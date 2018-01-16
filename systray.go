@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"0xacab.org/meskio/bitmask-systray/icon"
 	"github.com/getlantern/systray"
@@ -84,7 +85,7 @@ func (bt *bmTray) onReady() {
 			case <-mQuit.ClickedCh:
 				systray.Quit()
 				fmt.Println("Quit now...")
-				return
+				os.Exit(0)
 			}
 		}
 	}()
