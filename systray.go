@@ -141,15 +141,15 @@ func (bt *bmTray) changeStatus(status string) {
 }
 
 func (bt *bmTray) waitIcon() {
-	i := 0
 	icons := [][]byte{icon.Wait0, icon.Wait1, icon.Wait2, icon.Wait3}
-	for {
+	for i := 0; true; i = (i + 1) % 4 {
 		systray.SetIcon(icons[i])
+
 		select {
 		case <-bt.waitCh:
 			return
 		case <-time.After(time.Millisecond * 500):
-			i = (i + 1) % 4
+			continue
 		}
 	}
 }
