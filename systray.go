@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"0xacab.org/meskio/bitmask-systray/icon"
 	"github.com/getlantern/systray"
@@ -11,6 +12,7 @@ import (
 
 type bmTray struct {
 	ch        chan string
+	waitCh    chan bool
 	mStatus   *systray.MenuItem
 	mTurnOn   *systray.MenuItem
 	mTurnOff  *systray.MenuItem
@@ -93,6 +95,10 @@ func (bt *bmTray) onReady() {
 
 func (bt *bmTray) changeStatus(status string) {
 	statusStr := status
+	if bt.waitCh != nil {
+		bt.waitCh <- true
+		bt.waitCh = nil
+	}
 
 	switch status {
 	case "on":
@@ -108,13 +114,15 @@ func (bt *bmTray) changeStatus(status string) {
 		go bt.mCancel.Hide()
 
 	case "starting":
-		systray.SetIcon(icon.Wait)
+		bt.waitCh = make(chan bool)
+		go bt.waitIcon()
 		go bt.mTurnOn.Hide()
 		go bt.mTurnOff.Hide()
 		go bt.mCancel.Show()
 
 	case "stopping":
-		systray.SetIcon(icon.Wait)
+		bt.waitCh = make(chan bool)
+		go bt.waitIcon()
 		go bt.mTurnOn.Hide()
 		go bt.mTurnOff.Hide()
 		go bt.mCancel.Hide()
@@ -130,4 +138,18 @@ func (bt *bmTray) changeStatus(status string) {
 	systray.SetTooltip("RiseupVPN is " + statusStr)
 	bt.mStatus.SetTitle("VPN is " + statusStr)
 	bt.mStatus.SetTooltip("RiseupVPN is " + statusStr)
+}
+
+func (bt *bmTray) waitIcon() {
+	i := 0
+	icons := [][]byte{icon.Wait0, icon.Wait1, icon.Wait2, icon.Wait3}
+	for {
+		systray.SetIcon(icons[i])
+		select {
+		case <-bt.waitCh:
+			return
+		case <-time.After(time.Millisecond * 500):
+			i = (i + 1) % 4
+		}
+	}
 }

@@ -12,7 +12,7 @@ func notificate() {
 	// TODO: we need a proper icon
 	wd, _ := os.Getwd()
 	notify := notificator.New(notificator.Options{
-		DefaultIcon: path.Join(wd, "mask.svg"),
+		DefaultIcon: path.Join(wd, "riseupvpn.svg"),
 		AppName:     "RiseupVPN",
 	})
 

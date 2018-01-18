@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: on_unix.go off_unix.go wait_unix.go error_unix.go
+all: on_unix.go off_unix.go error_unix.go wait0_unix.go wait1_unix.go wait2_unix.go wait3_unix.go
 
 %_unix.go: %.png
 	echo "//+build linux darwin" > $@
