@@ -1,40 +1,21 @@
 package main
 
 import (
-	"time"
+	"log"
+
+	"0xacab.org/meskio/bitmask-systray/bitmask"
 )
 
-var ch chan string
+const (
+	provider = "demo.bitmask.net"
+)
 
 func main() {
 	go notificate()
 
-	ch = make(chan string)
-	run(ch)
-}
-
-func startVPN() {
-	go func() {
-		ch <- "starting"
-		time.Sleep(time.Second * 5)
-		ch <- "on"
-	}()
-}
-
-func cancelVPN() {
-	go func() {
-		ch <- "stopping"
-		time.Sleep(time.Second * 5)
-		ch <- "off"
-	}()
-}
-
-func stopVPN() {
-	go func() {
-		ch <- "failed"
-	}()
-}
-
-func getVPNStatus() string {
-	return "off"
+	b, err := bitmask.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+	run(b)
 }

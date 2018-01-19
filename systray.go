@@ -1,17 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"time"
 
+	"0xacab.org/meskio/bitmask-systray/bitmask"
 	"0xacab.org/meskio/bitmask-systray/icon"
 	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
 )
 
 type bmTray struct {
-	ch        chan string
+	bm        *bitmask.Bitmask
 	waitCh    chan bool
 	mStatus   *systray.MenuItem
 	mTurnOn   *systray.MenuItem
@@ -20,14 +21,14 @@ type bmTray struct {
 	mGateways []*systray.MenuItem
 }
 
-func run(ch chan string) {
-	bt := bmTray{ch: ch}
+func run(bm *bitmask.Bitmask) {
+	bt := bmTray{bm: bm}
 	systray.Run(bt.onReady, bt.onExit)
 }
 
 func (bt bmTray) onExit() {
 	// TODO: this doesn't get executed :(
-	fmt.Println("Finished onExit")
+	log.Println("Finished onExit")
 }
 
 func (bt *bmTray) onReady() {
@@ -51,31 +52,37 @@ func (bt *bmTray) onReady() {
 	bt.mGateways[2].Uncheck()
 	systray.AddSeparator()
 
-	mHelp := systray.AddMenuItem("Help", "")
-	mDonate := systray.AddMenuItem("Donate", "")
-	mAbout := systray.AddMenuItem("About", "")
+	mHelp := systray.AddMenuItem("Help ...", "")
+	mDonate := systray.AddMenuItem("Donate ...)", "")
+	mAbout := systray.AddMenuItem("About ...", "")
 	systray.AddSeparator()
 
 	mQuit := systray.AddMenuItem("Quit", "Quit BitmaskVPN")
 
 	go func() {
-		bt.changeStatus(getVPNStatus())
+		ch := bt.bm.GetStatusCh()
+		status, err := bt.bm.GetStatus()
+		if err != nil {
+			log.Printf("Error getting status: %v", err)
+		} else {
+			bt.changeStatus(status)
+		}
 
 		for {
 			select {
 			case status := <-ch:
-				fmt.Println("status: " + status)
+				log.Println("status: " + status)
 				bt.changeStatus(status)
 
 			case <-bt.mTurnOn.ClickedCh:
-				fmt.Println("on")
-				startVPN()
+				log.Println("on")
+				bt.bm.StartVPN(provider)
 			case <-bt.mTurnOff.ClickedCh:
-				fmt.Println("off")
-				stopVPN()
+				log.Println("off")
+				bt.bm.StopVPN()
 			case <-bt.mCancel.ClickedCh:
-				fmt.Println("cancel")
-				cancelVPN()
+				log.Println("cancel")
+				bt.bm.StopVPN()
 
 			case <-mHelp.ClickedCh:
 				open.Run("https://riseup.net/en/vpn/vpn-black")
@@ -86,7 +93,8 @@ func (bt *bmTray) onReady() {
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()
-				fmt.Println("Quit now...")
+				bt.bm.Close()
+				log.Println("Quit now...")
 				os.Exit(0)
 			}
 		}
@@ -95,6 +103,7 @@ func (bt *bmTray) onReady() {
 
 func (bt *bmTray) changeStatus(status string) {
 	statusStr := status
+	bt.mTurnOn.SetTitle("Turn on")
 	if bt.waitCh != nil {
 		bt.waitCh <- true
 		bt.waitCh = nil
@@ -129,9 +138,10 @@ func (bt *bmTray) changeStatus(status string) {
 
 	case "failed":
 		systray.SetIcon(icon.Error)
+		bt.mTurnOn.SetTitle("Retry")
 		go bt.mTurnOn.Show()
-		go bt.mTurnOff.Hide()
-		go bt.mCancel.Show()
+		go bt.mTurnOff.Show()
+		go bt.mCancel.Hide()
 		statusStr = "blocking internet"
 	}
 
