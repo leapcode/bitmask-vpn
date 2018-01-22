@@ -14,21 +14,25 @@ const (
 
 // Bitmask holds the bitmask client data
 type Bitmask struct {
-	//eventsoc *zmq4.Socket
 	coresoc  *zmq4.Socket
+	eventsoc *zmq4.Socket
 	statusCh chan string
 }
 
 // Init the connection to bitmask
 func Init() (*Bitmask, error) {
 	statusCh := make(chan string)
-	socket, err := initCore()
+	coresoc, err := initCore()
+	if err != nil {
+		return nil, err
+	}
+	eventsoc, err := initEvents()
 	if err != nil {
 		return nil, err
 	}
 
-	b := Bitmask{socket, statusCh}
-	go b.fetchStatus()
+	b := Bitmask{coresoc, eventsoc, statusCh}
+	go b.eventsHandler()
 	return &b, nil
 }
 

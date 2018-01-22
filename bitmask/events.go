@@ -1,12 +1,17 @@
 package bitmask
 
 import (
+	"io/ioutil"
+	"log"
+	"path/filepath"
+	"strings"
+
 	"github.com/pebbe/zmq4"
 )
 
 const (
 	eventsEndpoint = "tcp://127.0.0.1:9001"
-	//serverKeyPath  = "/home/user/.config/leap/events/zmq_certificates/public_keys/server.key" // FIXME
+	statusEvent    = "VPN_STATUS_CHANGED"
 )
 
 func initEvents() (*zmq4.Socket, error) {
@@ -16,20 +21,47 @@ func initEvents() (*zmq4.Socket, error) {
 	}
 
 	if zmq4.HasCurve() {
-		// TODO
+		err = initCurve(socket)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	err = socket.Connect(eventsEndpoint)
 	if err != nil {
 		return nil, err
 	}
-	return socket, nil
+
+	err = socket.SetSubscribe(statusEvent)
+	return socket, err
 }
 
-func (b *Bitmask) fetchStatus() {
-	// TODO: this should be a subscription to the event
+func initCurve(socket *zmq4.Socket) error {
+	serverKeyData, err := ioutil.ReadFile(getServerKeyPath())
+	if err != nil {
+		return err
+	}
+
+	pubkey, seckey, err := zmq4.NewCurveKeypair()
+	if err != nil {
+		return err
+	}
+
+	serverkey := strings.Split(string(serverKeyData), "\"")[1]
+	return socket.ClientAuthCurve(serverkey, pubkey, seckey)
+}
+
+func (b *Bitmask) eventsHandler() {
 	for {
-		time.Sleep(time.Second)
+		msg, err := b.eventsoc.RecvMessage(0)
+		if err != nil {
+			break
+		}
+		log.Println(msg[0])
+		if msg[0][:len(statusEvent)] != statusEvent {
+			continue
+		}
+
 		status, err := b.GetStatus()
 		if err != nil {
 			log.Printf("Error receiving status: %v", err)
@@ -37,4 +69,8 @@ func (b *Bitmask) fetchStatus() {
 		}
 		b.statusCh <- status
 	}
+}
+
+func getServerKeyPath() string {
+	return filepath.Join(configPath, "events", "zmq_certificates", "public_keys", "server.key")
 }

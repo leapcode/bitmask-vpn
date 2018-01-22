@@ -1,10 +1,5 @@
 package bitmask
 
-import (
-	"log"
-	"time"
-)
-
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
 	_, err := b.send("vpn", "start", provider)
