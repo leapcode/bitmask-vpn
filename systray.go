@@ -12,13 +12,18 @@ import (
 )
 
 type bmTray struct {
-	bm        *bitmask.Bitmask
-	waitCh    chan bool
-	mStatus   *systray.MenuItem
-	mTurnOn   *systray.MenuItem
-	mTurnOff  *systray.MenuItem
-	mCancel   *systray.MenuItem
-	mGateways []*systray.MenuItem
+	bm            *bitmask.Bitmask
+	waitCh        chan bool
+	mStatus       *systray.MenuItem
+	mTurnOn       *systray.MenuItem
+	mTurnOff      *systray.MenuItem
+	mCancel       *systray.MenuItem
+	activeGateway *gatewayTray
+}
+
+type gatewayTray struct {
+	menuItem *systray.MenuItem
+	name     string
 }
 
 func run(bm *bitmask.Bitmask) {
@@ -42,18 +47,10 @@ func (bt *bmTray) onReady() {
 	go bt.mCancel.Hide()
 	systray.AddSeparator()
 
-	mGateway := systray.AddMenuItem("Route traffic through", "")
-	mGateway.Disable()
-	bt.mGateways = append(bt.mGateways, systray.AddMenuItem("Seattle", "Use RiseupVPN Seattle gateway"))
-	bt.mGateways = append(bt.mGateways, systray.AddMenuItem("Montreal", "Use RiseupVPN Montreal gateway"))
-	bt.mGateways = append(bt.mGateways, systray.AddMenuItem("Amsterdam", "Use RiseupVPN Amsterdam gateway"))
-	bt.mGateways[0].Check()
-	bt.mGateways[1].Uncheck()
-	bt.mGateways[2].Uncheck()
-	systray.AddSeparator()
+	bt.addGateways()
 
 	mHelp := systray.AddMenuItem("Help ...", "")
-	mDonate := systray.AddMenuItem("Donate ...)", "")
+	mDonate := systray.AddMenuItem("Donate ...", "")
 	mAbout := systray.AddMenuItem("About ...", "")
 	systray.AddSeparator()
 
@@ -99,6 +96,51 @@ func (bt *bmTray) onReady() {
 			}
 		}
 	}()
+}
+
+func (bt *bmTray) addGateways() {
+	gatewayList, err := bt.bm.ListGateways(provider)
+	if err != nil {
+		log.Printf("Gateway initialization error: %v", err)
+		return
+	}
+
+	mGateway := systray.AddMenuItem("Route traffic through", "")
+	mGateway.Disable()
+	for i, name := range gatewayList {
+		menuItem := systray.AddMenuItem(name, "Use RiseupVPN "+name+" gateway")
+		gateway := gatewayTray{menuItem, name}
+
+		if i == 0 {
+			menuItem.Check()
+			menuItem.SetTitle("*" + name)
+			bt.activeGateway = &gateway
+		} else {
+			menuItem.Uncheck()
+		}
+
+		go func(gateway gatewayTray) {
+			for {
+				<-menuItem.ClickedCh
+				gateway.menuItem.SetTitle("*" + gateway.name)
+				gateway.menuItem.Check()
+
+				bt.activeGateway.menuItem.Uncheck()
+				bt.activeGateway.menuItem.SetTitle(bt.activeGateway.name)
+				bt.activeGateway = &gateway
+
+				bt.bm.UseGateway(gateway.name)
+			}
+		}(gateway)
+	}
+
+	systray.AddSeparator()
+
+	go bt.gatewaySelection()
+}
+
+func (bt *bmTray) gatewaySelection() {
+
 }
 
 func (bt *bmTray) changeStatus(status string) {
