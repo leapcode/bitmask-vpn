@@ -82,9 +82,9 @@ func (bt *bmTray) onReady() {
 				bt.bm.StopVPN()
 
 			case <-mHelp.ClickedCh:
-				open.Run("https://riseup.net/en/vpn/vpn-black")
+				open.Run("https://riseup.net/vpn")
 			case <-mDonate.ClickedCh:
-				open.Run("https://riseup.net/en/donate")
+				open.Run("https://riseup.net/donate-vpn")
 			case <-mAbout.ClickedCh:
 				open.Run("https://bitmask.net")
 
