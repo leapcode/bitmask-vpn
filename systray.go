@@ -145,15 +145,10 @@ func (bt *bmTray) addGateways() {
 	}
 
 	systray.AddSeparator()
-
-	go bt.gatewaySelection()
-}
-
-func (bt *bmTray) gatewaySelection() {
-
 }
 
 func (bt *bmTray) changeStatus(status string) {
+	// TODO: ugly hacks with 'go' to hide/show
 	statusStr := status
 	bt.mTurnOn.SetTitle("Turn on")
 	if bt.waitCh != nil {

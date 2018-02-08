@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 	"path"
 	"time"
@@ -42,13 +41,10 @@ func parseConfig() (*systrayConfig, error) {
 }
 
 func (c *systrayConfig) hasDonated() bool {
-	log.Println("has donated ", c.Donated.Add(oneMonth))
 	return c.Donated.Add(oneMonth).After(time.Now())
 }
 
 func (c *systrayConfig) needsNotification() bool {
-	log.Println("needs ", c.LastNotification.Add(oneDay))
-	log.Println(!c.hasDonated() && c.LastNotification.Add(oneDay).Before(time.Now()))
 	return !c.hasDonated() && c.LastNotification.Add(oneDay).Before(time.Now())
 }
 
