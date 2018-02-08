@@ -10,6 +10,7 @@ Build the systray:
 ```
   $ git clone 0xacab.org/leap/bitmask-systray
   $ cd bitmask-systray
+  $ go get .
   $ go build
 ```
 
