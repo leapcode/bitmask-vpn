@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	provider = "demo.bitmask.net"
+	provider = "riseup.net"
 )
 
 func main() {
