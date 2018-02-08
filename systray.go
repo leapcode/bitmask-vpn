@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"0xacab.org/meskio/bitmask-systray/bitmask"
-	"0xacab.org/meskio/bitmask-systray/icon"
+	"0xacab.org/leap/bitmask-systray/bitmask"
+	"0xacab.org/leap/bitmask-systray/icon"
 	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
 )

@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"0xacab.org/meskio/bitmask-systray/bitmask"
+	"0xacab.org/leap/bitmask-systray/bitmask"
 )
 
 const (
