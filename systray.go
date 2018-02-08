@@ -13,10 +13,13 @@ import (
 
 type bmTray struct {
 	bm            *bitmask.Bitmask
+	conf          *systrayConfig
 	waitCh        chan bool
 	mStatus       *systray.MenuItem
 	mTurnOn       *systray.MenuItem
 	mTurnOff      *systray.MenuItem
+	mDonate       *systray.MenuItem
+	mHaveDonated  *systray.MenuItem
 	mCancel       *systray.MenuItem
 	activeGateway *gatewayTray
 }
@@ -26,8 +29,8 @@ type gatewayTray struct {
 	name     string
 }
 
-func run(bm *bitmask.Bitmask) {
-	bt := bmTray{bm: bm}
+func run(bm *bitmask.Bitmask, conf *systrayConfig) {
+	bt := bmTray{bm: bm, conf: conf}
 	systray.Run(bt.onReady, bt.onExit)
 }
 
@@ -50,7 +53,8 @@ func (bt *bmTray) onReady() {
 	bt.addGateways()
 
 	mHelp := systray.AddMenuItem("Help ...", "")
-	mDonate := systray.AddMenuItem("Donate ...", "")
+	bt.mDonate = systray.AddMenuItem("Donate ...", "")
+	bt.mHaveDonated = systray.AddMenuItem("... I have donated", "")
 	mAbout := systray.AddMenuItem("About ...", "")
 	systray.AddSeparator()
 
@@ -66,6 +70,8 @@ func (bt *bmTray) onReady() {
 		}
 
 		for {
+			bt.updateDonateMenu()
+
 			select {
 			case status := <-ch:
 				log.Println("status: " + status)
@@ -83,8 +89,10 @@ func (bt *bmTray) onReady() {
 
 			case <-mHelp.ClickedCh:
 				open.Run("https://riseup.net/vpn")
-			case <-mDonate.ClickedCh:
+			case <-bt.mDonate.ClickedCh:
 				open.Run("https://riseup.net/donate-vpn")
+			case <-bt.mHaveDonated.ClickedCh:
+				bt.conf.setDonated()
 			case <-mAbout.ClickedCh:
 				open.Run("https://bitmask.net")
 
@@ -93,6 +101,8 @@ func (bt *bmTray) onReady() {
 				bt.bm.Close()
 				log.Println("Quit now...")
 				os.Exit(0)
+
+			case <-time.After(time.Minute * 30):
 			}
 		}
 	}()
@@ -190,6 +200,16 @@ func (bt *bmTray) changeStatus(status string) {
 	systray.SetTooltip("RiseupVPN is " + statusStr)
 	bt.mStatus.SetTitle("VPN is " + statusStr)
 	bt.mStatus.SetTooltip("RiseupVPN is " + statusStr)
+}
+
+func (bt *bmTray) updateDonateMenu() {
+	if bt.conf.hasDonated() {
+		go bt.mHaveDonated.Hide()
+		go bt.mDonate.Hide()
+	} else {
+		go bt.mHaveDonated.Show()
+		go bt.mDonate.Show()
+	}
 }
 
 func (bt *bmTray) waitIcon() {

@@ -72,5 +72,5 @@ func (b *Bitmask) eventsHandler() {
 }
 
 func getServerKeyPath() string {
-	return filepath.Join(configPath, "events", "zmq_certificates", "public_keys", "server.key")
+	return filepath.Join(ConfigPath, "events", "zmq_certificates", "public_keys", "server.key")
 }

@@ -4,4 +4,4 @@ package bitmask
 
 import "os"
 
-var configPath = os.Getenv("HOME") + "/.config/leap"
+var ConfigPath = os.Getenv("HOME") + "/.config/leap"
