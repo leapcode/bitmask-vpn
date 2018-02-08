@@ -11,7 +11,6 @@ const (
 )
 
 func main() {
-	// TODO: do I need to bootstrap the provider?
 	conf, err := parseConfig()
 	if err != nil {
 		log.Fatal(err)

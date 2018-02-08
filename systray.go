@@ -62,8 +62,7 @@ func (bt *bmTray) onReady() {
 
 	go func() {
 		ch := bt.bm.GetStatusCh()
-		status, err := bt.bm.GetStatus()
-		if err != nil {
+		if status, err := bt.bm.GetStatus(); err != nil {
 			log.Printf("Error getting status: %v", err)
 		} else {
 			bt.changeStatus(status)

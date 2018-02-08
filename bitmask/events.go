@@ -57,7 +57,6 @@ func (b *Bitmask) eventsHandler() {
 		if err != nil {
 			break
 		}
-		log.Println(msg[0])
 		if msg[0][:len(statusEvent)] != statusEvent {
 			continue
 		}
