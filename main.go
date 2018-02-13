@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer b.Close()
 
 	run(b, conf)
 }

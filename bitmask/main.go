@@ -3,6 +3,7 @@ package bitmask
 import (
 	"encoding/json"
 	"errors"
+	"log"
 
 	"github.com/pebbe/zmq4"
 )
@@ -43,6 +44,10 @@ func (b *Bitmask) GetStatusCh() chan string {
 
 // Close the connection to bitmask
 func (b *Bitmask) Close() {
+	_, err := b.send("core", "stop")
+	if err != nil {
+		log.Printf("Got an error stopping bitmaskd: %v", err)
+	}
 	b.coresoc.Close()
 }
 
