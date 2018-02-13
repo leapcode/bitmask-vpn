@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	go notificate(conf)
+	notify := newNotificator(conf)
 
 	b, err := bitmask.Init()
 	if err != nil {
@@ -39,5 +39,23 @@ func main() {
 	}
 	defer b.Close()
 
+	checkAndInstallHelpers(b, notify)
 	run(b, conf)
+}
+
+func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
+	helpers, priviledge, err := b.VPNCheck()
+	if err.Error() == "nopolkit" || (err == nil && !priviledge) {
+		log.Printf("No polkit found")
+		notify.authAgent()
+	} else if err != nil {
+		log.Fatal(err)
+	}
+
+	if !helpers {
+		err = b.InstallHelpers()
+		if err != nil {
+			log.Println("Error installing helpers: ", err)
+		}
+	}
 }

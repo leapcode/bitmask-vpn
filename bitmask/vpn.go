@@ -40,6 +40,21 @@ func (b *Bitmask) GetStatus() (string, error) {
 	return res["status"].(string), nil
 }
 
+// InstallHelpers into the system
+func (b *Bitmask) InstallHelpers() error {
+	_, err := b.send("vpn", "install")
+	return err
+}
+
+// VPNCheck returns if the helpers are installed and up to date and if polkit is running
+func (b *Bitmask) VPNCheck() (helpers bool, priviledge bool, err error) {
+	res, err := b.send("vpn", "check", "")
+	if err != nil {
+		return false, false, err
+	}
+	return res["installed"].(bool), res["privcheck"].(bool), nil
+}
+
 // ListGateways return the names of the gateways
 func (b *Bitmask) ListGateways(provider string) ([]string, error) {
 	res, err := b.send("vpn", "list")

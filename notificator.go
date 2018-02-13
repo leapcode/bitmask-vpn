@@ -20,26 +20,41 @@ import (
 	"path"
 	"time"
 
-	"github.com/0xAX/notificator"
+	notif "github.com/0xAX/notificator"
 )
 
 const (
-	notificationText = `The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn`
+	donationText     = `The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn`
+	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 )
 
-func notificate(conf *systrayConfig) {
+type notificator struct {
+	notify *notif.Notificator
+	conf   *systrayConfig
+}
+
+func newNotificator(conf *systrayConfig) *notificator {
 	wd, _ := os.Getwd()
-	notify := notificator.New(notificator.Options{
+	notify := notif.New(notif.Options{
 		DefaultIcon: path.Join(wd, "riseupvpn.svg"),
 		AppName:     "RiseupVPN",
 	})
+	n := notificator{notify, conf}
+	go n.donations()
+	return &n
+}
 
+func (n *notificator) donations() {
 	time.Sleep(time.Minute * 5)
 	for {
-		if conf.needsNotification() {
-			notify.Push("Donate to RiseupVPN", notificationText, "", notificator.UR_NORMAL)
-			conf.setNotification()
+		if n.conf.needsNotification() {
+			n.notify.Push("Donate to RiseupVPN", donationText, "", notif.UR_NORMAL)
+			n.conf.setNotification()
 		}
 		time.Sleep(time.Hour)
 	}
+}
+
+func (n *notificator) authAgent() {
+	n.notify.Push("Missing authentication agent", missingAuthAgent, "", notif.UR_CRITICAL)
 }
