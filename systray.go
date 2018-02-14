@@ -196,7 +196,7 @@ func (bt *bmTray) changeStatus(status string) {
 		go bt.mCancel.Hide()
 
 	case "failed":
-		systray.SetIcon(icon.Error)
+		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle("Retry")
 		go bt.mTurnOn.Show()
 		go bt.mTurnOff.Show()
