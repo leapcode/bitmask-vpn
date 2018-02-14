@@ -49,7 +49,8 @@ func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
 		log.Printf("No polkit found")
 		notify.authAgent()
 	} else if err != nil {
-		log.Fatal(err)
+		notify.bitmaskNotRunning()
+		log.Fatal("Is bitmask running? ", err)
 	}
 
 	if !helpers {

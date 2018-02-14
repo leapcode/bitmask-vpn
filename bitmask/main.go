@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"time"
 
 	"github.com/pebbe/zmq4"
 )
@@ -26,6 +27,7 @@ import (
 const (
 	// On win should be: tcp://127.0.0.1:5001
 	coreEndpoint = "ipc:///tmp/bitmask.core.sock"
+	timeout      = time.Second * 40
 )
 
 // Bitmask holds the bitmask client data
@@ -46,6 +48,8 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	coresoc.SetRcvtimeo(timeout)
 
 	b := Bitmask{coresoc, eventsoc, statusCh}
 	go b.eventsHandler()

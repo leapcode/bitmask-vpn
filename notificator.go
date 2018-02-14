@@ -26,6 +26,7 @@ import (
 const (
 	donationText     = `The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
+	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
 )
 
 type notificator struct {
@@ -53,6 +54,10 @@ func (n *notificator) donations() {
 		}
 		time.Sleep(time.Hour)
 	}
+}
+
+func (n *notificator) bitmaskNotRunning() {
+	n.notify.Push("Can't contact bitmask", notRunning, "", notif.UR_CRITICAL)
 }
 
 func (n *notificator) authAgent() {
