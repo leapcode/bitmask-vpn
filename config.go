@@ -17,6 +17,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"os"
 	"path"
 	"time"
@@ -36,6 +37,7 @@ var (
 type systrayConfig struct {
 	LastNotification time.Time
 	Donated          time.Time
+	SelectWateway    bool
 }
 
 func parseConfig() (*systrayConfig, error) {
@@ -52,7 +54,13 @@ func parseConfig() (*systrayConfig, error) {
 
 	dec := json.NewDecoder(f)
 	err = dec.Decode(&conf)
+	conf.parseFlags()
 	return &conf, err
+}
+
+func (c *systrayConfig) parseFlags() {
+	flag.BoolVar(&c.SelectWateway, "select-gateway", false, "Enable gateway selection")
+	flag.Parse()
 }
 
 func (c *systrayConfig) hasDonated() bool {

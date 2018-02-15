@@ -65,6 +65,10 @@ func (bt *bmTray) onReady() {
 	go bt.mCancel.Hide()
 	systray.AddSeparator()
 
+	if bt.conf.SelectWateway {
+		bt.addGateways()
+	}
+
 	mHelp := systray.AddMenuItem("Help ...", "")
 	bt.mDonate = systray.AddMenuItem("Donate ...", "")
 	bt.mHaveDonated = systray.AddMenuItem("... I have donated", "")
