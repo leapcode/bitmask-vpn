@@ -45,7 +45,7 @@ func main() {
 
 func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
 	helpers, priviledge, err := b.VPNCheck()
-	if err.Error() == "nopolkit" || (err == nil && !priviledge) {
+	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
 		log.Printf("No polkit found")
 		notify.authAgent()
 	} else if err != nil {
