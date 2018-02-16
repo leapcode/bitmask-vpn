@@ -3,7 +3,7 @@ Install it
 
 Install dependencies:
 ```
-  # apt install libzmq3-dev libgtk-3-dev libappindicator3-dev golang pkg-build
+  # apt install libzmq3-dev libgtk-3-dev libappindicator3-dev golang pkg-config
 ```
 
 Build the systray:
@@ -25,7 +25,7 @@ OSX
 Using homebrew:
 
 ```
-  $ brew install golang zmq pkg-build
+  $ brew install golang zmq pkg-config
   $ git clone 0xacab.org/leap/bitmask-systray
   $ cd bitmask-systray
   $ go get .
