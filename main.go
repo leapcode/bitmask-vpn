@@ -30,10 +30,7 @@ const (
 var printer *message.Printer
 
 func main() {
-	conf, err := parseConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
+	conf := parseConfig()
 	initPrinter()
 
 	notify := newNotificator(conf)

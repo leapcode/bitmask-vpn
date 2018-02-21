@@ -40,22 +40,19 @@ type systrayConfig struct {
 	SelectWateway    bool
 }
 
-func parseConfig() (*systrayConfig, error) {
+func parseConfig() *systrayConfig {
 	var conf systrayConfig
 
 	f, err := os.Open(configPath)
-	if os.IsNotExist(err) {
-		return &conf, nil
-	}
 	if err != nil {
-		return nil, err
+		return &conf
 	}
 	defer f.Close()
 
 	dec := json.NewDecoder(f)
 	err = dec.Decode(&conf)
 	conf.parseFlags()
-	return &conf, err
+	return &conf
 }
 
 func (c *systrayConfig) parseFlags() {
