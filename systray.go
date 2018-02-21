@@ -55,6 +55,8 @@ func (bt bmTray) onExit() {
 }
 
 func (bt *bmTray) onReady() {
+	systray.SetIcon(icon.Off)
+
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
 	bt.mStatus.Disable()
 	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), printer.Sprintf("Turn RiseupVPN on"))
