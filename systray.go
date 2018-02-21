@@ -55,13 +55,13 @@ func (bt bmTray) onExit() {
 }
 
 func (bt *bmTray) onReady() {
-	bt.mStatus = systray.AddMenuItem("Checking status...", "")
+	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
 	bt.mStatus.Disable()
-	bt.mTurnOn = systray.AddMenuItem("Turn on", "Turn RiseupVPN on")
+	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), printer.Sprintf("Turn RiseupVPN on"))
 	go bt.mTurnOn.Hide()
-	bt.mTurnOff = systray.AddMenuItem("Turn off", "Turn RiseupVPN off")
+	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), printer.Sprintf("Turn RiseupVPN off"))
 	go bt.mTurnOff.Hide()
-	bt.mCancel = systray.AddMenuItem("Cancel", "Cancel connection to RiseupVPN")
+	bt.mCancel = systray.AddMenuItem(printer.Sprintf("Cancel"), printer.Sprintf("Cancel connection to RiseupVPN"))
 	go bt.mCancel.Hide()
 	systray.AddSeparator()
 
@@ -69,13 +69,13 @@ func (bt *bmTray) onReady() {
 		bt.addGateways()
 	}
 
-	mHelp := systray.AddMenuItem("Help ...", "")
-	bt.mDonate = systray.AddMenuItem("Donate ...", "")
-	bt.mHaveDonated = systray.AddMenuItem("... I have donated", "")
-	mAbout := systray.AddMenuItem("About ...", "")
+	mHelp := systray.AddMenuItem(printer.Sprintf("Help ..."), "")
+	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate ..."), "")
+	bt.mHaveDonated = systray.AddMenuItem(printer.Sprintf("... I have donated"), "")
+	mAbout := systray.AddMenuItem(printer.Sprintf("About ..."), "")
 	systray.AddSeparator()
 
-	mQuit := systray.AddMenuItem("Quit", "Quit BitmaskVPN")
+	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), printer.Sprintf("Quit BitmaskVPN"))
 
 	go func() {
 		ch := bt.bm.GetStatusCh()
@@ -131,10 +131,10 @@ func (bt *bmTray) addGateways() {
 		return
 	}
 
-	mGateway := systray.AddMenuItem("Route traffic through", "")
+	mGateway := systray.AddMenuItem(printer.Sprintf("Route traffic through"), "")
 	mGateway.Disable()
 	for i, name := range gatewayList {
-		menuItem := systray.AddMenuItem(name, "Use RiseupVPN "+name+" gateway")
+		menuItem := systray.AddMenuItem(name, printer.Sprintf("Use RiseupVPN %v gateway", name))
 		gateway := gatewayTray{menuItem, name}
 
 		if i == 0 {
@@ -166,7 +166,7 @@ func (bt *bmTray) addGateways() {
 func (bt *bmTray) changeStatus(status string) {
 	// TODO: ugly hacks with 'go' to hide/show
 	statusStr := status
-	bt.mTurnOn.SetTitle("Turn on")
+	bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
 	if bt.waitCh != nil {
 		bt.waitCh <- true
 		bt.waitCh = nil
@@ -201,16 +201,16 @@ func (bt *bmTray) changeStatus(status string) {
 
 	case "failed":
 		systray.SetIcon(icon.Blocked)
-		bt.mTurnOn.SetTitle("Retry")
+		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
 		go bt.mTurnOn.Show()
 		go bt.mTurnOff.Show()
 		go bt.mCancel.Hide()
-		statusStr = "blocking internet"
+		statusStr = printer.Sprintf("blocking internet")
 	}
 
-	systray.SetTooltip("RiseupVPN is " + statusStr)
-	bt.mStatus.SetTitle("VPN is " + statusStr)
-	bt.mStatus.SetTooltip("RiseupVPN is " + statusStr)
+	systray.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
+	bt.mStatus.SetTitle(printer.Sprintf("VPN is %v", statusStr))
+	bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
 }
 
 func (bt *bmTray) updateDonateMenu() {

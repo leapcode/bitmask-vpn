@@ -14,10 +14,9 @@ Build the systray:
   $ go build
 ```
 
-Run bitmask and the systray:
+To be able to build the assets you'll need:
 ```
-  $ bitmaskd
-  $ ./bitmask-systray
+  $ go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
 ```
 
 OSX
@@ -35,3 +34,24 @@ Using homebrew:
 Run it
 -------------
 bitmask-systray assumes that you already have bitmaskd running.
+
+Run bitmask and the systray:
+```
+  $ bitmaskd
+  $ ./bitmask-systray
+```
+
+i18n
+----
+
+Generate `locales/*` files:
+```
+  $ make generate_locales LANGS="sjn tlh"
+```
+
+Edit the `locales/*/out.gotext.json` translations into `locales/*/messages.gotext.json`.
+
+To rebuild the locales:
+```
+  $ make locales
+```

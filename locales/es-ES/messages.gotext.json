@@ -1,0 +1,169 @@
+{
+    "language": "es-ES",
+    "messages": [
+        {
+            "id": "Donate to RiseupVPN",
+            "message": "Donate to RiseupVPN",
+            "translation": "Dona a RiseupVPN"
+        },
+        {
+            "id": [
+                "donationText",
+                "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn"
+            ],
+            "message": "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn",
+            "translation": "El servicio RiseupVPN es caro de mantener. Como no queremos guardar ninguna información personal tuya, no hay cuentas ni servicio de facturación. Si quieres que este servicio continue, dona al menos $5 cada mes en https://riseup.net/donate-vpn"
+        },
+        {
+            "id": "Can't contact bitmask",
+            "message": "Can't contact bitmask",
+            "translation": "No puedo contactar a bitmask"
+        },
+        {
+            "id": [
+                "notRunning",
+                "Is bitmaskd running? Start bitmask and try again."
+            ],
+            "message": "Is bitmaskd running? Start bitmask and try again.",
+            "translation": "¿Esta bitmask en ejecucion? Arranca bitmask y prueba de nuevo."
+        },
+        {
+            "id": "Missing authentication agent",
+            "message": "Missing authentication agent",
+            "translation": "Falta el agente de autenticación"
+        },
+        {
+            "id": [
+                "missingAuthAgent",
+                "Could not find a polkit authentication agent. Please run one and try again."
+            ],
+            "message": "Could not find a polkit authentication agent. Please run one and try again.",
+            "translation": "No pude encontrar ningún agente de autenticacion polkit. Por favor ejecuta uno y prueba de nuevo."
+        },
+        {
+            "id": "Checking status...",
+            "message": "Checking status...",
+            "translation": "Comprobando el estado..."
+        },
+        {
+            "id": "Turn on",
+            "message": "Turn on",
+            "translation": "Encender"
+        },
+        {
+            "id": "Turn RiseupVPN on",
+            "message": "Turn RiseupVPN on",
+            "translation": "Enciende RiseupVPN"
+        },
+        {
+            "id": "Turn off",
+            "message": "Turn off",
+            "translation": "Apagar"
+        },
+        {
+            "id": "Turn RiseupVPN off",
+            "message": "Turn RiseupVPN off",
+            "translation": "Apaga RiseupVPN"
+        },
+        {
+            "id": "Cancel",
+            "message": "Cancel",
+            "translation": "Cancelar"
+        },
+        {
+            "id": "Cancel connection to RiseupVPN",
+            "message": "Cancel connection to RiseupVPN",
+            "translation": "Cancela la conexión a RiseupVPN"
+        },
+        {
+            "id": "Help ...",
+            "message": "Help ...",
+            "translation": "Ayuda ..."
+        },
+        {
+            "id": "Donate ...",
+            "message": "Donate ...",
+            "translation": "Dona ..."
+        },
+        {
+            "id": "... I have donated",
+            "message": "... I have donated",
+            "translation": "... ya he donado"
+        },
+        {
+            "id": "About ...",
+            "message": "About ...",
+            "translation": "Acerca de ..."
+        },
+        {
+            "id": "Quit",
+            "message": "Quit",
+            "translation": "Cerrar"
+        },
+        {
+            "id": "Quit BitmaskVPN",
+            "message": "Quit BitmaskVPN",
+            "translation": "Cierra BitmaskVPN"
+        },
+        {
+            "id": "Route traffic through",
+            "message": "Route traffic through",
+            "translation": "Salir a traves de"
+        },
+        {
+            "id": "Use RiseupVPN {Name} gateway",
+            "message": "Use RiskieupVPN {Name} gateway",
+            "translation": "Usa la salida de RiseupVPN en {Name}",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "name"
+                }
+            ]
+        },
+        {
+            "id": "Retry",
+            "message": "Retry",
+            "translation": "Reintentar"
+        },
+        {
+            "id": "blocking internet",
+            "message": "blocking internet",
+            "translation": "internet bloqueado"
+        },
+        {
+            "id": "RiseupVPN is {StatusStr}",
+            "message": "RiseupVPN is {StatusStr}",
+            "translation": "RiseupVPN esta {StatusStr}",
+            "placeholders": [
+                {
+                    "id": "StatusStr",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "statusStr"
+                }
+            ]
+        },
+        {
+            "id": "VPN is {StatusStr}",
+            "message": "VPN is {StatusStr}",
+            "translation": "VPN esta {StatusStr}",
+            "placeholders": [
+                {
+                    "id": "StatusStr",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "statusStr"
+                }
+            ]
+        }
+    ]
+}

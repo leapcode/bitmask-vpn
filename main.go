@@ -19,17 +19,22 @@ import (
 	"log"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
+	"github.com/jmshal/go-locale"
+	"golang.org/x/text/message"
 )
 
 const (
 	provider = "riseup.net"
 )
 
+var printer *message.Printer
+
 func main() {
 	conf, err := parseConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
+	initPrinter()
 
 	notify := newNotificator(conf)
 
@@ -59,4 +64,13 @@ func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
 			log.Println("Error installing helpers: ", err)
 		}
 	}
+}
+
+func initPrinter() {
+	locale, err := go_locale.DetectLocale()
+	if err != nil {
+		log.Println("Error detecting the system locale: ", err)
+	}
+
+	printer = message.NewPrinter(message.MatchLanguage(locale, "en"))
 }

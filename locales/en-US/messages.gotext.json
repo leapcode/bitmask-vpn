@@ -1,0 +1,181 @@
+{
+    "language": "en-US",
+    "messages": [
+        {
+            "id": "Donate to RiseupVPN",
+            "message": "Donate to RiseupVPN",
+            "translation": "Donate to RiseupVPN",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": [
+                "donationText",
+                "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn"
+            ],
+            "message": "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn",
+            "translation": "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Can't contact bitmask",
+            "message": "Can't contact bitmask",
+            "translation": "Can't contact bitmask",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": [
+                "notRunning",
+                "Is bitmaskd running? Start bitmask and try again."
+            ],
+            "message": "Is bitmaskd running? Start bitmask and try again.",
+            "translation": "Is bitmaskd running? Start bitmask and try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Missing authentication agent",
+            "message": "Missing authentication agent",
+            "translation": "Missing authentication agent",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": [
+                "missingAuthAgent",
+                "Could not find a polkit authentication agent. Please run one and try again."
+            ],
+            "message": "Could not find a polkit authentication agent. Please run one and try again.",
+            "translation": "Could not find a polkit authentication agent. Please run one and try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Checking status...",
+            "message": "Checking status...",
+            "translation": "Checking status..."
+        },
+        {
+            "id": "Turn on",
+            "message": "Turn on",
+            "translation": "Turn on"
+        },
+        {
+            "id": "Turn RiseupVPN on",
+            "message": "Turn RiseupVPN on",
+            "translation": "Turn RiseupVPN on"
+        },
+        {
+            "id": "Turn off",
+            "message": "Turn off",
+            "translation": "Turn off"
+        },
+        {
+            "id": "Turn RiseupVPN off",
+            "message": "Turn RiseupVPN off",
+            "translation": "Turn RiseupVPN off"
+        },
+        {
+            "id": "Cancel",
+            "message": "Cancel",
+            "translation": "Cancel"
+        },
+        {
+            "id": "Cancel connection to RiseupVPN",
+            "message": "Cancel connection to RiseupVPN",
+            "translation": "Cancel connection to RiseupVPN"
+        },
+        {
+            "id": "Help ...",
+            "message": "Help ...",
+            "translation": "Help ..."
+        },
+        {
+            "id": "Donate ...",
+            "message": "Donate ...",
+            "translation": "Donate ...!!!!"
+        },
+        {
+            "id": "... I have donated",
+            "message": "... I have donated",
+            "translation": "... I have donated"
+        },
+        {
+            "id": "About ...",
+            "message": "About ...",
+            "translation": "About ..."
+        },
+        {
+            "id": "Quit",
+            "message": "Quit",
+            "translation": "Quit"
+        },
+        {
+            "id": "Quit BitmaskVPN",
+            "message": "Quit BitmaskVPN",
+            "translation": "Quit BitmaskVPN"
+        },
+        {
+            "id": "Route traffic through",
+            "message": "Route traffic through",
+            "translation": "Route traffic through"
+        },
+        {
+            "id": "Use RiseupVPN {Name} gateway",
+            "message": "Use RiseupVPN {Name} gateway",
+            "translation": "Use RiseupVPN {Name} gateway",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "name"
+                }
+            ]
+        },
+        {
+            "id": "Retry",
+            "message": "Retry",
+            "translation": "Retry"
+        },
+        {
+            "id": "blocking internet",
+            "message": "blocking internet",
+            "translation": "blocking internet"
+        },
+        {
+            "id": "RiseupVPN is {StatusStr}",
+            "message": "RiseupVPN is {StatusStr}",
+            "translation": "RiseupVPN is {StatusStr}",
+            "placeholders": [
+                {
+                    "id": "StatusStr",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "statusStr"
+                }
+            ]
+        },
+        {
+            "id": "VPN is {StatusStr}",
+            "message": "VPN is {StatusStr}",
+            "translation": "VPN is {StatusStr}",
+            "placeholders": [
+                {
+                    "id": "StatusStr",
+                    "string": "%[1]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "statusStr"
+                }
+            ]
+        }
+    ]
+}

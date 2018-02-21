@@ -49,7 +49,7 @@ func (n *notificator) donations() {
 	time.Sleep(time.Minute * 5)
 	for {
 		if n.conf.needsNotification() {
-			n.notify.Push("Donate to RiseupVPN", donationText, "", notif.UR_NORMAL)
+			n.notify.Push(printer.Sprintf("Donate to RiseupVPN"), printer.Sprintf(donationText), "", notif.UR_NORMAL)
 			n.conf.setNotification()
 		}
 		time.Sleep(time.Hour)
@@ -57,9 +57,9 @@ func (n *notificator) donations() {
 }
 
 func (n *notificator) bitmaskNotRunning() {
-	n.notify.Push("Can't contact bitmask", notRunning, "", notif.UR_CRITICAL)
+	n.notify.Push(printer.Sprintf("Can't contact bitmask"), printer.Sprintf(notRunning), "", notif.UR_CRITICAL)
 }
 
 func (n *notificator) authAgent() {
-	n.notify.Push("Missing authentication agent", missingAuthAgent, "", notif.UR_CRITICAL)
+	n.notify.Push(printer.Sprintf("Missing authentication agent"), printer.Sprintf(missingAuthAgent), "", notif.UR_CRITICAL)
 }
