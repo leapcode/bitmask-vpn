@@ -18,7 +18,9 @@ package bitmask
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/pebbe/zmq4"
@@ -26,7 +28,7 @@ import (
 
 const (
 	// On win should be: tcp://127.0.0.1:5001
-	coreEndpoint = "ipc:///tmp/bitmask.core.sock"
+	coreEndpoint = "ipc://%s/bitmask.core.sock"
 	timeout      = time.Second * 40
 )
 
@@ -100,6 +102,10 @@ func initCore() (*zmq4.Socket, error) {
 		return nil, err
 	}
 
-	err = socket.Connect(coreEndpoint)
+	endpointPwd := "/tmp"
+	if os.Getenv("SNAP") != "" {
+		endpointPwd = os.Getenv("SNAP")
+	}
+	err = socket.Connect(fmt.Sprintf(coreEndpoint, endpointPwd))
 	return socket, err
 }
