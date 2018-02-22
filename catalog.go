@@ -88,28 +88,28 @@ const en_USData string = "" + // Size: 748 bytes
 	"RiseupVPN is %[1]v\x02VPN is %[1]v"
 
 var es_ESIndex = []uint32{ // 26 elements
-	0x00000000, 0x00000011, 0x00000107, 0x00000124,
-	0x00000164, 0x00000186, 0x000001e9, 0x00000202,
-	0x0000020b, 0x0000021e, 0x00000225, 0x00000235,
-	0x0000023e, 0x0000025f, 0x00000269, 0x00000272,
-	0x00000283, 0x00000291, 0x00000298, 0x000002aa,
-	0x000002bc, 0x000002e0, 0x000002eb, 0x000002fe,
-	0x00000313, 0x00000322,
+	0x00000000, 0x00000011, 0x00000108, 0x00000129,
+	0x00000168, 0x0000018a, 0x000001f1, 0x0000020a,
+	0x00000213, 0x00000226, 0x0000022d, 0x0000023d,
+	0x00000246, 0x00000267, 0x00000271, 0x0000027a,
+	0x0000028b, 0x00000299, 0x000002a0, 0x000002b2,
+	0x000002c5, 0x000002ea, 0x000002f5, 0x00000308,
+	0x0000031e, 0x0000032e,
 } // Size: 128 bytes
 
-const es_ESData string = "" + // Size: 802 bytes
+const es_ESData string = "" + // Size: 814 bytes
 	"\x02Dona a RiseupVPN\x02El servicio RiseupVPN es caro de mantener. Como " +
 	"no queremos guardar ninguna información personal tuya, no hay cuentas ni" +
-	" servicio de facturación. Si quieres que este servicio continue, dona al" +
-	" menos $5 cada mes en https://riseup.net/donate-vpn\x02No puedo contacta" +
-	"r a bitmask\x02¿Esta bitmask en ejecucion? Arranca bitmask y prueba de n" +
-	"uevo.\x02Falta el agente de autenticación\x02No pude encontrar ningún ag" +
-	"ente de autenticacion polkit. Por favor ejecuta uno y prueba de nuevo." +
-	"\x02Comprobando el estado...\x02Encender\x02Enciende RiseupVPN\x02Apagar" +
-	"\x02Apaga RiseupVPN\x02Cancelar\x02Cancela la conexión a RiseupVPN\x02Ay" +
-	"uda ...\x02Dona ...\x02... ya he donado\x02Acerca de ...\x02Cerrar\x02Ci" +
-	"erra BitmaskVPN\x02Salir a traves de\x02Usa la salida de RiseupVPN en %[" +
-	"1]v\x02Reintentar\x02internet bloqueado\x02RiseupVPN esta %[1]v\x02VPN e" +
-	"sta %[1]v"
+	" servicio de facturación. Si quieres que este servicio continúe, dona al" +
+	" menos $5 cada mes en https://riseup.net/donate-vpn\x02No se pudo contac" +
+	"tar con bitmask\x02¿Está corriendo bitmaskd? Arranca bitmask y prueba de" +
+	" nuevo.\x02Falta un agente de autenticación\x02No se pudo encontrar ning" +
+	"ún agente de autenticacion de polkit. Por favor lanza uno y prueba de n" +
+	"uevo.\x02Comprobando el estado...\x02Encender\x02Enciende RiseupVPN\x02A" +
+	"pagar\x02Apaga RiseupVPN\x02Cancelar\x02Cancela la conexión a RiseupVPN" +
+	"\x02Ayuda ...\x02Dona ...\x02... ya he donado\x02Acerca de ...\x02Cerrar" +
+	"\x02Cerrar BitmaskVPN\x02Salir a través de\x02Usa la salida de RiseupVPN" +
+	" por %[1]v\x02Reintentar\x02internet bloqueada\x02RiseupVPN está %[1]v" +
+	"\x02VPN está %[1]v"
 
-	// Total table size 1806 bytes (1KiB); checksum: 85661B86
+	// Total table size 1818 bytes (1KiB); checksum: 21DEB3F

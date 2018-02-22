@@ -12,12 +12,12 @@
                 "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn"
             ],
             "message": "The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn",
-            "translation": "El servicio RiseupVPN es caro de mantener. Como no queremos guardar ninguna información personal tuya, no hay cuentas ni servicio de facturación. Si quieres que este servicio continue, dona al menos $5 cada mes en https://riseup.net/donate-vpn"
+            "translation": "El servicio RiseupVPN es caro de mantener. Como no queremos guardar ninguna información personal tuya, no hay cuentas ni servicio de facturación. Si quieres que este servicio continúe, dona al menos $5 cada mes en https://riseup.net/donate-vpn"
         },
         {
             "id": "Can't contact bitmask",
             "message": "Can't contact bitmask",
-            "translation": "No puedo contactar a bitmask"
+            "translation": "No se pudo contactar con bitmask"
         },
         {
             "id": [
@@ -25,12 +25,12 @@
                 "Is bitmaskd running? Start bitmask and try again."
             ],
             "message": "Is bitmaskd running? Start bitmask and try again.",
-            "translation": "¿Esta bitmask en ejecucion? Arranca bitmask y prueba de nuevo."
+            "translation": "¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Falta el agente de autenticación"
+            "translation": "Falta un agente de autenticación"
         },
         {
             "id": [
@@ -38,7 +38,7 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "No pude encontrar ningún agente de autenticacion polkit. Por favor ejecuta uno y prueba de nuevo."
+            "translation": "No se pudo encontrar ningún agente de autenticacion de polkit. Por favor lanza uno y prueba de nuevo."
         },
         {
             "id": "Checking status...",
@@ -103,17 +103,17 @@
         {
             "id": "Quit BitmaskVPN",
             "message": "Quit BitmaskVPN",
-            "translation": "Cierra BitmaskVPN"
+            "translation": "Cerrar BitmaskVPN"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Salir a traves de"
+            "translation": "Salir a través de"
         },
         {
             "id": "Use RiseupVPN {Name} gateway",
             "message": "Use RiskieupVPN {Name} gateway",
-            "translation": "Usa la salida de RiseupVPN en {Name}",
+            "translation": "Usa la salida de RiseupVPN por {Name}",
             "placeholders": [
                 {
                     "id": "Name",
@@ -133,12 +133,12 @@
         {
             "id": "blocking internet",
             "message": "blocking internet",
-            "translation": "internet bloqueado"
+            "translation": "internet bloqueada"
         },
         {
             "id": "RiseupVPN is {StatusStr}",
             "message": "RiseupVPN is {StatusStr}",
-            "translation": "RiseupVPN esta {StatusStr}",
+            "translation": "RiseupVPN está {StatusStr}",
             "placeholders": [
                 {
                     "id": "StatusStr",
@@ -153,7 +153,7 @@
         {
             "id": "VPN is {StatusStr}",
             "message": "VPN is {StatusStr}",
-            "translation": "VPN esta {StatusStr}",
+            "translation": "VPN está {StatusStr}",
             "placeholders": [
                 {
                     "id": "StatusStr",
