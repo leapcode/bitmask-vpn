@@ -104,7 +104,7 @@ func initCore() (*zmq4.Socket, error) {
 
 	endpointPwd := "/tmp"
 	if os.Getenv("SNAP") != "" {
-		endpointPwd = os.Getenv("SNAP")
+        endpointPwd = "/var/tmp"
 	}
 	err = socket.Connect(fmt.Sprintf(coreEndpoint, endpointPwd))
 	return socket, err
