@@ -20,7 +20,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/pebbe/zmq4"
