@@ -22,7 +22,7 @@ import (
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	"0xacab.org/leap/bitmask-systray/icon"
-	"github.com/getlantern/systray"
+	"0xacab.org/leap/go-systray"
 	"github.com/skratchdot/open-golang/open"
 )
 
@@ -60,11 +60,11 @@ func (bt *bmTray) onReady() {
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
 	bt.mStatus.Disable()
 	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), printer.Sprintf("Turn RiseupVPN on"))
-	go bt.mTurnOn.Hide()
+	bt.mTurnOn.Hide()
 	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), printer.Sprintf("Turn RiseupVPN off"))
-	go bt.mTurnOff.Hide()
+	bt.mTurnOff.Hide()
 	bt.mCancel = systray.AddMenuItem(printer.Sprintf("Cancel"), printer.Sprintf("Cancel connection to RiseupVPN"))
-	go bt.mCancel.Hide()
+	bt.mCancel.Hide()
 	systray.AddSeparator()
 
 	if bt.conf.SelectWateway {
@@ -166,7 +166,6 @@ func (bt *bmTray) addGateways() {
 }
 
 func (bt *bmTray) changeStatus(status string) {
-	// TODO: ugly hacks with 'go' to hide/show
 	statusStr := status
 	bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
 	if bt.waitCh != nil {
@@ -177,36 +176,36 @@ func (bt *bmTray) changeStatus(status string) {
 	switch status {
 	case "on":
 		systray.SetIcon(icon.On)
-		go bt.mTurnOn.Hide()
-		go bt.mTurnOff.Show()
-		go bt.mCancel.Hide()
+		bt.mTurnOn.Hide()
+		bt.mTurnOff.Show()
+		bt.mCancel.Hide()
 
 	case "off":
 		systray.SetIcon(icon.Off)
-		go bt.mTurnOn.Show()
-		go bt.mTurnOff.Hide()
-		go bt.mCancel.Hide()
+		bt.mTurnOn.Show()
+		bt.mTurnOff.Hide()
+		bt.mCancel.Hide()
 
 	case "starting":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
-		go bt.mTurnOn.Hide()
-		go bt.mTurnOff.Hide()
-		go bt.mCancel.Show()
+		bt.mTurnOn.Hide()
+		bt.mTurnOff.Hide()
+		bt.mCancel.Show()
 
 	case "stopping":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
-		go bt.mTurnOn.Hide()
-		go bt.mTurnOff.Hide()
-		go bt.mCancel.Hide()
+		bt.mTurnOn.Hide()
+		bt.mTurnOff.Hide()
+		bt.mCancel.Hide()
 
 	case "failed":
 		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
-		go bt.mTurnOn.Show()
-		go bt.mTurnOff.Show()
-		go bt.mCancel.Hide()
+		bt.mTurnOn.Show()
+		bt.mTurnOff.Show()
+		bt.mCancel.Hide()
 		statusStr = printer.Sprintf("blocking internet")
 	}
 
@@ -217,11 +216,11 @@ func (bt *bmTray) changeStatus(status string) {
 
 func (bt *bmTray) updateDonateMenu() {
 	if bt.conf.hasDonated() {
-		go bt.mHaveDonated.Hide()
-		go bt.mDonate.Hide()
+		bt.mHaveDonated.Hide()
+		bt.mDonate.Hide()
 	} else {
-		go bt.mHaveDonated.Show()
-		go bt.mDonate.Show()
+		bt.mHaveDonated.Show()
+		bt.mDonate.Show()
 	}
 }
 
