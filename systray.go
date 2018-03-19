@@ -17,7 +17,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"time"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
@@ -50,8 +49,7 @@ func run(bm *bitmask.Bitmask, conf *systrayConfig) {
 }
 
 func (bt bmTray) onExit() {
-	// TODO: this doesn't get executed :(
-	log.Println("Finished onExit")
+	log.Println("Closing systray")
 }
 
 func (bt *bmTray) onReady() {
@@ -116,12 +114,6 @@ func (bt *bmTray) onReady() {
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()
-				// XXX: this a hack as quit doesn't work
-				//      this should be done by defer in the main function
-				bt.bm.Close()
-				releasePID()
-				log.Println("Quit now...")
-				os.Exit(0)
 
 			case <-time.After(time.Minute * 30):
 			}
