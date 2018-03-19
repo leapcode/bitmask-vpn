@@ -30,6 +30,12 @@ const (
 var printer *message.Printer
 
 func main() {
+	err := acquirePID()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer releasePID()
+
 	conf := parseConfig()
 	initPrinter()
 
@@ -37,22 +43,28 @@ func main() {
 
 	b, err := bitmask.Init()
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 	defer b.Close()
 
-	checkAndInstallHelpers(b, notify)
+	err = checkAndInstallHelpers(b, notify)
+	if err != nil {
+		log.Printf("Is bitmask running? %v", err)
+		return
+	}
+
 	run(b, conf)
 }
 
-func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
+func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) error {
 	helpers, priviledge, err := b.VPNCheck()
 	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
 		log.Printf("No polkit found")
 		notify.authAgent()
 	} else if err != nil {
 		notify.bitmaskNotRunning()
-		log.Fatal("Is bitmask running? ", err)
+		return err
 	}
 
 	if !helpers {
@@ -61,6 +73,7 @@ func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) {
 			log.Println("Error installing helpers: ", err)
 		}
 	}
+	return nil
 }
 
 func initPrinter() {
