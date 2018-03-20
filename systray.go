@@ -33,7 +33,6 @@ type bmTray struct {
 	mTurnOn       *systray.MenuItem
 	mTurnOff      *systray.MenuItem
 	mDonate       *systray.MenuItem
-	mHaveDonated  *systray.MenuItem
 	mCancel       *systray.MenuItem
 	activeGateway *gatewayTray
 }
@@ -71,7 +70,6 @@ func (bt *bmTray) onReady() {
 
 	mHelp := systray.AddMenuItem(printer.Sprintf("Help ..."), "")
 	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate ..."), "")
-	bt.mHaveDonated = systray.AddMenuItem(printer.Sprintf("... I have donated"), "")
 	mAbout := systray.AddMenuItem(printer.Sprintf("About ..."), "")
 	systray.AddSeparator()
 
@@ -86,8 +84,6 @@ func (bt *bmTray) onReady() {
 		}
 
 		for {
-			bt.updateDonateMenu()
-
 			select {
 			case status := <-ch:
 				log.Println("status: " + status)
@@ -107,8 +103,6 @@ func (bt *bmTray) onReady() {
 				open.Run("https://riseup.net/vpn")
 			case <-bt.mDonate.ClickedCh:
 				open.Run("https://riseup.net/donate-vpn")
-			case <-bt.mHaveDonated.ClickedCh:
-				bt.conf.setDonated()
 			case <-mAbout.ClickedCh:
 				open.Run("https://bitmask.net")
 
@@ -207,16 +201,6 @@ func (bt *bmTray) changeStatus(status string) {
 	systray.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
 	bt.mStatus.SetTitle(printer.Sprintf("VPN is %v", statusStr))
 	bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
-}
-
-func (bt *bmTray) updateDonateMenu() {
-	if bt.conf.hasDonated() {
-		bt.mHaveDonated.Hide()
-		bt.mDonate.Hide()
-	} else {
-		bt.mHaveDonated.Show()
-		bt.mDonate.Show()
-	}
 }
 
 func (bt *bmTray) waitIcon() {

@@ -41,7 +41,7 @@ func newNotificator(conf *systrayConfig) *notificator {
 		AppName:     "RiseupVPN",
 	})
 	n := notificator{notify, conf}
-	go n.donations()
+	//go n.donations()
 	return &n
 }
 
