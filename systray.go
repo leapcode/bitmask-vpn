@@ -21,7 +21,7 @@ import (
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	"0xacab.org/leap/bitmask-systray/icon"
-	"0xacab.org/leap/go-systray"
+	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
 )
 
