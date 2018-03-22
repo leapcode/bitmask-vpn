@@ -1,10 +1,10 @@
 {
-    "language": "es-ES",
+    "language": "pt-BR",
     "messages": [
         {
             "id": "Can't contact bitmask",
             "message": "Can't contact bitmask",
-            "translation": "No se pudo contactar con bitmask"
+            "translation": "Não foi possível se comunicar com bitmask"
         },
         {
             "id": [
@@ -12,12 +12,12 @@
                 "Is bitmaskd running? Start bitmask and try again."
             ],
             "message": "Is bitmaskd running? Start bitmask and try again.",
-            "translation": "¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo."
+            "translation": "Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask e tente novamente."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Falta un agente de autenticación"
+            "translation": "Um agente de autenticação está faltando"
         },
         {
             "id": [
@@ -25,32 +25,32 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "No se pudo encontrar ningún agente de autenticacion de polkit. Por favor lanza uno y prueba de nuevo."
+            "translation": "Não foi possível encontrar um agente de autenticação polkit. Por favor, execute um agente e tente novamente."
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Comprobando el estado..."
+            "translation": "Verificando o estado da VPN..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Encender"
+            "translation": "Ligar"
         },
         {
             "id": "Turn RiseupVPN on",
             "message": "Turn RiseupVPN on",
-            "translation": "Enciende RiseupVPN"
+            "translation": "Ligar a RiseupVPN"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Apagar"
+            "translation": "Desligar"
         },
         {
             "id": "Turn RiseupVPN off",
             "message": "Turn RiseupVPN off",
-            "translation": "Apaga RiseupVPN"
+            "translation": "Desligar a RiseupVPN"
         },
         {
             "id": "Cancel",
@@ -60,42 +60,42 @@
         {
             "id": "Cancel connection to RiseupVPN",
             "message": "Cancel connection to RiseupVPN",
-            "translation": "Cancela la conexión a RiseupVPN"
+            "translation": "Cancelar a conexão à RiseupVPN"
         },
         {
             "id": "Help ...",
             "message": "Help ...",
-            "translation": "Ayuda ..."
+            "translation": "Ajuda ..."
         },
         {
             "id": "Donate ...",
             "message": "Donate ...",
-            "translation": "Dona ..."
+            "translation": "Fazer uma doação ..."
         },
         {
             "id": "About ...",
             "message": "About ...",
-            "translation": "Acerca de ..."
+            "translation": "Sobre ..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Cerrar"
+            "translation": "Fechar"
         },
         {
             "id": "Quit BitmaskVPN",
             "message": "Quit BitmaskVPN",
-            "translation": "Cerrar BitmaskVPN"
+            "translation": "Fechar BitmaskVPN"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Salir a través de"
+            "translation": "Rotear o tráfego através de"
         },
         {
             "id": "Use RiseupVPN {Name} gateway",
             "message": "Use RiseupVPN {Name} gateway",
-            "translation": "Usa la salida de RiseupVPN por {Name}",
+            "translation": "Usar o gateway {Name} da RiseupVPN",
             "placeholders": [
                 {
                     "id": "Name",
@@ -110,57 +110,57 @@
         {
             "id": "RiseupVPN is on",
             "message": "RiseupVPN is on",
-            "translation": "RiseupVPN esta encendida"
+            "translation": "RiseupVPN está ligada"
         },
         {
             "id": "VPN is on",
             "message": "VPN is on",
-            "translation": "VPN encendida"
+            "translation": "A VPN está ligada"
         },
         {
             "id": "RiseupVPN is off",
             "message": "RiseupVPN is off",
-            "translation": "RiseupVPN esta apagada"
+            "translation": "RiseupVPN está desligada"
         },
         {
             "id": "VPN is off",
             "message": "VPN is off",
-            "translation": "VPN apagada"
+            "translation": "A VPN está desligada"
         },
         {
             "id": "RiseupVPN is starting",
             "message": "RiseupVPN is starting",
-            "translation": "RiseupVPN esta arrancando"
+            "translation": "RiseupVPN está sendo iniciada"
         },
         {
             "id": "VPN is starting",
             "message": "VPN is starting",
-            "translation": "VPN arrancando"
+            "translation": "A VPN está sendo iniciada"
         },
         {
             "id": "RiseupVPN is stopping",
             "message": "RiseupVPN is stopping",
-            "translation": "RiseupVPN esta apagando"
+            "translation": "RiseupVPN está sendo parada"
         },
         {
             "id": "VPN is stopping",
             "message": "VPN is stopping",
-            "translation": "VPN apagando"
+            "translation": "A VPN está sendo parada"
         },
         {
             "id": "Retry",
             "message": "Retry",
-            "translation": "Reintentar"
+            "translation": "Tentar novamente"
         },
         {
             "id": "RiseupVPN is blocking internet",
             "message": "RiseupVPN is blocking internet",
-            "translation": "RiseupVPN esta bloqueando internet"
+            "translation": "RiseupVPN está bloqueando a Internet"
         },
         {
             "id": "VPN is blocking internet",
             "message": "VPN is blocking internet",
-            "translation": "VPN bloqueando internet"
+            "translation": "A VPN está bloqueando a Internet"
         }
     ]
 }

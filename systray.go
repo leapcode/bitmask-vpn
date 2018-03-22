@@ -155,7 +155,6 @@ func (bt *bmTray) addGateways() {
 }
 
 func (bt *bmTray) changeStatus(status string) {
-	statusStr := status
 	bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
 	if bt.waitCh != nil {
 		bt.waitCh <- true
@@ -165,12 +164,20 @@ func (bt *bmTray) changeStatus(status string) {
 	switch status {
 	case "on":
 		systray.SetIcon(icon.On)
+		systray.SetTooltip(printer.Sprintf("RiseupVPN is on"))
+		bt.mStatus.SetTitle(printer.Sprintf("VPN is on"))
+		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is on"))
+
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Show()
 		bt.mCancel.Hide()
 
 	case "off":
 		systray.SetIcon(icon.Off)
+		systray.SetTooltip(printer.Sprintf("RiseupVPN is off"))
+		bt.mStatus.SetTitle(printer.Sprintf("VPN is off"))
+		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is off"))
+
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Hide()
@@ -178,6 +185,10 @@ func (bt *bmTray) changeStatus(status string) {
 	case "starting":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
+		systray.SetTooltip(printer.Sprintf("RiseupVPN is starting"))
+		bt.mStatus.SetTitle(printer.Sprintf("VPN is starting"))
+		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is starting"))
+
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Show()
@@ -185,6 +196,10 @@ func (bt *bmTray) changeStatus(status string) {
 	case "stopping":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
+		systray.SetTooltip(printer.Sprintf("RiseupVPN is stopping"))
+		bt.mStatus.SetTitle(printer.Sprintf("VPN is stopping"))
+		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is stopping"))
+
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Hide()
@@ -192,15 +207,14 @@ func (bt *bmTray) changeStatus(status string) {
 	case "failed":
 		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
+		systray.SetTooltip(printer.Sprintf("RiseupVPN is blocking internet"))
+		bt.mStatus.SetTitle(printer.Sprintf("VPN is blocking internet"))
+		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is blocking internet"))
+
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Show()
 		bt.mCancel.Hide()
-		statusStr = printer.Sprintf("blocking internet")
 	}
-
-	systray.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
-	bt.mStatus.SetTitle(printer.Sprintf("VPN is %v", statusStr))
-	bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is %v", statusStr))
 }
 
 func (bt *bmTray) waitIcon() {
