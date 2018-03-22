@@ -70,7 +70,6 @@ func (bt *bmTray) onReady() {
 
 	mHelp := systray.AddMenuItem(printer.Sprintf("Help ..."), "")
 	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate ..."), "")
-	mAbout := systray.AddMenuItem(printer.Sprintf("About ..."), "")
 	systray.AddSeparator()
 
 	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), printer.Sprintf("Quit BitmaskVPN"))
@@ -103,8 +102,6 @@ func (bt *bmTray) onReady() {
 				open.Run("https://riseup.net/vpn")
 			case <-bt.mDonate.ClickedCh:
 				open.Run("https://riseup.net/donate-vpn")
-			case <-mAbout.ClickedCh:
-				open.Run("https://bitmask.net")
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()
