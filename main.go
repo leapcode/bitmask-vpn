@@ -24,7 +24,8 @@ import (
 )
 
 const (
-	provider = "riseup.net"
+	provider        = "riseup.net"
+	applicationName = "RiseupVPN"
 )
 
 var printer *message.Printer

@@ -46,19 +46,9 @@
             "translation": "Turn on"
         },
         {
-            "id": "Turn RiseupVPN on",
-            "message": "Turn RiseupVPN on",
-            "translation": "Turn RiseupVPN on"
-        },
-        {
             "id": "Turn off",
             "message": "Turn off",
             "translation": "Turn off"
-        },
-        {
-            "id": "Turn RiseupVPN off",
-            "message": "Turn RiseupVPN off",
-            "translation": "Turn RiseupVPN off"
         },
         {
             "id": "Cancel",
@@ -66,9 +56,21 @@
             "translation": "Cancel"
         },
         {
-            "id": "Cancel connection to RiseupVPN",
-            "message": "Cancel connection to RiseupVPN",
-            "translation": "Cancel connection to RiseupVPN"
+            "id": "Cancel connection to {ApplicationName}",
+            "message": "Cancel connection to {ApplicationName}",
+            "translation": "Cancel connection to {ApplicationName}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
+            "fuzzy": true
         },
         {
             "id": "Help ...",
@@ -78,12 +80,7 @@
         {
             "id": "Donate ...",
             "message": "Donate ...",
-            "translation": "Donate ...!!!!"
-        },
-        {
-            "id": "About ...",
-            "message": "About ...",
-            "translation": "About ..."
+            "translation": "Donate ..."
         },
         {
             "id": "Quit",
@@ -91,84 +88,101 @@
             "translation": "Quit"
         },
         {
-            "id": "Quit BitmaskVPN",
-            "message": "Quit BitmaskVPN",
-            "translation": "Quit BitmaskVPN"
-        },
-        {
             "id": "Route traffic through",
             "message": "Route traffic through",
             "translation": "Route traffic through"
         },
         {
-            "id": "Use RiseupVPN {Name} gateway",
-            "message": "Use RiseupVPN {Name} gateway",
-            "translation": "Use RiseupVPN {Name} gateway",
+            "id": "Use {ApplicationName} {City} gateway",
+            "message": "Use {ApplicationName} {City} gateway",
+            "translation": "Use {ApplicationName} {City} gateway",
+            "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Name",
-                    "string": "%[1]v",
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "name"
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "City",
+                    "string": "%[2]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "city"
                 }
-            ]
-        },
-        {
-            "id": "RiseupVPN is on",
-            "message": "RiseupVPN is on",
-            "translation": "RiseupVPN is on",
-            "translatorComment": "Copied from source.",
+            ],
             "fuzzy": true
         },
         {
-            "id": "VPN is on",
-            "message": "VPN is on",
-            "translation": "VPN is on",
+            "id": "{ApplicationName} on",
+            "message": "{ApplicationName} on",
+            "translation": "{ApplicationName} on",
             "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
             "fuzzy": true
         },
         {
-            "id": "RiseupVPN is off",
-            "message": "RiseupVPN is off",
-            "translation": "RiseupVPN is off",
+            "id": "{ApplicationName} off",
+            "message": "{ApplicationName} off",
+            "translation": "{ApplicationName} off",
             "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
             "fuzzy": true
         },
         {
-            "id": "VPN is off",
-            "message": "VPN is off",
-            "translation": "VPN is off",
+            "id": "Connecting to {ApplicationName}",
+            "message": "Connecting to {ApplicationName}",
+            "translation": "Connecting to {ApplicationName}",
             "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
             "fuzzy": true
         },
         {
-            "id": "RiseupVPN is starting",
-            "message": "RiseupVPN is starting",
-            "translation": "RiseupVPN is starting",
+            "id": "Stopping {ApplicationName}",
+            "message": "Stopping {ApplicationName}",
+            "translation": "Stopping {ApplicationName}",
             "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "VPN is starting",
-            "message": "VPN is starting",
-            "translation": "VPN is starting",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "RiseupVPN is stopping",
-            "message": "RiseupVPN is stopping",
-            "translation": "RiseupVPN is stopping",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "VPN is stopping",
-            "message": "VPN is stopping",
-            "translation": "VPN is stopping",
-            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -177,17 +191,20 @@
             "translation": "Retry"
         },
         {
-            "id": "RiseupVPN is blocking internet",
-            "message": "RiseupVPN is blocking internet",
-            "translation": "RiseupVPN is blocking internet",
+            "id": "{ApplicationName} blocking internet",
+            "message": "{ApplicationName} blocking internet",
+            "translation": "{ApplicationName} blocking internet",
             "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "VPN is blocking internet",
-            "message": "VPN is blocking internet",
-            "translation": "VPN is blocking internet",
-            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
             "fuzzy": true
         }
     ]

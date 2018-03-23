@@ -38,19 +38,9 @@
             "translation": "Ligar"
         },
         {
-            "id": "Turn RiseupVPN on",
-            "message": "Turn RiseupVPN on",
-            "translation": "Ligar a RiseupVPN"
-        },
-        {
             "id": "Turn off",
             "message": "Turn off",
             "translation": "Desligar"
-        },
-        {
-            "id": "Turn RiseupVPN off",
-            "message": "Turn RiseupVPN off",
-            "translation": "Desligar a RiseupVPN"
         },
         {
             "id": "Cancel",
@@ -58,9 +48,19 @@
             "translation": "Cancelar"
         },
         {
-            "id": "Cancel connection to RiseupVPN",
-            "message": "Cancel connection to RiseupVPN",
-            "translation": "Cancelar a conexão à RiseupVPN"
+            "id": "Cancel connection to {ApplicationName}",
+            "message": "Cancel connection to {ApplicationName}",
+            "translation": "Cancelar a conexão à {ApplicationName}",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         },
         {
             "id": "Help ...",
@@ -73,19 +73,9 @@
             "translation": "Fazer uma doação ..."
         },
         {
-            "id": "About ...",
-            "message": "About ...",
-            "translation": "Sobre ..."
-        },
-        {
             "id": "Quit",
             "message": "Quit",
             "translation": "Fechar"
-        },
-        {
-            "id": "Quit BitmaskVPN",
-            "message": "Quit BitmaskVPN",
-            "translation": "Fechar BitmaskVPN"
         },
         {
             "id": "Route traffic through",
@@ -93,59 +83,87 @@
             "translation": "Rotear o tráfego através de"
         },
         {
-            "id": "Use RiseupVPN {Name} gateway",
-            "message": "Use RiseupVPN {Name} gateway",
-            "translation": "Usar o gateway {Name} da RiseupVPN",
+            "id": "Use {ApplicationName} {City} gateway",
+            "message": "Use {ApplicationName} {City} gateway",
+            "translation": "Usar o gateway {City} da {ApplicationName}",
             "placeholders": [
                 {
-                    "id": "Name",
-                    "string": "%[1]v",
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "name"
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "City",
+                    "string": "%[2]v",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "city"
                 }
             ]
         },
         {
-            "id": "RiseupVPN is on",
-            "message": "RiseupVPN is on",
-            "translation": "RiseupVPN está ligada"
+            "id": "{ApplicationName} on",
+            "message": "{ApplicationName} on",
+            "translation": "{ApplicationName} está ligada",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         },
         {
-            "id": "VPN is on",
-            "message": "VPN is on",
-            "translation": "A VPN está ligada"
+            "id": "{ApplicationName} off",
+            "message": "{ApplicationName} off",
+            "translation": "{ApplicationName} está desligada",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         },
         {
-            "id": "RiseupVPN is off",
-            "message": "RiseupVPN is off",
-            "translation": "RiseupVPN está desligada"
+            "id": "Connecting to {ApplicationName}",
+            "message": "Connecting to {ApplicationName}",
+            "translation": "A {ApplicationName} está sendo iniciada",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         },
         {
-            "id": "VPN is off",
-            "message": "VPN is off",
-            "translation": "A VPN está desligada"
-        },
-        {
-            "id": "RiseupVPN is starting",
-            "message": "RiseupVPN is starting",
-            "translation": "RiseupVPN está sendo iniciada"
-        },
-        {
-            "id": "VPN is starting",
-            "message": "VPN is starting",
-            "translation": "A VPN está sendo iniciada"
-        },
-        {
-            "id": "RiseupVPN is stopping",
-            "message": "RiseupVPN is stopping",
-            "translation": "RiseupVPN está sendo parada"
-        },
-        {
-            "id": "VPN is stopping",
-            "message": "VPN is stopping",
-            "translation": "A VPN está sendo parada"
+            "id": "Stopping {ApplicationName}",
+            "message": "Stopping {ApplicationName}",
+            "translation": "A {ApplicationName} está sendo parada",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         },
         {
             "id": "Retry",
@@ -153,14 +171,19 @@
             "translation": "Tentar novamente"
         },
         {
-            "id": "RiseupVPN is blocking internet",
-            "message": "RiseupVPN is blocking internet",
-            "translation": "RiseupVPN está bloqueando a Internet"
-        },
-        {
-            "id": "VPN is blocking internet",
-            "message": "VPN is blocking internet",
-            "translation": "A VPN está bloqueando a Internet"
+            "id": "{ApplicationName} blocking internet",
+            "message": "{ApplicationName} blocking internet",
+            "translation": "{ApplicationName} está bloqueando a Internet",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
         }
     ]
 }

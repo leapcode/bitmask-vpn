@@ -56,11 +56,11 @@ func (bt *bmTray) onReady() {
 
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
 	bt.mStatus.Disable()
-	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), printer.Sprintf("Turn RiseupVPN on"))
+	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), "")
 	bt.mTurnOn.Hide()
-	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), printer.Sprintf("Turn RiseupVPN off"))
+	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), "")
 	bt.mTurnOff.Hide()
-	bt.mCancel = systray.AddMenuItem(printer.Sprintf("Cancel"), printer.Sprintf("Cancel connection to RiseupVPN"))
+	bt.mCancel = systray.AddMenuItem(printer.Sprintf("Cancel"), printer.Sprintf("Cancel connection to %s", applicationName))
 	bt.mCancel.Hide()
 	systray.AddSeparator()
 
@@ -72,7 +72,7 @@ func (bt *bmTray) onReady() {
 	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate ..."), "")
 	systray.AddSeparator()
 
-	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), printer.Sprintf("Quit BitmaskVPN"))
+	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), "")
 
 	go func() {
 		ch := bt.bm.GetStatusCh()
@@ -121,13 +121,13 @@ func (bt *bmTray) addGateways() {
 
 	mGateway := systray.AddMenuItem(printer.Sprintf("Route traffic through"), "")
 	mGateway.Disable()
-	for i, name := range gatewayList {
-		menuItem := systray.AddMenuItem(name, printer.Sprintf("Use RiseupVPN %v gateway", name))
-		gateway := gatewayTray{menuItem, name}
+	for i, city := range gatewayList {
+		menuItem := systray.AddMenuItem(city, printer.Sprintf("Use %s %v gateway", applicationName, city))
+		gateway := gatewayTray{menuItem, city}
 
 		if i == 0 {
 			menuItem.Check()
-			menuItem.SetTitle("*" + name)
+			menuItem.SetTitle("*" + city)
 			bt.activeGateway = &gateway
 		} else {
 			menuItem.Uncheck()
@@ -158,23 +158,18 @@ func (bt *bmTray) changeStatus(status string) {
 		bt.waitCh = nil
 	}
 
+	var statusStr string
 	switch status {
 	case "on":
 		systray.SetIcon(icon.On)
-		systray.SetTooltip(printer.Sprintf("RiseupVPN is on"))
-		bt.mStatus.SetTitle(printer.Sprintf("VPN is on"))
-		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is on"))
-
+		statusStr = printer.Sprintf("%s on", applicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Show()
 		bt.mCancel.Hide()
 
 	case "off":
 		systray.SetIcon(icon.Off)
-		systray.SetTooltip(printer.Sprintf("RiseupVPN is off"))
-		bt.mStatus.SetTitle(printer.Sprintf("VPN is off"))
-		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is off"))
-
+		statusStr = printer.Sprintf("%s off", applicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Hide()
@@ -182,10 +177,7 @@ func (bt *bmTray) changeStatus(status string) {
 	case "starting":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
-		systray.SetTooltip(printer.Sprintf("RiseupVPN is starting"))
-		bt.mStatus.SetTitle(printer.Sprintf("VPN is starting"))
-		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is starting"))
-
+		statusStr = printer.Sprintf("Connecting to %s", applicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Show()
@@ -193,10 +185,7 @@ func (bt *bmTray) changeStatus(status string) {
 	case "stopping":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
-		systray.SetTooltip(printer.Sprintf("RiseupVPN is stopping"))
-		bt.mStatus.SetTitle(printer.Sprintf("VPN is stopping"))
-		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is stopping"))
-
+		statusStr = printer.Sprintf("Stopping %s", applicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
 		bt.mCancel.Hide()
@@ -204,14 +193,14 @@ func (bt *bmTray) changeStatus(status string) {
 	case "failed":
 		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
-		systray.SetTooltip(printer.Sprintf("RiseupVPN is blocking internet"))
-		bt.mStatus.SetTitle(printer.Sprintf("VPN is blocking internet"))
-		bt.mStatus.SetTooltip(printer.Sprintf("RiseupVPN is blocking internet"))
-
+		statusStr = printer.Sprintf("%s blocking internet", applicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Show()
 		bt.mCancel.Hide()
 	}
+
+	systray.SetTooltip(statusStr)
+	bt.mStatus.SetTitle(statusStr)
 }
 
 func (bt *bmTray) waitIcon() {
