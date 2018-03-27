@@ -97,12 +97,15 @@ func (bt *bmTray) onReady() {
 			case <-bt.mTurnOn.ClickedCh:
 				log.Println("on")
 				bt.bm.StartVPN(provider)
+				bt.conf.setUserStoppedVPN(false)
 			case <-bt.mTurnOff.ClickedCh:
 				log.Println("off")
 				bt.bm.StopVPN()
+				bt.conf.setUserStoppedVPN(true)
 			case <-bt.mCancel.ClickedCh:
 				log.Println("cancel")
 				bt.bm.StopVPN()
+				bt.conf.setUserStoppedVPN(true)
 
 			case <-mHelp.ClickedCh:
 				open.Run("https://riseup.net/vpn")

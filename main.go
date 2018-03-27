@@ -54,6 +54,7 @@ func main() {
 		log.Printf("Is bitmask running? %v", err)
 		return
 	}
+	maybeStartVPN(b, conf)
 
 	run(b, conf)
 }
@@ -75,6 +76,18 @@ func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) error {
 		}
 	}
 	return nil
+}
+
+func maybeStartVPN(b *bitmask.Bitmask, conf *systrayConfig) {
+	if conf.UserStoppedVPN {
+		return
+	}
+
+	err := b.StartVPN(provider)
+	if err != nil {
+		log.Println("Error starting VPN: ", err)
+	}
+	conf.setUserStoppedVPN(false)
 }
 
 func initPrinter() {

@@ -38,6 +38,7 @@ type systrayConfig struct {
 	LastNotification time.Time
 	Donated          time.Time
 	SelectWateway    bool
+	UserStoppedVPN   bool
 }
 
 func parseConfig() *systrayConfig {
@@ -45,6 +46,7 @@ func parseConfig() *systrayConfig {
 
 	f, err := os.Open(configPath)
 	if err != nil {
+		conf.save()
 		return &conf
 	}
 	defer f.Close()
@@ -53,6 +55,11 @@ func parseConfig() *systrayConfig {
 	err = dec.Decode(&conf)
 	conf.parseFlags()
 	return &conf
+}
+
+func (c *systrayConfig) setUserStoppedVPN(vpnStopped bool) error {
+	c.UserStoppedVPN = vpnStopped
+	return c.save()
 }
 
 func (c *systrayConfig) parseFlags() {
