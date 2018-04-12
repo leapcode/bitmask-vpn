@@ -2,9 +2,27 @@
     "language": "es-ES",
     "messages": [
         {
-            "id": "Can't contact bitmask",
-            "message": "Can't contact bitmask",
-            "translation": "No se pudo contactar con bitmask"
+            "id": [
+                "donationText",
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+            ],
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "El servicio {ApplicationName} es caro de mantener. Como no queremos guardar ninguna información personal tuya, no hay cuentas ni servicio de facturación. Si quieres que este servicio continúe, dona al menos $5 cada mes.\n\t\n¿Quieres donar ahora?",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
+        },
+        {
+            "id": "Donate",
+            "message": "Donate",
+            "translation": "Dona"
         },
         {
             "id": [
@@ -15,9 +33,9 @@
             "translation": "¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo."
         },
         {
-            "id": "Missing authentication agent",
-            "message": "Missing authentication agent",
-            "translation": "Falta un agente de autenticación"
+            "id": "Can't contact bitmask",
+            "message": "Can't contact bitmask",
+            "translation": "No se pudo contactar con bitmask"
         },
         {
             "id": [
@@ -26,6 +44,11 @@
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "No se pudo encontrar ningún agente de autenticacion de polkit. Por favor lanza uno y prueba de nuevo."
+        },
+        {
+            "id": "Missing authentication agent",
+            "message": "Missing authentication agent",
+            "translation": "Falta un agente de autenticación"
         },
         {
             "id": "Checking status...",

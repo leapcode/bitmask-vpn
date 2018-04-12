@@ -37,108 +37,94 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"About ...":             13,
-	"Can't contact bitmask": 0,
-	"Cancel":                9,
-	"Cancel connection to RiseupVPN":                                              10,
-	"Checking status...":                                                          4,
-	"Could not find a polkit authentication agent. Please run one and try again.": 3,
+	"%s blocking internet":    21,
+	"%s off":                  17,
+	"%s on":                   16,
+	"Can't contact bitmask":   3,
+	"Cancel":                  9,
+	"Cancel connection to %s": 10,
+	"Checking status...":      6,
+	"Connecting to %s":        18,
+	"Could not find a polkit authentication agent. Please run one and try again.": 4,
+	"Donate":     1,
 	"Donate ...": 12,
 	"Help ...":   11,
-	"Is bitmaskd running? Start bitmask and try again.": 1,
-	"Missing authentication agent":                      2,
-	"Quit":            14,
-	"Quit BitmaskVPN": 15,
-	"Retry":           26,
-	"RiseupVPN is blocking internet": 27,
-	"RiseupVPN is off":               20,
-	"RiseupVPN is on":                18,
-	"RiseupVPN is starting":          22,
-	"RiseupVPN is stopping":          24,
-	"Route traffic through":          16,
-	"Turn RiseupVPN off":             8,
-	"Turn RiseupVPN on":              6,
-	"Turn off":                       7,
-	"Turn on":                        5,
-	"Use RiseupVPN %v gateway":       17,
-	"VPN is blocking internet":       28,
-	"VPN is off":                     21,
-	"VPN is on":                      19,
-	"VPN is starting":                23,
-	"VPN is stopping":                25,
+	"Is bitmaskd running? Start bitmask and try again.": 2,
+	"Missing authentication agent":                      5,
+	"Quit":                  13,
+	"Retry":                 20,
+	"Route traffic through": 14,
+	"Stopping %s":           19,
+	"The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?": 0,
+	"Turn off":          8,
+	"Turn on":           7,
+	"Use %s %v gateway": 15,
 }
 
-var en_USIndex = []uint32{ // 30 elements
-	0x00000000, 0x00000016, 0x00000048, 0x00000065,
-	0x000000b1, 0x000000c4, 0x000000cc, 0x000000de,
-	0x000000e7, 0x000000fa, 0x00000101, 0x00000120,
-	0x00000129, 0x00000138, 0x00000142, 0x00000147,
-	0x00000157, 0x0000016d, 0x00000189, 0x00000199,
-	0x000001a3, 0x000001b4, 0x000001bf, 0x000001d5,
-	0x000001e5, 0x000001fb, 0x0000020b, 0x00000211,
-	0x00000230, 0x00000249,
-} // Size: 144 bytes
+var en_USIndex = []uint32{ // 23 elements
+	0x00000000, 0x000000fd, 0x00000104, 0x00000136,
+	0x0000014c, 0x00000198, 0x000001b5, 0x000001c8,
+	0x000001d0, 0x000001d9, 0x000001e0, 0x000001fb,
+	0x00000204, 0x0000020f, 0x00000214, 0x0000022a,
+	0x00000242, 0x0000024b, 0x00000255, 0x00000269,
+	0x00000278, 0x0000027e, 0x00000296,
+} // Size: 116 bytes
 
-const en_USData string = "" + // Size: 585 bytes
-	"\x02Can't contact bitmask\x02Is bitmaskd running? Start bitmask and try " +
-	"again.\x02Missing authentication agent\x02Could not find a polkit authen" +
-	"tication agent. Please run one and try again.\x02Checking status...\x02T" +
-	"urn on\x02Turn RiseupVPN on\x02Turn off\x02Turn RiseupVPN off\x02Cancel" +
-	"\x02Cancel connection to RiseupVPN\x02Help ...\x02Donate ...!!!!\x02Abou" +
-	"t ...\x02Quit\x02Quit BitmaskVPN\x02Route traffic through\x02Use RiseupV" +
-	"PN %[1]v gateway\x02RiseupVPN is on\x02VPN is on\x02RiseupVPN is off\x02" +
-	"VPN is off\x02RiseupVPN is starting\x02VPN is starting\x02RiseupVPN is s" +
-	"topping\x02VPN is stopping\x02Retry\x02RiseupVPN is blocking internet" +
-	"\x02VPN is blocking internet"
+const en_USData string = "" + // Size: 662 bytes
+	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
+	"e personal information about you, there is no accounts or billing for th" +
+	"is service. But if you want the service to continue, donate at least $5 " +
+	"each month.\x0a\x09\x0aDo you want to donate now?\x02Donate\x02Is bitmas" +
+	"kd running? Start bitmask and try again.\x02Can't contact bitmask\x02Cou" +
+	"ld not find a polkit authentication agent. Please run one and try again." +
+	"\x02Missing authentication agent\x02Checking status...\x02Turn on\x02Tur" +
+	"n off\x02Cancel\x02Cancel connection to %[1]s\x02Help ...\x02Donate ..." +
+	"\x02Quit\x02Route traffic through\x02Use %[1]s %[2]v gateway\x02%[1]s on" +
+	"\x02%[1]s off\x02Connecting to %[1]s\x02Stopping %[1]s\x02Retry\x02%[1]s" +
+	" blocking internet"
 
-var es_ESIndex = []uint32{ // 30 elements
-	0x00000000, 0x00000021, 0x00000060, 0x00000082,
-	0x000000e9, 0x00000102, 0x0000010b, 0x0000011e,
-	0x00000125, 0x00000135, 0x0000013e, 0x0000015f,
-	0x00000169, 0x00000172, 0x00000180, 0x00000187,
-	0x00000199, 0x000001ac, 0x000001d1, 0x000001ea,
-	0x000001f8, 0x0000020f, 0x0000021b, 0x00000235,
-	0x00000244, 0x0000025c, 0x00000269, 0x00000274,
-	0x00000297, 0x000002af,
-} // Size: 144 bytes
+var es_ESIndex = []uint32{ // 23 elements
+	0x00000000, 0x000000ec, 0x000000f1, 0x00000130,
+	0x00000151, 0x000001b8, 0x000001da, 0x000001f3,
+	0x000001fc, 0x00000203, 0x0000020c, 0x00000229,
+	0x00000233, 0x0000023c, 0x00000243, 0x00000256,
+	0x00000277, 0x00000287, 0x00000295, 0x000002a9,
+	0x000002c1, 0x000002cc, 0x000002e6,
+} // Size: 116 bytes
 
-const es_ESData string = "" + // Size: 687 bytes
-	"\x02No se pudo contactar con bitmask\x02¿Está corriendo bitmaskd? Arranc" +
-	"a bitmask y prueba de nuevo.\x02Falta un agente de autenticación\x02No s" +
-	"e pudo encontrar ningún agente de autenticacion de polkit. Por favor lan" +
-	"za uno y prueba de nuevo.\x02Comprobando el estado...\x02Encender\x02Enc" +
-	"iende RiseupVPN\x02Apagar\x02Apaga RiseupVPN\x02Cancelar\x02Cancela la c" +
-	"onexión a RiseupVPN\x02Ayuda ...\x02Dona ...\x02Acerca de ...\x02Cerrar" +
-	"\x02Cerrar BitmaskVPN\x02Salir a través de\x02Usa la salida de RiseupVPN" +
-	" por %[1]v\x02RiseupVPN esta encendida\x02VPN encendida\x02RiseupVPN est" +
-	"a apagada\x02VPN apagada\x02RiseupVPN esta arrancando\x02VPN arrancando" +
-	"\x02RiseupVPN esta apagando\x02VPN apagando\x02Reintentar\x02RiseupVPN e" +
-	"sta bloqueando internet\x02VPN bloqueando internet"
+const es_ESData string = "" + // Size: 742 bytes
+	"\x02El servicio %[1]s es caro de mantener. Como no queremos guardar ning" +
+	"una información personal tuya, no hay cuentas ni servicio de facturación" +
+	". Si quieres que este servicio continúe, dona al menos $5 cada mes.\x0a" +
+	"\x09\x0a¿Quieres donar ahora?\x02Dona\x02¿Está corriendo bitmaskd? Arran" +
+	"ca bitmask y prueba de nuevo.\x02No se pudo contactar con bitmask\x02No " +
+	"se pudo encontrar ningún agente de autenticacion de polkit. Por favor la" +
+	"nza uno y prueba de nuevo.\x02Falta un agente de autenticación\x02Compro" +
+	"bando el estado...\x02Encender\x02Apagar\x02Cancelar\x02Cancela la conex" +
+	"ión a %[1]s\x02Ayuda ...\x02Dona ...\x02Cerrar\x02Salir a través de\x02U" +
+	"sa la salida de %[1]s por %[2]v\x02%[1]s encendida\x02%[1]s apagada\x02C" +
+	"onnectando a %[1]s\x02Desconnectando de %[1]s\x02Reintentar\x02%[1]s blo" +
+	"queando internet"
 
-var pt_BRIndex = []uint32{ // 30 elements
-	0x00000000, 0x0000002c, 0x00000086, 0x000000b1,
-	0x00000122, 0x00000141, 0x00000147, 0x00000159,
-	0x00000162, 0x00000177, 0x00000180, 0x000001a1,
-	0x000001ab, 0x000001c2, 0x000001cc, 0x000001d3,
-	0x000001e5, 0x00000203, 0x00000225, 0x0000023c,
-	0x0000024f, 0x00000269, 0x0000027f, 0x0000029e,
-	0x000002b9, 0x000002d6, 0x000002ef, 0x00000300,
-	0x00000326, 0x00000348,
-} // Size: 144 bytes
+var pt_BRIndex = []uint32{ // 23 elements
+	0x00000000, 0x00000000, 0x00000013, 0x0000006d,
+	0x00000099, 0x0000010a, 0x00000135, 0x00000154,
+	0x0000015a, 0x00000163, 0x0000016c, 0x00000189,
+	0x00000193, 0x000001aa, 0x000001b1, 0x000001cf,
+	0x000001ed, 0x00000200, 0x00000216, 0x00000233,
+	0x0000024e, 0x0000025f, 0x00000281,
+} // Size: 116 bytes
 
-const pt_BRData string = "" + // Size: 840 bytes
-	"\x02Não foi possível se comunicar com bitmask\x02Você tem certeza que bi" +
-	"tmaskd está sendo executado? Inicie o bitmask e tente novamente.\x02Um a" +
-	"gente de autenticação está faltando\x02Não foi possível encontrar um age" +
-	"nte de autenticação polkit. Por favor, execute um agente e tente novamen" +
-	"te.\x02Verificando o estado da VPN...\x02Ligar\x02Ligar a RiseupVPN\x02D" +
-	"esligar\x02Desligar a RiseupVPN\x02Cancelar\x02Cancelar a conexão à Rise" +
-	"upVPN\x02Ajuda ...\x02Fazer uma doação ...\x02Sobre ...\x02Fechar\x02Fec" +
-	"har BitmaskVPN\x02Rotear o tráfego através de\x02Usar o gateway %[1]v da" +
-	" RiseupVPN\x02RiseupVPN está ligada\x02A VPN está ligada\x02RiseupVPN es" +
-	"tá desligada\x02A VPN está desligada\x02RiseupVPN está sendo iniciada" +
-	"\x02A VPN está sendo iniciada\x02RiseupVPN está sendo parada\x02A VPN es" +
-	"tá sendo parada\x02Tentar novamente\x02RiseupVPN está bloqueando a Inter" +
-	"net\x02A VPN está bloqueando a Internet"
+const pt_BRData string = "" + // Size: 641 bytes
+	"\x02Fazer uma doação\x02Você tem certeza que bitmaskd está sendo executa" +
+	"do? Inicie o bitmask e tente novamente.\x02Não foi possível se comunicar" +
+	" com bitmask\x02Não foi possível encontrar um agente de autenticação pol" +
+	"kit. Por favor, execute um agente e tente novamente.\x02Um agente de aut" +
+	"enticação está faltando\x02Verificando o estado da VPN...\x02Ligar\x02De" +
+	"sligar\x02Cancelar\x02Cancelar a conexão à %[1]s\x02Ajuda ...\x02Fazer u" +
+	"ma doação ...\x02Fechar\x02Rotear o tráfego através de\x02Usar o gateway" +
+	" %[2]v da %[1]s\x02%[1]s está ligada\x02%[1]s está desligada\x02A %[1]s " +
+	"está sendo iniciada\x02A %[1]s está sendo parada\x02Tentar novamente\x02" +
+	"%[1]s está bloqueando a Internet"
 
-	// Total table size 2544 bytes (2KiB); checksum: FDED99FB
+	// Total table size 2393 bytes (2KiB); checksum: 3C9654DB

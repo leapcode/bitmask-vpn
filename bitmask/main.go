@@ -28,7 +28,7 @@ import (
 const (
 	// On win should be: tcp://127.0.0.1:5001
 	coreEndpoint = "ipc://%s/bitmask.core.sock"
-	timeout      = time.Second * 40
+	timeout      = time.Second * 15
 )
 
 // Bitmask holds the bitmask client data

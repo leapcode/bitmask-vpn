@@ -16,32 +16,27 @@
 package main
 
 import (
-	"os"
-	"path"
 	"time"
 
-	notif "github.com/0xAX/notificator"
+	"0xacab.org/leap/go-dialog"
+	"github.com/skratchdot/open-golang/open"
 )
 
 const (
-	donationText     = `The RiseupVPN service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month at https://riseup.net/donate-vpn`
+	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+	
+Do you want to donate now?`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
-	svgFileName      = "riseupvpn.svg"
 )
 
 type notificator struct {
-	notify *notif.Notificator
-	conf   *systrayConfig
+	conf *systrayConfig
 }
 
 func newNotificator(conf *systrayConfig) *notificator {
-	notify := notif.New(notif.Options{
-		DefaultIcon: getSVGPath(),
-		AppName:     "RiseupVPN",
-	})
-	n := notificator{notify, conf}
-	//go n.donations()
+	n := notificator{conf}
+	go n.donations()
 	return &n
 }
 
@@ -49,46 +44,21 @@ func (n *notificator) donations() {
 	time.Sleep(time.Minute * 5)
 	for {
 		if n.conf.needsNotification() {
-			n.notify.Push(printer.Sprintf("Donate to RiseupVPN"), printer.Sprintf(donationText), "", notif.UR_NORMAL)
+			letsDonate := dialog.Message(printer.Sprintf(donationText, applicationName)).Title(printer.Sprintf("Donate")).YesNo()
 			n.conf.setNotification()
+			if letsDonate {
+				open.Run("https://riseup.net/donate-vpn")
+				n.conf.setDonated()
+			}
 		}
 		time.Sleep(time.Hour)
 	}
 }
 
 func (n *notificator) bitmaskNotRunning() {
-	n.notify.Push(printer.Sprintf("Can't contact bitmask"), printer.Sprintf(notRunning), "", notif.UR_CRITICAL)
+	dialog.Message(printer.Sprintf(notRunning)).Title(printer.Sprintf("Can't contact bitmask")).Error()
 }
 
 func (n *notificator) authAgent() {
-	n.notify.Push(printer.Sprintf("Missing authentication agent"), printer.Sprintf(missingAuthAgent), "", notif.UR_CRITICAL)
-}
-
-func getSVGPath() string {
-	wd, _ := os.Getwd()
-	svgPath := path.Join(wd, svgFileName)
-	if fileExist(svgPath) {
-		return svgPath
-	}
-
-	svgPath = "/usr/share/riseupvpn/riseupvpn.svg"
-	if fileExist(svgPath) {
-		return svgPath
-	}
-
-	gopath := os.Getenv("GOPATH")
-	if gopath == "" {
-		gopath = path.Join(os.Getenv("HOME"), "go")
-	}
-	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-systray", svgFileName)
-	if fileExist(svgPath) {
-		return svgPath
-	}
-
-	return ""
-}
-
-func fileExist(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return err == nil
+	dialog.Message(printer.Sprintf(missingAuthAgent)).Title(printer.Sprintf("Missing authentication agent")).Error()
 }

@@ -2,9 +2,29 @@
     "language": "en-US",
     "messages": [
         {
-            "id": "Can't contact bitmask",
-            "message": "Can't contact bitmask",
-            "translation": "Can't contact bitmask",
+            "id": [
+                "donationText",
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+            ],
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Donate",
+            "message": "Donate",
+            "translation": "Donate",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -19,9 +39,9 @@
             "fuzzy": true
         },
         {
-            "id": "Missing authentication agent",
-            "message": "Missing authentication agent",
-            "translation": "Missing authentication agent",
+            "id": "Can't contact bitmask",
+            "message": "Can't contact bitmask",
+            "translation": "Can't contact bitmask",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -32,6 +52,13 @@
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "Could not find a polkit authentication agent. Please run one and try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Missing authentication agent",
+            "message": "Missing authentication agent",
+            "translation": "Missing authentication agent",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

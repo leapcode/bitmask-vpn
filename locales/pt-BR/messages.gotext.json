@@ -2,9 +2,27 @@
     "language": "pt-BR",
     "messages": [
         {
-            "id": "Can't contact bitmask",
-            "message": "Can't contact bitmask",
-            "translation": "Não foi possível se comunicar com bitmask"
+            "id": [
+                "donationText",
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+            ],
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                }
+            ]
+        },
+        {
+            "id": "Donate",
+            "message": "Donate",
+            "translation": "Fazer uma doação"
         },
         {
             "id": [
@@ -15,9 +33,9 @@
             "translation": "Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask e tente novamente."
         },
         {
-            "id": "Missing authentication agent",
-            "message": "Missing authentication agent",
-            "translation": "Um agente de autenticação está faltando"
+            "id": "Can't contact bitmask",
+            "message": "Can't contact bitmask",
+            "translation": "Não foi possível se comunicar com bitmask"
         },
         {
             "id": [
@@ -26,6 +44,11 @@
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "Não foi possível encontrar um agente de autenticação polkit. Por favor, execute um agente e tente novamente."
+        },
+        {
+            "id": "Missing authentication agent",
+            "message": "Missing authentication agent",
+            "translation": "Um agente de autenticação está faltando"
         },
         {
             "id": "Checking status...",

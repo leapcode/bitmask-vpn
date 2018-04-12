@@ -17,6 +17,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	"github.com/jmshal/go-locale"
@@ -48,15 +49,18 @@ func main() {
 		return
 	}
 	defer b.Close()
-
-	err = checkAndInstallHelpers(b, notify)
-	if err != nil {
-		log.Printf("Is bitmask running? %v", err)
-		return
-	}
-	maybeStartVPN(b, conf)
+	go checkAndStartBitmask(b, notify, conf)
 
 	run(b, conf)
+}
+
+func checkAndStartBitmask(b *bitmask.Bitmask, notify *notificator, conf *systrayConfig) {
+	err := checkAndInstallHelpers(b, notify)
+	if err != nil {
+		log.Printf("Is bitmask running? %v", err)
+		os.Exit(1)
+	}
+	maybeStartVPN(b, conf)
 }
 
 func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) error {
