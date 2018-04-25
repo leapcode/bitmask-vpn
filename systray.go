@@ -110,6 +110,7 @@ func (bt *bmTray) onReady() {
 			case <-mHelp.ClickedCh:
 				open.Run("https://riseup.net/vpn")
 			case <-bt.mDonate.ClickedCh:
+				bt.conf.setDonated()
 				open.Run("https://riseup.net/donate-vpn")
 
 			case <-mQuit.ClickedCh:
