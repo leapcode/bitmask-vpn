@@ -16,6 +16,8 @@
 package main
 
 import (
+	"os"
+	"path"
 	"time"
 
 	"0xacab.org/leap/go-dialog"
@@ -28,6 +30,7 @@ const (
 Do you want to donate now?`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
+	svgFileName      = "riseupvpn.svg"
 )
 
 type notificator struct {
@@ -44,7 +47,10 @@ func (n *notificator) donations() {
 	time.Sleep(time.Minute * 5)
 	for {
 		if n.conf.needsNotification() {
-			letsDonate := dialog.Message(printer.Sprintf(donationText, applicationName)).Title(printer.Sprintf("Donate")).YesNo()
+			letsDonate := dialog.Message(printer.Sprintf(donationText, applicationName)).
+				Title(printer.Sprintf("Donate")).
+				Icon(getSVGPath()).
+				YesNo()
 			n.conf.setNotification()
 			if letsDonate {
 				open.Run("https://riseup.net/donate-vpn")
@@ -56,9 +62,44 @@ func (n *notificator) donations() {
 }
 
 func (n *notificator) bitmaskNotRunning() {
-	dialog.Message(printer.Sprintf(notRunning)).Title(printer.Sprintf("Can't contact bitmask")).Error()
+	dialog.Message(printer.Sprintf(notRunning)).
+		Title(printer.Sprintf("Can't contact bitmask")).
+		Icon(getSVGPath()).
+		Error()
 }
 
 func (n *notificator) authAgent() {
-	dialog.Message(printer.Sprintf(missingAuthAgent)).Title(printer.Sprintf("Missing authentication agent")).Error()
+	dialog.Message(printer.Sprintf(missingAuthAgent)).
+		Title(printer.Sprintf("Missing authentication agent")).
+		Icon(getSVGPath()).
+		Error()
+}
+
+func getSVGPath() string {
+	wd, _ := os.Getwd()
+	svgPath := path.Join(wd, svgFileName)
+	if fileExist(svgPath) {
+		return svgPath
+	}
+
+	svgPath = "/usr/share/riseupvpn/riseupvpn.svg"
+	if fileExist(svgPath) {
+		return svgPath
+	}
+
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		gopath = path.Join(os.Getenv("HOME"), "go")
+	}
+	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-systray", svgFileName)
+	if fileExist(svgPath) {
+		return svgPath
+	}
+
+	return ""
+}
+
+func fileExist(filePath string) bool {
+	_, err := os.Stat(filePath)
+	return err == nil
 }
