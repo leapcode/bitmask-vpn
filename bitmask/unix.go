@@ -18,4 +18,6 @@ package bitmask
 
 import "os"
 
+const coreEndpoint = "ipc:///var/tmp/bitmask.core.sock"
+
 var ConfigPath = os.Getenv("HOME") + "/.config/leap"

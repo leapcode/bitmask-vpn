@@ -18,7 +18,6 @@ package bitmask
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"time"
 
@@ -26,9 +25,7 @@ import (
 )
 
 const (
-	// On win should be: tcp://127.0.0.1:5001
-	coreEndpoint = "ipc://%s/bitmask.core.sock"
-	timeout      = time.Second * 15
+	timeout = time.Second * 15
 )
 
 // Bitmask holds the bitmask client data
@@ -101,7 +98,6 @@ func initCore() (*zmq4.Socket, error) {
 		return nil, err
 	}
 
-	endpointPwd := "/var/tmp"
-	err = socket.Connect(fmt.Sprintf(coreEndpoint, endpointPwd))
+	err = socket.Connect(coreEndpoint)
 	return socket, err
 }
