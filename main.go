@@ -32,6 +32,10 @@ const (
 var printer *message.Printer
 
 func main() {
+	if _, err := os.Stat(bitmask.ConfigPath); os.IsNotExist(err) {
+		os.MkdirAll(bitmask.ConfigPath, os.ModePerm)
+	}
+
 	err := acquirePID()
 	if err != nil {
 		log.Fatal(err)
@@ -46,6 +50,7 @@ func main() {
 	b, err := bitmask.Init()
 	if err != nil {
 		log.Print(err)
+		notify.bitmaskNotRunning()
 		return
 	}
 	defer b.Close()
