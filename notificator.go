@@ -28,6 +28,11 @@ const (
 	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 	
 Do you want to donate now?`
+	aboutText = `%s is an easy, fast, and secure VPN service from riseup.net. %s does not require a user account, keep logs, or track you in any way.
+	    
+This service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.
+		
+By using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
 	svgFileName      = "riseupvpn.svg"
@@ -59,6 +64,13 @@ func (n *notificator) donations() {
 		}
 		time.Sleep(time.Hour)
 	}
+}
+
+func (n *notificator) about() {
+	dialog.Message(printer.Sprintf(aboutText, applicationName, applicationName)).
+		Title(printer.Sprintf("About")).
+		Icon(getSVGPath()).
+		Info()
 }
 
 func (n *notificator) bitmaskNotRunning() {

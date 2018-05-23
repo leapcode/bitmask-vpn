@@ -51,7 +51,7 @@ func main() {
 	defer b.Close()
 	go checkAndStartBitmask(b, notify, conf)
 
-	run(b, conf)
+	run(b, conf, notify)
 }
 
 func checkAndStartBitmask(b *bitmask.Bitmask, notify *notificator, conf *systrayConfig) {

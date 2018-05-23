@@ -30,6 +30,41 @@
         },
         {
             "id": [
+                "aboutText",
+                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName_1} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place."
+            ],
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName_1} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.",
+            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName_1} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "ApplicationName_1",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "applicationName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "About",
+            "message": "About",
+            "translation": "About",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": [
                 "notRunning",
                 "Is bitmaskd running? Start bitmask and try again."
             ],
@@ -100,14 +135,25 @@
             "fuzzy": true
         },
         {
-            "id": "Help ...",
-            "message": "Help ...",
-            "translation": "Help ..."
+            "id": "Help...",
+            "message": "Help...",
+            "translation": "Help...",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
         },
         {
-            "id": "Donate ...",
-            "message": "Donate ...",
-            "translation": "Donate ..."
+            "id": "Donate...",
+            "message": "Donate...",
+            "translation": "Donate...",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "About...",
+            "message": "About...",
+            "translation": "About...",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
         },
         {
             "id": "Quit",

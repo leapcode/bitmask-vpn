@@ -28,6 +28,7 @@ import (
 type bmTray struct {
 	bm            *bitmask.Bitmask
 	conf          *systrayConfig
+	notify        *notificator
 	waitCh        chan bool
 	mStatus       *systray.MenuItem
 	mTurnOn       *systray.MenuItem
@@ -42,8 +43,8 @@ type gatewayTray struct {
 	name     string
 }
 
-func run(bm *bitmask.Bitmask, conf *systrayConfig) {
-	bt := bmTray{bm: bm, conf: conf}
+func run(bm *bitmask.Bitmask, conf *systrayConfig, notify *notificator) {
+	bt := bmTray{bm: bm, conf: conf, notify: notify}
 	systray.Run(bt.onReady, bt.onExit)
 }
 
@@ -74,8 +75,9 @@ func (bt *bmTray) onReady() {
 		bt.addGateways()
 	}
 
-	mHelp := systray.AddMenuItem(printer.Sprintf("Help ..."), "")
-	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate ..."), "")
+	mHelp := systray.AddMenuItem(printer.Sprintf("Help..."), "")
+	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate..."), "")
+	mAbout := systray.AddMenuItem(printer.Sprintf("About..."), "")
 	systray.AddSeparator()
 
 	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), "")
@@ -108,10 +110,12 @@ func (bt *bmTray) onReady() {
 				bt.conf.setUserStoppedVPN(true)
 
 			case <-mHelp.ClickedCh:
-				open.Run("https://riseup.net/vpn")
+				open.Run("https://riseup.net/vpn/support")
 			case <-bt.mDonate.ClickedCh:
 				bt.conf.setDonated()
-				open.Run("https://riseup.net/donate-vpn")
+				open.Run("https://riseup.net/vpn/donate")
+			case <-mAbout.ClickedCh:
+				bt.notify.about()
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()
