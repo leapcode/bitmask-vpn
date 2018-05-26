@@ -35,7 +35,7 @@ func initEvents() (*zmq4.Socket, error) {
 		return nil, err
 	}
 
-	if zmq4.HasCurve() {
+	if hasCurve() {
 		err = initCurve(socket)
 		if err != nil {
 			return nil, err
