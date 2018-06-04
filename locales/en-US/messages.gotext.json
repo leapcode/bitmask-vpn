@@ -98,6 +98,41 @@
             "fuzzy": true
         },
         {
+            "id": [
+                "errorStartingVPN",
+                "Can't connect to {ApplicationName}: {Err}"
+            ],
+            "message": "Can't connect to {ApplicationName}: {Err}",
+            "translation": "Can't connect to {ApplicationName}: {Err}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "Err",
+                    "string": "%[2]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 2,
+                    "expr": "err"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Error starting VPN",
+            "message": "Error starting VPN",
+            "translation": "Error starting VPN",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Checking status...",
             "message": "Checking status...",
             "translation": "Checking status..."

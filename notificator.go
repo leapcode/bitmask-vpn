@@ -34,6 +34,7 @@ This service paid for entirely by donations from users like you. Please donate a
 		
 By using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
+	errorStartingVPN = `Can't connect to %s: %v`
 	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
 	svgFileName      = "riseupvpn.svg"
 )
@@ -83,6 +84,13 @@ func (n *notificator) bitmaskNotRunning() {
 func (n *notificator) authAgent() {
 	dialog.Message(printer.Sprintf(missingAuthAgent)).
 		Title(printer.Sprintf("Missing authentication agent")).
+		Icon(getSVGPath()).
+		Error()
+}
+
+func (n *notificator) errorStartingVPN(err error) {
+	dialog.Message(printer.Sprintf(errorStartingVPN, applicationName, err)).
+		Title(printer.Sprintf("Error starting VPN")).
 		Icon(getSVGPath()).
 		Error()
 }
