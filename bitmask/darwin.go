@@ -18,14 +18,6 @@ package bitmask
 
 import (
 	"os"
-
-	"github.com/pebbe/zmq4"
 )
 
-const coreEndpoint = "ipc:///var/tmp/bitmask.core.sock"
-
 var ConfigPath = os.Getenv("HOME") + "/Library/Preferences/leap"
-
-func hasCurve() bool {
-	return zmq4.HasCurve()
-}

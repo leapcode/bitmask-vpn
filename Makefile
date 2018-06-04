@@ -13,7 +13,7 @@ icon:
 	make -C icon
 
 get_deps:
-	 sudo apt install libzmq3-dev libgtk-3-dev libappindicator3-dev golang pkg-config
+	 sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config
 
 
 LANGS ?= $(foreach path,$(wildcard locales/*/messages.gotext.json),$(patsubst locales/%/messages.gotext.json,%,$(path)))

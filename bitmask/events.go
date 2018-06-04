@@ -16,63 +16,27 @@
 package bitmask
 
 import (
-	"io/ioutil"
 	"log"
-	"path/filepath"
-	"strings"
-
-	"github.com/pebbe/zmq4"
+	"net/http"
 )
 
 const (
-	eventsEndpoint = "tcp://127.0.0.1:9001"
-	statusEvent    = "VPN_STATUS_CHANGED"
+	statusEvent = "VPN_STATUS_CHANGED"
 )
 
-func initEvents() (*zmq4.Socket, error) {
-	socket, err := zmq4.NewSocket(zmq4.SUB)
-	if err != nil {
-		return nil, err
-	}
-
-	if hasCurve() {
-		err = initCurve(socket)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	err = socket.Connect(eventsEndpoint)
-	if err != nil {
-		return nil, err
-	}
-
-	err = socket.SetSubscribe(statusEvent)
-	return socket, err
-}
-
-func initCurve(socket *zmq4.Socket) error {
-	serverKeyData, err := ioutil.ReadFile(getServerKeyPath())
-	if err != nil {
-		return err
-	}
-
-	pubkey, seckey, err := zmq4.NewCurveKeypair()
-	if err != nil {
-		return err
-	}
-
-	serverkey := strings.Split(string(serverKeyData), "\"")[1]
-	return socket.ClientAuthCurve(serverkey, pubkey, seckey)
-}
-
 func (b *Bitmask) eventsHandler() {
+	b.send("events", "register", statusEvent)
+	client := &http.Client{
+		Timeout: 0,
+	}
 	for {
-		msg, err := b.eventsoc.RecvMessage(0)
-		if err != nil {
-			break
+		resJSON, err := send(b.apiToken, client, "events", "poll")
+		res, ok := resJSON.([]interface{})
+		if err != nil || !ok || len(res) < 1 {
+			continue
 		}
-		if msg[0][:len(statusEvent)] != statusEvent {
+		event, ok := res[0].(string)
+		if !ok || event != statusEvent {
 			continue
 		}
 
@@ -83,8 +47,4 @@ func (b *Bitmask) eventsHandler() {
 		}
 		b.statusCh <- status
 	}
-}
-
-func getServerKeyPath() string {
-	return filepath.Join(ConfigPath, "events", "zmq_certificates", "public_keys", "server.key")
 }

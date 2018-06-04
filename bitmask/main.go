@@ -16,40 +16,41 @@
 package bitmask
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"path"
 	"time"
-
-	"github.com/pebbe/zmq4"
 )
 
 const (
-	timeout = time.Second * 15
+	timeout    = time.Second * 15
+	url        = "http://localhost:7070/API/"
+	headerAuth = "X-Bitmask-Auth"
 )
 
 // Bitmask holds the bitmask client data
 type Bitmask struct {
-	coresoc  *zmq4.Socket
-	eventsoc *zmq4.Socket
+	client   *http.Client
+	apiToken string
 	statusCh chan string
 }
 
 // Init the connection to bitmask
 func Init() (*Bitmask, error) {
 	statusCh := make(chan string)
-	coresoc, err := initCore()
-	if err != nil {
-		return nil, err
+	client := &http.Client{
+		Timeout: timeout,
 	}
-	eventsoc, err := initEvents()
+	apiToken, err := getToken()
 	if err != nil {
 		return nil, err
 	}
 
-	coresoc.SetRcvtimeo(timeout)
-
-	b := Bitmask{coresoc, eventsoc, statusCh}
+	b := Bitmask{client, apiToken, statusCh}
 	go b.eventsHandler()
 	return &b, nil
 }
@@ -65,24 +66,48 @@ func (b *Bitmask) Close() {
 	if err != nil {
 		log.Printf("Got an error stopping bitmaskd: %v", err)
 	}
-	b.coresoc.Close()
 }
 
 func (b *Bitmask) send(parts ...interface{}) (map[string]interface{}, error) {
-	_, err := b.coresoc.SendMessage(parts...)
+	resJSON, err := send(b.apiToken, b.client, parts...)
 	if err != nil {
 		return nil, err
 	}
-	resJSON, err := b.coresoc.RecvBytes(0)
+	result, ok := resJSON.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("Not valid response")
+	}
+	return result, nil
+}
+
+func send(apiToken string, client *http.Client, parts ...interface{}) (interface{}, error) {
+	apiSection, _ := parts[0].(string)
+	reqBody, err := json.Marshal(parts[1:])
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("POST", url+apiSection, bytes.NewReader(reqBody))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add(headerAuth, apiToken)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	resJSON, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 	return parseResponse(resJSON)
 }
 
-func parseResponse(resJSON []byte) (map[string]interface{}, error) {
+func parseResponse(resJSON []byte) (interface{}, error) {
 	var response struct {
-		Result map[string]interface{}
+		Result interface{}
 		Error  string
 	}
 	err := json.Unmarshal(resJSON, &response)
@@ -92,12 +117,8 @@ func parseResponse(resJSON []byte) (map[string]interface{}, error) {
 	return response.Result, err
 }
 
-func initCore() (*zmq4.Socket, error) {
-	socket, err := zmq4.NewSocket(zmq4.REQ)
-	if err != nil {
-		return nil, err
-	}
-
-	err = socket.Connect(coreEndpoint)
-	return socket, err
+func getToken() (string, error) {
+	path := path.Join(ConfigPath, "authtoken")
+	b, err := ioutil.ReadFile(path)
+	return string(b), err
 }
