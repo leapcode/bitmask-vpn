@@ -17,7 +17,7 @@ build_test:
     - cd ${APP_PATH}
     - go get .
     - go test ./...
-    - go build
+    - make build
   tags:
     - linux
   artifacts:

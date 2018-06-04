@@ -2,8 +2,8 @@
 
 all: icon locales build
 
-build: icon catalog.go
-	go build
+build:
+	go build -ldflags "-X main.version=`git describe --tags`"
 
 clean:
 	make -C icon clean

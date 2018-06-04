@@ -16,6 +16,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"os"
 
@@ -29,9 +31,17 @@ const (
 	applicationName = "RiseupVPN"
 )
 
+var version string
 var printer *message.Printer
 
 func main() {
+	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
+	flag.Parse()
+	if *versionFlag {
+		fmt.Println(version)
+		os.Exit(0)
+	}
+
 	if _, err := os.Stat(bitmask.ConfigPath); os.IsNotExist(err) {
 		os.MkdirAll(bitmask.ConfigPath, os.ModePerm)
 	}
