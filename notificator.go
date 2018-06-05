@@ -59,7 +59,7 @@ func (n *notificator) donations() {
 				YesNo()
 			n.conf.setNotification()
 			if letsDonate {
-				open.Run("https://riseup.net/donate-vpn")
+				open.Run("https://riseup.net/vpn/donate")
 				n.conf.setDonated()
 			}
 		}
