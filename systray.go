@@ -27,7 +27,7 @@ import (
 )
 
 type bmTray struct {
-	bm            *bitmask.Bitmask
+	bm            bitmask.Bitmask
 	conf          *systrayConfig
 	notify        *notificator
 	waitCh        chan bool
@@ -44,7 +44,7 @@ type gatewayTray struct {
 	name     string
 }
 
-func run(bm *bitmask.Bitmask, conf *systrayConfig, notify *notificator) {
+func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator) {
 	bt := bmTray{bm: bm, conf: conf, notify: notify}
 	systray.Run(bt.onReady, bt.onExit)
 }
@@ -117,13 +117,13 @@ func (bt *bmTray) onReady() {
 				open.Run("https://riseup.net/vpn/donate")
 			case <-mAbout.ClickedCh:
 				bitmaskVersion, err := bt.bm.Version()
+				versionStr := version
 				if err != nil {
 					log.Printf("Error getting version: %v", err)
-					bt.notify.about(version)
-				} else {
-					versionStr := fmt.Sprintf("%s (bitmaskd %s)", version, bitmaskVersion)
-					bt.notify.about(versionStr)
+				} else if bitmaskVersion != "" {
+					versionStr = fmt.Sprintf("%s (bitmaskd %s)", version, bitmaskVersion)
 				}
+				bt.notify.about(versionStr)
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()

@@ -24,6 +24,8 @@ import (
 	"net/http"
 	"path"
 	"time"
+
+	"0xacab.org/leap/bitmask-systray/bitmask"
 )
 
 const (
@@ -62,7 +64,7 @@ func Init() (*Bitmask, error) {
 }
 
 // GetStatusCh returns a channel that will recieve VPN status changes
-func (b *Bitmask) GetStatusCh() chan string {
+func (b *Bitmask) GetStatusCh() <-chan string {
 	return b.statusCh
 }
 
@@ -148,7 +150,7 @@ func parseResponse(resJSON []byte) (interface{}, error) {
 
 func getToken() (string, error) {
 	var err error
-	path := path.Join(ConfigPath, "authtoken")
+	path := path.Join(bitmask.ConfigPath, "authtoken")
 	for i := 0; i < 30; i++ {
 		b, err := ioutil.ReadFile(path)
 		if err == nil {

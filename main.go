@@ -62,7 +62,7 @@ func main() {
 
 	notify := newNotificator(conf)
 
-	b, err := bitmask.Init()
+	b, err := initBitmask()
 	if err != nil {
 		log.Print(err)
 		notify.bitmaskNotRunning()
@@ -74,7 +74,7 @@ func main() {
 	run(b, conf, notify)
 }
 
-func checkAndStartBitmask(b *bitmask.Bitmask, notify *notificator, conf *systrayConfig) {
+func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *systrayConfig) {
 	err := checkAndInstallHelpers(b, notify)
 	if err != nil {
 		log.Printf("Is bitmask running? %v", err)
@@ -87,7 +87,7 @@ func checkAndStartBitmask(b *bitmask.Bitmask, notify *notificator, conf *systray
 	}
 }
 
-func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) error {
+func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 	helpers, priviledge, err := b.VPNCheck()
 	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
 		log.Printf("No polkit found")
@@ -106,7 +106,7 @@ func checkAndInstallHelpers(b *bitmask.Bitmask, notify *notificator) error {
 	return nil
 }
 
-func maybeStartVPN(b *bitmask.Bitmask, conf *systrayConfig) error {
+func maybeStartVPN(b bitmask.Bitmask, conf *systrayConfig) error {
 	if conf.UserStoppedVPN {
 		return nil
 	}
