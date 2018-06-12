@@ -15,8 +15,8 @@ build_test:
     - mkdir -p /go/src/0xacab.org/leap/
     - ln -s "$(pwd)" ${APP_PATH}
     - cd ${APP_PATH}
-    - go get .
-    - go test ./...
+    - make get
+    - make test
     - make build
   tags:
     - linux
