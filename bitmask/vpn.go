@@ -17,6 +17,7 @@ package bitmask
 
 import (
 	"errors"
+	"log"
 )
 
 // StartVPN for provider
@@ -52,7 +53,17 @@ func (b *Bitmask) VPNCheck() (helpers bool, priviledge bool, err error) {
 	if err != nil {
 		return false, false, err
 	}
-	return res["installed"].(bool), res["privcheck"].(bool), nil
+	installed, ok := res["installed"].(bool)
+	if !ok {
+		log.Printf("Unexpected value for installed on 'vpn check': %v", res)
+		return false, false, errors.New("Invalid response format")
+	}
+	privcheck, ok := res["privcheck"].(bool)
+	if !ok {
+		log.Printf("Unexpected value for privcheck on 'vpn check': %v", res)
+		return installed, false, errors.New("Invalid response format")
+	}
+	return installed, privcheck, nil
 }
 
 // ListGateways return the names of the gateways
