@@ -58,10 +58,12 @@ func (l *launcher) openvpnStop() error {
 	return runBitmaskRoot("openvpn", "stop")
 }
 
-func (l *launcher) firewallStart(gateways []string) error {
+func (l *launcher) firewallStart(gateways []gateway) error {
 	log.Println("firewall start")
 	arg := []string{"firewall", "start"}
-	arg = append(arg, gateways...)
+	for _, gw := range gateways {
+		arg = append(arg, gw.IPAddress)
+	}
 	return runBitmaskRoot(arg...)
 }
 

@@ -24,26 +24,28 @@ const (
 	openvpnManagementPort = "6061"
 )
 
-var gateways = []string{
-	"5.79.86.180",
-	"199.58.81.145",
-	"198.252.153.28",
-}
-
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
-	// TODO: openvpn args are hardcoded
-	err := b.launch.firewallStart(gateways)
+	gateways, err := b.bonafide.getGateways()
+	if err != nil {
+		return err
+	}
+	err = b.launch.firewallStart(gateways)
 	if err != nil {
 		return err
 	}
 
 	arg := []string{"--nobind", "--verb", "1"}
+	bonafideArgs, err := b.bonafide.getOpenvpnArgs()
+	if err != nil {
+		return err
+	}
+	arg = append(arg, bonafideArgs...)
 	for _, gw := range gateways {
-		arg = append(arg, "--remote", gw, "443", "tcp4")
+		arg = append(arg, "--remote", gw.IPAddress, "443", "tcp4")
 	}
 	certPemPath := b.getCertPemPath()
-	arg = append(arg, "--client", "--tls-client", "--remote-cert-tls", "server", "--tls-cipher", "DHE-RSA-AES128-SHA", "--cipher", "AES-128-CBC", "--tun-ipv6", "--auth", "SHA1", "--keepalive", "10 30", "--management-client", "--management", openvpnManagementAddr+" "+openvpnManagementPort, "--ca", b.getCaCertPath(), "--cert", certPemPath, "--key", certPemPath)
+	arg = append(arg, "--client", "--tls-client", "--remote-cert-tls", "server", "--management-client", "--management", openvpnManagementAddr+" "+openvpnManagementPort, "--ca", b.getCaCertPath(), "--cert", certPemPath, "--key", certPemPath)
 	return b.launch.openvpnStart(arg...)
 }
 

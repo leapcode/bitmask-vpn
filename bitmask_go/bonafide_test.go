@@ -11,16 +11,32 @@ var (
 )
 
 func TestGetCert(t *testing.T) {
-	cert, err := getCertPem()
+	b := newBonafide()
+	cert, err := b.getCertPem()
 	if err != nil {
-		t.Fatal("get_cert returned an error: ", err)
+		t.Fatal("getCert returned an error: ", err)
 	}
 
 	if !bytes.Contains(cert, privateKeyHeader) {
 		t.Errorf("No private key present: \n%q", cert)
 	}
 
-	if !bytes.Equal(cert, certHeader) {
+	if !bytes.Contains(cert, certHeader) {
 		t.Errorf("No cert present: \n%q", cert)
 	}
+}
+
+func TestGetGateways(t *testing.T) {
+	b := newBonafide()
+	gateways, err := b.getGateways()
+	if err != nil {
+		t.Fatal("getGateways returned an error: ", err)
+	}
+
+	for _, gw := range gateways {
+		if gw.IPAddress == "5.79.86.180" {
+			return
+		}
+	}
+	t.Errorf("5.79.86.180 not in the list")
 }

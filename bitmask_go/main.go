@@ -28,6 +28,7 @@ type Bitmask struct {
 	tempdir          string
 	statusCh         chan string
 	managementClient *openvpn.MgmtClient
+	bonafide         *bonafide
 	launch           *launcher
 }
 
@@ -38,15 +39,16 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
+	bonafide := newBonafide()
 	launch := newLauncher()
-	b := Bitmask{tempdir, statusCh, nil, launch}
+	b := Bitmask{tempdir, statusCh, nil, bonafide, launch}
 
 	err = b.StopVPN()
 	if err != nil {
 		return nil, err
 	}
 
-	cert, err := getCertPem()
+	cert, err := b.bonafide.getCertPem()
 	if err != nil {
 		return nil, err
 	}

@@ -18,13 +18,16 @@ package bitmask
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 const (
 	certAPI = "https://api.black.riseup.net/1/cert"
+	eipAPI  = "https://api.black.riseup.net/1/config/eip-service.json"
 )
 
 var (
@@ -62,7 +65,33 @@ UN9SaWRlWKSdP4haujnzCoJbM7dU9bjvlGZNyXEekgeT0W2qFeGGp+yyUWw8tNsp
 -----END CERTIFICATE-----`)
 )
 
-func getCertPem() ([]byte, error) {
+type bonafide struct {
+	client *http.Client
+	eip    *eipService
+}
+
+type eipService struct {
+	Gateways  []gateway
+	Locations map[string]struct {
+		CountryCode string
+		Hemisphere  string
+		Name        string
+		Timezone    string
+	}
+	OpenvpnConfiguration map[string]interface{} `json:"openvpn_configuration"`
+}
+
+type gateway struct {
+	Capabilities struct {
+		Ports     []string
+		Protocols []string
+	}
+	Host      string
+	IPAddress string `json:"ip_address"`
+	Location  string
+}
+
+func newBonafide() *bonafide {
 	certs := x509.NewCertPool()
 	certs.AppendCertsFromPEM(caCert)
 	client := &http.Client{
@@ -73,15 +102,74 @@ func getCertPem() ([]byte, error) {
 		},
 	}
 
-	resp, err := client.Post(certAPI, "", nil)
+	return &bonafide{client, nil}
+}
+
+func (b *bonafide) getCertPem() ([]byte, error) {
+	resp, err := b.client.Post(certAPI, "", nil)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
 	}
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+func (b *bonafide) getGateways() ([]gateway, error) {
+	if b.eip == nil {
+		err := b.fetchEipJSON()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return b.eip.Gateways, nil
+}
+
+func (b *bonafide) getOpenvpnArgs() ([]string, error) {
+	if b.eip == nil {
+		err := b.fetchEipJSON()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	args := []string{}
+	for arg, value := range b.eip.OpenvpnConfiguration {
+		switch v := value.(type) {
+		case string:
+			args = append(args, "--"+arg, v)
+		case bool:
+			if v {
+				args = append(args, "--"+arg)
+			}
+		default:
+			log.Printf("Uknwon openvpn argument type: %s - %v", arg, value)
+		}
+	}
+	return args, nil
+}
+
+func (b *bonafide) fetchEipJSON() error {
+	resp, err := b.client.Post(eipAPI, "", nil)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
+	}
+
+	var eip eipService
+	decoder := json.NewDecoder(resp.Body)
+	err = decoder.Decode(&eip)
+	if err != nil {
+		return err
+	}
+
+	b.eip = &eip
+	return nil
 }
