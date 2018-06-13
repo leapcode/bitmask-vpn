@@ -18,6 +18,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
 	"time"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
@@ -60,6 +62,9 @@ func (bt bmTray) onExit() {
 }
 
 func (bt *bmTray) onReady() {
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh, os.Interrupt)
+
 	systray.SetIcon(icon.Off)
 
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
@@ -127,8 +132,8 @@ func (bt *bmTray) onReady() {
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()
-
-			case <-time.After(time.Minute * 30):
+			case <-signalCh:
+				systray.Quit()
 			}
 		}
 	}()
