@@ -28,6 +28,7 @@ type Bitmask struct {
 	tempdir          string
 	statusCh         chan string
 	managementClient *openvpn.MgmtClient
+	launch           *launcher
 }
 
 // Init the connection to bitmask
@@ -37,7 +38,8 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, statusCh, nil}
+	launch := newLauncher()
+	b := Bitmask{tempdir, statusCh, nil, launch}
 
 	err = b.StopVPN()
 	if err != nil {

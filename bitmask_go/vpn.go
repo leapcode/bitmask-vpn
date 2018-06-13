@@ -33,7 +33,7 @@ var gateways = []string{
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
 	// TODO: openvpn args are hardcoded
-	err := firewallStart(gateways)
+	err := b.launch.firewallStart(gateways)
 	if err != nil {
 		return err
 	}
@@ -44,16 +44,16 @@ func (b *Bitmask) StartVPN(provider string) error {
 	}
 	certPemPath := b.getCertPemPath()
 	arg = append(arg, "--client", "--tls-client", "--remote-cert-tls", "server", "--tls-cipher", "DHE-RSA-AES128-SHA", "--cipher", "AES-128-CBC", "--tun-ipv6", "--auth", "SHA1", "--keepalive", "10 30", "--management-client", "--management", openvpnManagementAddr+" "+openvpnManagementPort, "--ca", b.getCaCertPath(), "--cert", certPemPath, "--key", certPemPath)
-	return openvpnStart(arg...)
+	return b.launch.openvpnStart(arg...)
 }
 
 // StopVPN or cancel
 func (b *Bitmask) StopVPN() error {
-	err := firewallStop()
+	err := b.launch.firewallStop()
 	if err != nil {
 		return err
 	}
-	return openvpnStop()
+	return b.launch.openvpnStop()
 }
 
 // GetStatus returns the VPN status

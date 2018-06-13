@@ -34,30 +34,61 @@ var bitmaskRootPaths = []string{
 	"/snap/bin/riseup-vpn.bitmask-root",
 }
 
-func openvpnStart(flags ...string) error {
+type launcher struct {
+	openvpnCh chan []string
+}
+
+func newLauncher() *launcher {
+	l := launcher{make(chan []string, 1)}
+	go l.openvpnRunner()
+	return &l
+}
+
+func (l *launcher) openvpnStart(flags ...string) error {
 	log.Println("openvpn start: ", flags)
 	arg := []string{"openvpn", "start", getOpenvpnPath()}
 	arg = append(arg, flags...)
-	// TODO: check errors somehow instead of fire and forget
-	go runBitmaskRoot(arg...)
+	l.openvpnCh <- arg
 	return nil
 }
 
-func openvpnStop() error {
+func (l *launcher) openvpnStop() error {
+	l.openvpnCh <- nil
 	log.Println("openvpn stop")
 	return runBitmaskRoot("openvpn", "stop")
 }
 
-func firewallStart(gateways []string) error {
+func (l *launcher) firewallStart(gateways []string) error {
 	log.Println("firewall start")
 	arg := []string{"firewall", "start"}
 	arg = append(arg, gateways...)
 	return runBitmaskRoot(arg...)
 }
 
-func firewallStop() error {
+func (l *launcher) firewallStop() error {
 	log.Println("firewall stop")
 	return runBitmaskRoot("firewall", "stop")
+}
+
+func (l *launcher) openvpnRunner(arg ...string) {
+	running := false
+	runOpenvpn := func(arg []string) {
+		for running {
+			err := runBitmaskRoot(arg...)
+			if err != nil {
+				log.Printf("An error ocurred running openvpn: %v", err)
+			}
+		}
+	}
+
+	for arg := range l.openvpnCh {
+		if arg == nil {
+			running = false
+		} else {
+			running = true
+			go runOpenvpn(arg)
+		}
+	}
 }
 
 func runBitmaskRoot(arg ...string) error {
