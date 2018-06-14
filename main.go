@@ -40,6 +40,10 @@ func main() {
 	// locking the main thread into an OS thread fixes the problem
 	runtime.LockOSThread()
 
+	conf := parseConfig()
+	initPrinter()
+
+	flag.BoolVar(&conf.SelectGateway, "select-gateway", false, "Enable gateway selection")
 	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
 	flag.Parse()
 	if *versionFlag {
@@ -56,9 +60,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer releasePID()
-
-	conf := parseConfig()
-	initPrinter()
 
 	notify := newNotificator(conf)
 

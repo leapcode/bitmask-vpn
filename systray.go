@@ -77,7 +77,7 @@ func (bt *bmTray) onReady() {
 	bt.mCancel.Hide()
 	systray.AddSeparator()
 
-	if bt.conf.SelectWateway {
+	if bt.conf.SelectGateway {
 		bt.addGateways()
 	}
 

@@ -81,13 +81,20 @@ func (b *Bitmask) VPNCheck() (helpers bool, priviledge bool, err error) {
 
 // ListGateways return the names of the gateways
 func (b *Bitmask) ListGateways(provider string) ([]string, error) {
-	// TODO
-	return []string{}, nil
+	gateways, err := b.bonafide.getGateways()
+	if err != nil {
+		return nil, err
+	}
+	gatewayNames := make([]string, len(gateways))
+	for i, gw := range gateways {
+		gatewayNames[i] = gw.Location
+	}
+	return gatewayNames, nil
 }
 
 // UseGateway selects name as the default gateway
 func (b *Bitmask) UseGateway(name string) error {
-	// TODO
+	b.bonafide.setDefaultGateway(name)
 	return nil
 }
 

@@ -23,6 +23,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sort"
+	"strconv"
+	"time"
 )
 
 const (
@@ -66,8 +69,9 @@ UN9SaWRlWKSdP4haujnzCoJbM7dU9bjvlGZNyXEekgeT0W2qFeGGp+yyUWw8tNsp
 )
 
 type bonafide struct {
-	client *http.Client
-	eip    *eipService
+	client         *http.Client
+	eip            *eipService
+	defaultGateway string
 }
 
 type eipService struct {
@@ -102,7 +106,7 @@ func newBonafide() *bonafide {
 		},
 	}
 
-	return &bonafide{client, nil}
+	return &bonafide{client, nil, ""}
 }
 
 func (b *bonafide) getCertPem() ([]byte, error) {
@@ -127,6 +131,11 @@ func (b *bonafide) getGateways() ([]gateway, error) {
 	}
 
 	return b.eip.Gateways, nil
+}
+
+func (b *bonafide) setDefaultGateway(name string) {
+	b.defaultGateway = name
+	b.sortGateways()
 }
 
 func (b *bonafide) getOpenvpnArgs() ([]string, error) {
@@ -171,5 +180,50 @@ func (b *bonafide) fetchEipJSON() error {
 	}
 
 	b.eip = &eip
+	b.sortGateways()
 	return nil
+}
+
+func (b *bonafide) sortGateways() {
+	type gatewayDistance struct {
+		gateway  gateway
+		distance int
+	}
+
+	gws := []gatewayDistance{}
+	_, tzOffset := time.Now().Zone()
+	for _, gw := range b.eip.Gateways {
+		distance := 13
+		if gw.Location == b.defaultGateway {
+			distance = -1
+		} else {
+			gwOffset, err := strconv.Atoi(b.eip.Locations[gw.Location].Timezone)
+			if err != nil {
+				log.Printf("Error sorting gateways: %v", err)
+			} else {
+				distance = tzDistance(tzOffset, gwOffset)
+			}
+		}
+		gws = append(gws, gatewayDistance{gw, distance})
+	}
+
+	sort.Slice(gws, func(i, j int) bool { return gws[i].distance > gws[j].distance })
+	for i, gw := range gws {
+		b.eip.Gateways[i] = gw.gateway
+	}
+}
+
+func tzDistance(offset1, offset2 int) int {
+	abs := func(x int) int {
+		if x < 0 {
+			return -x
+		} else {
+			return x
+		}
+	}
+	distance := abs(offset1 - offset2)
+	if distance > 12 {
+		distance = 24 - distance
+	}
+	return distance
 }

@@ -17,7 +17,6 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"os"
 	"path"
 	"time"
@@ -37,7 +36,7 @@ var (
 type systrayConfig struct {
 	LastNotification time.Time
 	Donated          time.Time
-	SelectWateway    bool
+	SelectGateway    bool
 	UserStoppedVPN   bool
 }
 
@@ -53,18 +52,12 @@ func parseConfig() *systrayConfig {
 
 	dec := json.NewDecoder(f)
 	err = dec.Decode(&conf)
-	conf.parseFlags()
 	return &conf
 }
 
 func (c *systrayConfig) setUserStoppedVPN(vpnStopped bool) error {
 	c.UserStoppedVPN = vpnStopped
 	return c.save()
-}
-
-func (c *systrayConfig) parseFlags() {
-	flag.BoolVar(&c.SelectWateway, "select-gateway", false, "Enable gateway selection")
-	flag.Parse()
 }
 
 func (c *systrayConfig) hasDonated() bool {
