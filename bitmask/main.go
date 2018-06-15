@@ -45,6 +45,12 @@ func Init() (*Bitmask, error) {
 	client := &http.Client{
 		Timeout: timeout,
 	}
+
+	err := waitForBitmaskd()
+	if err != nil {
+		return nil, err
+	}
+
 	apiToken, err := getToken()
 	if err != nil {
 		return nil, err
@@ -66,6 +72,20 @@ func (b *Bitmask) Close() {
 	if err != nil {
 		log.Printf("Got an error stopping bitmaskd: %v", err)
 	}
+}
+
+func waitForBitmaskd() error {
+	var err error
+	for i := 0; i < 30; i++ {
+		resp, err := http.Post(url, "", nil)
+		if err == nil {
+			resp.Body.Close()
+			return nil
+		}
+		log.Printf("Bitmask is not ready (iteration %i): %v", i, err)
+		time.Sleep(1 * time.Second)
+	}
+	return err
 }
 
 func (b *Bitmask) send(parts ...interface{}) (map[string]interface{}, error) {
@@ -118,7 +138,15 @@ func parseResponse(resJSON []byte) (interface{}, error) {
 }
 
 func getToken() (string, error) {
+	var err error
 	path := path.Join(ConfigPath, "authtoken")
-	b, err := ioutil.ReadFile(path)
-	return string(b), err
+	for i := 0; i < 30; i++ {
+		b, err := ioutil.ReadFile(path)
+		if err == nil {
+			return string(b), nil
+		}
+		log.Printf("Auth token is not ready (iteration %i): %v", i, err)
+		time.Sleep(1 * time.Second)
+	}
+	return "", err
 }
