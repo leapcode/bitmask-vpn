@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	"github.com/jmshal/go-locale"
@@ -35,6 +36,10 @@ var version string
 var printer *message.Printer
 
 func main() {
+	// on OSX sometimes the systray doesn't work (bitmask-systray#52)
+	// locking the main thread into an OS thread fixes the problem
+	runtime.LockOSThread()
+
 	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
 	flag.Parse()
 	if *versionFlag {
