@@ -27,10 +27,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName_1} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place."
+                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName_1} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.",
-            "translation": "{ApplicationName} es un servicio de VPN facil, rapido y seguro de riseup.net. {ApplicationName_1} no requiere registrar una cuenta, recoge logs ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga completamente por donaciones de gente como tu. Por favor dona a riseup.net/vpn/donate.\n\t\t\nAl usar este programa estas aceptando los Terminos de servicio disponibles en riseup.net/tos. Este servicio se ofrece tal cual, sin garantia y con la intencion de la gente que trabaja en el de hacer el mundo un mejor lugar.",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName} version: {Version}",
+            "translation": "{ApplicationName} es un servicio de VPN facil, rapido y seguro de riseup.net. {ApplicationName} no requiere registrar una cuenta, recoge logs ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga completamente por donaciones de gente como tu. Por favor dona a https://riseup.net/vpn/donate.\n\t\t\nAl usar este programa estas aceptando los Terminos de servicio disponibles en https://riseup.net/tos. Este servicio se ofrece tal cual, sin garantia y con la intencion de la gente que trabaja en el de hacer el mundo un mejor lugar.\n\n\n{ApplicationName} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -41,12 +41,12 @@
                     "expr": "applicationName"
                 },
                 {
-                    "id": "ApplicationName_1",
+                    "id": "Version",
                     "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 2,
-                    "expr": "applicationName"
+                    "expr": "version"
                 }
             ]
         },

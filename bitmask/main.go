@@ -74,6 +74,15 @@ func (b *Bitmask) Close() {
 	}
 }
 
+// Version gets the bitmask version string
+func (b *Bitmask) Version() (string, error) {
+	res, err := b.send("core", "version")
+	if err != nil {
+		return "", err
+	}
+	return res["version_core"].(string), nil
+}
+
 func waitForBitmaskd() error {
 	var err error
 	for i := 0; i < 30; i++ {

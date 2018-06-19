@@ -16,6 +16,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -115,7 +116,14 @@ func (bt *bmTray) onReady() {
 				bt.conf.setDonated()
 				open.Run("https://riseup.net/vpn/donate")
 			case <-mAbout.ClickedCh:
-				bt.notify.about()
+				bitmaskVersion, err := bt.bm.Version()
+				if err != nil {
+					log.Printf("Error getting version: %v", err)
+					bt.notify.about(version)
+				} else {
+					versionStr := fmt.Sprintf("%s (bitmaskd %s)", version, bitmaskVersion)
+					bt.notify.about(versionStr)
+				}
 
 			case <-mQuit.ClickedCh:
 				systray.Quit()

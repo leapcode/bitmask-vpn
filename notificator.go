@@ -28,11 +28,14 @@ const (
 	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 	
 Do you want to donate now?`
-	aboutText = `%s is an easy, fast, and secure VPN service from riseup.net. %s does not require a user account, keep logs, or track you in any way.
+	aboutText = `%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.
 	    
-This service paid for entirely by donations from users like you. Please donate at riseup.net/vpn/donate.
+This service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.
 		
-By using this application, you agree to the Terms of Service available at riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.`
+By using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.
+
+
+%[1]v version: %[2]s`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	errorStartingVPN = `Can't connect to %s: %v`
 	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
@@ -67,8 +70,8 @@ func (n *notificator) donations() {
 	}
 }
 
-func (n *notificator) about() {
-	dialog.Message(printer.Sprintf(aboutText, applicationName, applicationName)).
+func (n *notificator) about(version string) {
+	dialog.Message(printer.Sprintf(aboutText, applicationName, version)).
 		Title(printer.Sprintf("About")).
 		Icon(getSVGPath()).
 		Info()
