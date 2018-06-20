@@ -91,7 +91,7 @@ func waitForBitmaskd() error {
 			resp.Body.Close()
 			return nil
 		}
-		log.Printf("Bitmask is not ready (iteration %i): %v", i, err)
+		log.Printf("Bitmask is not ready (iteration %d): %v", i, err)
 		time.Sleep(1 * time.Second)
 	}
 	return err
@@ -154,7 +154,7 @@ func getToken() (string, error) {
 		if err == nil {
 			return string(b), nil
 		}
-		log.Printf("Auth token is not ready (iteration %i): %v", i, err)
+		log.Printf("Auth token is not ready (iteration %d): %v", i, err)
 		time.Sleep(1 * time.Second)
 	}
 	return "", err
