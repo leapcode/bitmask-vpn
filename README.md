@@ -25,10 +25,12 @@ Using homebrew:
 
 ```
   $ brew install golang zmq pkg-config
+  $ brew install --default-names gnu-sed
   $ git clone 0xacab.org/leap/bitmask-systray
   $ cd bitmask-systray
   $ go get .
   $ go build
+
 ```
 
 Run it
