@@ -38,10 +38,14 @@ type launcher struct {
 	openvpnCh chan []string
 }
 
-func newLauncher() *launcher {
+func newLauncher() (*launcher, error) {
 	l := launcher{make(chan []string, 1)}
 	go l.openvpnRunner()
-	return &l
+	return &l, nil
+}
+
+func (l *launcher) close() error {
+	return nil
 }
 
 func (l *launcher) openvpnStart(flags ...string) error {

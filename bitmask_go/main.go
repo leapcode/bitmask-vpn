@@ -40,7 +40,10 @@ func Init() (*Bitmask, error) {
 		return nil, err
 	}
 	bonafide := newBonafide()
-	launch := newLauncher()
+	launch, err := newLauncher()
+	if err != nil {
+		return nil, err
+	}
 	b := Bitmask{tempdir, statusCh, nil, bonafide, launch}
 
 	err = b.StopVPN()
@@ -70,7 +73,11 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 // Close the connection to bitmask
 func (b *Bitmask) Close() {
 	b.StopVPN()
-	err := os.RemoveAll(b.tempdir)
+	err := b.launch.close()
+	if err != nil {
+		log.Printf("There was an error closing the launcher: %v", err)
+	}
+	err = os.RemoveAll(b.tempdir)
 	if err != nil {
 		log.Printf("There was an error removing temp dir: %v", err)
 	}

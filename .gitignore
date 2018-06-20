@@ -1,3 +1,4 @@
 bitmask-systray
 locales/*/out.gotext.json
 .*.swp
+*.exe
