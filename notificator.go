@@ -99,6 +99,11 @@ func (n *notificator) errorStartingVPN(err error) {
 }
 
 func getSVGPath() string {
+	snapPath := os.Getenv("SNAP")
+	if snapPath != "" {
+		return snapPath + "/snap/gui/riseupvpn.svg"
+	}
+
 	wd, _ := os.Getwd()
 	svgPath := path.Join(wd, svgFileName)
 	if fileExist(svgPath) {
