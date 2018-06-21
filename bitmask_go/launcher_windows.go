@@ -19,6 +19,7 @@ package bitmask
 import (
 	"encoding/json"
 	"net/textproto"
+	"strings"
 )
 
 const (
@@ -59,9 +60,9 @@ func (l *launcher) send(cmd string, args ...string) error {
 		args = []string{}
 	}
 	command := struct {
-		Cmd  string   `json:"cmd"`
-		Args []string `json:"args"`
-	}{cmd, args}
+		Cmd  string `json:"cmd"`
+		Args string `json:"args"`
+	}{cmd, strings.Join(args, " ")}
 	bytesCmd, err := json.Marshal(command)
 	if err != nil {
 		return err
