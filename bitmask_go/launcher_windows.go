@@ -57,7 +57,7 @@ func (l *launcher) firewallStop() error {
 
 func (l *launcher) send(cmd string, args ...string) error {
 	if args == nil {
-		args = "null"
+		args = []string{"null"}
 	}
 	command := struct {
 		Cmd  string `json:"cmd"`
