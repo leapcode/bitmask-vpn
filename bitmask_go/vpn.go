@@ -36,21 +36,30 @@ func (b *Bitmask) StartVPN(provider string) error {
 		return err
 	}
 
-	arg := []string{"--nobind", "--verb", "1"}
-	if runtime.GOOS == "windows" {
-		arg = append(arg, "--dev", "tun", "--log", `C:\bitmask\openvp.log`)
-	}
-
-	bonafideArgs, err := b.bonafide.getOpenvpnArgs()
+	arg, err := b.bonafide.getOpenvpnArgs()
 	if err != nil {
 		return err
 	}
-	arg = append(arg, bonafideArgs...)
 	for _, gw := range gateways {
 		arg = append(arg, "--remote", gw.IPAddress, "443", "tcp4")
 	}
 	certPemPath := b.getCertPemPath()
-	arg = append(arg, "--client", "--tls-client", "--remote-cert-tls", "server", "--management-client", "--management", openvpnManagementAddr+" "+openvpnManagementPort, "--ca", b.getCaCertPath(), "--cert", certPemPath, "--key", certPemPath)
+	arg = append(arg,
+		"--nobind",
+		"--verb", "1",
+		"--dev", "tun",
+		"--client",
+		"--tls-client",
+		"--remote-cert-tls", "server",
+		"--script-security", "1",
+		"--management-client",
+		"--management", openvpnManagementAddr, openvpnManagementPort,
+		"--ca", b.getCaCertPath(),
+		"--cert", certPemPath,
+		"--key", certPemPath)
+	if runtime.GOOS == "windows" {
+		arg = append(arg, "--log", `C:\bitmask\openvp.log`)
+	}
 	return b.launch.openvpnStart(arg...)
 }
 

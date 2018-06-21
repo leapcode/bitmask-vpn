@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -150,7 +151,8 @@ func (b *bonafide) getOpenvpnArgs() ([]string, error) {
 	for arg, value := range b.eip.OpenvpnConfiguration {
 		switch v := value.(type) {
 		case string:
-			args = append(args, "--"+arg, v)
+			args = append(args, "--"+arg)
+			args = append(args, strings.Split(v, " ")...)
 		case bool:
 			if v {
 				args = append(args, "--"+arg)

@@ -16,6 +16,9 @@ test:
 build_go:
 	go build -tags "$(TAGS) bitmask_go" -ldflags "-X main.version=`git describe --tags`"
 
+build_win:
+	go build -tags "bitmask_go" -ldflags "-H windowsgui"
+
 clean:
 	make -C icon clean
 	rm bitmask-systray
