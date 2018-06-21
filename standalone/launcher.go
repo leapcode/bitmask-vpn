@@ -1,4 +1,4 @@
-// +build windows
+// +build !linux
 // Copyright (C) 2018 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,57 +17,71 @@
 package bitmask
 
 import (
+	"bytes"
 	"encoding/json"
-	"net/textproto"
-	"strings"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
 )
 
 const (
-	helperAddr = "localhost:7171"
+	helperAddr = "http://localhost:7171"
 )
 
 type launcher struct {
-	conn *textproto.Conn
 }
 
 func newLauncher() (*launcher, error) {
-	conn, err := textproto.Dial("tcp", helperAddr)
-	return &launcher{conn}, err
+	return &launcher{}, nil
 }
 
 func (l *launcher) close() error {
-	return l.conn.Close()
+	return nil
 }
 
 func (l *launcher) openvpnStart(flags ...string) error {
-	return l.send("openvpn_start", flags...)
-}
-
-func (l *launcher) openvpnStop() error {
-	return l.send("openvpn_stop")
-}
-
-func (l *launcher) firewallStart(gateways []gateway) error {
-	return nil
-}
-
-func (l *launcher) firewallStop() error {
-	return nil
-}
-
-func (l *launcher) send(cmd string, args ...string) error {
-	if args == nil {
-		args = []string{"null"}
-	}
-	command := struct {
-		Cmd  string `json:"cmd"`
-		Args string `json:"args"`
-	}{cmd, strings.Join(args, " ")}
-	bytesCmd, err := json.Marshal(command)
+	byteFlags, err := json.Marshal(flags)
 	if err != nil {
 		return err
 	}
+	return l.send("/openvpn/start", byteFlags)
+}
 
-	_, err = l.conn.Cmd(string(bytesCmd))
+func (l *launcher) openvpnStop() error {
+	return l.send("/openvpn/stop", nil)
+}
+
+func (l *launcher) firewallStart(gateways []gateway) error {
+	ipList := make([]string, len(gateways))
+	for i, gw := range gateways {
+		ipList[i] = gw.IPAddress
+	}
+	byteIPs, err := json.Marshal(ipList)
+	if err != nil {
+		return err
+	}
+	return l.send("/firewall/start", byteIPs)
+}
+
+func (l *launcher) firewallStop() error {
+	return l.send("/firewall/stop", nil)
+}
+
+func (l *launcher) send(path string, body []byte) error {
+	var reader io.Reader
+	if body != nil {
+		reader = bytes.NewReader(body)
+	}
+	res, err := http.Post(helperAddr+path, "", reader)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	resErr, err := ioutil.ReadAll(res.Body)
+	if len(resErr) > 0 {
+		return fmt.Errorf("Helper returned an error: %q", resErr)
+	}
 	return err
 }
