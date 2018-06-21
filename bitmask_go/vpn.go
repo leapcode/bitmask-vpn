@@ -17,6 +17,7 @@ package bitmask
 
 import (
 	"path"
+	"runtime"
 )
 
 const (
@@ -36,6 +37,10 @@ func (b *Bitmask) StartVPN(provider string) error {
 	}
 
 	arg := []string{"--nobind", "--verb", "1"}
+	if runtime.GOOS == "windows" {
+		arg = append(arg, "--dev", "tun", "--log", `C:\bitmask\openvp.log`)
+	}
+
 	bonafideArgs, err := b.bonafide.getOpenvpnArgs()
 	if err != nil {
 		return err
