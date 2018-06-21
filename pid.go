@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"syscall"
 
@@ -20,15 +22,8 @@ func acquirePID() error {
 		return err
 	}
 
-	if current != 0 && current != pid {
-		proc, err := os.FindProcess(current)
-		if err != nil {
-			return err
-		}
-		err = proc.Signal(syscall.Signal(0))
-		if err == nil {
-			return fmt.Errorf("Another systray is running with pid: %d", current)
-		}
+	if current != pid && pidRunning(current) {
+		return fmt.Errorf("Another systray is running with pid: %d", current)
 	}
 
 	return setPID(pid)
@@ -84,4 +79,25 @@ func setPID(pid int) error {
 
 	_, err = file.WriteString(fmt.Sprintf("%d", pid))
 	return err
+}
+
+func pidRunning(pid int) bool {
+	if pid == 0 {
+		return false
+	}
+
+	proc, err := os.FindProcess(pid)
+	if runtime.GOOS == "windows" {
+		return err == nil
+	}
+
+	if err != nil {
+		log.Printf("An error ocurred finding process: %v", err)
+		return false
+	}
+	err = proc.Signal(syscall.Signal(0))
+	if err == nil {
+		return true
+	}
+	return false
 }
