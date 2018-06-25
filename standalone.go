@@ -1,4 +1,4 @@
-// +build bitmask_go
+// +build standalone
 // Copyright (C) 2018 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@ package main
 
 import (
 	"0xacab.org/leap/bitmask-systray/bitmask"
-	bitmask_go "0xacab.org/leap/bitmask-systray/bitmask_go"
+	standalone "0xacab.org/leap/bitmask-systray/standalone"
 )
 
 func initBitmask() (bitmask.Bitmask, error) {
-	return bitmask_go.Init()
+	return standalone.Init()
 }
