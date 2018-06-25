@@ -53,8 +53,8 @@ func newNotificator(conf *systrayConfig) *notificator {
 }
 
 func (n *notificator) donations() {
-	time.Sleep(time.Minute * 5)
 	for {
+		time.Sleep(time.Hour)
 		if n.conf.needsNotification() {
 			letsDonate := dialog.Message(printer.Sprintf(donationText, applicationName)).
 				Title(printer.Sprintf("Donate")).
@@ -66,7 +66,6 @@ func (n *notificator) donations() {
 				n.conf.setDonated()
 			}
 		}
-		time.Sleep(time.Hour)
 	}
 }
 
