@@ -18,8 +18,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"path"
 	"runtime"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
@@ -40,6 +42,13 @@ func main() {
 	// locking the main thread into an OS thread fixes the problem
 	runtime.LockOSThread()
 
+	logger, err := configureLogger()
+	if err != nil {
+		log.Println("Can't configure logger: %v", err)
+	} else {
+		defer logger.Close()
+	}
+
 	conf := parseConfig()
 	initPrinter()
 
@@ -55,7 +64,7 @@ func main() {
 		os.MkdirAll(bitmask.ConfigPath, os.ModePerm)
 	}
 
-	err := acquirePID()
+	err = acquirePID()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,6 +124,14 @@ func maybeStartVPN(b bitmask.Bitmask, conf *systrayConfig) error {
 	err := b.StartVPN(provider)
 	conf.setUserStoppedVPN(false)
 	return err
+}
+
+func configureLogger() (io.Closer, error) {
+	logFile, err := os.OpenFile(path.Join(bitmask.ConfigPath, "systray.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err == nil {
+		log.SetOutput(io.MultiWriter(logFile, os.Stderr))
+	}
+	return logFile, err
 }
 
 func initPrinter() {
