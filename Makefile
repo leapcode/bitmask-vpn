@@ -17,7 +17,7 @@ standalone:
 	go build -tags "$(TAGS) standalone" -ldflags "-X main.version=`git describe --tags`"
 
 build_win:
-	go build -tags "standalone" -ldflags "-H windowsgui"
+	powershell -Command '$$version=git describe --tags; go build -tags "standalone" -ldflags "-H windowsgui -X main.version=$$version"'
 
 clean:
 	make -C icon clean
