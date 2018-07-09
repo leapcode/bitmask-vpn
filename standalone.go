@@ -17,10 +17,22 @@
 package main
 
 import (
+	"os"
+
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	standalone "0xacab.org/leap/bitmask-systray/standalone"
+	pmautostart "github.com/ProtonMail/go-autostart"
 )
 
 func initBitmask() (bitmask.Bitmask, error) {
 	return standalone.Init()
+}
+
+func newAutostart(appName string, iconPath string) autostart {
+	return &pmautostart.App{
+		Name:        appName,
+		Exec:        os.Args,
+		DisplayName: appName,
+		Icon:        iconPath,
+	}
 }

@@ -39,6 +39,7 @@ type bmTray struct {
 	mDonate       *systray.MenuItem
 	mCancel       *systray.MenuItem
 	activeGateway *gatewayTray
+	autostart     autostart
 }
 
 type gatewayTray struct {
@@ -46,8 +47,8 @@ type gatewayTray struct {
 	name     string
 }
 
-func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator) {
-	bt := bmTray{bm: bm, conf: conf, notify: notify}
+func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator, as autostart) {
+	bt := bmTray{bm: bm, conf: conf, notify: notify, autostart: as}
 	systray.Run(bt.onReady, bt.onExit)
 }
 
@@ -131,6 +132,10 @@ func (bt *bmTray) onReady() {
 				bt.notify.about(versionStr)
 
 			case <-mQuit.ClickedCh:
+				err := bt.autostart.Disable()
+				if err != nil {
+					log.Printf("Error disabling autostart: %v", err)
+				}
 				systray.Quit()
 			case <-signalCh:
 				systray.Quit()

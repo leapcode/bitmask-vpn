@@ -24,3 +24,7 @@ import (
 func initBitmask() (bitmask.Bitmask, error) {
 	return bitmaskd.Init()
 }
+
+func newAutostart(appName string, iconPath string) autostart {
+	return &dummyAutostart{}
+}

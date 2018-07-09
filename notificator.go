@@ -18,6 +18,7 @@ package main
 import (
 	"os"
 	"path"
+	"runtime"
 	"time"
 
 	"0xacab.org/leap/go-dialog"
@@ -58,7 +59,7 @@ func (n *notificator) donations() {
 		if n.conf.needsNotification() {
 			letsDonate := dialog.Message(printer.Sprintf(donationText, applicationName)).
 				Title(printer.Sprintf("Donate")).
-				Icon(getSVGPath()).
+				Icon(getIconPath()).
 				YesNo()
 			n.conf.setNotification()
 			if letsDonate {
@@ -72,32 +73,61 @@ func (n *notificator) donations() {
 func (n *notificator) about(version string) {
 	dialog.Message(printer.Sprintf(aboutText, applicationName, version)).
 		Title(printer.Sprintf("About")).
-		Icon(getSVGPath()).
+		Icon(getIconPath()).
 		Info()
 }
 
 func (n *notificator) bitmaskNotRunning() {
 	dialog.Message(printer.Sprintf(notRunning)).
 		Title(printer.Sprintf("Can't contact bitmask")).
-		Icon(getSVGPath()).
+		Icon(getIconPath()).
 		Error()
 }
 
 func (n *notificator) authAgent() {
 	dialog.Message(printer.Sprintf(missingAuthAgent)).
 		Title(printer.Sprintf("Missing authentication agent")).
-		Icon(getSVGPath()).
+		Icon(getIconPath()).
 		Error()
 }
 
 func (n *notificator) errorStartingVPN(err error) {
 	dialog.Message(printer.Sprintf(errorStartingVPN, applicationName, err)).
 		Title(printer.Sprintf("Error starting VPN")).
-		Icon(getSVGPath()).
+		Icon(getIconPath()).
 		Error()
 }
 
-func getSVGPath() string {
+func getIconPath() string {
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		gopath = path.Join(os.Getenv("HOME"), "go")
+	}
+
+	if runtime.GOOS == "windows" {
+		icoPath := `C:\Program Files\RiseupVPN\riseupvpn.ico`
+		if fileExist(icoPath) {
+			return icoPath
+		}
+		icoPath = path.Join(gopath, "src", "0xacab.org", "leap", "riseup_vpn", "assets", "riseupvpn.ico")
+		if fileExist(icoPath) {
+			return icoPath
+		}
+		return ""
+	}
+
+	if runtime.GOOS == "darwin" {
+		icnsPath := "/Applications/RiseupVPN.app/Contents/Resources/app.icns"
+		if fileExist(icnsPath) {
+			return icnsPath
+		}
+		icnsPath = path.Join(gopath, "src", "0xacab.org", "leap", "riseup_vpn", "assets", "riseupvpn.icns")
+		if fileExist(icnsPath) {
+			return icnsPath
+		}
+		return ""
+	}
+
 	snapPath := os.Getenv("SNAP")
 	if snapPath != "" {
 		return snapPath + "/snap/gui/riseupvpn.svg"
@@ -114,10 +144,6 @@ func getSVGPath() string {
 		return svgPath
 	}
 
-	gopath := os.Getenv("GOPATH")
-	if gopath == "" {
-		gopath = path.Join(os.Getenv("HOME"), "go")
-	}
 	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-systray", svgFileName)
 	if fileExist(svgPath) {
 		return svgPath

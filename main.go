@@ -81,7 +81,12 @@ func main() {
 	defer b.Close()
 	go checkAndStartBitmask(b, notify, conf)
 
-	run(b, conf, notify)
+	as := newAutostart(applicationName, getIconPath())
+	err = as.Enable()
+	if err != nil {
+		log.Printf("Error enabling autostart: %v", err)
+	}
+	run(b, conf, notify, as)
 }
 
 func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *systrayConfig) {
