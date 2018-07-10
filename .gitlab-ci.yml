@@ -16,7 +16,7 @@ build_test:
     - ln -s "$(pwd)" ${APP_PATH}
     - cd ${APP_PATH}
     - make get
-    - make test
+    - make static
     - make build
   tags:
     - linux
@@ -24,3 +24,34 @@ build_test:
     paths:
       - 'bitmask-systray'
     expire_in: 1 month
+
+win_installer:
+ image: 0xacab.org:4567/leap/bitmask-dev:latest
+ stage: build
+ script:
+   - apt-get -y update
+   - apt-get -y install nsis mingw-w64 golang upx-ucl
+   - mkdir -p /go/src/0xacab.org/leap/
+   - ln -s "$(pwd)" ${APP_PATH}
+   - cd ${APP_PATH}
+
+   # we need to manually patch w32 until they merge #81
+   - mkdir -p /go/src/github.com/AllenDang/
+   - cd /go/src/github.com/AllenDang/
+   - git clone https://github.com/AllenDang/w32
+   - cd w32
+   - curl https://downloads.leap.se/thirdparty/w32.patch | patch -p1 -N
+   - cd ${APP_PATH}
+
+   - git clone https://0xacab.org/leap/riseup_vpn
+   - cd riseup_vpn
+   - make openvpn_cross_win
+   - make build_cross_win
+   - mv dist/RiseupVPN-*.exe ..
+ tags:
+   - linux
+ artifacts:
+   name: installer_win_$CI_COMMIT_REF_NAME
+   paths:
+     - RiseupVPN-*.exe
+   expire_in: 1 month
