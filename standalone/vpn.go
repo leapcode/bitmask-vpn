@@ -17,7 +17,6 @@ package bitmask
 
 import (
 	"path"
-	"runtime"
 )
 
 const (
@@ -45,21 +44,12 @@ func (b *Bitmask) StartVPN(provider string) error {
 	}
 	certPemPath := b.getCertPemPath()
 	arg = append(arg,
-		"--nobind",
 		"--verb", "1",
-		"--dev", "tun",
-		"--client",
-		"--tls-client",
-		"--remote-cert-tls", "server",
-		"--script-security", "1",
 		"--management-client",
 		"--management", openvpnManagementAddr, openvpnManagementPort,
 		"--ca", b.getCaCertPath(),
 		"--cert", certPemPath,
 		"--key", certPemPath)
-	if runtime.GOOS == "windows" {
-		arg = append(arg, "--log", `C:\bitmask\openvp.log`)
-	}
 	return b.launch.openvpnStart(arg...)
 }
 
