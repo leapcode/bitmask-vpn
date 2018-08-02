@@ -16,7 +16,7 @@ build_test:
     - ln -s "$(pwd)" ${APP_PATH}
     - cd ${APP_PATH}
     - make get
-    - make static
+    - make standalone
     - make build
   tags:
     - linux

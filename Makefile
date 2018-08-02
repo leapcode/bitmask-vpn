@@ -5,7 +5,8 @@ TAGS ?= gtk_3_18
 all: icon locales get build
 
 get:
-	go get -tags $(TAGS) . ./standalone
+	go get -tags $(TAGS) ./...
+	go get -tags "$(TAGS) standalone" ./...
 
 build:
 	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`"
