@@ -30,7 +30,13 @@ win_installer:
  stage: build
  script:
    - apt-get -y update
-   - apt-get -y install nsis mingw-w64 golang upx-ucl
+   - apt-get -y install mingw-w64 golang upx-ucl
+
+   # we need nsis >= 3.0
+   - echo 'deb http://archive.ubuntu.com/ubuntu cosmic universe' >> /etc/apt/sources.list
+   - apt-get -y update
+   - apt-get -t cosmic -y install nsis
+
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
    - cd ${APP_PATH}
