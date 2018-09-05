@@ -61,3 +61,27 @@ win_installer:
    paths:
      - RiseupVPN-*.exe
    expire_in: 1 month
+
+snap:
+ image: 0xacab.org:4567/leap/bitmask-dev:latest
+ stage: build
+ script:
+   - apt-get -y update
+   - apt-get -y install snapcraft
+
+   - mkdir -p /go/src/0xacab.org/leap/
+   - ln -s "$(pwd)" ${APP_PATH}
+   - cd ${APP_PATH}
+
+   - git clone https://0xacab.org/leap/riseup_vpn
+   - cd riseup_vpn
+   - snapcraft build
+   - snapcraft snap
+   - mv riseup-vpn*.snap ..
+ tags:
+   - linux
+ artifacts:
+   name: snap_$CI_COMMIT_REF_NAME
+   paths:
+     - riseup-vpn*.snap
+   expire_in: 1 month
