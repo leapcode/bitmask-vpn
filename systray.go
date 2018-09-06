@@ -142,6 +142,13 @@ func (bt *bmTray) onReady() {
 				systray.Quit()
 			case <-signalCh:
 				systray.Quit()
+
+			case <-time.After(5 * time.Second):
+				if status, err := bt.bm.GetStatus(); err != nil {
+					log.Printf("Error getting status: %v", err)
+				} else {
+					bt.changeStatus(status)
+				}
 			}
 		}
 	}()
