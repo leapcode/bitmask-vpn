@@ -55,9 +55,7 @@ func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator, as autost
 func (bt bmTray) onExit() {
 	status, _ := bt.bm.GetStatus()
 	if status != "off" {
-		ch := bt.bm.GetStatusCh()
 		bt.bm.StopVPN()
-		status = <-ch
 	}
 	log.Println("Closing systray")
 }
