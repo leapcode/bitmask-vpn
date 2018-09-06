@@ -31,7 +31,6 @@ const (
 var bitmaskRootPaths = []string{
 	"/usr/sbin/bitmask-root",
 	"/usr/local/sbin/bitmask-root",
-	"/snap/bin/riseup-vpn.bitmask-root",
 }
 
 type launcher struct {
@@ -113,6 +112,12 @@ func runBitmaskRoot(arg ...string) error {
 }
 
 func bitmaskRootPath() (string, error) {
+	if os.Getenv("SNAP") != "" {
+		path := "/snap/bin/riseup-vpn.bitmask-root"
+		if _, err := os.Stat(path); !os.IsNotExist(err) {
+			return path, nil
+		}
+	}
 	for _, path := range bitmaskRootPaths {
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
 			return path, nil
