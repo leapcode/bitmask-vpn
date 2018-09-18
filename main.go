@@ -44,7 +44,7 @@ func main() {
 
 	logger, err := configureLogger()
 	if err != nil {
-		log.Println("Can't configure logger: %v", err)
+		log.Println("Can't configure logger: ", err)
 	} else {
 		defer logger.Close()
 	}
