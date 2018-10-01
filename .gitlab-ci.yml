@@ -7,11 +7,9 @@ variables:
   APP_PATH: /go/src/0xacab.org/leap/bitmask-systray
 
 build_test:
-  image: 0xacab.org:4567/leap/bitmask-dev:latest
+  image: 0xacab.org:4567/leap/bitmask-sytray:latest
   stage: build
   script:
-    - apt-get -y update
-    - apt-get -y install libappindicator3-dev libgtk-3-dev libzmq3-dev golang
     - mkdir -p /go/src/0xacab.org/leap/
     - ln -s "$(pwd)" ${APP_PATH}
     - cd ${APP_PATH}
@@ -26,17 +24,9 @@ build_test:
     expire_in: 1 month
 
 win_installer:
- image: 0xacab.org:4567/leap/bitmask-dev:latest
+ image: 0xacab.org:4567/leap/bitmask-systray:latest
  stage: build
  script:
-   - apt-get -y update
-   - apt-get -y install mingw-w64 golang upx-ucl
-
-   # we need nsis >= 3.0
-   - echo 'deb http://archive.ubuntu.com/ubuntu cosmic universe' >> /etc/apt/sources.list
-   - apt-get -y update
-   - apt-get -t cosmic -y install nsis
-
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
    - cd ${APP_PATH}
@@ -63,12 +53,9 @@ win_installer:
    expire_in: 1 month
 
 snap:
- image: 0xacab.org:4567/leap/bitmask-dev:latest
+ image: 0xacab.org:4567/leap/bitmask-systray:latest
  stage: build
  script:
-   - apt-get -y update
-   - apt-get -y install snapcraft
-
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
    - cd ${APP_PATH}
