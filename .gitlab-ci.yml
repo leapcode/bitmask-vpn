@@ -7,7 +7,7 @@ variables:
   APP_PATH: /go/src/0xacab.org/leap/bitmask-systray
 
 build_test:
-  image: 0xacab.org:4567/leap/bitmask-sytray:latest
+  image: 0xacab.org:4567/leap/docker/bitmask-sytray:latest
   stage: build
   script:
     - mkdir -p /go/src/0xacab.org/leap/
@@ -24,7 +24,7 @@ build_test:
     expire_in: 1 month
 
 win_installer:
- image: 0xacab.org:4567/leap/bitmask-systray:latest
+ image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
  stage: build
  script:
    - mkdir -p /go/src/0xacab.org/leap/
@@ -53,7 +53,7 @@ win_installer:
    expire_in: 1 month
 
 snap:
- image: 0xacab.org:4567/leap/bitmask-systray:latest
+ image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
  stage: build
  script:
    - mkdir -p /go/src/0xacab.org/leap/
