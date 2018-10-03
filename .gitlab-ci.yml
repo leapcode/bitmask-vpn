@@ -7,7 +7,7 @@ variables:
   APP_PATH: /go/src/0xacab.org/leap/bitmask-systray
 
 build_test:
-  image: 0xacab.org:4567/leap/docker/bitmask-sytray:latest
+  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
   stage: build
   script:
     - mkdir -p /go/src/0xacab.org/leap/
