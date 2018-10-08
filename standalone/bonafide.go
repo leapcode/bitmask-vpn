@@ -30,8 +30,9 @@ import (
 )
 
 const (
-	certAPI = "https://api.black.riseup.net/1/cert"
-	eipAPI  = "https://api.black.riseup.net/1/config/eip-service.json"
+	certAPI        = "https://api.black.riseup.net/1/cert"
+	eipAPI         = "https://api.black.riseup.net/1/config/eip-service.json"
+	secondsPerHour = 60 * 60
 )
 
 var (
@@ -194,6 +195,7 @@ func (b *bonafide) sortGateways() {
 
 	gws := []gatewayDistance{}
 	_, tzOffset := time.Now().Zone()
+	tzOffset = tzOffset / secondsPerHour
 	for _, gw := range b.eip.Gateways {
 		distance := 13
 		if gw.Location == b.defaultGateway {
@@ -209,7 +211,7 @@ func (b *bonafide) sortGateways() {
 		gws = append(gws, gatewayDistance{gw, distance})
 	}
 
-	sort.Slice(gws, func(i, j int) bool { return gws[i].distance > gws[j].distance })
+	sort.Slice(gws, func(i, j int) bool { return gws[i].distance < gws[j].distance })
 	for i, gw := range gws {
 		b.eip.Gateways[i] = gw.gateway
 	}
@@ -219,9 +221,8 @@ func tzDistance(offset1, offset2 int) int {
 	abs := func(x int) int {
 		if x < 0 {
 			return -x
-		} else {
-			return x
 		}
+		return x
 	}
 	distance := abs(offset1 - offset2)
 	if distance > 12 {
