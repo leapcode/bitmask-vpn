@@ -1,4 +1,4 @@
-.PHONY: all get build standalone icon locales generate_locales clean
+.PHONY: all get build build_bitmaskd icon locales generate_locales clean
 
 TAGS ?= gtk_3_18
 
@@ -6,7 +6,7 @@ all: icon locales get build
 
 get:
 	go get -tags $(TAGS) ./...
-	go get -tags "$(TAGS) standalone" ./...
+	go get -tags "$(TAGS) bitmaskd" ./...
 
 build:
 	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`"
@@ -14,11 +14,11 @@ build:
 test:
 	go test -tags $(TAGS) ./...
 
-standalone:
-	go build -tags "$(TAGS) standalone" -ldflags "-X main.version=`git describe --tags`"
+build_bitmaskd:
+	go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`"
 
 build_win:
-	powershell -Command '$$version=git describe --tags; go build -tags "standalone" -ldflags "-H windowsgui -X main.version=$$version"'
+	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version"'
 
 clean:
 	make -C icon clean

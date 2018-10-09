@@ -50,24 +50,29 @@ They are expected and don't produce any problem on the systray.
 
 Run it
 -------------
-bitmask-systray assumes that you already have bitmaskd running.
+The default build is a standalone systray. It still requires a helper and openvpn installed to work. For linux the helper is
+[bitmask-root](https://0xacab.org/leap/bitmask-dev/blob/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root)
+for windows and OSX there is [a helper written in go](https://0xacab.org/leap/riseup_vpn/tree/master/helper).
 
-Run bitmask and the systray:
+To build and run it:
+```
+  $ go build
+  $ ./bitmask-systray
+```
+
+
+Bitmaskd
+-------------
+Is also posible to compile the systray to use bitmask as backend:
+```
+  $ go build -tags bitmaskd
+```
+
+In that case bitmask-systray assumes that you already have bitmaskd running. Run bitmask and the systray:
 ```
   $ bitmaskd
   $ ./bitmask-systray
 ```
-
-Standalone
--------------
-
-Is also posible to compile the systray to be standalone (don't depend on bitmask):
-```
-  $ go build -tags standalone
-```
-It still requires a helper and openvpn installed to work. For linux the helper is
-[bitmask-root](https://0xacab.org/leap/bitmask-dev/blob/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root)
-for windows and OSX there is [a helper written in go](https://0xacab.org/leap/riseup_vpn/tree/master/helper).
 
 
 i18n
