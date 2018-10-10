@@ -16,6 +16,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"path"
 	"runtime"
@@ -71,6 +72,12 @@ func (n *notificator) donations() {
 }
 
 func (n *notificator) about(version string) {
+	if version == "" && os.Getenv("SNAP") != "" {
+		_version, err := ioutil.ReadFile(os.Getenv("SNAP") + "/snap/version.txt")
+		if err == nil {
+			version = string(_version)
+		}
+	}
 	dialog.Message(printer.Sprintf(aboutText, applicationName, version)).
 		Title(printer.Sprintf("About")).
 		Icon(getIconPath()).
