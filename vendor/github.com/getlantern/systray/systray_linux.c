@@ -8,8 +8,6 @@
 static AppIndicator *global_app_indicator;
 static GtkWidget *global_tray_menu = NULL;
 static GList *global_menu_items = NULL;
-// Keep track of all generated temp files to remove when app quits
-static GArray *global_temp_icon_file_names = NULL;
 
 typedef struct {
 	GtkWidget *menu_item;
@@ -31,7 +29,6 @@ int nativeLoop(void) {
 	app_indicator_set_status(global_app_indicator, APP_INDICATOR_STATUS_ACTIVE);
 	global_tray_menu = gtk_menu_new();
 	app_indicator_set_menu(global_app_indicator, GTK_MENU(global_tray_menu));
-	global_temp_icon_file_names = g_array_new(TRUE, FALSE, sizeof(char*));
 	systray_ready();
 	gtk_main();
 	systray_on_exit();
@@ -48,7 +45,6 @@ gboolean do_set_icon(gpointer data) {
 		printf("failed to create temp icon file %s: %s\n", temp_file_name, strerror(errno));
 		return FALSE;
 	}
-	g_array_append_val(global_temp_icon_file_names, temp_file_name);
 	gsize size = 0;
 	gconstpointer icon_data = g_bytes_get_data(bytes, &size);
 	ssize_t written = write(fd, icon_data, size);
@@ -59,6 +55,11 @@ gboolean do_set_icon(gpointer data) {
 	}
 	app_indicator_set_icon_full(global_app_indicator, temp_file_name, "");
 	app_indicator_set_attention_icon_full(global_app_indicator, temp_file_name, "");
+
+	int ret = unlink(temp_file_name);
+	if (ret == -1) {
+		printf("failed to remove temp icon file %s: %s\n", temp_file_name, strerror(errno));
+	}
 	g_bytes_unref(bytes);
 	return FALSE;
 }
@@ -146,17 +147,6 @@ gboolean do_show_menu_item(gpointer data) {
 
 // runs in main thread, should always return FALSE to prevent gtk to execute it again
 gboolean do_quit(gpointer data) {
-	int i;
-	for (i = 0; i < INT_MAX; ++i) {
-		char * temp_file_name = g_array_index(global_temp_icon_file_names, char*, i);
-		if (temp_file_name == NULL) {
-			break;
-		}
-		int ret = unlink(temp_file_name);
-		if (ret == -1) {
-			printf("failed to remove temp icon file %s: %s\n", temp_file_name, strerror(errno));
-		}
-	}
 	// app indicator doesn't provide a way to remove it, hide it as a workaround
 	app_indicator_set_status(global_app_indicator, APP_INDICATOR_STATUS_PASSIVE);
 	gtk_main_quit();
