@@ -17,6 +17,8 @@
 package main
 
 import (
+	"errors"
+	"log"
 	"os"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
@@ -24,8 +26,17 @@ import (
 	pmautostart "github.com/ProtonMail/go-autostart"
 )
 
+const (
+	errorMsg = `An error has ocurred initializing %s: %v`
+)
+
 func initBitmask() (bitmask.Bitmask, error) {
-	return standalone.Init()
+	b, err := standalone.Init()
+	if err != nil {
+		log.Printf("An error ocurred starting standalone bitmask: %v", err)
+		err = errors.New(printer.Sprintf(errorMsg, applicationName, err))
+	}
+	return b, err
 }
 
 func newAutostart(appName string, iconPath string) autostart {

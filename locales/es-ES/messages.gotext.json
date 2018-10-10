@@ -3,6 +3,14 @@
     "messages": [
         {
             "id": [
+                "notRunning",
+                "Is bitmaskd running? Start bitmask and try again."
+            ],
+            "message": "Is bitmaskd running? Start bitmask and try again.",
+            "translation": "¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo."
+        },
+        {
+            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
@@ -27,14 +35,30 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName} version: {Version}",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translation": "{ApplicationName} es un servicio de VPN facil, rapido y seguro de riseup.net. {ApplicationName} no requiere registrar una cuenta, recoge logs ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga completamente por donaciones de gente como tu. Por favor dona a https://riseup.net/vpn/donate.\n\t\t\nAl usar este programa estas aceptando los Terminos de servicio disponibles en https://riseup.net/tos. Este servicio se ofrece tal cual, sin garantia y con la intencion de la gente que trabaja en el de hacer el mundo un mejor lugar.\n\n\n{ApplicationName} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
                     "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "ApplicationName_1",
+                    "string": "%[1]v",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
@@ -56,17 +80,9 @@
             "translation": "Acerca de"
         },
         {
-            "id": [
-                "notRunning",
-                "Is bitmaskd running? Start bitmask and try again."
-            ],
-            "message": "Is bitmaskd running? Start bitmask and try again.",
-            "translation": "¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo."
-        },
-        {
-            "id": "Can't contact bitmask",
-            "message": "Can't contact bitmask",
-            "translation": "No se pudo contactar con bitmask"
+            "id": "Initialize error",
+            "message": "Initialize error",
+            "translation": "Problema arrancando"
         },
         {
             "id": [

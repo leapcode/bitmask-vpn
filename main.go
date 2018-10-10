@@ -74,8 +74,7 @@ func main() {
 
 	b, err := initBitmask()
 	if err != nil {
-		log.Print(err)
-		notify.bitmaskNotRunning()
+		notify.initFailure(err)
 		return
 	}
 	defer b.Close()
@@ -108,7 +107,8 @@ func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 		log.Printf("No polkit found")
 		notify.authAgent()
 	} else if err != nil {
-		notify.bitmaskNotRunning()
+		log.Printf("Error checking vpn: %v", err)
+		notify.errorStartingVPN(err)
 		return err
 	}
 

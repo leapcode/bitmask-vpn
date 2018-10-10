@@ -37,119 +37,118 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n%[1]v version: %[2]s": 2,
+	"%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n%[1]v version: %[2]s": 3,
 	"%s blocking internet":    26,
 	"%s off":                  22,
 	"%s on":                   21,
-	"About":                   3,
+	"About":                   4,
 	"About...":                17,
 	"Can't connect to %s: %v": 8,
-	"Can't contact bitmask":   5,
 	"Cancel":                  13,
 	"Cancel connection to %s": 14,
 	"Checking status...":      10,
 	"Connecting to %s":        23,
 	"Could not find a polkit authentication agent. Please run one and try again.": 6,
-	"Donate":             1,
-	"Donate...":          16,
-	"Error starting VPN": 9,
-	"Help...":            15,
-	"Is bitmaskd running? Start bitmask and try again.": 4,
+	"Donate":                                            2,
+	"Donate...":                                         16,
+	"Error starting VPN":                                9,
+	"Help...":                                           15,
+	"Initialize error":                                  5,
+	"Is bitmaskd running? Start bitmask and try again.": 0,
 	"Missing authentication agent":                      7,
 	"Quit":                  18,
 	"Retry":                 25,
 	"Route traffic through": 19,
 	"Stopping %s":           24,
-	"The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?": 0,
+	"The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?": 1,
 	"Turn off":          12,
 	"Turn on":           11,
 	"Use %s %v gateway": 20,
 }
 
 var en_USIndex = []uint32{ // 28 elements
-	0x00000000, 0x000000fd, 0x00000104, 0x000002fd,
-	0x00000303, 0x00000335, 0x0000034b, 0x00000397,
-	0x000003b4, 0x000003d2, 0x000003e5, 0x000003f8,
-	0x00000400, 0x00000409, 0x00000410, 0x0000042b,
-	0x00000433, 0x0000043d, 0x00000446, 0x0000044b,
-	0x00000461, 0x00000479, 0x00000482, 0x0000048c,
-	0x000004a0, 0x000004af, 0x000004b5, 0x000004cd,
+	0x00000000, 0x00000032, 0x0000012f, 0x00000136,
+	0x0000032f, 0x00000335, 0x00000346, 0x00000392,
+	0x000003af, 0x000003cd, 0x000003e0, 0x000003f3,
+	0x000003fb, 0x00000404, 0x0000040b, 0x00000426,
+	0x0000042e, 0x00000438, 0x00000441, 0x00000446,
+	0x0000045c, 0x00000474, 0x0000047d, 0x00000487,
+	0x0000049b, 0x000004aa, 0x000004b0, 0x000004c8,
 } // Size: 136 bytes
 
-const en_USData string = "" + // Size: 1229 bytes
-	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
-	"e personal information about you, there is no accounts or billing for th" +
-	"is service. But if you want the service to continue, donate at least $5 " +
-	"each month.\x0a\x09\x0aDo you want to donate now?\x02Donate\x02%[1]s is " +
-	"an easy, fast, and secure VPN service from riseup.net. %[1]s does not re" +
-	"quire a user account, keep logs, or track you in any way.\x0a\x09    " +
-	"\x0aThis service paid for entirely by donations from users like you. Ple" +
-	"ase donate at https://riseup.net/vpn/donate.\x0a\x09\x09\x0aBy using thi" +
-	"s application, you agree to the Terms of Service available at https://ri" +
-	"seup.net/tos. This service is provide as-is, without any warranty, and i" +
-	"s intended for people who work to make the world a better place.\x0a\x0a" +
-	"\x0a%[1]s version: %[2]s\x02About\x02Is bitmaskd running? Start bitmask " +
-	"and try again.\x02Can't contact bitmask\x02Could not find a polkit authe" +
-	"ntication agent. Please run one and try again.\x02Missing authentication" +
-	" agent\x02Can't connect to %[1]s: %[2]v\x02Error starting VPN\x02Checkin" +
-	"g status...\x02Turn on\x02Turn off\x02Cancel\x02Cancel connection to %[1" +
-	"]s\x02Help...\x02Donate...\x02About...\x02Quit\x02Route traffic through" +
-	"\x02Use %[1]s %[2]v gateway\x02%[1]s on\x02%[1]s off\x02Connecting to %[" +
-	"1]s\x02Stopping %[1]s\x02Retry\x02%[1]s blocking internet"
+const en_USData string = "" + // Size: 1224 bytes
+	"\x02Is bitmaskd running? Start bitmask and try again.\x02The %[1]s servi" +
+	"ce is expensive to run. Because we don't want to store personal informat" +
+	"ion about you, there is no accounts or billing for this service. But if " +
+	"you want the service to continue, donate at least $5 each month.\x0a\x09" +
+	"\x0aDo you want to donate now?\x02Donate\x02%[1]s is an easy, fast, and " +
+	"secure VPN service from riseup.net. %[1]s does not require a user accoun" +
+	"t, keep logs, or track you in any way.\x0a\x09    \x0aThis service paid " +
+	"for entirely by donations from users like you. Please donate at https://" +
+	"riseup.net/vpn/donate.\x0a\x09\x09\x0aBy using this application, you agr" +
+	"ee to the Terms of Service available at https://riseup.net/tos. This ser" +
+	"vice is provide as-is, without any warranty, and is intended for people " +
+	"who work to make the world a better place.\x0a\x0a\x0a%[1]s version: %[2" +
+	"]s\x02About\x02Initialize error\x02Could not find a polkit authenticatio" +
+	"n agent. Please run one and try again.\x02Missing authentication agent" +
+	"\x02Can't connect to %[1]s: %[2]v\x02Error starting VPN\x02Checking stat" +
+	"us...\x02Turn on\x02Turn off\x02Cancel\x02Cancel connection to %[1]s\x02" +
+	"Help...\x02Donate...\x02About...\x02Quit\x02Route traffic through\x02Use" +
+	" %[1]s %[2]v gateway\x02%[1]s on\x02%[1]s off\x02Connecting to %[1]s\x02" +
+	"Stopping %[1]s\x02Retry\x02%[1]s blocking internet"
 
 var es_ESIndex = []uint32{ // 28 elements
-	0x00000000, 0x000000ec, 0x000000f1, 0x00000305,
-	0x0000030f, 0x0000034e, 0x0000036f, 0x000003d6,
-	0x000003f8, 0x0000041b, 0x00000433, 0x0000044c,
-	0x00000455, 0x0000045c, 0x00000465, 0x00000482,
-	0x0000048b, 0x00000493, 0x000004a0, 0x000004a7,
-	0x000004ba, 0x000004db, 0x000004eb, 0x000004f9,
-	0x0000050d, 0x00000525, 0x00000530, 0x0000054a,
+	0x00000000, 0x0000003f, 0x0000012b, 0x00000130,
+	0x00000344, 0x0000034e, 0x00000362, 0x000003c9,
+	0x000003eb, 0x0000040e, 0x00000426, 0x0000043f,
+	0x00000448, 0x0000044f, 0x00000458, 0x00000475,
+	0x0000047e, 0x00000486, 0x00000493, 0x0000049a,
+	0x000004ad, 0x000004ce, 0x000004de, 0x000004ec,
+	0x00000500, 0x00000518, 0x00000523, 0x0000053d,
 } // Size: 136 bytes
 
-const es_ESData string = "" + // Size: 1354 bytes
-	"\x02El servicio %[1]s es caro de mantener. Como no queremos guardar ning" +
-	"una información personal tuya, no hay cuentas ni servicio de facturación" +
-	". Si quieres que este servicio continúe, dona al menos $5 cada mes.\x0a" +
-	"\x09\x0a¿Quieres donar ahora?\x02Dona\x02%[1]s es un servicio de VPN fac" +
-	"il, rapido y seguro de riseup.net. %[1]s no requiere registrar una cuent" +
-	"a, recoge logs ni te rastrea de ninguna manera.\x0a\x09    \x0aEste serv" +
-	"icio se paga completamente por donaciones de gente como tu. Por favor do" +
-	"na a https://riseup.net/vpn/donate.\x0a\x09\x09\x0aAl usar este programa" +
-	" estas aceptando los Terminos de servicio disponibles en https://riseup." +
-	"net/tos. Este servicio se ofrece tal cual, sin garantia y con la intenci" +
-	"on de la gente que trabaja en el de hacer el mundo un mejor lugar.\x0a" +
-	"\x0a\x0a%[1]s version: %[2]s\x02Acerca de\x02¿Está corriendo bitmaskd? A" +
-	"rranca bitmask y prueba de nuevo.\x02No se pudo contactar con bitmask" +
-	"\x02No se pudo encontrar ningún agente de autenticacion de polkit. Por f" +
-	"avor lanza uno y prueba de nuevo.\x02Falta un agente de autenticación" +
-	"\x02No puedo conectar con %[1]s: %[2]v\x02Error arrancando la VPN\x02Com" +
-	"probando el estado...\x02Encender\x02Apagar\x02Cancelar\x02Cancela la co" +
-	"nexión a %[1]s\x02Ayuda...\x02Dona...\x02Acerca de...\x02Cerrar\x02Salir" +
-	" a través de\x02Usa la salida de %[1]s por %[2]v\x02%[1]s encendida\x02%" +
-	"[1]s apagada\x02Connectando a %[1]s\x02Desconnectando de %[1]s\x02Reinte" +
-	"ntar\x02%[1]s bloqueando internet"
+const es_ESData string = "" + // Size: 1341 bytes
+	"\x02¿Está corriendo bitmaskd? Arranca bitmask y prueba de nuevo.\x02El s" +
+	"ervicio %[1]s es caro de mantener. Como no queremos guardar ninguna info" +
+	"rmación personal tuya, no hay cuentas ni servicio de facturación. Si qui" +
+	"eres que este servicio continúe, dona al menos $5 cada mes.\x0a\x09\x0a¿" +
+	"Quieres donar ahora?\x02Dona\x02%[1]s es un servicio de VPN facil, rapid" +
+	"o y seguro de riseup.net. %[1]s no requiere registrar una cuenta, recoge" +
+	" logs ni te rastrea de ninguna manera.\x0a\x09    \x0aEste servicio se p" +
+	"aga completamente por donaciones de gente como tu. Por favor dona a http" +
+	"s://riseup.net/vpn/donate.\x0a\x09\x09\x0aAl usar este programa estas ac" +
+	"eptando los Terminos de servicio disponibles en https://riseup.net/tos. " +
+	"Este servicio se ofrece tal cual, sin garantia y con la intencion de la " +
+	"gente que trabaja en el de hacer el mundo un mejor lugar.\x0a\x0a\x0a%[1" +
+	"]s version: %[2]s\x02Acerca de\x02Problema arrancando\x02No se pudo enco" +
+	"ntrar ningún agente de autenticacion de polkit. Por favor lanza uno y pr" +
+	"ueba de nuevo.\x02Falta un agente de autenticación\x02No puedo conectar " +
+	"con %[1]s: %[2]v\x02Error arrancando la VPN\x02Comprobando el estado..." +
+	"\x02Encender\x02Apagar\x02Cancelar\x02Cancela la conexión a %[1]s\x02Ayu" +
+	"da...\x02Dona...\x02Acerca de...\x02Cerrar\x02Salir a través de\x02Usa l" +
+	"a salida de %[1]s por %[2]v\x02%[1]s encendida\x02%[1]s apagada\x02Conne" +
+	"ctando a %[1]s\x02Desconnectando de %[1]s\x02Reintentar\x02%[1]s bloquea" +
+	"ndo internet"
 
 var pt_BRIndex = []uint32{ // 28 elements
-	0x00000000, 0x00000000, 0x00000013, 0x00000013,
-	0x00000013, 0x0000006d, 0x00000099, 0x0000010a,
-	0x00000135, 0x00000135, 0x00000135, 0x00000154,
-	0x0000015a, 0x00000163, 0x0000016c, 0x00000189,
-	0x00000192, 0x000001a8, 0x000001a8, 0x000001af,
-	0x000001cd, 0x000001eb, 0x000001fe, 0x00000214,
-	0x00000231, 0x0000024c, 0x0000025d, 0x0000027f,
+	0x00000000, 0x0000005a, 0x0000005a, 0x0000006d,
+	0x0000006d, 0x0000006d, 0x0000006d, 0x000000de,
+	0x00000109, 0x00000109, 0x00000109, 0x00000128,
+	0x0000012e, 0x00000137, 0x00000140, 0x0000015d,
+	0x00000166, 0x0000017c, 0x0000017c, 0x00000183,
+	0x000001a1, 0x000001bf, 0x000001d2, 0x000001e8,
+	0x00000205, 0x00000220, 0x00000231, 0x00000253,
 } // Size: 136 bytes
 
-const pt_BRData string = "" + // Size: 639 bytes
-	"\x02Fazer uma doação\x02Você tem certeza que bitmaskd está sendo executa" +
-	"do? Inicie o bitmask e tente novamente.\x02Não foi possível se comunicar" +
-	" com bitmask\x02Não foi possível encontrar um agente de autenticação pol" +
-	"kit. Por favor, execute um agente e tente novamente.\x02Um agente de aut" +
-	"enticação está faltando\x02Verificando o estado da VPN...\x02Ligar\x02De" +
-	"sligar\x02Cancelar\x02Cancelar a conexão à %[1]s\x02Ajuda...\x02Fazer um" +
-	"a doação...\x02Fechar\x02Rotear o tráfego através de\x02Usar o gateway %" +
-	"[2]v da %[1]s\x02%[1]s está ligada\x02%[1]s está desligada\x02A %[1]s es" +
-	"tá sendo iniciada\x02A %[1]s está sendo parada\x02Tentar novamente\x02%[" +
-	"1]s está bloqueando a Internet"
+const pt_BRData string = "" + // Size: 595 bytes
+	"\x02Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask" +
+	" e tente novamente.\x02Fazer uma doação\x02Não foi possível encontrar um" +
+	" agente de autenticação polkit. Por favor, execute um agente e tente nov" +
+	"amente.\x02Um agente de autenticação está faltando\x02Verificando o esta" +
+	"do da VPN...\x02Ligar\x02Desligar\x02Cancelar\x02Cancelar a conexão à %[" +
+	"1]s\x02Ajuda...\x02Fazer uma doação...\x02Fechar\x02Rotear o tráfego atr" +
+	"avés de\x02Usar o gateway %[2]v da %[1]s\x02%[1]s está ligada\x02%[1]s e" +
+	"stá desligada\x02A %[1]s está sendo iniciada\x02A %[1]s está sendo parad" +
+	"a\x02Tentar novamente\x02%[1]s está bloqueando a Internet"
 
-	// Total table size 3630 bytes (3KiB); checksum: 54E0AE6E
+	// Total table size 3568 bytes (3KiB); checksum: D5D7FF42

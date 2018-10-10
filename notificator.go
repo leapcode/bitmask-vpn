@@ -40,7 +40,6 @@ By using this application, you agree to the Terms of Service available at https:
 %[1]v version: %[2]s`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	errorStartingVPN = `Can't connect to %s: %v`
-	notRunning       = `Is bitmaskd running? Start bitmask and try again.`
 	svgFileName      = "riseupvpn.svg"
 )
 
@@ -84,9 +83,9 @@ func (n *notificator) about(version string) {
 		Info()
 }
 
-func (n *notificator) bitmaskNotRunning() {
-	dialog.Message(printer.Sprintf(notRunning)).
-		Title(printer.Sprintf("Can't contact bitmask")).
+func (n *notificator) initFailure(err error) {
+	dialog.Message(err.Error()).
+		Title(printer.Sprintf("Initialize error")).
 		Icon(getIconPath()).
 		Error()
 }

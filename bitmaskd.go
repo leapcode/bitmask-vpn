@@ -17,12 +17,24 @@
 package main
 
 import (
+	"errors"
+	"log"
+
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	bitmaskd "0xacab.org/leap/bitmask-systray/bitmaskd"
 )
 
+const (
+	notRunning = `Is bitmaskd running? Start bitmask and try again.`
+)
+
 func initBitmask() (bitmask.Bitmask, error) {
-	return bitmaskd.Init()
+	b, err := bitmaskd.Init()
+	if err != nil {
+		log.Printf("An error ocurred starting bitmaskd: %v", err)
+		err = errors.New(printer.Sprintf(notRunning))
+	}
+	return b, err
 }
 
 func newAutostart(appName string, iconPath string) autostart {

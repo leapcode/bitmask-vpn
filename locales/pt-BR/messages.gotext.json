@@ -3,6 +3,14 @@
     "messages": [
         {
             "id": [
+                "notRunning",
+                "Is bitmaskd running? Start bitmask and try again."
+            ],
+            "message": "Is bitmaskd running? Start bitmask and try again.",
+            "translation": "Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask e tente novamente."
+        },
+        {
+            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
@@ -72,17 +80,9 @@
             "translation": ""
         },
         {
-            "id": [
-                "notRunning",
-                "Is bitmaskd running? Start bitmask and try again."
-            ],
-            "message": "Is bitmaskd running? Start bitmask and try again.",
-            "translation": "Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask e tente novamente."
-        },
-        {
-            "id": "Can't contact bitmask",
-            "message": "Can't contact bitmask",
-            "translation": "Não foi possível se comunicar com bitmask"
+            "id": "Initialize error",
+            "message": "Initialize error",
+            "translation": ""
         },
         {
             "id": [
