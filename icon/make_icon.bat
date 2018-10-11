@@ -16,7 +16,7 @@ GOTO DONE
 ECHO Creating %1_win.go
 ECHO //+build windows > %1_win.go
 ECHO. >> %1_win.go
-TYPE ico\black\vpn_%1.ico | %GOPATH%\bin\2goarray %2 icon >> %1_win.go
+TYPE ico\white\vpn_%1.ico | %GOPATH%\bin\2goarray %2 icon >> %1_win.go
 EXIT /B
 
 :CREATEFAIL
