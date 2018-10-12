@@ -60,11 +60,15 @@ snap:
    - ln -s "$(pwd)" ${APP_PATH}
    - cd ${APP_PATH}
 
-   - git clone https://0xacab.org/leap/riseup_vpn
-   - cd riseup_vpn
+   - git clone https://0xacab.org/leap/riseup_vpn /riseup_vpn
+   - cd /riseup_vpn
+   - sed -i 's/https:\/\/0xacab.org\/leap\/bitmask-systray.git$/\/go\/src\/0xacab.org\/leap\/bitmask-systray/' snap/snapcraft.yaml
+   - sed -i 's/.\/bin\/bitmask-systray.git$/.\/bin\/bitmask-systray/' snap/snapcraft.yaml
+   - sed -i 's/git clone.*$//' snap/version.sh
+   - sed -i 's/git -C bitmask-systray/git -C \/go\/src\/0xacab.org\/leap\/bitmask-systray/' snap/version.sh
    - snapcraft build
    - snapcraft snap
-   - mv riseup-vpn*.snap ..
+   - mv riseup-vpn*.snap /go/src/0xacab.org/leap/bitmask-systray/
  tags:
    - linux
  artifacts:
