@@ -8,6 +8,7 @@
 static AppIndicator *global_app_indicator;
 static GtkWidget *global_tray_menu = NULL;
 static GList *global_menu_items = NULL;
+static char temp_file_name[PATH_MAX] = "";
 
 typedef struct {
 	GtkWidget *menu_item;
@@ -35,10 +36,20 @@ int nativeLoop(void) {
 	return 0;
 }
 
+void _unlink_temp_file() {
+	if (strlen(temp_file_name) != 0) {
+		int ret = unlink(temp_file_name);
+		if (ret == -1) {
+			printf("failed to remove temp icon file %s: %s\n", temp_file_name, strerror(errno));
+		}
+		temp_file_name[0] = '\0';
+	}
+}
+
 // runs in main thread, should always return FALSE to prevent gtk to execute it again
 gboolean do_set_icon(gpointer data) {
 	GBytes* bytes = (GBytes*)data;
-	char* temp_file_name = malloc(PATH_MAX);
+	_unlink_temp_file();
 	strcpy(temp_file_name, "/tmp/systray_XXXXXX");
 	int fd = mkstemp(temp_file_name);
 	if (fd == -1) {
@@ -55,11 +66,6 @@ gboolean do_set_icon(gpointer data) {
 	}
 	app_indicator_set_icon_full(global_app_indicator, temp_file_name, "");
 	app_indicator_set_attention_icon_full(global_app_indicator, temp_file_name, "");
-
-	int ret = unlink(temp_file_name);
-	if (ret == -1) {
-		printf("failed to remove temp icon file %s: %s\n", temp_file_name, strerror(errno));
-	}
 	g_bytes_unref(bytes);
 	return FALSE;
 }
@@ -147,6 +153,7 @@ gboolean do_show_menu_item(gpointer data) {
 
 // runs in main thread, should always return FALSE to prevent gtk to execute it again
 gboolean do_quit(gpointer data) {
+	_unlink_temp_file();
 	// app indicator doesn't provide a way to remove it, hide it as a workaround
 	app_indicator_set_status(global_app_indicator, APP_INDICATOR_STATUS_PASSIVE);
 	gtk_main_quit();
