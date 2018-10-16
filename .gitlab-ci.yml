@@ -72,3 +72,21 @@ snap:
    paths:
      - riseup-vpn*.snap
    expire_in: 1 month
+
+osx_installer:
+  stage: build
+  # for now...
+  allow_failure: true
+  script:
+      - git clone https://0xacab.org/leap/riseup_vpn
+      - cd riseup_vpn
+      - make openvpn_osx
+      - make build_osx
+  tags:
+    - yosemite
+    - osx
+ artifacts:
+   name: installer_osx_$CI_COMMIT_REF_NAME
+   paths:
+     - dist/RiseupVPN-*.pkg
+   expire_in: 1 month
