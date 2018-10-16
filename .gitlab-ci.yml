@@ -18,7 +18,7 @@ build_test:
     - make build
   tags:
     - linux
-  artifacts:
+  artifacts:
     paths:
       - 'bitmask-systray'
     expire_in: 1 month
