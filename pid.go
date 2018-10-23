@@ -6,11 +6,12 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strconv"
+	"strings"
 	"syscall"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
+	"github.com/mitchellh/go-ps"
 )
 
 var pidFile = filepath.Join(bitmask.ConfigPath, "systray.pid")
@@ -85,19 +86,14 @@ func pidRunning(pid int) bool {
 	if pid == 0 {
 		return false
 	}
-
-	proc, err := os.FindProcess(pid)
-	if runtime.GOOS == "windows" {
-		return err == nil
-	}
-
+	proc, err := ps.FindProcess(pid)
 	if err != nil {
 		log.Printf("An error ocurred finding process: %v", err)
 		return false
 	}
-	err = proc.Signal(syscall.Signal(0))
-	if err == nil {
-		return true
+	if proc == nil {
+		return false
 	}
-	return false
+	log.Printf("There is a running process with the pid %d and executable: %s", pid, proc.Executable())
+	return strings.Contains(os.Args[0], proc.Executable())
 }
