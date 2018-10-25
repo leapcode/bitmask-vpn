@@ -1,3 +1,0 @@
-2018-09-26
-----------------
-* temporarily vendoring github.com/getlantern/systray due to bug in windows systray.
