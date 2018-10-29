@@ -48,7 +48,9 @@ type gatewayTray struct {
 }
 
 func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator, as autostart) {
-	os.Setenv("TMPDIR", "/var/tmp")
+	// XXX this removes the snap error message, but produces an invisible icon.
+	// https://0xacab.org/leap/riseup_vpn/issues/44
+	// os.Setenv("TMPDIR", "/var/tmp")
 	bt := bmTray{bm: bm, conf: conf, notify: notify, autostart: as}
 	systray.Run(bt.onReady, bt.onExit)
 }
