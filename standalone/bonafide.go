@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"sort"
 	"strconv"
@@ -211,7 +212,22 @@ func (b *bonafide) sortGateways() {
 		gws = append(gws, gatewayDistance{gw, distance})
 	}
 
-	sort.Slice(gws, func(i, j int) bool { return gws[i].distance < gws[j].distance })
+	rand.Seed(time.Now().UnixNano())
+	cmp := func(i, j int) bool {
+		if gws[i].distance == gws[j].distance {
+			// TODO: a hack to distribute more the load into the new gw.
+			//       Let's delete it as soon as is more spread the load.
+			if gws[i].gateway.Host == "giraffe.riseup.net" {
+				return rand.Intn(4) != 0
+			} else if gws[j].gateway.Host == "giraffe.riseup.net" {
+				return rand.Intn(4) == 0
+			}
+
+			return rand.Intn(2) == 1
+		}
+		return gws[i].distance < gws[j].distance
+	}
+	sort.Slice(gws, cmp)
 	for i, gw := range gws {
 		b.eip.Gateways[i] = gw.gateway
 	}
