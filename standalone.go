@@ -18,8 +18,10 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
+	"regexp"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
 	standalone "0xacab.org/leap/bitmask-systray/standalone"
@@ -40,9 +42,22 @@ func initBitmask() (bitmask.Bitmask, error) {
 }
 
 func newAutostart(appName string, iconPath string) autostart {
+	exec := os.Args
+	if os.Getenv("SNAP") != "" {
+		re := regexp.MustCompile("/snap/([^/]*)/")
+		match := re.FindStringSubmatch(os.Args[0])
+		if len(match) > 1 {
+			snapName := match[1]
+			exec = []string{fmt.Sprintf("/snap/bin/%s.launcher", snapName)}
+		} else {
+			log.Printf("Snap binary has unknown path: %v", os.Args[0])
+		}
+	}
+
+
 	return &pmautostart.App{
 		Name:        appName,
-		Exec:        os.Args,
+		Exec:        exec,
 		DisplayName: appName,
 		Icon:        iconPath,
 	}
