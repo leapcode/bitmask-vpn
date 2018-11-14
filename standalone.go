@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 
 	"0xacab.org/leap/bitmask-systray/bitmask"
@@ -54,6 +55,13 @@ func newAutostart(appName string, iconPath string) autostart {
 		}
 	}
 
+	if exec[0][:2] == "./" || exec[0][:2] == ".\\" {
+		var err error
+		exec[0], err = filepath.Abs(exec[0])
+		if err != nil {
+			log.Printf("Error making the path absolute directory: %v", err)
+		}
+	}
 
 	return &pmautostart.App{
 		Name:        appName,
