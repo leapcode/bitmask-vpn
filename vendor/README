@@ -1,0 +1,3 @@
+2018-11-14
+-----------------
+* vendor getlantern/systray with PR #74, to work around menu positioning bug in windows.
