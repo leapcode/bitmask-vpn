@@ -3,19 +3,11 @@
     "messages": [
         {
             "id": [
-                "notRunning",
-                "Is bitmaskd running? Start bitmask and try again."
-            ],
-            "message": "Is bitmaskd running? Start bitmask and try again.",
-            "translation": "Você tem certeza que bitmaskd está sendo executado? Inicie o bitmask e tente novamente."
-        },
-        {
-            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "",
+            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -35,10 +27,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -77,11 +69,11 @@
         {
             "id": "About",
             "message": "About",
-            "translation": ""
+            "translation": "Sobre"
         },
         {
-            "id": "Initialize error",
-            "message": "Initialize error",
+            "id": "Initialization error",
+            "message": "Initialization error",
             "translation": ""
         },
         {
@@ -103,7 +95,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "",
+            "translation": "Can't connect to {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -126,7 +118,33 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": ""
+            "translation": "Error starting VPN"
+        },
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing {ApplicationName}: {Err}"
+            ],
+            "message": "An error has ocurred initializing {ApplicationName}: {Err}",
+            "translation": "An error has ocurred initializing {ApplicationName}: {Err}",
+            "placeholders": [
+                {
+                    "id": "ApplicationName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "applicationName"
+                },
+                {
+                    "id": "Err",
+                    "string": "%[2]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 2,
+                    "expr": "err"
+                }
+            ]
         },
         {
             "id": "Checking status...",
@@ -176,7 +194,7 @@
         {
             "id": "About...",
             "message": "About...",
-            "translation": ""
+            "translation": "About..."
         },
         {
             "id": "Quit",

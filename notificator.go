@@ -32,7 +32,7 @@ const (
 Do you want to donate now?`
 	aboutText = `%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.
 	    
-This service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.
+This service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.
 		
 By using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.
 
@@ -85,7 +85,7 @@ func (n *notificator) about(version string) {
 
 func (n *notificator) initFailure(err error) {
 	dialog.Message(err.Error()).
-		Title(printer.Sprintf("Initialize error")).
+		Title(printer.Sprintf("Initialization error")).
 		Icon(getIconPath()).
 		Error()
 }
