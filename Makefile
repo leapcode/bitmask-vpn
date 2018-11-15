@@ -31,17 +31,22 @@ get_deps:
 	 sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config
 
 
-LANGS ?= $(foreach path,$(wildcard locales/*/messages.gotext.json),$(patsubst locales/%/messages.gotext.json,%,$(path)))
+LANGS ?= $(foreach path,$(wildcard locales/*),$(patsubst locales/%,%,$(path)))
 empty :=
 space := $(empty) $(empty)
 lang_list := $(subst $(space),,$(foreach lang,$(LANGS),$(lang),))
 
-locales: catalog.go
+locales: $(foreach lang,$(LANGS),get_$(lang)) catalog.go
 
 generate_locales: $(foreach lang,$(LANGS),locales/$(lang)/out.gotext.json)
+	make -C transifex
 
 locales/%/out.gotext.json: systray.go notificator.go
 	gotext update -lang=$*
 
 catalog.go: $(foreach lang,$(LANGS),locales/$(lang)/messages.gotext.json)
 	gotext update -lang=$(lang_list) -out catalog.go
+
+get_%:
+	make -C transifex build
+	curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/RiseupVPN/translation/${subst -,_,$*}/?file" | transifex/transifex t2g locales/$*/
