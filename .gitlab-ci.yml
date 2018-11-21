@@ -80,6 +80,9 @@ snap:
 osx_installer:
   stage: build
   allow_failure: true
+  variables:
+      GOPATH: ~/go/
+      APP_PATH: ~/go/src/0xacab.org/leap/bitmask-systray
   script:
     - git clone https://0xacab.org/leap/riseup_vpn
     - cd riseup_vpn
