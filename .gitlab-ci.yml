@@ -94,5 +94,5 @@ osx_installer:
   artifacts:
     name: installer_osx_$CI_COMMIT_REF_NAME
     paths:
-      - RiseupVPN-*.pkg
+      - dist/RiseupVPN-*.pkg
     expire_in: 1 month
