@@ -1,5 +1,5 @@
 {
-    "language": "en-US",
+    "language": "nl",
     "messages": [
         {
             "id": [
@@ -7,8 +7,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translatorComment": "Copied from source.",
+            "translation": "De {ApplicationName} dienst is kostbaar om te onderhouden. Omdat we geen persoonlijke informatie over u willen bijhouden, zijn er geen accounts of betalingen voor deze dienst. Om deze dienst in leven te houden, overweeg ten minste €4 per maand te schenken.\n\t\nWilt u nu doneren?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -18,15 +17,12 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "Donate",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Doneren"
         },
         {
             "id": [
@@ -34,8 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translatorComment": "Copied from source.",
+            "translation": "{ApplicationName} is een gemakkelijke, snelle, en veilige VPN-dienst van riseup.net. {ApplicationName} vereist geen gebruikersaccount, houdt geen logboek bij en volgt u niet op wat voor manier dan ook.\n\t\nDeze dienst wordt volledig gefinancierd door donaties van gebruikers zoals u. Overweeg bij te dragen op https://riseup.net/vpn/donate.\n\t\t\nDoor deze applicatie te gebruiken gaat u akkoord met onze gebruikersvoorwaarden die beschikbaar zijn op https://riseup.net/tos. Deze dienst wordt geleverd zonder enige garantie, en is bedoeld voor mensen die werken aan een betere wereld.\n\n\n{ApplicationName_1} versie: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -69,22 +64,17 @@
                     "argNum": 2,
                     "expr": "version"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "About",
             "message": "About",
-            "translation": "About",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Over"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "Initialization error",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Initialisatiefout"
         },
         {
             "id": [
@@ -92,16 +82,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Kan geen polkit authenticatieagent vinden. Voer er een uit en probeer opnieuw."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Missing authentication agent",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Authenticatieagent ontbreekt"
         },
         {
             "id": [
@@ -109,8 +95,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Can't connect to {ApplicationName}: {Err}",
-            "translatorComment": "Copied from source.",
+            "translation": "Kan niet verbinden met {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -128,15 +113,12 @@
                     "argNum": 2,
                     "expr": "err"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Error starting VPN",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Fout bij het opstarten van de VPN"
         },
         {
             "id": [
@@ -144,8 +126,7 @@
                 "An error has ocurred initializing {ApplicationName}: {Err}"
             ],
             "message": "An error has ocurred initializing {ApplicationName}: {Err}",
-            "translation": "An error has ocurred initializing {ApplicationName}: {Err}",
-            "translatorComment": "Copied from source.",
+            "translation": "Er heeft zich een fout voorgedaan bij het initialiseren van {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -163,34 +144,32 @@
                     "argNum": 2,
                     "expr": "err"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Checking status..."
+            "translation": "Status controleren..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Turn on"
+            "translation": "Inschakelen"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Turn off"
+            "translation": "Uitschakelen"
         },
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "Cancel"
+            "translation": "Annuleren"
         },
         {
             "id": "Cancel connection to {ApplicationName}",
             "message": "Cancel connection to {ApplicationName}",
-            "translation": "Cancel connection to {ApplicationName}",
-            "translatorComment": "Copied from source.",
+            "translation": "Annuleer verbinding met {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -200,45 +179,37 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "Help...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Hulp..."
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "Donate...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Doneren..."
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "About...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translation": "Over..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Quit"
+            "translation": "Stoppen"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Route traffic through"
+            "translation": "Stuur verkeer door"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Use {ApplicationName} {City} gateway",
-            "translatorComment": "Copied from source.",
+            "translation": "Gebruik {ApplicationName} {City} gateway",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -256,14 +227,12 @@
                     "argNum": 2,
                     "expr": "city"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} on",
-            "translatorComment": "Copied from source.",
+            "translation": "{ApplicationName} aan",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -273,14 +242,12 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} off",
-            "translatorComment": "Copied from source.",
+            "translation": "{ApplicationName} uit",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -290,14 +257,12 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Connecting to {ApplicationName}",
-            "translatorComment": "Copied from source.",
+            "translation": "Verbinden met {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -307,14 +272,12 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Stopping {ApplicationName}",
-            "translatorComment": "Copied from source.",
+            "translation": "{ApplicationName} aan het stoppen",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -324,19 +287,17 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Retry",
             "message": "Retry",
-            "translation": "Retry"
+            "translation": "Opnieuw proberen"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} blocking internet",
-            "translatorComment": "Copied from source.",
+            "translation": "{ApplicationName} blokkeert het internet",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -346,8 +307,7 @@
                     "argNum": 1,
                     "expr": "applicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         }
     ]
 }

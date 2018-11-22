@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -74,7 +74,7 @@
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": ""
+            "translation": "Erro na inicialização"
         },
         {
             "id": [
@@ -118,7 +118,7 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Error starting VPN"
+            "translation": "Erro ao iniciar a VPN"
         },
         {
             "id": [
@@ -149,7 +149,7 @@
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Verificando o estado da VPN..."
+            "translation": "Verificando estado..."
         },
         {
             "id": "Turn on",
@@ -194,12 +194,12 @@
         {
             "id": "About...",
             "message": "About...",
-            "translation": "About..."
+            "translation": "Sobre..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Fechar"
+            "translation": "Sair"
         },
         {
             "id": "Route traffic through",

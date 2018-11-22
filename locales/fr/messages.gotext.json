@@ -74,7 +74,7 @@
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": ""
+            "translation": "Erreur d’initialisation"
         },
         {
             "id": [
@@ -232,7 +232,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} est activée",
+            "translation": "{ApplicationName} est activé",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -247,7 +247,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} est désactivée",
+            "translation": "{ApplicationName} est désactivé",
             "placeholders": [
                 {
                     "id": "ApplicationName",
