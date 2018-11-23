@@ -195,14 +195,14 @@ void runInMainThread(SEL method, id object) {
 void setIcon(const char* iconBytes, int length) {
   NSData* buffer = [NSData dataWithBytes: iconBytes length:length];
   NSImage *image = [[NSImage alloc] initWithData:buffer];
-  [image setSize:NSMakeSize(16, 16)];
+  [image setSize:NSMakeSize(18, 18)];
   runInMainThread(@selector(setIcon:), (id)image);
 }
 
 void setMenuItemIcon(const char* iconBytes, int length, int menuId) {
   NSData* buffer = [NSData dataWithBytes: iconBytes length:length];
   NSImage *image = [[NSImage alloc] initWithData:buffer];
-  [image setSize:NSMakeSize(16, 16)];
+  [image setSize:NSMakeSize(18, 18)];
 
   NSNumber *mId = [NSNumber numberWithInt:menuId];
   runInMainThread(@selector(setMenuItemIcon:), @[image, (id)mId]);
