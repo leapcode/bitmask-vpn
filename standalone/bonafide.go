@@ -20,6 +20,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -72,9 +73,13 @@ UN9SaWRlWKSdP4haujnzCoJbM7dU9bjvlGZNyXEekgeT0W2qFeGGp+yyUWw8tNsp
 )
 
 type bonafide struct {
-	client         *http.Client
+	client         httpClient
+	tzOffsetHours  int
 	eip            *eipService
 	defaultGateway string
+}
+type httpClient interface {
+	Post(url, contentType string, body io.Reader) (resp *http.Response, err error)
 }
 
 type eipService struct {
@@ -108,8 +113,15 @@ func newBonafide() *bonafide {
 			},
 		},
 	}
+	_, tzOffsetSeconds := time.Now().Zone()
+	tzOffsetHours := tzOffsetSeconds / secondsPerHour
 
-	return &bonafide{client, nil, ""}
+	return &bonafide{
+		client:         client,
+		tzOffsetHours:  tzOffsetHours,
+		eip:            nil,
+		defaultGateway: "",
+	}
 }
 
 func (b *bonafide) getCertPem() ([]byte, error) {
@@ -195,8 +207,6 @@ func (b *bonafide) sortGateways() {
 	}
 
 	gws := []gatewayDistance{}
-	_, tzOffset := time.Now().Zone()
-	tzOffset = tzOffset / secondsPerHour
 	for _, gw := range b.eip.Gateways {
 		distance := 13
 		if gw.Location == b.defaultGateway {
@@ -206,7 +216,7 @@ func (b *bonafide) sortGateways() {
 			if err != nil {
 				log.Printf("Error sorting gateways: %v", err)
 			} else {
-				distance = tzDistance(tzOffset, gwOffset)
+				distance = tzDistance(b.tzOffsetHours, gwOffset)
 			}
 		}
 		gws = append(gws, gatewayDistance{gw, distance})

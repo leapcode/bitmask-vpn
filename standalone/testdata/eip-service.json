@@ -1,0 +1,113 @@
+{
+  "gateways": [
+    {
+      "capabilities": {
+        "adblock": false,
+        "filter_dns": false,
+        "limited": false,
+        "ports": [
+          "443"
+        ],
+        "protocols": [
+          "tcp"
+        ],
+        "transport": [
+          "openvpn"
+        ],
+        "user_ips": false
+      },
+      "host": "1.example.com",
+      "ip_address": "1.1.1.1",
+      "location": "a"
+    },
+    {
+      "capabilities": {
+        "adblock": false,
+        "filter_dns": false,
+        "limited": false,
+        "ports": [
+          "443"
+        ],
+        "protocols": [
+          "tcp"
+        ],
+        "transport": [
+          "openvpn"
+        ],
+        "user_ips": false
+      },
+      "host": "2.example.com",
+      "ip_address": "2.2.2.2",
+      "location": "b"
+    },
+    {
+      "capabilities": {
+        "adblock": false,
+        "filter_dns": false,
+        "limited": false,
+        "ports": [
+          "443"
+        ],
+        "protocols": [
+          "tcp"
+        ],
+        "transport": [
+          "openvpn"
+        ],
+        "user_ips": false
+      },
+      "host": "3.example.com",
+      "ip_address": "3.3.3.3",
+      "location": "b"
+    },
+    {
+      "capabilities": {
+        "adblock": false,
+        "filter_dns": false,
+        "limited": false,
+        "ports": [
+          "443"
+        ],
+        "protocols": [
+          "tcp"
+        ],
+        "transport": [
+          "openvpn"
+        ],
+        "user_ips": false
+      },
+      "host": "4.example.com",
+      "ip_address": "4.4.4.4",
+      "location": "c"
+    }
+  ],
+  "locations": {
+    "a": {
+      "country_code": "AA",
+      "hemisphere": "N",
+      "name": "a",
+      "timezone": "-5"
+    },
+    "b": {
+      "country_code": "BB",
+      "hemisphere": "S",
+      "name": "b",
+      "timezone": "+1"
+    },
+    "c": {
+      "country_code": "CC",
+      "hemisphere": "N",
+      "name": "c",
+      "timezone": "+8"
+    }
+  },
+  "openvpn_configuration": {
+    "auth": "SHA1",
+    "cipher": "AES-128-CBC",
+    "keepalive": "10 30",
+    "tls-cipher": "DHE-RSA-AES128-SHA",
+    "tun-ipv6": true
+  },
+  "serial": 1,
+  "version": 1
+}

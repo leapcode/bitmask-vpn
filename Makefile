@@ -12,7 +12,7 @@ build:
 	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`"
 
 test:
-	go test -tags $(TAGS) ./...
+	go test -tags "integration $(TAGS)" ./...
 
 build_bitmaskd:
 	go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`"
