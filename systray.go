@@ -37,7 +37,6 @@ type bmTray struct {
 	mTurnOn       *systray.MenuItem
 	mTurnOff      *systray.MenuItem
 	mDonate       *systray.MenuItem
-	mCancel       *systray.MenuItem
 	activeGateway *gatewayTray
 	autostart     autostart
 }
@@ -75,8 +74,6 @@ func (bt *bmTray) onReady() {
 	bt.mTurnOn.Hide()
 	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), "")
 	bt.mTurnOff.Hide()
-	bt.mCancel = systray.AddMenuItem(printer.Sprintf("Cancel"), printer.Sprintf("Cancel connection to %s", applicationName))
-	bt.mCancel.Hide()
 	systray.AddSeparator()
 
 	if bt.conf.SelectGateway {
@@ -111,11 +108,6 @@ func (bt *bmTray) onReady() {
 				bt.conf.setUserStoppedVPN(false)
 			case <-bt.mTurnOff.ClickedCh:
 				log.Println("off")
-				bt.changeStatus("stopping")
-				bt.bm.StopVPN()
-				bt.conf.setUserStoppedVPN(true)
-			case <-bt.mCancel.ClickedCh:
-				log.Println("cancel")
 				bt.changeStatus("stopping")
 				bt.bm.StopVPN()
 				bt.conf.setUserStoppedVPN(true)
@@ -195,7 +187,6 @@ func (bt *bmTray) addGateways() {
 }
 
 func (bt *bmTray) changeStatus(status string) {
-	bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
 	if bt.waitCh != nil {
 		bt.waitCh <- true
 		bt.waitCh = nil
@@ -205,25 +196,25 @@ func (bt *bmTray) changeStatus(status string) {
 	switch status {
 	case "on":
 		systray.SetIcon(icon.On)
+		bt.mTurnOff.SetTitle(printer.Sprintf("Turn off"))
 		statusStr = printer.Sprintf("%s on", applicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Show()
-		bt.mCancel.Hide()
 
 	case "off":
 		systray.SetIcon(icon.Off)
+		bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
 		statusStr = printer.Sprintf("%s off", applicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Hide()
-		bt.mCancel.Hide()
 
 	case "starting":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
+		bt.mTurnOff.SetTitle(printer.Sprintf("Cancel"))
 		statusStr = printer.Sprintf("Connecting to %s", applicationName)
 		bt.mTurnOn.Hide()
-		bt.mTurnOff.Hide()
-		bt.mCancel.Show()
+		bt.mTurnOff.Show()
 
 	case "stopping":
 		bt.waitCh = make(chan bool)
@@ -231,15 +222,14 @@ func (bt *bmTray) changeStatus(status string) {
 		statusStr = printer.Sprintf("Stopping %s", applicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
-		bt.mCancel.Hide()
 
 	case "failed":
 		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
+		bt.mTurnOff.SetTitle(printer.Sprintf("Turn off"))
 		statusStr = printer.Sprintf("%s blocking internet", applicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Show()
-		bt.mCancel.Hide()
 	}
 
 	systray.SetTooltip(statusStr)
