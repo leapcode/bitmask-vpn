@@ -185,7 +185,7 @@ func (b *bonafide) fetchEipJSON() error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
+		return fmt.Errorf("get eip json has failed with status: %s", resp.Status)
 	}
 
 	var eip eipService
