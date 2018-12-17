@@ -34,6 +34,7 @@ import (
 const (
 	certAPI        = "https://api.black.riseup.net/1/cert"
 	eipAPI         = "https://api.black.riseup.net/1/config/eip-service.json"
+	geolocationAPI = "https://api.black.riseup.net/getmyip/json"
 	secondsPerHour = 60 * 60
 )
 
@@ -78,6 +79,7 @@ type bonafide struct {
 	eip            *eipService
 	defaultGateway string
 }
+
 type httpClient interface {
 	Post(url, contentType string, body io.Reader) (resp *http.Response, err error)
 }
@@ -101,6 +103,20 @@ type gateway struct {
 	Host      string
 	IPAddress string `json:"ip_address"`
 	Location  string
+}
+
+type gatewayDistance struct {
+	gateway  gateway
+	distance int
+}
+
+type geoLocation struct {
+	IPAddress      string   `json:"ip"`
+	Country        string   `json:"cc"`
+	City           string   `json:"city"`
+	Latitude       float64  `json:"lat"`
+	Longitude      float64  `json:"lon"`
+	SortedGateways []string `json:"gateways"`
 }
 
 func newBonafide() *bonafide {
@@ -172,10 +188,32 @@ func (b *bonafide) getOpenvpnArgs() ([]string, error) {
 				args = append(args, "--"+arg)
 			}
 		default:
-			log.Printf("Uknwon openvpn argument type: %s - %v", arg, value)
+			log.Printf("Unknown openvpn argument type: %s - %v", arg, value)
 		}
 	}
 	return args, nil
+}
+
+func (b *bonafide) fetchGeolocation() ([]string, error) {
+	resp, err := b.client.Post(geolocationAPI, "", nil)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("get geolocation failed with status: %s", resp.Status)
+	}
+
+	geo := &geoLocation{}
+	dataJSON, err := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(dataJSON, &geo)
+	if err != nil {
+		_ = fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
+		return nil, err
+	}
+
+	return geo.SortedGateways, nil
+
 }
 
 func (b *bonafide) fetchEipJSON() error {
@@ -200,13 +238,22 @@ func (b *bonafide) fetchEipJSON() error {
 	return nil
 }
 
-func (b *bonafide) sortGateways() {
-	type gatewayDistance struct {
-		gateway  gateway
-		distance int
-	}
-
+func (b *bonafide) sortGatewaysByGeolocation(geolocatedGateways []string) []gatewayDistance {
 	gws := []gatewayDistance{}
+
+	for i, host := range geolocatedGateways {
+		for _, gw := range b.eip.Gateways {
+			if gw.Host == host {
+				gws = append(gws, gatewayDistance{gw, i})
+			}
+		}
+	}
+	return gws
+}
+
+func (b *bonafide) sortGatewaysByTimezone() []gatewayDistance {
+	gws := []gatewayDistance{}
+
 	for _, gw := range b.eip.Gateways {
 		distance := 13
 		if gw.Location == b.defaultGateway {
@@ -221,23 +268,29 @@ func (b *bonafide) sortGateways() {
 		}
 		gws = append(gws, gatewayDistance{gw, distance})
 	}
-
 	rand.Seed(time.Now().UnixNano())
 	cmp := func(i, j int) bool {
 		if gws[i].distance == gws[j].distance {
-			// TODO: a hack to distribute more the load into the new gw.
-			//       Let's delete it as soon as is more spread the load.
-			if gws[i].gateway.Host == "giraffe.riseup.net" {
-				return rand.Intn(4) != 0
-			} else if gws[j].gateway.Host == "giraffe.riseup.net" {
-				return rand.Intn(4) == 0
-			}
-
 			return rand.Intn(2) == 1
 		}
 		return gws[i].distance < gws[j].distance
 	}
 	sort.Slice(gws, cmp)
+	return gws
+}
+
+func (b *bonafide) sortGateways() {
+	gws := []gatewayDistance{}
+
+	geolocatedGateways, _ := b.fetchGeolocation()
+
+	if len(geolocatedGateways) > 0 {
+		gws = b.sortGatewaysByGeolocation(geolocatedGateways)
+	} else {
+		log.Printf("Falling back to timezone heuristic for gateway selection")
+		gws = b.sortGatewaysByTimezone()
+	}
+
 	for i, gw := range gws {
 		b.eip.Gateways[i] = gw.gateway
 	}

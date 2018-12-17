@@ -38,6 +38,7 @@ win_installer:
    - git clone https://github.com/AllenDang/w32
    - cd w32
    - curl https://downloads.leap.se/thirdparty/w32.patch | patch -p1 -N
+
    - cd ${APP_PATH}
 
    - git clone https://0xacab.org/leap/riseup_vpn
