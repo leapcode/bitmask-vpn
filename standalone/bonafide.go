@@ -34,7 +34,7 @@ import (
 const (
 	certAPI        = "https://api.black.riseup.net/1/cert"
 	eipAPI         = "https://api.black.riseup.net/1/config/eip-service.json"
-	geolocationAPI = "https://api.black.riseup.net/getmyip/json"
+	geolocationAPI = "https://api.black.riseup.net:9001/json"
 	secondsPerHour = 60 * 60
 )
 
