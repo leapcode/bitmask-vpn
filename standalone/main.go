@@ -50,15 +50,6 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	cert, err := b.bonafide.getCertPem()
-	if err != nil {
-		return nil, err
-	}
-	err = ioutil.WriteFile(b.getCertPemPath(), cert, 0600)
-	if err != nil {
-		return nil, err
-	}
 	err = ioutil.WriteFile(b.getCaCertPath(), caCert, 0600)
 
 	go b.openvpnManagement()

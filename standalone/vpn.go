@@ -16,6 +16,8 @@
 package bitmask
 
 import (
+	"io/ioutil"
+	"os"
 	"path"
 )
 
@@ -30,6 +32,11 @@ func (b *Bitmask) StartVPN(provider string) error {
 	if err != nil {
 		return err
 	}
+	certPemPath, err := b.getCert()
+	if err != nil {
+		return err
+	}
+
 	err = b.launch.firewallStart(gateways)
 	if err != nil {
 		return err
@@ -42,7 +49,6 @@ func (b *Bitmask) StartVPN(provider string) error {
 	for _, gw := range gateways {
 		arg = append(arg, "--remote", gw.IPAddress, "443", "tcp4")
 	}
-	certPemPath := b.getCertPemPath()
 	arg = append(arg,
 		"--verb", "1",
 		"--management-client",
@@ -51,6 +57,20 @@ func (b *Bitmask) StartVPN(provider string) error {
 		"--cert", certPemPath,
 		"--key", certPemPath)
 	return b.launch.openvpnStart(arg...)
+}
+
+func (b *Bitmask) getCert() (certPath string, err error) {
+	certPath = b.getCertPemPath()
+
+	if _, err := os.Stat(certPath); os.IsNotExist(err) {
+		cert, err := b.bonafide.getCertPem()
+		if err != nil {
+			return "", err
+		}
+		err = ioutil.WriteFile(certPath, cert, 0600)
+	}
+
+	return certPath, err
 }
 
 // StopVPN or cancel
