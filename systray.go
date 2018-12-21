@@ -36,7 +36,10 @@ type bmTray struct {
 	mStatus       *systray.MenuItem
 	mTurnOn       *systray.MenuItem
 	mTurnOff      *systray.MenuItem
+	mHelp         *systray.MenuItem
 	mDonate       *systray.MenuItem
+	mAbout        *systray.MenuItem
+	mQuit         *systray.MenuItem
 	activeGateway *gatewayTray
 	autostart     autostart
 }
@@ -46,26 +49,18 @@ type gatewayTray struct {
 	name     string
 }
 
-func run(bm bitmask.Bitmask, conf *systrayConfig, notify *notificator, as autostart) {
+func (bt *bmTray) start() {
 	// XXX this removes the snap error message, but produces an invisible icon.
 	// https://0xacab.org/leap/riseup_vpn/issues/44
 	// os.Setenv("TMPDIR", "/var/tmp")
-	bt := bmTray{bm: bm, conf: conf, notify: notify, autostart: as}
 	systray.Run(bt.onReady, bt.onExit)
 }
 
-func (bt bmTray) onExit() {
-	status, _ := bt.bm.GetStatus()
-	if status != "off" {
-		bt.bm.StopVPN()
-	}
+func (bt *bmTray) onExit() {
 	log.Println("Closing systray")
 }
 
 func (bt *bmTray) onReady() {
-	signalCh := make(chan os.Signal, 1)
-	signal.Notify(signalCh, os.Interrupt)
-
 	systray.SetIcon(icon.Off)
 
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
@@ -80,71 +75,80 @@ func (bt *bmTray) onReady() {
 		bt.addGateways()
 	}
 
-	mHelp := systray.AddMenuItem(printer.Sprintf("Help..."), "")
+	bt.mHelp = systray.AddMenuItem(printer.Sprintf("Help..."), "")
 	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate..."), "")
-	mAbout := systray.AddMenuItem(printer.Sprintf("About..."), "")
+	bt.mAbout = systray.AddMenuItem(printer.Sprintf("About..."), "")
 	systray.AddSeparator()
 
-	mQuit := systray.AddMenuItem(printer.Sprintf("Quit"), "")
+	bt.mQuit = systray.AddMenuItem(printer.Sprintf("Quit"), "")
+}
 
-	go func() {
-		ch := bt.bm.GetStatusCh()
-		if status, err := bt.bm.GetStatus(); err != nil {
-			log.Printf("Error getting status: %v", err)
-		} else {
+func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as autostart) {
+	bt.bm = bm
+	bt.notify = notify
+	bt.autostart = as
+
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh, os.Interrupt)
+
+	ch := bt.bm.GetStatusCh()
+	if status, err := bt.bm.GetStatus(); err != nil {
+		log.Printf("Error getting status: %v", err)
+	} else {
+		bt.changeStatus(status)
+	}
+
+	for {
+		select {
+		case status := <-ch:
+			log.Println("status: " + status)
 			bt.changeStatus(status)
-		}
 
-		for {
-			select {
-			case status := <-ch:
-				log.Println("status: " + status)
+		case <-bt.mTurnOn.ClickedCh:
+			log.Println("on")
+			bt.changeStatus("starting")
+			bt.bm.StartVPN(provider)
+			bt.conf.setUserStoppedVPN(false)
+		case <-bt.mTurnOff.ClickedCh:
+			log.Println("off")
+			bt.changeStatus("stopping")
+			bt.bm.StopVPN()
+			bt.conf.setUserStoppedVPN(true)
+
+		case <-bt.mHelp.ClickedCh:
+			open.Run("https://riseup.net/vpn/support")
+		case <-bt.mDonate.ClickedCh:
+			bt.conf.setDonated()
+			open.Run("https://riseup.net/vpn/donate")
+		case <-bt.mAbout.ClickedCh:
+			bitmaskVersion, err := bt.bm.Version()
+			versionStr := version
+			if err != nil {
+				log.Printf("Error getting version: %v", err)
+			} else if bitmaskVersion != "" {
+				versionStr = fmt.Sprintf("%s (bitmaskd %s)", version, bitmaskVersion)
+			}
+			bt.notify.about(versionStr)
+
+		case <-bt.mQuit.ClickedCh:
+			err := bt.autostart.Disable()
+			if err != nil {
+				log.Printf("Error disabling autostart: %v", err)
+			}
+			systray.Quit()
+			return
+		case <-signalCh:
+			systray.Quit()
+			return
+
+		case <-time.After(5 * time.Second):
+			if status, err := bt.bm.GetStatus(); err != nil {
+				log.Printf("Error getting status: %v", err)
+			} else {
 				bt.changeStatus(status)
-
-			case <-bt.mTurnOn.ClickedCh:
-				log.Println("on")
-				bt.changeStatus("starting")
-				bt.bm.StartVPN(provider)
-				bt.conf.setUserStoppedVPN(false)
-			case <-bt.mTurnOff.ClickedCh:
-				log.Println("off")
-				bt.changeStatus("stopping")
-				bt.bm.StopVPN()
-				bt.conf.setUserStoppedVPN(true)
-
-			case <-mHelp.ClickedCh:
-				open.Run("https://riseup.net/vpn/support")
-			case <-bt.mDonate.ClickedCh:
-				bt.conf.setDonated()
-				open.Run("https://riseup.net/vpn/donate")
-			case <-mAbout.ClickedCh:
-				bitmaskVersion, err := bt.bm.Version()
-				versionStr := version
-				if err != nil {
-					log.Printf("Error getting version: %v", err)
-				} else if bitmaskVersion != "" {
-					versionStr = fmt.Sprintf("%s (bitmaskd %s)", version, bitmaskVersion)
-				}
-				bt.notify.about(versionStr)
-
-			case <-mQuit.ClickedCh:
-				err := bt.autostart.Disable()
-				if err != nil {
-					log.Printf("Error disabling autostart: %v", err)
-				}
-				systray.Quit()
-			case <-signalCh:
-				systray.Quit()
-
-			case <-time.After(5 * time.Second):
-				if status, err := bt.bm.GetStatus(); err != nil {
-					log.Printf("Error getting status: %v", err)
-				} else {
-					bt.changeStatus(status)
-				}
 			}
 		}
-	}()
+	}
 }
 
 func (bt *bmTray) addGateways() {

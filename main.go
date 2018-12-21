@@ -60,11 +60,17 @@ func main() {
 		os.Exit(0)
 	}
 
+	bt := bmTray{conf: conf}
+	go initialize(conf, &bt)
+	bt.start()
+}
+
+func initialize(conf *systrayConfig, bt *bmTray) {
 	if _, err := os.Stat(bitmask.ConfigPath); os.IsNotExist(err) {
 		os.MkdirAll(bitmask.ConfigPath, os.ModePerm)
 	}
 
-	err = acquirePID()
+	err := acquirePID()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -85,7 +91,7 @@ func main() {
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
 	}
-	run(b, conf, notify, as)
+	bt.loop(b, notify, as)
 }
 
 func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *systrayConfig) {
