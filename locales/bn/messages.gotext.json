@@ -1,5 +1,5 @@
 {
-    "language": "es-ES",
+    "language": "bn",
     "messages": [
         {
             "id": [
@@ -7,7 +7,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "Correr el servicio {ApplicationName} es caro. Porque no queremos almacenar información personal acerca tuyo, no hay cuentas o tarifas por este servicio. Pero si quieres que el mismo continúe, dona la menos USD 5 por mes.\n\t\n¿Quieres donar ahora?",
+            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -22,7 +22,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "Donar"
+            "translation": "অনুদান"
         },
         {
             "id": [
@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido y seguro de riseup.net. {ApplicationName} no requiere una cuenta de usuario, no mantiene bitácoras, o te rastrea de cualquier manera.\n\t    \nEl costo de este servicio está cubierto por completo por donaciones de usuarios como tú. Por favor dona a https://riseup.net/vpn/donate.\n\t\t\nAl usar esta aplicación, estás de acuerdo con los Términos del Servicio disponibles en https://riseup.net/tos. Este servicio se provee como está, sin ninguna garantía, y está apuntado a personas que trabajan para hacer del mundo un mejor lugar.\n\n\nVersión de {ApplicationName_1}: {Version}",
+            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -69,12 +69,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "Acerca de"
+            "translation": "সম্পর্কে"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "Error de inicialización"
+            "translation": "সূচনা ত্রুটি"
         },
         {
             "id": [
@@ -82,12 +82,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "No se pudo encontrar un agente de autenticación polkit. Por favor corre uno e intenta de nuevo."
+            "translation": "Could not find a polkit authentication agent. Please run one and try again."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Falta agente de autenticación"
+            "translation": "প্রমাণীকরণ এজেন্ট অনুপস্থিত"
         },
         {
             "id": [
@@ -95,7 +95,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "No se puede conectar a {ApplicationName}: {Err}",
+            "translation": "Can't connect to {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -118,7 +118,7 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Error iniciando VPN"
+            "translation": "ভিপিএন চালু করতে ত্রুটি হয়েছে"
         },
         {
             "id": [
@@ -126,7 +126,7 @@
                 "An error has ocurred initializing {ApplicationName}: {Err}"
             ],
             "message": "An error has ocurred initializing {ApplicationName}: {Err}",
-            "translation": "Ha ocurrido un error inicializando {ApplicationName}: {Err}",
+            "translation": "An error has ocurred initializing {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -149,47 +149,47 @@
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Comprobando estado..."
+            "translation": "অবস্থা পরিক্ষা করা হচ্ছে ..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Activar"
+            "translation": "চালু কর"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Desactivar"
+            "translation": "বন্ধ কর"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "Ayuda..."
+            "translation": "সাহায্য..."
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "Donar..."
+            "translation": "অনুদান..."
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "Acerca de..."
+            "translation": "সম্পর্কে..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Salir"
+            "translation": "বন্ধ"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Enrutar tráfico a través de"
+            "translation": "ট্রাফিক এর মাধ্যমে যাবে"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Usar ruta de salida {ApplicationName} {City}",
+            "translation": "Use {ApplicationName} {City} gateway",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -212,7 +212,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} activada",
+            "translation": "{ApplicationName} চালু",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -227,7 +227,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} desactivada",
+            "translation": "{ApplicationName} বন্ধ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -242,12 +242,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "Cancelar"
+            "translation": "বাতিল"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Conectando a {ApplicationName}",
+            "translation": "{ApplicationName} এর সাথে সংযুক্ত হচ্ছে",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -262,7 +262,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Deteniendo {ApplicationName}",
+            "translation": "{ApplicationName} বন্ধ হচ্ছে",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -277,12 +277,12 @@
         {
             "id": "Retry",
             "message": "Retry",
-            "translation": "Reintentar"
+            "translation": "পূনরায় চেষ্টা করুন"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} bloqueando Internet",
+            "translation": "{ApplicationName} ইন্টারনেট প্রতিরোধ করছে",
             "placeholders": [
                 {
                     "id": "ApplicationName",

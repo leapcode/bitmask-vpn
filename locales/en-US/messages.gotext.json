@@ -182,28 +182,6 @@
             "translation": "Turn off"
         },
         {
-            "id": "Cancel",
-            "message": "Cancel",
-            "translation": "Cancel"
-        },
-        {
-            "id": "Cancel connection to {ApplicationName}",
-            "message": "Cancel connection to {ApplicationName}",
-            "translation": "Cancel connection to {ApplicationName}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "ApplicationName",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "applicationName"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
             "id": "Help...",
             "message": "Help...",
             "translation": "Help...",
@@ -292,6 +270,11 @@
                 }
             ],
             "fuzzy": true
+        },
+        {
+            "id": "Cancel",
+            "message": "Cancel",
+            "translation": "Cancel"
         },
         {
             "id": "Connecting to {ApplicationName}",

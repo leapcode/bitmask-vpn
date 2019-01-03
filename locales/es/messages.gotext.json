@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} es un servicio de VPN facil, rapido y seguro de riseup.net. {ApplicationName} no requiere registrar una cuenta, recoge logs ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga completamente por donaciones de gente como tu. Por favor dona a https://riseup.net/vpn/donate.\n\t\t\nAl usar este programa estas aceptando los Terminos de servicio disponibles en https://riseup.net/tos. Este servicio se ofrece tal cual, sin garantia y con la intencion de la gente que trabaja en el de hacer el mundo un mejor lugar.\n\n\n{ApplicationName} version: {Version}",
+            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido, y seguro de riseup.net. {ApplicationName} no requiere una cuenta de usuario, no mantiene registros, ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga en su totalidad por donaciones de usuarios como tú. Por favor dona ingresando a https://riseup.net/vpn/donate.\n\t\t\nAl usar ésta aplicación, acuerdas con los Términos del Servicio disponibles en https://riseup.net/tos. Este servicio es provisto como viene, sin garantía alguna, y está destinado a gente que trabaja para hacer del mundo un lugar mejor.\n\n\nVersión de {ApplicationName_1}: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -74,7 +74,7 @@
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": ""
+            "translation": "Error de inicialización"
         },
         {
             "id": [
@@ -162,26 +162,6 @@
             "translation": "Apagar"
         },
         {
-            "id": "Cancel",
-            "message": "Cancel",
-            "translation": "Cancelar"
-        },
-        {
-            "id": "Cancel connection to {ApplicationName}",
-            "message": "Cancel connection to {ApplicationName}",
-            "translation": "Cancela la conexión a {ApplicationName}",
-            "placeholders": [
-                {
-                    "id": "ApplicationName",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "applicationName"
-                }
-            ]
-        },
-        {
             "id": "Help...",
             "message": "Help...",
             "translation": "Ayuda..."
@@ -258,6 +238,11 @@
                     "expr": "applicationName"
                 }
             ]
+        },
+        {
+            "id": "Cancel",
+            "message": "Cancel",
+            "translation": "Cancelar"
         },
         {
             "id": "Connecting to {ApplicationName}",

@@ -162,26 +162,6 @@
             "translation": "Désactiver"
         },
         {
-            "id": "Cancel",
-            "message": "Cancel",
-            "translation": "Annuler"
-        },
-        {
-            "id": "Cancel connection to {ApplicationName}",
-            "message": "Cancel connection to {ApplicationName}",
-            "translation": "Annuler la connexion à {ApplicationName}",
-            "placeholders": [
-                {
-                    "id": "ApplicationName",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "applicationName"
-                }
-            ]
-        },
-        {
             "id": "Help...",
             "message": "Help...",
             "translation": "Aide…"
@@ -258,6 +238,11 @@
                     "expr": "applicationName"
                 }
             ]
+        },
+        {
+            "id": "Cancel",
+            "message": "Cancel",
+            "translation": "Annuler"
         },
         {
             "id": "Connecting to {ApplicationName}",
