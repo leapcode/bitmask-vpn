@@ -85,6 +85,7 @@ func initialize(conf *systrayConfig, bt *bmTray) {
 	}
 	defer b.Close()
 	go checkAndStartBitmask(b, notify, conf)
+	go listenSignals(b)
 
 	as := newAutostart(applicationName, getIconPath())
 	err = as.Enable()

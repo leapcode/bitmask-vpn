@@ -82,6 +82,28 @@ func (b *Bitmask) StopVPN() error {
 	return b.launch.openvpnStop()
 }
 
+// ReloadFirewall restarts the firewall
+func (b *Bitmask) ReloadFirewall() error {
+	err := b.launch.firewallStop()
+	if err != nil {
+		return err
+	}
+
+	status, err := b.GetStatus()
+	if err != nil {
+		return err
+	}
+
+	if status != Off {
+		gateways, err := b.bonafide.getGateways()
+		if err != nil {
+			return err
+		}
+		return b.launch.firewallStart(gateways)
+	}
+	return nil
+}
+
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
 	status, err := b.getOpenvpnState()

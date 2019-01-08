@@ -1,3 +1,4 @@
+// +build windows
 // Copyright (C) 2018 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,18 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package bitmask
+package main
 
-type Bitmask interface {
-	GetStatusCh() <-chan string
-	Close()
-	Version() (string, error)
-	StartVPN(provider string) error
-	StopVPN() error
-	ReloadFirewall() error
-	GetStatus() (string, error)
-	InstallHelpers() error
-	VPNCheck() (helpers bool, priviledge bool, err error)
-	ListGateways(provider string) ([]string, error)
-	UseGateway(name string) error
+import (
+	"0xacab.org/leap/bitmask-systray/bitmask"
+)
+
+func listenSignals(bm bitmask.Bitmask) {
 }

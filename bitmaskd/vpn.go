@@ -32,6 +32,12 @@ func (b *Bitmask) StopVPN() error {
 	return err
 }
 
+// ReloadFirewall restarts the firewall
+func (b *Bitmask) ReloadFirewall() error {
+	_, err := b.send("vpn", "fw_reload")
+	return err
+}
+
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
 	res, err := b.send("vpn", "status")
