@@ -88,6 +88,9 @@ func (b *Bitmask) GetStatus() (string, error) {
 	if err != nil {
 		status = Off
 	}
+	if status == Off && b.launch.firewallIsUp() {
+		return Failed, nil
+	}
 	return status, nil
 }
 

@@ -75,6 +75,11 @@ func (l *launcher) firewallStop() error {
 	return runBitmaskRoot("firewall", "stop")
 }
 
+func (l *launcher) firewallIsUp() bool {
+	err := runBitmaskRoot("firewall", "isup")
+	return err == nil
+}
+
 func (l *launcher) openvpnRunner(arg ...string) {
 	running := false
 	runOpenvpn := func(arg []string) {

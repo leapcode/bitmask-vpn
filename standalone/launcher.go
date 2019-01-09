@@ -68,6 +68,16 @@ func (l *launcher) firewallStop() error {
 	return l.send("/firewall/stop", nil)
 }
 
+func (l *launcher) firewallIsUp() bool {
+	res, err := http.Post(helperAddr+"/firewall/isup", "", nil)
+	if err != nil {
+		return false
+	}
+	defer res.Body.Close()
+
+	return res.StatusCode == http.StatusOK
+}
+
 func (l *launcher) send(path string, body []byte) error {
 	var reader io.Reader
 	if body != nil {
