@@ -1,5 +1,6 @@
-bitmask-systray
+/bitmask-vpn
+cmd/bitmask-vpn/bitmask-vpn
 locales/*/out.gotext.json
 .*.swp
 *.exe
-transifex/transifex
+tools/transifex/transifex

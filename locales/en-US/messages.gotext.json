@@ -3,6 +3,26 @@
     "messages": [
         {
             "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "An error has ocurred initializing VPN: {Err}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
@@ -16,7 +36,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "n.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
@@ -43,7 +63,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "n.conf.ApplicationName"
                 },
                 {
                     "id": "ApplicationName",
@@ -51,7 +71,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "n.conf.ApplicationName"
                 },
                 {
                     "id": "ApplicationName_1",
@@ -59,7 +79,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "n.conf.ApplicationName"
                 },
                 {
                     "id": "Version",
@@ -118,7 +138,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "n.conf.ApplicationName"
                 },
                 {
                     "id": "Err",
@@ -136,34 +156,6 @@
             "message": "Error starting VPN",
             "translation": "Error starting VPN",
             "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": [
-                "errorMsg",
-                "An error has ocurred initializing {ApplicationName}: {Err}"
-            ],
-            "message": "An error has ocurred initializing {ApplicationName}: {Err}",
-            "translation": "An error has ocurred initializing {ApplicationName}: {Err}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "ApplicationName",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "applicationName"
-                },
-                {
-                    "id": "Err",
-                    "string": "%[2]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 2,
-                    "expr": "err"
-                }
-            ],
             "fuzzy": true
         },
         {
@@ -224,7 +216,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 },
                 {
                     "id": "City",
@@ -249,7 +241,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
@@ -266,7 +258,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
@@ -288,7 +280,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
@@ -305,7 +297,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
@@ -327,7 +319,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "applicationName"
+                    "expr": "bt.conf.ApplicationName"
                 }
             ],
             "fuzzy": true
