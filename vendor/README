@@ -1,5 +1,9 @@
+2019-01-12
+-----------------
+govendor add +external
+
 2018-11-14
 -----------------
 * vendor getlantern/systray with PR #74, to work around menu positioning bug in windows.
-* manually add a patch for the 18x18 icon size for mac
 * vendor PR #76 too (add separator to visibleitems)
+* manually add a patch for the 18x18 icon size for mac
