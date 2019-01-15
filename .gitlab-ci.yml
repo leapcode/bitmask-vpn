@@ -57,6 +57,8 @@ win_installer:
 snap:
  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
  stage: build
+ variables:
+     GOPATH: /go/
  script:
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
@@ -64,8 +66,7 @@ snap:
 
    - git clone https://0xacab.org/leap/riseup_vpn /riseup_vpn
    - cd /riseup_vpn
-   - sed -i 's/https:\/\/0xacab.org\/leap\/bitmask-systray.git$/\/go\/src\/0xacab.org\/leap\/bitmask-systray/' snap/snapcraft.yaml
-   - sed -i 's/.\/bin\/bitmask-systray.git$/.\/bin\/bitmask-systray/' snap/snapcraft.yaml
+   - sed -i 's/go-importpath:.*$/source: \/go\/src\/0xacab.org\/leap\/bitmask-systray\/cmd\/bitmask-vpn/' snap/snapcraft.yaml
    - sed -i 's/git clone.*$//' snap/version.sh
    - sed -i 's/git -C bitmask-systray/git -C \/go\/src\/0xacab.org\/leap\/bitmask-systray/' snap/version.sh
    - snapcraft build
