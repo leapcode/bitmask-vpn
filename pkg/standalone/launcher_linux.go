@@ -21,11 +21,14 @@ import (
 	"log"
 	"os"
 	"os/exec"
+
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 )
 
 const (
-	systemOpenvpnPath = "/usr/sbin/openvpn"
-	snapOpenvpnPath   = "/snap/bin/riseup-vpn.openvpn"
+	systemOpenvpnPath   = "/usr/sbin/openvpn"
+	snapOpenvpnPath     = "/snap/bin/" + config.BinaryName + ".openvpn"
+	snapBitmaskRootPath = "snap/bin/" + config.BinaryName + ".bitmask-root"
 )
 
 var bitmaskRootPaths = []string{
@@ -118,7 +121,7 @@ func runBitmaskRoot(arg ...string) error {
 
 func bitmaskRootPath() (string, error) {
 	if os.Getenv("SNAP") != "" {
-		path := "/snap/bin/riseup-vpn.bitmask-root"
+		path := snapBitmaskRootPath
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
 			return path, nil
 		}

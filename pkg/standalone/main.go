@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
@@ -50,7 +51,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = ioutil.WriteFile(b.getCaCertPath(), caCert, 0600)
+	err = ioutil.WriteFile(b.getCaCertPath(), config.CaCert, 0600)
 
 	go b.openvpnManagement()
 	return &b, err

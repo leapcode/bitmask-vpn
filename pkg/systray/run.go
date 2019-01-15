@@ -23,13 +23,13 @@ import (
 	"0xacab.org/leap/bitmask-systray/pkg/config"
 )
 
-func Run(conf *SystrayConfig) {
+func Run(conf *Config) {
 	bt := bmTray{conf: conf}
 	go initialize(conf, &bt)
 	bt.start()
 }
 
-func initialize(conf *SystrayConfig, bt *bmTray) {
+func initialize(conf *Config, bt *bmTray) {
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
@@ -51,7 +51,7 @@ func initialize(conf *SystrayConfig, bt *bmTray) {
 	go checkAndStartBitmask(b, notify, conf)
 	go listenSignals(b)
 
-	as := bitmask.NewAutostart(conf.ApplicationName, getIconPath())
+	as := bitmask.NewAutostart(config.ApplicationName, getIconPath())
 	err = as.Enable()
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
@@ -59,7 +59,7 @@ func initialize(conf *SystrayConfig, bt *bmTray) {
 	bt.loop(b, notify, as)
 }
 
-func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *SystrayConfig) {
+func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *Config) {
 	err := checkAndInstallHelpers(b, notify)
 	if err != nil {
 		log.Printf("Is bitmask running? %v", err)
@@ -92,12 +92,12 @@ func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 	return nil
 }
 
-func maybeStartVPN(b bitmask.Bitmask, conf *SystrayConfig) error {
+func maybeStartVPN(b bitmask.Bitmask, conf *Config) error {
 	if conf.UserStoppedVPN {
 		return nil
 	}
 
-	err := b.StartVPN(conf.Provider)
+	err := b.StartVPN(config.Provider)
 	conf.setUserStoppedVPN(false)
 	return err
 }

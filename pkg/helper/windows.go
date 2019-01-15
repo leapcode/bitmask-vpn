@@ -20,10 +20,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 )
 
 const (
-	appPath          = `C:\Program Files\RiseupVPN\`
+	appPath          = `C:\Program Files\` + config.ApplicationName + `\`
 	LogFolder        = appPath
 	openvpnPath      = appPath + `openvpn.exe`
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`

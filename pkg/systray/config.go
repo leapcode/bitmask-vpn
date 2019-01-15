@@ -34,21 +34,19 @@ var (
 	configPath = path.Join(config.Path, "systray.json")
 )
 
-// SystrayConfig holds the configuration of the systray
-type SystrayConfig struct {
+// Config holds the configuration of the systray
+type Config struct {
 	LastNotification time.Time
 	Donated          time.Time
 	SelectGateway    bool
 	UserStoppedVPN   bool
-	Provider         string           `json:"-"`
-	ApplicationName  string           `json:"-"`
 	Version          string           `json:"-"`
 	Printer          *message.Printer `json:"-"`
 }
 
 // ParseConfig reads the configuration from the configuration file
-func ParseConfig() *SystrayConfig {
-	var conf SystrayConfig
+func ParseConfig() *Config {
+	var conf Config
 
 	f, err := os.Open(configPath)
 	if err != nil {
@@ -62,30 +60,30 @@ func ParseConfig() *SystrayConfig {
 	return &conf
 }
 
-func (c *SystrayConfig) setUserStoppedVPN(vpnStopped bool) error {
+func (c *Config) setUserStoppedVPN(vpnStopped bool) error {
 	c.UserStoppedVPN = vpnStopped
 	return c.save()
 }
 
-func (c *SystrayConfig) hasDonated() bool {
+func (c *Config) hasDonated() bool {
 	return c.Donated.Add(oneMonth).After(time.Now())
 }
 
-func (c *SystrayConfig) needsNotification() bool {
+func (c *Config) needsNotification() bool {
 	return !c.hasDonated() && c.LastNotification.Add(oneDay).Before(time.Now())
 }
 
-func (c *SystrayConfig) setNotification() error {
+func (c *Config) setNotification() error {
 	c.LastNotification = time.Now()
 	return c.save()
 }
 
-func (c *SystrayConfig) setDonated() error {
+func (c *Config) setDonated() error {
 	c.Donated = time.Now()
 	return c.save()
 }
 
-func (c *SystrayConfig) save() error {
+func (c *Config) save() error {
 	f, err := os.Create(configPath)
 	if err != nil {
 		return err

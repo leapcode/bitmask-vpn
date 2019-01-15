@@ -36,11 +36,12 @@ import (
 	"path"
 	"strings"
 
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 	"github.com/sevlyar/go-daemon"
 )
 
 const (
-	appPath     = "/Applications/RiseupVPN.app/"
+	appPath     = "/Applications/" + config.ApplicationName + ".app/"
 	helperPath  = appPath + "Contents/helper/"
 	LogFolder   = helperPath
 	openvpnPath = appPath + "Contents/Resources/openvpn.leap"

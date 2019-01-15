@@ -20,6 +20,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
+
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 )
 
 const (
@@ -27,7 +29,7 @@ const (
 	openvpnGroup      = "nogroup"
 	LogFolder         = "/var/log/"
 	systemOpenvpnPath = "/usr/sbin/openvpn"
-	snapOpenvpnPath   = "/snap/bin/riseup-vpn.openvpn"
+	snapOpenvpnPath   = "/snap/bin/" + config.BinaryName + ".openvpn"
 )
 
 var (

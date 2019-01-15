@@ -24,13 +24,14 @@ import (
 
 	"0xacab.org/leap/bitmask-systray/icon"
 	"0xacab.org/leap/bitmask-systray/pkg/bitmask"
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
 )
 
 type bmTray struct {
 	bm            bitmask.Bitmask
-	conf          *SystrayConfig
+	conf          *Config
 	notify        *notificator
 	waitCh        chan bool
 	mStatus       *systray.MenuItem
@@ -108,7 +109,7 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 		case <-bt.mTurnOn.ClickedCh:
 			log.Println("on")
 			bt.changeStatus("starting")
-			bt.bm.StartVPN(bt.conf.Provider)
+			bt.bm.StartVPN(config.Provider)
 			bt.conf.setUserStoppedVPN(false)
 		case <-bt.mTurnOff.ClickedCh:
 			log.Println("off")
@@ -117,10 +118,10 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 			bt.conf.setUserStoppedVPN(true)
 
 		case <-bt.mHelp.ClickedCh:
-			open.Run("https://riseup.net/vpn/support")
+			open.Run(config.HelpURL)
 		case <-bt.mDonate.ClickedCh:
 			bt.conf.setDonated()
-			open.Run("https://riseup.net/vpn/donate")
+			open.Run(config.DonateURL)
 		case <-bt.mAbout.ClickedCh:
 			bitmaskVersion, err := bt.bm.Version()
 			versionStr := bt.conf.Version
@@ -153,7 +154,7 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 }
 
 func (bt *bmTray) addGateways() {
-	gatewayList, err := bt.bm.ListGateways(bt.conf.Provider)
+	gatewayList, err := bt.bm.ListGateways(config.Provider)
 	if err != nil {
 		log.Printf("Gateway initialization error: %v", err)
 		return
@@ -162,7 +163,7 @@ func (bt *bmTray) addGateways() {
 	mGateway := systray.AddMenuItem(bt.conf.Printer.Sprintf("Route traffic through"), "")
 	mGateway.Disable()
 	for i, city := range gatewayList {
-		menuItem := systray.AddMenuItem(city, bt.conf.Printer.Sprintf("Use %s %v gateway", bt.conf.ApplicationName, city))
+		menuItem := systray.AddMenuItem(city, bt.conf.Printer.Sprintf("Use %s %v gateway", config.ApplicationName, city))
 		gateway := gatewayTray{menuItem, city}
 
 		if i == 0 {
@@ -203,14 +204,14 @@ func (bt *bmTray) changeStatus(status string) {
 	case "on":
 		systray.SetIcon(icon.On)
 		bt.mTurnOff.SetTitle(printer.Sprintf("Turn off"))
-		statusStr = printer.Sprintf("%s on", bt.conf.ApplicationName)
+		statusStr = printer.Sprintf("%s on", config.ApplicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Show()
 
 	case "off":
 		systray.SetIcon(icon.Off)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Turn on"))
-		statusStr = printer.Sprintf("%s off", bt.conf.ApplicationName)
+		statusStr = printer.Sprintf("%s off", config.ApplicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Hide()
 
@@ -218,14 +219,14 @@ func (bt *bmTray) changeStatus(status string) {
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
 		bt.mTurnOff.SetTitle(printer.Sprintf("Cancel"))
-		statusStr = printer.Sprintf("Connecting to %s", bt.conf.ApplicationName)
+		statusStr = printer.Sprintf("Connecting to %s", config.ApplicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Show()
 
 	case "stopping":
 		bt.waitCh = make(chan bool)
 		go bt.waitIcon()
-		statusStr = printer.Sprintf("Stopping %s", bt.conf.ApplicationName)
+		statusStr = printer.Sprintf("Stopping %s", config.ApplicationName)
 		bt.mTurnOn.Hide()
 		bt.mTurnOff.Hide()
 
@@ -233,7 +234,7 @@ func (bt *bmTray) changeStatus(status string) {
 		systray.SetIcon(icon.Blocked)
 		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
 		bt.mTurnOff.SetTitle(printer.Sprintf("Turn off"))
-		statusStr = printer.Sprintf("%s blocking internet", bt.conf.ApplicationName)
+		statusStr = printer.Sprintf("%s blocking internet", config.ApplicationName)
 		bt.mTurnOn.Show()
 		bt.mTurnOff.Show()
 	}

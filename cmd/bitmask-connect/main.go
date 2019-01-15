@@ -23,13 +23,13 @@ import (
 	"os/signal"
 
 	"0xacab.org/leap/bitmask-systray/pkg/bitmask"
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
 
 const (
-	provider = "riseup.net"
-	logFile  = "systray.log"
+	logFile = "systray.log"
 )
 
 var version string
@@ -55,7 +55,7 @@ func start() {
 	}
 	defer b.Close()
 
-	err = b.StartVPN(provider)
+	err = b.StartVPN(config.Provider)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)

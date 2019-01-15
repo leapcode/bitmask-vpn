@@ -30,9 +30,7 @@ import (
 )
 
 const (
-	provider        = "riseup.net"
-	applicationName = "RiseupVPN"
-	logFile         = "systray.log"
+	logFile = "systray.log"
 )
 
 var version string
@@ -59,8 +57,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	conf.Provider = provider
-	conf.ApplicationName = applicationName
 	conf.Version = version
 	conf.Printer = initPrinter()
 	systray.Run(conf)

@@ -22,6 +22,7 @@ import (
 	"runtime"
 	"time"
 
+	"0xacab.org/leap/bitmask-systray/pkg/config"
 	"0xacab.org/leap/go-dialog"
 	"github.com/skratchdot/open-golang/open"
 )
@@ -30,24 +31,24 @@ const (
 	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 	
 Do you want to donate now?`
-	aboutText = `%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.
+	aboutText = `%[1]s is an easy, fast, and secure VPN service from %[2]s. %[1]s does not require a user account, keep logs, or track you in any way.
 	    
-This service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.
+This service is paid for entirely by donations from users like you. Please donate at %[3]s.
 		
-By using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.
+By using this application, you agree to the Terms of Service available at %[4]s. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.
 
 
-%[1]v version: %[2]s`
+%[1]v version: %[5]s`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	errorStartingVPN = `Can't connect to %s: %v`
 	svgFileName      = "riseupvpn.svg"
 )
 
 type notificator struct {
-	conf *SystrayConfig
+	conf *Config
 }
 
-func newNotificator(conf *SystrayConfig) *notificator {
+func newNotificator(conf *Config) *notificator {
 	n := notificator{conf}
 	go n.donations()
 	return &n
@@ -57,7 +58,7 @@ func (n *notificator) donations() {
 	for {
 		time.Sleep(time.Hour)
 		if n.conf.needsNotification() {
-			letsDonate := dialog.Message(n.conf.Printer.Sprintf(donationText, n.conf.ApplicationName)).
+			letsDonate := dialog.Message(n.conf.Printer.Sprintf(donationText, config.ApplicationName)).
 				Title(n.conf.Printer.Sprintf("Donate")).
 				Icon(getIconPath()).
 				YesNo()
@@ -77,7 +78,7 @@ func (n *notificator) about(version string) {
 			version = string(_version)
 		}
 	}
-	dialog.Message(n.conf.Printer.Sprintf(aboutText, n.conf.ApplicationName, version)).
+	dialog.Message(n.conf.Printer.Sprintf(aboutText, config.ApplicationName, config.Provider, config.DonateURL, config.TosURL, version)).
 		Title(n.conf.Printer.Sprintf("About")).
 		Icon(getIconPath()).
 		Info()
@@ -98,7 +99,7 @@ func (n *notificator) authAgent() {
 }
 
 func (n *notificator) errorStartingVPN(err error) {
-	dialog.Message(n.conf.Printer.Sprintf(errorStartingVPN, n.conf.ApplicationName, err)).
+	dialog.Message(n.conf.Printer.Sprintf(errorStartingVPN, config.ApplicationName, err)).
 		Title(n.conf.Printer.Sprintf("Error starting VPN")).
 		Icon(getIconPath()).
 		Error()
@@ -111,7 +112,7 @@ func getIconPath() string {
 	}
 
 	if runtime.GOOS == "windows" {
-		icoPath := `C:\Program Files\RiseupVPN\riseupvpn.ico`
+		icoPath := `C:\Program Files\` + config.ApplicationName + `\riseupvpn.ico`
 		if fileExist(icoPath) {
 			return icoPath
 		}
@@ -123,7 +124,7 @@ func getIconPath() string {
 	}
 
 	if runtime.GOOS == "darwin" {
-		icnsPath := "/Applications/RiseupVPN.app/Contents/Resources/app.icns"
+		icnsPath := "/Applications/" + config.ApplicationName + ".app/Contents/Resources/app.icns"
 		if fileExist(icnsPath) {
 			return icnsPath
 		}
@@ -145,7 +146,7 @@ func getIconPath() string {
 		return svgPath
 	}
 
-	svgPath = "/usr/share/riseupvpn/riseupvpn.svg"
+	svgPath = "/usr/share/" + config.BinaryName + "/riseupvpn.svg"
 	if fileExist(svgPath) {
 		return svgPath
 	}
