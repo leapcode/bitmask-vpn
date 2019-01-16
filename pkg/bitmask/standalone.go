@@ -24,7 +24,7 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"0xacab.org/leap/bitmask-systray/pkg/standalone"
+	"0xacab.org/leap/bitmask-vpn/pkg/standalone"
 	pmautostart "github.com/ProtonMail/go-autostart"
 	"golang.org/x/text/message"
 )

@@ -23,8 +23,8 @@ import (
 	"path"
 	"runtime"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
-	"0xacab.org/leap/bitmask-systray/pkg/systray"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/systray"
 	"github.com/jmshal/go-locale"
 	"golang.org/x/text/message"
 )

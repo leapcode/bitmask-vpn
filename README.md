@@ -8,7 +8,7 @@ Install dependencies:
 
 Build the systray:
 ```
-  $ git clone 0xacab.org/leap/bitmask-systray
+  $ git clone 0xacab.org/leap/bitmask-vpn
   $ cd bitmask-systray
   $ go get .
   $ go build
@@ -26,7 +26,7 @@ Using homebrew:
 ```
   $ brew install golang zmq pkg-config
   $ brew install --default-names gnu-sed
-  $ git clone 0xacab.org/leap/bitmask-systray
+  $ git clone 0xacab.org/leap/bitmask-vpn
   $ cd bitmask-systray
   $ go get .
   $ go build

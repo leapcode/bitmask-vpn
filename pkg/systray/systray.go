@@ -22,9 +22,9 @@ import (
 	"os/signal"
 	"time"
 
-	"0xacab.org/leap/bitmask-systray/icon"
-	"0xacab.org/leap/bitmask-systray/pkg/bitmask"
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/icon"
+	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/getlantern/systray"
 	"github.com/skratchdot/open-golang/open"
 )

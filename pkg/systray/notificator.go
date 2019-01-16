@@ -22,7 +22,7 @@ import (
 	"runtime"
 	"time"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/go-dialog"
 	"github.com/skratchdot/open-golang/open"
 )

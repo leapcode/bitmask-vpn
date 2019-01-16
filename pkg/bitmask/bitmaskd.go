@@ -20,7 +20,7 @@ import (
 	"errors"
 	"log"
 
-	"0xacab.org/leap/bitmask-systray/pkg/bitmaskd"
+	"0xacab.org/leap/bitmask-vpn/pkg/bitmaskd"
 	"golang.org/x/text/message"
 )
 

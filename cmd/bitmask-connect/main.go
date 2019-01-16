@@ -22,8 +22,8 @@ import (
 	"os"
 	"os/signal"
 
-	"0xacab.org/leap/bitmask-systray/pkg/bitmask"
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )

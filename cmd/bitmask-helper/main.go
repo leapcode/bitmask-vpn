@@ -19,8 +19,8 @@ import (
 	"log"
 	"path"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
-	"0xacab.org/leap/bitmask-systray/pkg/helper"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/helper"
 )
 
 const (

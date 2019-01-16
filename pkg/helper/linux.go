@@ -21,7 +21,7 @@ import (
 	"os"
 	"os/exec"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 const (

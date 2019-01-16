@@ -20,7 +20,7 @@ import (
 	"log"
 	"os"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"syscall"
 
-	"0xacab.org/leap/bitmask-systray/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/mitchellh/go-ps"
 )
 

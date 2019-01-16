@@ -21,7 +21,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"0xacab.org/leap/bitmask-systray/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 )
 
 func listenSignals(bm bitmask.Bitmask) {
