@@ -62,13 +62,12 @@ snap:
  script:
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
-   - cd ${APP_PATH}
 
    - git clone https://0xacab.org/leap/riseup_vpn /riseup_vpn
    - cd /riseup_vpn
-   - sed -i 's/go-importpath:.*$/source: \/go\/src\/0xacab.org\/leap\/bitmask-systray\/cmd\/bitmask-vpn/' snap/snapcraft.yaml
+   - sed -i "s/source:.*$/source: \/go\/src\/0xacab.org\/leap\/bitmask-vpn/" snap/snapcraft.yaml
    - sed -i 's/git clone.*$//' snap/version.sh
-   - sed -i 's/git -C bitmask-systray/git -C \/go\/src\/0xacab.org\/leap\/bitmask-systray/' snap/version.sh
+   - sed -i "s/git -C bitmask-vpn/git -C \/go\/src\/0xacab.org\/leap\/bitmask-vpn/" snap/version.sh
    - snapcraft build
    - snapcraft snap
    - mv riseup-vpn*.snap /go/src/0xacab.org/leap/bitmask-systray/
