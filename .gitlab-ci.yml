@@ -4,7 +4,7 @@ stages:
 
 variables:
   GOPATH: /go
-  APP_PATH: /go/src/0xacab.org/leap/bitmask-systray
+  APP_PATH: /go/src/0xacab.org/leap/bitmask-vpn
 
 build_test:
   image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
@@ -15,13 +15,15 @@ build_test:
     - cd ${APP_PATH}
     - make get
     - make test
-    - make bitmaskd
+    - make build_bitmaskd
     - make build
   tags:
     - linux
   artifacts:
     paths:
-      - 'bitmask-systray'
+      - 'bitmask-vpn'
+      - 'bitmask-helper'
+      - 'bitmask-connect'
     expire_in: 1 month
 
 win_installer:
@@ -57,20 +59,17 @@ win_installer:
 snap:
  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
  stage: build
- variables:
-     GOPATH: /go/
  script:
    - mkdir -p /go/src/0xacab.org/leap/
    - ln -s "$(pwd)" ${APP_PATH}
 
    - git clone https://0xacab.org/leap/riseup_vpn /riseup_vpn
    - cd /riseup_vpn
-   - sed -i "s/source:.*$/source: \/go\/src\/0xacab.org\/leap\/bitmask-vpn/" snap/snapcraft.yaml
+   - sed -i 's/https:\/\/0xacab.org\/leap\/bitmask-vpn.*$/\/go\/src\/0xacab.org\/leap\/bitmask-vpn/' snap/snapcraft.yaml
    - sed -i 's/git clone.*$//' snap/version.sh
-   - sed -i "s/git -C bitmask-vpn/git -C \/go\/src\/0xacab.org\/leap\/bitmask-vpn/" snap/version.sh
-   - snapcraft build
+   - sed -i 's/git -C bitmask-vpn/git -C \/go\/src\/0xacab.org\/leap\/bitmask-vpn/' snap/version.sh
    - snapcraft snap
-   - mv riseup-vpn*.snap /go/src/0xacab.org/leap/bitmask-systray/
+   - mv riseup-vpn*.snap ${APP_PATH}
  tags:
    - linux
  artifacts:
