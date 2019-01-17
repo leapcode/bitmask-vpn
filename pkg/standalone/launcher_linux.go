@@ -28,7 +28,7 @@ import (
 const (
 	systemOpenvpnPath   = "/usr/sbin/openvpn"
 	snapOpenvpnPath     = "/snap/bin/" + config.BinaryName + ".openvpn"
-	snapBitmaskRootPath = "snap/bin/" + config.BinaryName + ".bitmask-root"
+	snapBitmaskRootPath = "/snap/bin/" + config.BinaryName + ".bitmask-root"
 )
 
 var bitmaskRootPaths = []string{
