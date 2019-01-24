@@ -83,9 +83,13 @@ func (bt *bmTray) onReady() {
 	systray.AddSeparator()
 
 	bt.mQuit = systray.AddMenuItem(printer.Sprintf("Quit"), "")
+	bt.waitCh <- true
 }
 
 func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autostart) {
+	<-bt.waitCh
+	bt.waitCh = nil
+
 	bt.bm = bm
 	bt.notify = notify
 	bt.autostart = as

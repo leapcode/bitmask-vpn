@@ -24,7 +24,7 @@ import (
 )
 
 func Run(conf *Config) {
-	bt := bmTray{conf: conf}
+	bt := bmTray{conf: conf, waitCh: make(chan bool)}
 	go initialize(conf, &bt)
 	bt.start()
 }
