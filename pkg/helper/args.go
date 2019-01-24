@@ -23,6 +23,7 @@ var (
 		"--remote-cert-tls", "server",
 		"--dhcp-option", "DNS", nameserver,
 		"--log", LogFolder + "openvpn.log",
+		"--tls-version-min", "1.0",
 	}
 
 	allowendArgs = map[string][]string{
