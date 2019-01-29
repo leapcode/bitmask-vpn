@@ -236,7 +236,7 @@ func (bt *bmTray) changeStatus(status string) {
 
 	case "failed":
 		systray.SetIcon(icon.Blocked)
-		bt.mTurnOn.SetTitle(printer.Sprintf("Retry"))
+		bt.mTurnOn.SetTitle(printer.Sprintf("Reconnect"))
 		bt.mTurnOff.SetTitle(printer.Sprintf("Turn off"))
 		statusStr = printer.Sprintf("%s blocking internet", config.ApplicationName)
 		bt.mTurnOn.Show()

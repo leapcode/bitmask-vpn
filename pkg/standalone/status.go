@@ -60,7 +60,6 @@ func (b *Bitmask) openvpnManagement() {
 }
 
 func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
-	// TODO: we are reporing only openvpn status, missing firewall status
 	for event := range eventCh {
 		log.Printf("Event: %v", event)
 		stateEvent, ok := event.(*openvpn.StateEvent)

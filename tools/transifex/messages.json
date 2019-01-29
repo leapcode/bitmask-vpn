@@ -11,7 +11,7 @@
     "Initialization error": "Initialization error",
     "Missing authentication agent": "Missing authentication agent",
     "Quit": "Quit",
-    "Retry": "Retry",
+    "Reconnect": "Reconnect",
     "Route traffic through": "Route traffic through",
     "Stopping {ApplicationName}": "Stopping {ApplicationName}",
     "Turn off": "Turn off",
