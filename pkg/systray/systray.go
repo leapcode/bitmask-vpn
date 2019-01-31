@@ -67,6 +67,11 @@ func (bt *bmTray) onReady() {
 
 	bt.mStatus = systray.AddMenuItem(printer.Sprintf("Checking status..."), "")
 	bt.mStatus.Disable()
+	bt.waitCh <- true
+}
+
+func (bt *bmTray) setUpSystray() {
+	printer := bt.conf.Printer
 	bt.mTurnOn = systray.AddMenuItem(printer.Sprintf("Turn on"), "")
 	bt.mTurnOn.Hide()
 	bt.mTurnOff = systray.AddMenuItem(printer.Sprintf("Turn off"), "")
@@ -83,7 +88,6 @@ func (bt *bmTray) onReady() {
 	systray.AddSeparator()
 
 	bt.mQuit = systray.AddMenuItem(printer.Sprintf("Quit"), "")
-	bt.waitCh <- true
 }
 
 func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autostart) {
@@ -93,6 +97,7 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 	bt.bm = bm
 	bt.notify = notify
 	bt.autostart = as
+	bt.setUpSystray()
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, os.Interrupt)

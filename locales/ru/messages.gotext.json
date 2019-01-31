@@ -1,5 +1,5 @@
 {
-    "language": "pt-BR",
+    "language": "ru",
     "messages": [
         {
             "id": [
@@ -7,7 +7,7 @@
                 "An error has ocurred initializing the VPN: {Err}"
             ],
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Произошла ошибка при инициализации VPN: {Err}",
             "placeholders": [
                 {
                     "id": "Err",
@@ -25,7 +25,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "O serviço {ApplicationName} tem um custo para ser mantido. Como não queremos guardar suas informações pessoais, não temos contas de usuário e não cobramos por este serviço. Mas se você quiser que este serviço continue, faça uma doação de ao menos $5 dólares por mês.\n\nVocê quer fazer uma doação agora?",
+            "translation": "Сервис {ApplicationName} требует значительных затрат. Поскольку мы не хотим хранить личную информацию о вас, в этом сервисе нет ни аккаунтов, ни счетов. Если вы хотите, чтобы мы продолжали свою работу, мы убедительно просим вас жертвовать не менее 5 долларов в месяц.\n\t\nВы хотите пожертвовать сейчас?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -40,7 +40,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "Fazer uma doação"
+            "translation": "Сделать пожертвование"
         },
         {
             "id": [
@@ -48,7 +48,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} это простой, быстрый и безопасный VPN-сервис от {Provider}. {ApplicationName} не требует регистрации, не ведет журналы или каким-либо другим способом не отслеживает вас.\n\t    \nНаш сервис существует только на пожертвования от таких пользователей, как вы. Пожалуйста, поддержите нас тут {DonateURL}.\n\t\t\nИспользуя это приложение, вы соглашаетесь с Условиями использования, доступными по адресу {TosURL}. Этот сервис предоставляется как есть, без каких-либо гарантий и предназначен для людей, которые работают, чтобы сделать этот мир лучше.\n\n\n{ApplicationName_1} версия: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -111,12 +111,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "Sobre"
+            "translation": "О приложении"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "Erro na inicialização"
+            "translation": "Ошибка инициализации"
         },
         {
             "id": [
@@ -124,12 +124,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Não foi possível encontrar um agente de autenticação polkit. Por favor, execute um agente e tente novamente."
+            "translation": "Не удалось найти агент проверки подлинности polkit. Пожалуйста, запустите один и попробуйте снова."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Um agente de autenticação está faltando"
+            "translation": "Отсутствует агент аутентификации"
         },
         {
             "id": [
@@ -137,7 +137,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Não é possível conectar a {ApplicationName}: {Err}",
+            "translation": "Не удается подключиться к {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -160,52 +160,52 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Erro ao iniciar a VPN"
+            "translation": "Ошибка запуска VPN"
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Verificando estado..."
+            "translation": "Проверка статуса..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Ligar"
+            "translation": "Включить"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Desligar"
+            "translation": "Выключить"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "Ajuda..."
+            "translation": "Помощь..."
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "Fazer uma doação..."
+            "translation": "Сделать пожертвование..."
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "Sobre..."
+            "translation": "О приложении..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Sair"
+            "translation": "Выход"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Rotear o tráfego através de"
+            "translation": "Маршрут трафика через"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Usar o gateway {City} de {ApplicationName}",
+            "translation": "Используется шлюз {ApplicationName} {City}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -228,7 +228,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} está ligada",
+            "translation": "{ApplicationName} вкл.",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -243,7 +243,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} está desligada",
+            "translation": "{ApplicationName} выкл.",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -258,12 +258,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "Cancelar"
+            "translation": "Отменить"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Conectando a {ApplicationName}",
+            "translation": "Подключение к {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -278,7 +278,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Parando {ApplicationName}",
+            "translation": "Остановка {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -293,12 +293,12 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Reconnect"
+            "translation": "Переподключить"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} está bloqueando a Internet",
+            "translation": "{ApplicationName} блокировка интернета",
             "placeholders": [
                 {
                     "id": "ApplicationName",

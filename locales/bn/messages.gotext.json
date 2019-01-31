@@ -7,7 +7,7 @@
                 "An error has ocurred initializing the VPN: {Err}"
             ],
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "An error has ocurred initializing VPN: {Err}",
+            "translation": "An error has ocurred initializing the VPN: {Err}",
             "placeholders": [
                 {
                     "id": "Err",
@@ -33,7 +33,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "n.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         },
@@ -45,10 +45,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from riseup.net. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -56,7 +56,15 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "n.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
+                },
+                {
+                    "id": "Provider",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "config.Provider"
                 },
                 {
                     "id": "ApplicationName",
@@ -64,7 +72,23 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "n.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
+                },
+                {
+                    "id": "DonateURL",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "config.DonateURL"
+                },
+                {
+                    "id": "TosURL",
+                    "string": "%[4]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 4,
+                    "expr": "config.TosURL"
                 },
                 {
                     "id": "ApplicationName_1",
@@ -72,14 +96,14 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "n.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 },
                 {
                     "id": "Version",
-                    "string": "%[2]s",
+                    "string": "%[5]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 2,
+                    "argNum": 5,
                     "expr": "version"
                 }
             ]
@@ -121,7 +145,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "n.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 },
                 {
                     "id": "Err",
@@ -189,7 +213,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 },
                 {
                     "id": "City",
@@ -212,7 +236,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         },
@@ -227,7 +251,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         },
@@ -247,7 +271,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         },
@@ -262,14 +286,14 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         },
         {
-            "id": "Retry",
-            "message": "Retry",
-            "translation": "পূনরায় চেষ্টা করুন"
+            "id": "Reconnect",
+            "message": "Reconnect",
+            "translation": "Reconnect"
         },
         {
             "id": "{ApplicationName} blocking internet",
@@ -282,7 +306,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "bt.conf.ApplicationName"
+                    "expr": "config.ApplicationName"
                 }
             ]
         }
