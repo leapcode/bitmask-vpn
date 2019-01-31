@@ -139,7 +139,7 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 			} else if bitmaskVersion != "" {
 				versionStr = fmt.Sprintf("%s (bitmaskd %s)", bt.conf.Version, bitmaskVersion)
 			}
-			bt.notify.about(versionStr)
+			go bt.notify.about(versionStr)
 
 		case <-bt.mQuit.ClickedCh:
 			err := bt.autostart.Disable()
