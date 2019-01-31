@@ -33,6 +33,7 @@ func init() {
 		"lt":    &dictionary{index: ltIndex, data: ltData},
 		"nl":    &dictionary{index: nlIndex, data: nlData},
 		"pt_BR": &dictionary{index: pt_BRIndex, data: pt_BRData},
+		"ru":    &dictionary{index: ruIndex, data: ruData},
 	}
 	fallback := language.MustParse("en-US")
 	cat, err := catalog.NewFromMap(dict, catalog.Fallback(fallback))
@@ -43,7 +44,7 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"%[1]s is an easy, fast, and secure VPN service from riseup.net. %[1]s does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at https://riseup.net/vpn/donate.\n\t\t\nBy using this application, you agree to the Terms of Service available at https://riseup.net/tos. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n%[1]v version: %[2]s": 2,
+	"%[1]s is an easy, fast, and secure VPN service from %[2]s. %[1]s does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at %[3]s.\n\t\t\nBy using this application, you agree to the Terms of Service available at %[4]s. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n%[1]v version: %[5]s": 2,
 	"%s blocking internet": 24,
 	"%s off":               19,
 	"%s on":                18,
@@ -62,7 +63,7 @@ var messageKeyToIndex = map[string]int{
 	"Initialization error":         4,
 	"Missing authentication agent": 6,
 	"Quit":                         15,
-	"Retry":                        23,
+	"Reconnect":                    23,
 	"Route traffic through":        16,
 	"Stopping %s":                  22,
 	"The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?": 0,
@@ -72,298 +73,323 @@ var messageKeyToIndex = map[string]int{
 }
 
 var bnIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000fd, 0x00000110, 0x0000030c,
-	0x00000325, 0x00000348, 0x00000394, 0x000003e2,
-	0x00000400, 0x00000450, 0x00000497, 0x000004ab,
-	0x000004bf, 0x000004d8, 0x000004ee, 0x0000050a,
-	0x00000517, 0x00000557, 0x0000056f, 0x00000582,
-	0x00000595, 0x000005a5, 0x000005e5, 0x00000608,
-	0x0000063b, 0x00000683, 0x000006b0,
+	0x00000000, 0x000000fd, 0x00000110, 0x000002de,
+	0x000002f7, 0x0000031a, 0x00000366, 0x000003b4,
+	0x000003d2, 0x00000422, 0x00000469, 0x0000047d,
+	0x00000491, 0x000004aa, 0x000004c0, 0x000004dc,
+	0x000004e9, 0x00000529, 0x00000541, 0x00000554,
+	0x00000567, 0x00000577, 0x000005b7, 0x000005da,
+	0x000005e4, 0x0000062c, 0x0000065d,
 } // Size: 132 bytes
 
-const bnData string = "" + // Size: 1712 bytes
+const bnData string = "" + // Size: 1629 bytes
 	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
 	"e personal information about you, there is no accounts or billing for th" +
 	"is service. But if you want the service to continue, donate at least $5 " +
 	"each month.\x0a\x09\x0aDo you want to donate now?\x02অনুদান\x02%[1]s is " +
-	"an easy, fast, and secure VPN service from riseup.net. %[1]s does not re" +
-	"quire a user account, keep logs, or track you in any way.\x0a\x09    " +
-	"\x0aThis service is paid for entirely by donations from users like you. " +
-	"Please donate at https://riseup.net/vpn/donate.\x0a\x09\x09\x0aBy using " +
-	"this application, you agree to the Terms of Service available at https:/" +
-	"/riseup.net/tos. This service is provide as-is, without any warranty, an" +
-	"d is intended for people who work to make the world a better place.\x0a" +
-	"\x0a\x0a%[1]v version: %[2]s\x02সম্পর্কে\x02সূচনা ত্রুটি\x02Could not fi" +
-	"nd a polkit authentication agent. Please run one and try again.\x02প্রমা" +
-	"ণীকরণ এজেন্ট অনুপস্থিত\x02Can't connect to %[1]s: %[2]v\x02ভিপিএন চালু" +
-	" করতে ত্রুটি হয়েছে\x02অবস্থা পরিক্ষা করা হচ্ছে ...\x02চালু কর\x02বন্ধ কর" +
-	"\x02সাহায্য...\x02অনুদান...\x02সম্পর্কে...\x02বন্ধ\x02ট্রাফিক এর মাধ্যমে" +
-	" যাবে\x02Use %[1]s %[2]v gateway\x02%[1]s চালু\x02%[1]s বন্ধ\x02বাতিল" +
-	"\x02%[1]s এর সাথে সংযুক্ত হচ্ছে\x02%[1]s বন্ধ হচ্ছে\x02পূনরায় চেষ্টা করু" +
-	"ন\x02%[1]s ইন্টারনেট প্রতিরোধ করছে\x02An error has ocurred initializin" +
-	"g VPN: %[1]v"
+	"an easy, fast, and secure VPN service from %[2]s. %[1]s does not require" +
+	" a user account, keep logs, or track you in any way.\x0a\x09    \x0aThis" +
+	" service is paid for entirely by donations from users like you. Please d" +
+	"onate at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to t" +
+	"he Terms of Service available at %[4]s. This service is provide as-is, w" +
+	"ithout any warranty, and is intended for people who work to make the wor" +
+	"ld a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02সম্পর্কে\x02সূচনা " +
+	"ত্রুটি\x02Could not find a polkit authentication agent. Please run one" +
+	" and try again.\x02প্রমাণীকরণ এজেন্ট অনুপস্থিত\x02Can't connect to %[1]s" +
+	": %[2]v\x02ভিপিএন চালু করতে ত্রুটি হয়েছে\x02অবস্থা পরিক্ষা করা হচ্ছে ..." +
+	"\x02চালু কর\x02বন্ধ কর\x02সাহায্য...\x02অনুদান...\x02সম্পর্কে...\x02বন্ধ" +
+	"\x02ট্রাফিক এর মাধ্যমে যাবে\x02Use %[1]s %[2]v gateway\x02%[1]s চালু\x02" +
+	"%[1]s বন্ধ\x02বাতিল\x02%[1]s এর সাথে সংযুক্ত হচ্ছে\x02%[1]s বন্ধ হচ্ছে" +
+	"\x02Reconnect\x02%[1]s ইন্টারনেট প্রতিরোধ করছে\x02An error has ocurred i" +
+	"nitializing the VPN: %[1]v"
 
 var en_GBIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000ff, 0x00000106, 0x00000302,
-	0x00000308, 0x0000031d, 0x00000369, 0x00000386,
-	0x000003a4, 0x000003b7, 0x000003ca, 0x000003d2,
-	0x000003db, 0x000003e3, 0x000003ed, 0x000003f6,
-	0x000003fb, 0x00000411, 0x00000429, 0x00000432,
-	0x0000043c, 0x00000443, 0x00000457, 0x00000466,
-	0x0000046c, 0x00000484, 0x000004b2,
+	0x00000000, 0x000000ff, 0x00000106, 0x000002d4,
+	0x000002da, 0x000002ef, 0x0000033b, 0x00000358,
+	0x00000376, 0x00000389, 0x0000039c, 0x000003a4,
+	0x000003ad, 0x000003b5, 0x000003bf, 0x000003c8,
+	0x000003cd, 0x000003e3, 0x000003fb, 0x00000404,
+	0x0000040e, 0x00000415, 0x00000429, 0x00000438,
+	0x00000442, 0x0000045a, 0x0000048b,
 } // Size: 132 bytes
 
-const en_GBData string = "" + // Size: 1202 bytes
+const en_GBData string = "" + // Size: 1163 bytes
 	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
 	"e personal information about you, there is no accounts or billing for th" +
 	"is service. But if you want the service to continue, donate at least US$" +
 	"5 each month.\x0a\x09\x0aDo you want to donate now?\x02Donate\x02%[1]s i" +
-	"s an easy, fast, and secure VPN service from riseup.net. %[1]s does not " +
-	"require a user account, keep logs, or track you in any way.\x0a\x09    " +
-	"\x0aThis service is paid for entirely by donations from users like you. " +
-	"Please donate at https://riseup.net/vpn/donate.\x0a\x09\x09\x0aBy using " +
-	"this application, you agree to the Terms of Service available at https:/" +
-	"/riseup.net/tos. This service is provide as-is, without any warranty, an" +
-	"d is intended for people who work to make the world a better place.\x0a" +
-	"\x0a\x0a%[1]v version: %[2]s\x02About\x02Initialisation error\x02Could n" +
-	"ot find a Polkit authentication agent. Please run one and try again.\x02" +
-	"Missing authentication agent\x02Can't connect to %[1]s: %[2]v\x02Error s" +
-	"tarting VPN\x02Checking status...\x02Turn on\x02Turn off\x02Help...\x02D" +
-	"onate...\x02About...\x02Quit\x02Route traffic through\x02Use %[1]s %[2]v" +
-	" gateway\x02%[1]s on\x02%[1]s off\x02Cancel\x02Connecting to %[1]s\x02St" +
-	"opping %[1]s\x02Retry\x02%[1]s blocking Internet\x02An error has occurre" +
-	"d initialising VPN: %[1]v"
+	"s an easy, fast, and secure VPN service from %[2]s. %[1]s does not requi" +
+	"re a user account, keep logs, or track you in any way.\x0a\x09    \x0aTh" +
+	"is service is paid for entirely by donations from users like you. Please" +
+	" donate at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to" +
+	" the Terms of Service available at %[4]s. This service is provide as-is," +
+	" without any warranty, and is intended for people who work to make the w" +
+	"orld a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02About\x02Initial" +
+	"isation error\x02Could not find a Polkit authentication agent. Please ru" +
+	"n one and try again.\x02Missing authentication agent\x02Can't connect to" +
+	" %[1]s: %[2]v\x02Error starting VPN\x02Checking status...\x02Turn on\x02" +
+	"Turn off\x02Help...\x02Donate...\x02About...\x02Quit\x02Route traffic th" +
+	"rough\x02Use %[1]s %[2]v gateway\x02%[1]s on\x02%[1]s off\x02Cancel\x02C" +
+	"onnecting to %[1]s\x02Stopping %[1]s\x02Reconnect\x02%[1]s blocking Inte" +
+	"rnet\x02An error has ocurred initializing the VPN: %[1]v"
 
 var en_USIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000fd, 0x00000104, 0x00000300,
-	0x00000306, 0x0000031b, 0x00000367, 0x00000384,
-	0x000003a2, 0x000003b5, 0x000003c8, 0x000003d0,
-	0x000003d9, 0x000003e1, 0x000003eb, 0x000003f4,
-	0x000003f9, 0x0000040f, 0x00000427, 0x00000430,
-	0x0000043a, 0x00000441, 0x00000455, 0x00000464,
-	0x0000046a, 0x00000482, 0x000004af,
+	0x00000000, 0x000000fd, 0x00000104, 0x000002d2,
+	0x000002d8, 0x000002ed, 0x00000339, 0x00000356,
+	0x00000374, 0x00000387, 0x0000039a, 0x000003a2,
+	0x000003ab, 0x000003b3, 0x000003bd, 0x000003c6,
+	0x000003cb, 0x000003e1, 0x000003f9, 0x00000402,
+	0x0000040c, 0x00000413, 0x00000427, 0x00000436,
+	0x00000440, 0x00000458, 0x00000489,
 } // Size: 132 bytes
 
-const en_USData string = "" + // Size: 1199 bytes
+const en_USData string = "" + // Size: 1161 bytes
 	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
 	"e personal information about you, there is no accounts or billing for th" +
 	"is service. But if you want the service to continue, donate at least $5 " +
 	"each month.\x0a\x09\x0aDo you want to donate now?\x02Donate\x02%[1]s is " +
-	"an easy, fast, and secure VPN service from riseup.net. %[1]s does not re" +
-	"quire a user account, keep logs, or track you in any way.\x0a\x09    " +
-	"\x0aThis service is paid for entirely by donations from users like you. " +
-	"Please donate at https://riseup.net/vpn/donate.\x0a\x09\x09\x0aBy using " +
-	"this application, you agree to the Terms of Service available at https:/" +
-	"/riseup.net/tos. This service is provide as-is, without any warranty, an" +
-	"d is intended for people who work to make the world a better place.\x0a" +
-	"\x0a\x0a%[1]v version: %[2]s\x02About\x02Initialization error\x02Could n" +
-	"ot find a polkit authentication agent. Please run one and try again.\x02" +
-	"Missing authentication agent\x02Can't connect to %[1]s: %[2]v\x02Error s" +
-	"tarting VPN\x02Checking status...\x02Turn on\x02Turn off\x02Help...\x02D" +
-	"onate...\x02About...\x02Quit\x02Route traffic through\x02Use %[1]s %[2]v" +
-	" gateway\x02%[1]s on\x02%[1]s off\x02Cancel\x02Connecting to %[1]s\x02St" +
-	"opping %[1]s\x02Retry\x02%[1]s blocking internet\x02An error has ocurred" +
-	" initializing VPN: %[1]v"
+	"an easy, fast, and secure VPN service from %[2]s. %[1]s does not require" +
+	" a user account, keep logs, or track you in any way.\x0a\x09    \x0aThis" +
+	" service is paid for entirely by donations from users like you. Please d" +
+	"onate at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to t" +
+	"he Terms of Service available at %[4]s. This service is provide as-is, w" +
+	"ithout any warranty, and is intended for people who work to make the wor" +
+	"ld a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02About\x02Initializ" +
+	"ation error\x02Could not find a polkit authentication agent. Please run " +
+	"one and try again.\x02Missing authentication agent\x02Can't connect to %" +
+	"[1]s: %[2]v\x02Error starting VPN\x02Checking status...\x02Turn on\x02Tu" +
+	"rn off\x02Help...\x02Donate...\x02About...\x02Quit\x02Route traffic thro" +
+	"ugh\x02Use %[1]s %[2]v gateway\x02%[1]s on\x02%[1]s off\x02Cancel\x02Con" +
+	"necting to %[1]s\x02Stopping %[1]s\x02Reconnect\x02%[1]s blocking intern" +
+	"et\x02An error has ocurred initializing the VPN: %[1]v"
 
 var esIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000ec, 0x000000f1, 0x00000332,
-	0x0000033c, 0x00000355, 0x000003bc, 0x000003de,
-	0x00000401, 0x00000419, 0x00000432, 0x0000043b,
-	0x00000442, 0x0000044b, 0x00000453, 0x00000460,
-	0x00000467, 0x0000047a, 0x0000049b, 0x000004ab,
-	0x000004b9, 0x000004c2, 0x000004d6, 0x000004ee,
-	0x000004f9, 0x00000513, 0x00000541,
+	0x00000000, 0x000000ec, 0x000000f1, 0x00000304,
+	0x0000030e, 0x00000327, 0x0000038e, 0x000003b0,
+	0x000003d3, 0x000003eb, 0x00000404, 0x0000040d,
+	0x00000414, 0x0000041d, 0x00000425, 0x00000432,
+	0x00000439, 0x0000044c, 0x0000046d, 0x0000047d,
+	0x0000048b, 0x00000494, 0x000004a8, 0x000004c0,
+	0x000004ca, 0x000004e4, 0x00000515,
 } // Size: 132 bytes
 
-const esData string = "" + // Size: 1345 bytes
+const esData string = "" + // Size: 1301 bytes
 	"\x02El servicio %[1]s es caro de mantener. Como no queremos guardar ning" +
 	"una información personal tuya, no hay cuentas ni servicio de facturación" +
 	". Si quieres que este servicio continúe, dona al menos $5 cada mes.\x0a" +
 	"\x09\x0a¿Quieres donar ahora?\x02Dona\x02%[1]s es un servicio de VPN fác" +
-	"il, rápido, y seguro de riseup.net. %[1]s no requiere una cuenta de usua" +
-	"rio, no mantiene registros, ni te rastrea de ninguna manera.\x0a\x09    " +
-	"\x0aEste servicio se paga en su totalidad por donaciones de usuarios com" +
-	"o tú. Por favor dona ingresando a https://riseup.net/vpn/donate.\x0a\x09" +
-	"\x09\x0aAl usar ésta aplicación, acuerdas con los Términos del Servicio " +
-	"disponibles en https://riseup.net/tos. Este servicio es provisto como vi" +
-	"ene, sin garantía alguna, y está destinado a gente que trabaja para hace" +
-	"r del mundo un lugar mejor.\x0a\x0a\x0aVersión de %[1]v: %[2]s\x02Acerca" +
-	" de\x02Error de inicialización\x02No se pudo encontrar ningún agente de " +
-	"autenticacion de polkit. Por favor lanza uno y prueba de nuevo.\x02Falta" +
-	" un agente de autenticación\x02No puedo conectar con %[1]s: %[2]v\x02Err" +
-	"or arrancando la VPN\x02Comprobando el estado...\x02Encender\x02Apagar" +
-	"\x02Ayuda...\x02Dona...\x02Acerca de...\x02Cerrar\x02Salir a través de" +
-	"\x02Usa la salida de %[1]s por %[2]v\x02%[1]s encendida\x02%[1]s apagada" +
-	"\x02Cancelar\x02Connectando a %[1]s\x02Desconnectando de %[1]s\x02Reinte" +
-	"ntar\x02%[1]s bloqueando internet\x02Un error ha ocurrido inicializando " +
-	"VPN: %[1]v"
+	"il, rápido, y seguro de %[2]s. %[1]s no requiere una cuenta de usuario, " +
+	"no mantiene registros, ni te rastrea de ninguna manera.\x0a\x09    \x0aE" +
+	"ste servicio se paga en su totalidad por donaciones de usuarios como tú." +
+	" Por favor dona ingresando a %[3]s.\x0a\x09\x09\x0aAl usar ésta aplicaci" +
+	"ón, acuerdas con los Términos del Servicio disponibles en %[4]s. Este s" +
+	"ervicio es provisto como viene, sin garantía alguna, y está destinado a " +
+	"gente que trabaja para hacer del mundo un lugar mejor.\x0a\x0a\x0aVersió" +
+	"n de %[1]v: %[5]s\x02Acerca de\x02Error de inicialización\x02No se pudo " +
+	"encontrar ningún agente de autenticacion de polkit. Por favor lanza uno " +
+	"y prueba de nuevo.\x02Falta un agente de autenticación\x02No puedo conec" +
+	"tar con %[1]s: %[2]v\x02Error arrancando la VPN\x02Comprobando el estado" +
+	"...\x02Encender\x02Apagar\x02Ayuda...\x02Dona...\x02Acerca de...\x02Cerr" +
+	"ar\x02Salir a través de\x02Usa la salida de %[1]s por %[2]v\x02%[1]s enc" +
+	"endida\x02%[1]s apagada\x02Cancelar\x02Connectando a %[1]s\x02Desconnect" +
+	"ando de %[1]s\x02Reconnect\x02%[1]s bloqueando internet\x02Ha ocurrido u" +
+	"n error inicializando la VPN: %[1]v"
 
 var es_ESIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000ec, 0x000000f2, 0x00000343,
-	0x0000034d, 0x00000366, 0x000003c7, 0x000003e6,
-	0x0000040a, 0x0000041e, 0x00000434, 0x0000043c,
-	0x00000447, 0x00000450, 0x00000459, 0x00000466,
-	0x0000046c, 0x0000048a, 0x000004aa, 0x000004b9,
-	0x000004cb, 0x000004d4, 0x000004e7, 0x000004f8,
-	0x00000503, 0x0000051d, 0x0000054b,
+	0x00000000, 0x000000ec, 0x000000f2, 0x000002c0,
+	0x000002ca, 0x000002e3, 0x00000344, 0x00000363,
+	0x00000387, 0x0000039b, 0x000003b1, 0x000003b9,
+	0x000003c4, 0x000003cd, 0x000003d6, 0x000003e3,
+	0x000003e9, 0x00000407, 0x00000427, 0x00000436,
+	0x00000448, 0x00000451, 0x00000464, 0x00000475,
+	0x0000047f, 0x00000499, 0x000004ca,
 } // Size: 132 bytes
 
-const es_ESData string = "" + // Size: 1355 bytes
+const es_ESData string = "" + // Size: 1226 bytes
 	"\x02Correr el servicio %[1]s es caro. Porque no queremos almacenar infor" +
 	"mación personal acerca tuyo, no hay cuentas o tarifas por este servicio." +
 	" Pero si quieres que el mismo continúe, dona la menos USD 5 por mes.\x0a" +
-	"\x09\x0a¿Quieres donar ahora?\x02Donar\x02%[1]s es un servicio de VPN fá" +
-	"cil, rápido y seguro de riseup.net. %[1]s no requiere una cuenta de usua" +
-	"rio, no mantiene bitácoras, o te rastrea de cualquier manera.\x0a\x09   " +
-	" \x0aEl costo de este servicio está cubierto por completo por donaciones" +
-	" de usuarios como tú. Por favor dona a https://riseup.net/vpn/donate." +
-	"\x0a\x09\x09\x0aAl usar esta aplicación, estás de acuerdo con los Términ" +
-	"os del Servicio disponibles en https://riseup.net/tos. Este servicio se " +
-	"provee como está, sin ninguna garantía, y está apuntado a personas que t" +
-	"rabajan para hacer del mundo un mejor lugar.\x0a\x0a\x0aVersión de %[1]v" +
-	": %[2]s\x02Acerca de\x02Error de inicialización\x02No se pudo encontrar " +
-	"un agente de autenticación polkit. Por favor corre uno e intenta de nuev" +
-	"o.\x02Falta agente de autenticación\x02No se puede conectar a %[1]s: %[2" +
-	"]v\x02Error iniciando VPN\x02Comprobando estado...\x02Activar\x02Desacti" +
-	"var\x02Ayuda...\x02Donar...\x02Acerca de...\x02Salir\x02Enrutar tráfico " +
-	"a través de\x02Usar ruta de salida %[1]s %[2]v\x02%[1]s activada\x02%[1]" +
-	"s desactivada\x02Cancelar\x02Conectando a %[1]s\x02Deteniendo %[1]s\x02R" +
-	"eintentar\x02%[1]s bloqueando Internet\x02Ha ocurrido un error inicializ" +
-	"ando VPN: %[1]v"
+	"\x09\x0a¿Quieres donar ahora?\x02Donar\x02%[1]s is an easy, fast, and se" +
+	"cure VPN service from %[2]s. %[1]s does not require a user account, keep" +
+	" logs, or track you in any way.\x0a\x09    \x0aThis service is paid for " +
+	"entirely by donations from users like you. Please donate at %[3]s.\x0a" +
+	"\x09\x09\x0aBy using this application, you agree to the Terms of Service" +
+	" available at %[4]s. This service is provide as-is, without any warranty" +
+	", and is intended for people who work to make the world a better place." +
+	"\x0a\x0a\x0a%[1]v version: %[5]s\x02Acerca de\x02Error de inicialización" +
+	"\x02No se pudo encontrar un agente de autenticación polkit. Por favor co" +
+	"rre uno e intenta de nuevo.\x02Falta agente de autenticación\x02No se pu" +
+	"ede conectar a %[1]s: %[2]v\x02Error iniciando VPN\x02Comprobando estado" +
+	"...\x02Activar\x02Desactivar\x02Ayuda...\x02Donar...\x02Acerca de...\x02" +
+	"Salir\x02Enrutar tráfico a través de\x02Usar ruta de salida %[1]s %[2]v" +
+	"\x02%[1]s activada\x02%[1]s desactivada\x02Cancelar\x02Conectando a %[1]" +
+	"s\x02Deteniendo %[1]s\x02Reconnect\x02%[1]s bloqueando Internet\x02An er" +
+	"ror has ocurred initializing the VPN: %[1]v"
 
 var frIndex = []uint32{ // 27 elements
-	0x00000000, 0x00000154, 0x00000161, 0x000003d5,
-	0x000003df, 0x000003f9, 0x0000045b, 0x00000487,
-	0x000004b4, 0x000004d0, 0x000004ee, 0x000004f6,
-	0x00000502, 0x0000050a, 0x0000051a, 0x00000527,
-	0x0000052f, 0x00000547, 0x0000056b, 0x0000057d,
-	0x00000593, 0x0000059b, 0x000005ae, 0x000005be,
-	0x000005c7, 0x000005dd, 0x0000061c,
+	0x00000000, 0x00000154, 0x00000161, 0x000003a8,
+	0x000003b2, 0x000003cc, 0x0000042e, 0x0000045a,
+	0x00000487, 0x000004a3, 0x000004c1, 0x000004c9,
+	0x000004d5, 0x000004dd, 0x000004ed, 0x000004fa,
+	0x00000502, 0x0000051a, 0x0000053e, 0x00000550,
+	0x00000566, 0x0000056e, 0x00000581, 0x00000591,
+	0x000005a0, 0x000005b6, 0x000005fa,
 } // Size: 132 bytes
 
-const frData string = "" + // Size: 1564 bytes
+const frData string = "" + // Size: 1530 bytes
 	"\x02L’exploitation du service %[1]s coûte cher. Dans la mesure où ne nou" +
 	"s voulons enregistrer aucun renseignement personnel à votre sujet, il n’" +
 	"y ni compte ni facturation pour ce service. Mais si vous souhaitez toute" +
 	"fois que le service continue, faites un don d’au moins 5\u00a0$ mensuell" +
 	"ement\x0a\x09\x0aSouhaitez-vous faire un don maintenant\u2009?\x02Faire " +
 	"un don\x02%[1]s est un service de RPV simple, rapide et sécurisé offert " +
-	"par riseup.net. %[1]s ne demande pas de compte utilisateur, ne conserve " +
-	"pas de journaux, ni ne vous suit à la trace d’aucune façon.\x0a\x09    " +
-	"\x0aCe service est entièrement financé par les dons d’utilisateurs comme" +
-	" vous. Veuillez faire un don à https://riseup.net/vpn/donate.\x0a\x09" +
-	"\x09\x0aEn utilisant cette application, vous acceptez les conditions gén" +
-	"érales d’utilisation qui se trouvent sur https://riseup.net/tos. Ce ser" +
-	"vice est fourni tel quel, sans aucune garantie, et s’adresse aux personn" +
-	"es qui œuvrent à rendre le monde meilleur.\x0a\x0a\x0a%[1]v version " +
-	"\u00a0: %[2]s\x02À propos\x02Erreur d’initialisation\x02Impossible de tr" +
-	"ouver un agent d’authentification polkit. Veuillez en exécuter un et res" +
-	"sayer.\x02L’agent d’authentification est manquant\x02Impossible de se co" +
-	"nnecter à %[1]s\u00a0: %[2]v\x02Erreur du démarrage du RPV\x02Vérificati" +
-	"on de l’état…\x02Activer\x02Désactiver\x02Aide…\x02Faire un don…\x02À pr" +
-	"opos…\x02Quitter\x02Acheminer le trafic par\x02Utiliser la passerelle %[" +
-	"1]s %[2]v\x0a\x02%[1]s est activé\x02%[1]s est désactivé\x02Annuler\x02C" +
-	"onnexion à %[1]s\x02Arrêt de %[1]s\x02Ressayer\x02%[1]s bloque Internet" +
-	"\x02Une erreur est survenue lors de l'initialisation de VPN: %[1]v"
+	"par %[2]s. %[1]s ne demande pas de compte utilisateur, ne conserve pas d" +
+	"e journaux, ni ne vous suit à la trace d’aucune façon.\x0a\x09    \x0aCe" +
+	" service est entièrement financé par les dons d’utilisateurs comme vous." +
+	" Veuillez faire un don sur %[3]s.\x0a\x09\x09\x0aEn utilisant cette appl" +
+	"ication, vous acceptez les conditions générales d’utilisation qui se tro" +
+	"uvent sur %[4]s. Ce service est fourni tel quel, sans aucune garantie, e" +
+	"t s’adresse aux personnes qui œuvrent à rendre le monde meilleur.\x0a" +
+	"\x0a\x0a%[1]v version \u00a0: %[5]s\x02À propos\x02Erreur d’initialisati" +
+	"on\x02Impossible de trouver un agent d’authentification polkit. Veuillez" +
+	" en exécuter un et ressayer.\x02L’agent d’authentification est manquant" +
+	"\x02Impossible de se connecter à %[1]s\u00a0: %[2]v\x02Erreur du démarra" +
+	"ge du RPV\x02Vérification de l’état…\x02Activer\x02Désactiver\x02Aide…" +
+	"\x02Faire un don…\x02À propos…\x02Quitter\x02Acheminer le trafic par\x02" +
+	"Utiliser la passerelle %[1]s %[2]v\x0a\x02%[1]s est activé\x02%[1]s est " +
+	"désactivé\x02Annuler\x02Connexion à %[1]s\x02Arrêt de %[1]s\x02Se reconn" +
+	"ecter\x02%[1]s bloque Internet\x02Une erreur est survenue lors de l’\x0a" +
+	"initialisation du RPV\u00a0: %[1]v"
 
 var ltIndex = []uint32{ // 27 elements
-	0x00000000, 0x0000013d, 0x00000146, 0x00000392,
-	0x00000397, 0x000003aa, 0x00000411, 0x00000436,
-	0x0000045f, 0x00000477, 0x0000048c, 0x00000495,
-	0x0000049f, 0x000004aa, 0x000004b6, 0x000004be,
-	0x000004c6, 0x000004e3, 0x00000508, 0x00000517,
-	0x00000527, 0x00000532, 0x00000548, 0x00000557,
-	0x00000569, 0x00000583, 0x000005aa,
+	0x00000000, 0x0000013d, 0x00000146, 0x00000364,
+	0x00000369, 0x0000037c, 0x000003e3, 0x00000408,
+	0x00000431, 0x00000449, 0x0000045e, 0x00000467,
+	0x00000471, 0x0000047c, 0x00000488, 0x00000490,
+	0x00000498, 0x000004b5, 0x000004da, 0x000004e9,
+	0x000004f9, 0x00000504, 0x0000051a, 0x00000529,
+	0x0000053f, 0x00000559, 0x00000580,
 } // Size: 132 bytes
 
-const ltData string = "" + // Size: 1450 bytes
+const ltData string = "" + // Size: 1408 bytes
 	"\x02%[1]s paslaugą brangiai kainuoja išlaikyti. Kadangi nenorime saugoti" +
 	" jūsų asmeninės informacijos, todėl nėra jokių paskyrų ar apmokestinimo " +
 	"už šią paslaugą. Tačiau, jei norite, kad paslauga būtų teikiama ir tolia" +
 	"u, paaukokite kiekvieną mėnesį bent po $5 (JAV dolerius).\x0a\x09\x0aAr " +
 	"norite paaukoti dabar?\x02Paaukoti\x02%[1]s yra lengva naudoti, greita i" +
-	"r saugi VPN paslauga iš riseup.net. %[1]s nereikalauja naudotojo paskyro" +
-	"s, nesaugo žurnalų ir jokiu kitu būdu jūsų neseka.\x0a\x09    \x0aŠi pas" +
-	"lauga yra apmokama tik iš, tokių pačių naudotojų kaip jūs, paaukojimų. P" +
-	"rašome paaukokite, adresu https://riseup.net/vpn/donate.\x0a\x09\x09\x0a" +
-	"Naudodami šią programą, sutinkate su Naudojimosi Sąlygomis, kurias galit" +
-	"e rasti adresu https://riseup.net/tos. Ši paslauga yra teikiama esamu pa" +
-	"vidalu, be jokių garantijų ir yra skirta žmonėms, kurie dirba, kad padar" +
-	"ytų pasaulį geresnį.\x0a\x0a\x0a%[1]v versija: %[2]s\x02Apie\x02Inicijav" +
-	"imo klaida\x02Nepavyko rasti politikos rinkinio tapatybės nustatymo agen" +
-	"to. Paleiskite jį ir bandykite dar kartą.\x02Trūksta tapatybės nustatymo" +
-	" agento\x02Nepavyksta prisijungti prie %[1]s: %[2]v\x02Klaida paleidžian" +
-	"t VPN\x02Tikrinama būsena...\x02Įjungti\x02Išjungti\x02Pagalba...\x02Paa" +
-	"ukoti...\x02Apie...\x02Išeiti\x02Siųsti duomenų srautą per\x02Naudoti %[" +
-	"1]s %[2]v tinklų sietuvą\x02%[1]s įjungta\x02%[1]s išjungta\x02Atsisakyt" +
-	"i\x02Jungiamasi prie %[1]s\x02Stabdoma %[1]s\x02Bandyti iš naujo\x02%[1]" +
-	"s blokuoja internetą\x02Inicijuojant VPN, įvyko klaida: %[1]v"
+	"r saugi VPN paslauga iš %[2]s. %[1]s nereikalauja naudotojo paskyros, ne" +
+	"saugo žurnalų ir jokiu kitu būdu jūsų neseka.\x0a\x09    \x0aŠi paslauga" +
+	" yra apmokama tik iš, tokių pačių naudotojų kaip jūs, paaukojimų. Prašom" +
+	"e paaukokite, adresu %[3]s.\x0a\x09\x09\x0aNaudodami šią programą, sutin" +
+	"kate su Naudojimosi Sąlygomis, kurias galite rasti adresu %[4]s. Ši pasl" +
+	"auga yra teikiama esamu pavidalu, be jokių garantijų ir yra skirta žmonė" +
+	"ms, kurie dirba, kad padarytų pasaulį geresnį.\x0a\x0a\x0a%[1]v versija:" +
+	" %[5]s\x02Apie\x02Inicijavimo klaida\x02Nepavyko rasti politikos rinkini" +
+	"o tapatybės nustatymo agento. Paleiskite jį ir bandykite dar kartą.\x02T" +
+	"rūksta tapatybės nustatymo agento\x02Nepavyksta prisijungti prie %[1]s: " +
+	"%[2]v\x02Klaida paleidžiant VPN\x02Tikrinama būsena...\x02Įjungti\x02Išj" +
+	"ungti\x02Pagalba...\x02Paaukoti...\x02Apie...\x02Išeiti\x02Siųsti duomen" +
+	"ų srautą per\x02Naudoti %[1]s %[2]v tinklų sietuvą\x02%[1]s įjungta\x02" +
+	"%[1]s išjungta\x02Atsisakyti\x02Jungiamasi prie %[1]s\x02Stabdoma %[1]s" +
+	"\x02Prisijungti iš naujo\x02%[1]s blokuoja internetą\x02Inicijuojant VPN" +
+	", įvyko klaida: %[1]v"
 
 var nlIndex = []uint32{ // 27 elements
-	0x00000000, 0x0000010c, 0x00000114, 0x00000356,
-	0x0000035b, 0x0000036d, 0x000003bc, 0x000003d9,
-	0x000003fd, 0x0000041f, 0x00000435, 0x00000441,
-	0x0000044e, 0x00000456, 0x00000461, 0x00000469,
-	0x00000471, 0x00000484, 0x000004a0, 0x000004aa,
-	0x000004b4, 0x000004be, 0x000004d2, 0x000004e8,
-	0x000004f9, 0x00000516, 0x0000055d,
+	0x00000000, 0x0000010c, 0x00000114, 0x0000032c,
+	0x00000331, 0x00000343, 0x00000392, 0x000003af,
+	0x000003d3, 0x000003f5, 0x0000040b, 0x00000417,
+	0x00000424, 0x0000042c, 0x00000437, 0x0000043f,
+	0x00000447, 0x0000045a, 0x00000476, 0x00000480,
+	0x0000048a, 0x00000494, 0x000004a8, 0x000004be,
+	0x000004c8, 0x000004e5, 0x0000052f,
 } // Size: 132 bytes
 
-const nlData string = "" + // Size: 1373 bytes
+const nlData string = "" + // Size: 1327 bytes
 	"\x02De %[1]s dienst is kostbaar om te onderhouden. Omdat we geen persoon" +
 	"lijke informatie over u willen bijhouden, zijn er geen accounts of betal" +
 	"ingen voor deze dienst. Om deze dienst in leven te houden, overweeg ten " +
 	"minste €4 per maand te schenken.\x0a\x09\x0aWilt u nu doneren?\x02Donere" +
-	"n\x02%[1]s is een gemakkelijke, snelle, en veilige VPN-dienst van riseup" +
-	".net. %[1]s vereist geen gebruikersaccount, houdt geen logboek bij en vo" +
-	"lgt u niet op wat voor manier dan ook.\x0a\x09\x0aDeze dienst wordt voll" +
-	"edig gefinancierd door donaties van gebruikers zoals u. Overweeg bij te " +
-	"dragen op https://riseup.net/vpn/donate.\x0a\x09\x09\x0aDoor deze applic" +
-	"atie te gebruiken gaat u akkoord met onze gebruikersvoorwaarden die besc" +
-	"hikbaar zijn op https://riseup.net/tos. Deze dienst wordt geleverd zonde" +
-	"r enige garantie, en is bedoeld voor mensen die werken aan een betere we" +
-	"reld.\x0a\x0a\x0a%[1]v versie: %[2]s\x02Over\x02Initialisatiefout\x02Kan" +
-	" geen polkit authenticatieagent vinden. Voer er een uit en probeer opnie" +
-	"uw.\x02Authenticatieagent ontbreekt\x02Kan niet verbinden met %[1]s: %[2" +
-	"]v\x02Fout bij het opstarten van de VPN\x02Status controleren...\x02Insc" +
-	"hakelen\x02Uitschakelen\x02Hulp...\x02Doneren...\x02Over...\x02Stoppen" +
-	"\x02Stuur verkeer door\x02Gebruik %[1]s %[2]v gateway\x02%[1]s aan\x02%[" +
-	"1]s uit\x02Annuleren\x02Verbinden met %[1]s\x02%[1]s aan het stoppen\x02" +
-	"Opnieuw proberen\x02%[1]s blokkeert het internet\x02Er heeft zich een fo" +
-	"ut voorgedaan bij het initialiseren van VPN: %[1]v"
+	"n\x02%[1]s is een gemakkelijke, snelle en veilige VPN-dienst van %[2]s. " +
+	"%[1]s vereist geen gebruikersaccount, houdt geen logboek bij en volgt u " +
+	"niet op wat voor manier dan ook.\x0a\x09    \x0aDeze dienst wordt volled" +
+	"ig gefinancierd door donaties van gebruikers zoals u. Gelieve bij te dra" +
+	"gen op %[3]s.\x0a\x09\x09\x0aDoor deze applicatie te gebruiken, gaat u a" +
+	"kkoord met onze gebruikersvoorwaarden die beschikbaar zijn op %[4]s. Dez" +
+	"e dienst wordt geleverd zonder enige garantie en is bedoeld voor mensen " +
+	"die werken aan een betere wereld. \x0a\x0a\x0a%[1]v version: %[5]s\x02Ov" +
+	"er\x02Initialisatiefout\x02Kan geen polkit authenticatieagent vinden. Vo" +
+	"er er een uit en probeer opnieuw.\x02Authenticatieagent ontbreekt\x02Kan" +
+	" niet verbinden met %[1]s: %[2]v\x02Fout bij het opstarten van de VPN" +
+	"\x02Status controleren...\x02Inschakelen\x02Uitschakelen\x02Hulp...\x02D" +
+	"oneren...\x02Over...\x02Stoppen\x02Stuur verkeer door\x02Gebruik %[1]s %" +
+	"[2]v gateway\x02%[1]s aan\x02%[1]s uit\x02Annuleren\x02Verbinden met %[1" +
+	"]s\x02%[1]s aan het stoppen\x02Reconnect\x02%[1]s blokkeert het internet" +
+	"\x02Er heeft zich een fout voorgedaan bij het initialiseren van de VPN: " +
+	"%[1]v"
 
 var pt_BRIndex = []uint32{ // 27 elements
-	0x00000000, 0x00000134, 0x00000147, 0x0000039f,
-	0x000003a5, 0x000003bd, 0x0000042e, 0x00000459,
-	0x00000483, 0x00000499, 0x000004af, 0x000004b5,
-	0x000004be, 0x000004c7, 0x000004dd, 0x000004e6,
-	0x000004eb, 0x00000509, 0x00000527, 0x0000053a,
-	0x00000550, 0x00000559, 0x0000056c, 0x0000057a,
-	0x0000058b, 0x000005ad, 0x000005de,
+	0x00000000, 0x00000134, 0x00000147, 0x00000315,
+	0x0000031b, 0x00000333, 0x000003a4, 0x000003cf,
+	0x000003f9, 0x0000040f, 0x00000425, 0x0000042b,
+	0x00000434, 0x0000043d, 0x00000453, 0x0000045c,
+	0x00000461, 0x0000047f, 0x0000049d, 0x000004b0,
+	0x000004c6, 0x000004cf, 0x000004e2, 0x000004f0,
+	0x000004fa, 0x0000051c, 0x0000054d,
 } // Size: 132 bytes
 
-const pt_BRData string = "" + // Size: 1502 bytes
+const pt_BRData string = "" + // Size: 1357 bytes
 	"\x02O serviço %[1]s tem um custo para ser mantido. Como não queremos gua" +
 	"rdar suas informações pessoais, não temos contas de usuário e não cobram" +
 	"os por este serviço. Mas se você quiser que este serviço continue, faça " +
 	"uma doação de ao menos $5 dólares por mês.\x0a\x0aVocê quer fazer uma do" +
-	"ação agora?\x02Fazer uma doação\x02%[1]s é um serviço de VPN fácil, rápi" +
-	"do e seguro mantido por riseup.net.  %[1]s não precisa de uma conta de u" +
-	"suário, não mantém logs, e não te rastreia de forma alguma.\x0a\x0aO ser" +
-	"viço é financiado inteiramente através de doações de pessoas como você. " +
-	"Por favor faça uma doação acessando https://riseup.net/vpn/donate.\x0a" +
-	"\x0aAo usar este aplicativo, você concorda com os Termos de Serviço disp" +
-	"oníveis em https://riseup.net/tos. Este serviço é provido \x22no estado" +
-	"\x22, sem nenhuma garantia, e é direcionado a pessoas que trabalham para" +
-	" tornar o mundo um lugar melhor.\x0a\x0a\x0a%[1]v versão: %[2]s\x02Sobre" +
-	"\x02Erro na inicialização\x02Não foi possível encontrar um agente de aut" +
-	"enticação polkit. Por favor, execute um agente e tente novamente.\x02Um " +
-	"agente de autenticação está faltando\x02Não é possível conectar a %[1]s:" +
-	" %[2]v\x02Erro ao iniciar a VPN\x02Verificando estado...\x02Ligar\x02Des" +
-	"ligar\x02Ajuda...\x02Fazer uma doação...\x02Sobre...\x02Sair\x02Rotear o" +
-	" tráfego através de\x02Usar o gateway %[2]v de %[1]s\x02%[1]s está ligad" +
-	"a\x02%[1]s está desligada\x02Cancelar\x02Conectando a %[1]s\x02Parando %" +
-	"[1]s\x02Tentar novamente\x02%[1]s está bloqueando a Internet\x02Um erro " +
-	"ocorreu na inicialização de VPN: %[1]v"
+	"ação agora?\x02Fazer uma doação\x02%[1]s is an easy, fast, and secure VP" +
+	"N service from %[2]s. %[1]s does not require a user account, keep logs, " +
+	"or track you in any way.\x0a\x09    \x0aThis service is paid for entirel" +
+	"y by donations from users like you. Please donate at %[3]s.\x0a\x09\x09" +
+	"\x0aBy using this application, you agree to the Terms of Service availab" +
+	"le at %[4]s. This service is provide as-is, without any warranty, and is" +
+	" intended for people who work to make the world a better place.\x0a\x0a" +
+	"\x0a%[1]v version: %[5]s\x02Sobre\x02Erro na inicialização\x02Não foi po" +
+	"ssível encontrar um agente de autenticação polkit. Por favor, execute um" +
+	" agente e tente novamente.\x02Um agente de autenticação está faltando" +
+	"\x02Não é possível conectar a %[1]s: %[2]v\x02Erro ao iniciar a VPN\x02V" +
+	"erificando estado...\x02Ligar\x02Desligar\x02Ajuda...\x02Fazer uma doaçã" +
+	"o...\x02Sobre...\x02Sair\x02Rotear o tráfego através de\x02Usar o gatewa" +
+	"y %[2]v de %[1]s\x02%[1]s está ligada\x02%[1]s está desligada\x02Cancela" +
+	"r\x02Conectando a %[1]s\x02Parando %[1]s\x02Reconnect\x02%[1]s está bloq" +
+	"ueando a Internet\x02An error has ocurred initializing the VPN: %[1]v"
 
-	// Total table size 13890 bytes (13KiB); checksum: 25F68812
+var ruIndex = []uint32{ // 27 elements
+	0x00000000, 0x00000205, 0x0000022f, 0x000005d8,
+	0x000005f0, 0x00000618, 0x000006c8, 0x00000707,
+	0x00000744, 0x00000764, 0x00000787, 0x00000798,
+	0x000007ab, 0x000007bb, 0x000007e8, 0x00000803,
+	0x0000080e, 0x00000837, 0x00000865, 0x00000873,
+	0x00000883, 0x00000894, 0x000008b4, 0x000008cd,
+	0x000008ea, 0x00000918, 0x00000965,
+} // Size: 132 bytes
+
+const ruData string = "" + // Size: 2405 bytes
+	"\x02Сервис %[1]s требует значительных затрат. Поскольку мы не хотим хран" +
+	"ить личную информацию о вас, в этом сервисе нет ни аккаунтов, ни счетов" +
+	". Если вы хотите, чтобы мы продолжали свою работу, мы убедительно просим" +
+	" вас жертвовать не менее 5 долларов в месяц.\x0a\x09\x0aВы хотите пожерт" +
+	"вовать сейчас?\x02Сделать пожертвование\x02%[1]s это простой, быстрый и" +
+	" безопасный VPN-сервис от %[2]s. %[1]s не требует регистрации, не ведет " +
+	"журналы или каким-либо другим способом не отслеживает вас.\x0a\x09    " +
+	"\x0aНаш сервис существует только на пожертвования от таких пользователей" +
+	", как вы. Пожалуйста, поддержите нас тут %[3]s.\x0a\x09\x09\x0aИспользуя" +
+	" это приложение, вы соглашаетесь с Условиями использования, доступными п" +
+	"о адресу %[4]s. Этот сервис предоставляется как есть, без каких-либо га" +
+	"рантий и предназначен для людей, которые работают, чтобы сделать этот м" +
+	"ир лучше.\x0a\x0a\x0a%[1]v версия: %[5]s\x02О приложении\x02Ошибка иниц" +
+	"иализации\x02Не удалось найти агент проверки подлинности polkit. Пожалу" +
+	"йста, запустите один и попробуйте снова.\x02Отсутствует агент аутентифи" +
+	"кации\x02Не удается подключиться к %[1]s: %[2]v\x02Ошибка запуска VPN" +
+	"\x02Проверка статуса...\x02Включить\x02Выключить\x02Помощь...\x02Сделать" +
+	" пожертвование...\x02О приложении...\x02Выход\x02Маршрут трафика через" +
+	"\x02Используется шлюз %[1]s %[2]v\x02%[1]s вкл.\x02%[1]s выкл.\x02Отмени" +
+	"ть\x02Подключение к %[1]s\x02Остановка %[1]s\x02Переподключить\x02%[1]s" +
+	" блокировка интернета\x02Произошла ошибка при инициализации VPN: %[1]v"
+
+	// Total table size 15827 bytes (15KiB); checksum: 528C456
