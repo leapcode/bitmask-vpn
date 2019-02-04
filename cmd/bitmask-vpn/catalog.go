@@ -29,6 +29,7 @@ func init() {
 		"en_US": &dictionary{index: en_USIndex, data: en_USData},
 		"es":    &dictionary{index: esIndex, data: esData},
 		"es_ES": &dictionary{index: es_ESIndex, data: es_ESData},
+		"eu":    &dictionary{index: euIndex, data: euData},
 		"fr":    &dictionary{index: frIndex, data: frData},
 		"lt":    &dictionary{index: ltIndex, data: ltData},
 		"nl":    &dictionary{index: nlIndex, data: nlData},
@@ -73,35 +74,36 @@ var messageKeyToIndex = map[string]int{
 }
 
 var bnIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000fd, 0x00000110, 0x000002de,
-	0x000002f7, 0x0000031a, 0x00000366, 0x000003b4,
-	0x000003d2, 0x00000422, 0x00000469, 0x0000047d,
-	0x00000491, 0x000004aa, 0x000004c0, 0x000004dc,
-	0x000004e9, 0x00000529, 0x00000541, 0x00000554,
-	0x00000567, 0x00000577, 0x000005b7, 0x000005da,
-	0x000005e4, 0x0000062c, 0x0000065d,
+	0x00000000, 0x00000248, 0x0000025b, 0x0000074b,
+	0x00000764, 0x00000787, 0x0000087b, 0x000008c9,
+	0x0000091c, 0x0000096c, 0x000009b3, 0x000009c7,
+	0x000009db, 0x000009f4, 0x00000a0a, 0x00000a26,
+	0x00000a33, 0x00000a73, 0x00000ab8, 0x00000acb,
+	0x00000ade, 0x00000aee, 0x00000b2e, 0x00000b51,
+	0x00000b6d, 0x00000bb5, 0x00000c1a,
 } // Size: 132 bytes
 
-const bnData string = "" + // Size: 1629 bytes
-	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
-	"e personal information about you, there is no accounts or billing for th" +
-	"is service. But if you want the service to continue, donate at least $5 " +
-	"each month.\x0a\x09\x0aDo you want to donate now?\x02অনুদান\x02%[1]s is " +
-	"an easy, fast, and secure VPN service from %[2]s. %[1]s does not require" +
-	" a user account, keep logs, or track you in any way.\x0a\x09    \x0aThis" +
-	" service is paid for entirely by donations from users like you. Please d" +
-	"onate at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to t" +
-	"he Terms of Service available at %[4]s. This service is provide as-is, w" +
-	"ithout any warranty, and is intended for people who work to make the wor" +
-	"ld a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02সম্পর্কে\x02সূচনা " +
-	"ত্রুটি\x02Could not find a polkit authentication agent. Please run one" +
-	" and try again.\x02প্রমাণীকরণ এজেন্ট অনুপস্থিত\x02Can't connect to %[1]s" +
-	": %[2]v\x02ভিপিএন চালু করতে ত্রুটি হয়েছে\x02অবস্থা পরিক্ষা করা হচ্ছে ..." +
-	"\x02চালু কর\x02বন্ধ কর\x02সাহায্য...\x02অনুদান...\x02সম্পর্কে...\x02বন্ধ" +
-	"\x02ট্রাফিক এর মাধ্যমে যাবে\x02Use %[1]s %[2]v gateway\x02%[1]s চালু\x02" +
-	"%[1]s বন্ধ\x02বাতিল\x02%[1]s এর সাথে সংযুক্ত হচ্ছে\x02%[1]s বন্ধ হচ্ছে" +
-	"\x02Reconnect\x02%[1]s ইন্টারনেট প্রতিরোধ করছে\x02An error has ocurred i" +
-	"nitializing the VPN: %[1]v"
+const bnData string = "" + // Size: 3098 bytes
+	"\x02%[1]s সেবাটি চলার জন্য ব্যয়বহুল । কারণ আমরা আপনার সম্পর্কে ব্যক্তিগ" +
+	"ত তথ্য সঞ্চয় করতে চাই না, এই পরিষেবার জন্য কোন অ্যাকাউন্ট বা বিলিং নে" +
+	"ই । তবে সেবা চালিয়ে যেতে চাইলে প্রতি মাসে কমপক্ষে $5 দান করুন ।\x0a" +
+	"\x0aআপনি কি এখন দান করতে চান?\x02অনুদান\x02%[1]s %[2]s থেকে একটি সহজ, দ্" +
+	"রুত এবং নিরাপদ ভিপিএন পরিষেবা। %[1]s ব্যবহারকারীর অ্যাকাউন্টের প্রয়োজ" +
+	"ন নেই, লগ রাখে না, অথবা যে কোনও উপায়ে আপনাকে ট্র্যাক করে।\x0a\x09    " +
+	"\x0aআপনার মতো ব্যবহারকারীদের কাছ থেকে অনুদান নিয়ে এই সেবাটি সম্পূর্ণভাব" +
+	"ে প্রদান করা হয় । অনুগ্রহ করে %[3]s এ দান করুন ।\x0a\x09\x09\x0aএই অ্" +
+	"যাপ্লিকেশন ব্যবহার করে, আপনি %[4]s-এ উপলব্ধ পরিষেবার শর্তাবলীর সাথে সম" +
+	"্মত হন । এই পরিষেবাটি যেমন কোন ওয়ারেন্টি ছাড়াই প্রদান করা হয়, এবং য" +
+	"ারা বিশ্বকে একটি ভাল জায়গা করতে কাজ করে তাদের উদ্দেশ্যে ।\x0a\x0a\x0a" +
+	"%[1]v সংস্করণ: %[5]s\x02সম্পর্কে\x02সূচনা ত্রুটি\x02পোলকিট প্রমাণীকরণ এজ" +
+	"েন্ট খুঁজে পাওয়া যায়নি. অনুগ্রহ করে একটি চালান এবং আবার চেষ্টা করুন " +
+	"।\x02প্রমাণীকরণ এজেন্ট অনুপস্থিত\x02\u00a0%[1]s: %[2]v সাথে সংযোগ করতে" +
+	" পারবেন না\x02ভিপিএন চালু করতে ত্রুটি হয়েছে\x02অবস্থা পরিক্ষা করা হচ্ছে " +
+	"...\x02চালু কর\x02বন্ধ কর\x02সাহায্য...\x02অনুদান...\x02সম্পর্কে...\x02ব" +
+	"ন্ধ\x02ট্রাফিক এর মাধ্যমে যাবে\x02%[1]s %[2]v গেটওয়ে ব্যবহার করুন\x02" +
+	"%[1]s চালু\x02%[1]s বন্ধ\x02বাতিল\x02%[1]s এর সাথে সংযুক্ত হচ্ছে\x02%[1]" +
+	"s বন্ধ হচ্ছে\x02পুনঃসংযোগ\x02%[1]s ইন্টারনেট প্রতিরোধ করছে\x02VPN আরম্ভ " +
+	"করার সময় একটি ত্রুটি ঘটেছে: %[1]v"
 
 var en_GBIndex = []uint32{ // 27 elements
 	0x00000000, 0x000000ff, 0x00000106, 0x000002d4,
@@ -225,6 +227,39 @@ const es_ESData string = "" + // Size: 1226 bytes
 	"\x02%[1]s activada\x02%[1]s desactivada\x02Cancelar\x02Conectando a %[1]" +
 	"s\x02Deteniendo %[1]s\x02Reconnect\x02%[1]s bloqueando Internet\x02An er" +
 	"ror has ocurred initializing the VPN: %[1]v"
+
+var euIndex = []uint32{ // 27 elements
+	0x00000000, 0x000000fd, 0x0000010c, 0x0000033b,
+	0x00000346, 0x0000035b, 0x000003b6, 0x000003d6,
+	0x000003fa, 0x00000414, 0x0000042a, 0x00000433,
+	0x0000043f, 0x0000044b, 0x0000045d, 0x0000046b,
+	0x00000471, 0x00000493, 0x000004b0, 0x000004c1,
+	0x000004d5, 0x000004da, 0x000004f1, 0x00000501,
+	0x0000050e, 0x00000528, 0x00000557,
+} // Size: 132 bytes
+
+const euData string = "" + // Size: 1367 bytes
+	"\x02%[1]s zerbitzua mantentzea garestia da. Zure datu pertsonalak gorde " +
+	"nahi ez ditugulako, ez dago inolako konturik sortu beharrik edo tarifari" +
+	"k. Hala ere zerbitzua jarraitzea nahi baduzu, 5$eko dohaintza egin hilab" +
+	"etero.\x0a\x09\x0aDohaintza egin nahi duzu orain?\x02Dohaintza egin\x02%" +
+	"[1]s erraza, azkarra eta segurua den VPN zerbitzua da, %[2]s(e)k eskaini" +
+	"a. %[1]s(e)k ez du erabiltzaile kontu baten beharra, ez ditu datu pribat" +
+	"uak gordetzen eta zaitu inolako jarraipenik egiten.\x0a\x09    \x0aZerbi" +
+	"tzu zu bezalako erabiltzaileen dohaintzez mantentzen da. Dohaintza egin " +
+	"hemen, mesedez: %[3]s.\x0a\x09\x09\x0aAplikazio hau erabilita, %[4]s hel" +
+	"bideko zerbitzu-baldintzak onartzen dituzu. Zerbitzu hau eskuratu duzun " +
+	"bezala hornitzen da, inolako bermerik gabe, eta mundu hau leku hobe bat " +
+	"bihurtzeko lan egiten dutenentzat bideratuta dago.\x0a\x0a\x0a%[1]v bert" +
+	"sioa: %[5]s\x02Honi buruz\x02Errorea habiaraztean\x02Ezin da polkit aute" +
+	"ntifikazio agente bat bilatu. Mesedez, exekutatu bat eta berria saiatu." +
+	"\x02Autentifikazio agentea falta da\x02Ezin da %[1]s(e)ra konektatu: %[2" +
+	"]v\x02Errorea VPNa habiaraztean\x02Egiaztatzen egoera...\x02Aktibatu\x02" +
+	"Desaktibatu\x02Laguntza...\x02Dohaintza egin...\x02Honi buruz...\x02Irte" +
+	"n\x02Bideratu trafikoa honen bitartez:\x02Erabili %[1]s %[2]v atebidea" +
+	"\x02%[1]s aktibatuta\x02%[1]s desaktibatuta\x02Utzi\x02%[1]s(e)ra konekt" +
+	"atzen\x02%[1]s gelditzen\x02Birkonektatu\x02%[1]s internet blokeatzen" +
+	"\x02Errore bat gertatu da VPNa habiaraztean: %[1]v"
 
 var frIndex = []uint32{ // 27 elements
 	0x00000000, 0x00000154, 0x00000161, 0x000003a8,
@@ -392,4 +427,4 @@ const ruData string = "" + // Size: 2405 bytes
 	"ть\x02Подключение к %[1]s\x02Остановка %[1]s\x02Переподключить\x02%[1]s" +
 	" блокировка интернета\x02Произошла ошибка при инициализации VPN: %[1]v"
 
-	// Total table size 15827 bytes (15KiB); checksum: 528C456
+	// Total table size 18795 bytes (18KiB); checksum: 4D094C89

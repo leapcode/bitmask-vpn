@@ -7,7 +7,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "{ApplicationName} সেবাটি চলার জন্য ব্যয়বহুল । কারণ আমরা আপনার সম্পর্কে ব্যক্তিগত তথ্য সঞ্চয় করতে চাই না, এই পরিষেবার জন্য কোন অ্যাকাউন্ট বা বিলিং নেই । তবে সেবা চালিয়ে যেতে চাইলে প্রতি মাসে কমপক্ষে $5 দান করুন ।\n\nআপনি কি এখন দান করতে চান?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} {Provider} থেকে একটি সহজ, দ্রুত এবং নিরাপদ ভিপিএন পরিষেবা। {ApplicationName} ব্যবহারকারীর অ্যাকাউন্টের প্রয়োজন নেই, লগ রাখে না, অথবা যে কোনও উপায়ে আপনাকে ট্র্যাক করে।\n\t    \nআপনার মতো ব্যবহারকারীদের কাছ থেকে অনুদান নিয়ে এই সেবাটি সম্পূর্ণভাবে প্রদান করা হয় । অনুগ্রহ করে {DonateURL} এ দান করুন ।\n\t\t\nএই অ্যাপ্লিকেশন ব্যবহার করে, আপনি {TosURL}-এ উপলব্ধ পরিষেবার শর্তাবলীর সাথে সম্মত হন । এই পরিষেবাটি যেমন কোন ওয়ারেন্টি ছাড়াই প্রদান করা হয়, এবং যারা বিশ্বকে একটি ভাল জায়গা করতে কাজ করে তাদের উদ্দেশ্যে ।\n\n\n{ApplicationName_1} সংস্করণ: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -106,7 +106,7 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Could not find a polkit authentication agent. Please run one and try again."
+            "translation": "পোলকিট প্রমাণীকরণ এজেন্ট খুঁজে পাওয়া যায়নি. অনুগ্রহ করে একটি চালান এবং আবার চেষ্টা করুন ।"
         },
         {
             "id": "Missing authentication agent",
@@ -119,7 +119,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Can't connect to {ApplicationName}: {Err}",
+            "translation": " {ApplicationName}: {Err} সাথে সংযোগ করতে পারবেন না",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -187,7 +187,7 @@
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Use {ApplicationName} {City} gateway",
+            "translation": "{ApplicationName} {City} গেটওয়ে ব্যবহার করুন",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -275,7 +275,7 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Reconnect"
+            "translation": "পুনঃসংযোগ"
         },
         {
             "id": "{ApplicationName} blocking internet",
@@ -298,7 +298,7 @@
                 "An error has ocurred initializing the VPN: {Err}"
             ],
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "VPN আরম্ভ করার সময় একটি ত্রুটি ঘটেছে: {Err}",
             "placeholders": [
                 {
                     "id": "Err",
