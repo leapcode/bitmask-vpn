@@ -51,11 +51,19 @@ func main() {
 
 	selectGateway := flag.Bool("select-gateway", false, "Enable gateway selection")
 	disableAutostart := flag.Bool("disable-autostart", false, "Disable the autostart for the next run")
+	startVPN := flag.String("start-vpn", "", "Start the vpn in turned 'on' or 'off'")
 	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
 	flag.Parse()
 	if *versionFlag {
 		fmt.Println(version)
 		os.Exit(0)
+	}
+	if *startVPN != "" {
+		if *startVPN != "on" && *startVPN != "off" {
+			fmt.Println("-start-vpn should be 'on' or 'off'")
+			os.Exit(1)
+		}
+		conf.StartVPN = *startVPN == "on"
 	}
 	if *selectGateway {
 		conf.SelectGateway = *selectGateway

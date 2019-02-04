@@ -45,6 +45,7 @@ type Config struct {
 	}
 	SelectGateway     bool
 	DisableAustostart bool
+	StartVPN          bool
 	Version           string
 	Printer           *message.Printer
 }
@@ -65,16 +66,13 @@ func ParseConfig() *Config {
 
 	conf.SelectGateway = conf.file.SelectGateway
 	conf.DisableAustostart = conf.file.DisableAustostart
+	conf.StartVPN = !conf.file.UserStoppedVPN
 	return &conf
 }
 
 func (c *Config) setUserStoppedVPN(vpnStopped bool) error {
 	c.file.UserStoppedVPN = vpnStopped
 	return c.save()
-}
-
-func (c *Config) wasUserStopped() bool {
-	return c.file.UserStoppedVPN
 }
 
 func (c *Config) hasDonated() bool {

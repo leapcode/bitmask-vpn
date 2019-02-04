@@ -98,7 +98,7 @@ func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 }
 
 func maybeStartVPN(b bitmask.Bitmask, conf *Config) error {
-	if conf.wasUserStopped() {
+	if !conf.StartVPN {
 		return nil
 	}
 
