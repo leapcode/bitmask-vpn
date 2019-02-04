@@ -51,7 +51,12 @@ func initialize(conf *Config, bt *bmTray) {
 	go checkAndStartBitmask(b, notify, conf)
 	go listenSignals(b)
 
-	as := bitmask.NewAutostart(config.ApplicationName, getIconPath())
+	var as bitmask.Autostart
+	if conf.DisableAustostart {
+		as = &bitmask.DummyAutostart{}
+	} else {
+		as = bitmask.NewAutostart(config.ApplicationName, getIconPath())
+	}
 	err = as.Enable()
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
@@ -93,7 +98,7 @@ func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 }
 
 func maybeStartVPN(b bitmask.Bitmask, conf *Config) error {
-	if conf.UserStoppedVPN {
+	if conf.wasUserStopped() {
 		return nil
 	}
 

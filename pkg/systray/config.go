@@ -36,12 +36,17 @@ var (
 
 // Config holds the configuration of the systray
 type Config struct {
-	LastNotification time.Time
-	Donated          time.Time
-	SelectGateway    bool
-	UserStoppedVPN   bool
-	Version          string           `json:"-"`
-	Printer          *message.Printer `json:"-"`
+	file struct {
+		LastNotification  time.Time
+		Donated           time.Time
+		SelectGateway     bool
+		UserStoppedVPN    bool
+		DisableAustostart bool
+	}
+	SelectGateway     bool
+	DisableAustostart bool
+	Version           string
+	Printer           *message.Printer
 }
 
 // ParseConfig reads the configuration from the configuration file
@@ -56,30 +61,37 @@ func ParseConfig() *Config {
 	defer f.Close()
 
 	dec := json.NewDecoder(f)
-	err = dec.Decode(&conf)
+	err = dec.Decode(&conf.file)
+
+	conf.SelectGateway = conf.file.SelectGateway
+	conf.DisableAustostart = conf.file.DisableAustostart
 	return &conf
 }
 
 func (c *Config) setUserStoppedVPN(vpnStopped bool) error {
-	c.UserStoppedVPN = vpnStopped
+	c.file.UserStoppedVPN = vpnStopped
 	return c.save()
 }
 
+func (c *Config) wasUserStopped() bool {
+	return c.file.UserStoppedVPN
+}
+
 func (c *Config) hasDonated() bool {
-	return c.Donated.Add(oneMonth).After(time.Now())
+	return c.file.Donated.Add(oneMonth).After(time.Now())
 }
 
 func (c *Config) needsNotification() bool {
-	return !c.hasDonated() && c.LastNotification.Add(oneDay).Before(time.Now())
+	return !c.hasDonated() && c.file.LastNotification.Add(oneDay).Before(time.Now())
 }
 
 func (c *Config) setNotification() error {
-	c.LastNotification = time.Now()
+	c.file.LastNotification = time.Now()
 	return c.save()
 }
 
 func (c *Config) setDonated() error {
-	c.Donated = time.Now()
+	c.file.Donated = time.Now()
 	return c.save()
 }
 
@@ -91,5 +103,6 @@ func (c *Config) save() error {
 	defer f.Close()
 
 	enc := json.NewEncoder(f)
-	return enc.Encode(c)
+	enc.SetIndent("", "  ")
+	return enc.Encode(c.file)
 }

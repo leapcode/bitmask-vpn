@@ -40,5 +40,5 @@ func Init(printer *message.Printer) (Bitmask, error) {
 
 // NewAutostart creates a handler for the autostart of your platform
 func NewAutostart(appName string, iconPath string) Autostart {
-	return &dummyAutostart{}
+	return &DummyAutostart{}
 }

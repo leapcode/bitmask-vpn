@@ -49,12 +49,19 @@ func main() {
 
 	conf := systray.ParseConfig()
 
-	flag.BoolVar(&conf.SelectGateway, "select-gateway", false, "Enable gateway selection")
+	selectGateway := flag.Bool("select-gateway", false, "Enable gateway selection")
+	disableAutostart := flag.Bool("disable-autostart", false, "Disable the autostart for the next run")
 	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
 	flag.Parse()
 	if *versionFlag {
 		fmt.Println(version)
 		os.Exit(0)
+	}
+	if *selectGateway {
+		conf.SelectGateway = *selectGateway
+	}
+	if *disableAutostart {
+		conf.DisableAustostart = *disableAutostart
 	}
 
 	conf.Version = version

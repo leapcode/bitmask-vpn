@@ -21,12 +21,12 @@ type Autostart interface {
 	Enable() error
 }
 
-type dummyAutostart struct{}
+type DummyAutostart struct{}
 
-func (a *dummyAutostart) Disable() error {
+func (a *DummyAutostart) Disable() error {
 	return nil
 }
 
-func (a *dummyAutostart) Enable() error {
+func (a *DummyAutostart) Enable() error {
 	return nil
 }
