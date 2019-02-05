@@ -34,6 +34,7 @@ const (
 var (
 	platformOpenvpnFlags = []string{
 		"--script-security", "1",
+		"--block-outside-dns",
 	}
 )
 
