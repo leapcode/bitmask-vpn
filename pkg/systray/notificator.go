@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+	donationText = `The %s service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 	
 Do you want to donate now?`
 	aboutText = `%[1]s is an easy, fast, and secure VPN service from %[2]s. %[1]s does not require a user account, keep logs, or track you in any way.
