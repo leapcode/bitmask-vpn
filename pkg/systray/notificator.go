@@ -35,7 +35,7 @@ Do you want to donate now?`
 	    
 This service is paid for entirely by donations from users like you. Please donate at %[3]s.
 		
-By using this application, you agree to the Terms of Service available at %[4]s. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.
+By using this application, you agree to the Terms of Service available at %[4]s. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.
 
 
 %[1]v version: %[5]s`
