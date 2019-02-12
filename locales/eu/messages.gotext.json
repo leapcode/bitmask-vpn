@@ -4,10 +4,10 @@
         {
             "id": [
                 "donationText",
-                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
-            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "{ApplicationName} zerbitzua mantentzea garestia da. Zure datu pertsonalak gorde nahi ez ditugulako, ez dago inolako konturik sortu beharrik edo tarifarik. Hala ere zerbitzua jarraitzea nahi baduzu, 5$eko dohaintza egin hilabetero.\n\t\nDohaintza egin nahi duzu orain?",
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "placeholders": [
                 {
                     "id": "ApplicationName",

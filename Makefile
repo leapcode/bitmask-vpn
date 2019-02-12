@@ -41,11 +41,11 @@ lang_list := $(subst $(space),,$(foreach lang,$(LANGS),$(lang),))
 locales: $(foreach lang,$(LANGS),get_$(lang)) cmd/bitmask-vpn/catalog.go
 
 generate_locales:
-	gotext extract ./pkg/systray ./pkg/bitmask
+	gotext update ./pkg/systray ./pkg/bitmask
 	make -C tools/transifex
 
 locales/%/out.gotext.json: pkg/systray/systray.go pkg/systray/notificator.go pkg/bitmask/standalone.go pkg/bitmask/bitmaskd.go
-	gotext extract -lang=$* ./pkg/systray ./pkg/bitmask
+	gotext update -lang=$* ./pkg/systray ./pkg/bitmask
 
 cmd/bitmask-vpn/catalog.go: $(foreach lang,$(LANGS),locales/$(lang)/messages.gotext.json)
 	gotext update -lang=$(lang_list) -out cmd/bitmask-vpn/catalog.go ./pkg/systray ./pkg/bitmask

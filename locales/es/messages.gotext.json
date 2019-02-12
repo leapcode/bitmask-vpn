@@ -4,10 +4,10 @@
         {
             "id": [
                 "donationText",
-                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
-            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "El servicio {ApplicationName} es caro de mantener. Como no queremos guardar ninguna información personal tuya, no hay cuentas ni servicio de facturación. Si quieres que este servicio continúe, dona al menos $5 cada mes.\n\t\n¿Quieres donar ahora?",
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "El servicio {ApplicationName} es costoso de mantener. Debido a que no queremos almacenar información personal sobre los usuarios, no hay cuentas ni sistema de facturación en este servicio. Pero si deseas que el servicio continúe, puedes donar al menos 5 USD al mes.\n\t\n¿Quieres realizar la donación ahora?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido, y seguro de {Provider}. {ApplicationName} no requiere una cuenta de usuario, no mantiene registros, ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga en su totalidad por donaciones de usuarios como tú. Por favor dona ingresando a {DonateURL}.\n\t\t\nAl usar ésta aplicación, acuerdas con los Términos del Servicio disponibles en {TosURL}. Este servicio es provisto como viene, sin garantía alguna, y está destinado a gente que trabaja para hacer del mundo un lugar mejor.\n\n\nVersión de {ApplicationName_1}: {Version}",
+            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido, y seguro de {Provider}. {ApplicationName} no requiere una cuenta de usuario, no mantiene registros, ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga en su totalidad por donaciones de usuarios como tú. Por favor dona en {DonateURL}.\n\t\t\nAl usar esta aplicación, aceptas los Términos del Servicio disponibles en {TosURL}. Este servicio se provee tal cual, sin garantía alguna, y está destinado a gente que trabaja para hacer del mundo un lugar mejor.\n\n\nVersión de {ApplicationName_1}: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -245,7 +245,7 @@
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Connectando a {ApplicationName}",
+            "translation": "Conectando a {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -260,7 +260,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Desconnectando de {ApplicationName}",
+            "translation": "Desconectando de {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -275,7 +275,7 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Reconnect"
+            "translation": "Volver a conectar"
         },
         {
             "id": "{ApplicationName} blocking internet",

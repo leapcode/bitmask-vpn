@@ -4,10 +4,10 @@
         {
             "id": [
                 "donationText",
-                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
+                "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
-            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there is no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "Сервис {ApplicationName} требует значительных затрат. Поскольку мы не хотим хранить личную информацию о вас, в этом сервисе нет ни аккаунтов, ни счетов. Если вы хотите, чтобы мы продолжали свою работу, мы убедительно просим вас жертвовать не менее 5 долларов в месяц.\n\t\nВы хотите пожертвовать сейчас?",
+            "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "Служба {ApplicationName} платная. В связи с тем, что мы не хотим сохранять персональную информацию о Вас, здесь нет регистрации или выставления счёта по этой службе. Но, если Вам хочется сохранить работу этой службы, жертвуйте по крайней мере 5$ каждый месяц. Вы хотите пожертвовать в данный момент?",
             "placeholders": [
                 {
                     "id": "ApplicationName",

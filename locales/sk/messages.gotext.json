@@ -1,5 +1,5 @@
 {
-    "language": "lt",
+    "language": "sk",
     "messages": [
         {
             "id": [
@@ -7,7 +7,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "{ApplicationName} paslaugą brangiai kainuoja išlaikyti. Kadangi nenorime laikyti jūsų asmeninės informacijos, todėl nėra jokių paskyrų ar apmokestinimo už šią paslaugą. Tačiau, jei norite, kad paslauga būtų teikiama ir toliau, paaukokite kiekvieną mėnesį bent po $5 (JAV dolerius).\n\t\nAr norite paaukoti dabar?",
+            "translation": "Služby aplikácie {ApplicationName} sú nákladné na správu. Pretože o vás nechceme zbierať osobné informácie, v tejto službe neexistujú žiadne účty ani poplatky. Ale ak chcete aby naša služba mohla fungovať aj v budúcnosti, prosíme vás, aby ste prispievali aspoň sumou 5 $ mesačne.\n\nChceli by ste prispieť hneď teraz?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -22,7 +22,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "Paaukoti"
+            "translation": "Prispieť"
         },
         {
             "id": [
@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} yra lengva naudoti, greita ir saugi VPN paslauga iš {Provider}. {ApplicationName} nereikalauja naudotojo paskyros, nesaugo žurnalų ir jokiu kitu būdu jūsų neseka.\n\t    \nŠi paslauga yra apmokama tik iš, tokių pačių naudotojų kaip jūs, paaukojimų. Prašome paaukokite, adresu {DonateURL}.\n\t\t\nNaudodami šią programą, sutinkate su Naudojimosi Sąlygomis, kurias galite rasti adresu {TosURL}. Ši paslauga yra teikiama esamu pavidalu, be jokių garantijų ir yra skirta žmonėms, kurie dirba, kad padarytų pasaulį geresnį.\n\n\n{ApplicationName_1} versija: {Version}",
+            "translation": "Aplikácia {ApplicationName} predstavuje jednoduché, rýchle a bezpečné VPN od poskytovateľa {Provider}. {ApplicationName} nevyžaduje používateľský účet a nijakým spôsobom vás nesleduje.\n\nTúto službu financujú príspevky od používateľov, ako ste vy. Prosím, prispejte na {DonateURL}.\n\nPoužívaním tejto aplikácie vyjadrujete súhlas s podmienkami používania služby dostupnými na {TosURL}. Táto služba je poskytovaná v stave ako je, bez akejkoľvek záruky a je určená pre ľudí, ktorý chcú zo sveta urobiť lepšie miesto.\n\n\n{ApplicationName_1}, verzia: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -93,12 +93,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "Apie"
+            "translation": "O programe"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "Inicijavimo klaida"
+            "translation": "Chyba pri inicializácii"
         },
         {
             "id": [
@@ -106,12 +106,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Nepavyko rasti politikos rinkinio tapatybės nustatymo agento. Paleiskite jį ir bandykite dar kartą."
+            "translation": "Nebolo možné nájsť overovacieho agenta polkit. Prosím, spustite ho a skúste to znova."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "Trūksta tapatybės nustatymo agento"
+            "translation": "Chýba agent overenia"
         },
         {
             "id": [
@@ -119,7 +119,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Nepavyksta prisijungti prie {ApplicationName}: {Err}",
+            "translation": "Nebolo možné pripojiť sa k aplikácii {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -142,52 +142,52 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Klaida paleidžiant VPN"
+            "translation": "Chyba pri spustení VPN"
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Tikrinama būsena..."
+            "translation": "Kontrola stavu..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Įjungti"
+            "translation": "Zapnúť"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Išjungti"
+            "translation": "Vypnúť"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "Pagalba..."
+            "translation": "Pomocník..."
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "Paaukoti..."
+            "translation": "Prispieť..."
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "Apie..."
+            "translation": "O programe..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Išeiti"
+            "translation": "Ukončiť"
         },
         {
             "id": "Route traffic through",
             "message": "Route traffic through",
-            "translation": "Siųsti duomenų srautą per"
+            "translation": "Smerovať prenos cez"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Naudoti {ApplicationName} {City} tinklų sietuvą",
+            "translation": "Použiť prístup {ApplicationName} {City}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -210,7 +210,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} įjungta",
+            "translation": "Aplikácia {ApplicationName} je zapnutá",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -225,7 +225,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} išjungta",
+            "translation": "Aplikácia {ApplicationName} je vypnutá",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -240,12 +240,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "Atsisakyti"
+            "translation": "Zrušiť"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Jungiamasi prie {ApplicationName}",
+            "translation": "Pripájanie sa k aplikácii {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -260,7 +260,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Stabdoma {ApplicationName}",
+            "translation": "Zastavujem aplikáciu {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -275,12 +275,12 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Prisijungti iš naujo"
+            "translation": "Znova pripojiť"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} blokuoja internetą",
+            "translation": "Aplikácia {ApplicationName} blokuje internet",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -298,7 +298,7 @@
                 "An error has ocurred initializing the VPN: {Err}"
             ],
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "Inicijuojant VPN, įvyko klaida: {Err}",
+            "translation": "Pri spustení VPN nastala chyba: {Err}",
             "placeholders": [
                 {
                     "id": "Err",
