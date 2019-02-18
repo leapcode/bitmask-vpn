@@ -18,5 +18,6 @@ require (
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 	github.com/oxtoacart/bpool v0.0.0-20150712133111-4e1c5567d7c2
 	github.com/skratchdot/open-golang v0.0.0-20190104022628-a2dfa6d0dab6
-	golang.org/x/text v0.3.0 // indirect
+	golang.org/x/text v0.3.0
+	golang.org/x/tools v0.0.0-20190206221403-44bcb96178d3 // indirect
 )
