@@ -194,6 +194,8 @@ func (bt *bmTray) addGateways() {
 				bt.activeGateway = &gateway
 
 				bt.bm.UseGateway(gateway.name)
+				log.Printf("Manual connection to %s gateway\n", gateway.name)
+				bt.bm.StartVPN(config.Provider)
 			}
 		}(gateway)
 	}
