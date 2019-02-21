@@ -41,7 +41,7 @@ By using this application, you agree to the Terms of Service available at %[4]s.
 %[1]v version: %[5]s`
 	missingAuthAgent = `Could not find a polkit authentication agent. Please run one and try again.`
 	errorStartingVPN = `Can't connect to %s: %v`
-	svgFileName      = "riseupvpn.svg"
+	svgFileName      = "icon.svg"
 )
 
 type notificator struct {
@@ -64,7 +64,7 @@ func (n *notificator) donations() {
 				YesNo()
 			n.conf.setNotification()
 			if letsDonate {
-				open.Run("https://riseup.net/vpn/donate")
+				open.Run(config.DonateURL)
 				n.conf.setDonated()
 			}
 		}
@@ -112,7 +112,7 @@ func getIconPath() string {
 	}
 
 	if runtime.GOOS == "windows" {
-		icoPath := `C:\Program Files\` + config.ApplicationName + `\riseupvpn.ico`
+		icoPath := `C:\Program Files\` + config.ApplicationName + `\icon.ico`
 		if fileExist(icoPath) {
 			return icoPath
 		}
@@ -137,7 +137,7 @@ func getIconPath() string {
 
 	snapPath := os.Getenv("SNAP")
 	if snapPath != "" {
-		return snapPath + "/snap/gui/riseupvpn.svg"
+		return snapPath + "/snap/gui/icon.svg"
 	}
 
 	wd, _ := os.Getwd()
@@ -146,12 +146,12 @@ func getIconPath() string {
 		return svgPath
 	}
 
-	svgPath = "/usr/share/" + config.BinaryName + "/riseupvpn.svg"
+	svgPath = "/usr/share/" + config.BinaryName + "/icon.svg"
 	if fileExist(svgPath) {
 		return svgPath
 	}
 
-	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-systray", svgFileName)
+	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-vpn", svgFileName)
 	if fileExist(svgPath) {
 		return svgPath
 	}
