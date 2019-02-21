@@ -169,7 +169,7 @@ func (bt *bmTray) addGateways() {
 		return
 	}
 
-	mGateway := systray.AddMenuItem(bt.conf.Printer.Sprintf("Route traffic through"), "")
+	mGateway := systray.AddMenuItem(bt.conf.Printer.Sprintf("Route traffic through:"), "")
 	mGateway.Disable()
 	for i, city := range gatewayList {
 		menuItem := systray.AddMenuItem(city, bt.conf.Printer.Sprintf("Use %s %v gateway", config.ApplicationName, city))
