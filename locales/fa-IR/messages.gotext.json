@@ -1,5 +1,5 @@
 {
-    "language": "bn",
+    "language": "fa-IR",
     "messages": [
         {
             "id": [
@@ -7,7 +7,7 @@
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "{ApplicationName} পরিষেবা চালানো বেশ ব্যয়বহুল। কারণ আমরা আপনার ব্যক্তিগত তথ্য সংরক্ষণ করতে চাই না, এই পরিষেবাটির জন্য কোনো অ্যাকাউন্ট বা বিলিং নেই। কিন্তু আপনি যদি পরিষেবা চালিয়ে যেতে চান তবে প্রতি মাসে কমপক্ষে $ 5 দান করুন।\n\t\n আপনি কি এখন দান করতে চান?",
+            "translation": "سرویس {ApplicationName} برای اجرا گران است. به این دلیل که ما نمی‌خواهیم اطلاعات شخصی شما را ذخیره کنیم، حساب کاربری یا صورت حساب برای این سرویس وجود ندارد. ولی اگر مایل هستید که این سرویس ادامه داشته باشد، حداقل ماهی ۵ دلار به ما کمک کنید\n\t\nماید هستید که الان کمک کنید؟",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -22,7 +22,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "অনুদান"
+            "translation": "حمایت از ما"
         },
         {
             "id": [
@@ -30,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} ভিপিএন পরিষেবা {Provider} থেকে সহজ, দ্রুত এবং নিরাপদ । {ApplicationName} ব্যবহারকারীর কোন অ্যাকাউন্টের প্রয়োজন নেই। লগ রাখা অথবা যে কোনও উপায়ে আপনাকে ট্র্যাক করা হয় না। \n\nএই পরিষেবাটি সম্পূর্ণরূপে আপনার মতো ব্যবহারকারীদের অনুদানে পরিচালিত হয়। অনুগ্রহ করে দান করুন {DonateURL}\n\n এই অ্যাপ্লিকেশন ব্যবহার করে, আপনি {TosURL} এ উপলব্ধ পরিষেবার শর্তাদির সাথে সম্মত হয়েছেন। এই পরিষেবাটি যেমনটি প্রদান করা হয়েছে, তাছাড়া কোনও ওয়্যারেন্টি নেই এবং এটি এমন লোকদের জন্য তৈরি করা হয়েছে যারা পৃথিবীকে আরও সুন্দর করার জন্য কাজ করছে।\n\n\n {ApplicationName_1} সংস্করণ: {Version}",
+            "translation": "نرم‌افزار {ApplicationName} یک سرویس VPN اسان، سریع و امن از {Provider} است. نرم‌افزار {ApplicationName} نیاز به حساب کاربری ندارد، لاگ فعالیت کاربر یا فعالیت‌های شما را ذخیره نمی‌کند\n\t\nهزینه‌های این سرویس به شکل کامل از کمک‌های مالی کاربرانی مانند شما تأمین می‌شود. لطفاً از طریق آدرس {DonateURL} به ما کمک مالی کنید.\n\t\t\nبا استفاده از این نرم‌افزار، شما با شرایط خدمات که در آدرس {TosURL} در دسترس است موافقت می‌کنید. یان سرویس به شکلی که هست و بدون هیچگونه گارانتی ارائه می‌گردد، و برای افرادی است که برای اینکه دنیا جای بهتری باشد تلاش می‌کنند\n\n\n{ApplicationName_1} نسخه: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -93,12 +93,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "সম্পর্কে"
+            "translation": "‫‫درباره‬"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "সূচনা ত্রুটি"
+            "translation": "خطا در راه اندازی"
         },
         {
             "id": [
@@ -106,12 +106,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "পোলকিট প্রমাণীকরণ এজেন্ট খুঁজে পাওয়া যায়নি. অনুগ্রহ করে একটি চালান এবং আবার চেষ্টা করুন ।"
+            "translation": "عامل تأیید هویت polkit در دسترس نیست. لطفاً یکی را اجرا کنید و مجدد امتحان کنید."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "প্রমাণীকরণ এজেন্ট অনুপস্থিত"
+            "translation": "عامل تأیید هویت پیدا نشد"
         },
         {
             "id": [
@@ -119,7 +119,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": " {ApplicationName}: {Err} সাথে সংযোগ করতে পারবেন না",
+            "translation": "امکان اتصال به {ApplicationName} وجود ندارد: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -142,52 +142,52 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "ভিপিএন চালু করতে ত্রুটি হয়েছে"
+            "translation": "خطا در راه اندازی VPN"
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "অবস্থা পরিক্ষা করা হচ্ছে ..."
+            "translation": "چک کردن وضعیت..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "চালু কর"
+            "translation": "روشن کردن"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "বন্ধ কর"
+            "translation": "خاموش کردن"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "সাহায্য..."
+            "translation": "راهنما"
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "অনুদান..."
+            "translation": "حمایت از ما"
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "সম্পর্কে..."
+            "translation": "‫‫درباره‬"
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "বন্ধ"
+            "translation": "خروج"
         },
         {
             "id": "Route traffic through:",
             "message": "Route traffic through:",
-            "translation": "ট্রাফিক যে মাধ্যমে চলাচল করবে:"
+            "translation": "مسیریابی ترافیک از طریق:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "{ApplicationName} {City} গেটওয়ে ব্যবহার করুন",
+            "translation": "از دروازه {ApplicationName} {City} استفاده کن",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -210,7 +210,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} চালু",
+            "translation": "{ApplicationName} روشن",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -225,7 +225,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} বন্ধ",
+            "translation": "{ApplicationName} خاموش",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -240,12 +240,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "বাতিল"
+            "translation": "انصراف"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "{ApplicationName} এর সাথে সংযুক্ত হচ্ছে",
+            "translation": "اتصال به {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -260,7 +260,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "{ApplicationName} বন্ধ হচ্ছে",
+            "translation": "متوقف کردن {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -275,12 +275,12 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "পুনঃসংযোগ"
+            "translation": "اتصال مجدد"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} ইন্টারনেট প্রতিরোধ করছে",
+            "translation": "{ApplicationName} مسدود کردن اینترنت",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -298,7 +298,7 @@
                 "An error has ocurred initializing the VPN: {Err}"
             ],
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "VPN আরম্ভ করার সময় একটি ত্রুটি ঘটেছে: {Err}",
+            "translation": "خطایی در راه‌اندازی VPN روی داد: {Err}",
             "placeholders": [
                 {
                     "id": "Err",

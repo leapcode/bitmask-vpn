@@ -3,29 +3,11 @@
     "messages": [
         {
             "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "An error has ocurred initializing the VPN: {Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
-                }
-            ]
-        },
-        {
-            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "Correr el servicio {ApplicationName} es caro. Porque no queremos almacenar información personal acerca tuyo, no hay cuentas o tarifas por este servicio. Pero si quieres que el mismo continúe, dona al menos USD 5 por mes.\n\t\n¿Quieres donar ahora?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -45,10 +27,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido y seguro de {Provider}. {ApplicationName} no requiere una cuenta de usuario, no mantiene bitácoras, o te rastrea de cualquier manera.\n\t    \nEl costo de este servicio está cubierto por completo por donaciones de usuarios como tú. Por favor dona a {DonateURL}.\n\t\t\nAl usar esta aplicación, estás de acuerdo con los Términos del Servicio disponibles en {TosURL}. Este servicio se provee tal cual, sin ninguna garantía, y está apuntado a personas que trabajan para hacer del mundo un mejor lugar.\n\n\nVersión de {ApplicationName_1}: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -198,9 +180,9 @@
             "translation": "Salir"
         },
         {
-            "id": "Route traffic through",
-            "message": "Route traffic through",
-            "translation": "Enrutar tráfico a través de"
+            "id": "Route traffic through:",
+            "message": "Route traffic through:",
+            "translation": "Enrutar tráfico a través de:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
@@ -293,7 +275,7 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Reconnect"
+            "translation": "Reconectar"
         },
         {
             "id": "{ApplicationName} blocking internet",
@@ -307,6 +289,24 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
+                }
+            ]
+        },
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Ha ocurrido un error inicializando la VPN: {Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
                 }
             ]
         }

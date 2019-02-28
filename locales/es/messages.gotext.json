@@ -3,24 +3,6 @@
     "messages": [
         {
             "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "Ha ocurrido un error inicializando la VPN: {Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
-                }
-            ]
-        },
-        {
-            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
@@ -45,10 +27,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} es un servicio de VPN fácil, rápido, y seguro de {Provider}. {ApplicationName} no requiere una cuenta de usuario, no mantiene registros, ni te rastrea de ninguna manera.\n\t    \nEste servicio se paga en su totalidad por donaciones de usuarios como tú. Por favor dona ingresando a {DonateURL}.\n\t\t\nAl usar esta aplicación, acuerdas con los Términos del Servicio disponibles en {TosURL}. Este servicio se provee como viene, sin garantía alguna, y está destinado a gente que trabaja para hacer del mundo un lugar mejor.\n\n\nVersión de {ApplicationName_1}: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -160,7 +142,7 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Error arrancando la VPN"
+            "translation": "Error al iniciar la VPN"
         },
         {
             "id": "Checking status...",
@@ -198,14 +180,14 @@
             "translation": "Cerrar"
         },
         {
-            "id": "Route traffic through",
-            "message": "Route traffic through",
-            "translation": "Salir a través de"
+            "id": "Route traffic through:",
+            "message": "Route traffic through:",
+            "translation": "Enrutar tráfico a través de:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Usa la salida de {ApplicationName} por {City}",
+            "translation": "Usa la salida de {ApplicationName} de {City}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -307,6 +289,24 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
+                }
+            ]
+        },
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Ha ocurrido un error al iniciar la VPN: {Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
                 }
             ]
         }

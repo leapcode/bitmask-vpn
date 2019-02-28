@@ -3,29 +3,11 @@
     "messages": [
         {
             "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "An error has ocurred initializing the VPN: {Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
-                }
-            ]
-        },
-        {
-            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
+            "translation": "Il servizio {ApplicationName} è costoso da mantenere. Poichè non vogliamo immagazzinare informazioni personali su di te non ci sono account ne tariffe per l'utilizzo del servizio. Se vuoi puoi però aiutarci a mantenere il servizio in funzione donando dai $5 in su ogni mese.",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -45,10 +27,10 @@
         {
             "id": [
                 "aboutText",
-                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
+                "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
-            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provide as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
+            "translation": "{ApplicationName} è un servizio di VPN facile, veloce e sicuro di {Provider}. {ApplicationName} non richiede un account utente, non mantiene i log e non ti traccia in nessuna maniera.\n\nIl servizio è interamente mantenuto da donazioni di utenti come te. Per favore dona qui: {DonateURL}.\n\nUtilizzando questa applicazione, approvi i Termini di Servizio disponibili qui: {TosURL}. Questo servizio è fornito così com'è, senza nessuna garanzia, ed è destinato alle persone che lavorano per rendere il mondo un posto migliore.\n\n\n{ApplicationName_1} versione: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -124,7 +106,7 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Could not find a polkit authentication agent. Please run one and try again."
+            "translation": "Non è stato possibile trovare un agente di autenticazione polkit. Si prega di avviarne uno e riprovare."
         },
         {
             "id": "Missing authentication agent",
@@ -137,7 +119,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Can't connect to {ApplicationName}: {Err}",
+            "translation": "Impossibile connettersi ad {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -198,14 +180,14 @@
             "translation": "Esci"
         },
         {
-            "id": "Route traffic through",
-            "message": "Route traffic through",
-            "translation": "Instrada il traffico attraverso"
+            "id": "Route traffic through:",
+            "message": "Route traffic through:",
+            "translation": "Inoltra il traffico attraverso:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Use {ApplicationName} {City} gateway",
+            "translation": "Usa il gateway {ApplicationName} {City}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -228,7 +210,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} on",
+            "translation": "{ApplicationName} accesa",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -243,7 +225,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} off",
+            "translation": "{ApplicationName} spenta",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -298,7 +280,7 @@
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} blocking internet",
+            "translation": "{ApplicationName} sta bloccando l'accesso ad internet",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -307,6 +289,24 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
+                }
+            ]
+        },
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Si è verificato un errore nell'inizializzazione della VPN: {Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
                 }
             ]
         }
