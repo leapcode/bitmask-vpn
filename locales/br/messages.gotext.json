@@ -6,6 +6,7 @@
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
+            "key": "",
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "translation": "Servij {ApplicationName} a zo ker-ruz da lakaat da vont en-dro. Dre ma ne fell ket deomp mirout titour personel ebet war ho penn, n'eus kont ebet fakturadur ebet evit ar servij-mañ. Met ma fellfe deoc'h e talc'hfe da vont war-raok ar raktres-mañ, roit deomp $5 da vihanañ pep miz.\n\t\nHa fellout a ra deoc'h reiñ arc'hant bremañ?",
             "placeholders": [
@@ -21,6 +22,7 @@
         },
         {
             "id": "Donate",
+            "key": "",
             "message": "Donate",
             "translation": "Reiñ arc'hant"
         },
@@ -29,6 +31,7 @@
                 "aboutText",
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
+            "key": "",
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translation": "{ApplicationName} a zo ur servij VPN aes, fonnus, ha sur anezhañ graet gant {Provider}. {ApplicationName} na c'houlenn ket ur gont implijer, ne vir ket kennebeut war kavlec'hioù, ha ne heul ket ac'hanoc'h e nep doare.\n\t    \nAr servij-mañ a zo paeet en un doare hollek gant implijerien egiztoc’h. Roit arc'hant mar plij amañ: {DonateURL}.\n\t\t\nEn ur implijout an arload-mañ, ec'h asantit d'an Termenoù Implij hegerz amañ: {TosURL}. Ar servij-mañ a vez pourvezet evel m'emañ, hep tamm gwarantiz ebet, ha graet evit an dud hag a labour evit gwellaat hon flanedenn.\n\n{ApplicationName_1} stumm: {Version}",
             "placeholders": [
@@ -92,11 +95,13 @@
         },
         {
             "id": "About",
+            "key": "",
             "message": "About",
             "translation": "Diwar-benn"
         },
         {
             "id": "Initialization error",
+            "key": "",
             "message": "Initialization error",
             "translation": "Fazi deraouekadur"
         },
@@ -105,11 +110,13 @@
                 "missingAuthAgent",
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
+            "key": "",
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "N'heller ket kavout ur gwazour anaout polkit. Lakait unan da vont ha klaskit en-dro mar plij."
         },
         {
             "id": "Missing authentication agent",
+            "key": "",
             "message": "Missing authentication agent",
             "translation": "Mankout a ra ur gwazour anaout"
         },
@@ -118,6 +125,7 @@
                 "errorStartingVPN",
                 "Can't connect to {ApplicationName}: {Err}"
             ],
+            "key": "",
             "message": "Can't connect to {ApplicationName}: {Err}",
             "translation": "N'heller ket kevreañ ouzh {ApplicationName}: {Err}",
             "placeholders": [
@@ -141,51 +149,61 @@
         },
         {
             "id": "Error starting VPN",
+            "key": "",
             "message": "Error starting VPN",
             "translation": "Fazi en ur loc'hañ ar VPN"
         },
         {
             "id": "Checking status...",
+            "key": "",
             "message": "Checking status...",
             "translation": "O wiriañ ar statudoù..."
         },
         {
             "id": "Turn on",
+            "key": "",
             "message": "Turn on",
             "translation": "Enaouiñ"
         },
         {
             "id": "Turn off",
+            "key": "",
             "message": "Turn off",
             "translation": "Lazhañ"
         },
         {
             "id": "Help...",
+            "key": "",
             "message": "Help...",
             "translation": "Skoazell..."
         },
         {
             "id": "Donate...",
+            "key": "",
             "message": "Donate...",
             "translation": "Reiñ arc'hant..."
         },
         {
             "id": "About...",
+            "key": "",
             "message": "About...",
             "translation": "Diwar-benn..."
         },
         {
             "id": "Quit",
+            "key": "",
             "message": "Quit",
             "translation": "Kuitaat"
         },
         {
             "id": "Route traffic through:",
+            "key": "",
             "message": "Route traffic through:",
             "translation": "Tremenerezh hent dre:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
+            "key": "",
             "message": "Use {ApplicationName} {City} gateway",
             "translation": "Implijout {ApplicationName} {City} treuzell",
             "placeholders": [
@@ -209,6 +227,7 @@
         },
         {
             "id": "{ApplicationName} on",
+            "key": "",
             "message": "{ApplicationName} on",
             "translation": "{ApplicationName} enaouet",
             "placeholders": [
@@ -224,6 +243,7 @@
         },
         {
             "id": "{ApplicationName} off",
+            "key": "",
             "message": "{ApplicationName} off",
             "translation": "{ApplicationName} lazhet",
             "placeholders": [
@@ -239,11 +259,13 @@
         },
         {
             "id": "Cancel",
+            "key": "",
             "message": "Cancel",
             "translation": "Nullañ"
         },
         {
             "id": "Connecting to {ApplicationName}",
+            "key": "",
             "message": "Connecting to {ApplicationName}",
             "translation": "O kevreañ ouzh {ApplicationName}",
             "placeholders": [
@@ -259,6 +281,7 @@
         },
         {
             "id": "Stopping {ApplicationName}",
+            "key": "",
             "message": "Stopping {ApplicationName}",
             "translation": "O paouez {ApplicationName}",
             "placeholders": [
@@ -274,11 +297,13 @@
         },
         {
             "id": "Reconnect",
+            "key": "",
             "message": "Reconnect",
             "translation": "Adkevreañ"
         },
         {
             "id": "{ApplicationName} blocking internet",
+            "key": "",
             "message": "{ApplicationName} blocking internet",
             "translation": "{ApplicationName} a stank ar genrouedad",
             "placeholders": [
@@ -297,6 +322,7 @@
                 "errorMsg",
                 "An error has ocurred initializing the VPN: {Err}"
             ],
+            "key": "",
             "message": "An error has ocurred initializing the VPN: {Err}",
             "translation": "Ur fazi a zo c'hoarvezet en ur zeraouiñ ar VPN: {Err}",
             "placeholders": [

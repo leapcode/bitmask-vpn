@@ -6,6 +6,7 @@
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
+            "key": "",
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "translation": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "translatorComment": "Copied from source.",
@@ -18,21 +19,21 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Donate",
+            "key": "",
             "message": "Donate",
             "translation": "Donate",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": [
                 "aboutText",
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
+            "key": "",
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translation": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translatorComment": "Copied from source.",
@@ -93,45 +94,45 @@
                     "argNum": 5,
                     "expr": "version"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "About",
+            "key": "",
             "message": "About",
             "translation": "About",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Initialization error",
+            "key": "",
             "message": "Initialization error",
             "translation": "Initialization error",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": [
                 "missingAuthAgent",
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
+            "key": "",
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Missing authentication agent",
+            "key": "",
             "message": "Missing authentication agent",
             "translation": "Missing authentication agent",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": [
                 "errorStartingVPN",
                 "Can't connect to {ApplicationName}: {Err}"
             ],
+            "key": "",
             "message": "Can't connect to {ApplicationName}: {Err}",
             "translation": "Can't connect to {ApplicationName}: {Err}",
             "translatorComment": "Copied from source.",
@@ -152,66 +153,70 @@
                     "argNum": 2,
                     "expr": "err"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Error starting VPN",
+            "key": "",
             "message": "Error starting VPN",
             "translation": "Error starting VPN",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Checking status...",
+            "key": "",
             "message": "Checking status...",
             "translation": "Checking status..."
         },
         {
             "id": "Turn on",
+            "key": "",
             "message": "Turn on",
             "translation": "Turn on"
         },
         {
             "id": "Turn off",
+            "key": "",
             "message": "Turn off",
             "translation": "Turn off"
         },
         {
             "id": "Help...",
+            "key": "",
             "message": "Help...",
             "translation": "Help...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Donate...",
+            "key": "",
             "message": "Donate...",
             "translation": "Donate...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "About...",
+            "key": "",
             "message": "About...",
             "translation": "About...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Quit",
+            "key": "",
             "message": "Quit",
             "translation": "Quit"
         },
         {
             "id": "Route traffic through:",
+            "key": "",
             "message": "Route traffic through:",
             "translation": "Route traffic through:",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
+            "key": "",
             "message": "Use {ApplicationName} {City} gateway",
             "translation": "Use {ApplicationName} {City} gateway",
             "translatorComment": "Copied from source.",
@@ -232,11 +237,11 @@
                     "argNum": 2,
                     "expr": "city"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "{ApplicationName} on",
+            "key": "",
             "message": "{ApplicationName} on",
             "translation": "{ApplicationName} on",
             "translatorComment": "Copied from source.",
@@ -249,11 +254,11 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "{ApplicationName} off",
+            "key": "",
             "message": "{ApplicationName} off",
             "translation": "{ApplicationName} off",
             "translatorComment": "Copied from source.",
@@ -266,16 +271,17 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Cancel",
+            "key": "",
             "message": "Cancel",
             "translation": "Cancel"
         },
         {
             "id": "Connecting to {ApplicationName}",
+            "key": "",
             "message": "Connecting to {ApplicationName}",
             "translation": "Connecting to {ApplicationName}",
             "translatorComment": "Copied from source.",
@@ -288,11 +294,11 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Stopping {ApplicationName}",
+            "key": "",
             "message": "Stopping {ApplicationName}",
             "translation": "Stopping {ApplicationName}",
             "translatorComment": "Copied from source.",
@@ -305,18 +311,18 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": "Reconnect",
+            "key": "",
             "message": "Reconnect",
             "translation": "Reconnect",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
+            "translatorComment": "Copied from source."
         },
         {
             "id": "{ApplicationName} blocking internet",
+            "key": "",
             "message": "{ApplicationName} blocking internet",
             "translation": "{ApplicationName} blocking internet",
             "translatorComment": "Copied from source.",
@@ -329,14 +335,14 @@
                     "argNum": 1,
                     "expr": "config.ApplicationName"
                 }
-            ],
-            "fuzzy": true
+            ]
         },
         {
             "id": [
                 "errorMsg",
                 "An error has ocurred initializing the VPN: {Err}"
             ],
+            "key": "",
             "message": "An error has ocurred initializing the VPN: {Err}",
             "translation": "An error has ocurred initializing the VPN: {Err}",
             "translatorComment": "Copied from source.",
@@ -349,8 +355,7 @@
                     "argNum": 1,
                     "expr": "err"
                 }
-            ],
-            "fuzzy": true
+            ]
         }
     ]
 }

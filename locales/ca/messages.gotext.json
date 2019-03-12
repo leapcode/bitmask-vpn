@@ -1,5 +1,5 @@
 {
-    "language": "fa-IR",
+    "language": "ca",
     "messages": [
         {
             "id": [
@@ -8,7 +8,7 @@
             ],
             "key": "",
             "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "خطایی در راه‌اندازی VPN روی داد: {Err}",
+            "translation": "S'ha produït un error en inicialitzar el VPN: {Err}",
             "placeholders": [
                 {
                     "id": "Err",
@@ -27,7 +27,7 @@
             ],
             "key": "",
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "سرویس {ApplicationName} برای اجرا گران است. به این دلیل که ما نمی‌خواهیم اطلاعات شخصی شما را ذخیره کنیم، حساب کاربری یا صورت حساب برای این سرویس وجود ندارد. ولی اگر مایل هستید که این سرویس ادامه داشته باشد، حداقل ماهی ۵ دلار به ما کمک کنید\n\t\nماید هستید که الان کمک کنید؟",
+            "translation": "El servei {ApplicationName} és car de mantenir. Com que no volem emmagatzemar informació personal dels usuaris, no hi ha comptes ni sistema de facturació en aquest servei. Però si voleu que el servei continuï, podeu donar almenys 5 USD al mes.\n\t\nVoleu fer una donació ara?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -43,7 +43,7 @@
             "id": "Donate",
             "key": "",
             "message": "Donate",
-            "translation": "حمایت از ما"
+            "translation": "Donacions"
         },
         {
             "id": [
@@ -52,7 +52,7 @@
             ],
             "key": "",
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "نرم‌افزار {ApplicationName} یک سرویس VPN اسان، سریع و امن از {Provider} است. نرم‌افزار {ApplicationName} نیاز به حساب کاربری ندارد، لاگ فعالیت کاربر یا فعالیت‌های شما را ذخیره نمی‌کند\n\t\nهزینه‌های این سرویس به شکل کامل از کمک‌های مالی کاربرانی مانند شما تأمین می‌شود. لطفاً از طریق آدرس {DonateURL} به ما کمک مالی کنید.\n\t\t\nبا استفاده از این نرم‌افزار، شما با شرایط خدمات که در آدرس {TosURL} در دسترس است موافقت می‌کنید. یان سرویس به شکلی که هست و بدون هیچگونه گارانتی ارائه می‌گردد، و برای افرادی است که برای اینکه دنیا جای بهتری باشد تلاش می‌کنند\n\n\n{ApplicationName_1} نسخه: {Version}",
+            "translation": "{ApplicationName} és un servei de VPN fàcil, ràpid i segur de {Provider}. {ApplicationName} no requereix cap compte d'usuari, no manté registres, ni us fa cap mena de seguiment.\t Aquest servei es paga completament mitjançant donacions d'usuaris com vós. Si us plau, feu una donació fent un ingrès a {DonateURL}.\t\tSi utilitzeu aquesta aplicació, esteu acceptant els Termes del Servei disponibles a {TosURL}. Aquest servei es proveeix tal com és, sense cap garantia, i està destinat a persones que treballen per fer del món un lloc millor. \tVersió de {ApplicationName_1}: {Version} ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -116,13 +116,13 @@
             "id": "About",
             "key": "",
             "message": "About",
-            "translation": "‫‫درباره‬"
+            "translation": "Quant a"
         },
         {
             "id": "Initialization error",
             "key": "",
             "message": "Initialization error",
-            "translation": "خطا در راه اندازی"
+            "translation": "Error d'inicialització"
         },
         {
             "id": [
@@ -131,13 +131,13 @@
             ],
             "key": "",
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "عامل تأیید هویت polkit در دسترس نیست. لطفاً یکی را اجرا کنید و مجدد امتحان کنید."
+            "translation": "No s'ha trobat cap agent d'autenticació de polkit. Executeu-ne un i torneu-ho a provar."
         },
         {
             "id": "Missing authentication agent",
             "key": "",
             "message": "Missing authentication agent",
-            "translation": "عامل تأیید هویت پیدا نشد"
+            "translation": "Falta un agent d'autenticació"
         },
         {
             "id": [
@@ -146,7 +146,7 @@
             ],
             "key": "",
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "امکان اتصال به {ApplicationName} وجود ندارد: {Err}",
+            "translation": "No s'ha pogut connectar a {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -170,61 +170,61 @@
             "id": "Error starting VPN",
             "key": "",
             "message": "Error starting VPN",
-            "translation": "خطا در راه اندازی VPN"
+            "translation": "Error en iniciar la VPN"
         },
         {
             "id": "Checking status...",
             "key": "",
             "message": "Checking status...",
-            "translation": "چک کردن وضعیت..."
+            "translation": "S'està comprovant l'estat..."
         },
         {
             "id": "Turn on",
             "key": "",
             "message": "Turn on",
-            "translation": "روشن کردن"
+            "translation": "Activa"
         },
         {
             "id": "Turn off",
             "key": "",
             "message": "Turn off",
-            "translation": "خاموش کردن"
+            "translation": "Desactiva"
         },
         {
             "id": "Help...",
             "key": "",
             "message": "Help...",
-            "translation": "راهنما"
+            "translation": "Ajuda..."
         },
         {
             "id": "Donate...",
             "key": "",
             "message": "Donate...",
-            "translation": "حمایت از ما"
+            "translation": "Donacions..."
         },
         {
             "id": "About...",
             "key": "",
             "message": "About...",
-            "translation": "‫‫درباره‬"
+            "translation": "Quant a..."
         },
         {
             "id": "Quit",
             "key": "",
             "message": "Quit",
-            "translation": "خروج"
+            "translation": "Abandona"
         },
         {
             "id": "Route traffic through:",
             "key": "",
             "message": "Route traffic through:",
-            "translation": "مسیریابی ترافیک از طریق:"
+            "translation": "Encamina el trànsit per:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "key": "",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "از دروازه {ApplicationName} {City} استفاده کن",
+            "translation": "Utilitza la pasarel·la de {ApplicationName} de {City} ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -248,7 +248,7 @@
             "id": "{ApplicationName} on",
             "key": "",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} روشن",
+            "translation": "{ApplicationName} està connectada",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -264,7 +264,7 @@
             "id": "{ApplicationName} off",
             "key": "",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} خاموش",
+            "translation": "{ApplicationName} està desconnectada",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -280,13 +280,13 @@
             "id": "Cancel",
             "key": "",
             "message": "Cancel",
-            "translation": "انصراف"
+            "translation": "Cancel·la"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "key": "",
             "message": "Connecting to {ApplicationName}",
-            "translation": "اتصال به {ApplicationName}",
+            "translation": "Connectant a {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -302,7 +302,7 @@
             "id": "Stopping {ApplicationName}",
             "key": "",
             "message": "Stopping {ApplicationName}",
-            "translation": "متوقف کردن {ApplicationName}",
+            "translation": "Aturant {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -318,13 +318,13 @@
             "id": "Reconnect",
             "key": "",
             "message": "Reconnect",
-            "translation": "اتصال مجدد"
+            "translation": "Torna a connectar"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "key": "",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} مسدود کردن اینترنت",
+            "translation": "{ApplicationName} està bloquejant internet",
             "placeholders": [
                 {
                     "id": "ApplicationName",

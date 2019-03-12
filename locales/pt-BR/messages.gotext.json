@@ -3,9 +3,29 @@
     "messages": [
         {
             "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "key": "",
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Um erro ocorreu na inicialização da VPN: {Err} ",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ]
+        },
+        {
+            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
+            "key": "",
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "translation": "O serviço {ApplicationName} tem um custo para ser mantido. Como não queremos coletar as suas informações pessoais, não temos contas de usuário e não cobramos por este serviço. Mas se você quiser que este serviço continue, faça uma doação de ao menos $5 dólares por mês.\n\t\nVocê quer fazer uma doação agora? ",
             "placeholders": [
@@ -21,6 +41,7 @@
         },
         {
             "id": "Donate",
+            "key": "",
             "message": "Donate",
             "translation": "Fazer uma doação"
         },
@@ -29,6 +50,7 @@
                 "aboutText",
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
+            "key": "",
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translation": " {ApplicationName} é um serviço de VPN fácil, rápido e seguro mantido por {Provider}. {ApplicationName} não precisa de uma conta de usuário, não mantém logs, e não te rastreia de forma alguma. \n\t\nO serviço é financiado inteiramente através de doações de pessoas como você. Por favor faça uma doação acessando {DonateURL}\n\t\t\nAo usar este aplicativo, você concorda com os Termos de Serviço disponíveis em {TosURL}. Este serviço é provido \"no estado\", sem nenhuma garantia, e é direcionado a pessoas que trabalham para tornar o mundo um lugar melhor.\n\n\n{ApplicationName_1} versão: {Version} ",
             "placeholders": [
@@ -92,11 +114,13 @@
         },
         {
             "id": "About",
+            "key": "",
             "message": "About",
             "translation": "Sobre"
         },
         {
             "id": "Initialization error",
+            "key": "",
             "message": "Initialization error",
             "translation": "Erro na inicialização"
         },
@@ -105,11 +129,13 @@
                 "missingAuthAgent",
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
+            "key": "",
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "Não foi possível encontrar um agente de autenticação polkit. Por favor, execute um agente e tente novamente."
         },
         {
             "id": "Missing authentication agent",
+            "key": "",
             "message": "Missing authentication agent",
             "translation": "Um agente de autenticação está faltando"
         },
@@ -118,6 +144,7 @@
                 "errorStartingVPN",
                 "Can't connect to {ApplicationName}: {Err}"
             ],
+            "key": "",
             "message": "Can't connect to {ApplicationName}: {Err}",
             "translation": "Não é possível conectar a {ApplicationName}: {Err}",
             "placeholders": [
@@ -141,51 +168,61 @@
         },
         {
             "id": "Error starting VPN",
+            "key": "",
             "message": "Error starting VPN",
             "translation": "Erro ao iniciar a VPN"
         },
         {
             "id": "Checking status...",
+            "key": "",
             "message": "Checking status...",
             "translation": "Verificando estado..."
         },
         {
             "id": "Turn on",
+            "key": "",
             "message": "Turn on",
             "translation": "Ligar"
         },
         {
             "id": "Turn off",
+            "key": "",
             "message": "Turn off",
             "translation": "Desligar"
         },
         {
             "id": "Help...",
+            "key": "",
             "message": "Help...",
             "translation": "Ajuda..."
         },
         {
             "id": "Donate...",
+            "key": "",
             "message": "Donate...",
             "translation": "Fazer uma doação..."
         },
         {
             "id": "About...",
+            "key": "",
             "message": "About...",
             "translation": "Sobre..."
         },
         {
             "id": "Quit",
+            "key": "",
             "message": "Quit",
             "translation": "Sair"
         },
         {
             "id": "Route traffic through:",
+            "key": "",
             "message": "Route traffic through:",
             "translation": "Rotear o tráfego por:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
+            "key": "",
             "message": "Use {ApplicationName} {City} gateway",
             "translation": "Usar o gateway {City} de {ApplicationName}",
             "placeholders": [
@@ -209,6 +246,7 @@
         },
         {
             "id": "{ApplicationName} on",
+            "key": "",
             "message": "{ApplicationName} on",
             "translation": "{ApplicationName} está ligada",
             "placeholders": [
@@ -224,6 +262,7 @@
         },
         {
             "id": "{ApplicationName} off",
+            "key": "",
             "message": "{ApplicationName} off",
             "translation": "{ApplicationName} está desligada",
             "placeholders": [
@@ -239,11 +278,13 @@
         },
         {
             "id": "Cancel",
+            "key": "",
             "message": "Cancel",
             "translation": "Cancelar"
         },
         {
             "id": "Connecting to {ApplicationName}",
+            "key": "",
             "message": "Connecting to {ApplicationName}",
             "translation": "Conectando a {ApplicationName}",
             "placeholders": [
@@ -259,6 +300,7 @@
         },
         {
             "id": "Stopping {ApplicationName}",
+            "key": "",
             "message": "Stopping {ApplicationName}",
             "translation": "Parando {ApplicationName}",
             "placeholders": [
@@ -274,11 +316,13 @@
         },
         {
             "id": "Reconnect",
+            "key": "",
             "message": "Reconnect",
             "translation": "Reconectar"
         },
         {
             "id": "{ApplicationName} blocking internet",
+            "key": "",
             "message": "{ApplicationName} blocking internet",
             "translation": "{ApplicationName} está bloqueando a Internet",
             "placeholders": [
@@ -289,24 +333,6 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
-                }
-            ]
-        },
-        {
-            "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "Um erro ocorreu na inicialização da VPN: {Err} ",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
                 }
             ]
         }

@@ -3,9 +3,29 @@
     "messages": [
         {
             "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "key": "",
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "初始化 VPN 時發生錯誤：{Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ]
+        },
+        {
+            "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
+            "key": "",
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
             "translation": "{ApplicationName} 服務的運作成本高昂。因為我們不希望儲存您的個人資料，本服務不要求任何帳戶或付款資訊。但如果您希望本服務能繼續運作，請每個月至少捐獻 5 元。\n\t\n您想要現在就捐獻嗎？",
             "placeholders": [
@@ -21,6 +41,7 @@
         },
         {
             "id": "Donate",
+            "key": "",
             "message": "Donate",
             "translation": "捐獻"
         },
@@ -29,6 +50,7 @@
                 "aboutText",
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
+            "key": "",
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
             "translation": "由 {Provider} 提供的 {ApplicationName}，是一項簡易、快速且安全的 VPN 服務。{ApplicationName} 不需要使用者帳戶、不保存紀錄，也不會用任何方式追蹤您。\n\t    \n本服務的資金完全來自像您一樣的使用者捐獻。請在 {DonateURL} 捐獻。\n\t\t\n使用本程式，代表您同意 {TosURL} 上的服務條款。本服務是以現狀提供，無任何擔保，宗旨是為那些努力讓世界變得更美好的人們提供服務。\n\n\n{ApplicationName_1} 版本: {Version}",
             "placeholders": [
@@ -92,11 +114,13 @@
         },
         {
             "id": "About",
+            "key": "",
             "message": "About",
             "translation": "關於"
         },
         {
             "id": "Initialization error",
+            "key": "",
             "message": "Initialization error",
             "translation": "初始化錯誤"
         },
@@ -105,11 +129,13 @@
                 "missingAuthAgent",
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
+            "key": "",
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
             "translation": "Could not find a polkit authentication agent. Please run one and try again."
         },
         {
             "id": "Missing authentication agent",
+            "key": "",
             "message": "Missing authentication agent",
             "translation": "缺少驗證代理程式"
         },
@@ -118,6 +144,7 @@
                 "errorStartingVPN",
                 "Can't connect to {ApplicationName}: {Err}"
             ],
+            "key": "",
             "message": "Can't connect to {ApplicationName}: {Err}",
             "translation": "無法連線到 {ApplicationName}：{Err}",
             "placeholders": [
@@ -141,51 +168,61 @@
         },
         {
             "id": "Error starting VPN",
+            "key": "",
             "message": "Error starting VPN",
             "translation": "啟動 VPN 時發生錯誤"
         },
         {
             "id": "Checking status...",
+            "key": "",
             "message": "Checking status...",
             "translation": "正在檢查狀態..."
         },
         {
             "id": "Turn on",
+            "key": "",
             "message": "Turn on",
             "translation": "開啟"
         },
         {
             "id": "Turn off",
+            "key": "",
             "message": "Turn off",
             "translation": "關閉"
         },
         {
             "id": "Help...",
+            "key": "",
             "message": "Help...",
             "translation": "說明..."
         },
         {
             "id": "Donate...",
+            "key": "",
             "message": "Donate...",
             "translation": "捐獻..."
         },
         {
             "id": "About...",
+            "key": "",
             "message": "About...",
             "translation": "關於..."
         },
         {
             "id": "Quit",
+            "key": "",
             "message": "Quit",
             "translation": "退出"
         },
         {
             "id": "Route traffic through:",
+            "key": "",
             "message": "Route traffic through:",
             "translation": "Route traffic through:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
+            "key": "",
             "message": "Use {ApplicationName} {City} gateway",
             "translation": "使用 {ApplicationName} {City} 閘道",
             "placeholders": [
@@ -209,6 +246,7 @@
         },
         {
             "id": "{ApplicationName} on",
+            "key": "",
             "message": "{ApplicationName} on",
             "translation": "{ApplicationName} 開啟",
             "placeholders": [
@@ -224,6 +262,7 @@
         },
         {
             "id": "{ApplicationName} off",
+            "key": "",
             "message": "{ApplicationName} off",
             "translation": "{ApplicationName} 關閉",
             "placeholders": [
@@ -239,11 +278,13 @@
         },
         {
             "id": "Cancel",
+            "key": "",
             "message": "Cancel",
             "translation": "取消"
         },
         {
             "id": "Connecting to {ApplicationName}",
+            "key": "",
             "message": "Connecting to {ApplicationName}",
             "translation": "正在連線到 {ApplicationName}",
             "placeholders": [
@@ -259,6 +300,7 @@
         },
         {
             "id": "Stopping {ApplicationName}",
+            "key": "",
             "message": "Stopping {ApplicationName}",
             "translation": "正在停止 {ApplicationName}",
             "placeholders": [
@@ -274,11 +316,13 @@
         },
         {
             "id": "Reconnect",
+            "key": "",
             "message": "Reconnect",
             "translation": "重新連線"
         },
         {
             "id": "{ApplicationName} blocking internet",
+            "key": "",
             "message": "{ApplicationName} blocking internet",
             "translation": "{ApplicationName} blocking internet",
             "placeholders": [
@@ -289,24 +333,6 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
-                }
-            ]
-        },
-        {
-            "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "初始化 VPN 時發生錯誤：{Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
                 }
             ]
         }
