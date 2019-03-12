@@ -78,17 +78,19 @@ In that case bitmask-systray assumes that you already have bitmaskd running. Run
 i18n
 ----
 
-Generate `locales/*` files:
+When a string has being modified you need to regenerate the locales:
 ```
-  $ make generate_locales LANGS="sjn tlh"
+  $ make generate_locales
 ```
 
-Edit the `locales/*/out.gotext.json` translations into `locales/*/messages.gotext.json`.
+To fetch the translations from transifex and rebuild the catalog.go (API\_TOKEN is the transifex API token):
+```
+  $ API_TOKEN='xxxxxxxxxxx' make locales
+```
+There is some bug on gotext and the catalog.go generated doesn't have a package, you will need to edit
+cmd/bitmask-vpn/catalog.go and to have a `package main` at the beginning of the file.
 
-To rebuild the locales:
-```
-  $ make locales
-```
+If you want to add a new language create the folder `locales/$lang` before running `make locales`.
 
 
 Report an issue
