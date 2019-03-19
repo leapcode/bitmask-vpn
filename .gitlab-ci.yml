@@ -90,7 +90,6 @@ deb:
     - make build_deb
   tags:
     - linux
-    - deb
   artifacts:
     name: debian_$CI_COMMIT_REF_NAME
     paths:
