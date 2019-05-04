@@ -39,11 +39,13 @@ func init() {
 		"it":    &dictionary{index: itIndex, data: itData},
 		"lt":    &dictionary{index: ltIndex, data: ltData},
 		"nl":    &dictionary{index: nlIndex, data: nlData},
+		"pl":    &dictionary{index: plIndex, data: plData},
 		"pt_BR": &dictionary{index: pt_BRIndex, data: pt_BRData},
 		"ro":    &dictionary{index: roIndex, data: roData},
 		"ru":    &dictionary{index: ruIndex, data: ruData},
 		"sk":    &dictionary{index: skIndex, data: skData},
 		"sv":    &dictionary{index: svIndex, data: svData},
+		"zh":    &dictionary{index: zhIndex, data: zhData},
 		"zh_TW": &dictionary{index: zh_TWIndex, data: zh_TWData},
 	}
 	fallback := language.MustParse("en-US")
@@ -402,16 +404,16 @@ const fa_IRData string = "" + // Size: 2176 bytes
 	"کردن اینترنت\x02خطایی در راه\u200cاندازی VPN روی داد: %[1]v"
 
 var frIndex = []uint32{ // 27 elements
-	0x00000000, 0x00000154, 0x00000161, 0x000003a7,
-	0x000003b1, 0x000003cb, 0x0000042d, 0x00000459,
-	0x00000486, 0x000004a2, 0x000004c0, 0x000004c8,
-	0x000004d4, 0x000004dc, 0x000004ec, 0x000004f9,
-	0x00000501, 0x0000051c, 0x00000540, 0x00000552,
-	0x00000568, 0x00000570, 0x00000583, 0x00000593,
-	0x000005a2, 0x000005b8, 0x000005fc,
+	0x00000000, 0x00000154, 0x00000161, 0x000003a6,
+	0x000003b0, 0x000003ca, 0x0000042c, 0x00000458,
+	0x00000485, 0x000004a1, 0x000004bf, 0x000004c7,
+	0x000004d3, 0x000004db, 0x000004eb, 0x000004f8,
+	0x00000500, 0x0000051b, 0x0000053f, 0x00000551,
+	0x00000567, 0x0000056f, 0x00000582, 0x00000592,
+	0x000005a1, 0x000005b7, 0x000005fb,
 } // Size: 132 bytes
 
-const frData string = "" + // Size: 1532 bytes
+const frData string = "" + // Size: 1531 bytes
 	"\x02L’exploitation du service %[1]s coûte cher. Dans la mesure où ne nou" +
 	"s voulons enregistrer aucun renseignement personnel à votre sujet, il n’" +
 	"y ni compte ni facturation pour ce service. Mais si vous souhaitez toute" +
@@ -423,8 +425,8 @@ const frData string = "" + // Size: 1532 bytes
 	"rvice est entièrement financé par les dons d’utilisateurs comme vous. Ve" +
 	"uillez faire un don sur %[3]s.\x0a\x09\x09\x0aEn utilisant cette applica" +
 	"tion, vous acceptez les conditions générales d’utilisation qui se trouve" +
-	"nt sur %[4]s. Ce service est fourni tel quel, sans aucune garantie, et s" +
-	"’adresse aux personnes qui œuvrent à rendre le monde meilleur.\x0a\x0a" +
+	"nt sur %[4]s. Ce service est fourni tel quel, sans aucune garantie et s’" +
+	"adresse aux personnes qui œuvrent à rendre le monde meilleur.\x0a\x0a" +
 	"\x0a%[1]v version \u00a0: %[5]s\x02À propos\x02Erreur d’initialisation" +
 	"\x02Impossible de trouver un agent d’authentification polkit. Veuillez e" +
 	"n exécuter un et ressayer.\x02L’agent d’authentification est manquant" +
@@ -437,33 +439,31 @@ const frData string = "" + // Size: 1532 bytes
 	"lors de l’\x0ainitialisation du RPV\u00a0: %[1]v"
 
 var heIndex = []uint32{ // 27 elements
-	0x00000000, 0x000000fe, 0x00000107, 0x000002d6,
-	0x000002e1, 0x000002f7, 0x00000343, 0x0000035e,
-	0x0000038b, 0x000003a7, 0x000003bc, 0x000003c5,
-	0x000003cc, 0x000003d8, 0x000003e4, 0x000003f2,
-	0x000003f7, 0x00000413, 0x00000433, 0x00000442,
-	0x00000451, 0x00000458, 0x0000046e, 0x00000482,
-	0x00000496, 0x000004b4, 0x000004e4,
+	0x00000000, 0x00000144, 0x0000014d, 0x000003d3,
+	0x000003de, 0x000003f4, 0x00000456, 0x00000471,
+	0x0000049e, 0x000004ba, 0x000004cf, 0x000004d8,
+	0x000004df, 0x000004eb, 0x000004f7, 0x00000505,
+	0x0000050a, 0x00000526, 0x00000546, 0x00000555,
+	0x00000564, 0x0000056b, 0x00000581, 0x00000595,
+	0x000005a9, 0x000005c7, 0x000005f7,
 } // Size: 132 bytes
 
-const heData string = "" + // Size: 1252 bytes
-	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
-	"e personal information about you, there are no accounts or billing for t" +
-	"his service. But if you want the service to continue, donate at least $5" +
-	" each month.\x0a\x09\x0aDo you want to donate now?\x02תרום\x02%[1]s is a" +
-	"n easy, fast, and secure VPN service from %[2]s. %[1]s does not require " +
-	"a user account, keep logs, or track you in any way.\x0a\x09    \x0aThis " +
-	"service is paid for entirely by donations from users like you. Please do" +
-	"nate at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to th" +
-	"e Terms of Service available at %[4]s. This service is provided as-is, w" +
-	"ithout any warranty, and is intended for people who work to make the wor" +
-	"ld a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02אודות\x02שגיאת התח" +
-	"לה\x02Could not find a polkit authentication agent. Please run one and " +
-	"try again.\x02סוכן אימות חסר\x02לא ניתן להתחבר אל %[1]s: %[2]v\x02שגיאה " +
-	"בהתחלת VPN\x02בודק מעמד...\x02הפעל\x02כבה\x02עזרה...\x02תרום...\x02אודו" +
-	"ת...\x02צא\x02נתב תעבורה דרך:\x02השתמש בשער %[1]s %[2]v\x02%[1]s פועל" +
-	"\x02%[1]s כבוי\x02בטל\x02מתחבר אל %[1]s\x02עוצר את %[1]s\x02התחבר מחדש" +
-	"\x02%[1]s חוסם אינטרנט\x02שגיאה התרחשה בהתחלת VPN: %[1]v"
+const heData string = "" + // Size: 1527 bytes
+	"\x02השירות %[1]s הוא יקר לתפעול. מאחר שאיננו רוצים לאחסן מידע אישי לגביך" +
+	", אין חשבונות או חיוב עבור שירות זה. אבל אם אתה רוצה שהשירות ימשיך, תרום" +
+	" לפחות $5 כל חודש.\x0a\x09\x0aהאם אתה רוצה לתרום עכשיו?\x02תרום\x02%[1]s" +
+	" הוא שירות VPN קל, מהיר ומאובטח מאת %[2]s. %[1]s אינו דורש חשבון משתמש, " +
+	"אינו שומר יומנים או עוקב אחריך בדרך כלשהי.\x0a\x09    \x0aשירות זה משול" +
+	"ם לגמרי ע\x22י תרומות ממשתמשים כמוך. אנא תרום בכתובת %[3]s.\x0a\x09\x09" +
+	"\x0aע\x22י שימוש ביישום זה, אתה מסכים אל תנאיי השירות הזמינים בכתובת %[4" +
+	"]s. שירות זה מסופק כפי שהוא, ללא אחריות כלשהי, והוא מיועד לאנשים שפועלים" +
+	" להפוך את העולם למקום טוב יותר.\x0a\x0a\x0a%[1]v גרסה: %[5]s\x02אודות" +
+	"\x02שגיאת התחלה\x02לא היה ניתן למצוא סוכן אימות Polkit. אנא הרץ אחד ונסה" +
+	" שוב.\x02סוכן אימות חסר\x02לא ניתן להתחבר אל %[1]s: %[2]v\x02שגיאה בהתחל" +
+	"ת VPN\x02בודק מעמד...\x02הפעל\x02כבה\x02עזרה...\x02תרום...\x02אודות..." +
+	"\x02צא\x02נתב תעבורה דרך:\x02השתמש בשער %[1]s %[2]v\x02%[1]s פועל\x02%[1" +
+	"]s כבוי\x02בטל\x02מתחבר אל %[1]s\x02עוצר את %[1]s\x02התחבר מחדש\x02%[1]s" +
+	" חוסם אינטרנט\x02שגיאה התרחשה בהתחלת VPN: %[1]v"
 
 var itIndex = []uint32{ // 27 elements
 	0x00000000, 0x0000010a, 0x0000010f, 0x00000310,
@@ -563,6 +563,38 @@ const nlData string = "" + // Size: 1335 bytes
 	"\x02%[1]s aan het stoppen\x02Opnieuw verbinden\x02%[1]s blokkeert het in" +
 	"ternet\x02Er heeft zich een fout voorgedaan bij het initialiseren van de" +
 	" VPN: %[1]v"
+
+var plIndex = []uint32{ // 27 elements
+	0x00000000, 0x00000112, 0x0000011c, 0x00000331,
+	0x00000340, 0x00000353, 0x000003a6, 0x000003c3,
+	0x000003e9, 0x00000408, 0x0000041c, 0x00000424,
+	0x0000042d, 0x00000436, 0x00000442, 0x00000451,
+	0x00000459, 0x00000479, 0x00000491, 0x000004a2,
+	0x000004b4, 0x000004bb, 0x000004ce, 0x000004e2,
+	0x000004f4, 0x0000050b, 0x0000053c,
+} // Size: 132 bytes
+
+const plData string = "" + // Size: 1340 bytes
+	"\x02Utrzymywanie %[1]s jest kosztowne. Ponieważ nie chcemy przechowywać " +
+	"danych osobowych o Tobie, nie ma kont ani rozliczeń za tę usługę. Ale je" +
+	"śli chcesz, aby usługa była kontynuowana, przekazuj co najmniej 5 USD m" +
+	"iesięcznie.\x0aCzy chcesz teraz przekazać darowiznę?\x0a\x02Darowizna" +
+	"\x02%[1]s to łatwy, szybki i bezpieczny VPN od %[2]s. %[1]s nie wymaga k" +
+	"onta użytkownika, nie przechowuje logów, czy śledzi Cię w jakikolwiek sp" +
+	"osób.\x0a\x09\x0aTa usługa jest opłacana w całości przez darowizny od ta" +
+	"kich użytkowników jak Ty. Przekaż darowiznę na %[3]s.\x0a\x09\x09\x0aUży" +
+	"wając tej aplikacji zgadzasz się na Zasady Użytkowania dostępne na %[4]s" +
+	". Usługa jest dostępna taka-jaka-jest bez żadnej gwarancji i jest zamier" +
+	"zona dla ludzi, którzy pracują nad tym, aby świat stał się lepszym miejs" +
+	"cem.\x0a\x0a\x0a%[1]v wersja: %[5]s\x02O programie...\x02Błąd inicjowani" +
+	"a\x02Nie znaleziono agenta autentykacji polkit. Proszę uruchom go i spró" +
+	"buj ponownie.\x02Brakujący agent autoryzacji\x02Nie można połączyć z %[1" +
+	"]s: %[2]v\x02Błąd przy uruchamianiu VPN'a\x02Sprawdzanie statusu\x02Włąc" +
+	"z\x02Wyłącz\x02Pomoc...\x02Wesprzyj...\x02O programie...\x02Zamknij\x02P" +
+	"rzekieruj ruch sieciowy przez:\x02Użyj bramy %[2]v %[1]s\x02%[1]s włączo" +
+	"ny\x02%[1]s wyłączony\x02Anuluj\x02Łączenie z %[1]s\x02Zatrzymywanie %[1" +
+	"]s\x02Połącz ponownie\x02%[1]s blokuje internet\x02Powstał błąd podczas " +
+	"inicjowania VPN'a: %[1]v"
 
 var pt_BRIndex = []uint32{ // 27 elements
 	0x00000000, 0x00000139, 0x0000014c, 0x0000037a,
@@ -700,12 +732,12 @@ var svIndex = []uint32{ // 27 elements
 	0x000002f2, 0x00000305, 0x0000035b, 0x00000377,
 	0x0000039a, 0x000003af, 0x000003c6, 0x000003cd,
 	0x000003d7, 0x000003e1, 0x000003eb, 0x000003f1,
-	0x000003f9, 0x00000410, 0x0000042c, 0x0000043a,
-	0x00000448, 0x0000044f, 0x00000463, 0x00000471,
-	0x0000047d, 0x00000496, 0x000004c3,
+	0x000003f9, 0x0000040e, 0x0000042a, 0x00000438,
+	0x00000446, 0x0000044d, 0x00000461, 0x0000046f,
+	0x0000047b, 0x00000494, 0x000004c1,
 } // Size: 132 bytes
 
-const svData string = "" + // Size: 1219 bytes
+const svData string = "" + // Size: 1217 bytes
 	"\x02%[1]s-tjänsten är dyr at driva. Då vi inte vill spara någon av din p" +
 	"ersonliga information, så finns det inga konton eller fakturatjänster fö" +
 	"r den här tjänsten. Men om du vill att tjänsten ska fortsätta fungera så" +
@@ -721,31 +753,59 @@ const svData string = "" + // Size: 1219 bytes
 	" Vänligen starta en och försök igen. \x02Saknar authentiseringsagent\x02" +
 	"Kan inte ansluta till %[1]s: %[2]v\x02Fel vid start av VPN\x02Kontroller" +
 	"ar status...\x02Starta\x02Stäng av\x02Hjälp...\x02Donera...\x02Om...\x02" +
-	"Avsluta\x02Route traffic through:\x02Använd %[1]s %[2]v gateway\x02%[1]s" +
-	" startad\x02%[1]s stoppad\x02Avbryt\x02Ansluter till %[1]s\x02Stoppar %[" +
-	"1]s\x02Återanslut\x02%[1]s blockerar internet\x02Ett fel uppstod vid ini" +
-	"tiering av VPN: %[1]v"
+	"Avsluta\x02Slussa trafik genom:\x02Använd %[1]s %[2]v gateway\x02%[1]s s" +
+	"tartad\x02%[1]s stoppad\x02Avbryt\x02Ansluter till %[1]s\x02Stoppar %[1]" +
+	"s\x02Återanslut\x02%[1]s blockerar internet\x02Ett fel uppstod vid initi" +
+	"ering av VPN: %[1]v"
+
+var zhIndex = []uint32{ // 27 elements
+	0x00000000, 0x000000fe, 0x00000105, 0x000002d4,
+	0x000002db, 0x000002eb, 0x00000337, 0x00000354,
+	0x00000372, 0x00000384, 0x00000394, 0x0000039b,
+	0x000003a2, 0x000003ac, 0x000003b6, 0x000003c0,
+	0x000003c7, 0x000003dd, 0x000003f7, 0x00000404,
+	0x00000411, 0x00000418, 0x0000042e, 0x00000441,
+	0x0000044e, 0x00000466, 0x0000048c,
+} // Size: 132 bytes
+
+const zhData string = "" + // Size: 1164 bytes
+	"\x02The %[1]s service is expensive to run. Because we don't want to stor" +
+	"e personal information about you, there are no accounts or billing for t" +
+	"his service. But if you want the service to continue, donate at least $5" +
+	" each month.\x0a\x09\x0aDo you want to donate now?\x02捐赠\x02%[1]s is an " +
+	"easy, fast, and secure VPN service from %[2]s. %[1]s does not require a " +
+	"user account, keep logs, or track you in any way.\x0a\x09    \x0aThis se" +
+	"rvice is paid for entirely by donations from users like you. Please dona" +
+	"te at %[3]s.\x0a\x09\x09\x0aBy using this application, you agree to the " +
+	"Terms of Service available at %[4]s. This service is provided as-is, wit" +
+	"hout any warranty, and is intended for people who work to make the world" +
+	" a better place.\x0a\x0a\x0a%[1]v version: %[5]s\x02关于\x02初始化失败\x02Could" +
+	" not find a polkit authentication agent. Please run one and try again." +
+	"\x02Missing authentication agent\x02无法连接到 %[1]s：%[2]v\x02启动 VPN 失败\x02检查" +
+	"状态...\x02开启\x02关闭\x02帮助...\x02捐赠...\x02关于...\x02退出\x02将流量路由到：\x02使用 %[" +
+	"1]s %[2]v 网关\x02%[1]s 开启\x02%[1]s 关闭\x02取消\x02正在连接到 %[1]s\x02正在停止 %[1]s" +
+	"\x02重新连接\x02%[1]s blocking internet\x02初始化 VPN 时发生错误：%[1]v"
 
 var zh_TWIndex = []uint32{ // 27 elements
 	0x00000000, 0x000000f4, 0x000000fb, 0x000002cc,
-	0x000002d3, 0x000002e3, 0x0000032f, 0x00000348,
-	0x00000366, 0x00000381, 0x00000397, 0x0000039e,
-	0x000003a5, 0x000003af, 0x000003b9, 0x000003c3,
-	0x000003ca, 0x000003e1, 0x000003fb, 0x00000408,
-	0x00000415, 0x0000041c, 0x00000432, 0x00000445,
-	0x00000452, 0x0000046a, 0x00000490,
+	0x000002d3, 0x000002e3, 0x00000331, 0x0000034a,
+	0x00000368, 0x00000383, 0x00000399, 0x000003a0,
+	0x000003a7, 0x000003b1, 0x000003bb, 0x000003c5,
+	0x000003cc, 0x000003e8, 0x00000402, 0x0000040f,
+	0x0000041c, 0x00000423, 0x00000439, 0x0000044c,
+	0x00000459, 0x00000478, 0x0000049e,
 } // Size: 132 bytes
 
-const zh_TWData string = "" + // Size: 1168 bytes
+const zh_TWData string = "" + // Size: 1182 bytes
 	"\x02%[1]s 服務的運作成本高昂。因為我們不希望儲存您的個人資料，本服務不要求任何帳戶或付款資訊。但如果您希望本服務能繼續運作，請每個月至" +
 	"少捐獻 5 元。\x0a\x09\x0a您想要現在就捐獻嗎？\x02捐獻\x02由 %[2]s 提供的 %[1]s，是一項簡易、快速且安全的" +
 	" VPN 服務。%[1]s 不需要使用者帳戶、不保存紀錄，也不會用任何方式追蹤您。\x0a\x09    \x0a本服務的資金完全來自像您一樣的" +
 	"使用者捐獻。請在 %[3]s 捐獻。\x0a\x09\x09\x0a使用本程式，代表您同意 %[4]s 上的服務條款。本服務是以現狀提供，無" +
 	"任何擔保，宗旨是為那些努力讓世界變得更美好的人們提供服務。\x0a\x0a\x0a%[1]v 版本: %[5]s\x02關於\x02初始化錯" +
-	"誤\x02Could not find a polkit authentication agent. Please run one and " +
-	"try again.\x02缺少驗證代理程式\x02無法連線到 %[1]s：%[2]v\x02啟動 VPN 時發生錯誤\x02正在檢查狀態..." +
-	"\x02開啟\x02關閉\x02說明...\x02捐獻...\x02關於...\x02退出\x02Route traffic through:" +
-	"\x02使用 %[1]s %[2]v 閘道\x02%[1]s 開啟\x02%[1]s 關閉\x02取消\x02正在連線到 %[1]s\x02正在" +
-	"停止 %[1]s\x02重新連線\x02%[1]s blocking internet\x02初始化 VPN 時發生錯誤：%[1]v"
+	"誤\x02找不到 Polkit 驗證代理程式。請於執行該程式後再試一次。\x02缺少驗證代理程式\x02無法連線到 %[1]s：%[2]v" +
+	"\x02啟動 VPN 時發生錯誤\x02正在檢查狀態...\x02開啟\x02關閉\x02說明...\x02捐獻...\x02關於...\x02" +
+	"退出\x02流量將會通過路由：\x02使用 %[1]s %[2]v 閘道\x02%[1]s 開啟\x02%[1]s 關閉\x02取消\x02" +
+	"正在連線到 %[1]s\x02正在停止 %[1]s\x02重新連線\x02%[1]s 正在封鎖網際網路\x02初始化 VPN 時發生錯誤：%" +
+	"[1]v"
 
-	// Total table size 35020 bytes (34KiB); checksum: 2E771281
+	// Total table size 38074 bytes (37KiB); checksum: E196AC1B
