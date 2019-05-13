@@ -26,6 +26,28 @@ build_test:
       - 'bitmask-connect'
     expire_in: 1 month
 
+branded_push:
+  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  stage: build
+  script:
+    # install the command-line openssh client to manage private keys
+    - apt install -y openssh-client
+    # activate the ssh-agent
+    - eval $(ssh-agent -s)
+    # load the private key, which is accessed vi a gitlab CI secret environment variable
+    # We're using tr to fix line endings which makes ed25519 keys work
+    # without extra base64 encoding.
+    - ssh-add <(echo "$RISEUP_VPN_PACKAGE_SSH_KEY")
+    - mkdir -p ~/.ssh
+    # ensure that ssh will trust a new host, instead of asking
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    # we also need to configure name and email for git user
+    - git config user.name "Gitlab CI"
+    - git config user.email "gitlabci@0xacab.org"
+    # Add the remote repository and push to it
+    - git remote add riseup-vpn git@0xacab.org:leap/riseup-vpn_package.git
+    - git push riseup-vpn HEAD:master
+
 win_installer:
  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
  stage: build
