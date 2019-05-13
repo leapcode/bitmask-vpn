@@ -27,7 +27,7 @@ build_test:
     expire_in: 1 month
 
 branded_push:
-  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
   stage: build
   script:
     # install the command-line openssh client to manage private keys
