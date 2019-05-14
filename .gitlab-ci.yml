@@ -46,7 +46,7 @@ branded_push:
     - git config user.email "gitlabci@0xacab.org"
     # Add the remote repository and push to it
     - git remote add riseup-vpn git@0xacab.org:leap/riseup-vpn_package.git
-    - git push riseup-vpn HEAD:master
+    - git push --force riseup-vpn HEAD:incoming
 
 win_installer:
  image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
