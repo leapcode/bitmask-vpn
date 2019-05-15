@@ -1,6 +1,7 @@
 ---
 stages:
   - build
+  - trigger-deb
 
 variables:
   GOPATH: /go
@@ -118,22 +119,28 @@ deb:
       - riseup_vpn/dist/*.deb
     expire_in: 1 month
 
-osx_installer:
-  stage: build
-  allow_failure: true
-  variables:
-      GOPATH: /tmp/go/
-      APP_PATH: /tmp/go/src/0xacab.org/leap/bitmask-vpn
+# osx_installer:
+#   stage: build
+#   allow_failure: true
+#   variables:
+#       GOPATH: /tmp/go/
+#       APP_PATH: /tmp/go/src/0xacab.org/leap/bitmask-vpn
+#   script:
+#     - git clone https://0xacab.org/leap/riseup_vpn
+#     - cd riseup_vpn
+#     - make openvpn_osx
+#     - make build_osx
+#   tags:
+#     - yosemite
+#     - osx
+#   artifacts:
+#     name: installer_osx_$CI_COMMIT_REF_NAME
+#     paths:
+#       - riseup_vpn/dist/RiseupVPN-*.pkg
+#   expire_in: 1 month
+
+
+trigger_deb:
+  stage: trigger-deb
   script:
-    - git clone https://0xacab.org/leap/riseup_vpn
-    - cd riseup_vpn
-    - make openvpn_osx
-    - make build_osx
-  tags:
-    - yosemite
-    - osx
-  artifacts:
-    name: installer_osx_$CI_COMMIT_REF_NAME
-    paths:
-      - riseup_vpn/dist/RiseupVPN-*.pkg
-    expire_in: 1 month
+    - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
