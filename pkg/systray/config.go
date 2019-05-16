@@ -57,12 +57,11 @@ func ParseConfig() *Config {
 	f, err := os.Open(configPath)
 	if err != nil {
 		conf.save()
-		return &conf
+	} else {
+		defer f.Close()
+		dec := json.NewDecoder(f)
+		err = dec.Decode(&conf.file)
 	}
-	defer f.Close()
-
-	dec := json.NewDecoder(f)
-	err = dec.Decode(&conf.file)
 
 	conf.SelectGateway = conf.file.SelectGateway
 	conf.DisableAustostart = conf.file.DisableAustostart
