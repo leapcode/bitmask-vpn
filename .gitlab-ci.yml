@@ -122,6 +122,8 @@ deb:
 branded_push:
   image: 0xacab.org:4567/leap/docker/bitmask-systray:latest
   stage: push
+  only:
+      - master
   script:
     # install the command-line openssh client to manage private keys
     - apt install -y openssh-client
