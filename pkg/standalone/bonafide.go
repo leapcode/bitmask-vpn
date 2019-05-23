@@ -34,9 +34,10 @@ import (
 )
 
 const (
-	certAPI        = config.APIURL + "1/cert"
-	eipAPI         = config.APIURL + "1/config/eip-service.json"
-	secondsPerHour = 60 * 60
+	certAPI               = config.APIURL + "1/cert"
+	eipAPI                = config.APIURL + "1/config/eip-service.json"
+	secondsPerHour        = 60 * 60
+	retryFetchJSONSeconds = 15
 )
 
 type bonafide struct {
@@ -184,8 +185,10 @@ func (b *bonafide) fetchGeolocation() ([]string, error) {
 
 func (b *bonafide) fetchEipJSON() error {
 	resp, err := b.client.Post(eipAPI, "", nil)
-	if err != nil {
-		return err
+	for err != nil {
+		log.Printf("Error fetching eip json: %v", err)
+		time.Sleep(retryFetchJSONSeconds * time.Second)
+		resp, err = b.client.Post(eipAPI, "", nil)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
