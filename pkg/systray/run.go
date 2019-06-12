@@ -82,6 +82,7 @@ func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
 	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
 		log.Printf("No polkit found")
 		notify.authAgent()
+		os.Exit(1)
 	} else if err != nil {
 		log.Printf("Error checking vpn: %v", err)
 		notify.errorStartingVPN(err)

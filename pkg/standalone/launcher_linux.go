@@ -21,8 +21,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"github.com/mitchellh/go-ps"
 )
 
 const (
@@ -48,6 +50,82 @@ func newLauncher() (*launcher, error) {
 
 func (l *launcher) close() error {
 	return nil
+}
+
+func (l *launcher) check() (helpers bool, priviledge bool, err error) {
+
+	isRunning, err := isPolkitRunning()
+	if err != nil {
+		return
+	}
+	if !isRunning {
+		polkitPath := getPolkitPath()
+		if polkitPath == "" {
+			return true, false, nil
+		}
+		cmd := exec.Command("setsid", polkitPath)
+		err = cmd.Start()
+		if err != nil {
+			return
+		}
+		isRunning, err = isPolkitRunning()
+		return true, isRunning, err
+	}
+
+	return true, true, nil
+}
+
+func isPolkitRunning() (bool, error) {
+	var polkitProcNames = [...]string{
+		"polkit-gnome-authentication-agent-1",
+		"polkit-kde-authentication-agent-1",
+		"polkit-mate-authentication-agent-1",
+		"lxpolkit",
+		"lxsession",
+		"gnome-shell",
+		"gnome-flashback",
+		"fingerprint-polkit-agent",
+		"xfce-polkit",
+	}
+
+	processes, err := ps.Processes()
+	if err != nil {
+		return false, err
+	}
+
+	for _, proc := range processes {
+		executable := proc.Executable()
+		for _, name := range polkitProcNames {
+			if strings.Contains(executable, name) {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func getPolkitPath() string {
+	var polkitPaths = [...]string{
+		"/usr/bin/lxpolkit",
+		"/usr/bin/lxqt-policykit-agent",
+		"/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1",
+		"/usr/lib/x86_64-linux-gnu/polkit-mate/polkit-mate-authentication-agent-1",
+		"/usr/lib/mate-polkit/polkit-mate-authentication-agent-1",
+		"/usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1",
+		"/usr/lib/kde4/libexec/polkit-kde-authentication-agent-1",
+		// now we get weird
+		"/usr/libexec/policykit-1-pantheon/pantheon-agent-polkit",
+		"/usr/lib/polkit-1-dde/dde-polkit-agent",
+		// do you know some we"re still missing? :)
+	}
+
+	for _, polkit := range polkitPaths {
+		_, err := os.Stat(polkit)
+		if err == nil {
+			return polkit
+		}
+	}
+	return ""
 }
 
 func (l *launcher) openvpnStart(flags ...string) error {

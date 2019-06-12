@@ -124,8 +124,7 @@ func (b *Bitmask) InstallHelpers() error {
 
 // VPNCheck returns if the helpers are installed and up to date and if polkit is running
 func (b *Bitmask) VPNCheck() (helpers bool, priviledge bool, err error) {
-	// TODO
-	return true, true, nil
+	return b.launch.check()
 }
 
 // ListGateways return the names of the gateways

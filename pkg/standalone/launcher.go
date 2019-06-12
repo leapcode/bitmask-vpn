@@ -40,6 +40,10 @@ func (l *launcher) close() error {
 	return nil
 }
 
+func (l *launcher) check() (helpers bool, priviledge bool, err error) {
+	return true, true, nil
+}
+
 func (l *launcher) openvpnStart(flags ...string) error {
 	byteFlags, err := json.Marshal(flags)
 	if err != nil {
