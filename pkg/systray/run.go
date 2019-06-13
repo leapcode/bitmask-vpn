@@ -25,11 +25,14 @@ import (
 
 func Run(conf *Config) {
 	bt := bmTray{conf: conf, waitCh: make(chan bool)}
-	go initialize(conf, &bt)
+	finishedCh := make(chan bool)
+	go initialize(conf, &bt, finishedCh)
 	bt.start()
+	<-finishedCh
 }
 
-func initialize(conf *Config, bt *bmTray) {
+func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
+	defer func() { finishedCh <- true }()
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
