@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
 	"github.com/mitchellh/go-ps"
 )
 
@@ -144,7 +145,7 @@ func (l *launcher) openvpnStop() error {
 	return runBitmaskRoot("openvpn", "stop")
 }
 
-func (l *launcher) firewallStart(gateways []gateway) error {
+func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
 	log.Println("firewall start")
 	arg := []string{"firewall", "start"}
 	for _, gw := range gateways {

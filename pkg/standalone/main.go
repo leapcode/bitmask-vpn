@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
@@ -29,7 +30,7 @@ type Bitmask struct {
 	tempdir          string
 	statusCh         chan string
 	managementClient *openvpn.MgmtClient
-	bonafide         *bonafide
+	bonafide         *bonafide.Bonafide
 	launch           *launcher
 }
 
@@ -40,7 +41,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	bonafide := newBonafide()
+	bonafide := bonafide.New()
 	launch, err := newLauncher()
 	if err != nil {
 		return nil, err

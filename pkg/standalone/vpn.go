@@ -28,7 +28,7 @@ const (
 
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
-	gateways, err := b.bonafide.getGateways()
+	gateways, err := b.bonafide.GetGateways("openvpn")
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (b *Bitmask) StartVPN(provider string) error {
 		return err
 	}
 
-	arg, err := b.bonafide.getOpenvpnArgs()
+	arg, err := b.bonafide.GetOpenvpnArgs()
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 	certPath = b.getCertPemPath()
 
 	if _, err := os.Stat(certPath); os.IsNotExist(err) {
-		cert, err := b.bonafide.getCertPem()
+		cert, err := b.bonafide.GetCertPem()
 		if err != nil {
 			return "", err
 		}
@@ -95,7 +95,7 @@ func (b *Bitmask) ReloadFirewall() error {
 	}
 
 	if status != Off {
-		gateways, err := b.bonafide.getGateways()
+		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
 			return err
 		}
@@ -129,7 +129,7 @@ func (b *Bitmask) VPNCheck() (helpers bool, priviledge bool, err error) {
 
 // ListGateways return the names of the gateways
 func (b *Bitmask) ListGateways(provider string) ([]string, error) {
-	gateways, err := b.bonafide.getGateways()
+	gateways, err := b.bonafide.GetGateways("openvpn")
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ func (b *Bitmask) ListGateways(provider string) ([]string, error) {
 
 // UseGateway selects name as the default gateway
 func (b *Bitmask) UseGateway(name string) error {
-	b.bonafide.setDefaultGateway(name)
+	b.bonafide.SetDefaultGateway(name)
 	return nil
 }
 

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package standalone
+package bonafide
 
 import (
 	"bytes"
@@ -27,8 +27,8 @@ var (
 )
 
 func TestIntegrationGetCert(t *testing.T) {
-	b := newBonafide()
-	cert, err := b.getCertPem()
+	b := New()
+	cert, err := b.GetCertPem()
 	if err != nil {
 		t.Fatal("getCert returned an error: ", err)
 	}
@@ -43,8 +43,8 @@ func TestIntegrationGetCert(t *testing.T) {
 }
 
 func TestGetGateways(t *testing.T) {
-	b := newBonafide()
-	gateways, err := b.getGateways()
+	b := New()
+	gateways, err := b.GetGateways("openvpn")
 	if err != nil {
 		t.Fatal("getGateways returned an error: ", err)
 	}
