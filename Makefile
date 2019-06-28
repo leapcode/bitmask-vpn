@@ -8,6 +8,9 @@ get:
 	go get -tags $(TAGS) ./...
 	go get -tags "$(TAGS) bitmaskd" ./...
 
+generate:
+	go generate cmd/bitmask-vpn/main.go
+
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:

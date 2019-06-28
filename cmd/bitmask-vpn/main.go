@@ -15,6 +15,8 @@
 
 package main
 
+//go:generate ../../branding/vendorize.py ../../branding/config.go.tmpl ../../branding/config/vendor.conf ../../pkg/config/config.go
+
 import (
 	"flag"
 	"fmt"
