@@ -116,7 +116,7 @@ func getIconPath() string {
 		if fileExist(icoPath) {
 			return icoPath
 		}
-		icoPath = path.Join(gopath, "src", "0xacab.org", "leap", "riseup_vpn", "assets", "riseupvpn.ico")
+		icoPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-vpn", "branding", "assets", "default", "icon.ico")
 		if fileExist(icoPath) {
 			return icoPath
 		}
@@ -128,7 +128,8 @@ func getIconPath() string {
 		if fileExist(icnsPath) {
 			return icnsPath
 		}
-		icnsPath = path.Join(gopath, "src", "0xacab.org", "leap", "riseup_vpn", "assets", "riseupvpn.icns")
+
+		icnsPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-vpn", "branding", "assets", "default", "icon.icns")
 		if fileExist(icnsPath) {
 			return icnsPath
 		}
@@ -151,7 +152,7 @@ func getIconPath() string {
 		return svgPath
 	}
 
-	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-vpn", svgFileName)
+	svgPath = path.Join(gopath, "src", "0xacab.org", "leap", "bitmask-vpn", "branding", "assets", "default", svgFileName)
 	if fileExist(svgPath) {
 		return svgPath
 	}
