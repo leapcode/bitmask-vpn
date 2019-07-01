@@ -137,7 +137,7 @@ func getIconPath() string {
 
 	snapPath := os.Getenv("SNAP")
 	if snapPath != "" {
-		return snapPath + "/snap/gui/icon.svg"
+		return snapPath + "/snap/meta/gui/icon.svg"
 	}
 
 	wd, _ := os.Getwd()
