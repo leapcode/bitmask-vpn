@@ -2,6 +2,9 @@
 
 TAGS ?= gtk_3_18
 
+PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
+DEFAULT_PROVIDER = branding/assets/default/
+
 all: icon locales get build
 
 get:
@@ -10,6 +13,15 @@ get:
 
 generate:
 	go generate cmd/bitmask-vpn/main.go
+
+relink_default:
+ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
+	cd branding/assets && unlink default
+endif
+	cd branding/assets && ln -s ${PROVIDER} default
+
+prepare: generate relink_default
+	branding/scripts/check-ca-crt.py ${PROVIDER} branding/config/vendor.conf
 
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 

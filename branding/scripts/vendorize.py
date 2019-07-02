@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import os
 import sys
 
@@ -12,11 +13,20 @@ CONFIGFILE = 'config/vendor.conf'
 SCRIPT_NAME = 'vendorize'
 
 
-def getProviderData(config):
-    default = config['default']['provider']
-    print("[+] Configured provider:", default)
+def getDefaultProvider(config):
+    provider = os.environ.get('PROVIDER')
+    if provider:
+        print('[+] Got provider {} from environemnt'.format(provider))
+    else:
+        print('[+] Using default provider from config file')
+        provider = config['default']['provider']
+    return provider
 
-    c = config[default]
+
+def getProviderData(provider, config):
+    print("[+] Configured provider:", provider)
+
+    c = config[provider]
     d = dict()
 
     keys = ('name', 'applicationName', 'binaryName',
@@ -25,6 +35,9 @@ def getProviderData(config):
 
     for value in keys:
         d[value] = c.get(value)
+
+    d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
+        datetime.datetime.now())
 
     return d
 
@@ -90,7 +103,8 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read(configfile)
 
-    data = getProviderData(config)
+    provider = getDefaultProvider(config)
+    data = getProviderData(provider, config)
     addCaData(data, configfile)
     writeOutput(data, infile, outfile)
 

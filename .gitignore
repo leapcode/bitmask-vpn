@@ -8,5 +8,7 @@ cmd/bitmask-connect/bitmask-connect
 locales/*/out.gotext.json
 tools/transifex/transifex
 
+branding/assets/default
+
 .*.swp
 *.exe

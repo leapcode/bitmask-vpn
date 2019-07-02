@@ -15,7 +15,7 @@
 
 package main
 
-//go:generate ../../branding/vendorize.py ../../branding/config.go.tmpl ../../branding/config/vendor.conf ../../pkg/config/config.go
+//go:generate ../../branding/scripts/vendorize.py ../../branding/template/config.go ../../branding/config/vendor.conf ../../pkg/config/config.go
 
 import (
 	"flag"
