@@ -11,6 +11,7 @@ require (
 	github.com/getlantern/hex v0.0.0-20160523043825-083fba3033ad
 	github.com/getlantern/hidden v0.0.0-20160523043807-d52a649ab33a
 	github.com/getlantern/ops v0.0.0-20170904182230-37353306c908
+	github.com/getlantern/systray v0.0.0-20190626064521-f2fa635d0474
 	github.com/go-stack/stack v1.8.0
 	github.com/golang/text v0.3.0 // indirect
 	github.com/gotk3/gotk3 v0.0.0-20190108052711-d09d58ef3476
