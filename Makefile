@@ -27,6 +27,7 @@ build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
 	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
+	strip $*
 
 test:
 	go test -tags "integration $(TAGS)" ./...
