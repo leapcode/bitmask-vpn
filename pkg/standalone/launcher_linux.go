@@ -54,23 +54,25 @@ func (l *launcher) close() error {
 
 func (l *launcher) check() (helpers bool, priviledge bool, err error) {
 
-	isRunning, err := isPolkitRunning()
-	if err != nil {
-		return
-	}
-	if !isRunning {
-		polkitPath := getPolkitPath()
-		if polkitPath == "" {
-			return true, false, nil
-		}
-		cmd := exec.Command("setsid", polkitPath)
-		err = cmd.Start()
+	/*
+		isRunning, err := isPolkitRunning()
 		if err != nil {
 			return
 		}
-		isRunning, err = isPolkitRunning()
-		return true, isRunning, err
-	}
+		if !isRunning {
+			polkitPath := getPolkitPath()
+			if polkitPath == "" {
+				return true, false, nil
+			}
+			cmd := exec.Command("setsid", polkitPath)
+			err = cmd.Start()
+			if err != nil {
+				return
+			}
+			isRunning, err = isPolkitRunning()
+			return true, isRunning, err
+		}
+	*/
 
 	return true, true, nil
 }
