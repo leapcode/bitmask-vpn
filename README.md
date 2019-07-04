@@ -52,7 +52,7 @@ Run it
 -------------
 The default build is a standalone systray. It still requires a helper and openvpn installed to work. For linux the helper is
 [bitmask-root](https://0xacab.org/leap/bitmask-dev/blob/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root)
-for windows and OSX there is [a helper written in go](https://0xacab.org/leap/riseup_vpn/tree/master/helper).
+for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bitmask-vpn/tree/master/pkg/helper/).
 
 To build and run it:
 ```
