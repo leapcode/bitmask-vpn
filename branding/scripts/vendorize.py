@@ -88,6 +88,12 @@ if __name__ == "__main__":
         except IndexError:
             bail()
 
+    env_provider_conf = os.environ.get('PROVIDER_CONFIG')
+    if env_provider_conf:
+        if os.path.isfile(env_provider_conf):
+            print("[+] Overriding provider config per PROVIDER_CONFIG variable")
+            configfile = env_provider_conf
+
     if not os.path.isfile(infile):
         bail('[!] Cannot find template in {path}'.format(
             path=os.path.abspath(infile)))

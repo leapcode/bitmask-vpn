@@ -3,6 +3,7 @@
 TAGS ?= gtk_3_18
 
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
+PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 
 all: icon locales get build
@@ -21,7 +22,7 @@ endif
 	cd branding/assets && ln -s ${PROVIDER} default
 
 prepare: generate relink_default
-	branding/scripts/check-ca-crt.py ${PROVIDER} branding/config/vendor.conf
+	branding/scripts/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
 
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
