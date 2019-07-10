@@ -1,0 +1,9 @@
+..\staging\bitmask_helper.exe
+..\staging\bitmask-vpn.exe
+..\staging\libcrypto-1_1-x64.dll
+..\staging\liblzo2-2.dll
+..\staging\libpkcs11-helper-1.dll
+..\staging\libssl-1_1-x64.dll
+..\staging\padlock.dll
+..\staging\openvpn\openvpn.exe
+..\staging\openvpn\tap-windows.exe

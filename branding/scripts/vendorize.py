@@ -1,45 +1,18 @@
 #!/usr/bin/env python3
 
-import datetime
 import os
 import sys
 
 from string import Template
 import configparser
 
+from provider import getDefaultProvider
+from provider import getProviderData
+
 OUTFILE = 'config.go'
-INFILE = 'config.go.tmpl'
-CONFIGFILE = 'config/vendor.conf'
+INFILE = '../templates/golang/config.go'
+CONFIGFILE = '../config/vendor.conf'
 SCRIPT_NAME = 'vendorize'
-
-
-def getDefaultProvider(config):
-    provider = os.environ.get('PROVIDER')
-    if provider:
-        print('[+] Got provider {} from environemnt'.format(provider))
-    else:
-        print('[+] Using default provider from config file')
-        provider = config['default']['provider']
-    return provider
-
-
-def getProviderData(provider, config):
-    print("[+] Configured provider:", provider)
-
-    c = config[provider]
-    d = dict()
-
-    keys = ('name', 'applicationName', 'binaryName',
-            'providerURL', 'tosURL', 'helpURL',
-            'donateURL', 'apiURL', 'geolocationAPI', 'caCertString')
-
-    for value in keys:
-        d[value] = c.get(value)
-
-    d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
-        datetime.datetime.now())
-
-    return d
 
 
 def addCaData(data, configfile):
@@ -91,7 +64,8 @@ if __name__ == "__main__":
     env_provider_conf = os.environ.get('PROVIDER_CONFIG')
     if env_provider_conf:
         if os.path.isfile(env_provider_conf):
-            print("[+] Overriding provider config per PROVIDER_CONFIG variable")
+            print("[+] Overriding provider config per "
+                  "PROVIDER_CONFIG variable")
             configfile = env_provider_conf
 
     if not os.path.isfile(infile):

@@ -1,0 +1,13 @@
+icon.ico
+openssl.exe
+openvpn.exe
+ssleay32.dll
+libeay32.dll
+liblzo2-2.dll
+libpkcs11-helper-1.dll
+libcrypto-1_1-x64.dll
+libssl-1_1-x64.dll
+padlock.dll
+bitmask_helper.exe
+bitmask-vpn.exe
+tap-windows.exe

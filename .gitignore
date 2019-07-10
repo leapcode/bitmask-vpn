@@ -1,3 +1,6 @@
+__pycache__
+build
+dist
 /bitmask-vpn
 cmd/bitmask-vpn/bitmask-vpn
 /bitmask-helper
