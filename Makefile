@@ -64,7 +64,8 @@ build_win:
 
 clean:
 	make -C icon clean
-	rm build/bitmask-vpn
+	rm -f build/bitmask-vpn
+	unlink branding/assets/default
 
 icon:
 	make -C icon

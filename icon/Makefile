@@ -21,5 +21,5 @@ go_array_name = "$(shell echo $(<) | sed -e 's/.*vpn_\(.*\)\.png/\u\1/' -e 's/_/
 	cat $< | 2goarray $(go_array_name) icon >> $@
 
 clean:
-	rm *_unix.go
-	rm *_darwin.go
+	rm -f *_unix.go
+	rm -f *_darwin.go
