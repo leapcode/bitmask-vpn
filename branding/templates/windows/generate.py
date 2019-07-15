@@ -34,9 +34,6 @@ data = json.load(open(os.path.join(here, 'data.json')))
 data['extra_install_files'] = get_files('install')
 data['extra_uninstall_files'] = get_files('uninstall')
 
-import pprint
-pprint.pprint(data)
-
 INSTALLER = data['applicationName'] + '-installer.nsi'
 
 

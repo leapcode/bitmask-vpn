@@ -7,7 +7,25 @@ PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
 
+# detect OS, we use it for dependencies
+UNAME = `uname`
+
 all: icon locales get build
+
+depends:
+	-@make depends$(UNAME)
+	go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
+
+dependsLinux:
+	sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config cmake
+
+dependsDarwin:
+	# TODO - bootstrap homebrew if not there
+	brew install python3 golang make pkg-config upx
+	brew install --default-names gnu-sed
+
+dependsCygwin:
+	choco install -y golang python nssm nsis wget 7zip
 
 get:
 	go get -tags $(TAGS) ./...
@@ -24,18 +42,32 @@ endif
 
 prepare: generate relink_default
 	mkdir -p build/${PROVIDER}/bin/
+	cp branding/templates/makefile/Makefile build/${PROVIDER}/Makefile
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-vendor-make.py build/${PROVIDER}/vendor.mk
 	branding/scripts/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
+	-@make icon
 
 prepare_win:
 	mkdir -p build/${PROVIDER}/windows/
 	cp -r branding/templates/windows build/${PROVIDER}
 	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-win.py build/${PROVIDER}/windows/data.json
 	cd build/${PROVIDER}/windows && python3 generate.py
-	# TODO create build/PROVIDER/assets/
-	# TODO create build/PROVIDER/staging/
+	# TODO create/copy build/PROVIDER/assets/
+	# TODO create/copy build/PROVIDER/staging/
 
 prepare_osx:
-	echo "osx..."
+	mkdir -p build/${PROVIDER}/osx/scripts
+	mkdir -p build/${PROVIDER}/staging
+ifeq (,$(wildcard build/${PROVIDER}/assets))
+	ln -s ../../branding/assets/default build/${PROVIDER}/assets
+endif
+ifeq (,$(wildcard build/${PROVIDER}/staging/openvpn-osx))
+	curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
+endif
+	cp -r branding/templates/osx build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-osx.py build/${PROVIDER}/osx/data.json
+	cd build/${PROVIDER}/osx && python3 generate.py
+	cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
 prepare_snap:
 	echo "snap..."
@@ -49,9 +81,12 @@ build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
 	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
-	strip $*
+	# FIXME does not work in osx
+	# strip $*
 	mkdir -p build/bin
 	mv $* build/bin/
+	mkdir -p build/${PROVIDER}/staging
+	ln -s ../../bin/$* build/${PROVIDER}/staging/$*
 
 test:
 	go test -tags "integration $(TAGS)" ./...
@@ -64,14 +99,11 @@ build_win:
 
 clean:
 	make -C icon clean
-	rm -f build/bitmask-vpn
+	rm -f build/${PROVIDER}/bin/bitmask-*
 	unlink branding/assets/default
 
 icon:
 	make -C icon
-
-get_deps:
-	sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config
 
 
 LANGS ?= $(foreach path,$(wildcard locales/*),$(patsubst locales/%,%,$(path)))

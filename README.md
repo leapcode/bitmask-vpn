@@ -3,15 +3,14 @@ Install it
 
 Install dependencies:
 ```
-  # apt install libgtk-3-dev libappindicator3-dev golang pkg-config
+  # make depends
 ```
 
 Build the systray:
 ```
-  $ git clone 0xacab.org/leap/bitmask-vpn
-  $ cd bitmask-systray
-  $ go get .
-  $ go build
+  $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  $ make get
+  $ make build
 ```
 
 To be able to build the assets you'll need:
@@ -24,12 +23,10 @@ OSX
 Using homebrew:
 
 ```
-  $ brew install golang zmq pkg-config
-  $ brew install --default-names gnu-sed
-  $ git clone 0xacab.org/leap/bitmask-vpn
-  $ cd bitmask-systray
-  $ go get .
-  $ go build
+  $ make depends
+  $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  $ make get
+  $ make build
 
 ```
 
@@ -56,8 +53,8 @@ for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bi
 
 To build and run it:
 ```
-  $ go build
-  $ ./bitmask-systray
+  $ make build
+  $ ./bitmask-vpn
 ```
 
 
@@ -71,7 +68,7 @@ Is also posible to compile the systray to use bitmask as backend:
 In that case bitmask-systray assumes that you already have bitmaskd running. Run bitmask and the systray:
 ```
   $ bitmaskd
-  $ ./bitmask-systray
+  $ ./bitmask-vpn
 ```
 
 
@@ -97,6 +94,7 @@ Report an issue
 -------------------
 
 When you report an issue include the following information:
+
 * what you expected to see
 * what you got
 * the version of the program. You can check the version on the about page.

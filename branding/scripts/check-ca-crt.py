@@ -20,6 +20,7 @@ def getLocalCert(provider):
 
 
 def getRemoteCert(uri):
+    print("... checking cert from", uri)
     fp = urllib.request.urlopen(uri)
     remote_cert = fp.read().decode('utf-8').strip()
     fp.close()

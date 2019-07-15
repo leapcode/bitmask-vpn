@@ -1,0 +1,11 @@
+# some notes on cross-compiling for osx
+
+wget https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
+sha256sum 631b4144c6bf75bf7a4d480d685a9b5bda10ee8d03dbf0db829391e2ef858789
+git clone https://github.com/tpoechtrager/osxcross
+mv MacOSX* osxcross/tarballs
+sudo apt-get install -y --force-yes clang llvm-dev libxml2-dev uuid-dev \
+  libssl-dev bash patch make  tar xz-utils bzip2 gzip sed cpio libbz2-dev
+cd oscross
+./build.sh
+PATH=$PATH:/home/user/dev/osxcross/osxcross/target/bin/ MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang" go build 0xacab.org/leap/bitmask-systray

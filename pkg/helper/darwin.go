@@ -102,13 +102,21 @@ func firewallStart(gateways []string) error {
 }
 
 func firewallStop() error {
-	return exec.Command(pfctl, "-a", bitmask_anchor, "-F", "all").Run()
+	out, err := exec.Command(pfctl, "-a", bitmask_anchor, "-F", "all").Output()
+	if err != nil {
+		log.Printf("An error ocurred stopping the firewall: %v", out)
+		/* TODO return error if different from anchor not exists */
+		/*return errors.New("Error while stopping firewall")*/
+		return nil
+	}
+	return nil
 }
 
 func firewallIsUp() bool {
 	out, err := exec.Command(pfctl, "-a", bitmask_anchor, "-sr").Output()
 	if err != nil {
 		log.Printf("An error ocurred getting the status of the firewall: %v", err)
+		log.Printf(string(out))
 		return false
 	}
 	return bytes.Contains(out, []byte("block out proto udp to any port 53"))

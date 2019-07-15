@@ -1,0 +1,11 @@
+#!/bin/sh
+# --------------------------------------------
+# Signs a RiseupVPN pkg file
+# Usage: signbundle <file> <version>
+#
+# Use it when you have built it in a
+# machine with no access to the certificates.
+# --------------------------------------------
+OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
+productsign --sign "$OSX_CERT" $1 $1-signed.pkg
+mv $1-signed.pkg ../dist/$applicationName-OSX-$2-signed.pkg
