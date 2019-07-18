@@ -50,28 +50,26 @@ openvpn_cross_win:
 	cp $(STAGING)/openvpn/bin/openvpn.exe $(STAGING)/openvpn
 	cp $(STAGING)/openvpn/bin/*.dll $(STAGING)
 	cp $(STAGING)/openvpn/lib/engines-1_1/*.dll $(STAGING)
-helper_win:
-	go build -ldflags "-s -w" -o $(STAGING)/$(HELPER_BIN).exe $(SYSTRAY)/cmd/bitmask-helper
-systray_win:
-	go get -u $(SYSTRAY)/cmd/bitmask-vpn
-	powershell '$$gopath=go env GOPATH;$$version=git -C $$gopath/src/$(SYSTRAY) describe --tags; go build -ldflags "-H windowsgui -s -w -X main.version=$$version" -o $(STAGING)/$(SYSTRAY_BIN).exe $(SYSTRAY)/cmd/bitmask-vpn'
-build_win: staging\nssm.exe helper_win systray_win
-# since it's tedious, I assume you did bootstrap openvpn_win manually already.
+
+# TODO no need to build systray in windows, but move this powershell hack to main build makefile
+#powershell '$$gopath=go env GOPATH;$$version=git -C $$gopath/src/$(SYSTRAY) describe --tags; go build -ldflags "-H windowsgui -s -w -X main.version=$$version" -o $(STAGING)/$(SYSTRAY_BIN).exe $(SYSTRAY)/cmd/bitmask-vpn'
+
+package_win: staging\nssm.exe helper_win systray_win
+# I assume you did bootstrap openvpn_win manually already.
 	echo "[+] building windows"
-	if not exist dist mkdir dist
-	powershell '$$gopath=go env GOPATH;$$version=git -C $$gopath/src/$(SYSTRAY) describe --tags; $(MAKE) -C win VERSION=$$version'
-	"C:\Program Files (x86)\NSIS\makensis.exe" win/RiseupVPN-installer.nsi
+	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
+
 sign_win:
 	echo "[+] signing windows build"
-	python win/sign.py $(WIN_CERT_PATH) $(WIN_CERT_PASS)
+	python windowns/sign.py $(WIN_CERT_PATH) $(WIN_CERT_PASS)
+
+# TODO move to main build makefile
 build_cross_win: staging/nssm.exe
 	echo "!define VERSION $(VERSION)" > $(STAGING)/version.nsh
 	$(CROSS_FLAGS) $(MAKE) helper_win
-	$(CROSS_FLAGS) go get $(SYSTRAY)/cmd/bitmask-vpn
-	$(CROSS_FLAGS) go build -ldflags "-H windowsgui -s -w -X main.version=$(VERSION)" -o $(STAGING)/$(SYSTRAY_BIN).exe $(SYSTRAY)/cmd/bitmask-vpn
 	mkdir -p dist
 	make -C win VERSION=$(VERSION)
-	makensis win/RiseupVPN-installer.nsi
+	makensis win/$(APPNAME)-installer.nsi
 
 # -----------------------------------------------------------------------------
 # OSX

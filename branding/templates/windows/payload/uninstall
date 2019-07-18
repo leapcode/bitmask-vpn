@@ -8,6 +8,6 @@ libpkcs11-helper-1.dll
 libcrypto-1_1-x64.dll
 libssl-1_1-x64.dll
 padlock.dll
-bitmask_helper.exe
+bitmask-helper.exe
 bitmask-vpn.exe
 tap-windows.exe

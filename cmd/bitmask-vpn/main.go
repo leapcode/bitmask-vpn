@@ -15,7 +15,7 @@
 
 package main
 
-//go:generate ../../branding/scripts/vendorize.py ../../branding/templates/bitmaskvpn/config.go ../../branding/config/vendor.conf ../../pkg/config/config.go
+//go:generate python3 ../../branding/scripts/vendorize.py ../../branding/templates/bitmaskvpn/config.go ../../branding/config/vendor.conf ../../pkg/config/config.go
 
 import (
 	"flag"

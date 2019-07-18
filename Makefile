@@ -45,7 +45,8 @@ prepare: generate relink_default
 	cp branding/templates/makefile/Makefile build/${PROVIDER}/Makefile
 	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-vendor-make.py build/${PROVIDER}/vendor.mk
 	branding/scripts/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
-	-@make icon
+	# FIXME trouble in win - better get into repo
+	#-@make icon
 
 prepare_win:
 	mkdir -p build/${PROVIDER}/windows/
