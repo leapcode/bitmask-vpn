@@ -96,3 +96,8 @@ func (b *Bitmask) UseGateway(name string) error {
 	_, err := b.send("vpn", "locations", name)
 	return err
 }
+
+// UseTransport selects an obfuscation transport to use
+func (b *Bitmask) UseTransport(transport string) error {
+	return errors.New("Transport " + transport + " not implemented")
+}

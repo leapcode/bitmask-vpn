@@ -22,6 +22,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
+	"0xacab.org/leap/shapeshifter"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
@@ -32,6 +33,8 @@ type Bitmask struct {
 	managementClient *openvpn.MgmtClient
 	bonafide         *bonafide.Bonafide
 	launch           *launcher
+	transport        string
+	shapes           *shapeshifter.ShapeShifter
 }
 
 // Init the connection to bitmask
@@ -46,7 +49,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, statusCh, nil, bonafide, launch}
+	b := Bitmask{tempdir, statusCh, nil, bonafide, launch, "", nil}
 
 	err = b.StopVPN()
 	if err != nil {

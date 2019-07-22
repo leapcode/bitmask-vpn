@@ -31,6 +31,7 @@ import (
 
 const (
 	certAPI               = config.APIURL + "1/cert"
+	certAPI3              = config.APIURL + "3/cert"
 	secondsPerHour        = 60 * 60
 	retryFetchJSONSeconds = 15
 )
@@ -91,6 +92,13 @@ func (b *Bonafide) GetCertPem() ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode == 404 {
+		resp, err = b.client.Post(certAPI3, "", nil)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+	}
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
 	}

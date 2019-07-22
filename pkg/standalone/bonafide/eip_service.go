@@ -78,11 +78,17 @@ func (b *Bonafide) fetchEipJSON() error {
 	case 200:
 		b.eip, err = decodeEIP3(resp.Body)
 	case 404:
+		buf := make([]byte, 128)
+		resp.Body.Read(buf)
+		log.Printf("Error fetching eip v3 json: %s", buf)
 		resp, err = b.client.Post(eip1API, "", nil)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
+		if resp.StatusCode != 200 {
+			return fmt.Errorf("get eip json has failed with status: %s", resp.Status)
+		}
 
 		b.eip, err = decodeEIP1(resp.Body)
 	default:
@@ -108,6 +114,7 @@ func decodeEIP1(body io.Reader) (*eipService, error) {
 	decoder := json.NewDecoder(body)
 	err := decoder.Decode(&eip1)
 	if err != nil {
+		log.Printf("Error fetching eip v1 json: %v", err)
 		return nil, err
 	}
 

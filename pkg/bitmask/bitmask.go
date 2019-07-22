@@ -27,4 +27,5 @@ type Bitmask interface {
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	ListGateways(provider string) ([]string, error)
 	UseGateway(name string) error
+	UseTransport(transport string) error
 }

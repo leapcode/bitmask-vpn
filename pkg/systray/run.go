@@ -68,6 +68,12 @@ func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
 }
 
 func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *Config) {
+	if conf.Obfs4 {
+		err := b.UseTransport("obfs4")
+		if err != nil {
+			log.Printf("Error setting transport: %v", err)
+		}
+	}
 	err := checkAndInstallHelpers(b, notify)
 	if err != nil {
 		log.Printf("Is bitmask running? %v", err)

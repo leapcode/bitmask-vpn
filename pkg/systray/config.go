@@ -40,10 +40,12 @@ type Config struct {
 		LastNotification  time.Time
 		Donated           time.Time
 		SelectGateway     bool
+		Obfs4             bool
 		UserStoppedVPN    bool
 		DisableAustostart bool
 	}
 	SelectGateway     bool
+	Obfs4             bool
 	DisableAustostart bool
 	StartVPN          bool
 	Version           string
@@ -64,6 +66,7 @@ func ParseConfig() *Config {
 	}
 
 	conf.SelectGateway = conf.file.SelectGateway
+	conf.Obfs4 = conf.file.Obfs4
 	conf.DisableAustostart = conf.file.DisableAustostart
 	conf.StartVPN = !conf.file.UserStoppedVPN
 	return &conf

@@ -52,6 +52,7 @@ func main() {
 	conf := systray.ParseConfig()
 
 	selectGateway := flag.Bool("select-gateway", false, "Enable gateway selection")
+	obfs4 := flag.Bool("obfs4", false, "Use obfs4 to obfuscate the traffic is available in the provider")
 	disableAutostart := flag.Bool("disable-autostart", false, "Disable the autostart for the next run")
 	startVPN := flag.String("start-vpn", "", "Start the vpn in turned 'on' or 'off'")
 	versionFlag := flag.Bool("version", false, "Version of the bitmask-systray")
@@ -69,6 +70,9 @@ func main() {
 	}
 	if *selectGateway {
 		conf.SelectGateway = *selectGateway
+	}
+	if *obfs4 {
+		conf.Obfs4 = *obfs4
 	}
 	if *disableAutostart {
 		conf.DisableAustostart = *disableAutostart
