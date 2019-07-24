@@ -1,0 +1,83 @@
+name: ${binaryName}
+version: ${version}
+summary: ${applicationName}, secure VPN. Powered by Bitmask.
+description: |
+        ${applicationName} is an easy, fast, and secure VPN service from ${providerURL}.
+        ${applicationName} does not require a user account, keep logs, or track you in
+        any way. The service is paid for entirely by donations from users like you.
+grade: stable
+confinement: classic
+icon: snap/gui/icon.svg
+base: core18
+
+parts:
+        desktop-gtk3:
+                plugin: nil
+                stage-packages:
+                    - libc6
+                prime:
+                    - '*'
+                    - -usr/include
+                    - -usr/lib/locale
+                    - -usr/share/X11/locale
+                    - -usr/share/doc
+                    - -usr/share/locale
+                    - -usr/share/man
+         
+        bitmask-root:
+                after: [desktop-gtk3]
+                plugin: dump
+                source: https://0xacab.org/leap/bitmask-dev/
+                source-type: git
+                build-packages:
+                    - wget
+                override-prime: |
+                        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+                        mkdir -p bin
+                        wget -O bin/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
+                        chmod +x bin/bitmask-root
+                        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+
+        openvpn:
+                plugin: nil
+                stage-packages:
+                    - openvpn
+                    - libc6
+                prime:
+                    - -usr/share/doc
+                    - -usr/share/man
+
+        bitmask-vpn:
+                after: [desktop-gtk3]
+                plugin: go
+                source-type: git
+                go-packages:
+                        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
+                override-build: |
+                      echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+                      #cat $SNAPCRAFT_PROJECT_DIR/snap/local/bitmask-vpn.desktop
+                      cp ../../../gui/bitmask-vpn.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
+                      snapcraftctl build
+                      echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+                build-packages:
+                    - pkg-config
+                    - patchelf
+                    - libpcre3-dev
+                    - libappindicator3-dev
+                    - libgtk-3-dev
+                stage-packages:
+                    - libc6
+                    - libpcre3
+                    - libappindicator3-1
+                    - zlib1g
+
+apps:
+        launcher:
+                command: bin/bitmask-vpn
+                desktop: ${binaryName}.desktop
+                environment:
+                        LD_LIBRARY_PATH: "$SNAP/usr/lib/$(gcc -print-multiarch):$SNAP/lib/$(gcc -print-multiarch):$LD_LIBRARY_PATH"
+        openvpn:
+                command: usr/sbin/openvpn
+        bitmask-root:
+                command: bin/bitmask-root

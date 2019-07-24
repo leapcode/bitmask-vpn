@@ -48,7 +48,7 @@ prepare: generate relink_default
 	# FIXME trouble in win - better get into repo
 	#-@make icon
 
-prepare_win:
+gen_pkg_win:
 	mkdir -p build/${PROVIDER}/windows/
 	cp -r branding/templates/windows build/${PROVIDER}
 	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-win.py build/${PROVIDER}/windows/data.json
@@ -56,7 +56,7 @@ prepare_win:
 	# TODO create/copy build/PROVIDER/assets/
 	# TODO create/copy build/PROVIDER/staging/
 
-prepare_osx:
+gen_pkg_osx:
 	mkdir -p build/${PROVIDER}/osx/scripts
 	mkdir -p build/${PROVIDER}/staging
 ifeq (,$(wildcard build/${PROVIDER}/assets))
@@ -70,13 +70,18 @@ endif
 	cd build/${PROVIDER}/osx && python3 generate.py
 	cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
-prepare_snap:
-	echo "snap..."
+gen_pkg_snap:
+	cp -r branding/templates/snap build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-snap.py build/${PROVIDER}/snap/data.json
+	cd build/${PROVIDER}/snap && python3 generate.py
+	rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
+	mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	# TODO missing hooks
 
-prepare_debian:
+gen_pkg_deb:
 	echo "debian..."
 
-prepare_all: prepare prepare_win prepare_osx prepare_snap
+gen_pkg_all: prepare gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb
 
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
