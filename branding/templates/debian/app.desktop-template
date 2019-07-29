@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${applicationName}
+Comment=Easy VPN by ${name}
+Comment[es]=VPN Facil de ${name}
+Comment[de]=Easy VPN by ${name}
+Exec=${binaryName} %U
+Terminal=false
+Icon=riseupvpn
+Categories=Network;Application;
+StartupNotify=true
+X-AppInstall-Package=${binaryName}
+Keywords=encryption;vpn;${name};leap

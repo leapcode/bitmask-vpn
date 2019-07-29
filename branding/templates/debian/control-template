@@ -1,0 +1,23 @@
+Source: ${binaryName}
+Section: net
+Priority: extra
+Maintainer: LEAP Encryption Access Project <debian@leap.se>
+Build-Depends: debhelper (>= 10.0.0), dh-golang, golang-go (> 2:1.9),
+    golang-golang-x-text-dev (>= 0.3.0-2),
+    libgtk-3-dev, libappindicator3-dev, pkg-config
+Standards-Version: 3.9.8
+
+Package: ${binaryName}
+Architecture: any
+Multi-Arch: foreign
+Depends: ${misc:Depends},
+    openvpn, libgtk-3-0, libappindicator3-1,
+    policykit-1-gnome | polkit-1-auth-agent,
+    python3,
+Enhances: openvpn
+Description: Easy, fast, and secure VPN service from ${name}.
+ This package is a custom build of the new Bitmask VPN client, preconfigured
+ to use the ${providerURL} provider.
+ .
+ The service does not require a user account, keep logs, or track you in any
+ way. The service is paid for entirely by donations from users.

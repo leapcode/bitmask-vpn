@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export DH_GOPKG = 0xacab.org/leap/bitmask-vpn
+export DH_GOLANG_EXCLUDES = vendor
+
+# TODO get the static version that gen_pkg generated instead??
+VERSION = debian-$(shell git describe --tags --always)
+APPNAME = ${binaryName}
+
+%:
+	dh $@ --with golang --buildsystem golang
+
+override_dh_auto_test:
+
+override_dh_auto_build:
+	rm -rf src/0xacab.org/leap/bitmask-vpn/tools/transifex
+	rm -rf obj-$(DEB_BUILD_GNU_TYPE)/src/0xacab.org/leap/bitmask-vpn/tools/transifex
+	rm -rf tools
+	dh_auto_build -O--buildsystem=golang -- -ldflags "-X main.version=$(VERSION)"
+
+override_dh_install:
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/sbin
+	cp $(CURDIR)/helpers/bitmask-root $(CURDIR)/debian/${binaryName}/usr/sbin/
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
+	cp $(CURDIR)/helpers/se.leap.bitmask.policy   $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
+	rm -fr $(CURDIR)/debian/${APPNAME}/usr/share/gocode
+	strip $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-vpn
+	rm $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-helper
+	rm $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-connect
+	mv $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-vpn $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/share/${APPNAME}
+	cp $(CURDIR)/debian/icons/scalable/icon.svg $(CURDIR)/debian/${APPNAME}/usr/share/${APPNAME}/icon.svg
+	dh_install

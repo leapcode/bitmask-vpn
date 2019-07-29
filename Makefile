@@ -10,6 +10,9 @@ VERSION ?= $(shell git describe)
 # detect OS, we use it for dependencies
 UNAME = `uname`
 
+TEMPLATES = "branding/templates"
+SCRIPTS = "branding/scripts"
+
 all: icon locales get build
 
 depends:
@@ -40,18 +43,18 @@ ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
 endif
 	cd branding/assets && ln -s ${PROVIDER} default
 
-prepare: generate relink_default
+prepare: generate relink_default tgz
 	mkdir -p build/${PROVIDER}/bin/
-	cp branding/templates/makefile/Makefile build/${PROVIDER}/Makefile
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-vendor-make.py build/${PROVIDER}/vendor.mk
-	branding/scripts/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
+	cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
+	${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
 	# FIXME trouble in win - better get into repo
 	#-@make icon
 
 gen_pkg_win:
 	mkdir -p build/${PROVIDER}/windows/
-	cp -r branding/templates/windows build/${PROVIDER}
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-win.py build/${PROVIDER}/windows/data.json
+	cp -r ${TEMPLATES}/windows build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-win.py build/${PROVIDER}/windows/data.json
 	cd build/${PROVIDER}/windows && python3 generate.py
 	# TODO create/copy build/PROVIDER/assets/
 	# TODO create/copy build/PROVIDER/staging/
@@ -65,21 +68,25 @@ endif
 ifeq (,$(wildcard build/${PROVIDER}/staging/openvpn-osx))
 	curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
 endif
-	cp -r branding/templates/osx build/${PROVIDER}
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-osx.py build/${PROVIDER}/osx/data.json
+	cp -r ${TEMPLATES}/osx build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-osx.py build/${PROVIDER}/osx/data.json
 	cd build/${PROVIDER}/osx && python3 generate.py
 	cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
 gen_pkg_snap:
-	cp -r branding/templates/snap build/${PROVIDER}
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} branding/scripts/generate-snap.py build/${PROVIDER}/snap/data.json
+	cp -r ${TEMPLATES}/snap build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} S{SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
 	cd build/${PROVIDER}/snap && python3 generate.py
 	rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
 	mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
 	# TODO missing hooks
 
 gen_pkg_deb:
-	echo "debian..."
+	cp -r ${TEMPLATES}/debian build/${PROVIDER}
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-debian.py build/${PROVIDER}/debian/data.json
+	mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	cd build/${PROVIDER}/debian && python3 generate.py
+	cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 
 gen_pkg_all: prepare gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb
 
@@ -102,6 +109,20 @@ build_bitmaskd:
 
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
+
+
+TGZ_NAME = bitmask-vpn_${VERSION}-src
+TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
+tgz:
+	mkdir -p $(TGZ_PATH)
+	git archive HEAD | tar -x -C $(TGZ_PATH)
+	mkdir $(TGZ_PATH)/helpers
+	wget -O $(TGZ_PATH)/helpers/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
+	chmod +x $(TGZ_PATH)/helpers/bitmask-root
+	wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
+	cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
+	rm -r $(TGZ_PATH)
+
 
 clean:
 	make -C icon clean

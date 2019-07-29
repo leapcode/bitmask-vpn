@@ -15,17 +15,8 @@ BUILD_RELEASE?=no
 WIN_CERT_PATH?=z:\leap\LEAP.pfx
 WIN_CERT_PASS?=
 OSX_CERT = "Developer ID Installer: LEAP Encryption Access Project"
+DEB_VERSION = $(shell echo ${VERSION} | cut -d '-' -f 1,2)
 
-TGZ_PATH = $(shell pwd)/dist/$(BINNAME)-$(VERSION)
-tgz:
-	mkdir -p $(TGZ_PATH)
-	git -C `go env GOPATH`/src/$(SYSTRAY) archive HEAD | tar -x -C $(TGZ_PATH)
-	mkdir $(TGZ_PATH)/helpers
-	wget -O $(TGZ_PATH)/helpers/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
-	chmod +x $(TGZ_PATH)/helpers/bitmask-root
-	wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
-	cd dist; tar cvzf $(BINNAME)-$(VERSION).tgz $(BINNAME)-$(VERSION)
-	rm -r $(TGZ_PATH)
 
 # -----------------------------------------------------------------------------
 # Windows 
@@ -54,7 +45,7 @@ openvpn_cross_win:
 # TODO no need to build systray in windows, but move this powershell hack to main build makefile
 #powershell '$$gopath=go env GOPATH;$$version=git -C $$gopath/src/$(SYSTRAY) describe --tags; go build -ldflags "-H windowsgui -s -w -X main.version=$$version" -o $(STAGING)/$(SYSTRAY_BIN).exe $(SYSTRAY)/cmd/bitmask-vpn'
 
-package_win: staging\nssm.exe helper_win systray_win
+pkg_win: staging\nssm.exe helper_win systray_win
 # I assume you did bootstrap openvpn_win manually already.
 	echo "[+] building windows"
 	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
@@ -75,7 +66,7 @@ build_cross_win: staging/nssm.exe
 # OSX
 # -----------------------------------------------------------------------------
 
-package_osx:
+pkg_osx:
 	echo "[+] Building osx package..."
 	osx/quickpkg --output dist/$(APPNAME)-$(VERSION)_unsigned.pkg --scripts osx/scripts/ dist/$(APPNAME).app/
 	@if [ $(BUILD_RELEASE) = no ]; then\
@@ -89,27 +80,28 @@ package_osx:
 # Linux 
 # -----------------------------------------------------------------------------
 
-build_snap:
+pkg_snap:
 	echo "[+] building snap..."
 	snapcraft build
 	snapcraft snap
 	mkdir -p dist
 	mv $(BINNAME)* dist/
 
-build_deb:  tgz
-	echo "[+] building deb..."
+pkg_deb:
+	echo "[+] building debian package version" ${DEB_VERSION}
 	@if [ $(BUILD_RELEASE) = no ]; then\
 		dch -v $(VERSION) -M "debian package generated from the git repository" && echo "[!] BUILD_RELEASE=no, incrementing changelog";\
 	else\
 		echo "[!] BUILD_RELEASE";\
 	fi
-	mkdir -p build
-	cp dist/$(BINNAME)-$(VERSION).tgz build/$(BINNAME)_$(shell echo ${VERSION} | cut -d '-' -f 1-2).orig.tar.gz
-	cd build && tar xzf $(BINNAME)_$(shell echo ${VERSION} | cut -d '-' -f 1-2).orig.tar.gz
-	cp -r debian/ build/$(BINNAME)-$(VERSION)/
-	cd build/$(BINNAME)-$(VERSION) && debuild -us -uc
-	cp build/*.deb dist/
-	git checkout -- debian/changelog
+	mkdir -p build ../dist
+	# bitmask-vpn tar.gz should be placed in parent forlder after doing 'make prepare' with the
+	# bitmask-vpn topmost Makefile.
+	cp ../bitmask-vpn_$(VERSION).tgz build/$(BINNAME)_${DEB_VERSION}.orig.tar.gz
+	cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
+	cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
+	cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
+	cp build/*.deb ../dist/
 
 # -----------------------------------------------------------------------------
 # Utils

@@ -1,0 +1,5 @@
+${binaryName} (${version}) unstable; urgency=medium
+
+  * Initial package.
+
+ -- LEAP Encryption Access Project  <debian@leap.se>  Mon, 29 Jul 2019 10:00:00 +0100
