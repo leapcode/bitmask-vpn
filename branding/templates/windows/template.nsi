@@ -30,7 +30,7 @@ RequestExecutionLevel admin
 
 
 
-!define BITMAP_FILE riseupvpn.bmp
+!define BITMAP_FILE icon.bmp
 
 !define MUI_ICON "..\assets\$applicationNameLower.ico"
 !define MUI_UNICON "..\assets\$applicationNameLower.ico"
