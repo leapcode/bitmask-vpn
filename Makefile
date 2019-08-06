@@ -75,7 +75,7 @@ endif
 
 gen_pkg_snap:
 	cp -r ${TEMPLATES}/snap build/${PROVIDER}
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} S{SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
 	cd build/${PROVIDER}/snap && python3 generate.py
 	rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
 	mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
