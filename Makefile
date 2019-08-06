@@ -65,7 +65,7 @@ build_win:
 
 
 clean:
-	@rm -f build/${PROVIDER}/bin/bitmask-*
+	@rm -rf build/
 	@unlink branding/assets/default
 
 #########################################################################
@@ -99,7 +99,7 @@ tgz:
 	@chmod +x $(TGZ_PATH)/helpers/bitmask-root
 	@wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
 	@cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
-	@rm -f $(TGZ_PATH)
+	@rm -rf $(TGZ_PATH)
 
 gen_pkg_win:
 	@mkdir -p build/${PROVIDER}/windows/
@@ -142,7 +142,8 @@ gen_pkg_deb:
 # packaging action
 #########################################################################
 
-packages: pkg_snap pkg_deb pkg_osx pkg_win
+packages: package_deb package_osx package_win
+# package_snap
 
 package_snap:
 	@make -C build/${PROVIDER} pkg_snap

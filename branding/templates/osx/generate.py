@@ -98,9 +98,10 @@ with open(APP_PATH + "/Contents/PkgInfo", "w") as f:
 # 3. Copy the binary payloads
 # --------------------------------------------
 
-copy_payload(ENTRYPOINT)
-copy_payload(HELPER)
-copy_payload(OPENVPN, destfile='/Contents/Resources/openvpn.leap')
+# TODO ------------------------ move this to makefile
+# copy_payload(ENTRYPOINT)
+# copy_payload(HELPER)
+# copy_payload(OPENVPN, destfile='/Contents/Resources/openvpn.leap')
 
 # 4. Copy the app icon from the assets folder
 # -----------------------------------------------
