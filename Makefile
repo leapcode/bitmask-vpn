@@ -63,6 +63,14 @@ build_bitmaskd:
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
 
+CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
+build_cross_win:
+	$(CROSS_WIN_FLAGS) $(MAKE) build
+
+CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
+build_cross_osx:
+	$(CROSS_OSX_FLAGS) $(MAKE) build
+
 
 clean:
 	@rm -rf build/

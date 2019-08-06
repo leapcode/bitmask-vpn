@@ -21,8 +21,6 @@ DEB_VERSION = $(shell echo ${VERSION} | cut -d '-' -f 1,2)
 # -----------------------------------------------------------------------------
 # Windows 
 # -----------------------------------------------------------------------------
-CROSS_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
-
 openvpn_win:
 	if not exist staging\openvpn mkdir staging\openvpn
 	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O staging/openvpn/tap-windows.exe
