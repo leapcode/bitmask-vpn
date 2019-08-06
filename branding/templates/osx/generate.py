@@ -10,16 +10,16 @@ import os
 import os.path
 import shutil
 import stat
+import sys
 
 from string import Template
 
 here = os.path.split(os.path.abspath(__file__))[0]
 
 ENTRYPOINT = 'bitmask-vpn'
-HELPER = 'bitmask-helper'
-OPENVPN = 'openvpn-osx'
 TEMPLATE_INFO = 'template-info.plist'
 TEMPLATE_HELPER = 'template-helper.plist'
+TEMPLATE_PACKAGEINFO = 'template-packageinfo.plist'
 
 TEMPLATE_PREINSTALL = 'template-preinstall'
 TEMPLATE_POSTINSTALL = 'template-postinstall'
@@ -30,12 +30,14 @@ APPNAME = data.get('applicationName')
 VERSION = data.get('version', 'unknown')
 
 APP_PATH = os.path.abspath(here + '/../dist/' + APPNAME + ".app")
+PKG_PATH = os.path.abspath(here + '/../dist/' + APPNAME)
 STAGING = os.path.abspath(here + '/../staging/')
 ASSETS = os.path.abspath(here + '/../assets/')
 ICON = os.path.join(ASSETS, 'icon.icns')
 SCRIPTS = os.path.join(os.path.abspath(here), 'scripts')
 INFO_PLIST = APP_PATH + '/Contents/Info.plist'
 HELPER_PLIST = os.path.join(SCRIPTS, 'se.leap.bitmask-helper.plist')
+PACKAGEINFO = os.path.join(PKG_PATH, 'PackageInfo')
 PREINSTALL = os.path.join(SCRIPTS, 'preinstall')
 POSTINSTALL = os.path.join(SCRIPTS, 'postinstall')
 RULEFILE = os.path.join(here, 'bitmask.pf.conf')
@@ -64,16 +66,6 @@ data['bundle_name'] = APPNAME
 # utils
 
 
-def copy_payload(filename, destfile=None):
-    if destfile is None:
-        destfile = APP_PATH + "/Contents/MacOS/" + filename
-    else:
-        destfile = APP_PATH + destfile
-    shutil.copyfile(STAGING + '/' + filename, destfile)
-    cmode = os.stat(destfile).st_mode
-    os.chmod(destfile, cmode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-
-
 def generate_from_template(template, dest, data):
     print("[+] File written from template to", dest)
     template = Template(open(template).read())
@@ -95,13 +87,15 @@ with open(APP_PATH + "/Contents/PkgInfo", "w") as f:
     f.write("APPL????")
 
 
-# 3. Copy the binary payloads
+# 3. Generate if needed the package info (for cross build)
 # --------------------------------------------
 
-# TODO ------------------------ move this to makefile
-# copy_payload(ENTRYPOINT)
-# copy_payload(HELPER)
-# copy_payload(OPENVPN, destfile='/Contents/Resources/openvpn.leap')
+if not sys.platform.startswith('darwin'):
+    try:
+        os.mkdir(PKG_PATH)
+    except FileExistsError:
+        pass
+    generate_from_template(TEMPLATE_PACKAGEINFO, PACKAGEINFO, data)
 
 # 4. Copy the app icon from the assets folder
 # -----------------------------------------------

@@ -16,6 +16,7 @@ WIN_CERT_PATH?=z:\leap\LEAP.pfx
 WIN_CERT_PASS?=
 OSX_CERT = "Developer ID Installer: LEAP Encryption Access Project"
 DEB_VERSION = $(shell echo ${VERSION} | cut -d '-' -f 1,2)
+SYSTEM = $(shell uname -s)
 
 
 # -----------------------------------------------------------------------------
@@ -40,25 +41,17 @@ openvpn_cross_win:
 	cp $(STAGING)/openvpn/bin/*.dll $(STAGING)
 	cp $(STAGING)/openvpn/lib/engines-1_1/*.dll $(STAGING)
 
-# TODO no need to build systray in windows, but move this powershell hack to main build makefile
-#powershell '$$gopath=go env GOPATH;$$version=git -C $$gopath/src/$(SYSTRAY) describe --tags; go build -ldflags "-H windowsgui -s -w -X main.version=$$version" -o $(STAGING)/$(SYSTRAY_BIN).exe $(SYSTRAY)/cmd/bitmask-vpn'
-
 pkg_win: staging\nssm.exe helper_win systray_win
 # I assume you did bootstrap openvpn_win manually already.
 	echo "[+] building windows"
 	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
 
+pkg_cross_win: staging/nssm.exe
+	makensis windows/$(APPNAME)-installer.nsi
+
 sign_win:
 	echo "[+] signing windows build"
 	python windowns/sign.py $(WIN_CERT_PATH) $(WIN_CERT_PASS)
-
-# TODO move to main build makefile
-build_cross_win: staging/nssm.exe
-	echo "!define VERSION $(VERSION)" > $(STAGING)/version.nsh
-	$(CROSS_FLAGS) $(MAKE) helper_win
-	mkdir -p dist
-	make -C win VERSION=$(VERSION)
-	makensis win/$(APPNAME)-installer.nsi
 
 # -----------------------------------------------------------------------------
 # OSX
@@ -66,6 +59,10 @@ build_cross_win: staging/nssm.exe
 
 pkg_osx:
 	echo "[+] Building osx package..."
+	cp ../bin/bitmask-vpn dist/$(APPNAME).app/Contents/MacOS/
+	cp ../bin/bitmask-helper dist/$(APPNAME).app/Contents/MacOS/
+	cp $(STAGING)/openvpn-osx dist/$(APPNAME).app/Contents/Resources/openvpn.leap
+ifeq ($(SYSTEM), Darwin)
 	osx/quickpkg --output dist/$(APPNAME)-$(VERSION)_unsigned.pkg --scripts osx/scripts/ dist/$(APPNAME).app/
 	@if [ $(BUILD_RELEASE) = no ]; then\
 		echo "[!] BUILD_RELEASE=no, skipping signature";\
@@ -73,6 +70,17 @@ pkg_osx:
 		echo "[+] Signing the bundle";\
 		productsign --sign $(OSX_CERT) dist/$(APPNAME)-$(VERSION)_unsigned.pkg dist/$(APPNAME)-$(VERSION).pkg;\
 	fi
+else
+	mkdir dist/tmp
+	mv dist/$(APPNAME).app dist/tmp
+	mkbom -u 0 -g 80 dist/tmp dist/$(APPNAME)/Bom
+	mv dist/tmp/$(APPNAME).app dist
+	rmdir dist/tmp
+	
+	cd dist && find $(APPNAME).app | cpio -o --format odc --owner 0:80 | gzip -c > $(APPNAME)/Payload
+	cd osx/scripts && find . | cpio -o --format odc --owner 0:80 | gzip -c > ../../dist/$(APPNAME)/Scripts
+	xar --compression none -cf dist/RiseupVPN-$(VERSION)_unsigned.pkg dist/$(APPNAME)/
+endif
 
 # -----------------------------------------------------------------------------
 # Linux 

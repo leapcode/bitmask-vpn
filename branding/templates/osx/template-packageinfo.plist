@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<pkg-info overwrite-permissions="true" relocatable="false" identifier="se.leap.$applicationNameLower" postinstall-action="none" version="$applicationName $version" format-version="2" generator-version="InstallCmds-502 (14A389)" install-location="/Applications" auth="root">
+    <payload numberOfFiles="15" installKBytes="10188"/>
+    <bundle path="./$applicationName.app" id="se.leap.$applicationNameLower" CFBundleShortVersionString="$applicationName $version" CFBundleVersion="0.19.1"/>
+    <bundle-version>
+        <bundle id="se.leap.$applicationNameLower"/>
+    </bundle-version>
+    <upgrade-bundle>
+        <bundle id="se.leap.$applicationNameLower"/>
+    </upgrade-bundle>
+    <update-bundle/>
+    <atomic-update-bundle/>
+    <strict-identifier>
+        <bundle id="se.leap.$applicationNameLower"/>
+    </strict-identifier>
+    <relocate/>
+    <scripts>
+        <preinstall file="./preinstall"/>
+        <postinstall file="./postinstall"/>
+    </scripts>
+</pkg-info>
