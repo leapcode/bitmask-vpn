@@ -29,7 +29,8 @@ depends:
 	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
 
 dependsLinux:
-	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config cmake
+	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper
+	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
 	# TODO - bootstrap homebrew if not there
@@ -46,7 +47,7 @@ get:
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
-	@go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
+	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
 	-@strip $*
 	@mkdir -p build/bin
 	@mv $* build/bin/
@@ -141,19 +142,20 @@ gen_pkg_deb:
 # packaging action
 #########################################################################
 
-pkg: pkg_win pkg_osx pkg_deb pkg_snap
+packages: pkg_snap pkg_deb pkg_osx pkg_win
 
-pkg_win:
-	@make -C build/${PROVIDER} pkg_win
+package_snap:
+	@make -C build/${PROVIDER} pkg_snap
 
-pkg_osx:
-	@make -C build/${PROVIDER} pkg_osx
-
-pkg_deb:
+package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
-pkg_snap:
-	@make -C build/${PROVIDER} pkg_snap
+package_win:
+	@make -C build/${PROVIDER} pkg_win
+
+package_osx:
+	@make -C build/${PROVIDER} pkg_osx
+
 
 
 #########################################################################

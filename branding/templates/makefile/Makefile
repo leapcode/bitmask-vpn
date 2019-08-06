@@ -81,11 +81,11 @@ pkg_osx:
 # -----------------------------------------------------------------------------
 
 pkg_snap:
-	echo "[+] building snap..."
+	@echo "[+] building snap..."
 	snapcraft build
 	snapcraft snap
-	mkdir -p dist
-	mv $(BINNAME)* dist/
+	-@mkdir -p dist
+	@mv $(BINNAME)* dist/
 
 pkg_deb:
 	echo "[+] building debian package version" ${DEB_VERSION}
