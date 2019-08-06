@@ -1,3 +1,8 @@
+#########################################################################
+# Multiplatform build and packaging recipes for BitmaskVPN
+# (c) LEAP Encryption Access Project, 2019
+#########################################################################
+
 .PHONY: all get build build_bitmaskd icon locales generate_locales clean
 
 TAGS ?= gtk_3_18
@@ -14,6 +19,10 @@ TEMPLATES = "branding/templates"
 SCRIPTS = "branding/scripts"
 
 all: icon locales get build
+
+#########################################################################
+# go build
+#########################################################################
 
 depends:
 	-@make depends$(UNAME)
@@ -34,6 +43,43 @@ get:
 	go get -tags $(TAGS) ./...
 	go get -tags "$(TAGS) bitmaskd" ./...
 
+build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
+
+build_%:
+	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
+	# FIXME does not work in osx
+	# strip $*
+	mkdir -p build/bin
+	mv $* build/bin/
+	mkdir -p build/${PROVIDER}/staging
+	ln -s ../../bin/$* build/${PROVIDER}/staging/$*
+
+test:
+	go test -tags "integration $(TAGS)" ./...
+
+build_bitmaskd:
+	go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`" ./cmd/*
+
+build_win:
+	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
+
+
+clean:
+	rm -f build/${PROVIDER}/bin/bitmask-*
+	unlink branding/assets/default
+
+#########################################################################
+# packaging templates
+#########################################################################
+
+prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb
+
+prepare_templates: generate relink_default tgz
+	mkdir -p build/${PROVIDER}/bin/
+	cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
+	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
+	${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
+
 generate:
 	go generate cmd/bitmask-vpn/main.go
 
@@ -43,13 +89,17 @@ ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
 endif
 	cd branding/assets && ln -s ${PROVIDER} default
 
-prepare: generate relink_default tgz
-	mkdir -p build/${PROVIDER}/bin/
-	cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
-	VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
-	${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
-	# FIXME trouble in win - better get into repo
-	#-@make icon
+TGZ_NAME = bitmask-vpn_${VERSION}-src
+TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
+tgz:
+	mkdir -p $(TGZ_PATH)
+	git archive HEAD | tar -x -C $(TGZ_PATH)
+	mkdir $(TGZ_PATH)/helpers
+	wget -O $(TGZ_PATH)/helpers/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
+	chmod +x $(TGZ_PATH)/helpers/bitmask-root
+	wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
+	cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
+	rm -r $(TGZ_PATH)
 
 gen_pkg_win:
 	mkdir -p build/${PROVIDER}/windows/
@@ -88,46 +138,28 @@ gen_pkg_deb:
 	cd build/${PROVIDER}/debian && python3 generate.py
 	cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 
-gen_pkg_all: prepare gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb
+#########################################################################
+# packaging action
+#########################################################################
 
-build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
+pkg: pkg_win pkg_osx pkg_deb pkg_snap
 
-build_%:
-	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
-	# FIXME does not work in osx
-	# strip $*
-	mkdir -p build/bin
-	mv $* build/bin/
-	mkdir -p build/${PROVIDER}/staging
-	ln -s ../../bin/$* build/${PROVIDER}/staging/$*
+pkg_win:
+	@make -C build/${PROVIDER} pkg_win
 
-test:
-	go test -tags "integration $(TAGS)" ./...
+pkg_osx:
+	@make -C build/${PROVIDER} pkg_osx
 
-build_bitmaskd:
-	go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`" ./cmd/*
+pkg_deb:
+	@make -C build/${PROVIDER} pkg_deb
 
-build_win:
-	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
+pkg_snap:
+	@make -C build/${PROVIDER} pkg_snap
 
 
-TGZ_NAME = bitmask-vpn_${VERSION}-src
-TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
-tgz:
-	mkdir -p $(TGZ_PATH)
-	git archive HEAD | tar -x -C $(TGZ_PATH)
-	mkdir $(TGZ_PATH)/helpers
-	wget -O $(TGZ_PATH)/helpers/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
-	chmod +x $(TGZ_PATH)/helpers/bitmask-root
-	wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
-	cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
-	rm -r $(TGZ_PATH)
-
-
-clean:
-	make -C icon clean
-	rm -f build/${PROVIDER}/bin/bitmask-*
-	unlink branding/assets/default
+#########################################################################
+# icons & locales
+#########################################################################
 
 icon:
 	make -C icon
