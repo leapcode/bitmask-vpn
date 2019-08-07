@@ -12,13 +12,18 @@ PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
 
+# go paths
+GOPATH = $(shell go env GOPATH)
+SYSTRAY = "0xacab.org/leap/bitmask-vpn"
+GOSYSTRAY = ${GOPATH}/src/${SYSTRAY}
+
 # detect OS, we use it for dependencies
 UNAME = `uname`
 
 TEMPLATES = "branding/templates"
 SCRIPTS = "branding/scripts"
 
-all: icon locales get build
+all: icon locales build
 
 #########################################################################
 # go build
@@ -41,10 +46,14 @@ dependsCygwin:
 	choco install -y golang python nssm nsis wget 7zip
 
 get:
-	@go get -tags $(TAGS) ./...
-	@go get -tags "$(TAGS) bitmaskd" ./...
+	-@mkdir -p ${GOPATH}/src/0xacab.org/leap
+	-@ln -s `pwd` ${GOSYSTRAY}
+	@cd ${GOSYSTRAY} && go get -tags $(TAGS) ./...
+	@cd ${GOSYSTRAY} && go get -tags "$(TAGS) bitmaskd" ./...
 
-build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
+# when we can depend on go 1.11 we don't need the get step anymore
+
+build: get $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
 	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o $* ./cmd/$*
