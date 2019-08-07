@@ -29,6 +29,13 @@ all: icon locales build
 # go build
 #########################################################################
 
+install_go:
+	# the version of go in bionic is too old. let's get something newer from a ppa.
+	@sudo add-apt-repository ppa:longsleep/golang-backports
+	@sudo apt-get update
+	@sudo apt-get install golang-go
+
+
 depends:
 	-@make depends$(UNAME)
 	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
