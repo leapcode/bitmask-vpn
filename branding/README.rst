@@ -41,11 +41,11 @@ Then you need to build the package::
 
 Then you can build all the packages::
 
- make pkg
+ make packages
 
 Alternatively, you can build only for an specific os::
 
- make pkg_win
- make pkg_osx
- make pkg_snap
- make pkg_deb
+ make package_win
+ make package_osx
+ make package_snap
+ make package_deb

@@ -51,12 +51,15 @@ parts:
                 after: [desktop-gtk3]
                 plugin: go
                 source-type: git
-                go-packages:
-                        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
+                source: https://0xacab.org/leap/bitmask-vpn
+                # this does not seem to work with snapcraft package version in bionic
+                #go-packages:
+                #        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
                 override-build: |
                       echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
                       #cat $SNAPCRAFT_PROJECT_DIR/snap/local/bitmask-vpn.desktop
-                      cp ../../../gui/bitmask-vpn.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
+                      cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
+                      #cp ../../../gui/bitmask-vpn.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
                       snapcraftctl build
                       echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
                 build-packages:

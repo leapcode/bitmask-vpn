@@ -53,7 +53,7 @@ get:
 
 # when we can depend on go 1.11 we don't need the get step anymore
 
-build: get $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
+build: get $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
 
 build_%:
 	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o $* ./cmd/$*
@@ -79,6 +79,9 @@ CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o
 build_cross_osx:
 	$(CROSS_OSX_FLAGS) $(MAKE) build
 
+build_done:
+	@echo
+	@echo 'Done. You can do "make packages" now.'
 
 clean:
 	@rm -rf build/

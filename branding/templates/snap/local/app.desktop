@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${applicationName}
+Comment=Anonymous VPN
+Comment[es]=VPN Anonima
+Comment[de]=Anonymous VPN
+Path=/snap/bin/
+Exec="/snap/bin/${binaryName}.launcher"
+Terminal=false
+Icon=/snap/${binaryName}/current/meta/gui/icon.svg
+Categories=Network;Application;
+StartupNotify=true
+Keywords=VPN;${name};leap
+
