@@ -12,18 +12,22 @@ Build the systray:
   $ make build
 ```
 
-To be able to build the assets you'll need:
+You need at least go 1.11. If you have something older and are using ubuntu, you can do:
+
 ```
-  $ go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
+  make install_go
 ```
+
+For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
+
 
 OSX
 ----------
 Using homebrew:
 
 ```
-  $ make depends
   $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  $ make depends
   $ make build
 
 ```
