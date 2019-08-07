@@ -9,7 +9,6 @@ Install dependencies:
 Build the systray:
 ```
   $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  $ make get
   $ make build
 ```
 
@@ -25,7 +24,6 @@ Using homebrew:
 ```
   $ make depends
   $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  $ make get
   $ make build
 
 ```
@@ -54,7 +52,7 @@ for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bi
 To build and run it:
 ```
   $ make build
-  $ ./bitmask-vpn
+  $ build/bin/bitmask-vpn
 ```
 
 
@@ -68,7 +66,7 @@ Is also posible to compile the systray to use bitmask as backend:
 In that case bitmask-systray assumes that you already have bitmaskd running. Run bitmask and the systray:
 ```
   $ bitmaskd
-  $ ./bitmask-vpn
+  $ build/bin/bitmask-vpn
 ```
 
 
