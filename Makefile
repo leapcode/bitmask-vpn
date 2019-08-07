@@ -14,14 +14,14 @@ VERSION ?= $(shell git describe)
 
 # go paths
 GOPATH = $(shell go env GOPATH)
-SYSTRAY = "0xacab.org/leap/bitmask-vpn"
+SYSTRAY = 0xacab.org/leap/bitmask-vpn
 GOSYSTRAY = ${GOPATH}/src/${SYSTRAY}
 
 # detect OS, we use it for dependencies
 UNAME = `uname`
 
-TEMPLATES = "branding/templates"
-SCRIPTS = "branding/scripts"
+TEMPLATES = branding/templates
+SCRIPTS = branding/scripts
 
 all: icon locales build
 
@@ -47,12 +47,17 @@ dependsCygwin:
 
 get:
 	-@mkdir -p ${GOPATH}/src/0xacab.org/leap
-	-@ln -s `pwd` ${GOSYSTRAY}
+ifeq (,$(wildcard ${GOSYSTRAY}))
+else
+	@rm -rf ${GOSYSTRAY}
+endif
+	@ln -s `pwd` ${GOSYSTRAY}
 	@cd ${GOSYSTRAY} && go get -tags $(TAGS) ./...
 	@cd ${GOSYSTRAY} && go get -tags "$(TAGS) bitmaskd" ./...
+	@echo "Done with go get."
+
 
 # when we can depend on go 1.11 we don't need the get step anymore
-
 build: get $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
 
 build_%:
