@@ -32,8 +32,8 @@ RequestExecutionLevel admin
 
 !define BITMAP_FILE icon.bmp
 
-!define MUI_ICON "..\assets\$applicationNameLower.ico"
-!define MUI_UNICON "..\assets\$applicationNameLower.ico"
+!define MUI_ICON "..\assets\icon.ico"
+!define MUI_UNICON "..\assets\icon.ico"
 
 !define MUI_WELCOMEPAGE_TITLE "$applicationName"
 !define MUI_WELCOMEPAGE_TEXT "This will install $applicationName in your computer. $applicationName is a simple, fast and secure VPN Client, powered by Bitmask. \n This VPN service is run by donations from people like you."
@@ -79,7 +79,7 @@ Section "InstallFiles"
 
   File "readme.txt"
   File "..\staging\nssm.exe"
-  File "/oname=icon.ico" "..\assets\$applicationNameLower.ico"
+  File "/oname=icon.ico" "..\assets\icon.ico"
 
   $extra_install_files
 

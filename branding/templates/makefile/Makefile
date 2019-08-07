@@ -16,38 +16,30 @@ WIN_CERT_PATH?=z:\leap\LEAP.pfx
 WIN_CERT_PASS?=
 OSX_CERT = "Developer ID Installer: LEAP Encryption Access Project"
 DEB_VERSION = $(shell echo ${VERSION} | cut -d '-' -f 1,2)
+
+ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
+SYSTEM = Windows
+else
 SYSTEM = $(shell uname -s)
+endif
 
 
 # -----------------------------------------------------------------------------
 # Windows 
 # -----------------------------------------------------------------------------
-openvpn_win:
-	if not exist staging\openvpn mkdir staging\openvpn
-	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O staging/openvpn/tap-windows.exe
-# eventually, this should be built statically and cross compiled in the same pipeline that we build the installer. 
-	wget https://downloads.leap.se/thirdparty/windows/openvpn-x86_64-w64-mingw32.tar.bz2 -O staging/openvpn/openvpn.tar.bz2
-	7z e -y -ostaging/openvpn/ staging/openvpn/openvpn.tar.bz2
-	7z e -y -r -ostaging/openvpn/ staging/openvpn/openvpn.tar *.dll
-	7z e -y -r -ostaging/openvpn/ staging/openvpn/openvpn.tar *.exe
-	copy .\staging\openvpn\openvpn.exe .\staging
-	copy .\staging\openvpn\*.dll .\staging
-openvpn_cross_win:
-	mkdir -p staging/openvpn
-	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O $(STAGING)/openvpn/tap-windows.exe
-	wget https://downloads.leap.se/thirdparty/windows/openvpn-x86_64-w64-mingw32.tar.bz2 -O $(STAGING)/openvpn/openvpn.tar.bz2
-	tar xvjf $(STAGING)/openvpn/openvpn.tar.bz2 -C $(STAGING)/openvpn/
-	cp $(STAGING)/openvpn/bin/openvpn.exe $(STAGING)/openvpn
-	cp $(STAGING)/openvpn/bin/*.dll $(STAGING)
-	cp $(STAGING)/openvpn/lib/engines-1_1/*.dll $(STAGING)
-
-pkg_win: staging\nssm.exe helper_win systray_win
-# I assume you did bootstrap openvpn_win manually already.
+ifeq ($(SYSTEM), Windows)
+pkg_win: staging\nssm.exe staging\openvpn\openvpn.exe
 	echo "[+] building windows"
+	copy ..\bin\bitmask-vpn staging\bitmask-vpn.exe
+	copy ..\bin\bitmask-helper staging\bitmask_helper.exe
 	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
-
-pkg_cross_win: staging/nssm.exe
+else
+pkg_win: staging/nssm.exe staging/openvpn/openvpn.exe
+	echo "[+] building windows"
+	cp ../bin/bitmask-vpn staging/bitmask-vpn.exe
+	cp ../bin/bitmask-helper staging/bitmask_helper.exe
 	makensis windows/$(APPNAME)-installer.nsi
+endif
 
 sign_win:
 	echo "[+] signing windows build"
@@ -123,3 +115,23 @@ staging/nssm.exe:
 	unzip $(STAGING)/nssm.zip -d $(STAGING)
 	mv $(STAGING)/nssm-*/win32/nssm.exe $(STAGING)
 	rm -rf $(STAGING)/nssm-* $(STAGING)/nssm.zip
+
+staging\openvpn\openvpn.exe:
+	if not exist staging\openvpn mkdir staging\openvpn
+	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O staging/openvpn/tap-windows.exe
+# eventually, this should be built statically and cross compiled in the same pipeline that we build the installer. 
+	wget https://downloads.leap.se/thirdparty/windows/openvpn-x86_64-w64-mingw32.tar.bz2 -O staging/openvpn/openvpn.tar.bz2
+	7z e -y -ostaging/openvpn/ staging/openvpn/openvpn.tar.bz2
+	7z e -y -r -ostaging/openvpn/ staging/openvpn/openvpn.tar *.dll
+	7z e -y -r -ostaging/openvpn/ staging/openvpn/openvpn.tar *.exe
+	copy .\staging\openvpn\openvpn.exe .\staging
+	copy .\staging\openvpn\*.dll .\staging
+staging/openvpn/openvpn.exe:
+	mkdir -p staging/openvpn
+	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O $(STAGING)/openvpn/tap-windows.exe
+	wget https://downloads.leap.se/thirdparty/windows/openvpn-x86_64-w64-mingw32.tar.bz2 -O $(STAGING)/openvpn/openvpn.tar.bz2
+	tar xvjf $(STAGING)/openvpn/openvpn.tar.bz2 -C $(STAGING)/openvpn/
+	cp $(STAGING)/openvpn/bin/openvpn.exe $(STAGING)/openvpn
+	cp $(STAGING)/openvpn/bin/*.dll $(STAGING)
+	cp $(STAGING)/openvpn/lib/engines-1_1/*.dll $(STAGING)
+
