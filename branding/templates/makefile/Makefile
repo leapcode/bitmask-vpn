@@ -79,27 +79,28 @@ endif
 # -----------------------------------------------------------------------------
 
 pkg_snap:
+	-@mkdir -p ../../deploy
 	@echo "[+] building snap..."
 	snapcraft build
 	snapcraft snap
-	-@mkdir -p dist
-	@mv $(BINNAME)* dist/
+	@mv $(BINNAME)* ../../deploy
 
 pkg_deb:
 	echo "[+] building debian package version" ${DEB_VERSION}
+	-@mkdir -p ../../deploy
 	@if [ $(BUILD_RELEASE) = no ]; then\
 		dch -v $(VERSION) -M "debian package generated from the git repository" && echo "[!] BUILD_RELEASE=no, incrementing changelog";\
 	else\
 		echo "[!] BUILD_RELEASE";\
 	fi
-	mkdir -p build ../dist
+	@mkdir -p build 
 	# bitmask-vpn tar.gz should be placed in parent forlder after doing 'make prepare' with the
 	# bitmask-vpn topmost Makefile.
-	cp ../bitmask-vpn_$(VERSION).tgz build/$(BINNAME)_${DEB_VERSION}.orig.tar.gz
-	cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
-	cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
-	cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
-	cp build/*.deb ../dist/
+	@cp ../bitmask-vpn_$(VERSION).tgz build/$(BINNAME)_${DEB_VERSION}.orig.tar.gz
+	@cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
+	@cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
+	@cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
+	@cp build/*.deb ../../deploy
 
 # -----------------------------------------------------------------------------
 # Utils

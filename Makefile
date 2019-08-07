@@ -64,8 +64,7 @@ endif
 	@echo "Done with go get."
 
 
-# when we can depend on go 1.11 we don't need the get step anymore
-build: get $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
+build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
 
 build_%:
 	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o $* ./cmd/$*
