@@ -4,22 +4,34 @@ FROM ubuntu:disco
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
 LABEL Description="An image to build Bitmask Lite" Vendor="LEAP" Version="1.1"
+ENV OSXSDK_SHA256="631b4144c6bf75bf7a4d480d685a9b5bda10ee8d03dbf0db829391e2ef858789" \
+    PATH="$PATH:/osxcross/target/bin"
 
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+            build-essential \
+            make cmake \
+            git curl wget \
+            golang libappindicator3-dev libgtk-3-dev \
+            mingw-w64 upx-ucl python snapcraft \
+            unzip \
+            devscripts fakeroot debhelper dh-golang golang-golang-x-text-dev nsis \
+            clang llvm-dev libxml2-dev uuid-dev \
+            libssl-dev bash patch tar \
+            xz-utils bzip2 gzip sed cpio libbz2-dev
 
-# Install all the deps for building and packaging bitmask-vpn
+RUN git clone https://github.com/tpoechtrager/osxcross && \
+    cd osxcross/tarballs && \
+    wget https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz && \
+    echo "${OSXSDK_SHA256} *MacOSX10.10.sdk.tar.xz" | sha256sum -c - && \
+    cd .. && UNATTENDED=1 ./build.sh && \
+    ln -s /osxcross/target/SDK/MacOSX10.10.sdk/usr/include/objc/NSObjCRuntime.h /osxcross/target/SDK/MacOSX10.10.sdk/usr/include/objc/NSObjcRuntime.h
 
-RUN apt install -y --no-install-recommends \
-        build-essential \
-        make \
-        git curl wget \
-        golang libappindicator3-dev libgtk-3-dev \
-        mingw-w64 upx-ucl python snapcraft \
-        unzip \
-        devscripts fakeroot debhelper dh-golang golang-golang-x-text-dev 
 
-# we need nsis >= 3.0
-RUN echo 'deb http://archive.ubuntu.com/ubuntu cosmic universe' >> /etc/apt/sources.list
-RUN apt update
-RUN apt install -y --no-install-recommends -t cosmic nsis
+RUN git clone https://github.com/hogliux/bomutils && \
+    cd bomutils && make && sudo make install
 
+RUN git clone https://github.com/VantaInc/xar && \
+    cd xar/xar && \
+    ./autogen.sh && ./configure && \
+    make && sudo make install
