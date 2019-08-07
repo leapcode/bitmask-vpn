@@ -29,12 +29,12 @@ depends:
 	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
 
 dependsLinux:
-	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper
+	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
 	# TODO - bootstrap homebrew if not there
-	@brew install python3 golang make pkg-config upx
+	@brew install python3 golang make pkg-config upx curl
 	@brew install --default-names gnu-sed
 
 dependsCygwin:
@@ -79,7 +79,7 @@ clean:
 # packaging templates
 #########################################################################
 
-prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb
+prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
 
 prepare_templates: generate relink_default tgz
 	@mkdir -p build/${PROVIDER}/bin/
@@ -144,6 +144,10 @@ gen_pkg_deb:
 	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
+
+prepare_done:
+	@echo
+	@echo 'Done. You can do "make build" now.'
 
 #########################################################################
 # packaging action
