@@ -47,8 +47,7 @@ get:
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
-	go build -tags $(TAGS) -ldflags "-X main.version=`git describe --tags`" -o $* ./cmd/$*
-	-# doesn't work for cross compile: @strip $*
+	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o $* ./cmd/$*
 	@mkdir -p build/bin
 	@mv $* build/bin/
 	-@rm -rf build/${PROVIDER}/staging && mkdir -p build/${PROVIDER}/staging
