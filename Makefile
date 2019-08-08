@@ -11,7 +11,7 @@ PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' 
 PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
-XBUILD ?= 0
+XBUILD ?= no
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -58,15 +58,15 @@ dependsCygwin:
 
 build:
 	$(MAKE) _buildparts
-ifeq ($(XBUILD),"yes")
-	build_cross_win
-	build_cross_osx
+ifeq (${XBUILD}, yes)
+	$(MAKE) build_cross_win
+	$(MAKE) build_cross_osx
 	$(MAKE) _build_xbuild_done
-else ifeq ($(XBUILD), "win")
-	build_cross_win
+else ifeq (${XBUILD}, win)
+	$(MAKE) build_cross_win
 	$(MAKE) _build_done
-else ifeq ($(XBUILD), "osx")
-	build_cross_osx
+else ifeq (${XBUILD}, osx)
+	$(MAKE) build_cross_osx
 	$(MAKE) _build_done
 endif
 
