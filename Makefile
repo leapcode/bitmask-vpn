@@ -58,7 +58,7 @@ dependsCygwin:
 
 build:
 	$(MAKE) _buildparts
-ifeq($(XBUILD),"yes")
+ifeq ($(XBUILD),"yes")
 	build_cross_win
 	build_cross_osx
 	$(MAKE) _build_xbuild_done
