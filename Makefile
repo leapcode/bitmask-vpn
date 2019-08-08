@@ -11,6 +11,7 @@ PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' 
 PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
+XBUILD ?= 0
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -52,10 +53,23 @@ dependsDarwin:
 	@brew install --default-names gnu-sed
 
 dependsCygwin:
-	choco install -y golang python nssm nsis wget 7zip
+	@choco install -y golang python nssm nsis wget 7zip
 
+build:
+	$(MAKE) _buildparts
+ifeq($(XBUILD),"yes")
+	build_cross_win
+	build_cross_osx
+	$(MAKE) _build_xbuild_done
+else ifeq ($(XBUILD), "win")
+	build_cross_win
+	$(MAKE) _build_done
+else ifeq ($(XBUILD), "osx")
+	build_cross_osx
+	$(MAKE) _build_done
+endif
 
-build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
+_buildparts: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
 	@mkdir -p build/bin/${PLATFORM}
@@ -75,14 +89,18 @@ build_win:
 CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
 PLATFORM_WIN = PLATFORM=windows
 build_cross_win:
-	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(MAKE) build
+	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(MAKE) _buildparts
 
 CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
 PLATFORM_OSX = PLATFORM=darwin
 build_cross_osx:
-	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) build
+	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) _buildparts
 
-build_done:
+_build_done:
+	@echo
+	@echo 'Done. You can build your package now.'
+
+_build_xbuild_done:
 	@echo
 	@echo 'Done. You can do "make packages" now.'
 
