@@ -15,10 +15,15 @@ RUN apt-get update && apt-get upgrade -y && \
             golang libappindicator3-dev libgtk-3-dev \
             mingw-w64 upx-ucl python snapcraft \
             unzip \
-            devscripts fakeroot debhelper dh-golang golang-golang-x-text-dev nsis \
+            devscripts fakeroot debhelper nsis \
             clang llvm-dev libxml2-dev uuid-dev \
             libssl-dev bash patch tar \
-            xz-utils bzip2 gzip sed cpio libbz2-dev
+            xz-utils bzip2 gzip sed cpio libbz2-dev && \
+    apt-get install software-properties-common && \
+    add-apt-repository ppa:longsleep/golang-backports && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+            dh-golang golang-golang-x-text-dev
 
 RUN git clone https://github.com/tpoechtrager/osxcross && \
     cd osxcross/tarballs && \
