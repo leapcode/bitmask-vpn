@@ -18,12 +18,14 @@ SYSTRAY = 0xacab.org/leap/bitmask-vpn
 GOSYSTRAY = ${GOPATH}/src/${SYSTRAY}
 
 # detect OS, we use it for dependencies
-UNAME = `uname`
+UNAME = $(shell uname -s)
+PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
 
 TEMPLATES = branding/templates
 SCRIPTS = branding/scripts
 
 all: icon locales build
+
 
 #########################################################################
 # go build
@@ -52,26 +54,14 @@ dependsDarwin:
 dependsCygwin:
 	choco install -y golang python nssm nsis wget 7zip
 
-get:
-	-@mkdir -p ${GOPATH}/src/0xacab.org/leap
-ifeq (,$(wildcard ${GOSYSTRAY}))
-else
-	@rm -rf ${GOSYSTRAY}
-endif
-	@ln -s `pwd` ${GOSYSTRAY}
-	@cd ${GOSYSTRAY} && go get -tags $(TAGS) ./...
-	@cd ${GOSYSTRAY} && go get -tags "$(TAGS) bitmaskd" ./...
-	@echo "Done with go get."
-
 
 build: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path))) build_done
 
 build_%:
-	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o $* ./cmd/$*
-	@mkdir -p build/bin
-	@mv $* build/bin/
-	-@rm -rf build/${PROVIDER}/staging && mkdir -p build/${PROVIDER}/staging
-	-@ln -s ../../bin/$* build/${PROVIDER}/staging/$*
+	@mkdir -p build/bin/${PLATFORM}
+	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o build/bin/${PLATFORM}/$* ./cmd/$*
+	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
+	-@ln -s ../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
 
 test:
 	@go test -tags "integration $(TAGS)" ./...
@@ -83,12 +73,14 @@ build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
 
 CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
+PLATFORM_WIN = PLATFORM=windows
 build_cross_win:
-	$(CROSS_WIN_FLAGS) $(MAKE) build
+	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(MAKE) build
 
 CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
+PLATFORM_OSX = PLATFORM=darwin
 build_cross_osx:
-	$(CROSS_OSX_FLAGS) $(MAKE) build
+	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) build
 
 build_done:
 	@echo
