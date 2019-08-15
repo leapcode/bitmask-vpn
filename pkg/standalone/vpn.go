@@ -70,6 +70,7 @@ func (b *Bitmask) startTransport() (proxy string, err error) {
 			Target:    gw.IPAddress + ":" + gw.Ports[0],
 			SocksAddr: proxy,
 		}
+		go b.listenShapeErr()
 		if iatMode, ok := gw.Options["iat-mode"]; ok {
 			b.shapes.IatMode, err = strconv.Atoi(iatMode)
 			if err != nil {
@@ -84,6 +85,17 @@ func (b *Bitmask) startTransport() (proxy string, err error) {
 		return proxy, nil
 	}
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
+}
+
+func (b *Bitmask) listenShapeErr() {
+	ch := b.shapes.GetErrorChannel()
+	for {
+		err, more := <-ch
+		if !more {
+			return
+		}
+		log.Printf("Error from shappeshifter: %v", err)
+	}
 }
 
 func (b *Bitmask) startOpenVPN(proxy string) error {
