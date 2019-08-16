@@ -25,7 +25,7 @@ Package
 
 NOTE: Some of the following scripts need network access, since they will check
 whether the configuration published by your provider matches what is configured
-before the build.
+before the build. If you want to skip this check, pass `SKIP_CACHECK=yes`
 
 Run::
 

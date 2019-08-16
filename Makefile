@@ -138,10 +138,6 @@ TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
 tgz:
 	@mkdir -p $(TGZ_PATH)
 	@git archive HEAD | tar -x -C $(TGZ_PATH)
-	-@mkdir -p $(TGZ_PATH)/helpers
-	@wget -O $(TGZ_PATH)/helpers/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
-	@chmod +x $(TGZ_PATH)/helpers/bitmask-root
-	@wget -O $(TGZ_PATH)/helpers/se.leap.bitmask.policy https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/se.leap.bitmask.policy
 	@cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
@@ -170,10 +166,11 @@ endif
 gen_pkg_snap:
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
+	@cp helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
+	@cp helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py
 	@rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
 	@mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
-	# TODO missing hooks
 
 gen_pkg_deb:
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}

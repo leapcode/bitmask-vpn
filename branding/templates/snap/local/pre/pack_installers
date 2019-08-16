@@ -3,33 +3,20 @@ import os
 import subprocess
 from base64 import encodestring as encode
 
-# we expect to find bitmask-dev cloned in the parent folder for this repo
-# we will clone it if not
-PARENT = '../../'
-BITMASK_FOLDER = PARENT + 'bitmask-dev/'
-BITMASK_GIT = 'https://0xacab.org/leap/bitmask-dev'
-HELPDIR = BITMASK_FOLDER + 'src/leap/bitmask/vpn/helpers/linux/'
+HELPDIR = '../../../../../helpers'
 INSTALL = 'hooks/install'
-POLKIT_FILE = 'se.leap.bitmask.riseupvpn.policy'
-APP_NAME = 'riseup-vpn'
 
-if not os.path.isdir(BITMASK_FOLDER):
-    print('[+] Cloning bitmask-dev repo to get helpers...')
-    cmd = 'cd ../.. && git clone %s' % (BITMASK_GIT, )
-    os.system(cmd)
-else:
-    print('[+] Updating bitmask-dev repo to get helpers...')
-    cmd = 'cd ' + BITMASK_FOLDER + ' && git pull'
-    os.system(cmd)
+POLKIT_FILE = os.environ.get('POLKIT_FILE')
+APP_NAME = os.environ.get('APP_NAME')
 
-with open(os.path.join(HELPDIR, POLKIT_FILE)) as polkit:
+with open(POLKIT_FILE) as polkit:
     b64_polkit = encode(polkit.read().encode())
 
 with open(INSTALL, 'w') as install:
     install.write('#!/usr/bin/env python3\n')
     install.write('# DO NOT MODIFY MANUALLY\n')
     install.write('# This helper installs the polkit policy file\n')
-    install.write('# for the RiseupVPN snap.\n')
+    install.write('# for the ${applicationName} snap.\n')
     install.write('# It is generated automatically\n')
     install.write('# by the script at "snap/local/pre/pack_installers"\n')
     install.write('import subprocess\n')
@@ -53,9 +40,9 @@ if 'ID=debian' in release:
     os.symlink("/snap/{app_name}/current/snap/meta/gui/{app_name}.desktop", desktop_path)
     subprocess.call(['update-desktop-database'])
 """.format(
-    polkit=b64_polkit,
-    polkit_file=POLKIT_FILE,
-    app_name=APP_NAME))
+        polkit=b64_polkit,
+        polkit_file=POLKIT_FILE,
+        app_name=APP_NAME))
 
 subprocess.Popen(["chmod", "+x", INSTALL])
 print("[+] Done packing installers into the snap install hook...")
