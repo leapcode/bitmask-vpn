@@ -97,6 +97,7 @@ pkg_deb:
 	# bitmask-vpn tar.gz should be placed in parent forlder after doing 'make prepare' with the
 	# bitmask-vpn topmost Makefile.
 	@cp ../bitmask-vpn_$(VERSION).tgz build/$(BINNAME)_${DEB_VERSION}.orig.tar.gz
+	@rm -rf build/${BINNAME}_${DEB_VERSION} build/bitmask-vpn_${VERSION}-src
 	@cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
 	@cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
 	@cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
