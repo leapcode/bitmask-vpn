@@ -12,6 +12,7 @@ PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
 XBUILD ?= no
+SKIP_CACHECK ?= no
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -119,7 +120,9 @@ prepare_templates: generate relink_default tgz
 	@mkdir -p build/${PROVIDER}/bin/
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
+ifeq (${SKIP_CACHECK}, no)
 	@${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
+endif
 
 generate:
 	@go generate cmd/bitmask-vpn/main.go
