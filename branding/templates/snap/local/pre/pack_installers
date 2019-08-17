@@ -4,7 +4,7 @@ import subprocess
 from base64 import encodestring as encode
 
 HELPDIR = '../../../../../helpers'
-INSTALL = 'hooks/install'
+INSTALL = '../../hooks/install'
 
 POLKIT_FILE = os.environ.get('POLKIT_FILE')
 APP_NAME = os.environ.get('APP_NAME')
