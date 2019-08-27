@@ -23,6 +23,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
 )
 
 const (
@@ -56,7 +58,7 @@ func (l *launcher) openvpnStop() error {
 	return l.send("/openvpn/stop", nil)
 }
 
-func (l *launcher) firewallStart(gateways []gateway) error {
+func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
 	ipList := make([]string, len(gateways))
 	for i, gw := range gateways {
 		ipList[i] = gw.IPAddress
