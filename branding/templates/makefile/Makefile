@@ -36,8 +36,8 @@ pkg_win: staging\nssm.exe staging\openvpn\openvpn.exe
 else
 pkg_win: staging/nssm.exe staging/openvpn/openvpn.exe
 	echo "[+] building windows"
-	cp ../bin/bitmask-vpn staging/bitmask-vpn.exe
-	cp ../bin/bitmask-helper staging/bitmask_helper.exe
+	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
+	cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
 	makensis windows/$(APPNAME)-installer.nsi
 endif
 
@@ -51,8 +51,8 @@ sign_win:
 
 pkg_osx:
 	echo "[+] Building osx package..."
-	cp ../bin/bitmask-vpn dist/$(APPNAME).app/Contents/MacOS/
-	cp ../bin/bitmask-helper dist/$(APPNAME).app/Contents/MacOS/
+	cp ../bin/darwin/bitmask-vpn dist/$(APPNAME).app/Contents/MacOS/
+	cp ../bin/darwin/bitmask-helper dist/$(APPNAME).app/Contents/MacOS/
 	cp $(STAGING)/openvpn-osx dist/$(APPNAME).app/Contents/Resources/openvpn.leap
 ifeq ($(SYSTEM), Darwin)
 	osx/quickpkg --output dist/$(APPNAME)-$(VERSION)_unsigned.pkg --scripts osx/scripts/ dist/$(APPNAME).app/
