@@ -39,6 +39,7 @@ pkg_win: staging/nssm.exe staging/openvpn/openvpn.exe
 	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
 	cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
 	makensis windows/$(APPNAME)-installer.nsi
+	mv dist/$(APPNAME)-$(VERSION).exe ../../deploy/
 endif
 
 sign_win:
@@ -71,8 +72,9 @@ else
 	
 	cd dist && find $(APPNAME).app | cpio -o --format odc --owner 0:80 | gzip -c > $(APPNAME)/Payload
 	cd osx/scripts && find . | cpio -o --format odc --owner 0:80 | gzip -c > ../../dist/$(APPNAME)/Scripts
-	xar --compression none -cf dist/RiseupVPN-$(VERSION)_unsigned.pkg dist/$(APPNAME)/
+	xar --compression none -cf dist/$(APPNAME)-$(VERSION)_unsigned.pkg dist/$(APPNAME)/
 endif
+	mv dist/$(APPNAME)-$(VERSION)_unsigned.pkg ../../deploy/
 
 # -----------------------------------------------------------------------------
 # Linux 
@@ -101,7 +103,7 @@ pkg_deb:
 	@cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
 	@cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
 	@cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
-	@cp build/*.deb ../../deploy
+	@mv build/*.deb ../../deploy
 
 # -----------------------------------------------------------------------------
 # Utils
