@@ -2,6 +2,7 @@ __pycache__
 .mypy_cache  
 build
 dist
+deploy
 /bitmask-vpn
 cmd/bitmask-vpn/bitmask-vpn
 /bitmask-helper
