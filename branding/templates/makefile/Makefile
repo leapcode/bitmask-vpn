@@ -64,15 +64,7 @@ ifeq ($(SYSTEM), Darwin)
 		productsign --sign $(OSX_CERT) dist/$(APPNAME)-$(VERSION)_unsigned.pkg dist/$(APPNAME)-$(VERSION).pkg;\
 	fi
 else
-	mkdir dist/tmp
-	mv dist/$(APPNAME).app dist/tmp
-	mkbom -u 0 -g 80 dist/tmp dist/$(APPNAME)/Bom
-	mv dist/tmp/$(APPNAME).app dist
-	rmdir dist/tmp
-	
-	cd dist && find $(APPNAME).app | cpio -o --format odc --owner 0:80 | gzip -c > $(APPNAME)/Payload
-	cd osx/scripts && find . | cpio -o --format odc --owner 0:80 | gzip -c > ../../dist/$(APPNAME)/Scripts
-	xar --compression none -cf dist/$(APPNAME)-$(VERSION)_unsigned.pkg dist/$(APPNAME)/
+	cd osx && APPNAME=$(APPNAME) VERSION=$(VERSION) ./cross-quickpkg
 endif
 	mv dist/$(APPNAME)-$(VERSION)_unsigned.pkg ../../deploy/
 

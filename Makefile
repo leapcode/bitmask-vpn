@@ -7,12 +7,12 @@
 
 TAGS ?= gtk_3_18
 
+XBUILD ?= no
+SKIP_CACHECK ?= no
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
-XBUILD ?= no
-SKIP_CACHECK ?= no
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -39,7 +39,6 @@ install_go:
 	@sudo add-apt-repository ppa:longsleep/golang-backports
 	@sudo apt-get update
 	@sudo apt-get install golang-go
-
 
 depends:
 	-@make depends$(UNAME)
