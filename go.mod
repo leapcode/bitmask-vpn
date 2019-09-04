@@ -2,9 +2,15 @@ module 0xacab.org/leap/bitmask-vpn
 
 require (
 	0xacab.org/leap/go-dialog v0.0.0-20181123042829-0ee8438431a0
+	0xacab.org/leap/shapeshifter v0.0.0-20190815154545-f602ba600f5d
 	github.com/AllenDang/w32 v0.0.0-20180428130237-ad0a36d80adc // indirect
+	github.com/OperatorFoundation/obfs4 v0.0.0-20161108041644-17f2cb99c264 // indirect
+	github.com/OperatorFoundation/shapeshifter-ipc v0.0.0-20170814234159-11746ba927e0 // indirect
+	github.com/OperatorFoundation/shapeshifter-transports v0.0.0-20190827222855-df9bac9654e0 // indirect
 	github.com/ProtonMail/go-autostart v0.0.0-20181114175602-c5272053443a
+	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/apparentlymart/go-openvpn-mgmt v0.0.0-20161009010951-9a305aecd7f2
+	github.com/dchest/siphash v1.2.1 // indirect
 	github.com/getlantern/golog v0.0.0-20190809085441-26e09e6dd330 // indirect
 	github.com/getlantern/systray v0.0.0-20190727060347-6f0e5a3c556c
 	github.com/gotk3/gotk3 v0.0.0-20190809225113-dc58eba1cccc // indirect
