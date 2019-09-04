@@ -88,7 +88,12 @@ func getOpenvpnPath() string {
 }
 
 func kill(cmd *exec.Cmd) error {
-	return cmd.Process.Signal(os.Interrupt)
+	log.Printf("Sending kill signal to pid: %v", cmd.Process.Pid)
+	err := cmd.Process.Signal(os.Interrupt)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func firewallStart(gateways []string) error {
