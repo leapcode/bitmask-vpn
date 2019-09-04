@@ -27,8 +27,13 @@ func Run(conf *Config) {
 	bt := bmTray{conf: conf, waitCh: make(chan bool)}
 	finishedCh := make(chan bool)
 	go initialize(conf, &bt, finishedCh)
+	go func() {
+		<-finishedCh
+		/* in osx, systray.Quit() halts the program */
+		bt.quit()
+		os.Exit(0)
+	}()
 	bt.start()
-	<-finishedCh
 }
 
 func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {

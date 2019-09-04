@@ -68,6 +68,7 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 
 // Close the connection to bitmask
 func (b *Bitmask) Close() {
+	log.Printf("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
 	err := b.launch.close()
 	if err != nil {

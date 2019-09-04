@@ -57,6 +57,10 @@ func (bt *bmTray) start() {
 	systray.Run(bt.onReady, bt.onExit)
 }
 
+func (bt *bmTray) quit() {
+	systray.Quit()
+}
+
 func (bt *bmTray) onExit() {
 	log.Println("Closing systray")
 }
@@ -146,10 +150,10 @@ func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autos
 			if err != nil {
 				log.Printf("Error disabling autostart: %v", err)
 			}
-			systray.Quit()
+			/* we return and leave bt.quit() to the caller */
 			return
 		case <-signalCh:
-			systray.Quit()
+			/* we return and leave bt.quit() to the caller */
 			return
 
 		case <-time.After(5 * time.Second):
