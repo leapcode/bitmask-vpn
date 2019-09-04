@@ -27,7 +27,6 @@ To inspect the rules in the firewall manually, use the bitmask anchor:
 package helper
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"log"
@@ -124,7 +123,7 @@ func firewallIsUp() bool {
 		log.Printf(string(out))
 		return false
 	}
-	return bytes.Contains(out, []byte("block out proto udp to any port 53"))
+	return strings.Contains(string(out), "block drop out proto udp from any to any port = 53")
 }
 
 func enablePf() {

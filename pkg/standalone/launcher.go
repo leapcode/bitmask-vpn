@@ -23,6 +23,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
 )
@@ -75,13 +76,29 @@ func (l *launcher) firewallStop() error {
 }
 
 func (l *launcher) firewallIsUp() bool {
+	var isup bool = false
 	res, err := http.Post(helperAddr+"/firewall/isup", "", nil)
 	if err != nil {
 		return false
 	}
 	defer res.Body.Close()
 
-	return res.StatusCode == http.StatusOK
+	if res.StatusCode != http.StatusOK {
+		fmt.Printf("Got an error status code for firewall/isup: %v\n", res.StatusCode)
+		isup = false
+	} else {
+		upStr, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			fmt.Errorf("Error getting body for firewall/isup: %q", err)
+			return false
+		}
+		isup, err = strconv.ParseBool(string(upStr))
+		if err != nil {
+			fmt.Errorf("Error parsing body for firewall/isup: %q", err)
+			return false
+		}
+	}
+	return isup
 }
 
 func (l *launcher) send(path string, body []byte) error {
