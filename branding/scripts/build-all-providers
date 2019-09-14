@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# run the build process for all the providers passed
+# on a environment variable
+
+: "${PROVIDERS:=riseup}"
+
+set -e
+
+export XBUILD=yes
+
+for _provider in $PROVIDERS; do
+    export PROVIDER=$_provider;
+    make prepare
+    make build
+    make packages
+done

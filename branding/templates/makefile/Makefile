@@ -54,8 +54,8 @@ pkg_osx:
 	echo "[+] Building osx package..."
 	cp ../bin/darwin/bitmask-vpn dist/$(APPNAME).app/Contents/MacOS/
 	cp ../bin/darwin/bitmask-helper dist/$(APPNAME).app/Contents/MacOS/
-	chmod +x $(STAGING)/openvpn-osx
 	cp $(STAGING)/openvpn-osx dist/$(APPNAME).app/Contents/Resources/openvpn.leap
+	chmod +x dist/$(APPNAME).app/Contents/Resources/openvpn.leap
 ifeq ($(SYSTEM), Darwin)
 	osx/quickpkg --output dist/$(APPNAME)-$(VERSION)_unsigned.pkg --scripts osx/scripts/ dist/$(APPNAME).app/
 	@if [ $(BUILD_RELEASE) = no ]; then\

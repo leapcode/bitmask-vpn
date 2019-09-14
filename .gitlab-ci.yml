@@ -3,6 +3,7 @@ stages:
   - build
   - push
   - trigger
+  - vendor
 
 variables:
   GOPATH: /go
@@ -149,3 +150,16 @@ trigger_deb:
   stage: trigger
   script:
     - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
+
+vendorize:
+  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  stage: vendor
+  script:
+    - PROVIDERS="riseup" make build_all_providers
+ artifacts:
+   name: installers-$CI_COMMIT_REF_NAME
+   paths:
+     - deploy/RiseupVPN-*.exe
+     - deploy/RiseupVPN-*.pkg
+     - deploy/riseup-vpn-*.deb
+   expire_in: 1 month
