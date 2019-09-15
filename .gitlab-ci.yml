@@ -29,35 +29,35 @@ build_test:
       - 'bitmask-connect'
     expire_in: 1 month
 
-win_installer:
- image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
- stage: build
- script:
-   - mkdir -p /go/src/0xacab.org/leap/
-   - ln -s "$(pwd)" ${APP_PATH}
-   - cd ${APP_PATH}
-
-   # we need to manually patch w32 until they merge #81
-   - mkdir -p /go/src/github.com/AllenDang/
-   - cd /go/src/github.com/AllenDang/
-   - git clone https://github.com/AllenDang/w32
-   - cd w32
-   - curl https://downloads.leap.se/thirdparty/w32.patch | patch -p1 -N
-
-   - cd ${APP_PATH}
-
-   - git clone https://0xacab.org/leap/riseup_vpn
-   - cd riseup_vpn
-   - make openvpn_cross_win
-   - make build_cross_win
-   - mv dist/RiseupVPN-*.exe ..
- tags:
-   - linux
- artifacts:
-   name: installer_win_$CI_COMMIT_REF_NAME
-   paths:
-     - RiseupVPN-*.exe
-   expire_in: 1 month
+# win_installer:
+#  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+#  stage: build
+#  script:
+#    - mkdir -p /go/src/0xacab.org/leap/
+#    - ln -s "$(pwd)" ${APP_PATH}
+#    - cd ${APP_PATH}
+# 
+#    # we need to manually patch w32 until they merge #81
+#    - mkdir -p /go/src/github.com/AllenDang/
+#    - cd /go/src/github.com/AllenDang/
+#    - git clone https://github.com/AllenDang/w32
+#    - cd w32
+#    - curl https://downloads.leap.se/thirdparty/w32.patch | patch -p1 -N
+# 
+#    - cd ${APP_PATH}
+# 
+#    - git clone https://0xacab.org/leap/riseup_vpn
+#    - cd riseup_vpn
+#    - make openvpn_cross_win
+#    - make build_cross_win
+#    - mv dist/RiseupVPN-*.exe ..
+#  tags:
+#    - linux
+#  artifacts:
+#    name: installer_win_$CI_COMMIT_REF_NAME
+#    paths:
+#      - RiseupVPN-*.exe
+#    expire_in: 1 month
 
 snap:
  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
