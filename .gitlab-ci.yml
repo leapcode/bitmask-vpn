@@ -140,8 +140,8 @@ branded_push:
     # we also need to configure name and email for git user
     - git config user.name "Gitlab CI"
     - git config user.email "gitlabci@0xacab.org"
-    # Add the remote repository and push to it
-    - git remote add riseup-vpn git@0xacab.org:leap/riseup-vpn_package.git
+    # Add the remote repository and push to it - sometimes it already exists, and it causes the pipeline to fail, so we only add if its not already there
+    - git remote -v |grep -q riseup-vpn; if [ $? -ne 0 ]; then git remote add riseup-vpn git@0xacab.org:leap/riseup-vpn_package.git; fi
     - git push --force riseup-vpn HEAD:incoming
 
 
