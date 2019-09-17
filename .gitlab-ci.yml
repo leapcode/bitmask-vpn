@@ -60,7 +60,7 @@ build_test:
 #    expire_in: 1 month
 
 snap:
- image:registry.0xacab.org/leap/docker/bitmask-vpn:latest
+ image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
  stage: build
  script:
    - mkdir -p /go/src/0xacab.org/leap/
