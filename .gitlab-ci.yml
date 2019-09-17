@@ -10,7 +10,7 @@ variables:
   APP_PATH: /go/src/0xacab.org/leap/bitmask-vpn
 
 build_test:
-  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
   stage: build
   script:
     - mkdir -p /go/src/0xacab.org/leap/
@@ -60,7 +60,7 @@ build_test:
 #    expire_in: 1 month
 
 snap:
- image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+ image:registry.0xacab.org/leap/docker/bitmask-vpn:latest
  stage: build
  script:
    - mkdir -p /go/src/0xacab.org/leap/
@@ -82,7 +82,7 @@ snap:
    expire_in: 1 month
 
 deb:
-  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
   stage: build
   allow_failure: true
   script:
@@ -121,7 +121,7 @@ deb:
 
 
 branded_push:
-  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
   stage: push
   only:
       - master
@@ -146,13 +146,13 @@ branded_push:
 
 
 trigger_deb:
-  image: 0xacab.org:4567/leap/docker/buster_amd64:latest
+  image: registry.0xacab.org/leap/docker/buster_amd64:latest
   stage: trigger
   script:
     - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
 
 vendorize:
-  image: 0xacab.org:4567/leap/docker/bitmask-vpn:latest
+  image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
   stage: vendor
   script:
     - 'PROVIDERS="riseup" make build_all_providers'
