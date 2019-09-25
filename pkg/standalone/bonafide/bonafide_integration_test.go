@@ -21,6 +21,10 @@ import (
 	"testing"
 )
 
+const (
+	gwIP = "199.58.81.145"
+)
+
 var (
 	privateKeyHeader = []byte("-----BEGIN RSA PRIVATE KEY-----")
 	certHeader       = []byte("-----BEGIN CERTIFICATE-----")
@@ -50,9 +54,9 @@ func TestGetGateways(t *testing.T) {
 	}
 
 	for _, gw := range gateways {
-		if gw.IPAddress == "5.79.86.180" {
+		if gw.IPAddress == gwIP {
 			return
 		}
 	}
-	t.Errorf("5.79.86.180 not in the list")
+	t.Errorf("%s not in the list", gwIP)
 }
