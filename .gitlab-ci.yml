@@ -144,5 +144,8 @@ vendorize:
     paths:
       - 'deploy/RiseupVPN-*.exe'
       - 'deploy/RiseupVPN-*.pkg'
-      - 'deploy/riseup-vpn-*.deb'
+      - 'deploy/riseup-vpn_*.deb'
+      - 'deploy/CalyxVPN-*.exe'
+      - 'deploy/CalyxVPN-*.pkg'
+      - 'deploy/calyx-vpn_*.deb'
     expire_in: 1 month
