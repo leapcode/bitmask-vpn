@@ -76,7 +76,7 @@ build_%:
 	@mkdir -p build/bin/${PLATFORM}
 	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o build/bin/${PLATFORM}/$* ./cmd/$*
 	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
-	-@ln -s ../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
+	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
 
 test:
 	@go test -tags "integration $(TAGS)" ./...
