@@ -11,6 +11,7 @@ const (
 	ApplicationName = "$applicationName"
 	BinaryName      = "$binaryName"
 	DonateURL       = "$donateURL"
+	AskForDonations = "$askForDonations"
 	HelpURL         = "$helpURL"
 	TosURL          = "$tosURL"
 	APIURL          = "$apiURL"

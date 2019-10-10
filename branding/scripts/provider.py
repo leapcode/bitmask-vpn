@@ -20,7 +20,8 @@ def getProviderData(provider, config):
 
     keys = ('name', 'applicationName', 'binaryName',
             'providerURL', 'tosURL', 'helpURL',
-            'donateURL', 'apiURL', 'geolocationAPI', 'caCertString')
+            'askForDonations', 'donateURL', 'apiURL',
+            'geolocationAPI', 'caCertString')
 
     for value in keys:
         d[value] = c.get(value)

@@ -10,7 +10,7 @@ from provider import getDefaultProvider
 from provider import getProviderData
 
 OUTFILE = 'config.go'
-INFILE = '../templates/golang/config.go'
+INFILE = '../templates/bitmaskvpn/config.go'
 CONFIGFILE = '../config/vendor.conf'
 SCRIPT_NAME = 'vendorize'
 

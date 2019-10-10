@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"0xacab.org/leap/bitmask-vpn/icon"
@@ -88,10 +89,21 @@ func (bt *bmTray) setUpSystray() {
 
 	bt.mHelp = systray.AddMenuItem(printer.Sprintf("Help..."), "")
 	bt.mDonate = systray.AddMenuItem(printer.Sprintf("Donate..."), "")
+
 	bt.mAbout = systray.AddMenuItem(printer.Sprintf("About..."), "")
 	systray.AddSeparator()
 
 	bt.mQuit = systray.AddMenuItem(printer.Sprintf("Quit"), "")
+
+	showDonate, err := strconv.ParseBool(config.AskForDonations)
+	if err != nil {
+		log.Printf("Error parsing AskForDonations: %v", err)
+		showDonate = true
+	}
+	if !showDonate {
+		bt.mDonate.Hide()
+	}
+
 }
 
 func (bt *bmTray) loop(bm bitmask.Bitmask, notify *notificator, as bitmask.Autostart) {
