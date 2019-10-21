@@ -10,7 +10,7 @@ const (
 	Provider        = "riseup.net"
 	ApplicationName = "RiseupVPN"
 	BinaryName      = "riseup-vpn"
-	DonateURL       = "https://riseup.net/donate"
+	DonateURL       = "https://riseup.net/vpn/donate"
 	AskForDonations = "true"
 	HelpURL         = "https://riseup.net/support"
 	TosURL          = "https://riseup.net/tos"
