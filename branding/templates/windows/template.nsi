@@ -87,7 +87,7 @@ SectionEnd
 
 Section "InstallService"
   ; Easy service management thanks to nssm
-  ExecWait '"$INSTDIR\nssm.exe" install $applicationNameLower-helper "$INSTDIR\bitmask-helper.exe"'
+  ExecWait '"$INSTDIR\nssm.exe" install $applicationNameLower-helper "$INSTDIR\bitmask_helper.exe"'
   ExecWait '"$INSTDIR\nssm.exe" set $applicationNameLower-helper AppDirectory "$INSTDIR"'
   ExecWait '"$INSTDIR\nssm.exe" start $applicationNameLower-helper'
 SectionEnd
