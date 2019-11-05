@@ -1,31 +1,13 @@
 {
-    "language": "fr",
+    "language": "hu",
     "messages": [
-        {
-            "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "Une erreur est survenue lors de l’\ninitialisation du RPV : {Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
-                }
-            ]
-        },
         {
             "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "L’exploitation du service {ApplicationName} coûte cher. Dans la mesure où ne nous voulons enregistrer aucun renseignement personnel à votre sujet, il n’y ni compte ni facturation pour ce service. Mais si vous souhaitez toutefois que le service continue, faites un don d’au moins 5 $ mensuellement\n\t\nSouhaitez-vous faire un don maintenant ?",
+            "translation": "A {ApplicationName} szolgáltatás futtatása drága. Mivel nem szeretnénk Önről adatot tárolni, azért nincsen fiók és számlázás ehhez a szolgáltatáshoz. Ha szeretné, hogy a szolgáltatás folytatodjék, támogasson legalább 5$-ral havonta.\n\t\nSzeretne támogatni most?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -40,7 +22,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "Faire un don"
+            "translation": "Támogatás"
         },
         {
             "id": [
@@ -48,7 +30,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} est un service de RPV simple, rapide et sécurisé offert par {Provider}. {ApplicationName} n’exige pas de compte utilisateur, ne conserve pas de journaux, ni ne vous suit à la trace d’aucune façon.\n\t    \nCe service est entièrement financé par les dons d’utilisateurs comme vous. Veuillez faire un don sur {DonateURL}.\n\t\t\nEn utilisant cette application, vous acceptez les conditions générales d’utilisation qui se trouvent sur {TosURL}. Ce service est fourni tel quel, sans aucune garantie et s’adresse aux personnes qui œuvrent à rendre le monde meilleur.\n\n\n{ApplicationName_1} version  : {Version}",
+            "translation": "A {ApplicationName} egy egyszerű, biztonságos VPN szolgáltatás a(z) {Provider} szolgáltatótó. A  {ApplicationName} nem igényel felhasználói fiókot, logot őrizzen, vagy kövesse Önt bármiképp.\n\t    \nEz a szolgáltatás kizárólag a támogatásokból fizetett olyan felhasználók által, mint Ön. Kérjük támogasson a következő linken {DonateURL}.\n\t\t\nAz alkalmazás használatával elfogadja a Felhasználási feltételeket, amik itt elérhetők: {TosURL}. Ez a szolgáltatás as-is biztosított, bármiféle garancia nélkül, azok számára, akik a világot jobbá akarják tenni.\n\n\n{ApplicationName_1} verzió: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -111,12 +93,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "À propos"
+            "translation": "Névjegy"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "Erreur d’initialisation"
+            "translation": "Inicializációs hiba"
         },
         {
             "id": [
@@ -124,12 +106,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "Impossible de trouver un agent d’authentification polkit. Veuillez en exécuter un et ressayer."
+            "translation": "Nem található polkit azonosító ügynök. Kérjük futtasson egyet és próbálja újra."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "L’agent d’authentification est manquant"
+            "translation": "Hiányzó autentikációs ügynök"
         },
         {
             "id": [
@@ -137,7 +119,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": "Impossible de se connecter à {ApplicationName} : {Err}",
+            "translation": "Sikertelen a csatlakozás - {ApplicationName}: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -160,52 +142,52 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "Erreur du démarrage du RPV"
+            "translation": "VPN indítása sikertelen"
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "Vérification de l’état…"
+            "translation": "Állapot ellenőrzése..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "Activer"
+            "translation": "Bekapcsolás"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "Désactiver"
+            "translation": "Kikapcsolás"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "Aide…"
+            "translation": "Súgó..."
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "Faire un don…"
+            "translation": "Támogatás..."
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "À propos…"
+            "translation": "Névjegy..."
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "Quitter"
+            "translation": "Kilépés"
         },
         {
             "id": "Route traffic through:",
             "message": "Route traffic through:",
-            "translation": "Acheminer le trafic par :"
+            "translation": "Forgalom routolás ezen keresztül:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "Utiliser la passerelle {ApplicationName} {City}\n",
+            "translation": "A {ApplicationName} {City} átjáró használata",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -228,7 +210,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} est activé",
+            "translation": "{ApplicationName} bekapcsolva",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -243,7 +225,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} est désactivé",
+            "translation": "{ApplicationName} kikapcsolva",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -258,12 +240,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "Annuler"
+            "translation": "Mégsem"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "Connexion à {ApplicationName}",
+            "translation": "Kapcsolódás alkalmazáshoz - {ApplicationName} ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -278,7 +260,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "Arrêt de {ApplicationName}",
+            "translation": "Alkalmazás leállítása - {ApplicationName} ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -293,12 +275,12 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "Se reconnecter"
+            "translation": "Újracsatlakozás"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} bloque Internet",
+            "translation": "{ApplicationName} blokkolja az internetet",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -307,6 +289,24 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
+                }
+            ]
+        },
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Hiba történt a VPN inicializálásánál: {Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
                 }
             ]
         }
