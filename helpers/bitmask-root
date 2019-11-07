@@ -764,7 +764,7 @@ def firewall_start(args):
                                               exitcode=True) != 0:
         with open(QUBES_FW_SCRIPT, mode="w") as qfile:
                 qfile.write("#!/bin/sh\n")
-                qfile.write("# Anti-leak rules installed by " + SCRIPT + " " +
+                qfile.write("# Anti-leak rules installed by " + SCRIPT + " "
                             + VERSION + "\n")
                 qfile.write("iptables --insert FORWARD -i eth0 -j DROP\n")
                 qfile.write("iptables --insert FORWARD -o eth0 -j DROP\n")
