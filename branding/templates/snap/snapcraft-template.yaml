@@ -27,16 +27,11 @@ parts:
         bitmask-root:
                 after: [desktop-gtk3]
                 plugin: dump
-                source: https://0xacab.org/leap/bitmask-dev/
-                source-type: git
-                build-packages:
-                    - wget
+                source: ../../helpers/
                 override-prime: |
-                        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
                         mkdir -p bin
-                        wget -O bin/bitmask-root https://0xacab.org/leap/bitmask-dev/raw/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root
+                        cp $SNAPCRAFT_PART_SRC/bitmask-root bin/
                         chmod +x bin/bitmask-root
-                        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
 
         openvpn:
                 plugin: nil
@@ -50,18 +45,16 @@ parts:
         bitmask-vpn:
                 after: [desktop-gtk3]
                 plugin: go
-                source-type: git
-                source: https://0xacab.org/leap/bitmask-vpn
-                # this does not seem to work with snapcraft package version in bionic
-                #go-packages:
-                #        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
+                source: ../../cmd/bitmask-vpn
+                go-importpath: 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
+                go-packages:
+                        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
                 override-build: |
-                      echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
-                      #cat $SNAPCRAFT_PROJECT_DIR/snap/local/bitmask-vpn.desktop
-                      cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
-                      #cp ../../../gui/bitmask-vpn.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
+                      cp $SNAPCRAFT_STAGE/../snap/local/riseup-vpn.desktop $SNAPCRAFT_PRIME/riseup-vpn.desktop
                       snapcraftctl build
-                      echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+                override-prime: |
+                      rm -rf $SNAPCRAFT_PRIME/../snap/hooks/.mypy_cache
+                      snapcraftctl prime
                 build-packages:
                     - pkg-config
                     - patchelf
