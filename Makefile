@@ -193,8 +193,7 @@ prepare_done:
 # packaging action
 #########################################################################
 
-packages: package_deb package_osx package_win
-# package_snap
+packages: package_deb package_snap package_osx package_win
 
 package_snap:
 	@make -C build/${PROVIDER} pkg_snap
