@@ -50,7 +50,7 @@ parts:
                 go-packages:
                         - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
                 override-build: |
-                      cp $SNAPCRAFT_STAGE/../snap/local/riseup-vpn.desktop $SNAPCRAFT_PRIME/riseup-vpn.desktop
+                      cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/${binaryName}.desktop
                       snapcraftctl build
                 override-prime: |
                       rm -rf $SNAPCRAFT_PRIME/../snap/hooks/.mypy_cache
