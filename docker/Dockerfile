@@ -1,6 +1,6 @@
 # An image to build and package the Bitmask Lite (RiseupVPN and other branded builds)
-# (c) LEAP Encryption Access Project 2018
-FROM ubuntu:disco
+# (c) LEAP Encryption Access Project 2018-2019
+FROM ubuntu:18.04
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
 LABEL Description="An image to build Bitmask Lite" Vendor="LEAP" Version="1.1"
@@ -25,6 +25,7 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
             dh-golang golang golang-golang-x-text-dev
 
+# osx cross compiling
 RUN git clone https://github.com/tpoechtrager/osxcross && \
     cd osxcross/tarballs && \
     wget https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz && \
@@ -32,10 +33,11 @@ RUN git clone https://github.com/tpoechtrager/osxcross && \
     cd .. && UNATTENDED=1 ./build.sh && \
     ln -s /osxcross/target/SDK/MacOSX10.10.sdk/usr/include/objc/NSObjCRuntime.h /osxcross/target/SDK/MacOSX10.10.sdk/usr/include/objc/NSObjcRuntime.h
 
-
+# bomutils (for osx packaging)
 RUN git clone https://github.com/hogliux/bomutils && \
     cd bomutils && make && sudo make install
 
+# xar (for osx packaging)
 RUN git clone https://github.com/VantaInc/xar && \
     cd xar/xar && \
     ./autogen.sh && ./configure && \
