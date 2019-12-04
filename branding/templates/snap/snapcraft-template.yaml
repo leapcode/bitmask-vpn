@@ -7,7 +7,7 @@ description: |
         any way. The service is paid for entirely by donations from users like you.
 grade: stable
 confinement: classic
-icon: icon.svg 
+icon: snap/gui/icon.svg 
 base: core18
 
 parts:
@@ -34,6 +34,8 @@ parts:
                 go-packages:
                         - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
                 override-build: |
+                      mkdir $SNAPCRAFT_PRIME/snap
+                      echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
                       mkdir -p $SNAPCRAFT_PRIME/usr/share/applications
                       cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/usr/share/applications/${binaryName}.desktop
                       snapcraftctl build
@@ -54,7 +56,6 @@ parts:
 apps:
         launcher:
                 command: bin/bitmask-vpn
-                command-chain: [snap/command-chain/desktop-launch]
                 desktop: usr/share/applications/${binaryName}.desktop
                 environment:
                         LD_LIBRARY_PATH: "$SNAP/usr/lib/$(gcc -print-multiarch):$SNAP/lib/$(gcc -print-multiarch):$LD_LIBRARY_PATH"
