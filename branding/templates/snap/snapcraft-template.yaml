@@ -52,21 +52,12 @@ parts:
                     - libpcre3
                     - libappindicator3-1
                     - zlib1g
-
 apps:
         launcher:
                 command: bin/bitmask-vpn
                 desktop: usr/share/applications/${binaryName}.desktop
                 environment:
                         LD_LIBRARY_PATH: "$SNAP/usr/lib/$(gcc -print-multiarch):$SNAP/lib/$(gcc -print-multiarch):$LD_LIBRARY_PATH"
-                plugs:
-                    - desktop
-                    - desktop-legacy
-                    - home
-                    - network
-                    - unity7
-                    - wayland
-                    - x11
         openvpn:
                 command: usr/sbin/openvpn
         bitmask-root:
