@@ -1,5 +1,5 @@
 IMAGE=bitmask-vpn
-REGISTRY=0xacab.org:4567/leap/docker
+REGISTRY=registry.0xacab.org/leap/docker
 
 build:
 	docker build -t $(REGISTRY)/$(IMAGE):latest .
@@ -8,6 +8,6 @@ push:
 prune:
 	docker system prune
 login:
-	docker login 0xacab.org:4567
+	docker login $(REGISTRY)
 shell:
-	docker run -it --rm $(REGISTRY)/$(IMAGE):latest  /bin/bash
+	docker run -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.orig -it --rm $(REGISTRY)/$(IMAGE):latest  /bin/bash
