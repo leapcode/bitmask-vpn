@@ -25,6 +25,9 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
             dh-golang golang golang-golang-x-text-dev
 
+RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-x-text/golang-golang-x-text-dev_0.3.2-1_all.deb && \
+    dpkg -i golang-golang-x-text-dev_0.3.2-1_all.deb
+
 # osx cross compiling
 RUN git clone https://github.com/tpoechtrager/osxcross && \
     cd osxcross/tarballs && \
