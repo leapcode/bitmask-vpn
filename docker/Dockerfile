@@ -1,5 +1,8 @@
 # An image to build and package the Bitmask Lite (RiseupVPN and other branded builds)
 # (c) LEAP Encryption Access Project 2018-2019
+
+# we start with 18.04 (bionic) to match the core18 used in the snap
+# but we will have to install a couple of extras on top...
 FROM ubuntu:18.04
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
@@ -15,7 +18,7 @@ RUN apt-get update && apt-get upgrade -y && \
             libappindicator3-dev libgtk-3-dev \
             mingw-w64 upx-ucl python snapcraft \
             unzip \
-            devscripts fakeroot debhelper nsis \
+            devscripts fakeroot debhelper \
             clang llvm-dev libxml2-dev uuid-dev \
             libssl-dev bash patch tar \
             xz-utils bzip2 gzip sed cpio libbz2-dev && \
@@ -25,8 +28,15 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
             dh-golang golang golang-golang-x-text-dev
 
+# version in 18.04 (bionic) is too old
 RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-x-text/golang-golang-x-text-dev_0.3.2-1_all.deb && \
     dpkg -i golang-golang-x-text-dev_0.3.2-1_all.deb
+
+# we also need a newer nsis version
+RUN echo "deb http://de.archive.ubuntu.com/ubuntu disco main universe" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nsis && \
+    sed -i '$ d' /etc/apt/sources.list && apt-get update
 
 # osx cross compiling
 RUN git clone https://github.com/tpoechtrager/osxcross && \

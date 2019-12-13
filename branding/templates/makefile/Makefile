@@ -108,10 +108,12 @@ clean:
 staging\nssm.exe:
 	xcopy /y "C:\ProgramData\chocolatey\lib\NSSM\tools\nssm.exe" $(STAGING)
 staging/nssm.exe:
-	wget https://nssm.cc/release/nssm-2.24.zip -O $(STAGING)/nssm.zip
-	unzip $(STAGING)/nssm.zip -d $(STAGING)
-	mv $(STAGING)/nssm-*/win32/nssm.exe $(STAGING)
-	rm -rf $(STAGING)/nssm-* $(STAGING)/nssm.zip
+	#wget https://nssm.cc/release/nssm-2.24.zip -O $(STAGING)/nssm.zip
+	#unzip $(STAGING)/nssm.zip -d $(STAGING)
+	#mv $(STAGING)/nssm-*/win32/nssm.exe $(STAGING)
+	#rm -rf $(STAGING)/nssm-* $(STAGING)/nssm.zip
+	# BACKUP IN CASE THE OFFICIAL SITE IS UNAVAILABLE
+	wget https://downloads.leap.se/thirdparty/windows/nssm.exe -O $(STAGING)/nssm.exe
 
 staging\openvpn\openvpn.exe:
 	if not exist staging\openvpn mkdir staging\openvpn
