@@ -48,6 +48,7 @@ func init() {
 		"ru":    &dictionary{index: ruIndex, data: ruData},
 		"sk":    &dictionary{index: skIndex, data: skData},
 		"sv":    &dictionary{index: svIndex, data: svData},
+		"tr":    &dictionary{index: trIndex, data: trData},
 		"ug":    &dictionary{index: ugIndex, data: ugData},
 		"zh":    &dictionary{index: zhIndex, data: zhData},
 		"zh_TW": &dictionary{index: zh_TWIndex, data: zh_TWData},
@@ -731,34 +732,36 @@ const pt_PTData string = "" + // Size: 1196 bytes
 
 var roIndex = []uint32{ // 27 elements
 	0x00000000, 0x00000030, 0x00000147, 0x00000150,
-	0x0000031f, 0x00000326, 0x0000033e, 0x00000394,
-	0x000003b7, 0x000003db, 0x000003f2, 0x00000406,
-	0x00000411, 0x0000041c, 0x00000426, 0x00000432,
-	0x0000043c, 0x00000447, 0x0000045e, 0x00000480,
-	0x00000491, 0x000004a2, 0x000004aa, 0x000004bd,
-	0x000004ca, 0x000004d6, 0x000004fb,
+	0x00000393, 0x0000039a, 0x000003b2, 0x00000408,
+	0x0000042b, 0x0000044f, 0x00000466, 0x0000047a,
+	0x00000485, 0x00000490, 0x0000049a, 0x000004a6,
+	0x000004b0, 0x000004bb, 0x000004d2, 0x000004f4,
+	0x00000505, 0x00000516, 0x0000051e, 0x00000531,
+	0x0000053e, 0x0000054a, 0x0000056f,
 } // Size: 132 bytes
 
-const roData string = "" + // Size: 1275 bytes
+const roData string = "" + // Size: 1391 bytes
 	"\x02A apărut o eroare la inițializarea VPN: %[1]v\x02Serviciul %[1]s est" +
 	"e scump pentru a rula. Deoarece nu dorim să stocăm informații personale " +
 	"despre dvs., nu există conturi sau facturare pentru acest serviciu. Dar " +
 	"dacă doriți ca serviciul să continue, donați cel puțin 5 USD în fiecare " +
-	"lună.\x0a\x09\x0aVreți să donați acum?\x02Donație\x02%[1]s is an easy, f" +
-	"ast, and secure VPN service from %[2]s. %[1]s does not require a user ac" +
-	"count, keep logs, or track you in any way.\x0a\x09    \x0aThis service i" +
-	"s paid for entirely by donations from users like you. Please donate at %" +
-	"[3]s.\x0a\x09\x09\x0aBy using this application, you agree to the Terms o" +
-	"f Service available at %[4]s. This service is provided as-is, without an" +
-	"y warranty, and is intended for people who work to make the world a bett" +
-	"er place.\x0a\x0a\x0a%[1]v version: %[5]s\x02Despre\x02Eroare de inițial" +
-	"izare\x02Nu am găsit un agent de autentificare polkit. Porniți unul și î" +
-	"ncercați din nou.\x02Lipsește agentul de autentificare\x02Nu se poate co" +
-	"necta la %[1]s: %[2]v\x02Eroare la pornirea VPN\x02Verificare stare..." +
-	"\x02Deschidere\x02Închidere\x02Ajutor...\x02Donație...\x02Despre...\x02Î" +
-	"nchidere\x02Route traffic through:\x02Utilizați gateway-ul %[1]s %[2]v" +
-	"\x02Am deschis %[1]s\x02Am închis %[1]s\x02Anulare\x02Conectare la %[1]s" +
-	"\x02Oprire %[1]s\x02Reconectare\x02%[1]s blochează accesul la internet"
+	"lună.\x0a\x09\x0aVreți să donați acum?\x02Donație\x02%[1]s este un servi" +
+	"ciu VPN ușor, rapid și sigur de la %[2]s. %[1]s nu necesită un cont de u" +
+	"tilizator, nu păstrează jurnalele și nu vă urmărește în niciun fel.\x0a" +
+	"\x09    \x0aAcest serviciu este plătit în întregime prin donații de la u" +
+	"tilizatori cum sunteți dvs. Vă rugăm să donați la %[3]s.\x0a\x09\x09\x0a" +
+	"Prin utilizarea acestei aplicații, sunteți de acord cu Termenii și condi" +
+	"țiile disponibile la %[4]s. Acest serviciu este oferit așa cum este, fă" +
+	"ră nicio garanție și este destinat persoanelor care lucrează pentru a fa" +
+	"ce lumea un loc mai bun.\x0a\x0a\x0a%[1]v versiunea: %[5]s\x02Despre\x02" +
+	"Eroare de inițializare\x02Nu am găsit un agent de autentificare polkit. " +
+	"Porniți unul și încercați din nou.\x02Lipsește agentul de autentificare" +
+	"\x02Nu se poate conecta la %[1]s: %[2]v\x02Eroare la pornirea VPN\x02Ver" +
+	"ificare stare...\x02Deschidere\x02Închidere\x02Ajutor...\x02Donație..." +
+	"\x02Despre...\x02Închidere\x02Traficul rutelor prin:\x02Utilizați gatewa" +
+	"y-ul %[1]s %[2]v\x02Am deschis %[1]s\x02Am închis %[1]s\x02Anulare\x02Co" +
+	"nectare la %[1]s\x02Oprire %[1]s\x02Reconectare\x02%[1]s blochează acces" +
+	"ul la internet"
 
 var ruIndex = []uint32{ // 27 elements
 	0x00000000, 0x0000004d, 0x00000250, 0x0000027a,
@@ -857,6 +860,38 @@ const svData string = "" + // Size: 1298 bytes
 	"s %[2]v gateway\x02%[1]s startad\x02%[1]s stoppad\x02Avbryt\x02Ansluter " +
 	"till %[1]s\x02Stoppar %[1]s\x02Återanslut\x02%[1]s blockerar internet"
 
+var trIndex = []uint32{ // 27 elements
+	0x00000000, 0x0000002d, 0x0000014a, 0x00000157,
+	0x00000393, 0x0000039d, 0x000003af, 0x0000040d,
+	0x00000433, 0x0000045d, 0x00000473, 0x00000485,
+	0x00000489, 0x0000048f, 0x0000049a, 0x000004aa,
+	0x000004b7, 0x000004c1, 0x000004e8, 0x00000505,
+	0x00000512, 0x00000520, 0x00000527, 0x00000548,
+	0x0000055b, 0x0000056b, 0x00000586,
+} // Size: 132 bytes
+
+const trData string = "" + // Size: 1414 bytes
+	"\x02VPN başlatılırken bir hata oluştu: %[1]v\x02%[1]s hizmetini çalıştır" +
+	"mak pahalıdır. Sizin hakkınızda kişisel bilgi saklamak istemediğimiz içi" +
+	"n, bu hizmete ilişkin hesaplar veya fatura yok. Ancak hizmetin sürmesini" +
+	" istiyorsanız, her ay en azından 5$ bağış yapmalısınız.\x0a\x09\x0aŞimdi" +
+	" bağış yapmak ister misiniz?\x02Bağış Yap\x02%[1]s, %[2]s tarafından sağ" +
+	"lanan kolay, hızlı ve güvenli bir VPN hizmetidir. %[1]s kullanıcı hesabı" +
+	" gerektirmez, kayıt tutmaz veya sizi hiç bir şekilde izlemez. \x0a\x09" +
+	"\x0aBu hizmetin ücreti sizin gibi kullanıcıların bağışlarıyla ödeniyor. " +
+	"Lütfen %[3]s bağlantısıyla bağış yapın.\x0a\x09\x09\x0aBu uygulamayı kul" +
+	"lanarak, %[4]s adresindeki Hizmet Kullanım Şartlarını kabul etmiş olursu" +
+	"nuz. Bu hizmet olduğu gibi, herhangi bir garanti olmadan sunulmaktadır v" +
+	"e dünyayı daha iyi bir yer kılmak için çalışan insanlara yöneliktir.\x0a" +
+	"\x0a\x0a%[1]v sürüm: %[5]s\x02Hakkında\x02Başlatma hatası\x02Bir polkit " +
+	"kimlik doğrulama vekili bulunamıyor. Bir tane çalıştırın ve tekrar deney" +
+	"in.\x02Kimlik doğrulama vekili bulunamıyor\x02%[1]s uygulamasına bağlana" +
+	"mıyor: %[2]v\x02VPN başlatma hatası\x02Durum denetimi...\x02Aç\x02Kapat" +
+	"\x02Yardım...\x02Bağış yap...\x02Hakkında...\x02Çıkış\x02Trafiği şunun ü" +
+	"zerinden yönlendir:\x02%[1]s %[2]v geçidini kullan\x02%[1]s açık\x02%[1]" +
+	"s kapalı\x02İptal\x02%[1]s uygulamasına bağlanıyor\x02%[1]s durduruluyor" +
+	"\x02Yeniden bağlan\x02%[1]s interneti engelliyor"
+
 var ugIndex = []uint32{ // 27 elements
 	0x00000000, 0x00000058, 0x00000266, 0x00000273,
 	0x00000652, 0x00000661, 0x00000693, 0x00000706,
@@ -939,4 +974,4 @@ const zh_TWData string = "" + // Size: 1182 bytes
 	"捐獻...\x02關於...\x02退出\x02流量將會通過路由：\x02使用 %[1]s %[2]v 閘道\x02%[1]s 開啟\x02" +
 	"%[1]s 關閉\x02取消\x02正在連線到 %[1]s\x02正在停止 %[1]s\x02重新連線\x02%[1]s 正在封鎖網際網路"
 
-	// Total table size 44924 bytes (43KiB); checksum: A7DC7BE4
+	// Total table size 46586 bytes (45KiB); checksum: 6D4C7E6A
