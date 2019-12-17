@@ -123,7 +123,7 @@ build_all_providers:
 prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
 
 prepare_templates: generate relink_default tgz
-	@mkdir -p build/${PROVIDER}/bin/
+	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
 ifeq (${SKIP_CACHECK}, no)

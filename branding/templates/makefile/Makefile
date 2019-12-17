@@ -44,7 +44,7 @@ endif
 
 sign_win:
 	echo "[+] signing windows build"
-	python windowns/sign.py $(WIN_CERT_PATH) $(WIN_CERT_PASS)
+	python windows/sign.py $(WIN_CERT_PATH) $(WIN_CERT_PASS)
 
 # -----------------------------------------------------------------------------
 # OSX
@@ -67,7 +67,7 @@ ifeq ($(SYSTEM), Darwin)
 else
 	cd osx && APPNAME=$(APPNAME) VERSION=$(VERSION) ./cross-quickpkg
 endif
-	mv dist/$(APPNAME)-$(VERSION)_unsigned.pkg ../../deploy/
+	mv dist/$(APPNAME)-$(VERSION)*.pkg ../../deploy/
 
 # -----------------------------------------------------------------------------
 # Linux 
