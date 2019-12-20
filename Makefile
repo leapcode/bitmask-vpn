@@ -74,7 +74,7 @@ _buildparts: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
 	@mkdir -p build/bin/${PLATFORM}
-	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags`" -o build/bin/${PLATFORM}/$* ./cmd/$*
+	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
 	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
 	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
 
@@ -89,8 +89,9 @@ build_win:
 
 CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
 PLATFORM_WIN = PLATFORM=windows
+EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
-	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(MAKE) _buildparts
+	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
 
 CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
 PLATFORM_OSX = PLATFORM=darwin
