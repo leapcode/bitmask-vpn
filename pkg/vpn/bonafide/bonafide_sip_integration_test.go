@@ -18,20 +18,40 @@ package bonafide
 
 import (
 	"bytes"
+	"os"
 	"testing"
 )
 
-const (
-	gwIP = "199.58.81.145"
-)
+type SIPCreds struct {
+	userOk, passOk string
+}
 
-var (
-	privateKeyHeader = []byte("-----BEGIN RSA PRIVATE KEY-----")
-	certHeader       = []byte("-----BEGIN CERTIFICATE-----")
-)
+func getFromEnv(name, defaultVar string) string {
+	val, ok := os.LookupEnv(name)
+	if !ok {
+		return defaultVar
+	}
+	return val
+}
 
-func TestIntegrationGetCert(t *testing.T) {
+func getSIPCreds() SIPCreds {
+	userOk := getFromEnv("SIP_USER_OK", "test_user_ok")
+	passOk := getFromEnv("SIP_PASS_OK", "test_pass_ok")
+	creds := SIPCreds{
+		userOk: userOk,
+		passOk: passOk,
+	}
+	return creds
+}
+
+func TestSIPIntegrationGetCert(t *testing.T) {
+	creds := getSIPCreds()
+
 	b := New()
+	b.auth = &SipAuthentication{b}
+	b.SetCredentials(creds.userOk, creds.passOk)
+	b.apiURL = "http://localhost:8000/"
+
 	cert, err := b.GetPemCertificate()
 	if err != nil {
 		t.Fatal("getCert returned an error: ", err)
@@ -44,19 +64,7 @@ func TestIntegrationGetCert(t *testing.T) {
 	if !bytes.Contains(cert, certHeader) {
 		t.Errorf("No cert present: \n%q", cert)
 	}
-}
 
-func TestGetGateways(t *testing.T) {
-	b := New()
-	gateways, err := b.GetGateways("openvpn")
-	if err != nil {
-		t.Fatal("getGateways returned an error: ", err)
-	}
-
-	for _, gw := range gateways {
-		if gw.IPAddress == gwIP {
-			return
-		}
-	}
-	t.Errorf("%s not in the list", gwIP)
+	/* TODO -- check we receive 401 for bad credentials */
+	/* TODO -- check we receive 4xx for no credentials */
 }

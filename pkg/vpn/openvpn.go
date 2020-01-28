@@ -150,7 +150,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 	certPath = b.getCertPemPath()
 
 	if _, err := os.Stat(certPath); os.IsNotExist(err) {
-		cert, err := b.bonafide.GetCertPem()
+		cert, err := b.bonafide.GetPemCertificate()
 		if err != nil {
 			return "", err
 		}

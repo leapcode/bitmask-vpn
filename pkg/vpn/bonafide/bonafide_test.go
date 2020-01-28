@@ -27,9 +27,10 @@ import (
 )
 
 const (
-	certPath = "testdata/cert"
-	eip1Path = "testdata/eip-service.json"
-	eipPath  = "testdata/eip-service3.json"
+	certPath   = "testdata/cert"
+	eip1Path   = "testdata/eip-service.json"
+	eipPath    = "testdata/eip-service3.json"
+	eipPathSip = "testdata/eip-service3-sip.json"
 )
 
 type client struct {
@@ -44,9 +45,18 @@ func (c client) Post(url, contentType string, body io.Reader) (resp *http.Respon
 	}, err
 }
 
-func TestGetCert(t *testing.T) {
+func (c client) Do(req *http.Request) (*http.Response, error) {
+	f, err := os.Open(c.path)
+	return &http.Response{
+		Body:       f,
+		StatusCode: 200,
+	}, err
+}
+
+func TestAnonGetCert(t *testing.T) {
 	b := Bonafide{client: client{certPath}}
-	cert, err := b.GetCertPem()
+	b.auth = &AnonymousAuthentication{&b}
+	cert, err := b.GetPemCertificate()
 	if err != nil {
 		t.Fatal("getCert returned an error: ", err)
 	}
@@ -182,6 +192,8 @@ func TestObfs4Gateways(t *testing.T) {
 	}
 }
 
+/* TODO -- failClient instead? */
+
 type fallClient struct {
 	path string
 }
@@ -195,6 +207,14 @@ func (c fallClient) Post(url, contentType string, body io.Reader) (resp *http.Re
 	return &http.Response{
 		Body:       f,
 		StatusCode: statusCode,
+	}, err
+}
+
+func (c fallClient) Do(req *http.Request) (*http.Response, error) {
+	f, err := os.Open(c.path)
+	return &http.Response{
+		Body:       f,
+		StatusCode: 401,
 	}, err
 }
 

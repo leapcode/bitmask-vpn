@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -33,11 +32,11 @@ func (a *SipAuthentication) GetPemCertificate() ([]byte, error) {
 	if cred == nil {
 		return nil, fmt.Errorf("Need bonafide credentials for sip auth")
 	}
-	credJson, err := formatCredentials(cred.User, cred.Password)
+	credJSON, err := formatCredentials(cred.User, cred.Password)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
 	}
-	token, err := a.getToken(credJson)
+	token, err := a.getToken(credJSON)
 	if err != nil {
 		return nil, fmt.Errorf("Error while getting token: %s", err)
 	}
@@ -49,7 +48,11 @@ func (a *SipAuthentication) GetPemCertificate() ([]byte, error) {
 }
 
 func (a *SipAuthentication) getProtectedCert(token string) ([]byte, error) {
-	req, err := http.NewRequest("POST", certAPI, strings.NewReader(""))
+	certURL, err := a.bonafide.GetURL("certv3")
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("POST", certURL, strings.NewReader(""))
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	resp, err := a.bonafide.client.Do(req)
 	if err != nil {
@@ -57,7 +60,7 @@ func (a *SipAuthentication) getProtectedCert(token string) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Cannot get cert: Error %d", resp.StatusCode)
+		return nil, fmt.Errorf("Error %d", resp.StatusCode)
 	}
 	return ioutil.ReadAll(resp.Body)
 }
@@ -67,9 +70,13 @@ func (a *SipAuthentication) getToken(credJson string) ([]byte, error) {
 	[ ] get token from disk?
 	[ ] check if expired? set a goroutine to refresh it periodically?
 	*/
-	resp, err := http.Post(authAPI, "text/json", strings.NewReader(credJson))
+	authURL, err := a.bonafide.GetURL("auth")
 	if err != nil {
-		log.Fatal("Error on auth request: ", err)
+		return nil, fmt.Errorf("Error getting auth url")
+	}
+	resp, err := http.Post(authURL, "text/json", strings.NewReader(credJson))
+	if err != nil {
+		return nil, fmt.Errorf("Error on auth request: %v", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
@@ -80,9 +87,9 @@ func (a *SipAuthentication) getToken(credJson string) ([]byte, error) {
 
 func formatCredentials(user, pass string) (string, error) {
 	c := Credentials{User: user, Password: pass}
-	credJson, err := json.Marshal(c)
+	credJSON, err := json.Marshal(c)
 	if err != nil {
 		return "", err
 	}
-	return string(credJson), nil
+	return string(credJSON), nil
 }

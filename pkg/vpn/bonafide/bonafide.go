@@ -30,23 +30,29 @@ import (
 )
 
 const (
-	certAPI               = config.APIURL + "1/cert"
-	certAPI3              = config.APIURL + "3/cert"
-	authAPI               = config.APIURL + "3/auth"
 	secondsPerHour        = 60 * 60
 	retryFetchJSONSeconds = 15
 )
 
-// Bonafide exposes all the methods needed to communicate with the LEAP server.
+const (
+	certPathv1 = "1/cert"
+	certPathv3 = "3/cert"
+	authPathv3 = "3/auth"
+
+	certAPI  = config.APIURL + certPathv1
+	certAPI3 = config.APIURL + certPathv3
+	authAPI  = config.APIURL + authPathv3
+)
+
 type Bonafide struct {
 	client        httpClient
 	eip           *eipService
 	tzOffsetHours int
 	auth          Authentication
 	credentials   *Credentials
+	apiURL        string
 }
 
-// A Gateway is each one of the remotes we can pass to OpenVPN. It contains a description of all the fields that the eip-service advertises.
 type Gateway struct {
 	Host      string
 	IPAddress string
@@ -106,7 +112,33 @@ func (b *Bonafide) SetCredentials(username, password string) {
 	b.credentials = &Credentials{username, password}
 }
 
+func (b *Bonafide) GetURL(object string) (string, error) {
+	if b.apiURL == "" {
+		switch object {
+		case "cert":
+			return certAPI, nil
+		case "certv3":
+			return certAPI3, nil
+		case "auth":
+			return authAPI, nil
+		}
+	} else {
+		switch object {
+		case "cert":
+			return b.apiURL + certPathv1, nil
+		case "certv3":
+			return b.apiURL + certPathv3, nil
+		case "auth":
+			return b.apiURL + authPathv3, nil
+		}
+	}
+	return "", fmt.Errorf("ERROR: unknown object for api url")
+}
+
 func (b *Bonafide) GetPemCertificate() ([]byte, error) {
+	if b.auth == nil {
+		log.Fatal("ERROR: bonafide did not initialize auth")
+	}
 	cert, err := b.auth.GetPemCertificate()
 	return cert, err
 }
