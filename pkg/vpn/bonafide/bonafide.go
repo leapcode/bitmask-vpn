@@ -32,16 +32,21 @@ import (
 const (
 	certAPI               = config.APIURL + "1/cert"
 	certAPI3              = config.APIURL + "3/cert"
+	authAPI               = config.APIURL + "3/auth"
 	secondsPerHour        = 60 * 60
 	retryFetchJSONSeconds = 15
 )
 
+// Bonafide exposes all the methods needed to communicate with the LEAP server.
 type Bonafide struct {
 	client        httpClient
 	eip           *eipService
 	tzOffsetHours int
+	auth          Authentication
+	credentials   *Credentials
 }
 
+// A Gateway is each one of the remotes we can pass to OpenVPN. It contains a description of all the fields that the eip-service advertises.
 type Gateway struct {
 	Host      string
 	IPAddress string
@@ -55,6 +60,13 @@ type openvpnConfig map[string]interface{}
 
 type httpClient interface {
 	Post(url, contentType string, body io.Reader) (resp *http.Response, err error)
+	Do(req *http.Request) (*http.Response, error)
+}
+
+// The Authentication interface allows to get a Certificate in Pem format.
+// We implement Anonymous Authentication (Riseup et al), and Sip (Libraries).
+type Authentication interface {
+	GetPemCertificate() ([]byte, error)
 }
 
 type geoLocation struct {
@@ -66,6 +78,7 @@ type geoLocation struct {
 	SortedGateways []string `json:"gateways"`
 }
 
+// New Bonafide: Initializes a Bonafide object. By default, no Credentials are passed.
 func New() *Bonafide {
 	certs := x509.NewCertPool()
 	certs.AppendCertsFromPEM(config.CaCert)
@@ -79,31 +92,23 @@ func New() *Bonafide {
 	_, tzOffsetSeconds := time.Now().Zone()
 	tzOffsetHours := tzOffsetSeconds / secondsPerHour
 
-	return &Bonafide{
+	b := &Bonafide{
 		client:        client,
 		eip:           nil,
 		tzOffsetHours: tzOffsetHours,
 	}
+	auth := AnonymousAuthentication{b}
+	b.auth = &auth
+	return b
 }
 
-func (b *Bonafide) GetCertPem() ([]byte, error) {
-	resp, err := b.client.Post(certAPI, "", nil)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode == 404 {
-		resp, err = b.client.Post(certAPI3, "", nil)
-		if err != nil {
-			return nil, err
-		}
-		defer resp.Body.Close()
-	}
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
-	}
+func (b *Bonafide) SetCredentials(username, password string) {
+	b.credentials = &Credentials{username, password}
+}
 
-	return ioutil.ReadAll(resp.Body)
+func (b *Bonafide) GetPemCertificate() ([]byte, error) {
+	cert, err := b.auth.GetPemCertificate()
+	return cert, err
 }
 
 func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
