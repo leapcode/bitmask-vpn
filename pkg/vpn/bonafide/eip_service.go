@@ -23,6 +23,7 @@ type eipService struct {
 	Gateways             []gatewayV3
 	Locations            map[string]location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
+	auth                 string
 	defaultGateway       string
 }
 
@@ -65,6 +66,22 @@ type transportV3 struct {
 	Options   map[string]string
 }
 
+func (b *Bonafide) setupAuthentication(i interface{}) {
+	switch i.(type) {
+	case eipService:
+		switch auth := b.eip.auth; auth {
+		case "anon":
+			// Do nothing, we're set on initialization.
+		case "sip":
+			b.auth = &SipAuthentication{b}
+		default:
+			log.Printf("BUG: unknown authentication method %s", auth)
+		}
+	case eipServiceV1:
+		// Do nothing, no auth on v1.
+	}
+}
+
 func (b *Bonafide) fetchEipJSON() error {
 	resp, err := b.client.Post(eip3API, "", nil)
 	for err != nil {
@@ -80,24 +97,25 @@ func (b *Bonafide) fetchEipJSON() error {
 	case 404:
 		buf := make([]byte, 128)
 		resp.Body.Read(buf)
-		log.Printf("Error fetching eip v3 json: %s", buf)
+		log.Printf("Error fetching eip v3 json")
 		resp, err = b.client.Post(eip1API, "", nil)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode != 200 {
-			return fmt.Errorf("get eip json has failed with status: %s", resp.Status)
+			return fmt.Errorf("Get eip json has failed with status: %s", resp.Status)
 		}
 
 		b.eip, err = decodeEIP1(resp.Body)
 	default:
-		return fmt.Errorf("get eip json has failed with status: %s", resp.Status)
+		return fmt.Errorf("Get eip json has failed with status: %s", resp.Status)
 	}
 	if err != nil {
 		return err
 	}
 
+	b.setupAuthentication(b.eip)
 	b.sortGateways()
 	return nil
 }
