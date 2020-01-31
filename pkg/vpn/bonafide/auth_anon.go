@@ -16,22 +16,29 @@
 package bonafide
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 )
 
-type AnonymousAuthentication struct {
-	bonafide *Bonafide
+type anonymousAuthentication struct {
+	client  httpClient
+	authURI string
+	certURI string
 }
 
-func (a *AnonymousAuthentication) GetPemCertificate() ([]byte, error) {
-	resp, err := a.bonafide.client.Post(certAPI, "", nil)
+func (a *anonymousAuthentication) needsCredentials() bool {
+	return true
+}
+
+func (a *anonymousAuthentication) getPemCertificate(cred *credentials) ([]byte, error) {
+	resp, err := a.client.Post(certAPI, "", nil)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 404 {
-		resp, err = a.bonafide.client.Post(certAPI3, "", nil)
+		resp, err = a.client.Post(certAPI3, "", nil)
 		if err != nil {
 			return nil, err
 		}
@@ -42,4 +49,8 @@ func (a *AnonymousAuthentication) GetPemCertificate() ([]byte, error) {
 	}
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+func (a *anonymousAuthentication) getToken(cred *credentials) ([]byte, error) {
+	return []byte(""), errors.New("anon authentication should not call getToken")
 }
