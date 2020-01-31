@@ -18,7 +18,7 @@ def getProviderData(provider, config):
     c = config[provider]
     d = dict()
 
-    keys = ('name', 'applicationName', 'binaryName',
+    keys = ('name', 'applicationName', 'binaryName', 'auth',
             'providerURL', 'tosURL', 'helpURL',
             'askForDonations', 'donateURL', 'apiURL',
             'geolocationAPI', 'caCertString')

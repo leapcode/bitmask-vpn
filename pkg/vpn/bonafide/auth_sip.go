@@ -23,58 +23,41 @@ import (
 	"strings"
 )
 
-type SipAuthentication struct {
-	bonafide *Bonafide
+type sipAuthentication struct {
+	client  httpClient
+	authURI string
+	certURI string
 }
 
-func (a *SipAuthentication) GetPemCertificate() ([]byte, error) {
-	cred := a.bonafide.credentials
+func (a *sipAuthentication) needsCredentials() bool {
+	return true
+}
+
+func (a *sipAuthentication) getPemCertificate(cred *credentials) ([]byte, error) {
 	if cred == nil {
 		return nil, fmt.Errorf("Need bonafide credentials for sip auth")
 	}
-	credJSON, err := formatCredentials(cred.User, cred.Password)
-	if err != nil {
-		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
-	}
-	token, err := a.getToken(credJSON)
+	token, err := a.getToken(cred)
 	if err != nil {
 		return nil, fmt.Errorf("Error while getting token: %s", err)
 	}
-	cert, err := a.getProtectedCert(string(token))
+	cert, err := a.getProtectedCert(a.certURI, string(token))
 	if err != nil {
 		return nil, fmt.Errorf("Error while getting cert: %s", err)
 	}
 	return cert, nil
 }
 
-func (a *SipAuthentication) getProtectedCert(token string) ([]byte, error) {
-	certURL, err := a.bonafide.GetURL("certv3")
-	if err != nil {
-		return nil, err
-	}
-	req, err := http.NewRequest("POST", certURL, strings.NewReader(""))
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	resp, err := a.bonafide.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("Error while getting token: %s", err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Error %d", resp.StatusCode)
-	}
-	return ioutil.ReadAll(resp.Body)
-}
-
-func (a *SipAuthentication) getToken(credJson string) ([]byte, error) {
+func (a *sipAuthentication) getToken(cred *credentials) ([]byte, error) {
 	/* TODO
 	[ ] get token from disk?
 	[ ] check if expired? set a goroutine to refresh it periodically?
 	*/
-	authURL, err := a.bonafide.GetURL("auth")
+	credJSON, err := formatCredentials(cred.User, cred.Password)
 	if err != nil {
-		return nil, fmt.Errorf("Error getting auth url")
+		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
 	}
-	resp, err := http.Post(authURL, "text/json", strings.NewReader(credJson))
+	resp, err := http.Post(a.authURI, "text/json", strings.NewReader(credJSON))
 	if err != nil {
 		return nil, fmt.Errorf("Error on auth request: %v", err)
 	}
@@ -85,8 +68,22 @@ func (a *SipAuthentication) getToken(credJson string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
+func (a *sipAuthentication) getProtectedCert(uri, token string) ([]byte, error) {
+	req, err := http.NewRequest("POST", uri, strings.NewReader(""))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	resp, err := a.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("Error while getting token: %s", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("Error %d", resp.StatusCode)
+	}
+	return ioutil.ReadAll(resp.Body)
+}
+
 func formatCredentials(user, pass string) (string, error) {
-	c := Credentials{User: user, Password: pass}
+	c := credentials{User: user, Password: pass}
 	credJSON, err := json.Marshal(c)
 	if err != nil {
 		return "", err

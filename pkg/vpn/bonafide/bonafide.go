@@ -19,6 +19,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -48,8 +49,8 @@ type Bonafide struct {
 	client        httpClient
 	eip           *eipService
 	tzOffsetHours int
-	auth          Authentication
-	credentials   *Credentials
+	auth          authentication
+	credentials   credentials
 	apiURL        string
 }
 
@@ -67,12 +68,6 @@ type openvpnConfig map[string]interface{}
 type httpClient interface {
 	Post(url, contentType string, body io.Reader) (resp *http.Response, err error)
 	Do(req *http.Request) (*http.Response, error)
-}
-
-// The Authentication interface allows to get a Certificate in Pem format.
-// We implement Anonymous Authentication (Riseup et al), and Sip (Libraries).
-type Authentication interface {
-	GetPemCertificate() ([]byte, error)
 }
 
 type geoLocation struct {
@@ -103,44 +98,80 @@ func New() *Bonafide {
 		eip:           nil,
 		tzOffsetHours: tzOffsetHours,
 	}
-	auth := AnonymousAuthentication{b}
-	b.auth = &auth
+	switch auth := config.Auth; auth {
+	case "sip":
+		log.Println("Client expects sip auth")
+		b.auth = &sipAuthentication{client, b.getURL("auth"), b.getURL("certv3")}
+	case "anon":
+		log.Println("Client expects anon auth")
+		b.auth = &anonymousAuthentication{client, "", b.getURL("certv3")}
+	default:
+		log.Println("Client expects invalid auth", auth)
+		b.auth = &anonymousAuthentication{client, "", b.getURL("certv3")}
+	}
+
 	return b
 }
 
-func (b *Bonafide) SetCredentials(username, password string) {
-	b.credentials = &Credentials{username, password}
+func (b *Bonafide) DoLogin(username, password string) (bool, error) {
+	if !b.auth.needsCredentials() {
+		return false, errors.New("Auth method does not need login")
+	}
+
+	cred := credentials{username, password}
+	b.credentials = cred
+
+	/* TODO keep this in memory */
+	_, err := b.auth.getToken(&cred)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
-func (b *Bonafide) GetURL(object string) (string, error) {
-	if b.apiURL == "" {
-		switch object {
-		case "cert":
-			return certAPI, nil
-		case "certv3":
-			return certAPI3, nil
-		case "auth":
-			return authAPI, nil
-		}
-	} else {
-		switch object {
-		case "cert":
-			return b.apiURL + certPathv1, nil
-		case "certv3":
-			return b.apiURL + certPathv3, nil
-		case "auth":
-			return b.apiURL + authPathv3, nil
-		}
+func (b *Bonafide) checkCredentialsAreSet() bool {
+	if b.credentials.User == "" || b.credentials.Password == "" {
+		log.Println("BUG: expected credentials to be set")
+		return false
 	}
-	return "", fmt.Errorf("ERROR: unknown object for api url")
+	return true
 }
 
 func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	if b.auth == nil {
 		log.Fatal("ERROR: bonafide did not initialize auth")
 	}
-	cert, err := b.auth.GetPemCertificate()
+	if b.auth.needsCredentials() {
+		b.checkCredentialsAreSet()
+	}
+
+	cert, err := b.auth.getPemCertificate(&b.credentials)
 	return cert, err
+}
+
+func (b *Bonafide) getURL(object string) string {
+	if b.apiURL == "" {
+		switch object {
+		case "cert":
+			return certAPI
+		case "certv3":
+			return certAPI3
+		case "auth":
+			return authAPI
+		}
+	} else {
+		switch object {
+		case "cert":
+			return b.apiURL + certPathv1
+		case "certv3":
+			return b.apiURL + certPathv3
+		case "auth":
+			return b.apiURL + authPathv3
+		}
+	}
+	log.Println("BUG: unknown url object")
+	return ""
 }
 
 func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {

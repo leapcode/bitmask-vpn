@@ -10,6 +10,7 @@ const (
 	Provider        = "$providerURL"
 	ApplicationName = "$applicationName"
 	BinaryName      = "$binaryName"
+	Auth            = "$auth"
 	DonateURL       = "$donateURL"
 	AskForDonations = "$askForDonations"
 	HelpURL         = "$helpURL"

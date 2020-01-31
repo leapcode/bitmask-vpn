@@ -15,7 +15,16 @@
 
 package bonafide
 
-type Credentials struct {
+type credentials struct {
 	User     string
 	Password string
+}
+
+// The authentication interface allows to get a Certificate in Pem format.
+// We implement Anonymous Authentication (Riseup et al), and Sip (Libraries).
+
+type authentication interface {
+	needsCredentials() bool
+	getToken(cred *credentials) ([]byte, error)
+	getPemCertificate(cred *credentials) ([]byte, error)
 }
