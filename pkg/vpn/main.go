@@ -92,3 +92,11 @@ func (b *Bitmask) Close() {
 func (b *Bitmask) Version() (string, error) {
 	return "", nil
 }
+
+func (b *Bitmask) NeedsCredentials() bool {
+	return b.bonafide.NeedsCredentials()
+}
+
+func (b *Bitmask) DoLogin(username, password string) (bool, error) {
+	return b.bonafide.DoLogin(username, password)
+}

@@ -26,34 +26,18 @@ import (
 type sipAuthentication struct {
 	client  httpClient
 	authURI string
-	certURI string
 }
 
 func (a *sipAuthentication) needsCredentials() bool {
 	return true
 }
 
-func (a *sipAuthentication) getPemCertificate(cred *credentials) ([]byte, error) {
-	if cred == nil {
-		return nil, fmt.Errorf("Need bonafide credentials for sip auth")
-	}
-	token, err := a.getToken(cred)
-	if err != nil {
-		return nil, fmt.Errorf("Error while getting token: %s", err)
-	}
-	cert, err := a.getProtectedCert(a.certURI, string(token))
-	if err != nil {
-		return nil, fmt.Errorf("Error while getting cert: %s", err)
-	}
-	return cert, nil
-}
-
-func (a *sipAuthentication) getToken(cred *credentials) ([]byte, error) {
+func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	/* TODO
 	[ ] get token from disk?
 	[ ] check if expired? set a goroutine to refresh it periodically?
 	*/
-	credJSON, err := formatCredentials(cred.User, cred.Password)
+	credJSON, err := formatCredentials(user, password)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
 	}
@@ -64,20 +48,6 @@ func (a *sipAuthentication) getToken(cred *credentials) ([]byte, error) {
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("Cannot get token: Error %d", resp.StatusCode)
-	}
-	return ioutil.ReadAll(resp.Body)
-}
-
-func (a *sipAuthentication) getProtectedCert(uri, token string) ([]byte, error) {
-	req, err := http.NewRequest("POST", uri, strings.NewReader(""))
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	resp, err := a.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("Error while getting token: %s", err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Error %d", resp.StatusCode)
 	}
 	return ioutil.ReadAll(resp.Body)
 }

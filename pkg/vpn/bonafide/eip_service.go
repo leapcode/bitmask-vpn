@@ -73,7 +73,7 @@ func (b *Bonafide) setupAuthentication(i interface{}) {
 		case "anon":
 			// Do nothing, we're set on initialization.
 		case "sip":
-			b.auth = &sipAuthentication{b.client, b.getURL("auth"), b.getURL("certv3")}
+			b.auth = &sipAuthentication{b.client, b.getURL("auth")}
 		default:
 			log.Printf("BUG: unknown authentication method %s", auth)
 		}
