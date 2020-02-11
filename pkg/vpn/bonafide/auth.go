@@ -25,6 +25,5 @@ type credentials struct {
 
 type authentication interface {
 	needsCredentials() bool
-	getToken(cred *credentials) ([]byte, error)
-	getPemCertificate(cred *credentials) ([]byte, error)
+	getToken(user, password string) ([]byte, error)
 }

@@ -17,40 +17,16 @@ package bonafide
 
 import (
 	"errors"
-	"fmt"
-	"io/ioutil"
 )
 
 type anonymousAuthentication struct {
-	client  httpClient
-	authURI string
-	certURI string
+	client httpClient
 }
 
 func (a *anonymousAuthentication) needsCredentials() bool {
 	return true
 }
 
-func (a *anonymousAuthentication) getPemCertificate(cred *credentials) ([]byte, error) {
-	resp, err := a.client.Post(certAPI, "", nil)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode == 404 {
-		resp, err = a.client.Post(certAPI3, "", nil)
-		if err != nil {
-			return nil, err
-		}
-		defer resp.Body.Close()
-	}
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Get vpn cert has failed with status: %s", resp.Status)
-	}
-
-	return ioutil.ReadAll(resp.Body)
-}
-
-func (a *anonymousAuthentication) getToken(cred *credentials) ([]byte, error) {
+func (a *anonymousAuthentication) getToken(user, password string) ([]byte, error) {
 	return []byte(""), errors.New("anon authentication should not call getToken")
 }

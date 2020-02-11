@@ -25,6 +25,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -50,7 +51,7 @@ type Bonafide struct {
 	eip           *eipService
 	tzOffsetHours int
 	auth          authentication
-	credentials   credentials
+	token         []byte
 	apiURL        string
 }
 
@@ -101,16 +102,20 @@ func New() *Bonafide {
 	switch auth := config.Auth; auth {
 	case "sip":
 		log.Println("Client expects sip auth")
-		b.auth = &sipAuthentication{client, b.getURL("auth"), b.getURL("certv3")}
+		b.auth = &sipAuthentication{client, b.getURL("auth")}
 	case "anon":
 		log.Println("Client expects anon auth")
-		b.auth = &anonymousAuthentication{client, "", b.getURL("certv3")}
+		b.auth = &anonymousAuthentication{client}
 	default:
 		log.Println("Client expects invalid auth", auth)
-		b.auth = &anonymousAuthentication{client, "", b.getURL("certv3")}
+		b.auth = &anonymousAuthentication{client}
 	}
 
 	return b
+}
+
+func (b *Bonafide) NeedsCredentials() bool {
+	return b.auth.needsCredentials()
 }
 
 func (b *Bonafide) DoLogin(username, password string) (bool, error) {
@@ -118,11 +123,8 @@ func (b *Bonafide) DoLogin(username, password string) (bool, error) {
 		return false, errors.New("Auth method does not need login")
 	}
 
-	cred := credentials{username, password}
-	b.credentials = cred
-
-	/* TODO keep this in memory */
-	_, err := b.auth.getToken(&cred)
+	var err error
+	b.token, err = b.auth.getToken(username, password)
 	if err != nil {
 		return false, err
 	}
@@ -130,24 +132,39 @@ func (b *Bonafide) DoLogin(username, password string) (bool, error) {
 	return true, nil
 }
 
-func (b *Bonafide) checkCredentialsAreSet() bool {
-	if b.credentials.User == "" || b.credentials.Password == "" {
-		log.Println("BUG: expected credentials to be set")
-		return false
-	}
-	return true
-}
-
 func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	if b.auth == nil {
 		log.Fatal("ERROR: bonafide did not initialize auth")
 	}
-	if b.auth.needsCredentials() {
-		b.checkCredentialsAreSet()
+	if b.auth.needsCredentials() && b.token == nil {
+		log.Println("BUG: expected token to be set, but is not there")
+		return nil, errors.New("Needs to login, but it was not logged in. Please, restart the application and report it if it continues happening")
 	}
 
-	cert, err := b.auth.getPemCertificate(&b.credentials)
-	return cert, err
+	req, err := http.NewRequest("POST", b.getURL("certv3"), strings.NewReader(""))
+	if err != nil {
+		return nil, err
+	}
+	if b.token != nil {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", b.token))
+	}
+	resp, err := b.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 404 {
+		resp, err = b.client.Post(b.getURL("cert"), "", nil)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+	}
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("Get vpn cert has failed with status: %s", resp.Status)
+	}
+
+	return ioutil.ReadAll(resp.Body)
 }
 
 func (b *Bonafide) getURL(object string) string {
