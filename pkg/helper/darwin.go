@@ -60,6 +60,10 @@ var (
 	}
 )
 
+func parseCliArgs() {
+	// OSX helper does not respond to arguments
+}
+
 func daemonize() {
 	cntxt := &daemon.Context{
 		PidFileName: "pid",
@@ -80,6 +84,10 @@ func daemonize() {
 	}
 	defer cntxt.Release()
 	log.Print("bitmask-helper daemon started")
+}
+
+func doHandleCommands(bindAddr string) {
+	runCommandServer(bindAddr)
 }
 
 func getOpenvpnPath() string {

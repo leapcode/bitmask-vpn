@@ -26,8 +26,7 @@ type openvpnT struct {
 	cmd *exec.Cmd
 }
 
-func ServeHTTP(bindAddr string) {
-	daemonize()
+func runCommandServer(bindAddr string) {
 	openvpn := openvpnT{nil}
 	http.HandleFunc("/openvpn/start", openvpn.start)
 	http.HandleFunc("/openvpn/stop", openvpn.stop)
@@ -36,6 +35,12 @@ func ServeHTTP(bindAddr string) {
 	http.HandleFunc("/firewall/isup", firewallIsUpHandler)
 
 	log.Fatal(http.ListenAndServe(bindAddr, nil))
+}
+
+func ServeHTTP(bindAddr string) {
+	parseCliArgs()
+	daemonize()
+	doHandleCommands(bindAddr)
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {

@@ -40,7 +40,15 @@ var (
 	}
 )
 
+func parseCliArgs() {
+	// linux helper does not reply to args
+}
+
 func daemonize() {}
+
+func doHandleCommands(bindAddr string) {
+	runCommandServer(bindAddr)
+}
 
 func getOpenvpnPath() string {
 	if os.Getenv("SNAP") != "" {
