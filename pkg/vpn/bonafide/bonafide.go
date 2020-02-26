@@ -105,10 +105,10 @@ func New() *Bonafide {
 		b.auth = &sipAuthentication{client, b.getURL("auth")}
 	case "anon":
 		log.Println("Client expects anon auth")
-		b.auth = &anonymousAuthentication{client}
+		b.auth = &anonymousAuthentication{}
 	default:
 		log.Println("Client expects invalid auth", auth)
-		b.auth = &anonymousAuthentication{client}
+		b.auth = &anonymousAuthentication{}
 	}
 
 	return b

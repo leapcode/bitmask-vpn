@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"strings"
 )
 
@@ -41,7 +40,7 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
 	}
-	resp, err := http.Post(a.authURI, "text/json", strings.NewReader(credJSON))
+	resp, err := a.client.Post(a.authURI, "text/json", strings.NewReader(credJSON))
 	if err != nil {
 		return nil, fmt.Errorf("Error on auth request: %v", err)
 	}
