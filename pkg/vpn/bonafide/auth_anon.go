@@ -19,9 +19,7 @@ import (
 	"errors"
 )
 
-type anonymousAuthentication struct {
-	client httpClient
-}
+type anonymousAuthentication struct{}
 
 func (a *anonymousAuthentication) needsCredentials() bool {
 	return true
