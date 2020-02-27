@@ -21,6 +21,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -97,7 +98,10 @@ func usage(errmsg string) {
 func daemonize() {}
 
 // http server is called from within Execute in windows
-func doHandleCommands(bindAddr string) {
+func doHandleCommands(preferredPort int) {
+	port := getFirstAvailablePortFrom(preferredPort)
+	writePortToFile(port)
+	bindAddr := "localhost:" + strconv.Itoa(port)
 	httpBindAddr = bindAddr
 }
 

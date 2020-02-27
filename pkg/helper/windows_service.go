@@ -8,8 +8,6 @@ package helper
 
 import (
 	"fmt"
-	//"strings"
-	//"time"
 
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
@@ -24,8 +22,7 @@ func (m *myservice) Execute(args []string, r <-chan svc.ChangeRequest, changes c
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
 	changes <- svc.Status{State: svc.StartPending}
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
-	// TODO use httpBindAddr
-	go runCommandServer("localhost:7171")
+	go runCommandServer(httpBindAddr)
 loop:
 	for {
 		select {

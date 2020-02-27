@@ -24,8 +24,8 @@ import (
 )
 
 const (
-	bindAddr = "localhost:7171"
-	logFile  = "helper.log"
+	preferredPort = 7171
+	logFile       = "helper.log"
 )
 
 func main() {
@@ -36,6 +36,5 @@ func main() {
 		defer logger.Close()
 	}
 
-	helper.ServeHTTP(bindAddr)
-
+	helper.ServeHTTP(preferredPort)
 }

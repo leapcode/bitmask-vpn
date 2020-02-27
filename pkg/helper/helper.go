@@ -37,10 +37,10 @@ func runCommandServer(bindAddr string) {
 	log.Fatal(http.ListenAndServe(bindAddr, nil))
 }
 
-func ServeHTTP(bindAddr string) {
+func ServeHTTP(port int) {
 	parseCliArgs()
 	daemonize()
-	doHandleCommands(bindAddr)
+	doHandleCommands(port)
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {

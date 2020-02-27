@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
@@ -46,8 +47,8 @@ func parseCliArgs() {
 
 func daemonize() {}
 
-func doHandleCommands(bindAddr string) {
-	runCommandServer(bindAddr)
+func doHandleCommands(port int) {
+	runCommandServer("localhost:" + strconv.Itoa(port))
 }
 
 func getOpenvpnPath() string {
