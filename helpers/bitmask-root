@@ -100,10 +100,23 @@ LOCAL_INTERFACE = "lo"
 IMAP_PORT = "1984"
 SMTP_PORT = "2013"
 
-IP = "/sbin/ip"
-IPTABLES = "/sbin/iptables"
-IP6TABLES = "/sbin/ip6tables"
-SYSCTL = "/sbin/sysctl"
+def swhich(binary):
+    """
+    Find the path to binary in sbin
+
+    :rtype: str
+    """
+    for folder in ["/sbin", "/usr/sbin", "/usr/local/sbin"]:
+        path = os.path.join(folder, binary)
+        if os.path.isfile(path):
+            return path
+
+    raise Exception("Can't find %s" % (binary,))
+
+IP = swhich("ip")
+IPTABLES = swhich("iptables")
+IP6TABLES = swhich("ip6tables")
+SYSCTL = swhich("sysctl")
 
 OPENVPN_USER = "nobody"
 OPENVPN_GROUP = get_no_group_name()
