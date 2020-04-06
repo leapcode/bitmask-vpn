@@ -1,5 +1,7 @@
 module 0xacab.org/leap/bitmask-vpn
 
+go 1.14
+
 require (
 	0xacab.org/leap/go-dialog v0.0.0-20181123042829-0ee8438431a0
 	0xacab.org/leap/shapeshifter v0.0.0-20191029173606-85d3e8ac43e2
@@ -17,9 +19,9 @@ require (
 	github.com/gotk3/gotk3 v0.0.0-20191027191019-60cba67d4ea4 // indirect
 	github.com/jmshal/go-locale v0.0.0-20190124211249-eb00fb25cc61
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
+	github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 	github.com/mattn/go-gtk v0.0.0-20191030024613-af2e013261f5 // indirect
 	github.com/mattn/go-pointer v0.0.0-20190911064623-a0a44394634f // indirect
-	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
 	github.com/sevlyar/go-daemon v0.1.5
 	github.com/skelterjohn/go.wde v0.0.0-20190318181201-adc3f78cdb45 // indirect
 	github.com/skratchdot/open-golang v0.0.0-20190402232053-79abb63cd66e

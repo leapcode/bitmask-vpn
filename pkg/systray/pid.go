@@ -11,7 +11,7 @@ import (
 	"syscall"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"github.com/mitchellh/go-ps"
+	"github.com/keybase/go-ps"
 )
 
 var pidFile = filepath.Join(config.Path, "systray.pid")

@@ -25,7 +25,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
-	"github.com/mitchellh/go-ps"
+	"github.com/keybase/go-ps"
 )
 
 const (
