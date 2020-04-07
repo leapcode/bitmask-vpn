@@ -56,8 +56,6 @@ Section "InstallFiles"
   Abort
 
   noError:
-  ExecShellWait "runas" "$INSTDIR\nssm.exe" 'stop $applicationNameLower-helper'
-  ExecShellWait "runas" "$INSTDIR\nssm.exe" 'remove $applicationNameLower-helper confirm'
 
   SetOutPath $INSTDIR 
   WriteUninstaller $INSTDIR\uninstall.exe
@@ -78,7 +76,6 @@ Section "InstallFiles"
   createShortCut "$SMPROGRAMS\$applicationName\$applicationName.lnk" "$INSTDIR\bitmask-vpn.exe" "" "$INSTDIR\icon.ico"
 
   File "readme.txt"
-  File "..\staging\nssm.exe"
   File "/oname=icon.ico" "..\assets\icon.ico"
 
   $extra_install_files
@@ -86,10 +83,8 @@ Section "InstallFiles"
 SectionEnd
 
 Section "InstallService"
-  ; Easy service management thanks to nssm
-  ExecWait '"$INSTDIR\nssm.exe" install $applicationNameLower-helper "$INSTDIR\bitmask_helper.exe"'
-  ExecWait '"$INSTDIR\nssm.exe" set $applicationNameLower-helper AppDirectory "$INSTDIR"'
-  ExecWait '"$INSTDIR\nssm.exe" start $applicationNameLower-helper'
+  ExecWait '"$INSTDIR\bitmask_helper.exe" install'
+  ExecWait '"$INSTDIR\bitmask_helper.exe" start'
 SectionEnd
 
 Section /o "TAP Virtual Ethernet Adapter" SecTAP
@@ -103,11 +98,9 @@ Section /o "TAP Virtual Ethernet Adapter" SecTAP
 SectionEnd
 
 Section "Uninstall"
-  ExecShellWait "runas" "$INSTDIR\nssm.exe" 'stop $applicationNameLower-helper'
-  ExecShellWait "runas" "$INSTDIR\nssm.exe" 'remove $applicationNameLower-helper confirm'
+  ExecShellWait "runas" "$INSTDIR\bitmask_helper.exe" 'remove'
 
   Delete $INSTDIR\readme.txt
-  Delete $INSTDIR\nssm.exe
   Delete $INSTDIR\helper.log
   Delete "$SMPROGRAMS\$applicationName\$applicationName.lnk"
   RMDir "$SMPROGRAMS\$applicationName\"
