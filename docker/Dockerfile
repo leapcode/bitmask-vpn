@@ -21,12 +21,12 @@ RUN apt-get update && apt-get upgrade -y && \
             devscripts fakeroot debhelper \
             clang llvm-dev libxml2-dev uuid-dev \
             libssl-dev bash patch tar \
-            xz-utils bzip2 gzip sed cpio libbz2-dev && \
-    apt-get install -y software-properties-common && \
+            xz-utils bzip2 gzip sed cpio libbz2-dev \
+            software-properties-common && \
     add-apt-repository -y ppa:longsleep/golang-backports && \
     apt-get update && \
-    apt-get install -y --no-install-recommends \
-            dh-golang golang golang-golang-x-text-dev
+    apt-get install -y --no-install-recommends golang-1.14-go golang-golang-x-tools-dev && \
+    apt-get install -y dh-golang
 
 # version in 18.04 (bionic) is too old
 RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-x-text/golang-golang-x-text-dev_0.3.2-1_all.deb && \
