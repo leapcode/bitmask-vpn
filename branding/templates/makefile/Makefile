@@ -28,13 +28,13 @@ endif
 # Windows 
 # -----------------------------------------------------------------------------
 ifeq ($(SYSTEM), Windows)
-pkg_win: staging\nssm.exe staging\openvpn\openvpn.exe
+pkg_win: staging\openvpn\openvpn.exe
 	echo "[+] building windows"
 	copy ..\bin\bitmask-vpn staging\bitmask-vpn.exe
 	copy ..\bin\bitmask-helper staging\bitmask_helper.exe
 	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
 else
-pkg_win: staging/nssm.exe staging/openvpn/openvpn.exe
+pkg_win: staging/openvpn/openvpn.exe
 	echo "[+] building windows"
 	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
 	cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
@@ -104,16 +104,6 @@ pkg_deb:
 
 clean:
 	rm -rf dist/ build/
-
-staging\nssm.exe:
-	xcopy /y "C:\ProgramData\chocolatey\lib\NSSM\tools\nssm.exe" $(STAGING)
-staging/nssm.exe:
-	#wget https://nssm.cc/release/nssm-2.24.zip -O $(STAGING)/nssm.zip
-	#unzip $(STAGING)/nssm.zip -d $(STAGING)
-	#mv $(STAGING)/nssm-*/win32/nssm.exe $(STAGING)
-	#rm -rf $(STAGING)/nssm-* $(STAGING)/nssm.zip
-	# BACKUP IN CASE THE OFFICIAL SITE IS UNAVAILABLE
-	wget https://downloads.leap.se/thirdparty/windows/nssm.exe -O $(STAGING)/nssm.exe
 
 staging\openvpn\openvpn.exe:
 	if not exist staging\openvpn mkdir staging\openvpn
