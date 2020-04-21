@@ -87,8 +87,11 @@ func daemonize() {
 	log.Print("bitmask-helper daemon started")
 }
 
-func doHandleCommands(port int) {
-	runCommandServer("localhost:" + strconv.Itoa(port))
+func doHandleCommands(preferredPort int) {
+	port := getFirstAvailablePortFrom(preferredPort)
+	writePortToFile(port)
+	bindAddr := "localhost:" + strconv.Itoa(port)
+	runCommandServer(bindAddr)
 }
 
 func getOpenvpnPath() string {
