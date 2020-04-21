@@ -2,6 +2,7 @@ IMAGE=bitmask-vpn
 REGISTRY=registry.0xacab.org/leap/docker
 
 build:
+	mkdir -p mods && cp ../go.mod ../go.sum mods/ && cp -r ../packages mods/
 	docker build -t $(REGISTRY)/$(IMAGE):latest .
 push:
 	docker push $(REGISTRY)/$(IMAGE):latest

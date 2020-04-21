@@ -18,6 +18,8 @@ const (
 	GeolocationAPI  = "$geolocationAPI"
 )
 
+var Version string
+
 /*
 
 CaCert : a string containing a representation of the provider CA, used to
