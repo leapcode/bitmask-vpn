@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ const (
 	logFile       = "helper.log"
 )
 
+var version string
+
 func main() {
 	logger, err := config.ConfigureLogger(path.Join(helper.LogFolder, logFile))
 	if err != nil {
@@ -35,6 +37,7 @@ func main() {
 	} else {
 		defer logger.Close()
 	}
+	config.Version = version
 
 	helper.ServeHTTP(preferredPort)
 }

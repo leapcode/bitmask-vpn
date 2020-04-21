@@ -13,9 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// This helper is intended to be long-lived, and run with administrator privileges.
+// It will launch a http server and expose a REST API to control OpenVPN and the firewall.
+// At the moment, it is only used in Darwin and Windows - although it could also be used in GNU/Linux systems (but we use the one-shot bitmask-root wrapper in GNU/Linux instead).
+// In Windows, this helper will run on the first available port after the standard one (7171).
+// In other systems, the 7171 port is hardcoded.
+
 package helper
 
 import (
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -33,6 +40,7 @@ func runCommandServer(bindAddr string) {
 	http.HandleFunc("/firewall/start", firewallStartHandler)
 	http.HandleFunc("/firewall/stop", firewallStopHandler)
 	http.HandleFunc("/firewall/isup", firewallIsUpHandler)
+	http.HandleFunc("/version", versionHandler)
 
 	log.Fatal(http.ListenAndServe(bindAddr, nil))
 }
@@ -134,6 +142,11 @@ func firewallIsUpHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("false"))
 		w.WriteHeader(http.StatusNoContent)
 	}
+}
+
+func versionHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(config.ApplicationName + "/" + config.Version + "\n"))
+	w.WriteHeader(http.StatusOK)
 }
 
 func getArgs(r *http.Request) ([]string, error) {
