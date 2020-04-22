@@ -8,6 +8,7 @@ package helper
 
 import (
 	"fmt"
+	"log"
 
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
@@ -22,13 +23,17 @@ func (m *myservice) Execute(args []string, r <-chan svc.ChangeRequest, changes c
 	const cmdsAccepted = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPauseAndContinue
 	changes <- svc.Status{State: svc.StartPending}
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
-	go runCommandServer(httpBindAddr)
+
+	// defined in helper.go
+	// TODO should have a way to stop it --
+	//go serveHTTP("localhost:7171")
+	log.Println("serving>>", httpServerConf.BindAddr)
+	go serveHTTP(httpServerConf.BindAddr)
 loop:
 	for {
 		select {
 		case c := <-r:
 			switch c.Cmd {
-			// TODO start??
 			case svc.Interrogate:
 				changes <- c.CurrentStatus
 			case svc.Stop, svc.Shutdown:
@@ -44,6 +49,9 @@ loop:
 }
 
 func runService(name string, isDebug bool) {
+
+	log.Println("Running service...")
+
 	var err error
 	if isDebug {
 		elog = debug.New(name)

@@ -37,15 +37,20 @@ const (
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
 )
 
+type httpConf struct {
+	BindAddr string
+}
+
 var (
 	platformOpenvpnFlags = []string{
 		"--script-security", "1",
 		"--block-outside-dns",
 	}
-	httpBindAddr string
+	httpServerConf = &httpConf{}
 )
 
 func parseCliArgs() {
+	log.Println("Parsing CLI args...")
 	isIntSess, err := svc.IsAnInteractiveSession()
 	if err != nil {
 		log.Fatalf("Failed to determine if we are running in an interactive session: %v", err)
@@ -54,15 +59,18 @@ func parseCliArgs() {
 		runService(svcName, false)
 		return
 	}
+	log.Println("Checking for admin")
 	admin := isAdmin()
 	fmt.Printf("Running as admin: %v\n", admin)
 	if !admin {
-		log.Fatal("Needs to be run as administrator")
+		fmt.Println("Needs to be run as administrator")
+		os.Exit(2)
 	}
 	if len(os.Args) < 2 {
 		usage("ERROR: no command specified")
 	}
 	cmd := strings.ToLower(os.Args[1])
+	log.Println("cmd:", cmd)
 	switch cmd {
 	case "debug":
 		runService(svcName, true)
@@ -95,15 +103,18 @@ func usage(errmsg string) {
 	os.Exit(2)
 }
 
-func daemonize() {}
-
-// http server is called from within Execute in windows
-func doHandleCommands(preferredPort int) {
+// initializeService only initializes the server.
+// we expect serveHTTP to be called from within Execute in windows
+func initializeService(preferredPort int) {
 	port := getFirstAvailablePortFrom(preferredPort)
 	writePortToFile(port)
-	bindAddr := "localhost:" + strconv.Itoa(port)
-	httpBindAddr = bindAddr
+	httpServerConf.BindAddr = "localhost:" + strconv.Itoa(port)
+	log.Println("Command server initialized to listen on", httpServerConf.BindAddr)
 }
+
+func daemonize() {}
+
+func runServer(port int) {}
 
 func getOpenvpnPath() string {
 	if _, err := os.Stat(openvpnPath); !os.IsNotExist(err) {

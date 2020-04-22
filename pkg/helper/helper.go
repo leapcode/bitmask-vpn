@@ -33,7 +33,19 @@ type openvpnT struct {
 	cmd *exec.Cmd
 }
 
-func runCommandServer(bindAddr string) {
+// startHelper is the main entrypoint. It can react to cli args (used to install or manage the service in windows), and
+// eventually will start the http server.
+func StartHelper(port int) {
+	initializeService(port)
+	parseCliArgs()
+	daemonize()
+	runServer(port)
+}
+
+// serveHTTP will start the HTTP server that exposes the firewall and openvpn api.
+// this can be called at different times by the different implementations of the helper.
+func serveHTTP(bindAddr string) {
+	log.Println("Starting HTTP server at", bindAddr)
 	openvpn := openvpnT{nil}
 	http.HandleFunc("/openvpn/start", openvpn.start)
 	http.HandleFunc("/openvpn/stop", openvpn.stop)
@@ -43,12 +55,6 @@ func runCommandServer(bindAddr string) {
 	http.HandleFunc("/version", versionHandler)
 
 	log.Fatal(http.ListenAndServe(bindAddr, nil))
-}
-
-func ServeHTTP(port int) {
-	parseCliArgs()
-	daemonize()
-	doHandleCommands(port)
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {

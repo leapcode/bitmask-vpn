@@ -45,10 +45,13 @@ func parseCliArgs() {
 	// linux helper does not reply to args
 }
 
+func initializeService(port int) {}
+
 func daemonize() {}
 
-func doHandleCommands(port int) {
-	runCommandServer("localhost:" + strconv.Itoa(port))
+func runServer(port int) {
+	// defined in helper.go
+	serveHTTP("localhost:" + strconv.Itoa(port))
 }
 
 func getOpenvpnPath() string {

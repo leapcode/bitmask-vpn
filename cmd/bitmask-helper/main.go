@@ -39,5 +39,6 @@ func main() {
 	}
 	config.Version = version
 
-	helper.ServeHTTP(preferredPort)
+	// StartHelper is the main entry point - it also handles cli args in windows, and starts the http server.
+	helper.StartHelper(preferredPort)
 }
