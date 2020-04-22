@@ -98,7 +98,13 @@ Section /o "TAP Virtual Ethernet Adapter" SecTAP
 SectionEnd
 
 Section "Uninstall"
-  ExecShellWait "runas" "$INSTDIR\bitmask_helper.exe" 'remove'
+  ; this could fail: uninstalling old nssm helper
+  ExecShellWait "runas" '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
+  ExecShellWait "runas" '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
+
+  ; now we uninstall the new-style go helper
+  ExecShellWait "runas" '"$INSTDIR\bitmask_helper.exe" remove'
+
 
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\helper.log
