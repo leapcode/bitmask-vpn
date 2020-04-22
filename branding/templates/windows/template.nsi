@@ -46,7 +46,23 @@ RequestExecutionLevel admin
  
 
 Section "InstallFiles"
-  ; first we try to delete the systray, locked by the app.
+  ; first we try to delete the helper, in case it is still the nssm-style
+  ClearErrors
+  Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
+  IfErrors 0 noErrorHelper
+
+  ; this could fail: uninstalling old nssm helper
+  ExecShellWait "runas" '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
+  ExecShellWait "runas" '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
+  IfErrors 0 noErrorHelper
+
+  ; Error handling
+  MessageBox MB_OK|MB_ICONEXCLAMATION "$applicationNameLower-helper cannot be deleted. Please try to remove it manually, and then run this installer again."
+  Abort
+
+  noErrorHelper:
+  
+  ; now we try to delete the systray, locked by the app.
   ClearErrors
   Delete 'C:\Program Files\$applicationName\bitmask-vpn.exe'
   IfErrors 0 noError
@@ -98,11 +114,8 @@ Section /o "TAP Virtual Ethernet Adapter" SecTAP
 SectionEnd
 
 Section "Uninstall"
-  ; this could fail: uninstalling old nssm helper
-  ExecShellWait "runas" '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
-  ExecShellWait "runas" '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
 
-  ; now we uninstall the new-style go helper
+  ; we uninstall the new-style go helper
   ExecShellWait "runas" '"$INSTDIR\bitmask_helper.exe" remove'
 
 
