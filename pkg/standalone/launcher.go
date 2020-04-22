@@ -22,21 +22,64 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
 )
 
-const (
-	helperAddr = "http://localhost:7171"
-)
-
 type launcher struct {
+	helperAddr string
+}
+
+const initialHelperPort = 7171
+
+func probeHelperPort(port int) int {
+	// this should be enough for a local reply
+	timeout := time.Duration(500 * time.Millisecond)
+	c := http.Client{Timeout: timeout}
+	for {
+		if smellsLikeOurHelperSpirit(port, &c) {
+			return port
+		}
+		port++
+		if port > 65535 {
+			break
+		}
+	}
+	return 0
+}
+
+func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
+	uri := "http://localhost:" + strconv.Itoa(port) + "/version"
+	log.Println("probing for helper at", uri)
+	resp, err := c.Get(uri)
+	if err != nil {
+		return false
+	}
+	if resp.StatusCode == 200 {
+		ver, err := ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+		if err != nil {
+			return false
+		}
+		if strings.Contains(string(ver), config.ApplicationName) {
+			return true
+		} else {
+			log.Println("Another helper replied to our version request:", string(ver))
+		}
+	}
+	return false
 }
 
 func newLauncher() (*launcher, error) {
-	return &launcher{}, nil
+	helperPort := probeHelperPort(initialHelperPort)
+	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
+	return &launcher{helperAddr}, nil
 }
 
 func (l *launcher) close() error {
@@ -77,7 +120,7 @@ func (l *launcher) firewallStop() error {
 
 func (l *launcher) firewallIsUp() bool {
 	var isup bool = false
-	res, err := http.Post(helperAddr+"/firewall/isup", "", nil)
+	res, err := http.Post(l.helperAddr+"/firewall/isup", "", nil)
 	if err != nil {
 		return false
 	}
@@ -106,7 +149,7 @@ func (l *launcher) send(path string, body []byte) error {
 	if body != nil {
 		reader = bytes.NewReader(body)
 	}
-	res, err := http.Post(helperAddr+path, "", reader)
+	res, err := http.Post(l.helperAddr+path, "", reader)
 	if err != nil {
 		return err
 	}
