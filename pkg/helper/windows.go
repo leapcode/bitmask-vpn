@@ -49,6 +49,11 @@ var (
 	httpServerConf = &httpConf{}
 )
 
+// parseCliArgs allows the helper binary to install/uninstall itself. It requires admin privileges.
+// However, be warned: if you intend to use it from the command line, you will have to compile it with the Go compiler yourself.
+// the version we're shipping (ie, cross-compiled with the mingw compiler) apparently is not able to output to stdout/stderr properly.
+// To compile a usable version, from the top of the repo you can do:
+// "cd cmd/bitmask-helper && GOOS=windows GOARCH=i386 go build"
 func parseCliArgs() {
 	log.Println("Parsing CLI args...")
 	isIntSess, err := svc.IsAnInteractiveSession()
@@ -73,10 +78,12 @@ func parseCliArgs() {
 	log.Println("cmd:", cmd)
 	switch cmd {
 	case "debug":
+		// run the service on the foreground, for debugging
 		runService(svcName, true)
 		return
 	case "install":
-		// TODO get binary name
+		// TODO get binary name -- or maybe not, since in this way we make sure
+		// that all bitmask-vpn brandings are mutually exclusive.
 		err = installService(svcName, "bitmask-helper service")
 	case "remove":
 		err = removeService(svcName)
