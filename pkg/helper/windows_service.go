@@ -25,9 +25,7 @@ func (m *myservice) Execute(args []string, r <-chan svc.ChangeRequest, changes c
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 
 	// defined in helper.go
-	// TODO should have a way to stop it --
-	//go serveHTTP("localhost:7171")
-	log.Println("serving>>", httpServerConf.BindAddr)
+	// TODO should have a better way to stop it --
 	go serveHTTP(httpServerConf.BindAddr)
 loop:
 	for {

@@ -1,10 +1,19 @@
-SetCompressor /SOLID lzma
+!ifdef UNINSTALLER
+  !echo "Stage 1: building uninstaller"
+  ; we don't care about this installer, in this step we just pick the uninstaller
+  ; to be able to sign it.
+  OutFile "$%TEMP%\tempinstaller.exe"
+  SetCompressor off
+!else
+  !echo "Stage 2: building installer"
+  Outfile "..\dist\$applicationName-$version.exe"
+  SetCompressor /SOLID lzma
+!endif
 
 !define PRODUCT_PUBLISHER "LEAP Encryption Access Project"
 !include "MUI2.nsh"
 
 Name "$applicationName"
-Outfile "..\dist\$applicationName-$version.exe"
 ;TODO make the installdir configurable - and set it in the registry.
 InstallDir "C:\Program Files\$applicationName\"
 RequestExecutionLevel admin
@@ -52,35 +61,37 @@ Section "InstallFiles"
   Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
   IfErrors 0 noErrorHelper
 
-  ; uninstalling old nssm helper - could file if it isn't there, or if nssm is not there...
+  ; uninstalling old nssm helper - could fail if it isn't there, or if nssm is not there...
+  ClearErrors
   DetailPrint "Trying to uninstall an old style helper..."
-  ExecShellWait "runas" '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
-  ExecShellWait "runas" '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
+  ExecWait '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
+  ExecWait '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
   IfErrors 0 noErrorHelper
+  DetailPrint "Failed to stop nssm-style helper, maybe it was not there"
 
-  ; let's try to stop it in case it's the new style helper
+  ; let's try to stop it in case it's the new style helper -- we need to do it to be able to overwrite it.
+  ; we don't care about errors because if we're upgrading from 0.20.1 this will not work.
+  ClearErrors
   DetailPrint "Trying to uninstall a new style helper..."
   ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
   IfErrors 0 noErrorHelper
-
-  ; Error handling - ok, we give up
-  MessageBox MB_OK|MB_ICONEXCLAMATION "$applicationNameLower-helper cannot be deleted. Please try to remove it manually, and then run this installer again."
-  Abort
+  DetailPrint "Failed to stop new-style helper, maybe it was not there"
 
   noErrorHelper:
   
   ; now we try to delete the systray, locked by the app - just to know if another instance of FoobarVPN is running.
-  DetailPrint "Checking for a running systray..."
   ClearErrors
+  DetailPrint "Checking for a running systray..."
   Delete 'C:\Program Files\$applicationName\bitmask-vpn.exe'
-  IfErrors 0 noError
+  IfErrors 0 noDelError
 
   ; Error handling
   MessageBox MB_OK|MB_ICONEXCLAMATION "$applicationName is Running. Please close it, and then run this installer again."
   Abort
 
-  noError:
+  noDelError:
 
+  ; TODO -- write uninstaller in a separate stage, so we can sign it!
   SetOutPath $INSTDIR 
   WriteUninstaller $INSTDIR\uninstall.exe
 
@@ -133,13 +144,16 @@ SectionEnd
 
 Section "Uninstall"
   ; we uninstall the new-style go helper
-  ExecShellWait "runas" '"$INSTDIR\bitmask_helper.exe" remove'
+  ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
+  ExecWait '"$INSTDIR\bitmask_helper.exe" remove'
 
   ; now we (try to) remove everything else. kill it with fire!
+  Delete $INSTDIR\nssm.exe ; probably does not exist anymore, but just in case
+  Delete $INSTDIR\bitmask_helper.exe
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\helper.log
+  Delete $INSTDIR\openvpn.log
   Delete $INSTDIR\port
-  Delete $INSTDIR\nssm.exe
   Delete "$SMPROGRAMS\$applicationName\$applicationName.lnk"
   RMDir "$SMPROGRAMS\$applicationName\"
 
