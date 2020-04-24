@@ -63,6 +63,9 @@ Section "InstallFiles"
 
   DetailPrint "Trying to uninstall new helper..."
   ClearErrors
+  ExecWait '"$INSTDIR\helper.exe" stop'
+  ExecWait '"$INSTDIR\helper.exe" remove'
+  ClearErrors
   Delete 'C:\Program Files\$applicationName\helper.exe'
   IfErrors 0 noErrorHelper
 

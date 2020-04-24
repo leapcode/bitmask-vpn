@@ -57,7 +57,6 @@ dependsCygwin:
 	@choco install -y golang python nssm nsis wget 7zip
 
 build:
-	echo "XBUILD>", ${XBUILD}
 ifeq (${XBUILD}, yes)
 	$(MAKE) build_cross_win
 	$(MAKE) build_cross_osx
