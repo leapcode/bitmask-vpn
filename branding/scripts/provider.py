@@ -5,7 +5,7 @@ import os
 def getDefaultProvider(config):
     provider = os.environ.get('PROVIDER')
     if provider:
-        print('[+] Got provider {} from environemnt'.format(provider))
+        print('[+] Got provider {} from environment'.format(provider))
     else:
         print('[+] Using default provider from config file')
         provider = config['default']['provider']

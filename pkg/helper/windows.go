@@ -82,8 +82,6 @@ func parseCliArgs() {
 		runService(svcName, true)
 		return
 	case "install":
-		// TODO get binary name -- or maybe not, since in this way we make sure
-		// that all bitmask-vpn brandings are mutually exclusive.
 		err = installService(svcName, "bitmask-helper service")
 	case "remove":
 		err = removeService(svcName)

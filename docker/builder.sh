@@ -10,7 +10,18 @@ make prepare
 make build
 case $XBUILD in
     win)
-        make package_win
+        if [ "$STAGE" = "1" ]; then
+            echo ""
+            echo "[+] Bulding WIN installer >>>>>>>>>>> STAGE 1"
+            make package_win_stage_1
+            echo ""
+        fi
+        if [ "$STAGE" = "2" ]; then
+            echo ""
+            echo "[+] Building WIN installer >>>>>>>>>> STAGE 2"
+            make package_win_stage_2
+            echo ""
+        fi
         ;;
     osx)
         make package_osx

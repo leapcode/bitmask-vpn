@@ -1,6 +1,6 @@
 #########################################################################
 # Multiplatform build and packaging recipes for BitmaskVPN
-# (c) LEAP Encryption Access Project, 2019
+# (c) LEAP Encryption Access Project, 2019-2020
 #########################################################################
 
 .PHONY: all get build build_bitmaskd icon locales generate_locales clean
@@ -150,8 +150,8 @@ TGZ_NAME = bitmask-vpn_${VERSION}-src
 TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
 tgz:
 	@mkdir -p $(TGZ_PATH)
-	@git archive HEAD | tar -x -C $(TGZ_PATH)
-	@cd build/ && tar cvzf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
+	git archive HEAD | tar -x -C $(TGZ_PATH)
+	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
 gen_pkg_win:
@@ -209,8 +209,11 @@ package_snap:
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
-package_win:
-	@make -C build/${PROVIDER} pkg_win
+package_win_stage_1:
+	@make -C build/${PROVIDER} pkg_win_stage_1
+
+package_win_stage_2:
+	@make -C build/${PROVIDER} pkg_win_stage_2
 
 package_osx:
 	@make -C build/${PROVIDER} pkg_osx

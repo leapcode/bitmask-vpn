@@ -34,11 +34,19 @@ pkg_win: staging\openvpn\openvpn.exe
 	copy ..\bin\bitmask-helper staging\bitmask_helper.exe
 	"C:\Program Files (x86)\NSIS\makensis.exe" windows/$(APPNAME)-installer.nsi
 else
-pkg_win: staging/openvpn/openvpn.exe
-	echo "[+] building windows"
+pkg_win_stage_1: staging/openvpn/openvpn.exe
+	echo "[+] building windows [stage1]"
 	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
-	#cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
 	cp ../bin/windows/bitmask-helper-go staging/helper.exe
+	touch windows/uninstall.exe
+	makensis -DUNINSTALLER windows/$(APPNAME)-installer.nsi
+	mv dist/produce-bitmask-uninstaller.exe ../../deploy/
+
+pkg_win_stage_2: staging/openvpn/openvpn.exe
+	echo "[+] building windows [stage2]"
+	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
+	cp ../bin/windows/bitmask-helper-go staging/helper.exe
+	cp ../windows/staging/uninstall-signed.exe windows/uninstall.exe
 	makensis windows/$(APPNAME)-installer.nsi
 	mv dist/$(APPNAME)-$(VERSION).exe ../../deploy/
 endif
@@ -117,10 +125,10 @@ staging\openvpn\openvpn.exe:
 	copy .\staging\openvpn\openvpn.exe .\staging
 	copy .\staging\openvpn\*.dll .\staging
 staging/openvpn/openvpn.exe:
-	mkdir -p staging/openvpn
+	@mkdir -p staging/openvpn
 	wget https://build.openvpn.net/downloads/releases/latest/tap-windows-latest-stable.exe -O $(STAGING)/openvpn/tap-windows.exe
 	wget https://downloads.leap.se/thirdparty/windows/openvpn-x86_64-w64-mingw32.tar.bz2 -O $(STAGING)/openvpn/openvpn.tar.bz2
-	tar xvjf $(STAGING)/openvpn/openvpn.tar.bz2 -C $(STAGING)/openvpn/
+	@tar xjf $(STAGING)/openvpn/openvpn.tar.bz2 -C $(STAGING)/openvpn/
 	cp $(STAGING)/openvpn/bin/openvpn.exe $(STAGING)/openvpn
 	cp $(STAGING)/openvpn/bin/*.dll $(STAGING)
 	cp $(STAGING)/openvpn/lib/engines-1_1/*.dll $(STAGING)

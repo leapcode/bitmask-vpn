@@ -2,10 +2,10 @@
   !echo "Stage 1: building uninstaller"
   ; we don't care about this installer, in this step we just pick the uninstaller
   ; to be able to sign it.
-  OutFile "$%TEMP%\tempinstaller.exe"
-  SetCompressor off
+  OutFile "..\dist\produce-bitmask-uninstaller.exe"
+  SetCompress off
 !else
-  !echo "Stage 2: building installer"
+  !echo "Stage 2: building main installer"
   Outfile "..\dist\$applicationName-$version.exe"
   SetCompressor /SOLID lzma
 !endif
@@ -59,7 +59,6 @@ Section "InstallFiles"
   DetailPrint "Trying to uninstall any older helper..."
   ClearErrors
   Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
-  IfErrors 0 noErrorHelper
 
   DetailPrint "Trying to uninstall new helper..."
   ClearErrors
@@ -67,14 +66,14 @@ Section "InstallFiles"
   ExecWait '"$INSTDIR\helper.exe" remove'
   ClearErrors
   Delete 'C:\Program Files\$applicationName\helper.exe'
-  IfErrors 0 noErrorHelper
+  ;IfErrors 0 noErrorHelper
 
   ; uninstalling old nssm helper - could fail if it isn't there, or if nssm is not there...
   ClearErrors
   DetailPrint "Trying to uninstall an old style helper..."
   ExecWait '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
   ExecWait '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
-  IfErrors 0 noErrorHelper
+  ;IfErrors 0 noErrorHelper
   DetailPrint "Failed to stop nssm-style helper, maybe it was not there"
 
   ; let's try to stop it in case it's the new style helper -- we need to do it to be able to overwrite it.
@@ -82,16 +81,10 @@ Section "InstallFiles"
   ClearErrors
   DetailPrint "Trying to uninstall a new style helper..."
   ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
-  IfErrors 0 noErrorHelper
+  ;IfErrors 0 noErrorHelper
   DetailPrint "Failed to stop new-style helper, maybe it was not there"
 
-  ClearErrors
-  DetailPrint "Trying to uninstall a new style helper..."
-  ExecWait '"$INSTDIR\helper.exe" stop'
-  IfErrors 0 noErrorHelper
-  DetailPrint "Failed to stop new-style helper, maybe it was not there"
-
-  noErrorHelper:
+  ;noErrorHelper:
   
   ; now we try to delete the systray, locked by the app - just to know if another instance of FoobarVPN is running.
   ClearErrors
@@ -105,9 +98,7 @@ Section "InstallFiles"
 
   noDelError:
 
-  ; TODO -- write uninstaller in a separate stage, so we can sign it!
   SetOutPath $INSTDIR 
-  WriteUninstaller $INSTDIR\uninstall.exe
 
   ; Add ourselves to Add/remove programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$applicationNameLower" "DisplayName" "$applicationName"
@@ -125,6 +116,7 @@ Section "InstallFiles"
   createShortCut "$SMPROGRAMS\$applicationName\$applicationName.lnk" "$INSTDIR\bitmask-vpn.exe" "" "$INSTDIR\icon.ico"
 
   File "readme.txt"
+  File "uninstall.exe"
   File "/oname=icon.ico" "..\assets\icon.ico"
 
   $extra_install_files
@@ -156,6 +148,8 @@ Section /o "TAP Virtual Ethernet Adapter" SecTAP
 	DetailPrint "TAP installed!"
 SectionEnd
 
+!ifdef UNINSTALLER
+; this section should not be in the main installer, because it will cause warnings.
 Section "Uninstall"
   ; we uninstall the new-style go helper
   ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
@@ -180,9 +174,17 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   RMDir $INSTDIR
 SectionEnd
+!endif
 
 Function .onInit
+!ifdef UNINSTALLER
+        ; If UNINSTALLER is defined, then we don't do anything execpt write out the uninstaller.
+        SetSilent silent
+        WriteUninstaller "c:\bitmask-uninstall.exe"
+        Quit ; bail out quickly when running the UNINSTALLER stage.
+!else
 	!insertmacro SelectByParameter ${SecTAP} SELECT_TAP 1
+!endif
 FunctionEnd
 
 ;----------------------------------------
