@@ -37,7 +37,8 @@ else
 pkg_win: staging/openvpn/openvpn.exe
 	echo "[+] building windows"
 	cp ../bin/windows/bitmask-vpn staging/bitmask-vpn.exe
-	cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
+	#cp ../bin/windows/bitmask-helper staging/bitmask_helper.exe
+	cp ../bin/windows/bitmask-helper-go staging/helper.exe
 	makensis windows/$(APPNAME)-installer.nsi
 	mv dist/$(APPNAME)-$(VERSION).exe ../../deploy/
 endif

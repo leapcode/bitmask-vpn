@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
-export DESTDIR=/bitmask-vpn.orig/deploy/
-rm -rf /bitmask-vpn
-cp -r /bitmask-vpn.orig /bitmask-vpn
-cd /bitmask-vpn
+export HOSTDIR=/bitmask-vpn.host
+export GUESTDIR=/bitmask-vpn
+export DESTDIR="${HOSTDIR}"/deploy/
+rm -rf "${GUESTDIR}"
+cp -r "${HOSTDIR}" "${GUESTDIR}"
+cd "${GUESTDIR}"
 make prepare
 make build
 case $XBUILD in
@@ -17,4 +19,4 @@ case $XBUILD in
         make packages
         ;;
 esac
-cp  /bitmask-vpn/deploy/* $DESTDIR
+cp  "${GUESTDIR}"/deploy/* $DESTDIR

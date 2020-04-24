@@ -57,7 +57,7 @@ dependsCygwin:
 	@choco install -y golang python nssm nsis wget 7zip
 
 build:
-	$(MAKE) _buildparts
+	echo "XBUILD>", ${XBUILD}
 ifeq (${XBUILD}, yes)
 	$(MAKE) build_cross_win
 	$(MAKE) build_cross_osx
@@ -68,11 +68,14 @@ else ifeq (${XBUILD}, win)
 else ifeq (${XBUILD}, osx)
 	$(MAKE) build_cross_osx
 	$(MAKE) _build_done
+else
+	$(MAKE) _buildparts
 endif
 
 _buildparts: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
 build_%:
+	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
 	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
 	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
@@ -91,7 +94,11 @@ CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mi
 PLATFORM_WIN = PLATFORM=windows
 EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
+	@echo "[+] Cross-building for windows..."
 	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
+	# workaround for helper: we use the go compiler
+	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
+	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
 
 CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
 PLATFORM_OSX = PLATFORM=darwin

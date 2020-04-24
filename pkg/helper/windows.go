@@ -30,7 +30,7 @@ import (
 )
 
 const (
-	svcName          = config.BinaryName + `-helper`
+	svcName          = config.BinaryName + `-helper-v2`
 	appPath          = `C:\Program Files\` + config.ApplicationName + `\`
 	LogFolder        = appPath
 	openvpnPath      = appPath + `openvpn.exe`

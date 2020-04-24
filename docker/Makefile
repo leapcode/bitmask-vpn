@@ -14,10 +14,10 @@ package_win:
 	docker run \
 	    -e XBUILD=win \
 	    -e PROVIDER=riseup \
-	    -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.orig \
+	    -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.host \
 	    --cpus="4" \
 	    -it --rm \
 	    $(REGISTRY)/$(IMAGE):latest  \
 	    /builder.sh
 shell:
-	docker run -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.orig -it --rm $(REGISTRY)/$(IMAGE):latest  /bin/bash
+	docker run -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.host -it --rm $(REGISTRY)/$(IMAGE):latest  /bin/bash

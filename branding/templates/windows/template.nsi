@@ -61,6 +61,11 @@ Section "InstallFiles"
   Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
   IfErrors 0 noErrorHelper
 
+  DetailPrint "Trying to uninstall new helper..."
+  ClearErrors
+  Delete 'C:\Program Files\$applicationName\helper.exe'
+  IfErrors 0 noErrorHelper
+
   ; uninstalling old nssm helper - could fail if it isn't there, or if nssm is not there...
   ClearErrors
   DetailPrint "Trying to uninstall an old style helper..."
@@ -74,6 +79,12 @@ Section "InstallFiles"
   ClearErrors
   DetailPrint "Trying to uninstall a new style helper..."
   ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
+  IfErrors 0 noErrorHelper
+  DetailPrint "Failed to stop new-style helper, maybe it was not there"
+
+  ClearErrors
+  DetailPrint "Trying to uninstall a new style helper..."
+  ExecWait '"$INSTDIR\helper.exe" stop'
   IfErrors 0 noErrorHelper
   DetailPrint "Failed to stop new-style helper, maybe it was not there"
 
@@ -120,14 +131,14 @@ SectionEnd
 Section "InstallService"
   DetailPrint "Trying to uninstall previous versions of the (new) helper..."
   ClearErrors
-  ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
-  ExecWait '"$INSTDIR\bitmask_helper.exe" remove'
+  ExecWait '"$INSTDIR\helper.exe" stop'
+  ExecWait '"$INSTDIR\helper.exe" remove'
   IfErrors 0 noError
   DetailPrint "Could not uninstall a previous version of the (new) helper!"
 
   noError:
-  ExecWait '"$INSTDIR\bitmask_helper.exe" install'
-  ExecWait '"$INSTDIR\bitmask_helper.exe" start'
+  ExecWait '"$INSTDIR\helper.exe" install'
+  ExecWait '"$INSTDIR\helper.exe" start'
 SectionEnd
 
 Section /o "TAP Virtual Ethernet Adapter" SecTAP
@@ -147,9 +158,11 @@ Section "Uninstall"
   ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
   ExecWait '"$INSTDIR\bitmask_helper.exe" remove'
 
+  ExecWait '"$INSTDIR\helper.exe" stop'
+  ExecWait '"$INSTDIR\helper.exe" remove'
+
   ; now we (try to) remove everything else. kill it with fire!
   Delete $INSTDIR\nssm.exe ; probably does not exist anymore, but just in case
-  Delete $INSTDIR\bitmask_helper.exe
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\helper.log
   Delete $INSTDIR\openvpn.log
