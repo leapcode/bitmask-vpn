@@ -77,6 +77,10 @@ In that case bitmask-systray assumes that you already have bitmaskd running. Run
 i18n
 ----
 
+The translations are done in transifex. To help us contribute your translations there and/or review the existing
+ones:
+https://www.transifex.com/otf/bitmask/RiseupVPN/
+
 When a string has being modified you need to regenerate the locales:
 ```
   $ make generate_locales

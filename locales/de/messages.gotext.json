@@ -1,13 +1,31 @@
 {
-    "language": "bn",
+    "language": "de",
     "messages": [
+        {
+            "id": [
+                "errorMsg",
+                "An error has ocurred initializing the VPN: {Err}"
+            ],
+            "message": "An error has ocurred initializing the VPN: {Err}",
+            "translation": "Ein Fehler ist bei der Initialisierung des VPN aufgetreten: {Err}",
+            "placeholders": [
+                {
+                    "id": "Err",
+                    "string": "%[1]v",
+                    "type": "error",
+                    "underlyingType": "interface{Error() string}",
+                    "argNum": 1,
+                    "expr": "err"
+                }
+            ]
+        },
         {
             "id": [
                 "donationText",
                 "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?"
             ],
             "message": "The {ApplicationName} service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.\n\t\nDo you want to donate now?",
-            "translation": "{ApplicationName} পরিষেবা চালানো বেশ ব্যয়বহুল। কারণ আমরা আপনার ব্যক্তিগত তথ্য সংরক্ষণ করতে চাই না, এই পরিষেবাটির জন্য কোনো অ্যাকাউন্ট বা বিলিং নেই। কিন্তু আপনি যদি পরিষেবা চালিয়ে যেতে চান তবে প্রতি মাসে কমপক্ষে $ 5 দান করুন।\n\t\n আপনি কি এখন দান করতে চান?",
+            "translation": "Es ist kostspielig {ApplicationName} zu betreiben. Da wir keine persönliche Daten über Sie speichern, gibt es keine Konten oder Rechnungen für diesen Service. Wenn Sie uns ermöglichen möchten, dass wir diesen Service weiter anbieten können, spenden Sie bitte mindestens $5 pro Monat.\n\t\nMöchten Sie jetzt spenden?",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -22,7 +40,7 @@
         {
             "id": "Donate",
             "message": "Donate",
-            "translation": "অনুদান"
+            "translation": "Spenden"
         },
         {
             "id": [
@@ -30,7 +48,7 @@
                 "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}"
             ],
             "message": "{ApplicationName} is an easy, fast, and secure VPN service from {Provider}. {ApplicationName} does not require a user account, keep logs, or track you in any way.\n\t    \nThis service is paid for entirely by donations from users like you. Please donate at {DonateURL}.\n\t\t\nBy using this application, you agree to the Terms of Service available at {TosURL}. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.\n\n\n{ApplicationName_1} version: {Version}",
-            "translation": "{ApplicationName} ভিপিএন পরিষেবা {Provider} থেকে সহজ, দ্রুত এবং নিরাপদ । {ApplicationName} ব্যবহারকারীর কোন অ্যাকাউন্টের প্রয়োজন নেই। লগ রাখা অথবা যে কোনও উপায়ে আপনাকে ট্র্যাক করা হয় না। \n\nএই পরিষেবাটি সম্পূর্ণরূপে আপনার মতো ব্যবহারকারীদের অনুদানে পরিচালিত হয়। অনুগ্রহ করে দান করুন {DonateURL}\n\n এই অ্যাপ্লিকেশন ব্যবহার করে, আপনি {TosURL} এ উপলব্ধ পরিষেবার শর্তাদির সাথে সম্মত হয়েছেন। এই পরিষেবাটি যেমনটি প্রদান করা হয়েছে, তাছাড়া কোনও ওয়্যারেন্টি নেই এবং এটি এমন লোকদের জন্য তৈরি করা হয়েছে যারা পৃথিবীকে আরও সুন্দর করার জন্য কাজ করছে।\n\n\n {ApplicationName_1} সংস্করণ: {Version}",
+            "translation": "{ApplicationName} ist ein einfacher, schneller und sicherer VPN-Service von {Provider}.{ApplicationName} benötigt kein Benutzerkonto, speichert keine Logdateien oder verfolgt Sie.\n\t\nDieser Service wird komplett über Spenden von Benutzern wie Ihnen finanziert. Bitte spenden Sie unter {DonateURL}.\n\t\t\nDurch den Gebrauch der Anwendung stimmen Sie den Nuzungsbedingungen unter {TosURL} zu. Dieser Service wird so angeboten wie er ist, ohne Gewährlesitung, und ist für Menschen gemacht die daran arbeiten die Welt zu einem besseren Platz zu machen.\n\n\n{ApplicationName_1} Version: {Version}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -93,12 +111,12 @@
         {
             "id": "About",
             "message": "About",
-            "translation": "সম্পর্কে"
+            "translation": "Über"
         },
         {
             "id": "Initialization error",
             "message": "Initialization error",
-            "translation": "সূচনা ত্রুটি"
+            "translation": "Initialisierungsfehler "
         },
         {
             "id": [
@@ -106,12 +124,12 @@
                 "Could not find a polkit authentication agent. Please run one and try again."
             ],
             "message": "Could not find a polkit authentication agent. Please run one and try again.",
-            "translation": "পোলকিট প্রমাণীকরণ এজেন্ট খুঁজে পাওয়া যায়নি. অনুগ্রহ করে একটি চালান এবং আবার চেষ্টা করুন ।"
+            "translation": "Es konnte kein polkit Authentifizierungsmerkmal gefunden werden. Bitte dieses Starten und erneut versuchen."
         },
         {
             "id": "Missing authentication agent",
             "message": "Missing authentication agent",
-            "translation": "প্রমাণীকরণ এজেন্ট অনুপস্থিত"
+            "translation": "Fehlendes Authentifizierungsmerkmal"
         },
         {
             "id": [
@@ -119,7 +137,7 @@
                 "Can't connect to {ApplicationName}: {Err}"
             ],
             "message": "Can't connect to {ApplicationName}: {Err}",
-            "translation": " {ApplicationName}: {Err} সাথে সংযোগ করতে পারবেন না",
+            "translation": "Kann Verbindung zu {ApplicationName} nicht herstellen: {Err}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -142,52 +160,52 @@
         {
             "id": "Error starting VPN",
             "message": "Error starting VPN",
-            "translation": "ভিপিএন চালু করতে ত্রুটি হয়েছে"
+            "translation": "Fehler beim Starten des VPN"
         },
         {
             "id": "Checking status...",
             "message": "Checking status...",
-            "translation": "অবস্থা পরিক্ষা করা হচ্ছে ..."
+            "translation": "Überprüfe Status ..."
         },
         {
             "id": "Turn on",
             "message": "Turn on",
-            "translation": "চালু কর"
+            "translation": "Anschalten"
         },
         {
             "id": "Turn off",
             "message": "Turn off",
-            "translation": "বন্ধ কর"
+            "translation": "Auschalten"
         },
         {
             "id": "Help...",
             "message": "Help...",
-            "translation": "সাহায্য..."
+            "translation": "Hilfe…"
         },
         {
             "id": "Donate...",
             "message": "Donate...",
-            "translation": "অনুদান..."
+            "translation": "Spenden…"
         },
         {
             "id": "About...",
             "message": "About...",
-            "translation": "সম্পর্কে..."
+            "translation": "Über…"
         },
         {
             "id": "Quit",
             "message": "Quit",
-            "translation": "বন্ধ"
+            "translation": "Beenden"
         },
         {
             "id": "Route traffic through:",
             "message": "Route traffic through:",
-            "translation": "ট্রাফিক যে মাধ্যমে চলাচল করবে:"
+            "translation": "Leite Datenverkehr über:"
         },
         {
             "id": "Use {ApplicationName} {City} gateway",
             "message": "Use {ApplicationName} {City} gateway",
-            "translation": "{ApplicationName} {City} গেটওয়ে ব্যবহার করুন",
+            "translation": "Benutze {ApplicationName} {City} Portal",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -210,7 +228,7 @@
         {
             "id": "{ApplicationName} on",
             "message": "{ApplicationName} on",
-            "translation": "{ApplicationName} চালু",
+            "translation": "{ApplicationName} an",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -225,7 +243,7 @@
         {
             "id": "{ApplicationName} off",
             "message": "{ApplicationName} off",
-            "translation": "{ApplicationName} বন্ধ",
+            "translation": "{ApplicationName} aus",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -240,12 +258,12 @@
         {
             "id": "Cancel",
             "message": "Cancel",
-            "translation": "বাতিল"
+            "translation": "Abbrechen"
         },
         {
             "id": "Connecting to {ApplicationName}",
             "message": "Connecting to {ApplicationName}",
-            "translation": "{ApplicationName} এর সাথে সংযুক্ত হচ্ছে",
+            "translation": "Verbinde zu {ApplicationName}",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -260,7 +278,7 @@
         {
             "id": "Stopping {ApplicationName}",
             "message": "Stopping {ApplicationName}",
-            "translation": "{ApplicationName} বন্ধ হচ্ছে",
+            "translation": "Stoppe {ApplicationName} ",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -275,12 +293,12 @@
         {
             "id": "Reconnect",
             "message": "Reconnect",
-            "translation": "পুনঃসংযোগ"
+            "translation": "Wiederverbinden"
         },
         {
             "id": "{ApplicationName} blocking internet",
             "message": "{ApplicationName} blocking internet",
-            "translation": "{ApplicationName} ইন্টারনেট প্রতিরোধ করছে",
+            "translation": "{ApplicationName} blockiert die Internetverbindung",
             "placeholders": [
                 {
                     "id": "ApplicationName",
@@ -289,24 +307,6 @@
                     "underlyingType": "string",
                     "argNum": 1,
                     "expr": "config.ApplicationName"
-                }
-            ]
-        },
-        {
-            "id": [
-                "errorMsg",
-                "An error has ocurred initializing the VPN: {Err}"
-            ],
-            "message": "An error has ocurred initializing the VPN: {Err}",
-            "translation": "VPN আরম্ভ করার সময় একটি ত্রুটি ঘটেছে: {Err}",
-            "placeholders": [
-                {
-                    "id": "Err",
-                    "string": "%[1]v",
-                    "type": "error",
-                    "underlyingType": "interface{Error() string}",
-                    "argNum": 1,
-                    "expr": "err"
                 }
             ]
         }
