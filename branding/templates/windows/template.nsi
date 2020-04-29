@@ -56,39 +56,40 @@ RequestExecutionLevel admin
 
 Section "InstallFiles"
   ; first we try to delete the helper (it can be the old one or a previous version of the new one)
-  DetailPrint "Trying to uninstall any older helper..."
-  ClearErrors
-  Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
-
   DetailPrint "Trying to uninstall new helper..."
-  ClearErrors
+  IfFileExists $INSTDIR\helper.exe 0 +4
   ExecWait '"$INSTDIR\helper.exe" stop'
   ExecWait '"$INSTDIR\helper.exe" remove'
-  ClearErrors
   Delete 'C:\Program Files\$applicationName\helper.exe'
-  ;IfErrors 0 noErrorHelper
 
   ; uninstalling old nssm helper - could fail if it isn't there, or if nssm is not there...
   ClearErrors
   DetailPrint "Trying to uninstall an old style helper..."
+  IfFileExists $INSTDIR\bitmask_helper.exe 0 +8
   ExecWait '"$INSTDIR\nssm.exe" stop $applicationNameLower-helper'
   ExecWait '"$INSTDIR\nssm.exe" remove $applicationNameLower-helper confirm'
-  ;IfErrors 0 noErrorHelper
-  DetailPrint "Failed to stop nssm-style helper, maybe it was not there"
+  ClearErrors
+  Sleep 1000
+  Delete 'C:\Program Files\$applicationName\bitmask_helper.exe'
+  IfErrors 0 +2
+  DetailPrint "Failed to delete nssm-style helper, maybe it was not there"
 
   ; let's try to stop it in case it's the new style helper -- we need to do it to be able to overwrite it.
   ; we don't care about errors because if we're upgrading from 0.20.1 this will not work.
   ClearErrors
   DetailPrint "Trying to uninstall a new style helper..."
-  ExecWait '"$INSTDIR\bitmask_helper.exe" stop'
-  ;IfErrors 0 noErrorHelper
-  DetailPrint "Failed to stop new-style helper, maybe it was not there"
-
-  ;noErrorHelper:
+  IfFileExists $INSTDIR\bitmask_helper.exe 0 +4
+  Exec '"$INSTDIR\bitmask_helper.exe" stop'
+  IfErrors 0 noErrorHelper
+  DetailPrint "old-style bitmask_helper.exe not present"
+  GoTo +2
+  DetailPrint "cannot stop old-style bitmask_helper.exe"
+  noErrorHelper:
   
   ; now we try to delete the systray, locked by the app - just to know if another instance of FoobarVPN is running.
   ClearErrors
   DetailPrint "Checking for a running systray..."
+
   Delete 'C:\Program Files\$applicationName\bitmask-vpn.exe'
   IfErrors 0 noDelError
 

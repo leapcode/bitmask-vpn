@@ -31,7 +31,7 @@ login:
 package_win: clean_win package_win_stage_1 sign_win_uninstaller_in_host package_win_stage_2 sign_win_installer_in_host
 
 clean_win:
-	@rm ../deploy/*.exe
+	@rm -f ../deploy/*.exe
 
 package_win_stage_1:
 	docker run \
