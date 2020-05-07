@@ -12,7 +12,7 @@ case $TYPE in
         echo "[+] Building SNAP"
         make package_snap
         ;;
-    default)
+    *)
         make build
         ;;
 esac

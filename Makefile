@@ -206,7 +206,16 @@ prepare_done:
 # packaging action
 #########################################################################
 
+builder_image:
+	@make -C docker build
+
 packages: package_deb package_snap package_osx package_win
+
+package_snap_in_docker:
+	@make -C docker package_snap
+
+package_win_in_docker:
+	@make -C docker package_win
 
 package_snap:
 	@make -C build/${PROVIDER} pkg_snap
