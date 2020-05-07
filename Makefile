@@ -46,6 +46,7 @@ depends:
 
 dependsLinux:
 	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
+	@make -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
