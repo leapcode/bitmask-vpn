@@ -7,7 +7,15 @@ rm -rf "${GUESTDIR}"
 cp -r "${HOSTDIR}" "${GUESTDIR}"
 cd "${GUESTDIR}"
 make prepare
-make build
+case $TYPE in
+    snap)
+        echo "[+] Building SNAP"
+        make package_snap
+        ;;
+    default)
+        make build
+        ;;
+esac
 case $XBUILD in
     win)
         if [ "$STAGE" = "1" ]; then
@@ -28,6 +36,9 @@ case $XBUILD in
         ;;
     yes)
         make packages
+        ;;
+    default)
+        echo "no XBUILD set..."
         ;;
 esac
 cp  "${GUESTDIR}"/deploy/* $DESTDIR

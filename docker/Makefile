@@ -16,7 +16,7 @@ UNINSTALLER_SIGNED="../build/windows/staging/uninstall-signed.exe"
 SIGNCODE=osslsigncode
 SECRETS="leap/secrets/windoze"
 
-build:
+build: 
 	mkdir -p mods && cp ../go.mod ../go.sum mods/ && cp -r ../packages mods/
 	docker build -t $(REGISTRY)/$(IMAGE):latest .
 deps:
@@ -27,6 +27,17 @@ prune:
 	docker system prune
 login:
 	docker login $(REGISTRY)
+
+package_snap:
+	docker run \
+	    -e PROVIDER=$(PROVIDER) \
+	    -e TYPE=snap \
+	    -v `python3 -c 'import os; print(os.path.abspath(".."))'`:/bitmask-vpn.host \
+	    --cpus="4" \
+	    -it --rm \
+	    $(REGISTRY)/$(IMAGE):latest  \
+	    /builder.sh
+
 
 package_win: clean_win package_win_stage_1 sign_win_uninstaller_in_host package_win_stage_2 sign_win_installer_in_host
 
