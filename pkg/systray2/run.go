@@ -23,19 +23,6 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
-func Run(conf *Config) {
-	bt := bmTray{conf: conf, waitCh: make(chan bool)}
-	finishedCh := make(chan bool)
-	go initialize(conf, &bt, finishedCh)
-	go func() {
-		<-finishedCh
-		/* in osx, systray.Quit() halts the program */
-		bt.quit()
-		os.Exit(0)
-	}()
-	bt.start()
-}
-
 func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
 	defer func() { finishedCh <- true }()
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
@@ -48,38 +35,35 @@ func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
 	}
 	defer releasePID()
 
-	notify := newNotificator(conf)
-
 	b, err := bitmask.Init(conf.Printer)
 	if err != nil {
-		notify.initFailure(err)
+		// TODO notify failure
 		return
 	}
 	defer b.Close()
-	go checkAndStartBitmask(b, notify, conf)
+	go checkAndStartBitmask(b, conf)
 	go listenSignals(b)
 
 	var as bitmask.Autostart
 	if conf.DisableAustostart {
 		as = &bitmask.DummyAutostart{}
 	} else {
-		as = bitmask.NewAutostart(config.ApplicationName, getIconPath())
+		as = bitmask.NewAutostart(config.ApplicationName, "")
 	}
 	err = as.Enable()
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
 	}
-	bt.loop(b, notify, as)
 }
 
-func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *Config) {
+func checkAndStartBitmask(b bitmask.Bitmask, conf *Config) {
 	if conf.Obfs4 {
 		err := b.UseTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)
 		}
 	}
-	err := checkAndInstallHelpers(b, notify)
+	err := checkAndInstallHelpers(b)
 	if err != nil {
 		log.Printf("Is bitmask running? %v", err)
 		os.Exit(1)
@@ -87,19 +71,16 @@ func checkAndStartBitmask(b bitmask.Bitmask, notify *notificator, conf *Config) 
 	err = maybeStartVPN(b, conf)
 	if err != nil {
 		log.Println("Error starting VPN: ", err)
-		notify.errorStartingVPN(err)
 	}
 }
 
-func checkAndInstallHelpers(b bitmask.Bitmask, notify *notificator) error {
+func checkAndInstallHelpers(b bitmask.Bitmask) error {
 	helpers, priviledge, err := b.VPNCheck()
 	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
 		log.Printf("No polkit found")
-		notify.authAgent()
 		os.Exit(1)
 	} else if err != nil {
 		log.Printf("Error checking vpn: %v", err)
-		notify.errorStartingVPN(err)
 		return err
 	}
 
