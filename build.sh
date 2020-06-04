@@ -48,7 +48,7 @@ function buildQmake {
     $QMAKE -o qtbuild/Makefile "CONFIG-=debug CONFIG+=release" $PROJECT
 }
 
-echo "[+] Building minimal qml example..."
+echo "[+] Building BitmaskVPN"
 
 buildGoLib
 buildQmake
