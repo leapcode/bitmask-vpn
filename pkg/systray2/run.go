@@ -23,6 +23,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
+/*
 func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
 	defer func() { finishedCh <- true }()
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
@@ -55,6 +56,7 @@ func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
 		log.Printf("Error enabling autostart: %v", err)
 	}
 }
+*/
 
 func checkAndStartBitmask(b bitmask.Bitmask, conf *Config) {
 	if conf.Obfs4 {
