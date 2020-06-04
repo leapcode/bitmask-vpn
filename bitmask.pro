@@ -47,7 +47,7 @@ HEADERS += \
     gui/qjsonmodel.h \
     lib/libgoshim.h
 
-LIBS += -L./lib -lgoshim -lpthread
+LIBS += -L../lib -lgoshim -lpthread
 
 DESTDIR = release
 OBJECTS_DIR = release/.obj
