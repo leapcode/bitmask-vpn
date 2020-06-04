@@ -65,6 +65,12 @@ int main(int argc, char **argv) {
 
     bool debugQml = getEnv("DEBUG_QML_DATA") == "yes";
 
+    if (argc > 1 && strcmp(argv[1], "install-helpers") == 0) {
+        qDebug() << "Will try to install helpers with sudo";
+        InstallHelpers();
+        exit(0);
+    }
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);

@@ -14,6 +14,7 @@ import (
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 	"0xacab.org/leap/bitmask-vpn/pkg/systray2"
 	"github.com/jmshal/go-locale"
 	"golang.org/x/text/message"
@@ -335,6 +336,11 @@ func InitializeBitmaskContext() {
 func RefreshContext() *C.char {
 	c, _ := ctx.toJson()
 	return C.CString(string(c))
+}
+
+//export InstallHelpers
+func InstallHelpers() {
+	pickle.InstallHelpers()
 }
 
 /* end of the exposed api */
