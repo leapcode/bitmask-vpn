@@ -22,6 +22,7 @@ require (
 	github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 	github.com/mattn/go-gtk v0.0.0-20191030024613-af2e013261f5 // indirect
 	github.com/mattn/go-pointer v0.0.0-20190911064623-a0a44394634f // indirect
+	github.com/rakyll/statik v0.1.7
 	github.com/sevlyar/go-daemon v0.1.5
 	github.com/skelterjohn/go.wde v0.0.0-20190318181201-adc3f78cdb45 // indirect
 	github.com/skratchdot/open-golang v0.0.0-20190402232053-79abb63cd66e
