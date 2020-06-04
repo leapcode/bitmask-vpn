@@ -14,6 +14,8 @@ locales/*/out.gotext.json
 tools/transifex/transifex
 
 branding/assets/default
+lib/*
+qtbuild/*
 
 .*.swp
 *.exe
