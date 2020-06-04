@@ -122,6 +122,12 @@ func (s status) fromString(st string) status {
 	}
 }
 
+// FIXME -----------------------------------------------------------------------
+// at some moment I thought this was a good idea, but probably is overkill -
+// and not used right now. Discuss with meskio in code review, and very likely
+// remove it - there are probably better ways of dealing with tracking of user
+// actions more towards the ui layer.
+
 // An action is originated in the UI. These represent requests coming from the
 // frontend via the C code. VPN code needs to watch them and fullfill their
 // requests as soon as possible.
@@ -143,6 +149,8 @@ func (a actions) MarshalJSON() ([]byte, error) {
 	b.WriteString(`"`)
 	return b.Bytes(), nil
 }
+
+// -----------------------------------------------------------------------------
 
 // The connectionCtx keeps the global state that is passed around to C-land. It
 // also serves as the primary way of passing requests from the frontend to the
