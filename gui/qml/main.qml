@@ -92,13 +92,13 @@ ApplicationWindow {
                     },
                     State {
                         name: "stopping"
-                        PropertyChanges { target: systray; tooltip: toHuman["stopping"]; icon.source: icons["wait"] }
-                        PropertyChanges { target: statusItem; text: toHuman["stopping"] }
+                        PropertyChanges { target: systray; tooltip: toHuman("stopping"); icon.source: icons["wait"] }
+                        PropertyChanges { target: statusItem; text: toHuman("stopping") }
                     },
                     State {
                         name: "failed"
-                        PropertyChanges { target: systray; tooltip: toHuman["failed"]; icon.source: icons["wait"] }
-                        PropertyChanges { target: statusItem; text: toHuman["failed"] }
+                        PropertyChanges { target: systray; tooltip: toHuman("failed"); icon.source: icons["wait"] }
+                        PropertyChanges { target: statusItem; text: toHuman("failed") }
                     }
                 ]
             }
