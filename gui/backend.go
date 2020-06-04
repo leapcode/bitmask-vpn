@@ -14,8 +14,8 @@ import (
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/systray2"
 	"github.com/jmshal/go-locale"
-	"github.com/kalikaneko/bitmask-vpn/pkg/systray2"
 	"golang.org/x/text/message"
 )
 
