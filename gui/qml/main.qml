@@ -24,7 +24,9 @@ ApplicationWindow {
          We can still use this quirk, and can use the AppWindow with deferred
          Loaders as a placeholder for all the many dialogs, or to load
          a nice splash screen etc...  */
+
         app.visible = true;
+        show();
         hide();
     }
 
@@ -65,6 +67,7 @@ ApplicationWindow {
             icon.source = icons["off"]
             tooltip = qsTr("Checking status...")
             console.debug("systray init completed")
+            hide();
             show();
         }
 
