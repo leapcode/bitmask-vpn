@@ -7,6 +7,10 @@ unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.14
 
+macx {
+    LIBS += -framework Security
+}
+
 # trying to optimize size of the static binary.
 # probably more can be shaved off with some patience
 # You need to recompile your version of Qt to use the libraries you want. The
