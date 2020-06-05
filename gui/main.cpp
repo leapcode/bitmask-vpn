@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QTimer>
@@ -71,8 +71,8 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
     QQmlApplicationEngine engine;
     QQmlContext *ctx = engine.rootContext();
