@@ -52,15 +52,29 @@ ApplicationWindow {
         "wait":    "qrc:/assets/icon/png/black/vpn_wait_0.png",
         "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png",
     }
-
+    
 
     SystemTrayIcon {
 
         id: systray
         visible: true
+
         onActivated: {
-            console.debug("app is", ctx.appName)
-            menu.open()
+            // this looks like a widget bug. middle click (reasons 3 or 4)
+            // produce a segfault when trying to call menu.open()
+            // left and right click seem to be working fine, so let's ignore this for now.
+            switch (reason) {
+            case SystemTrayIcon.Unknown:
+                break
+            case SystemTrayIcon.Context:
+                break
+            case SystemTrayIcon.DoubleClick:
+                break
+            case SystemTrayIcon.Trigger:
+                break
+            case SystemTrayIcon.MiddleClick:
+                break
+            }
         }
 
         Component.onCompleted: {
@@ -71,8 +85,10 @@ ApplicationWindow {
             show();
         }
 
-
         menu: Menu {
+
+            id: systrayMenu
+
             StateGroup {
                 id: vpn
                 state: ctx ? ctx.status : ""
@@ -105,49 +121,6 @@ ApplicationWindow {
                     }
                 ]
             }
-
-            /*
-            LoginDialog {
-                id: login
-            }
-            DonateDialog {
-                id: donate
-            }
-            MessageDialog {
-                id: about
-                buttons: MessageDialog.Ok
-                title: "About"
-                text: "<p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p>
-    <p>This service is paid for entirely by donations from users like you. <a href=\"%3\">Please donate</a>.</p>
-    <p>By using this application, you agree to the <a href=\"%4\">Terms of Service</a>. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.</p>".arg(ctxSystray.applicationName).arg(ctxSystray.provider).arg(ctxSystray.donateURL).arg(ctxSystray.tosURL)
-                informativeText: "%1 version: %2".arg(ctxSystray.applicationName).arg(ctxSystray.version)
-            }
-            MessageDialog {
-                id: errorStartingVPN
-                buttons: MessageDialog.Ok
-                modality: Qt.NonModal
-                title: "Error starting VPN"
-                text: "Can't connect to %1".arg(ctxSystray.applicationName)
-                detailedText: ctxSystray.errorStartingMsg
-                visible: ctxSystray.errorStartingMsg != ""
-            }
-            MessageDialog {
-                id: authAgent
-                buttons: MessageDialog.Ok
-                modality: Qt.NonModal
-                title: "Missing authentication agent"
-                text: "Could not find a polkit authentication agent. Please run one and try again."
-                visible: ctxSystray.authAgent == true
-            }
-            MessageDialog {
-                id: initFailure
-                buttons: MessageDialog.Ok
-                modality: Qt.NonModal
-                title: "Initialization Error"
-                text: ctxSystray.errorInitMsg
-                visible: ctxSystray.errorInitMsg != ""
-            }
-            */
 
             MenuItem {
                 id: statusItem
@@ -190,9 +163,8 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("Donate...")
-                //onTriggered: ctxSystray.donate()
                 visible: true
-                //visible: ctx.showDonate
+                //onTriggered: donate.open()
             }
 
             MenuItem {
@@ -208,4 +180,50 @@ ApplicationWindow {
             }
         }
     }
+
+    /*
+    LoginDialog {
+        id: login
+    }
+    DonateDialog {
+        id: donate
+    }
+    MessageDialog {
+        id: about
+        buttons: MessageDialog.Ok
+        title: "About"
+        text: "<p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p>
+<p>This service is paid for entirely by donations from users like you. <a href=\"%3\">Please donate</a>.</p>
+<p>By using this application, you agree to the <a href=\"%4\">Terms of Service</a>. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.</p>".arg(ctxSystray.applicationName).arg(ctxSystray.provider).arg(ctxSystray.donateURL).arg(ctxSystray.tosURL)
+        informativeText: "%1 version: %2".arg(ctxSystray.applicationName).arg(ctxSystray.version)
+    }
+    MessageDialog {
+        id: errorStartingVPN
+        buttons: MessageDialog.Ok
+        modality: Qt.NonModal
+        title: "Error starting VPN"
+        text: "Can't connect to %1".arg(ctxSystray.applicationName)
+        detailedText: ctxSystray.errorStartingMsg
+        visible: ctxSystray.errorStartingMsg != ""
+    }
+    MessageDialog {
+        id: authAgent
+        buttons: MessageDialog.Ok
+        modality: Qt.NonModal
+        title: "Missing authentication agent"
+        text: "Could not find a polkit authentication agent. Please run one and try again."
+        visible: ctxSystray.authAgent == true
+    }
+    MessageDialog {
+        id: initFailure
+        buttons: MessageDialog.Ok
+        modality: Qt.NonModal
+        title: "Initialization Error"
+        text: ctxSystray.errorInitMsg
+        visible: ctxSystray.errorInitMsg != ""
+    }
+    */
+
+
+
 }
