@@ -21,10 +21,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"os"
 	"os/exec"
-	"time"
+	"runtime"
 
 	_ "0xacab.org/leap/bitmask-vpn/pkg/pickle/statik"
 	"github.com/rakyll/statik/fs"
@@ -35,16 +34,6 @@ const (
 	// TODO parametrize this with config.appName
 	policyFile = "/usr/share/polkit-1/actions/se.leap.bitmask.riseupvpn.policy"
 )
-
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
-}
 
 func check(e error) {
 	if e != nil {
@@ -59,25 +48,41 @@ func alreadyThere(path string) bool {
 	return false
 }
 
+func isRoot() bool {
+	uid := os.Getuid()
+	return uid == 0
+}
+
 func copyAsRoot(orig, dest string, isExec bool) {
 	if alreadyThere(dest) {
 		fmt.Println("> File exists: ", dest)
 		return
 	}
-	var confirm string
-	fmt.Println("> About to write (as root):", dest)
-	fmt.Printf("> Continue? [y/N] ")
-	fmt.Scanln(&confirm)
-	if confirm != "y" {
-		fmt.Println("aborting")
-		os.Exit(1)
+
+	cmd := exec.Command("false")
+	if isRoot() {
+		cmd = exec.Command("cp", orig, dest)
+	} else {
+		var confirm string
+		fmt.Println("> About to write (with sudo):", dest)
+		fmt.Printf("> ok? [y/N] ")
+		fmt.Scanln(&confirm)
+		if confirm != "y" {
+			fmt.Println("aborting")
+			os.Exit(1)
+		}
+		cmd = exec.Command("sudo", "cp", orig, dest)
 	}
-	cmd := exec.Command("sudo", "cp", orig, dest)
+
 	err := cmd.Run()
 	check(err)
 
 	if isExec {
-		cmd = exec.Command("sudo", "chmod", "776", dest)
+		if isRoot() {
+			cmd = exec.Command("chmod", "776", dest)
+		} else {
+			cmd = exec.Command("sudo", "chmod", "776", dest)
+		}
 		err = cmd.Run()
 		check(err)
 	}
@@ -85,9 +90,12 @@ func copyAsRoot(orig, dest string, isExec bool) {
 	fmt.Println("> done")
 }
 
-/* dumpHelper works in linux only at the moment.
-   TODO should separate implementations by platform */
 func dumpHelper(fname, dest string, isExec bool) {
+	// TODO win/mac implementation
+	if runtime.GOOS != "linux" {
+		fmt.Println("Only linux supported for now")
+		return
+	}
 	stFS, err := fs.New()
 	if err != nil {
 		log.Fatal(err)
@@ -103,19 +111,17 @@ func dumpHelper(fname, dest string, isExec bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	tmp := "/dev/shm/" + randSeq(14)
 
-	f, err := os.Create(tmp)
+	tmpfile, err := ioutil.TempFile("/dev/shm", "*")
 	check(err)
-	defer os.Remove(tmp)
+	defer os.Remove(tmpfile.Name())
 
-	_, err = f.Write(c)
+	_, err = tmpfile.Write(c)
 	check(err)
-	copyAsRoot(tmp, dest, isExec)
+	copyAsRoot(tmpfile.Name(), dest, isExec)
 }
 
 func InstallHelpers() {
-	rand.Seed(time.Now().UnixNano())
 	dumpHelper("bitmask-root", bitmaskRoot, true)
 	dumpHelper("se.leap.bitmask.policy", policyFile, false)
 }
