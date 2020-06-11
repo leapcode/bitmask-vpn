@@ -1,8 +1,9 @@
 #include <QApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickWindow>
+#include <QSystemTrayIcon>
 #include <QTimer>
 #include <QtQml>
+#include <QQmlApplicationEngine>
+#include <QQuickWindow>
 #include <string>
 
 #include "handlers.h"
@@ -13,45 +14,15 @@
    from blockbusters like "here be dragons" and "darling, I wrote a little
    contraption". */
 
-/* Our glorious global object state. In here we store a serialized snapshot of
-   the context from the application "backend", living in the linked Go-land
-   lib. */
+QJsonWatch *qw = new QJsonWatch;
 
-static char *json;
+/* onStatusChanged is the C function that we register as a callback with CGO.
+   It pulls a string serialization of the context object, than we then pass
+   along to Qml via signals. */
 
-/* We are interested in observing changes to this global json variable.
-   The jsonWatchdog bridges the gap from pure c callbacks to the rest of the c++
-   logic. QJsonWatch comes from QObject so it can emit signals. */
-
-QJsonWatch *qw;
-
-struct jsonWatchdog {
-    jsonWatchdog() { qw = new QJsonWatch; }
-    void changed() { emit qw->jsonChanged(QString(json)); }
-};
-
-/* we need C wrappers around every C++ object, so that we can invoke their methods
-   from the function pointers passed as callbacks to CGO. */
-extern "C" {
-static void *newWatchdog(void) { return (void *)(new jsonWatchdog); }
-static void jsonChanged(void *ptr) {
-    if (ptr != NULL) {
-        jsonWatchdog *klsPtr = static_cast<jsonWatchdog *>(ptr);
-        klsPtr->changed();
-    }
-}
-}
-
-void *wd = newWatchdog();
-
-/* onStatusChanged is the C function that we register as a callback with CGO,
-   to be called from the Go side. It pulls a string serialization of the
-   context object, than we then pass along to Qt objects and to Qml. */
 void onStatusChanged() {
     char *ctx = RefreshContext();
-    json = ctx;
-    /* the method wrapped emits a qt signal */
-    jsonChanged(wd);
+    emit qw->jsonChanged(QString(ctx));
     free(ctx);
 }
 
@@ -71,8 +42,15 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
+
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
+
+    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+        qDebug() << "No systray icon available. Things won't work for now, sorry...";
+        exit(1);
+    }
+    
     app.setQuitOnLastWindowClosed(false);
     QQmlApplicationEngine engine;
     QQmlContext *ctx = engine.rootContext();
@@ -95,7 +73,7 @@ int main(int argc, char **argv) {
     /* connect the jsonChanged signal explicitely.
         In the lambda, we reload the json in the model every time we receive an
         update from Go */
-    QObject::connect(qw, &QJsonWatch::jsonChanged, [ctx, model](QString js) {
+    QObject::connect(qw, &QJsonWatch::jsonChanged, [model](QString js) {
         model->loadJson(js.toUtf8());
     });
 
