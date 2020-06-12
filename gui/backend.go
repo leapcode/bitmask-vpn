@@ -6,14 +6,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"reflect"
 	"sync"
+	//"time"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 	"0xacab.org/leap/bitmask-vpn/pkg/systray2"
 	"github.com/jmshal/go-locale"
@@ -70,8 +74,6 @@ func trigger(event string) {
 }
 
 /* connection status */
-
-const logFile = "systray.log"
 
 const (
 	offStr      = "off"
@@ -130,6 +132,7 @@ func (s status) fromString(st string) status {
 type connectionCtx struct {
 	AppName  string `json:"appName"`
 	Provider string `json:"provider"`
+	Donate   bool   `json:"donate"`
 	Status   status `json:"status"`
 	bm       bitmask.Bitmask
 }
@@ -170,8 +173,14 @@ func setStatus(st status) {
 	go trigger(OnStatusChanged)
 }
 
+func toggleDonate() {
+	stmut.Lock()
+	defer stmut.Unlock()
+	ctx.Donate = !ctx.Donate
+	go trigger(OnStatusChanged)
+}
+
 func setStatusFromStr(stStr string) {
-	log.Println("status:", stStr)
 	setStatus(unknown.fromString(stStr))
 }
 
@@ -184,8 +193,18 @@ func initPrinter() *message.Printer {
 	return message.NewPrinter(message.MatchLanguage(locale, "en"))
 }
 
+const logFile = "systray.log"
+
+var logger io.Closer
+
 // initializeBitmask instantiates a bitmask connection
 func initializeBitmask() {
+	_, err := config.ConfigureLogger(path.Join(config.Path, logFile))
+
+	if err != nil {
+		log.Println("Can't configure logger: ", err)
+	}
+
 	if ctx == nil {
 		log.Println("error: cannot initialize bitmask, ctx is nil")
 		os.Exit(1)
@@ -223,6 +242,7 @@ func initializeContext(provider, appName string) {
 	ctx = &connectionCtx{
 		AppName:  appName,
 		Provider: provider,
+		Donate:   false,
 		Status:   st,
 	}
 	go trigger(OnStatusChanged)
@@ -263,27 +283,32 @@ func mockUI() {
 
 //export SwitchOn
 func SwitchOn() {
-	setStatus(starting)
-	startVPN()
+	go setStatus(starting)
+	go startVPN()
 }
 
 //export SwitchOff
 func SwitchOff() {
-	setStatus(stopping)
-	stopVPN()
-}
-
-//export Quit
-func Quit() {
-	if ctx.Status != off {
-		setStatus(stopping)
-		stopVPN()
-	}
+	go setStatus(stopping)
+	go stopVPN()
 }
 
 //export Unblock
 func Unblock() {
 	fmt.Println("unblock... [not implemented]")
+}
+
+//export Quit
+func Quit() {
+	if ctx.Status != off {
+		go setStatus(stopping)
+		stopVPN()
+	}
+}
+
+//export ToggleDonate
+func ToggleDonate() {
+	toggleDonate()
 }
 
 //export SubscribeToEvent
@@ -293,12 +318,21 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 
 //export InitializeBitmaskContext
 func InitializeBitmaskContext() {
-	provider := "black.riseup.net"
-	appName := "RiseupVPN"
+	provider := config.Provider
+	appName := config.ApplicationName
 	initOnce.Do(func() {
 		initializeContext(provider, appName)
 	})
 	go ctx.updateStatus()
+
+	/* DEBUG
+	timer := time.NewTimer(time.Second * 3)
+	go func() {
+		<-timer.C
+		fmt.Println("donate timer fired")
+		toggleDonate()
+	}()
+	*/
 }
 
 //export RefreshContext

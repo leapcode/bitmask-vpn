@@ -1,7 +1,7 @@
 # FIXME: this should be overwritten by build templates
 TARGET=riseup-vpn
 
-CONFIG += qt static
+CONFIG += qt staticlib
 windows:CONFIG += console
 unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
