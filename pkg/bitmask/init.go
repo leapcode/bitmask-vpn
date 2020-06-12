@@ -16,6 +16,7 @@
 package bitmask
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path"
@@ -25,6 +26,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/pid"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
 )
 
 type ProviderInfo struct {
@@ -45,6 +47,15 @@ func InitializeLogger() {
 	}
 }
 
+func initBitmask(printer *message.Printer) (Bitmask, error) {
+	b, err := vpn.Init()
+	if err != nil {
+		log.Printf("An error ocurred starting bitmask: %v", err)
+		err = errors.New(printer.Sprintf(errorMsg, err))
+	}
+	return b, err
+}
+
 func InitializeBitmask() (Bitmask, error) {
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
@@ -60,7 +71,7 @@ func InitializeBitmask() (Bitmask, error) {
 	conf.Version = "unknown"
 	conf.Printer = initPrinter()
 
-	b, err := Init(conf.Printer)
+	b, err := initBitmask(conf.Printer)
 	if err != nil {
 		// TODO notify failure
 		log.Fatal(err)
