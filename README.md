@@ -2,6 +2,9 @@ Install it
 ----------
 
 Install dependencies:
+
+TODO: add qt5 deps here
+
 ```
   # make depends
 ```
@@ -99,23 +102,13 @@ Run it:
 
 ```
 
-
-Bitmaskd
--------------
-Is also posible to compile the systray to use bitmask as backend:
-```
-  $ go build -tags bitmaskd
-```
-
-In that case bitmask-systray assumes that you already have bitmaskd running. Run bitmask and the systray:
-```
-  $ bitmaskd
-  $ build/bin/bitmask-vpn
-```
+./build.sh
 
 
 i18n
 ----
+
+TODO: move this to developer docs
 
 The translations are done in transifex. To help us contribute your translations there and/or review the existing
 ones:
@@ -125,6 +118,7 @@ When a string has being modified you need to regenerate the locales:
 ```
   $ make generate_locales
 ```
+
 
 To fetch the translations from transifex and rebuild the catalog.go (API\_TOKEN is the transifex API token):
 ```
