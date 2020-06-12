@@ -33,6 +33,7 @@ public slots:
     void switchOn();
     void switchOff();
     void unblock();
+    void toggleDonate();
     void quit();
 };
 

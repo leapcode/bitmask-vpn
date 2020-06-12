@@ -42,13 +42,11 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        qDebug() << "No systray icon available. Things won't work for now, sorry...";
-        exit(1);
+        qDebug() << "No systray icon available. Things might not work for now, sorry...";
     }
     
     app.setQuitOnLastWindowClosed(false);

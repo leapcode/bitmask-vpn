@@ -23,8 +23,14 @@ void Backend::unblock()
     Unblock();
 }
 
+void Backend::toggleDonate()
+{
+    ToggleDonate();
+}
+
 void Backend::quit()
 {
     Quit();
     emit this->quitDone();
 }
+

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
+        <file>qml/DonateDialog.qml</file>
          
         <file>assets/icon/png/black/vpn_off.png</file>
         <file>assets/icon/png/black/vpn_on.png</file>

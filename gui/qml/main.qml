@@ -11,10 +11,16 @@ ApplicationWindow {
 
     property var     ctx
 
+
     Connections {
         target: jsonModel
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson());
+            if (ctx.donate == 'true') {
+                console.debug(jsonModel.getJson())
+                donate.visible = true
+                backend.toggleDonate()
+            }
         }
     }
 
@@ -92,6 +98,7 @@ ApplicationWindow {
             StateGroup {
                 id: vpn
                 state: ctx ? ctx.status : ""
+            
                 states: [
                     State { name: "initializing" },
                     State {
@@ -106,7 +113,7 @@ ApplicationWindow {
                     },
                     State {
                         name: "starting"
-                       PropertyChanges { target: systray; tooltip: toHuman("connecting"); icon.source: icons["wait"] }
+                        PropertyChanges { target: systray; tooltip: toHuman("connecting"); icon.source: icons["wait"] }
                         PropertyChanges { target: statusItem; text: toHuman("connecting") }
                     },
                     State {
@@ -181,12 +188,16 @@ ApplicationWindow {
         }
     }
 
+    DonateDialog {
+        visible: false
+        id: donate
+    }
+}
+
+
     /*
     LoginDialog {
         id: login
-    }
-    DonateDialog {
-        id: donate
     }
     MessageDialog {
         id: about
@@ -223,7 +234,3 @@ ApplicationWindow {
         visible: ctxSystray.errorInitMsg != ""
     }
     */
-
-
-
-}
