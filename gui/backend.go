@@ -6,22 +6,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
-	"path"
 	"reflect"
 	"sync"
 	//"time"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
-	"0xacab.org/leap/bitmask-vpn/pkg/systray2"
-	"github.com/jmshal/go-locale"
-	"golang.org/x/text/message"
 )
 
 // typedef void (*cb)();
@@ -184,37 +178,17 @@ func setStatusFromStr(stStr string) {
 	setStatus(unknown.fromString(stStr))
 }
 
-func initPrinter() *message.Printer {
-	locale, err := go_locale.DetectLocale()
-	if err != nil {
-		log.Println("Error detecting the system locale: ", err)
-	}
-
-	return message.NewPrinter(message.MatchLanguage(locale, "en"))
-}
-
-const logFile = "systray.log"
-
-var logger io.Closer
-
 // initializeBitmask instantiates a bitmask connection
 func initializeBitmask() {
-	_, err := config.ConfigureLogger(path.Join(config.Path, logFile))
-
-	if err != nil {
-		log.Println("Can't configure logger: ", err)
-	}
-
 	if ctx == nil {
 		log.Println("error: cannot initialize bitmask, ctx is nil")
 		os.Exit(1)
 	}
-	conf := systray.ParseConfig()
-	conf.Version = "unknown"
-	conf.Printer = initPrinter()
-	b, err := bitmask.Init(conf.Printer)
+	bitmask.InitializeLogger()
+
+	b, err := bitmask.InitializeBitmask()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("error: cannot initialize bitmask")
 	}
 	ctx.bm = b
 }
@@ -318,10 +292,10 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 
 //export InitializeBitmaskContext
 func InitializeBitmaskContext() {
-	provider := config.Provider
-	appName := config.ApplicationName
+	pi := bitmask.GetConfiguredProvider()
+
 	initOnce.Do(func() {
-		initializeContext(provider, appName)
+		initializeContext(pi.Provider, pi.AppName)
 	})
 	go ctx.updateStatus()
 

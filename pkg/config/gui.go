@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package systray
+package config
 
 import (
 	"encoding/json"
@@ -21,7 +21,6 @@ import (
 	"path"
 	"time"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"golang.org/x/text/message"
 )
 
@@ -31,7 +30,8 @@ const (
 )
 
 var (
-	configPath = path.Join(config.Path, "systray.json")
+	configPath = path.Join(Path, "systray.json")
+	LogPath    = path.Join(Path, "systray.log")
 )
 
 // Config holds the configuration of the systray
@@ -72,25 +72,25 @@ func ParseConfig() *Config {
 	return &conf
 }
 
-func (c *Config) setUserStoppedVPN(vpnStopped bool) error {
+func (c *Config) SetUserStoppedVPN(vpnStopped bool) error {
 	c.file.UserStoppedVPN = vpnStopped
 	return c.save()
 }
 
-func (c *Config) hasDonated() bool {
+func (c *Config) HasDonated() bool {
 	return c.file.Donated.Add(oneMonth).After(time.Now())
 }
 
-func (c *Config) needsNotification() bool {
-	return !c.hasDonated() && c.file.LastNotification.Add(oneDay).Before(time.Now())
+func (c *Config) NeedsNotification() bool {
+	return !c.HasDonated() && c.file.LastNotification.Add(oneDay).Before(time.Now())
 }
 
-func (c *Config) setNotification() error {
+func (c *Config) SetNotification() error {
 	c.file.LastNotification = time.Now()
 	return c.save()
 }
 
-func (c *Config) setDonated() error {
+func (c *Config) SetDonated() error {
 	c.file.Donated = time.Now()
 	return c.save()
 }
