@@ -43,8 +43,8 @@ func Init(printer *message.Printer) (Bitmask, error) {
 	return b, err
 }
 
-// NewAutostart creates a handler for the autostart of your platform
-func NewAutostart(appName string, iconPath string) Autostart {
+// newAutostart creates a handler for the autostart of your platform
+func newAutostart(appName string, iconPath string) Autostart {
 	exec := os.Args
 	if os.Getenv("SNAP") != "" {
 		re := regexp.MustCompile("/snap/([^/]*)/")

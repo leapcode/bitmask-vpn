@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,52 +13,83 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package systray
+package bitmask
 
 import (
 	"log"
 	"os"
+	"path"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"github.com/jmshal/go-locale"
+	"golang.org/x/text/message"
+
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 )
 
-/*
-func initialize(conf *Config, bt *bmTray, finishedCh chan bool) {
-	defer func() { finishedCh <- true }()
+type ProviderInfo struct {
+	Provider string
+	AppName  string
+}
+
+func GetConfiguredProvider() *ProviderInfo {
+	provider := config.Provider
+	appName := config.ApplicationName
+	return &ProviderInfo{provider, appName}
+}
+
+func InitializeLogger() {
+	_, err := config.ConfigureLogger(path.Join(config.LogPath))
+	if err != nil {
+		log.Println("Can't configure logger: ", err)
+	}
+}
+
+func InitializeBitmask() (Bitmask, error) {
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
 
-	err := acquirePID()
+	err := pid.AcquirePID()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer releasePID()
+	defer pid.ReleasePID()
 
-	b, err := bitmask.Init(conf.Printer)
+	conf := config.ParseConfig()
+	conf.Version = "unknown"
+	conf.Printer = initPrinter()
+
+	b, err := Init(conf.Printer)
 	if err != nil {
 		// TODO notify failure
-		return
+		log.Fatal(err)
 	}
-	defer b.Close()
 	go checkAndStartBitmask(b, conf)
-	go listenSignals(b)
 
-	var as bitmask.Autostart
+	var as Autostart
 	if conf.DisableAustostart {
-		as = &bitmask.DummyAutostart{}
+		as = &dummyAutostart{}
 	} else {
-		as = bitmask.NewAutostart(config.ApplicationName, "")
+		as = newAutostart(config.ApplicationName, "")
 	}
 	err = as.Enable()
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
 	}
+	return b, nil
 }
-*/
 
-func checkAndStartBitmask(b bitmask.Bitmask, conf *Config) {
+func initPrinter() *message.Printer {
+	locale, err := go_locale.DetectLocale()
+	if err != nil {
+		log.Println("Error detecting the system locale: ", err)
+	}
+
+	return message.NewPrinter(message.MatchLanguage(locale, "en"))
+}
+
+func checkAndStartBitmask(b Bitmask, conf *config.Config) {
 	if conf.Obfs4 {
 		err := b.UseTransport("obfs4")
 		if err != nil {
@@ -76,9 +107,9 @@ func checkAndStartBitmask(b bitmask.Bitmask, conf *Config) {
 	}
 }
 
-func checkAndInstallHelpers(b bitmask.Bitmask) error {
-	helpers, priviledge, err := b.VPNCheck()
-	if (err != nil && err.Error() == "nopolkit") || (err == nil && !priviledge) {
+func checkAndInstallHelpers(b Bitmask) error {
+	helpers, privilege, err := b.VPNCheck()
+	if (err != nil && err.Error() == "nopolkit") || (err == nil && !privilege) {
 		log.Printf("No polkit found")
 		os.Exit(1)
 	} else if err != nil {
@@ -95,12 +126,12 @@ func checkAndInstallHelpers(b bitmask.Bitmask) error {
 	return nil
 }
 
-func maybeStartVPN(b bitmask.Bitmask, conf *Config) error {
+func maybeStartVPN(b Bitmask, conf *config.Config) error {
 	if !conf.StartVPN {
 		return nil
 	}
 
 	err := b.StartVPN(config.Provider)
-	conf.setUserStoppedVPN(false)
+	conf.SetUserStoppedVPN(false)
 	return err
 }

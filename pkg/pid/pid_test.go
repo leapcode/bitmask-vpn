@@ -1,4 +1,4 @@
-package systray
+package pid
 
 import (
 	"syscall"
