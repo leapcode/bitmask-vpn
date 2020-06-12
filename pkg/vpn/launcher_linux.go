@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package standalone
+package vpn
 
 import (
 	"errors"
@@ -24,7 +24,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/bitmask-vpn/pkg/standalone/bonafide"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"github.com/keybase/go-ps"
 )
 
