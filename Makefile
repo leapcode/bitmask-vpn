@@ -132,12 +132,7 @@ build_all_providers:
 # packaging templates
 #########################################################################
 
-prepare: re_vendor prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
-
-re_vendor:
-	# we update the module vendoring in case we're building with a different
-	# go version than in development
-	@go mod vendor
+prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
 
 prepare_templates: generate relink_default tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
