@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 const (
@@ -19,6 +20,56 @@ const (
 // ctx will be our glorious global object.
 // if we ever switch again to a provider-agnostic app, we should keep a map here.
 var ctx *connectionCtx
+
+// The connectionCtx keeps the global state that is passed around to C-land. It
+// also serves as the primary way of passing requests from the frontend to the
+// Go-core, by letting the UI write some of these variables and processing
+// them.
+
+type connectionCtx struct {
+	AppName         string `json:"appName"`
+	Provider        string `json:"provider"`
+	AskForDonations bool   `json:"askForDonations"`
+	DonateDialog    bool   `json:"donateDialog"`
+	DonateURL       string `json:"donateURL"`
+	Status          status `json:"status"`
+	bm              bitmask.Bitmask
+	cfg             *config.Config
+}
+
+func (c connectionCtx) toJson() ([]byte, error) {
+	stmut.Lock()
+	defer stmut.Unlock()
+	b, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return b, nil
+}
+
+func (c connectionCtx) updateStatus() {
+	if stStr, err := c.bm.GetStatus(); err != nil {
+		log.Printf("Error getting status: %v", err)
+	} else {
+		setStatusFromStr(stStr)
+	}
+
+	statusCh := c.bm.GetStatusCh()
+	for {
+		select {
+		case stStr := <-statusCh:
+			setStatusFromStr(stStr)
+		}
+	}
+}
+
+func setStatus(st status) {
+	stmut.Lock()
+	defer stmut.Unlock()
+	ctx.Status = st
+	go trigger(OnStatusChanged)
+}
 
 // the status type reflects the current VPN status. Go code is responsible for updating
 // it; the C gui just watches its changes and pulls its updates via the serialized
@@ -61,60 +112,6 @@ func (s status) fromString(st string) status {
 	default:
 		return unknown
 	}
-}
-
-// The connectionCtx keeps the global state that is passed around to C-land. It
-// also serves as the primary way of passing requests from the frontend to the
-// Go-core, by letting the UI write some of these variables and processing
-// them.
-
-type connectionCtx struct {
-	AppName  string `json:"appName"`
-	Provider string `json:"provider"`
-	Donate   bool   `json:"donate"`
-	Status   status `json:"status"`
-	bm       bitmask.Bitmask
-}
-
-func (c connectionCtx) toJson() ([]byte, error) {
-	stmut.Lock()
-	defer stmut.Unlock()
-	b, err := json.Marshal(c)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	return b, nil
-}
-
-func (c connectionCtx) updateStatus() {
-	if stStr, err := c.bm.GetStatus(); err != nil {
-		log.Printf("Error getting status: %v", err)
-	} else {
-		setStatusFromStr(stStr)
-	}
-
-	statusCh := c.bm.GetStatusCh()
-	for {
-		select {
-		case stStr := <-statusCh:
-			setStatusFromStr(stStr)
-		}
-	}
-}
-
-func setStatus(st status) {
-	stmut.Lock()
-	defer stmut.Unlock()
-	ctx.Status = st
-	go trigger(OnStatusChanged)
-}
-
-func toggleDonate() {
-	stmut.Lock()
-	defer stmut.Unlock()
-	ctx.Donate = !ctx.Donate
-	go trigger(OnStatusChanged)
 }
 
 func setStatusFromStr(stStr string) {

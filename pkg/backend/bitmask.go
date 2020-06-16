@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 func initializeBitmask() {
@@ -19,6 +20,7 @@ func initializeBitmask() {
 		log.Println("error: cannot initialize bitmask")
 	}
 	ctx.bm = b
+	ctx.cfg = config.ParseConfig()
 }
 
 func startVPN() {
@@ -36,16 +38,25 @@ func stopVPN() {
 	}
 }
 
+func wantDonations() bool {
+	if config.AskForDonations == "true" {
+		return true
+	}
+	return false
+}
+
 // initializeContext initializes an empty connStatus and assigns it to the
 // global ctx holder. This is expected to be called only once, so the public
 // api uses the sync.Once primitive to call this.
 func initializeContext(provider, appName string) {
 	var st status = off
 	ctx = &connectionCtx{
-		AppName:  appName,
-		Provider: provider,
-		Donate:   false,
-		Status:   st,
+		AppName:         appName,
+		Provider:        provider,
+		DonateURL:       config.DonateURL,
+		AskForDonations: wantDonations(),
+		DonateDialog:    false,
+		Status:          st,
 	}
 	go trigger(OnStatusChanged)
 	initializeBitmask()

@@ -37,7 +37,7 @@ var (
 // Config holds the configuration of the systray
 type Config struct {
 	file struct {
-		LastNotification  time.Time
+		LastReminded      time.Time
 		Donated           time.Time
 		SelectGateway     bool
 		Obfs4             bool
@@ -77,16 +77,16 @@ func (c *Config) SetUserStoppedVPN(vpnStopped bool) error {
 	return c.save()
 }
 
-func (c *Config) HasDonated() bool {
+func (c *Config) NeedsDonationReminder() bool {
+	return !c.hasDonated() && c.file.LastReminded.Add(oneDay).Before(time.Now())
+}
+
+func (c *Config) hasDonated() bool {
 	return c.file.Donated.Add(oneMonth).After(time.Now())
 }
 
-func (c *Config) NeedsNotification() bool {
-	return !c.HasDonated() && c.file.LastNotification.Add(oneDay).Before(time.Now())
-}
-
-func (c *Config) SetNotification() error {
-	c.file.LastNotification = time.Now()
+func (c *Config) SetLastReminded() error {
+	c.file.LastReminded = time.Now()
 	return c.save()
 }
 

@@ -1,5 +1,7 @@
 #include <QTimer>
 #include <QDebug>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "handlers.h"
 #include "lib/libgoshim.h"
@@ -23,9 +25,19 @@ void Backend::unblock()
     Unblock();
 }
 
-void Backend::toggleDonate()
+void Backend::donateAccepted()
 {
-    ToggleDonate();
+    DonateAccepted();
+}
+
+void Backend::donateRejected()
+{
+    DonateRejected();
+}
+
+void Backend::openURL(QString link)
+{
+    QDesktopServices::openUrl(QUrl(link));
 }
 
 void Backend::quit()

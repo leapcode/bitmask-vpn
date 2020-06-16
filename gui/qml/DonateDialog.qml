@@ -16,12 +16,13 @@ MessageDialog {
 
     onAccepted: {
         if (backend) {
-            backend.donateAccepted(true)
+            backend.openURL(ctx.donateURL)
+            backend.donateAccepted()
         }
     }
     onRejected: {
         if (backend) {
-            backend.donateAccepted(false)
+            backend.donateRejected()
         }
     }
 }

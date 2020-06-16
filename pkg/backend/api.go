@@ -6,6 +6,7 @@ import (
 	"C"
 	"fmt"
 	"log"
+	"time"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
@@ -23,18 +24,24 @@ func SwitchOff() {
 }
 
 func Unblock() {
+	//TODO
 	fmt.Println("unblock... [not implemented]")
 }
 
 func Quit() {
 	if ctx.Status != off {
 		go setStatus(stopping)
+		ctx.cfg.SetUserStoppedVPN(true)
 		stopVPN()
 	}
 }
 
-func ToggleDonate() {
-	toggleDonate()
+func DonateAccepted() {
+	donateAccepted()
+}
+
+func DonateRejected() {
+	donateRejected()
 }
 
 func SubscribeToEvent(event string, f unsafe.Pointer) {
@@ -42,21 +49,23 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 }
 
 func InitializeBitmaskContext() {
-	pi := bitmask.GetConfiguredProvider()
+	p := bitmask.GetConfiguredProvider()
 
 	initOnce.Do(func() {
-		initializeContext(pi.Provider, pi.AppName)
+		initializeContext(
+			p.Provider, p.AppName)
 	})
 	go ctx.updateStatus()
 
-	/* DEBUG
-	timer := time.NewTimer(time.Second * 3)
 	go func() {
-		<-timer.C
-		fmt.Println("donate timer fired")
-		toggleDonate()
+		if needsDonationReminder() {
+			// wait a bit before launching reminder
+			timer := time.NewTimer(time.Minute * 5)
+			<-timer.C
+			showDonate()
+		}
+
 	}()
-	*/
 }
 
 func RefreshContext() *C.char {
