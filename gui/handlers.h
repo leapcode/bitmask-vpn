@@ -33,7 +33,9 @@ public slots:
     void switchOn();
     void switchOff();
     void unblock();
-    void toggleDonate();
+    void donateAccepted();
+    void donateRejected();
+    void openURL(QString link);
     void quit();
 };
 

@@ -31,9 +31,14 @@ func Quit() {
 
 }
 
-//export ToggleDonate
-func ToggleDonate() {
-	backend.ToggleDonate()
+//export DonateAccepted
+func DonateAccepted() {
+	backend.DonateAccepted()
+}
+
+//export DonateRejected
+func DonateRejected() {
+	backend.DonateRejected()
 }
 
 //export SubscribeToEvent

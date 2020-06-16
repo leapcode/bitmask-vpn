@@ -16,10 +16,9 @@ ApplicationWindow {
         target: jsonModel
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson());
-            if (ctx.donate == 'true') {
+            if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
-                backend.toggleDonate()
             }
         }
     }
@@ -171,7 +170,9 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Donate...")
                 visible: true
-                //onTriggered: donate.open()
+                onTriggered: {
+                    donate.visible = true
+                }
             }
 
             MenuItem {
