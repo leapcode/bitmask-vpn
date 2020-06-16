@@ -138,7 +138,7 @@ ifeq (${SKIP_CACHECK}, no)
 endif
 
 generate:
-	@go generate cmd/bitmask-vpn/main.go
+	@go generate gui/backend.go
 
 relink_default:
 ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
