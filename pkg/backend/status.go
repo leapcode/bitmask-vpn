@@ -29,6 +29,8 @@ var ctx *connectionCtx
 type connectionCtx struct {
 	AppName         string `json:"appName"`
 	Provider        string `json:"provider"`
+	TosURL          string `json:"tosURL"`
+	HelpURL         string `json:"helpURL"`
 	AskForDonations bool   `json:"askForDonations"`
 	DonateDialog    bool   `json:"donateDialog"`
 	DonateURL       string `json:"donateURL"`

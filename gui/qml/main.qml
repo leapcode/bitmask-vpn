@@ -164,20 +164,18 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("Help...")
-                //onTriggered: ctxSystray.help()
+                onTriggered: backend.openURL(ctx.helpURL)
             }
 
             MenuItem {
                 text: qsTr("Donate...")
                 visible: true
-                onTriggered: {
-                    donate.visible = true
-                }
+                onTriggered: { donate.visible = true }
             }
 
             MenuItem {
                 text: qsTr("About...")
-                //onTriggered: about.open()
+                //onTriggered: { about.visible = true }
             }
 
             MenuSeparator {}
