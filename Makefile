@@ -3,9 +3,7 @@
 # (c) LEAP Encryption Access Project, 2019-2020
 #########################################################################
 
-.PHONY: all get build build_bitmaskd icon locales generate_locales clean
-
-TAGS ?= gtk_3_18
+.PHONY: all get build icon locales generate_locales clean
 
 XBUILD ?= no
 SKIP_CACHECK ?= no
@@ -42,16 +40,15 @@ install_go:
 
 depends:
 	-@make depends$(UNAME)
-	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
 
 dependsLinux:
-	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
+	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
 	@make -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
 	# TODO - bootstrap homebrew if not there
-	@brew install python3 golang make pkg-config upx curl
+	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
 dependsCygwin:
@@ -83,9 +80,6 @@ build_%:
 
 test:
 	@go test -tags "integration $(TAGS)" ./...
-
-build_bitmaskd:
-	@go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`" ./cmd/*
 
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
@@ -254,7 +248,7 @@ generate_locales:
 	@gotext update -lang=$(lang_list) ./pkg/systray ./pkg/bitmask
 	@make -C tools/transifex
 
-locales/%/out.gotext.json: pkg/systray/systray.go pkg/systray/notificator.go pkg/bitmask/standalone.go pkg/bitmask/bitmaskd.go
+locales/%/out.gotext.json: pkg/systray/systray.go pkg/systray/notificator.go pkg/bitmask/standalone.go 
 	@gotext update -lang=$* ./pkg/systray ./pkg/bitmask
 
 cmd/bitmask-vpn/catalog.go: $(foreach lang,$(LANGS),locales/$(lang)/messages.gotext.json)

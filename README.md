@@ -75,6 +75,6 @@ When you report an issue include the following information:
 * what you got
 * the version of the program. You can check the version on the about page.
 * the logs of the program. The location of the logs depends on the OS:
-  * linux: `/home/<your user>/.config/leap/bitmaskd.log` & `/home/<your user>/.config/leap/systray.log`
+  * linux: `/home/<your user>/.config/leap/systray.log`
   * OSX: `/Users/<your user>/Library/Preferences/leap/systray.log`, `/Applications/RiseupVPN.app/Contents/helper/helper.log` & `/Applications/RiseupVPN.app/Contents/helper/openvpn.log`
   * windows: `C:\Users\<your user>\AppData\Local\leap\systray.log`, `C:\Program Files\RiseupVPN\helper.log` & `C:\Program Files\RiseupVPN\openvp.log`
