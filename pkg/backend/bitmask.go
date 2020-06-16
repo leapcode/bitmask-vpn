@@ -53,6 +53,8 @@ func initializeContext(provider, appName string) {
 	ctx = &connectionCtx{
 		AppName:         appName,
 		Provider:        provider,
+		TosURL:          config.TosURL,
+		HelpURL:         config.HelpURL,
 		DonateURL:       config.DonateURL,
 		AskForDonations: wantDonations(),
 		DonateDialog:    false,
