@@ -1,4 +1,4 @@
-/* All the exported functions live here */
+/* All the exported functions should be added here */
 
 package backend
 
@@ -24,7 +24,7 @@ func SwitchOff() {
 }
 
 func Unblock() {
-	//TODO
+	//TODO -
 	fmt.Println("unblock... [not implemented]")
 }
 
@@ -34,6 +34,7 @@ func Quit() {
 		ctx.cfg.SetUserStoppedVPN(true)
 		stopVPN()
 	}
+	cleanupTempDirs()
 }
 
 func DonateAccepted() {
@@ -51,10 +52,7 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 func InitializeBitmaskContext() {
 	p := bitmask.GetConfiguredProvider()
 
-	initOnce.Do(func() {
-		initializeContext(
-			p.Provider, p.AppName)
-	})
+	initOnce.Do(func() { initializeContext(p.Provider, p.AppName) })
 	go ctx.updateStatus()
 
 	go func() {
