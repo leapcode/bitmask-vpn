@@ -1,10 +1,12 @@
+#include <csignal>
+#include <string>
+
 #include <QApplication>
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QtQml>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
-#include <string>
 
 #include "handlers.h"
 #include "qjsonmodel.h"
@@ -32,7 +34,13 @@ std::string getEnv(std::string const& key)
     return val == NULL ? std::string() : std::string(val);
 }
 
+void signalHandler(int signum) {
+    Quit();
+    exit(0);
+}
+
 int main(int argc, char **argv) {
+    signal(SIGINT, signalHandler);
 
     bool debugQml = getEnv("DEBUG_QML_DATA") == "yes";
 
@@ -79,6 +87,7 @@ int main(int argc, char **argv) {
     QObject::connect(&backend, &Backend::quitDone, []() {
             QGuiApplication::quit();
     });
+
 
     /* register statusChanged callback with CGO */
     const char *stCh = "OnStatusChanged";
