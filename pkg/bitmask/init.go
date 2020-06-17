@@ -68,15 +68,17 @@ func InitializeBitmask() (Bitmask, error) {
 	defer pid.ReleasePID()
 
 	conf := config.ParseConfig()
-	conf.Version = "unknown"
 	conf.Printer = initPrinter()
 
 	b, err := initBitmask(conf.Printer)
 	if err != nil {
-		// TODO notify failure
-		log.Fatal(err)
+		return nil, err
 	}
-	go checkAndStartBitmask(b, conf)
+
+	err = checkAndStartBitmask(b, conf)
+	if err != nil {
+		return nil, err
+	}
 
 	var as Autostart
 	if conf.DisableAustostart {
@@ -84,6 +86,7 @@ func InitializeBitmask() (Bitmask, error) {
 	} else {
 		as = newAutostart(config.ApplicationName, "")
 	}
+
 	err = as.Enable()
 	if err != nil {
 		log.Printf("Error enabling autostart: %v", err)
@@ -100,39 +103,19 @@ func initPrinter() *message.Printer {
 	return message.NewPrinter(message.MatchLanguage(locale, "en"))
 }
 
-func checkAndStartBitmask(b Bitmask, conf *config.Config) {
+func checkAndStartBitmask(b Bitmask, conf *config.Config) error {
 	if conf.Obfs4 {
 		err := b.UseTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)
+			return err
 		}
 	}
-	err := checkAndInstallHelpers(b)
-	if err != nil {
-		log.Printf("Is bitmask running? %v", err)
-		os.Exit(1)
-	}
-	err = maybeStartVPN(b, conf)
+
+	err := maybeStartVPN(b, conf)
 	if err != nil {
 		log.Println("Error starting VPN: ", err)
-	}
-}
-
-func checkAndInstallHelpers(b Bitmask) error {
-	helpers, privilege, err := b.VPNCheck()
-	if (err != nil && err.Error() == "nopolkit") || (err == nil && !privilege) {
-		log.Printf("No polkit found")
-		os.Exit(1)
-	} else if err != nil {
-		log.Printf("Error checking vpn: %v", err)
 		return err
-	}
-
-	if !helpers {
-		err = b.InstallHelpers()
-		if err != nil {
-			log.Println("Error installing helpers: ", err)
-		}
 	}
 	return nil
 }

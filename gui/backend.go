@@ -30,7 +30,6 @@ func Unblock() {
 //export Quit
 func Quit() {
 	backend.Quit()
-
 }
 
 //export DonateAccepted

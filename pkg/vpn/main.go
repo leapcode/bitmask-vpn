@@ -51,10 +51,13 @@ func Init() (*Bitmask, error) {
 	}
 	b := Bitmask{tempdir, statusCh, nil, bonafide, launch, "", nil}
 
-	err = b.StopVPN()
-	if err != nil {
-		return nil, err
-	}
+	/*
+		err = b.StopVPN()
+		if err != nil {
+			return nil, err
+		}
+	*/
+
 	err = ioutil.WriteFile(b.getCaCertPath(), config.CaCert, 0600)
 
 	go b.openvpnManagement()

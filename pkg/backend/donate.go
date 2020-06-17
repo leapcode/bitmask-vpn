@@ -3,7 +3,16 @@ package backend
 import (
 	"log"
 	"time"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
+
+func wantDonations() bool {
+	if config.AskForDonations == "true" {
+		return true
+	}
+	return false
+}
 
 func needsDonationReminder() bool {
 	return ctx.cfg.NeedsDonationReminder()

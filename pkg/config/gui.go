@@ -48,7 +48,6 @@ type Config struct {
 	Obfs4             bool
 	DisableAustostart bool
 	StartVPN          bool
-	Version           string
 	Printer           *message.Printer
 }
 
