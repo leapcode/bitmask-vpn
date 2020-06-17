@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-/* NOTE! ATCHUNG! what follow are not silly comments. Well, *this one* is, but
+/* ATCHUNG! what follow are not silly comments. Well, *this one* is, but
    the lines after this are not.
    Those are inline C functions, that are invoked by CGO later on.
    it's also crucial that you don't any extra space between the function

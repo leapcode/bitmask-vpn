@@ -1,5 +1,5 @@
 // +build linux
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -53,32 +53,49 @@ func (l *launcher) close() error {
 	return nil
 }
 
-func (l *launcher) check() (helpers bool, priviledge bool, err error) {
+func (l *launcher) check() (helpers bool, privilege bool, err error) {
+	hasHelpers, err := hasHelpers()
+	if err != nil {
+		return
+	}
+	if !hasHelpers {
+		return false, true, nil
+	}
 
-	/*
-		isRunning, err := isPolkitRunning()
+	isRunning, err := isPolkitRunning()
+	if err != nil {
+		return
+	}
+
+	if !isRunning {
+		polkitPath := getPolkitPath()
+		if polkitPath == "" {
+			return true, false, nil
+		}
+		cmd := exec.Command("setsid", polkitPath)
+		err = cmd.Start()
 		if err != nil {
 			return
 		}
-		if !isRunning {
-			polkitPath := getPolkitPath()
-			if polkitPath == "" {
-				return true, false, nil
-			}
-			cmd := exec.Command("setsid", polkitPath)
-			err = cmd.Start()
-			if err != nil {
-				return
-			}
-			isRunning, err = isPolkitRunning()
-			return true, isRunning, err
-		}
-	*/
+		isRunning, err = isPolkitRunning()
+		return true, isRunning, err
+	}
 
 	return true, true, nil
 }
 
+func hasHelpers() (bool, error) {
+	/* TODO add polkit file too */
+	for _, f := range bitmaskRootPaths {
+		if _, err := os.Stat(f); err == nil {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 func isPolkitRunning() (bool, error) {
+	// TODO shouldn't we also check for polkitd running?
 	var polkitProcNames = [...]string{
 		"polkit-gnome-authentication-agent-1",
 		"polkit-kde-authentication-agent-1",

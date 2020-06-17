@@ -35,6 +35,7 @@ type connectionCtx struct {
 	DonateDialog    bool   `json:"donateDialog"`
 	DonateURL       string `json:"donateURL"`
 	Version         string `json:"version"`
+	Errors          string `json:"errors"`
 	Status          status `json:"status"`
 	bm              bitmask.Bitmask
 	cfg             *config.Config

@@ -34,7 +34,7 @@ std::string getEnv(std::string const& key)
     return val == NULL ? std::string() : std::string(val);
 }
 
-void signalHandler(int signum) {
+void signalHandler(int) {
     Quit();
     exit(0);
 }

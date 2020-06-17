@@ -11,7 +11,6 @@ ApplicationWindow {
 
     property var     ctx
 
-
     Connections {
         target: jsonModel
         onDataChanged: {
@@ -20,7 +19,22 @@ ApplicationWindow {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
             }
+            if (ctx.errors ) {
+               // TODO consider disabling on/off buttons, or quit after closing the dialog
+               if ( ctx.errors  == "nohelpers" ) {
+                   showInitFailure(qsTr("Could not find helpers. Check your installation"))
+               } else if ( ctx.errors == "nopolkit" ) {
+                   showInitFailure(qsTr("Could not find polkit agent."))
+               } else {
+                   console.debug(ctx.errors)
+               }
+            }
         }
+    }
+
+    function showInitFailure(msg) {
+          initFailure.text = msg
+          initFailure.visible  = true
     }
 
     Component.onCompleted: {
@@ -210,9 +224,6 @@ ApplicationWindow {
         text: ""
         detailedText: ""
         visible: false
-        //text: ctx ? qsTr("Can't connect to %1").arg(ctx.appName) : ""
-        //detailedText: ctx ? ctx.errorStartingMsg : ""
-        //visible: ctx.errorStartingMsg != ""
     }
 
     MessageDialog {
@@ -222,7 +233,6 @@ ApplicationWindow {
         title: qsTr("Missing authentication agent")
         text: qsTr("Could not find a polkit authentication agent. Please run one and try again.")
         visible: false
-        //visible: ctx.missingAuthAgent == "true"
     }
 
     MessageDialog {
@@ -232,7 +242,5 @@ ApplicationWindow {
         title: qsTr("Initialization Error")
         text: ""
         visible: false
-        //text: ctx ? ctx.errorInitMsg : ""
-        //visible: ctx.errorInitMsg != ""
     }
 }
