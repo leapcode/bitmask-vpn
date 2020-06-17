@@ -28,7 +28,7 @@ function init {
 
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
-    $GO generate ./pkg/config/version/gen.go
+    $GO generate ./pkg/config/version/genver/gen.go
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"

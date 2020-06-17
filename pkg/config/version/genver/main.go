@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	flPackageName  = flag.String("package", "main", "name for the generated golang package")
+	flPackageName  = flag.String("package", "version", "name for the generated golang package")
 	flVariableName = flag.String("variable", "VERSION", "variable name in the generated golang package")
 	flOutputFile   = flag.String("output", "", "output filename (default stdout)")
 )
