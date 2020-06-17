@@ -175,7 +175,7 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("About...")
-                //onTriggered: { about.visible = true }
+                onTriggered: { about.visible = true }
             }
 
             MenuSeparator {}
@@ -188,48 +188,51 @@ ApplicationWindow {
     }
 
     DonateDialog {
-        visible: false
         id: donate
+        visible: false
     }
-}
 
+    AboutDialog {
+        id: about
+        visible: false
+    }
 
-    /*
     LoginDialog {
         id: login
+        visible: false
     }
-    MessageDialog {
-        id: about
-        buttons: MessageDialog.Ok
-        title: "About"
-        text: "<p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p>
-<p>This service is paid for entirely by donations from users like you. <a href=\"%3\">Please donate</a>.</p>
-<p>By using this application, you agree to the <a href=\"%4\">Terms of Service</a>. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.</p>".arg(ctxSystray.applicationName).arg(ctxSystray.provider).arg(ctxSystray.donateURL).arg(ctxSystray.tosURL)
-        informativeText: "%1 version: %2".arg(ctxSystray.applicationName).arg(ctxSystray.version)
-    }
+
     MessageDialog {
         id: errorStartingVPN
         buttons: MessageDialog.Ok
         modality: Qt.NonModal
-        title: "Error starting VPN"
-        text: "Can't connect to %1".arg(ctxSystray.applicationName)
-        detailedText: ctxSystray.errorStartingMsg
-        visible: ctxSystray.errorStartingMsg != ""
+        title: qsTr("Error starting VPN")
+        text: ""
+        detailedText: ""
+        visible: false
+        //text: ctx ? qsTr("Can't connect to %1").arg(ctx.appName) : ""
+        //detailedText: ctx ? ctx.errorStartingMsg : ""
+        //visible: ctx.errorStartingMsg != ""
     }
+
     MessageDialog {
         id: authAgent
         buttons: MessageDialog.Ok
         modality: Qt.NonModal
-        title: "Missing authentication agent"
-        text: "Could not find a polkit authentication agent. Please run one and try again."
-        visible: ctxSystray.authAgent == true
+        title: qsTr("Missing authentication agent")
+        text: qsTr("Could not find a polkit authentication agent. Please run one and try again.")
+        visible: false
+        //visible: ctx.missingAuthAgent == "true"
     }
+
     MessageDialog {
         id: initFailure
         buttons: MessageDialog.Ok
         modality: Qt.NonModal
-        title: "Initialization Error"
-        text: ctxSystray.errorInitMsg
-        visible: ctxSystray.errorInitMsg != ""
+        title: qsTr("Initialization Error")
+        text: ""
+        visible: false
+        //text: ctx ? ctx.errorInitMsg : ""
+        //visible: ctx.errorInitMsg != ""
     }
-    */
+}

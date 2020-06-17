@@ -6,6 +6,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 )
 
 func initializeBitmask() {
@@ -58,6 +59,7 @@ func initializeContext(provider, appName string) {
 		DonateURL:       config.DonateURL,
 		AskForDonations: wantDonations(),
 		DonateDialog:    false,
+		Version:         version.VERSION,
 		Status:          st,
 	}
 	go trigger(OnStatusChanged)
