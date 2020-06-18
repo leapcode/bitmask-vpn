@@ -12,11 +12,11 @@ import (
 // initializeContext initializes an empty connStatus and assigns it to the
 // global ctx holder. This is expected to be called only once, so the public
 // api uses the sync.Once primitive to call this.
-func initializeContext(provider, appName string) {
+func initializeContext(opts *InitOpts) {
 	var st status = off
 	ctx = &connectionCtx{
-		AppName:         appName,
-		Provider:        provider,
+		AppName:         opts.AppName,
+		Provider:        opts.Provider,
 		TosURL:          config.TosURL,
 		HelpURL:         config.HelpURL,
 		DonateURL:       config.DonateURL,
@@ -28,7 +28,7 @@ func initializeContext(provider, appName string) {
 	errCh := make(chan string)
 	go trigger(OnStatusChanged)
 	go checkErrors(errCh)
-	initializeBitmask(errCh)
+	initializeBitmask(errCh, opts)
 }
 
 func checkErrors(errCh chan string) {
@@ -39,14 +39,14 @@ func checkErrors(errCh chan string) {
 	}
 }
 
-func initializeBitmask(errCh chan string) {
+func initializeBitmask(errCh chan string, opts *InitOpts) {
 	if ctx == nil {
 		log.Println("bug: cannot initialize bitmask, ctx is nil!")
 		os.Exit(1)
 	}
 	bitmask.InitializeLogger()
 
-	b, err := bitmask.InitializeBitmask()
+	b, err := bitmask.InitializeBitmask(opts.SkipLaunch)
 	if err != nil {
 		log.Println("error: cannot initialize bitmask")
 		errCh <- err.Error()

@@ -34,7 +34,6 @@ RCC_DIR = release/.rcc
 UI_DIR = release/.ui
 
 Release:DESTDIR = release
-Release:DESTDIR = release
 Release:OBJECTS_DIR = release/.obj
 Release:MOC_DIR = release/.moc
 Release:RCC_DIR = release/.rcc

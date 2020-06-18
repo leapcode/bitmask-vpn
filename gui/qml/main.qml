@@ -9,7 +9,7 @@ ApplicationWindow {
     id: app
     visible: false
 
-    property var     ctx
+    property var ctx
 
     Connections {
         target: jsonModel

@@ -45,10 +45,18 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 	subscribe(event, f)
 }
 
-func InitializeBitmaskContext() {
-	p := bitmask.GetConfiguredProvider()
+type InitOpts struct {
+	Provider   string
+	AppName    string
+	SkipLaunch bool
+}
 
-	initOnce.Do(func() { initializeContext(p.Provider, p.AppName) })
+func InitializeBitmaskContext(opts *InitOpts) {
+	p := bitmask.GetConfiguredProvider()
+	opts.Provider = p.Provider
+	opts.AppName = p.AppName
+
+	initOnce.Do(func() { initializeContext(opts) })
 	runDonationReminder()
 	go ctx.updateStatus()
 }
@@ -62,7 +70,7 @@ func InstallHelpers() {
 	pickle.InstallHelpers()
 }
 
-func MockUIInteraction() {
-	log.Println("mocking ui interaction on port 8080. \nTry 'curl localhost:8080/{on|off|failed}' to toggle status.")
-	go mockUI()
+func EnableMockBackend() {
+	log.Println("[+] Mocking ui interaction on port 8080. \nTry 'curl localhost:8080/{on|off|failed}' to toggle status.")
+	go enableMockBackend()
 }

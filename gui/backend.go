@@ -44,7 +44,16 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 
 //export InitializeBitmaskContext
 func InitializeBitmaskContext() {
-	backend.InitializeBitmaskContext()
+	opts := &backend.InitOpts{}
+	backend.InitializeBitmaskContext(opts)
+}
+
+//export InitializeTestBitmaskContext
+func InitializeTestBitmaskContext() {
+	opts := &backend.InitOpts{}
+	opts.SkipLaunch = true
+	backend.InitializeBitmaskContext(opts)
+	backend.EnableMockBackend()
 }
 
 //export RefreshContext
