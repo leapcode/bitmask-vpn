@@ -14,8 +14,8 @@ VERSION ?= $(shell git describe)
 
 # go paths
 GOPATH = $(shell go env GOPATH)
-SYSTRAY = 0xacab.org/leap/bitmask-vpn
-GOSYSTRAY = ${GOPATH}/src/${SYSTRAY}
+TARGET_GOLIB=lib/libgoshim.a
+SOURCE_GOLIB=gui/backend.go
 
 # detect OS, we use it for dependencies
 UNAME = $(shell uname -s)
@@ -80,6 +80,15 @@ build_%:
 
 test:
 	@go test -tags "integration $(TAGS)" ./...
+
+golib:
+	CGO_ENABLED=1 go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
+
+test_ui: golib
+	@qmake -o tests/Makefile test.pro
+	@make -C tests clean
+	@make -C tests
+	@./tests/build/test_ui
 
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'

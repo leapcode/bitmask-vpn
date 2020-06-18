@@ -105,6 +105,14 @@ Run it:
 ./build.sh
 
 
+Running tests
+-------------
+
+sudo apt install qml-module-qttest
+make test
+make test_ui
+
+
 i18n
 ----
 

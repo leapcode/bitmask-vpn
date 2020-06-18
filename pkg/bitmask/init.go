@@ -56,14 +56,18 @@ func initBitmask(printer *message.Printer) (Bitmask, error) {
 	return b, err
 }
 
-func InitializeBitmask() (Bitmask, error) {
+func InitializeBitmask(skipLaunch bool) (Bitmask, error) {
+	if skipLaunch {
+		log.Println("Initializing bitmask, but not launching it...")
+	}
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
 
 	err := pid.AcquirePID()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error acquiring PID:", err)
+		return nil, err
 	}
 	defer pid.ReleasePID()
 
@@ -75,13 +79,21 @@ func InitializeBitmask() (Bitmask, error) {
 		return nil, err
 	}
 
-	err = checkAndStartBitmask(b, conf)
+	err = setTransport(b, conf)
 	if err != nil {
 		return nil, err
 	}
 
+	if !skipLaunch {
+		err := maybeStartVPN(b, conf)
+		if err != nil {
+			log.Println("Error starting VPN: ", err)
+			return nil, err
+		}
+	}
+
 	var as Autostart
-	if conf.DisableAustostart {
+	if skipLaunch || conf.DisableAustostart {
 		as = &dummyAutostart{}
 	} else {
 		as = newAutostart(config.ApplicationName, "")
@@ -103,19 +115,13 @@ func initPrinter() *message.Printer {
 	return message.NewPrinter(message.MatchLanguage(locale, "en"))
 }
 
-func checkAndStartBitmask(b Bitmask, conf *config.Config) error {
+func setTransport(b Bitmask, conf *config.Config) error {
 	if conf.Obfs4 {
 		err := b.UseTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)
 			return err
 		}
-	}
-
-	err := maybeStartVPN(b, conf)
-	if err != nil {
-		log.Println("Error starting VPN: ", err)
-		return err
 	}
 	return nil
 }
