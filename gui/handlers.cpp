@@ -30,16 +30,6 @@ void Backend::donateAccepted()
     DonateAccepted();
 }
 
-void Backend::donateRejected()
-{
-    DonateRejected();
-}
-
-void Backend::openURL(QString link)
-{
-    QDesktopServices::openUrl(QUrl(link));
-}
-
 void Backend::quit()
 {
     Quit();

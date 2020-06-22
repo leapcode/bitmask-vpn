@@ -19,11 +19,11 @@ import (
 // }
 import "C"
 
-/* callbacks into C-land */
+/* callbacks into C-land. We keep a registry, and protect its updates with a mutex. */
 
-var mut sync.Mutex
-var stmut sync.Mutex
-var cbs = make(map[string](*[0]byte))
+var callbacks = make(map[string](*[0]byte))
+var callbackMutex sync.Mutex
+
 var initOnce sync.Once
 
 // Events are just a enumeration of all the posible events that C functions can
@@ -38,23 +38,23 @@ const OnStatusChanged string = "OnStatusChanged"
 // subscribe registers a callback from C-land.
 // This callback needs to be passed as a void* C function pointer.
 func subscribe(event string, fp unsafe.Pointer) {
-	mut.Lock()
-	defer mut.Unlock()
+	callbackMutex.Lock()
+	defer callbackMutex.Unlock()
 	e := &Events{}
 	v := reflect.Indirect(reflect.ValueOf(&e))
 	hf := v.Elem().FieldByName(event)
 	if reflect.ValueOf(hf).IsZero() {
 		fmt.Println("ERROR: not a valid event:", event)
 	} else {
-		cbs[event] = (*[0]byte)(fp)
+		callbacks[event] = (*[0]byte)(fp)
 	}
 }
 
 // trigger fires a callback from C-land.
 func trigger(event string) {
-	mut.Lock()
-	defer mut.Unlock()
-	cb := cbs[event]
+	callbackMutex.Lock()
+	defer callbackMutex.Unlock()
+	cb := callbacks[event]
 	if cb != nil {
 		C._do_callback(cb)
 	} else {

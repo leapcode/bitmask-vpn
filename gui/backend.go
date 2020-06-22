@@ -37,11 +37,6 @@ func DonateAccepted() {
 	backend.DonateAccepted()
 }
 
-//export DonateRejected
-func DonateRejected() {
-	backend.DonateRejected()
-}
-
 //export SubscribeToEvent
 func SubscribeToEvent(event string, f unsafe.Pointer) {
 	backend.SubscribeToEvent(event, f)

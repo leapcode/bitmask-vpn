@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"log"
+	"sync"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -16,6 +17,8 @@ const (
 	stoppingStr = "stopping"
 	failedStr   = "failed"
 )
+
+var statusMutex sync.Mutex
 
 // ctx will be our glorious global object.
 // if we ever switch again to a provider-agnostic app, we should keep a map here.
@@ -42,8 +45,8 @@ type connectionCtx struct {
 }
 
 func (c connectionCtx) toJson() ([]byte, error) {
-	stmut.Lock()
-	defer stmut.Unlock()
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err)
@@ -69,8 +72,8 @@ func (c connectionCtx) updateStatus() {
 }
 
 func setStatus(st status) {
-	stmut.Lock()
-	defer stmut.Unlock()
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
 	ctx.Status = st
 	go trigger(OnStatusChanged)
 }

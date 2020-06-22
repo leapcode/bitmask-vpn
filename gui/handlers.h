@@ -34,8 +34,6 @@ public slots:
     void switchOff();
     void unblock();
     void donateAccepted();
-    void donateRejected();
-    void openURL(QString link);
     void quit();
 };
 
