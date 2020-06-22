@@ -19,6 +19,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"path/filepath"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -52,10 +54,15 @@ func Init() (*Bitmask, error) {
 	b := Bitmask{tempdir, statusCh, nil, bonafide, launch, "", nil}
 
 	/*
-		err = b.StopVPN()
-		if err != nil {
-			return nil, err
-		}
+		TODO -- we still want to do this, since it resets the fw/vpn if running
+		from a previous one, but first we need to complete all the
+		system/helper checks that we can do. otherwise this times out with an
+		error that's captured badly as of today.
+
+			err = b.StopVPN()
+			if err != nil {
+				return nil, err
+			}
 	*/
 
 	err = ioutil.WriteFile(b.getCaCertPath(), config.CaCert, 0600)
@@ -86,4 +93,12 @@ func (b *Bitmask) Close() {
 // Version gets the bitmask version string
 func (b *Bitmask) Version() (string, error) {
 	return "", nil
+}
+
+func Cleanup() {
+	dirs, _ := filepath.Glob(path.Join(os.TempDir(), "leap-*"))
+	for _, d := range dirs {
+		log.Println("removing temp dir:", d)
+		os.RemoveAll(d)
+	}
 }

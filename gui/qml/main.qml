@@ -178,7 +178,7 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("Help...")
-                onTriggered: backend.openURL(ctx.helpURL)
+                onTriggered: Qt.openUrlExternally(ctx.helpURL)
             }
 
             MenuItem {

@@ -1,16 +1,9 @@
 package backend
 
 import (
-	"log"
-	"os"
-	"path"
-	"path/filepath"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
 )
 
-func cleanupTempDirs() {
-	dirs, _ := filepath.Glob(path.Join(os.TempDir(), "leap-*"))
-	for _, d := range dirs {
-		log.Println("removing temp dir:", d)
-		os.RemoveAll(d)
-	}
+func cleanup() {
+	vpn.Cleanup()
 }

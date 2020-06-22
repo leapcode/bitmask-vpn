@@ -1,11 +1,23 @@
 package backend
 
 import (
-	"log"
 	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
+
+// runDonationReminder checks every hour if we need to show the reminder,
+// and trigger the launching of the dialog if needed.
+func runDonationReminder() {
+	go func() {
+		for {
+			time.Sleep(time.Hour)
+			if needsDonationReminder() {
+				showDonate()
+			}
+		}
+	}()
+}
 
 func wantDonations() bool {
 	if config.AskForDonations == "true" {
@@ -19,25 +31,16 @@ func needsDonationReminder() bool {
 }
 
 func donateAccepted() {
-	stmut.Lock()
-	defer stmut.Unlock()
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
 	ctx.DonateDialog = false
-	log.Println("marking as donated")
 	ctx.cfg.SetDonated()
 	go trigger(OnStatusChanged)
 }
 
-func donateRejected() {
-	timer := time.NewTimer(time.Hour)
-	go func() {
-		<-timer.C
-		showDonate()
-	}()
-}
-
 func showDonate() {
-	stmut.Lock()
-	defer stmut.Unlock()
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
 	ctx.DonateDialog = true
 	ctx.cfg.SetLastReminded()
 	go trigger(OnStatusChanged)
