@@ -76,6 +76,10 @@ func EnableMockBackend() {
 	go enableMockBackend()
 }
 
+func EnableWebAPI() {
+	go enableWebAPI()
+}
+
 /* these two are a bit redundant since we already add them to ctx. however, we
    want to have them available before everything else, to be able to parse cli
    arguments. In the long run, we probably want to move all vendoring to qt, so

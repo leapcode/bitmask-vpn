@@ -66,6 +66,12 @@ int main(int argc, char **argv) {
                                     "extension, or to control VPN by other means)."),
         },
         {
+            {"w", "web-api"},
+            QApplication::translate(
+                "main",
+                "Enable web api (on port 8080)."),
+        },
+        {
             {"i", "install-helpers"},
             QApplication::translate(
                 "main",
@@ -76,6 +82,7 @@ int main(int argc, char **argv) {
 
     bool hideSystray    = parser.isSet("no-systray");
     bool installHelpers = parser.isSet("install-helpers");
+    bool webAPI         = parser.isSet("web-api");
 
     if (hideSystray) {
         qDebug() << "Not showing systray icon because --no-systray option is set.";
@@ -131,6 +138,9 @@ int main(int argc, char **argv) {
 
     /* let the Go side initialize its internal state */
     InitializeBitmaskContext();
+
+    /* if requested, enable web api for controlling the VPN */
+    if (webAPI) { EnableWebAPI(); };
 
     /* kick off your shoes, put your feet up */
     return app.exec();
