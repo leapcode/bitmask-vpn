@@ -10,6 +10,16 @@ Backend::Backend(QObject *parent) : QObject(parent)
 {
 }
 
+QString Backend::getAppName()
+{
+    return QString(GetAppName());
+}
+
+QString Backend::getVersion()
+{
+    return QString(GetVersion());
+}
+
 void Backend::switchOn()
 {
     SwitchOn();

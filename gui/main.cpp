@@ -1,13 +1,11 @@
 #include <csignal>
-#include <string>
-
 #include <QApplication>
-#include <QSystemTrayIcon>
 #include <QTimer>
 #include <QTranslator>
-#include <QtQml>
-#include <QQmlApplicationEngine>
+#include <QCommandLineParser>
 #include <QQuickWindow>
+#include <QSystemTrayIcon>
+#include <QtQml>
 
 #include "handlers.h"
 #include "qjsonmodel.h"
@@ -42,17 +40,29 @@ void signalHandler(int) {
 
 int main(int argc, char **argv) {
     signal(SIGINT, signalHandler);
-
     bool debugQml = getEnv("DEBUG_QML_DATA") == "yes";
 
-    if (argc > 1 && strcmp(argv[1], "install-helpers") == 0) {
+    Backend backend;
+
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setApplicationName(backend.getAppName());
+    QApplication::setApplicationVersion(backend.getVersion());
+    QApplication app(argc, argv);
+
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription(backend.getAppName() + ": a fast and secure VPN. Powered by Bitmask.");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
+
+    const QStringList args = parser.positionalArguments();
+
+    if (args.at(0) == "install-helpers") {
         qDebug() << "Will try to install helpers with sudo";
         InstallHelpers();
         exit(0);
     }
-
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication app(argc, argv);
 
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
         qDebug() << "No systray icon available. Things might not work for now, sorry...";
@@ -72,7 +82,6 @@ int main(int argc, char **argv) {
 
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
-    Backend backend;
     ctx->setContextProperty("backend", &backend);
 
     /* set the json model, load the qml */

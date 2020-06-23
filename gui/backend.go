@@ -12,6 +12,16 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/backend"
 )
 
+//export GetVersion
+func GetVersion() *C.char {
+	return (*C.char)(backend.GetVersion())
+}
+
+//export GetAppName
+func GetAppName() *C.char {
+	return (*C.char)(backend.GetAppName())
+}
+
 //export SwitchOn
 func SwitchOn() {
 	backend.SwitchOn()
