@@ -80,7 +80,7 @@ ApplicationWindow {
     SystemTrayIcon {
 
         id: systray
-        visible: true
+        visible: systrayVisible
 
         onActivated: {
             // this looks like a widget bug. middle click (reasons 3 or 4)
@@ -105,7 +105,9 @@ ApplicationWindow {
             tooltip = qsTr("Checking status...")
             console.debug("systray init completed")
             hide();
-            show();
+            if (systrayVisible) {
+                show();
+            }
         }
 
         menu: Menu {
