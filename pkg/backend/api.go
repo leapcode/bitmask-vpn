@@ -9,6 +9,7 @@ import (
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 )
 
@@ -73,4 +74,18 @@ func InstallHelpers() {
 func EnableMockBackend() {
 	log.Println("[+] Mocking ui interaction on port 8080. \nTry 'curl localhost:8080/{on|off|failed}' to toggle status.")
 	go enableMockBackend()
+}
+
+/* these two are a bit redundant since we already add them to ctx. however, we
+   want to have them available before everything else, to be able to parse cli
+   arguments. In the long run, we probably want to move all vendoring to qt, so
+   this probably should not live in the backend. */
+
+func GetVersion() *C.char {
+	return C.CString(version.VERSION)
+}
+
+func GetAppName() *C.char {
+	p := bitmask.GetConfiguredProvider()
+	return C.CString(p.AppName)
 }
