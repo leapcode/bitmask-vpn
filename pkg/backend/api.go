@@ -30,10 +30,11 @@ func Unblock() {
 func Quit() {
 	if ctx.Status != off {
 		go setStatus(stopping)
+		ctx.cfg.SetUserStoppedVPN(false)
+	} else {
 		ctx.cfg.SetUserStoppedVPN(true)
-		stopVPN()
 	}
-	cleanup()
+	closeVPN()
 }
 
 func DonateAccepted() {

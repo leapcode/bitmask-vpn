@@ -19,8 +19,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
-	"path/filepath"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -76,7 +74,7 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 	return b.statusCh
 }
 
-// Close the connection to bitmask
+// Close the connection to bitmask, and does cleanup of temporal files
 func (b *Bitmask) Close() {
 	log.Printf("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
@@ -93,12 +91,4 @@ func (b *Bitmask) Close() {
 // Version gets the bitmask version string
 func (b *Bitmask) Version() (string, error) {
 	return "", nil
-}
-
-func Cleanup() {
-	dirs, _ := filepath.Glob(path.Join(os.TempDir(), "leap-*"))
-	for _, d := range dirs {
-		log.Println("removing temp dir:", d)
-		os.RemoveAll(d)
-	}
 }
