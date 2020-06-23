@@ -66,6 +66,11 @@ func InitializeTestBitmaskContext() {
 	backend.EnableMockBackend()
 }
 
+//export EnableWebAPI
+func EnableWebAPI() {
+	backend.EnableWebAPI()
+}
+
 //export RefreshContext
 func RefreshContext() *C.char {
 	return (*C.char)(backend.RefreshContext())
