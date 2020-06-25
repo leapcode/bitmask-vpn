@@ -34,7 +34,7 @@ func Quit() {
 	} else {
 		ctx.cfg.SetUserStoppedVPN(true)
 	}
-	closeVPN()
+	ctx.bm.Close()
 }
 
 func DonateAccepted() {
