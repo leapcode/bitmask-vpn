@@ -19,7 +19,3 @@ func stopVPN() {
 		log.Println(err)
 	}
 }
-
-func closeVPN() {
-	ctx.bm.Close()
-}
