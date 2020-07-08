@@ -12,8 +12,6 @@ class QJsonWatch : public QObject {
 
     Q_OBJECT
 
-    QJsonModel *model;
-
 public:
 
 signals:
