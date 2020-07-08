@@ -20,8 +20,8 @@ fi
 if [ "$XBUILD" == "$WIN64" ]
 then
     # TODO allow to override vars
-    QMAKE="`pwd`/../mxe/usr/x86_64-w64-mingw32.static/qt5/bin/qmake"
-    PATH="`pwd`/../mxe/usr/bin"/:$PATH
+    QMAKE="`pwd`/../../mxe/usr/x86_64-w64-mingw32.static/qt5/bin/qmake"
+    PATH="`pwd`/../../mxe/usr/bin"/:$PATH
     CC=x86_64-w64-mingw32.static-gcc
 else
     if [ "$QMAKE" == "" ]
