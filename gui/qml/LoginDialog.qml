@@ -4,19 +4,19 @@ import QtQuick.Controls 1.4
 
 Dialog {
     standardButtons: StandardButton.Ok
-    title: "Login"
+    title: qsTr("Login")
     Column {
         anchors.fill: parent
         Text {
-            text: "Log in with your library credentials"
+            text: qsTr("Log in with your library credentials")
         }
         TextField {
             id: username
-            placeholderText: "patron id"
+            placeholderText: qsTr("patron id")
         }
         TextField {
             id: password
-            placeholderText: "password"
+            placeholderText: qsTr("password")
             echoMode: TextInput.PasswordEchoOnEdit
         }
     }

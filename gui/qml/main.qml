@@ -52,16 +52,20 @@ ApplicationWindow {
     function toHuman(st) {
         switch(st) {
             case "off":
-                // TODO improve string interpolation, give context to translators etc
-                return qsTr(ctx.appName + " off");
+		//: %1 -> application name
+                return qsTr("%1 off").arg(ctx.appName);
             case "on":
-                return qsTr(ctx.appName + " on");
+		//: %1 -> application name
+                return qsTr("%1 on").arg(ctx.appName);
             case "connecting":
-                return qsTr("Connecting to " + ctx.appName);
+		//: %1 -> application name
+                return qsTr("Connecting to %1").arg(ctx.appName);
             case "stopping":
-                return qsTr("Stopping " + ctx.appName);
+		//: %1 -> application name
+                return qsTr("Stopping %1").arg(ctx.appName);
             case "failed":
-                return qsTr(ctx.appName + " blocking internet"); // TODO failed is not handed yet
+		//: %1 -> application name
+                return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handed yet
         }
     }
 

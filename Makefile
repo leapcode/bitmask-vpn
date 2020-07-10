@@ -251,23 +251,12 @@ icon:
 	@make -C icon
 
 
-LANGS ?= $(foreach path,$(wildcard locales/*),$(patsubst locales/%,%,$(path)))
-empty :=
-space := $(empty) $(empty)
-lang_list := $(subst $(space),,$(foreach lang,$(LANGS),$(lang),))
+LANGS ?= $(foreach path,$(wildcard gui/i18n/main_*.ts),$(patsubst gui/i18n/main_%.ts,%,$(path)))
 
-locales: $(foreach lang,$(LANGS),get_$(lang)) cmd/bitmask-vpn/catalog.go
+locales: $(foreach lang,$(LANGS),get_$(lang))
 
 generate_locales:
-	@gotext update -lang=$(lang_list) ./pkg/systray ./pkg/bitmask
-	@make -C tools/transifex
+	@lupdate bitmask.pro
 
-locales/%/out.gotext.json: pkg/systray/systray.go pkg/systray/notificator.go pkg/bitmask/standalone.go 
-	@gotext update -lang=$* ./pkg/systray ./pkg/bitmask
-
-cmd/bitmask-vpn/catalog.go: $(foreach lang,$(LANGS),locales/$(lang)/messages.gotext.json)
-	@gotext update -lang=$(lang_list) -out cmd/bitmask-vpn/catalog.go ./pkg/systray ./pkg/bitmask
-
-get_%: locales/%/out.gotext.json
-	@make -C tools/transifex build
-	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/RiseupVPN/translation/${subst -,_,$*}/?file" | tools/transifex/transifex t2g locales/$*/
+get_%:
+	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/riseupvpn-test/translation/${subst -,_,$*}/?file" > gui/i18n/main_$*.ts

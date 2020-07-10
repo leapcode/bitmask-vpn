@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QSystemTrayIcon>
 #include <QTimer>
+#include <QTranslator>
 #include <QtQml>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -56,6 +57,10 @@ int main(int argc, char **argv) {
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
         qDebug() << "No systray icon available. Things might not work for now, sorry...";
     }
+
+    QTranslator translator;
+    translator.load(QLocale(), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
+    app.installTranslator(&translator);
     
     app.setQuitOnLastWindowClosed(false);
     QQmlApplicationEngine engine;

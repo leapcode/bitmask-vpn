@@ -47,3 +47,8 @@ Debug:UI_DIR = debug/.ui
 
 DISTFILES += \
     README.md
+
+CONFIG += lrelease embed_translations
+
+TRANSLATIONS += $$files(gui/i18n/*.ts, true)
+RESOURCES += $$files(gui/i18n/*.qm, true)
