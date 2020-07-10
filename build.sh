@@ -51,6 +51,7 @@ function buildQmake {
 
 echo "[+] Building BitmaskVPN"
 
+lrelease bitmask.pro
 buildGoLib
 buildQmake
 make -C qtbuild clean

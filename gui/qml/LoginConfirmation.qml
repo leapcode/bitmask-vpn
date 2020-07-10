@@ -4,8 +4,8 @@ import QtQuick.Controls 1.4
 
 Dialog {
     standardButtons: StandardButton.Ok
-    title: "Login Success"
-    text: "You are now logged in, connecting now"
+    title: qsTr("Login Success")
+    text: qsTr("You are now logged in, connecting now")
 
     visible: ctxSystray.loginConfirmationDialog == true
 }
