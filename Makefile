@@ -3,7 +3,7 @@
 # (c) LEAP Encryption Access Project, 2019-2020
 #########################################################################
 
-.PHONY: all get build icon locales generate_locales clean
+.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw
 
 XBUILD ?= no
 SKIP_CACHECK ?= no
@@ -27,6 +27,8 @@ TEMPLATES = branding/templates
 SCRIPTS = branding/scripts
 
 all: icon locales helper build
+
+HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
 
 
 #########################################################################
@@ -79,11 +81,17 @@ else
 	@gui/build.sh
 endif
 
-build_installer: build
-	# TODO check for binarycreator in path
+build_installer: check_qtifw build
 	cp -r qtbuild/release/${PROVIDER}-vpn.app installer/packages/${PROVIDER}vpn/data/
 	cp build/bin/${PLATFORM}/bitmask-helper installer/packages/${PROVIDER}vpn/data/
 	cd installer && qmake && make
+
+check_qtifw: 
+ifdef HAS_QTIFW
+	@echo "[+] Found QTIFW"
+else
+	$(error "[!] Cannot find QTIFW. Please install it and add it to your PATH")
+endif
 
 # ----------- FIXME ------- old build, reuse or delete -----------------------------
 
@@ -113,6 +121,9 @@ _build_xbuild_done:
 # --------- FIXME -----------------------------------------------------------------------
 
 clean:
+	@rm -rf installer/*.app
+	@rm -rf installer/packages/${PROVIDER}vpn/data/*.app
+	@rm -rf installer/packages/${PROVIDER}vpn/data/bitmask-helper
 	@rm -rf build/
 	@unlink branding/assets/default
 
