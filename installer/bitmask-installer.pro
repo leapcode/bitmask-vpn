@@ -17,5 +17,16 @@ OTHER_FILES += \
     packages/riseupvpn/meta/package.xml \
     packages/riseupvpn/meta/install.js \
     packages/riseupvpn/data/README.txt \
-    packages/riseupvpn/data/riseup-vpn
 
+macx {
+    OTHER_FILES += "packages/riseupvpn/data/riseup-vpn.app"
+    OTHER_FILES += "packages/riseupvpn/data/bitmask-helper"
+}
+linux {
+    OTHER_FILES += "packages/riseupvpn/data/riseup-vpn"
+    OTHER_FILES += "packages/riseupvpn/data/bitmask-helper"
+}
+win32{
+    OTHER_FILES += "packages/riseupvpn/data/riseup-vpn.exe"
+    OTHER_FILES += "packages/riseupvpn/data/helper.exe"
+}	

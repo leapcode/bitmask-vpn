@@ -45,7 +45,6 @@ depends:
 
 dependsLinux:
 	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls libqt5qml5 qtdeclarative5-dev qml-module-qt-labs-platform qml-module-qt-labs-qmlmodels qml-module-qtquick-extras qml-module-qtquick-dialogs
-
 	@make -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
@@ -54,13 +53,16 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
-build: build_helper
-	@gui/build.sh
+golib:
+	CGO_ENABLED=1 go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
 	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" ./cmd/bitmask-helper/
+
+build: build_helper
+	@gui/build.sh
 
 build_old:
 ifeq (${XBUILD}, yes)
@@ -77,28 +79,13 @@ else
 	@gui/build.sh
 endif
 
+build_installer: build
+	# TODO check for binarycreator in path
+	cp -r qtbuild/release/${PROVIDER}-vpn.app installer/packages/${PROVIDER}vpn/data/
+	cp build/bin/${PLATFORM}/bitmask-helper installer/packages/${PROVIDER}vpn/data/
+	cd installer && qmake && make
 
-build_old_%:
-	@echo "PLATFORM: ${PLATFORM}"
-	@mkdir -p build/bin/${PLATFORM}
-	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
-	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
-	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
-
-test:
-	@go test -tags "integration $(TAGS)" ./pkg/...
-
-golib:
-	CGO_ENABLED=1 go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
-
-test_ui: golib
-	@qmake -o tests/Makefile test.pro
-	@make -C tests clean
-	@make -C tests
-	@./tests/build/test_ui
-
-build_win:
-	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
+# ----------- FIXME ------- old build, reuse or delete -----------------------------
 
 ARCH ?= amd64
 
@@ -133,6 +120,8 @@ _build_xbuild_done:
 	@echo
 	@echo 'Done. You can do "make packages" now.'
 
+# --------- FIXME -----------------------------------------------------------------------
+
 clean:
 	@rm -rf build/
 	@unlink branding/assets/default
@@ -143,6 +132,21 @@ clean:
 
 build_all_providers:
 	branding/scripts/build-all-providers
+
+########################################################################
+# tests
+#########################################################################
+
+
+test:
+	@go test -tags "integration $(TAGS)" ./pkg/...
+
+test_ui: golib
+	@qmake -o tests/Makefile test.pro
+	@make -C tests clean
+	@make -C tests
+	@./tests/build/test_ui
+
 
 #########################################################################
 # packaging templates
