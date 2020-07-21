@@ -65,6 +65,8 @@ func parseCliArgs() {
 	// OSX helper does not respond to arguments
 }
 
+func initializeService(port int) {}
+
 func daemonize() {
 	cntxt := &daemon.Context{
 		PidFileName: "pid",

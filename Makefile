@@ -54,11 +54,13 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
-dependsCygwin:
-	@choco install -y golang python nssm nsis wget 7zip
-	
-build:
-	gui/build.sh
+build: build_helper
+	@gui/build.sh
+
+build_helper:
+	@echo "PLATFORM: ${PLATFORM}"
+	@mkdir -p build/bin/${PLATFORM}
+	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" ./cmd/bitmask-helper/
 
 build_old:
 ifeq (${XBUILD}, yes)
@@ -76,8 +78,12 @@ else
 endif
 
 
-helper:
-	go build -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" cmd/bitmask-helper/main.go
+build_old_%:
+	@echo "PLATFORM: ${PLATFORM}"
+	@mkdir -p build/bin/${PLATFORM}
+	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
+	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
+	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
 
 test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
