@@ -21,6 +21,7 @@ OTHER_FILES += \
 macx {
     OTHER_FILES += "packages/riseupvpn/data/riseup-vpn.app"
     OTHER_FILES += "packages/riseupvpn/data/bitmask-helper"
+    OTHER_FILES += "packages/riseupvpn/data/installer.py"
 }
 linux {
     OTHER_FILES += "packages/riseupvpn/data/riseup-vpn"
