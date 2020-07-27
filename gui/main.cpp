@@ -98,12 +98,6 @@ int main(int argc, char **argv) {
                 "Install helpers (linux only, requires sudo)."),
         },
         {
-            {"v", "version"},
-            QApplication::translate(
-                "main",
-                "Version of the bitmask-vpn."),
-        },
-        {
             {"o", "obfs4"},
             QApplication::translate(
                 "main",

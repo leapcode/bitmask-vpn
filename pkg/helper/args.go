@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"path/filepath"
 )
 
 const (
@@ -22,11 +23,11 @@ var (
 		"--tls-client",
 		"--remote-cert-tls", "server",
 		"--dhcp-option", "DNS", nameserver,
-		"--log", LogFolder + "openvpn.log",
 		"--tls-version-min", "1.0",
+		"--log", filepath.Join(LogFolder, "openvpn-leap.log"),
 	}
 
-	allowendArgs = map[string][]string{
+	allowedArgs = map[string][]string{
 		"--remote":            []string{"IP", "NUMBER", "PROTO"},
 		"--tls-cipher":        []string{"CIPHER"},
 		"--cipher":            []string{"CIPHER"},
@@ -44,7 +45,7 @@ var (
 
 	cipher  = regexp.MustCompile("^[A-Z0-9-]+$")
 	formats = map[string]func(s string) bool{
-		"NUMBER": isNumber,
+			"NUMBER": isNumber,
 		"PROTO":  isProto,
 		"IP":     isIP,
 		"CIPHER": cipher.MatchString,
@@ -54,9 +55,9 @@ var (
 
 func parseOpenvpnArgs(args []string) []string {
 	newArgs := fixedArgs
-	newArgs = append(newArgs, platformOpenvpnFlags...)
+	newArgs = append(newArgs, getPlatformOpenvpnFlags()...)
 	for i := 0; i < len(args); i++ {
-		params, ok := allowendArgs[args[i]]
+		params, ok := allowedArgs[args[i]]
 		if !ok {
 			log.Printf("Invalid openvpn arg: %s", args[i])
 			continue

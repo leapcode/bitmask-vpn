@@ -22,6 +22,11 @@ macx {
     OTHER_FILES += "packages/riseupvpn/data/riseup-vpn.app"
     OTHER_FILES += "packages/riseupvpn/data/bitmask-helper"
     OTHER_FILES += "packages/riseupvpn/data/installer.py"
+    OTHER_FILES += "packages/riseupvpn/data/se.leap.bitmask-helper.plist"
+    OTHER_FILES += "packages/riseupvpn/data/openvpn.leap"
+    OTHER_FILES += "packages/riseupvpn/data/helper/bitmask.pf.conf"
+    OTHER_FILES += "packages/riseupvpn/data/client.up.sh"
+    OTHER_FILES += "packages/riseupvpn/data/client.down.sh"
 }
 linux {
     OTHER_FILES += "packages/riseupvpn/data/riseup-vpn"

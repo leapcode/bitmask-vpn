@@ -29,6 +29,7 @@ SCRIPTS = branding/scripts
 all: icon locales helper build
 
 HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
+OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 
 
 #########################################################################
@@ -55,16 +56,21 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
+ifeq ($(PLATFORM), darwin)
+ EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
+else
+ EXTRA_FLAGS =
+endif
 golib:
-	CGO_ENABLED=1 go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
+	CGO_ENABLED=1 ${EXTRA_FLAGS} go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
+
+build: build_helper build_openvpn
+	@XBUILD=no gui/build.sh
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
 	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" ./cmd/bitmask-helper/
-
-build: build_helper
-	@gui/build.sh
 
 build_old:
 ifeq (${XBUILD}, yes)
@@ -81,9 +87,16 @@ else
 	@gui/build.sh
 endif
 
+build_openvpn:
+	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
+
 build_installer: check_qtifw build
 	cp -r qtbuild/release/${PROVIDER}-vpn.app installer/packages/${PROVIDER}vpn/data/
 	cp build/bin/${PLATFORM}/bitmask-helper installer/packages/${PROVIDER}vpn/data/
+	cp $(OPENVPN_BIN) installer/packages/${PROVIDER}vpn/data/openvpn.leap
+	cp branding/templates/osx/bitmask.pf.conf installer/packages/${PROVIDER}vpn/data/helper/bitmask.pf.conf
+	cp branding/templates/osx/client.up.sh installer/packages/${PROVIDER}vpn/data/
+	cp branding/templates/osx/client.down.sh installer/packages/${PROVIDER}vpn/data/
 	cd installer && qmake && make
 
 check_qtifw: 
@@ -263,6 +276,7 @@ package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
 installer_win:
+	# XXX refactor with build_installer
 	cp helper.exe ${WININST_DATA}
 	cp qtbuild/release/${TARGET}.exe ${WININST_DATA}${PROVIDER}-vpn.exe
 	windeployqt --qmldir gui/qml ${WININST_DATA}${PROVIDER}-vpn.exe

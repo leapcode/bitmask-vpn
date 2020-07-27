@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>RiseupVPN Installer 1.0</Name>
+    <Publisher>LEAP Encryption Access Project</Publisher>
     <Title>RiseupVPN Installer</Title>
     <Version>1.0.0</Version>
     <TargetDir>@ApplicationsDir@/RiseupVPN</TargetDir>
@@ -9,4 +10,5 @@
             <Url>http://localhost/repository/</Url>
         </Repository>
     </RemoteRepositories>
+    <WizardStyle>mac</WizardStyle>
 </Installer>
