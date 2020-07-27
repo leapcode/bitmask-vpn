@@ -40,11 +40,15 @@ var (
 	openvpnPath      = path.Join(appPath, "openvpn.exe")
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
 	platformOpenvpnFlags = []string{
+	httpServerConf = &httpConf{}
+)
+
+func getPlatformOpenvpnFlags() []string {
+	return []string{
 		"--script-security", "1",
 		"--block-outside-dns",
 	}
-	httpServerConf = &httpConf{}
-)
+}
 
 func getExecDir() string {
 	ex, err := os.Executable()

@@ -1,5 +1,5 @@
 // +build darwin
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ package helper
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"log"
 	"os"
 	"os/exec"
@@ -36,30 +37,39 @@ import (
 	"strconv"
 	"strings"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/sevlyar/go-daemon"
 )
 
 const (
-	appPath     = "/Applications/" + config.ApplicationName + ".app/"
-	helperPath  = appPath + "Contents/helper/"
-	LogFolder   = helperPath
-	openvpnPath = appPath + "Contents/Resources/openvpn.leap"
-
-	rulefilePath   = helperPath + "bitmask.pf.conf"
 	bitmask_anchor = "com.apple/250.BitmaskFirewall"
 	gateways_table = "bitmask_gateways"
-
 	pfctl = "/sbin/pfctl"
+	LogFolder = "/var/log/"
 )
 
-var (
-	platformOpenvpnFlags = []string{
+func _getExecPath() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Print("error while getting executable path!")
+	}
+	return filepath.Dir(ex)
+}
+
+func getHelperPath() string {
+	execPath := _getExecPath()
+	hp := filepath.Join(execPath, "../../../", "bitmask-helper")
+	log.Println(">>> DEBUG: helper", hp)
+	return hp
+}
+
+func getPlatformOpenvpnFlags() []string {
+	helperPath := getHelperPath()
+	return []string{
 		"--script-security", "2",
 		"--up", helperPath + "client.up.sh",
 		"--down", helperPath + "client.down.sh",
 	}
-)
+}
 
 func parseCliArgs() {
 	// OSX helper does not respond to arguments
@@ -97,6 +107,9 @@ func runServer(preferredPort int) {
 }
 
 func getOpenvpnPath() string {
+	execPath := _getExecPath()
+	openvpnPath := filepath.Join(execPath, "../../../", "openvpn.leap")
+	log.Println(">>> DEBUG: openvpn", openvpnPath)
 	return openvpnPath
 }
 
@@ -190,6 +203,9 @@ func loadBitmaskAnchor() error {
 }
 
 func getRulefilePath() (string, error) {
+	rulefilePath := filepath.Join(getHelperPath(), "helper", "bitmask.pf.conf")
+	log.Println("DEBUG: rule file path", rulefilePath)
+
 	if _, err := os.Stat(rulefilePath); !os.IsNotExist(err) {
 		return rulefilePath, nil
 	}

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+set -x
 
 XBUILD=${XBUILD-no}
 WIN64="win64"
@@ -30,6 +30,7 @@ else
     fi
 fi
 
+PLATFORM=`uname -s`
 
 function init {
     mkdir -p lib
@@ -38,10 +39,18 @@ function init {
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
     $GO generate ./pkg/config/version/genver/gen.go
+    if [ "$PLATFORM" == "Darwin" ]
+    then
+        OSX_TARGET=10.12
+        GOOS=darwin
+	CC=clang
+	CGO_CFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
+	CGO_LDFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
+    fi
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"
-        CGO_ENABLED=1 go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
+        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
     if [ "$XBUILD" == "$WIN64" ]
     then
