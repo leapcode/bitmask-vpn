@@ -34,7 +34,6 @@ public slots:
     QString getVersion();
     void switchOn();
     void switchOff();
-    void unblock();
     void donateAccepted();
     void quit();
 };
