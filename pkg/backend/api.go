@@ -4,7 +4,6 @@ package backend
 
 import (
 	"C"
-	"fmt"
 	"log"
 	"strconv"
 	"unsafe"
@@ -31,7 +30,9 @@ func Quit() {
 	} else {
 		ctx.cfg.SetUserStoppedVPN(true)
 	}
-	ctx.bm.Close()
+	if ctx.bm != nil {
+		ctx.bm.Close()
+	}
 }
 
 func DonateAccepted() {
@@ -55,7 +56,9 @@ func InitializeBitmaskContext(opts *InitOpts) {
 
 	initOnce.Do(func() { initializeContext(opts) })
 	runDonationReminder()
-	go ctx.updateStatus()
+	if ctx.bm != nil {
+		go ctx.updateStatus()
+	}
 }
 
 func RefreshContext() *C.char {

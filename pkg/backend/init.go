@@ -45,6 +45,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		os.Exit(1)
 	}
 	bitmask.InitializeLogger()
+	ctx.cfg = config.ParseConfig()
 
 	b, err := bitmask.InitializeBitmask(opts.SkipLaunch)
 	if err != nil {
@@ -70,5 +71,4 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	}
 
 	ctx.bm = b
-	ctx.cfg = config.ParseConfig()
 }
