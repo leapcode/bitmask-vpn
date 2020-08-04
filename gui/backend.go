@@ -32,11 +32,6 @@ func SwitchOff() {
 	backend.SwitchOff()
 }
 
-//export Unblock
-func Unblock() {
-	backend.Unblock()
-}
-
 //export Quit
 func Quit() {
 	backend.Quit()

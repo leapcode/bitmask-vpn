@@ -24,11 +24,6 @@ func SwitchOff() {
 	go stopVPN()
 }
 
-func Unblock() {
-	//TODO -
-	fmt.Println("unblock... [not implemented]")
-}
-
 func Quit() {
 	if ctx.Status != off {
 		go setStatus(stopping)

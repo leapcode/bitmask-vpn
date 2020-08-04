@@ -30,11 +30,6 @@ void Backend::switchOff()
     SwitchOff();
 }
 
-void Backend::unblock()
-{
-    Unblock();
-}
-
 void Backend::donateAccepted()
 {
     DonateAccepted();
