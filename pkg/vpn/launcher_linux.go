@@ -230,7 +230,8 @@ func bitmaskRootPath() (string, error) {
 			return path, nil
 		}
 	}
-	return "", errors.New("No bitmask-root found")
+	log.Println("Can't find bitmask-root")
+	return "", errors.New("nohelpers")
 }
 
 func getOpenvpnPath() string {

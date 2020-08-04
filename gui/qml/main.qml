@@ -20,12 +20,14 @@ ApplicationWindow {
                 donate.visible = true
             }
             if (ctx.errors ) {
-               // TODO consider disabling on/off buttons, or quit after closing the dialog
                if ( ctx.errors  == "nohelpers" ) {
                    showInitFailure(qsTr("Could not find helpers. Check your installation"))
                } else if ( ctx.errors == "nopolkit" ) {
                    showInitFailure(qsTr("Could not find polkit agent."))
                } else {
+                   //: %1 -> application name
+                   //: %2 -> error string
+                   showInitFailure(qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors))
                    console.debug(ctx.errors)
                }
             }
@@ -248,5 +250,7 @@ ApplicationWindow {
         title: qsTr("Initialization Error")
         text: ""
         visible: false
+    	onAccepted: backend.quit()
+    	onRejected: backend.quit()
     }
 }
