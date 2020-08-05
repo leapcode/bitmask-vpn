@@ -56,6 +56,9 @@ ApplicationWindow {
          Loaders as a placeholder for all the many dialogs, or to load
          a nice splash screen etc...  */
 
+        console.debug("Pre-seeded providers:");
+        console.debug(providers.getJson());
+
         app.visible = true;
         show();
         hide();

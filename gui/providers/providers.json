@@ -1,0 +1,4 @@
+[
+    {"name": "provider1", "url": "https://example.com"},
+    {"name": "provider2", "url": "https://foobar.com"}
+]

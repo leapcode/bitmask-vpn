@@ -40,7 +40,6 @@ void signalHandler(int) {
 
 int main(int argc, char **argv) {
     signal(SIGINT, signalHandler);
-    bool debugQml = getEnv("DEBUG_QML_DATA") == "yes";
 
     Backend backend;
 
@@ -104,19 +103,27 @@ int main(int argc, char **argv) {
     QTranslator translator;
     translator.load(QLocale(), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
     app.installTranslator(&translator);
-    
+
     QQmlApplicationEngine engine;
     QQmlContext *ctx = engine.rootContext();
 
     QJsonModel *model = new QJsonModel;
 
+    /* load providers json */
+    QFile providerJson (":/providers.json");
+    providerJson.open(QIODevice::ReadOnly | QIODevice::Text);
+    QJsonModel *providers = new QJsonModel;
+    providers->loadJson(providerJson.readAll());
+
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
     ctx->setContextProperty("backend", &backend);
 
-    /* we pass the json model and set some useful flags */
+    /* set the json model, load providers.json */
     ctx->setContextProperty("jsonModel", model);
-    ctx->setContextProperty("debugQml", debugQml);
+    ctx->setContextProperty("providers", providers);
+
+    /* set some useful flags */
     ctx->setContextProperty("systrayVisible", !hideSystray);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
@@ -132,7 +139,6 @@ int main(int argc, char **argv) {
     QObject::connect(&backend, &Backend::quitDone, []() {
             QGuiApplication::quit();
     });
-
 
     /* register statusChanged callback with CGO */
     const char *stCh = "OnStatusChanged";
