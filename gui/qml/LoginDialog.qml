@@ -22,7 +22,6 @@ Dialog {
     }
 
     visible: false
-    //visible: ctx.showLogin == true
-    //onAccepted: backend.login(username.text, password.text)
-    onRejected: backend.quit()  // TODO: it doesn't close
+    onAccepted: backend.login(username.text, password.text)
+    onRejected: backend.quit()
 }

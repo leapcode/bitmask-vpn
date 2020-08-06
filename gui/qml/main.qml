@@ -19,6 +19,10 @@ ApplicationWindow {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
             }
+            if (ctx.loginDialog == 'true') {
+                console.debug(jsonModel.getJson())
+                login.visible = true
+            }
             if (ctx.errors ) {
                if ( ctx.errors  == "nohelpers" ) {
                    showInitFailure(qsTr("Could not find helpers. Check your installation"))

@@ -35,6 +35,7 @@ public slots:
     void switchOn();
     void switchOff();
     void donateAccepted();
+    void login(QString username, QString password);
     void quit();
 };
 
