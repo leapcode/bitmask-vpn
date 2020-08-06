@@ -22,6 +22,11 @@ func GetAppName() *C.char {
 	return (*C.char)(backend.GetAppName())
 }
 
+//export Login
+func Login(username, password *C.char) {
+	backend.Login(C.GoString(username), C.GoString(password))
+}
+
 //export SwitchOn
 func SwitchOn() {
 	backend.SwitchOn()

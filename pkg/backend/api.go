@@ -13,6 +13,21 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 )
 
+func Login(username, password string) {
+	success, err := ctx.bm.DoLogin(username, password)
+	if err != nil {
+		// TODO
+		log.Printf("Error login: %v", err)
+	} else if success {
+		// TODO: Notify success
+		log.Printf("Logged in as %s", username)
+	} else {
+		// TODO: display login again with an err
+		log.Printf("Failed to login as %s", username)
+		ctx.LoginDialog = true
+	}
+}
+
 func SwitchOn() {
 	go setStatus(starting)
 	go startVPN()
@@ -57,6 +72,9 @@ func InitializeBitmaskContext(opts *InitOpts) {
 	initOnce.Do(func() { initializeContext(opts) })
 	runDonationReminder()
 	if ctx.bm != nil {
+		if ctx.bm.NeedsCredentials() {
+			ctx.LoginDialog = true
+		}
 		go ctx.updateStatus()
 	}
 }
