@@ -6,6 +6,7 @@ import (
 	"C"
 	"fmt"
 	"log"
+	"strconv"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
@@ -76,8 +77,12 @@ func EnableMockBackend() {
 	go enableMockBackend()
 }
 
-func EnableWebAPI() {
-	go enableWebAPI()
+func EnableWebAPI(port string) {
+	intPort, err := strconv.Atoi(port)
+	if err != nil {
+		log.Fatal("Cannot parse port", port)
+	}
+	go enableWebAPI(intPort)
 }
 
 /* these two are a bit redundant since we already add them to ctx. however, we

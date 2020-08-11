@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
             {"w", "web-api"},
             QApplication::translate(
                 "main",
-                "Enable web api (on port 8080)."),
+                "Enable web api."),
         },
         {
             {"i", "install-helpers"},
@@ -78,11 +78,14 @@ int main(int argc, char **argv) {
                 "Install helpers (linux only, requires sudo)."),
         },
     });
+    QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web api port (default: 8080)"), "port", "8080");
+    parser.addOption(webPortOption);
     parser.process(app);
 
     bool hideSystray    = parser.isSet("no-systray");
     bool installHelpers = parser.isSet("install-helpers");
     bool webAPI         = parser.isSet("web-api");
+    QString webPort     = parser.value("web-port");
 
     if (hideSystray) {
         qDebug() << "Not showing systray icon because --no-systray option is set.";
@@ -140,7 +143,11 @@ int main(int argc, char **argv) {
     InitializeBitmaskContext();
 
     /* if requested, enable web api for controlling the VPN */
-    if (webAPI) { EnableWebAPI(); };
+    if (webAPI) {
+        char* wp = webPort.toLocal8Bit().data();
+        GoString p = {wp, (long int)strlen(wp)};
+        EnableWebAPI(p);
+    };
 
     /* kick off your shoes, put your feet up */
     return app.exec();
