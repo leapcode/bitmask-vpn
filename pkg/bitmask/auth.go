@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -12,7 +13,7 @@ import (
 
 /* functions for local authentication of control endpoints */
 
-const tokenPath = "/dev/shm/bitmask-token"
+const bitmaskToken = "bitmask-token"
 
 func GenerateAuthToken() {
 	if runtime.GOOS != "linux" {
@@ -20,6 +21,7 @@ func GenerateAuthToken() {
 		return
 	}
 	t := getRandomString()
+	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
 	err := ioutil.WriteFile(tokenPath, []byte(t), os.FileMode(int(0600)))
 	if err != nil {
 		log.Println("Could not write authentication token.")
@@ -31,6 +33,7 @@ func ReadAuthToken() string {
 		log.Println("Authentication token only implemented in linux at the moment.")
 		return ""
 	}
+	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
 	token, err := ioutil.ReadFile(tokenPath)
 	if err != nil {
 		log.Println("Error reading token:", err)

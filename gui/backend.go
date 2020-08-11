@@ -67,8 +67,8 @@ func InitializeTestBitmaskContext() {
 }
 
 //export EnableWebAPI
-func EnableWebAPI() {
-	backend.EnableWebAPI()
+func EnableWebAPI(port string) {
+	backend.EnableWebAPI(port)
 }
 
 //export RefreshContext
