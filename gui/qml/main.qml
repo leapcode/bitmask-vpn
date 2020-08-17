@@ -10,6 +10,7 @@ ApplicationWindow {
     visible: false
 
     property var ctx
+    property var loginDone 
 
     Connections {
         target: jsonModel
@@ -22,6 +23,9 @@ ApplicationWindow {
             if (ctx.loginDialog == 'true') {
                 console.debug(jsonModel.getJson())
                 login.visible = true
+            }
+            if (ctx.loginOk == 'true' && loginDone == false) {
+                loginOk.visible = true
             }
             if (ctx.errors ) {
                if ( ctx.errors  == "nohelpers" ) {
@@ -44,6 +48,8 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        loginDone = false;
+
         /* stupid as it sounds, windows doesn't like to have the systray icon
          not being attached to an actual application window.
          We can still use this quirk, and can use the AppWindow with deferred
@@ -225,6 +231,11 @@ ApplicationWindow {
 
     LoginDialog {
         id: login
+        visible: false
+    }
+
+    LoginOKDialog{
+        id: loginOk
         visible: false
     }
 

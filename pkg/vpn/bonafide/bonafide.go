@@ -137,7 +137,7 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 		log.Fatal("ERROR: bonafide did not initialize auth")
 	}
 	if b.auth.needsCredentials() && b.token == nil {
-		log.Println("BUG: expected token to be set, but is not there")
+		log.Println("Needs token, but token is empty")
 		return nil, errors.New("Needs to login, but it was not logged in. Please, restart the application and report it if it continues happening")
 	}
 

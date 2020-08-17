@@ -16,6 +16,7 @@
 package vpn
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -43,7 +44,21 @@ func (b *Bitmask) StartVPN(provider string) error {
 		}
 	}
 
+	if !b.CanStartVPN() {
+		return errors.New("BUG: cannot start vpn")
+	}
 	return b.startOpenVPN(proxy)
+}
+
+func (b *Bitmask) CanStartVPN() bool {
+	if !b.bonafide.NeedsCredentials() {
+		return true
+	}
+	_, err := b.getCert()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func (b *Bitmask) startTransport() (proxy string, err error) {
@@ -150,6 +165,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 	certPath = b.getCertPemPath()
 
 	if _, err := os.Stat(certPath); os.IsNotExist(err) {
+		log.Println("Cert does not exist in ", certPath, "...fetching")
 		cert, err := b.bonafide.GetPemCertificate()
 		if err != nil {
 			return "", err

@@ -16,16 +16,19 @@ import (
 func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
 	if err != nil {
-		// TODO
-		log.Printf("Error login: %v", err)
+		log.Printf("Error on login: %v", err)
+		ctx.Errors = "bad_auth_unknown"
 	} else if success {
-		// TODO: Notify success
 		log.Printf("Logged in as %s", username)
+		ctx.LoginOk = true
+		ctx.LoginDialog = false
 	} else {
 		// TODO: display login again with an err
 		log.Printf("Failed to login as %s", username)
 		ctx.LoginDialog = true
+		ctx.Errors = "bad_auth"
 	}
+	go ctx.updateStatus()
 }
 
 func SwitchOn() {

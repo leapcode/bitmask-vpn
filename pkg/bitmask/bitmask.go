@@ -20,6 +20,7 @@ type Bitmask interface {
 	Close()
 	Version() (string, error)
 	StartVPN(provider string) error
+	CanStartVPN() bool
 	StopVPN() error
 	ReloadFirewall() error
 	GetStatus() (string, error)
