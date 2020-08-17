@@ -38,6 +38,7 @@ type connectionCtx struct {
 	DonateDialog    bool   `json:"donateDialog"`
 	DonateURL       string `json:"donateURL"`
 	LoginDialog     bool   `json:"loginDialog"`
+	LoginOk         bool   `json:"loginOk"`
 	Version         string `json:"version"`
 	Errors          string `json:"errors"`
 	Status          status `json:"status"`

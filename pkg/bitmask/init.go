@@ -131,7 +131,10 @@ func maybeStartVPN(b Bitmask, conf *config.Config) error {
 		return nil
 	}
 
-	err := b.StartVPN(config.Provider)
-	conf.SetUserStoppedVPN(false)
-	return err
+	if b.CanStartVPN() {
+		err := b.StartVPN(config.Provider)
+		conf.SetUserStoppedVPN(false)
+		return err
+	}
+	return nil
 }
