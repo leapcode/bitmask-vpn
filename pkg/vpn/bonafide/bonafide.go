@@ -114,8 +114,18 @@ func New() *Bonafide {
 	return b
 }
 
+/* NeedsCredentials signals if we have to ask user for credentials. If false, it can be that we have a cached token */
 func (b *Bonafide) NeedsCredentials() bool {
-	return b.auth.needsCredentials()
+	if !b.auth.needsCredentials() {
+		return false
+	}
+	/* try cached */
+	/* TODO cleanup this call - maybe expose getCachedToken instead of relying on empty creds? */
+	_, err := b.auth.getToken("", "")
+	if err != nil {
+		return true
+	}
+	return false
 }
 
 func (b *Bonafide) DoLogin(username, password string) (bool, error) {
@@ -136,9 +146,13 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	if b.auth == nil {
 		log.Fatal("ERROR: bonafide did not initialize auth")
 	}
-	if b.auth.needsCredentials() && b.token == nil {
-		log.Println("Needs token, but token is empty")
-		return nil, errors.New("Needs to login, but it was not logged in. Please, restart the application and report it if it continues happening")
+	if b.auth.needsCredentials() {
+		/* try cached token */
+		token, err := b.auth.getToken("", "")
+		if err != nil {
+			return nil, errors.New("BUG: This service needs login, but we were not logged in.")
+		}
+		b.token = token
 	}
 
 	req, err := http.NewRequest("POST", b.getURL("certv3"), strings.NewReader(""))
