@@ -51,14 +51,7 @@ func (b *Bitmask) StartVPN(provider string) error {
 }
 
 func (b *Bitmask) CanStartVPN() bool {
-	if !b.bonafide.NeedsCredentials() {
-		return true
-	}
-	_, err := b.getCert()
-	if err != nil {
-		return false
-	}
-	return true
+	return !b.bonafide.NeedsCredentials()
 }
 
 func (b *Bitmask) startTransport() (proxy string, err error) {

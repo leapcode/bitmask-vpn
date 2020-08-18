@@ -19,7 +19,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"path"
 	"strings"
+	"time"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 type sipAuthentication struct {
@@ -32,10 +38,11 @@ func (a *sipAuthentication) needsCredentials() bool {
 }
 
 func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
-	/* TODO
-	[ ] get token from disk?
-	[ ] check if expired? set a goroutine to refresh it periodically?
-	*/
+	/* TODO refresh session token periodically */
+	if hasRecentToken() {
+		log.Println("Got cached token")
+		return readToken()
+	}
 	credJSON, err := formatCredentials(user, password)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
@@ -48,7 +55,49 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("Cannot get token: Error %d", resp.StatusCode)
 	}
-	return ioutil.ReadAll(resp.Body)
+	token, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	writeToken(token)
+	return token, nil
+}
+
+func getTokenPath() string {
+	return path.Join(config.Path, config.ApplicationName+".token")
+}
+
+func writeToken(token []byte) {
+	tp := getTokenPath()
+	err := ioutil.WriteFile(tp, token, 0600)
+	if err != nil {
+		log.Println("BUG: cannot write token to", tp)
+	}
+}
+
+func readToken() ([]byte, error) {
+	f, err := os.Open(getTokenPath())
+	if err != nil {
+		log.Println("Error: cannot open token file")
+		return nil, err
+	}
+	token, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Println("Error: cannot read token")
+		return nil, err
+	}
+	return token, nil
+}
+
+func hasRecentToken() bool {
+	statinfo, err := os.Stat(getTokenPath())
+	if err != nil {
+		return false
+	}
+	lastWrote := statinfo.ModTime().Unix()
+	/* in vpnweb we set the duration of the token to 24 hours */
+	old := time.Now().Add(-time.Hour * 20).Unix()
+	return lastWrote >= old
 }
 
 func formatCredentials(user, pass string) (string, error) {
