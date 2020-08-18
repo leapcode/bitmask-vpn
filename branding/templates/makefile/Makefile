@@ -85,8 +85,11 @@ endif
 pkg_snap:
 	-@mkdir -p ../../deploy
 	@echo "[+] building snap..."
+	cd ../..
+	-@ln -s build/$(PROVIDER)/snap snap
 	snapcraft build
 	snapcraft snap
+	-@rm snap
 	@mv $(BINNAME)* ../../deploy
 
 pkg_deb:

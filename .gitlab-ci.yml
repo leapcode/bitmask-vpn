@@ -65,7 +65,8 @@ vendorize:
   image: registry.0xacab.org/leap/docker/bitmask-vpn:latest
   stage: vendor
   script:
-    - 'PROVIDERS="riseup calyx" make build_all_providers'
+    #- 'PROVIDERS="riseup calyx" make build_all_providers'
+    - 'PROVIDERS="riseup" make build_all_providers'
   artifacts:
     name: installers-$CI_COMMIT_REF_NAME
     paths:
