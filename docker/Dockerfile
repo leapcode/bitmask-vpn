@@ -17,15 +17,16 @@ RUN apt-get update && apt-get upgrade --yes && \
             git curl wget \
             libappindicator3-dev libgtk-3-dev \
             webkit2gtk-4.0 \
-            mingw-w64 upx-ucl python snapcraft snapd \
-            unzip \
+            mingw-w64 upx-ucl python snapd \
+            unzip sudo locales \
             devscripts fakeroot debhelper \
             clang llvm-dev libxml2-dev uuid-dev \
             libssl-dev bash patch tar \
             xz-utils bzip2 gzip sed cpio libbz2-dev \
             software-properties-common dh-golang \
             jq \
-            squashfs-tools && \
+            squashfs-tools \
+            qtbase5-dev qttools5-dev-tools qt5-qmake g++ qtdeclarative5-dev qt5-default && \
     add-apt-repository -y ppa:longsleep/golang-backports && \
     apt-get update && \
     apt-get install -y --no-install-recommends golang-1.14-go golang-go golang-golang-x-tools-dev && \
@@ -60,11 +61,30 @@ RUN git clone https://github.com/VantaInc/xar && \
     ./autogen.sh && ./configure && \
     make && sudo make install
 
-# Grab the core18 snap (which snapcraft uses as a base) from the stable channel
+# Grab the core18 and core20 snap (which snapcraft uses as a base) from the stable channel
 # and unpack it in the proper place, to speed up snapcraft builds in the containers.
 RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/core18' | jq '.download_url' -r) --output core18.snap
 RUN mkdir -p /snap/core18
 RUN unsquashfs -d /snap/core18/current core18.snap
+RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/core20' | jq '.download_url' -r) --output core20.snap
+RUN mkdir -p /snap/core20
+RUN unsquashfs -d /snap/core20/current core20.snap
+
+# Grab the snapcraft snap from the stable channel and unpack it in the proper
+# place.
+RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=stable' | jq '.download_url' -r) --output snapcraft.snap
+RUN mkdir -p /snap/snapcraft
+RUN unsquashfs -d /snap/snapcraft/current snapcraft.snap
+
+
+# Create a snapcraft runner (TODO: move version detection to the core of
+# snapcraft).
+RUN mkdir -p /snap/bin
+RUN echo "#!/bin/sh" > /snap/bin/snapcraft
+RUN snap_version="$(awk '/^version:/{print $2}' /snap/snapcraft/current/meta/snap.yaml)" && echo "export SNAP_VERSION=\"$snap_version\"" >> /snap/bin/snapcraft
+RUN echo 'exec "$SNAP/usr/bin/python3" "$SNAP/bin/snapcraft" "$@"' >> /snap/bin/snapcraft
+RUN chmod +x /snap/bin/snapcraft
+RUN ln -s /snap/bin/snapcraft /bin/
 
 # cache go modules
 RUN rm -rf /gomods && mkdir -p /gomods/packages
@@ -76,9 +96,12 @@ RUN go mod download
 COPY builder.sh /
 
 # Generate locale.
-RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes sudo locales && locale-gen en_US.UTF-8
+RUN locale-gen en_US.UTF-8
 
 # Set the proper environment.
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 ENV LC_ALL="en_US.UTF-8"
+ENV SNAP="/snap/snapcraft/current"
+ENV SNAP_NAME="snapcraft"
+ENV SNAP_ARCH="amd64"
