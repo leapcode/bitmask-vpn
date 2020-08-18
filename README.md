@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: LEAP Encryption Access Project 2018-2019
+-->
+
 Install it
 ----------
 
