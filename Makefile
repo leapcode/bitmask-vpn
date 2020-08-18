@@ -1,6 +1,7 @@
 #########################################################################
 # Multiplatform build and packaging recipes for BitmaskVPN
-# (c) LEAP Encryption Access Project, 2019-2020
+# SPDX-FileCopyrightText: LEAP Encryption Access Project, 2019-2020
+# SPDX-License-Identifier: GPL-3.0-or-later
 #########################################################################
 
 .PHONY: all get build build_bitmaskd icon locales generate_locales clean
