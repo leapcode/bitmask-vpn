@@ -12,6 +12,7 @@ export XBUILD=yes
 for _provider in $PROVIDERS; do
     export PROVIDER=$_provider;
     make prepare
-    make build
-    make packages
+    #make build
+    #make packages
+    make package_snap
 done
