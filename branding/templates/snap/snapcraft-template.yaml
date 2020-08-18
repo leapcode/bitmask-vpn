@@ -8,12 +8,13 @@ description: |
 grade: stable
 confinement: classic
 icon: snap/gui/icon.svg 
-base: core18
+base: core20
 
 parts:
         bitmask-root:
                 plugin: dump
-                source: ../../helpers/
+                source: helpers/
+                source-type: local
                 override-prime: |
                         mkdir -p bin
                         cp $SNAPCRAFT_PART_SRC/bitmask-root bin/
@@ -23,42 +24,70 @@ parts:
                 plugin: nil
                 stage-packages:
                     - openvpn
+                    - libdouble-conversion1
+                    - libfreetype6
+                    - libgl1
+                    - libglvnd0
+                    - libglx0
+                    - libgraphite2-3
+                    - libharfbuzz0b
+                    - libicu60
+                    - libpng16-16
+                    - libqt5core5a
+                    - libqt5gui5
+                    - libqt5network5
+                    - libqt5qml5
+                    - libqt5widgets5
+                    - libx11-6
+                    - libxau6
+                    - libxcb1
+                    - libxdmcp6
+                    - qml-module-qt-labs-platform
+                    - qml-module-qtquick-controls2
+                    - qml-module-qtquick-dialogs
+                    - qml-module-qtquick-extras
                 prime:
                     - -usr/share/doc
                     - -usr/share/man
 
         bitmask-vpn:
-                plugin: go
-                source: ../../cmd/bitmask-vpn
-                go-importpath: 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
-                go-packages:
-                        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
+                plugin: nil
+                source: .
+                source-type: local
+                stage:
+                    - bin/${binaryName}
                 override-build: |
-                      mkdir $SNAPCRAFT_PRIME/snap
-                      echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
+                      mkdir -p $SNAPCRAFT_PRIME/snap/
+                      echo 0.20.4-40-gcf5ed56 > $SNAPCRAFT_PRIME/snap/version.txt
                       mkdir -p $SNAPCRAFT_PRIME/usr/share/applications
-                      cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/usr/share/applications/${binaryName}.desktop
-                      snapcraftctl build
+                      cp $SNAPCRAFT_PROJECT_DIR/snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/usr/share/applications/${binaryName}.desktop
+                      QT_SELECT=5 XBUILD=no ./build.sh
+                      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+                      mv qtbuild/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
                 override-prime: |
-                      rm -rf $SNAPCRAFT_PRIME/../snap/hooks/.mypy_cache
+                      rm -rf $SNAPCRAFT_PROJECT_DIR/snap/hooks/.mypy_cache
                       snapcraftctl prime
                 build-packages:
                     - pkg-config
                     - patchelf
-                    - libpcre3-dev
-                    - libappindicator3-dev
-                    - libgtk-3-dev
-                stage-packages:
-                    - libpcre3
-                    - libappindicator3-1
-                    - zlib1g
+                    - g++
+                    - golang
+                    - git
+                    - make
+                    - qtbase5-dev
+                    - qttools5-dev-tools
+                    - qt5-qmake
+                    - qtdeclarative5-dev
+
 apps:
         launcher:
-                command: bin/bitmask-vpn
+                command: bin/${binaryName}
                 desktop: usr/share/applications/${binaryName}.desktop
                 environment:
-                        LD_LIBRARY_PATH: "$SNAP/usr/lib/$(gcc -print-multiarch):$SNAP/lib/$(gcc -print-multiarch):$LD_LIBRARY_PATH"
+                        LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH"
         openvpn:
                 command: usr/sbin/openvpn
+                environment:
+                        LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH"
         bitmask-root:
                 command: bin/bitmask-root
