@@ -79,7 +79,7 @@ build_%:
 	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
 
 test:
-	@go test -tags "integration $(TAGS)" ./...
+	@go test -tags "integration $(TAGS)" ./pkg/...
 
 golib:
 	CGO_ENABLED=1 go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
@@ -158,6 +158,7 @@ endif
 
 generate:
 	@go generate gui/backend.go
+	@go generate pkg/config/version/genver/gen.go
 
 relink_default:
 ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
