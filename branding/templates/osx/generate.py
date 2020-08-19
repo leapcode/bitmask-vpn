@@ -2,8 +2,9 @@
 
 # Generate bundles for brandable Bitmask Lite.
 
-# (c) LEAP Encryption Access Project
-# (c) Kali Kaneko 2018-2019
+# SPDX-FileCopyrightText: LEAP Encryption Access Project
+# SPDX-FileCopyrightText: 2018-2019 Kali Kaneko
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
 import os

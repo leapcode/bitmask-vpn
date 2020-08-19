@@ -1,5 +1,6 @@
 #########################################
-# (c) LEAP Encryption Access Project 2018
+# SPDX-FileCopyrightText: 2018-2019 LEAP Encryption Access Project
+# SPDX-License-Identifier: GPL-3.0-or-later
 include vendor.mk
 #########################################
 
