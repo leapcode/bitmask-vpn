@@ -1,6 +1,7 @@
 #!/bin/sh
 # Bitmask Pre-Instalation script
-# (c) LEAP Encryption access Project
+# SPDX-FileCopyrightText: LEAP Encryption access Project
+# SPDX-License-Identifier: GPL-3.0-or-later
 # We unload the bitmask-helper if it is running, because we can be installing an upgrade.
 
 LOG=/tmp/$applicationName-install.log

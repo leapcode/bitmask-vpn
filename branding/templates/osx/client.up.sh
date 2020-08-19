@@ -2,6 +2,9 @@
 # Note: must be bash; uses bash-specific tricks
 #
 # ******************************************************************************************************************
+# SPDX-FileCopyrightText: Tunnelblick
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Copyright by Tunnelblick. Redistributed under GPL as part of Bitmask.
 # This Tunnelblick script does everything! It handles TUN and TAP interfaces, 
 # pushed configurations, DHCP with DNS and SMB, and renewed DHCP leases. :)

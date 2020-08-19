@@ -1,6 +1,7 @@
 #!/bin/sh
 # Bitmask Post-Instalation script
-# (c) LEAP Encryption access Project
+# SPDX-FileCopyrightText: LEAP Encryption access Project
+# SPDX-License-Identifier: GPL-3.0-or-later
 # We copy the bitmask-helper plist to the LaunchDaemons folder, and load the bitmask-helper that runs as root.
 
 LOG=/tmp/$applicationName-install.log
