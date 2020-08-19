@@ -232,7 +232,7 @@ func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
 }
 
 func (b *Bonafide) fetchGeolocation() ([]string, error) {
-	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate.
+	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
 	So this is a workaround until we streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
 	if err != nil {

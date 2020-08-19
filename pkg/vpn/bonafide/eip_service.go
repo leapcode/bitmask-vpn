@@ -116,6 +116,9 @@ func (b *Bonafide) fetchEipJSON() error {
 	}
 
 	b.setupAuthentication(b.eip)
+	/* TODO we could launch the looping call from here.
+	but smells: calls a bonafide method that in turn calls methods in this file
+	*/
 	b.sortGateways()
 	return nil
 }
@@ -204,8 +207,9 @@ func (eip eipService) getOpenvpnArgs() []string {
 }
 
 func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
-	gws := make([]gatewayV3, len(eip.Gateways))
+	gws := make([]gatewayV3, 0)
 
+	/* TODO this probably should be moved out of this method */
 	if eip.defaultGateway != "" {
 		for _, gw := range eip.Gateways {
 			if gw.Location == eip.defaultGateway {
@@ -213,6 +217,8 @@ func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
 				break
 			}
 		}
+		// a manually selected gateway means we do want exactly one remote
+		return
 	}
 
 	for _, host := range geolocatedGateways {
@@ -224,7 +230,9 @@ func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
 	}
 
 	if len(gws) == 0 {
-		log.Println("ERROR: avoiding to replace eip.Gateways will null list. Is the geolocation service properly configured?")
+		// this can happen if a misconfigured geoip service does not match the
+		// providers list we got.
+		log.Println("ERROR: avoiding to nullify eip.Gateways. Is the geolocation service properly configured?")
 	} else {
 		if len(gws) > 2 {
 			eip.Gateways = gws[:3]
