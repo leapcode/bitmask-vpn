@@ -17,7 +17,7 @@ func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
 	if err != nil {
 		log.Printf("Error on login: %v", err)
-		ctx.Errors = "bad_auth_unknown"
+		ctx.Errors = "bad_auth"
 	} else if success {
 		log.Printf("Logged in as %s", username)
 		ctx.LoginOk = true
@@ -73,13 +73,11 @@ func InitializeBitmaskContext(opts *InitOpts) {
 	opts.AppName = p.AppName
 
 	initOnce.Do(func() { initializeContext(opts) })
-	runDonationReminder()
 	if ctx.bm != nil {
-		if ctx.bm.NeedsCredentials() {
-			ctx.LoginDialog = true
-		}
+		ctx.LoginDialog = ctx.bm.NeedsCredentials()
 		go ctx.updateStatus()
 	}
+	runDonationReminder()
 }
 
 func RefreshContext() *C.char {

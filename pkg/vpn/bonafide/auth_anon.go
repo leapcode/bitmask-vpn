@@ -22,7 +22,7 @@ import (
 type anonymousAuthentication struct{}
 
 func (a *anonymousAuthentication) needsCredentials() bool {
-	return true
+	return false
 }
 
 func (a *anonymousAuthentication) getToken(user, password string) ([]byte, error) {
