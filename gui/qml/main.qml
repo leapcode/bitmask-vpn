@@ -24,7 +24,7 @@ ApplicationWindow {
                 console.debug(jsonModel.getJson())
                 login.visible = true
             }
-            if (ctx.loginOk == 'true' && loginDone == false) {
+            if (ctx.loginOk == 'true') {
                 loginOk.visible = true
             }
             if (ctx.errors ) {
