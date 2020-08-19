@@ -40,7 +40,6 @@ func (a *sipAuthentication) needsCredentials() bool {
 func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	/* TODO refresh session token periodically */
 	if hasRecentToken() {
-		log.Println("Got cached token")
 		return readToken()
 	}
 	credJSON, err := formatCredentials(user, password)
