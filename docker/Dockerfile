@@ -1,5 +1,7 @@
 # An image to build and package the Bitmask Lite (RiseupVPN and other branded builds)
-# (c) LEAP Encryption Access Project 2018-2019
+# SPDX-FileCopyrightText: LEAP Encryption Access Project 2018-2019
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 
 # we start with 18.04 (bionic) to match the core18 used in the snap
 # but we will have to install a couple of extras on top...

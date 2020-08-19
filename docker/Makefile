@@ -1,6 +1,7 @@
 #########################################################################
 # Docker build environment for BitmaskVPN
-# (c) LEAP Encryption Access Project, 2019-2020
+# SPDX-FileCopyrightText: LEAP Encryption Access Project, 2019-2020
+# SPDX-License-Identifier: GPL-3.0-or-later
 #########################################################################
 
 IMAGE=bitmask-vpn

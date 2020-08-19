@@ -1,5 +1,6 @@
 // +build !bitmaskd
-// Copyright (C) 2018 LEAP
+// SPDX-FileCopyrightText: 2018 LEAP
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: LEAP Encryption Access Project 2018-2019
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 Install it
 ----------
 
@@ -108,3 +113,14 @@ When you report an issue include the following information:
   * linux: `/home/<your user>/.config/leap/bitmaskd.log` & `/home/<your user>/.config/leap/systray.log`
   * OSX: `/Users/<your user>/Library/Preferences/leap/systray.log`, `/Applications/RiseupVPN.app/Contents/helper/helper.log` & `/Applications/RiseupVPN.app/Contents/helper/openvpn.log`
   * windows: `C:\Users\<your user>\AppData\Local\leap\systray.log`, `C:\Program Files\RiseupVPN\helper.log` & `C:\Program Files\RiseupVPN\openvp.log`
+
+Third party code
+-------------------
+
+Bitmask bundles third party code:
+
+- w32 under BSD-3 license
+- quickpkg under Apache-2.0
+- ...
+
+Please check individual files for copyright and license information.
