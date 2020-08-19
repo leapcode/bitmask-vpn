@@ -232,23 +232,36 @@ func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
 }
 
 func (b *Bonafide) fetchGeolocation() ([]string, error) {
+	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate.
+	So this is a workaround until we streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
 	if err != nil {
-		return nil, err
+		client := &http.Client{}
+		_resp, err := client.Post(config.GeolocationAPI, "", nil)
+		if err != nil {
+			log.Println("ERROR: could not fetch geolocation:", fmt.Errorf("%s", err))
+			return nil, err
+		}
+		resp = _resp
 	}
+
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("get geolocation failed with status: %s", resp.Status)
+		log.Println("ERROR: bad status code while fetching geolocation:", fmt.Errorf("%s", resp.Status))
+		return nil, fmt.Errorf("Get geolocation failed with status: %s", resp.Status)
 	}
 
 	geo := &geoLocation{}
 	dataJSON, err := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(dataJSON, &geo)
 	if err != nil {
-		_ = fmt.Errorf("get vpn cert has failed with status: %s", resp.Status)
+		log.Println("ERROR: cannot parse geolocation json", fmt.Errorf("%s", err))
+		log.Println(string(dataJSON))
+		_ = fmt.Errorf("bad json")
 		return nil, err
 	}
 
+	log.Println("Got sorted gateways:", geo.SortedGateways)
 	return geo.SortedGateways, nil
 
 }

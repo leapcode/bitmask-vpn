@@ -214,6 +214,7 @@ func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
 			}
 		}
 	}
+
 	for _, host := range geolocatedGateways {
 		for _, gw := range eip.Gateways {
 			if gw.Host == host {
@@ -221,7 +222,17 @@ func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
 			}
 		}
 	}
-	eip.Gateways = gws
+
+	if len(gws) == 0 {
+		log.Println("ERROR: avoiding to replace eip.Gateways will null list. Is the geolocation service properly configured?")
+	} else {
+		if len(gws) > 2 {
+			eip.Gateways = gws[:3]
+		} else {
+			eip.Gateways = gws
+		}
+		log.Println("Picked best gateways for location:", eip.Gateways)
+	}
 }
 
 type gatewayDistance struct {
