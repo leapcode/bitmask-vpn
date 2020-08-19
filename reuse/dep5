@@ -1,0 +1,20 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: LEAP Encryption Access Project
+Upstream-Contact: info@leap.se
+Source: https://github.com/leapcode/
+
+Files: icon/ico/black/*
+Copyright: 2018 LEAP Encryption Access Project
+License: GPL-3.0-or-later
+
+Files: icon/ico/white/*
+Copyright: 2018 LEAP Encryption Access Project
+License: GPL-3.0-or-later
+
+Files: icon/png/black/*
+Copyright: 2018 LEAP Encryption Access Project
+License: GPL-3.0-or-later
+
+Files: icon/png/white/*
+Copyright: 2018 LEAP Encryption Access Project
+License: GPL-3.0-or-later
