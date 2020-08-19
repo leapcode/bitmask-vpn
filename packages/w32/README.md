@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2010-2012 The W32 Authors. All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause
+-->
+
 About w32
 ==========
 

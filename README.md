@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: LEAP Encryption Access Project 2018-2019
+SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 Install it
