@@ -116,4 +116,10 @@ When you report an issue include the following information:
 Third party code
 -------------------
 
-Bitmask bundles third party code. Please check individual files for copyright and license information.
+Bitmask bundles third party code:
+
+- w32 under BSD-3 license
+- quickpkg under Apache-2.0
+- ...
+
+Please check individual files for copyright and license information.
