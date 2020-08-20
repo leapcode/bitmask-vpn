@@ -13,7 +13,8 @@ Dialog {
     }
 
     function _loginOk() {
-        backend.resetError("bad_auth")
+        visible: false;
+        backend.resetNotification("login_ok");
     }
 
     visible: false

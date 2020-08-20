@@ -40,13 +40,6 @@ func checkErrors(errCh chan string) {
 	}
 }
 
-func resetErrors(errname string) {
-	if ctx.Errors == errname {
-		ctx.Errors = ""
-		log.Println("DEBUG: reset error", errname)
-	}
-}
-
 func initializeBitmask(errCh chan string, opts *InitOpts) {
 	if ctx == nil {
 		log.Println("bug: cannot initialize bitmask, ctx is nil!")

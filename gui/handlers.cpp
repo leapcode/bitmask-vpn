@@ -52,6 +52,11 @@ void Backend::resetError(QString errlabel)
     ResetError(toGoStr(errlabel));
 }
 
+void Backend::resetNotification(QString label)
+{
+    ResetNotification(toGoStr(label));
+}
+
 void Backend::quit()
 {
     Quit();

@@ -16,12 +16,12 @@ ApplicationWindow {
         target: jsonModel
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson());
+
             if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
             }
             if (ctx.loginDialog == 'true') {
-                console.debug(jsonModel.getJson())
                 login.visible = true
             }
             if (ctx.loginOk == 'true') {
