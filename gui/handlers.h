@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QObject>
 #include "qjsonmodel.h"
+#include "lib/libgoshim.h"
+
+GoString toGoStr(QString s);
 
 class QJsonWatch : public QObject {
 
@@ -36,6 +39,7 @@ public slots:
     void switchOff();
     void donateAccepted();
     void login(QString username, QString password);
+    void resetError(QString errlabel);
     void quit();
 };
 
