@@ -86,8 +86,20 @@ func RefreshContext() *C.char {
 }
 
 func ResetError(errname string) {
-	log.Println("DEBUG: resetting error", errname)
-	resetErrors(errname)
+	if ctx.Errors == errname {
+		ctx.Errors = ""
+	}
+}
+
+func ResetNotification(label string) {
+	switch label {
+	case "login_ok":
+		ctx.LoginOk = false
+		break
+	default:
+		break
+	}
+	go trigger(OnStatusChanged)
 }
 
 func InstallHelpers() {

@@ -81,6 +81,11 @@ func ResetError(errname string) {
 	backend.ResetError(errname)
 }
 
+//export ResetNotification
+func ResetNotification(label string) {
+	backend.ResetNotification(label)
+}
+
 //export InstallHelpers
 func InstallHelpers() {
 	backend.InstallHelpers()

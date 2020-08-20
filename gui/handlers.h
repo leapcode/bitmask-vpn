@@ -40,6 +40,7 @@ public slots:
     void donateAccepted();
     void login(QString username, QString password);
     void resetError(QString errlabel);
+    void resetNotification(QString label);
     void quit();
 };
 
