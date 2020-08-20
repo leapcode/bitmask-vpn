@@ -23,8 +23,8 @@ func GetAppName() *C.char {
 }
 
 //export Login
-func Login(username, password *C.char) {
-	backend.Login(C.GoString(username), C.GoString(password))
+func Login(username, password string) {
+	backend.Login(username, password)
 }
 
 //export SwitchOn
@@ -74,6 +74,11 @@ func EnableWebAPI(port string) {
 //export RefreshContext
 func RefreshContext() *C.char {
 	return (*C.char)(backend.RefreshContext())
+}
+
+//export ResetError
+func ResetError(errname string) {
+	backend.ResetError(errname)
 }
 
 //export InstallHelpers

@@ -12,9 +12,8 @@ Dialog {
         }
     }
 
-    // TODO implement cleanNotifications on backend
     function _loginOk() {
-        loginDone = true;
+        backend.resetError("bad_auth")
     }
 
     visible: false

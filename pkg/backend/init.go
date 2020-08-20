@@ -34,8 +34,16 @@ func initializeContext(opts *InitOpts) {
 func checkErrors(errCh chan string) {
 	for {
 		err := <-errCh
+		// TODO consider a queue instead
 		ctx.Errors = err
 		go trigger(OnStatusChanged)
+	}
+}
+
+func resetErrors(errname string) {
+	if ctx.Errors == errname {
+		ctx.Errors = ""
+		log.Println("DEBUG: reset error", errname)
 	}
 }
 

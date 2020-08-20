@@ -144,9 +144,7 @@ int main(int argc, char **argv) {
 
     /* if requested, enable web api for controlling the VPN */
     if (webAPI) {
-        char* wp = webPort.toLocal8Bit().data();
-        GoString p = {wp, (long int)strlen(wp)};
-        EnableWebAPI(p);
+        EnableWebAPI(toGoStr(webPort));
     };
 
     /* kick off your shoes, put your feet up */

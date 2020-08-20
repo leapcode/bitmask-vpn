@@ -6,6 +6,13 @@
 #include "handlers.h"
 #include "lib/libgoshim.h"
 
+GoString toGoStr(QString s)
+{
+    char *c = s.toLocal8Bit().data();
+    return (GoString){c, (long int)strlen(c)};
+}
+
+
 Backend::Backend(QObject *parent) : QObject(parent)
 {
 }
@@ -37,14 +44,12 @@ void Backend::donateAccepted()
 
 void Backend::login(QString username, QString password)
 {
-    // TODO: there has to be a cleaner way to do the conversion
-    char * u = new char [username.length()+1];
-    char * p = new char [password.length()+1];
-    strcpy(u, username.toStdString().c_str());
-    strcpy(p, password.toStdString().c_str());
-    Login(u, p);
-    delete [] u;
-    delete [] p;
+    Login(toGoStr(username), toGoStr(password));
+}
+
+void Backend::resetError(QString errlabel)
+{
+    ResetError(toGoStr(errlabel));
 }
 
 void Backend::quit()

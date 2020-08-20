@@ -85,6 +85,11 @@ func RefreshContext() *C.char {
 	return C.CString(string(c))
 }
 
+func ResetError(errname string) {
+	log.Println("DEBUG: resetting error", errname)
+	resetErrors(errname)
+}
+
 func InstallHelpers() {
 	pickle.InstallHelpers()
 }
@@ -105,7 +110,7 @@ func EnableWebAPI(port string) {
 /* these two are a bit redundant since we already add them to ctx. however, we
    want to have them available before everything else, to be able to parse cli
    arguments. In the long run, we probably want to move all vendoring to qt, so
-   this probably should not live in the backend. */
+   this probably should not live in the backend, see #326*/
 
 func GetVersion() *C.char {
 	return C.CString(version.VERSION)
