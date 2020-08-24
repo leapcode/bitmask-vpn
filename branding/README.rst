@@ -29,15 +29,14 @@ before the build. If you want to skip this check, pass `SKIP_CACHECK=yes`
 
 Run::
 
- PROVIDER=example make prepare
+ PROVIDER=example make vendor
 
-You can also specify a custom config file::
+Then you can build the binary::
 
- PROVIDER=example PROVIDER_CONFIG=/path/to/vendor.conf make prepare
+ ./build.sh
 
-Then you need to build the package::
 
- make build
+* The following does not work yet! in progress ------------------
 
 Then you can build all the packages::
 
