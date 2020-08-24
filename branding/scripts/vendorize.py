@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# TODO: to be deprecated! use gen-providers-json.py instead
+
 import os
 import sys
 

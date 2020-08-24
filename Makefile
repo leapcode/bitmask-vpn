@@ -141,6 +141,11 @@ build_all_providers:
 # packaging templates
 #########################################################################
 
+vendor: gen_providers_json
+
+gen_providers_json:
+	@python3 branding/scripts/gen-providers-json.py branding/config/vendor.conf gui/providers/providers.json
+
 prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
 
 prepare_templates: generate relink_default tgz
