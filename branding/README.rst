@@ -2,7 +2,7 @@ Branding for BitmaskVPN
 ================================================================================
 
 This folder contains everything that is needed to generate a customized built of
-BitmaskVPN for your provider.
+the Desktop BitmaskVPN app for a given provider.
 
 
 Configure
