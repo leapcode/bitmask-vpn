@@ -18,6 +18,7 @@ package vpn
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
@@ -66,9 +67,13 @@ func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
 		if !ok {
 			continue
 		}
-		status, ok := statusNames[stateEvent.NewState()]
+		statusName := stateEvent.NewState()
+		status, ok := statusNames[statusName]
 		if ok {
 			b.statusCh <- status
+		}
+		if statusName == "CONNECTED" {
+			b.onGateway = strings.Split(stateEvent.String(), ": ")[1]
 		}
 	}
 	b.statusCh <- Off
