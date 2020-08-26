@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,17 +46,10 @@ type Bonafide struct {
 	client        httpClient
 	eip           *eipService
 	tzOffsetHours int
+	gateways      *gatewayPool
+	maxGateways   int
 	auth          authentication
 	token         []byte
-}
-
-type Gateway struct {
-	Host      string
-	IPAddress string
-	Location  string
-	Ports     []string
-	Protocols []string
-	Options   map[string]string
 }
 
 type openvpnConfig map[string]interface{}
@@ -192,24 +185,42 @@ func (b *Bonafide) getURL(object string) string {
 	return ""
 }
 
-func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
+func (b *Bonafide) maybeInitializeEIP() error {
 	if b.eip == nil {
 		err := b.fetchEipJSON()
 		if err != nil {
-			return nil, err
+			return err
 		}
+		b.gateways = newGatewayPool(b.eip)
+		b.fetchGatewayRanking()
+	}
+	return nil
+}
+
+func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
+	err := b.maybeInitializeEIP()
+	if err != nil {
+		return nil, err
+	}
+	max := maxGateways
+	if b.maxGateways != 0 {
+		max = b.maxGateways
 	}
 
-	return b.eip.getGateways(transport), nil
+	gws, err := b.gateways.getBest(transport, b.tzOffsetHours, max)
+	return gws, err
 }
 
-func (b *Bonafide) SetManualGateway(name string) {
-	/* TODO use gateway-id instead - a location-id is probably more useful than
-	* the gateway hostname */
-	b.eip.setManualGateway(name)
+func (b *Bonafide) SetManualGateway(label string) {
+	b.gateways.setUserChoice(label)
 }
 
-func (b *Bonafide) requestBestGatewaysFromService() ([]string, error) {
+func (b *Bonafide) SetAutomaticGateway() {
+	b.gateways.setAutomaticChoice()
+}
+
+/* TODO this still needs to be called periodically */
+func (b *Bonafide) fetchGatewayRanking() error {
 	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
 	So this is a workaround until we streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
@@ -218,7 +229,7 @@ func (b *Bonafide) requestBestGatewaysFromService() ([]string, error) {
 		_resp, err := client.Post(config.GeolocationAPI, "", nil)
 		if err != nil {
 			log.Printf("ERROR: could not fetch geolocation: %s\n", err)
-			return nil, err
+			return err
 		}
 		resp = _resp
 	}
@@ -226,7 +237,7 @@ func (b *Bonafide) requestBestGatewaysFromService() ([]string, error) {
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		log.Println("ERROR: bad status code while fetching geolocation:", resp.StatusCode)
-		return nil, fmt.Errorf("Get geolocation failed with status: %d", resp.StatusCode)
+		return fmt.Errorf("Get geolocation failed with status: %d", resp.StatusCode)
 	}
 
 	geo := &geoLocation{}
@@ -236,31 +247,18 @@ func (b *Bonafide) requestBestGatewaysFromService() ([]string, error) {
 		log.Printf("ERROR: cannot parse geolocation json: %s\n", err)
 		log.Println(string(dataJSON))
 		_ = fmt.Errorf("bad json")
-		return nil, err
+		return err
 	}
 
 	log.Println("Got sorted gateways:", geo.SortedGateways)
-	return geo.SortedGateways, nil
-
-}
-
-func (b *Bonafide) sortGateways() {
-	serviceSelection, _ := b.requestBestGatewaysFromService()
-
-	if len(serviceSelection) > 0 {
-		b.eip.autoSortGateways(serviceSelection)
-	} else {
-		log.Printf("Falling back to timezone heuristic for gateway selection")
-		b.eip.sortGatewaysByTimezone(b.tzOffsetHours)
-	}
+	b.gateways.setRanking(geo.SortedGateways)
+	return nil
 }
 
 func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
-	if b.eip == nil {
-		err := b.fetchEipJSON()
-		if err != nil {
-			return nil, err
-		}
+	err := b.maybeInitializeEIP()
+	if err != nil {
+		return nil, err
 	}
 	return b.eip.getOpenvpnArgs(), nil
 }

@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
-	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -16,25 +13,17 @@ import (
 
 type eipService struct {
 	Gateways             []gatewayV3
-	SelectedGateways     []gatewayV3
-	Locations            map[string]location
 	defaultGateway       string
+	Locations            map[string]location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 	auth                 string
 }
 
 type eipServiceV1 struct {
 	Gateways             []gatewayV1
-	SelectedGateways     []gatewayV1
+	defaultGateway       string
 	Locations            map[string]location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
-}
-
-type location struct {
-	CountryCode string
-	Hemisphere  string
-	Name        string
-	Timezone    string
 }
 
 type gatewayV1 struct {
@@ -54,6 +43,13 @@ type gatewayV3 struct {
 	Host      string
 	IPAddress string `json:"ip_address"`
 	Location  string
+}
+
+type location struct {
+	CountryCode string
+	Hemisphere  string
+	Name        string
+	Timezone    string
 }
 
 type transportV3 struct {
@@ -84,6 +80,7 @@ func (b *Bonafide) fetchEipJSON() error {
 	resp, err := b.client.Post(eip3API, "", nil)
 	for err != nil {
 		log.Printf("Error fetching eip v3 json: %v", err)
+		// TODO why exactly 1 retry? Make it configurable, for tests
 		time.Sleep(retryFetchJSONSeconds * time.Second)
 		resp, err = b.client.Post(eip3API, "", nil)
 	}
@@ -115,10 +112,6 @@ func (b *Bonafide) fetchEipJSON() error {
 	}
 
 	b.setupAuthentication(b.eip)
-	/* TODO we could launch the looping call from here.
-	but smells: calls a bonafide method that in turn calls methods in this file
-	*/
-	b.sortGateways()
 	return nil
 }
 
@@ -161,15 +154,10 @@ func decodeEIP1(body io.Reader) (*eipService, error) {
 	return &eip3, nil
 }
 
-func (eip eipService) getGateways(transport string) []Gateway {
+func (eip eipService) getGateways() []Gateway {
 	gws := []Gateway{}
-	// TODO check that len(selected) != 0
-	for _, g := range eip.SelectedGateways {
+	for _, g := range eip.Gateways {
 		for _, t := range g.Capabilities.Transport {
-			if t.Type != transport {
-				continue
-			}
-
 			gateway := Gateway{
 				Host:      g.Host,
 				IPAddress: g.IPAddress,
@@ -177,78 +165,12 @@ func (eip eipService) getGateways(transport string) []Gateway {
 				Ports:     t.Ports,
 				Protocols: t.Protocols,
 				Options:   t.Options,
+				Transport: t.Type,
 			}
 			gws = append(gws, gateway)
 		}
 	}
-	// TODO return only top 3, at least for openvpn
 	return gws
-}
-
-func (eip *eipService) setManualGateway(name string) {
-	eip.defaultGateway = name
-
-	gws := make([]gatewayV3, 0)
-	for _, gw := range eip.Gateways {
-		if gw.Location == eip.defaultGateway {
-			gws = append(gws, gw)
-			break
-		}
-	}
-	eip.SelectedGateways = gws
-}
-
-func (eip *eipService) autoSortGateways(serviceSelection []string) {
-	gws := make([]gatewayV3, 0)
-
-	for _, host := range serviceSelection {
-		for _, gw := range eip.Gateways {
-			if gw.Host == host {
-				gws = append(gws, gw)
-			}
-		}
-	}
-
-	if len(gws) == 0 {
-		// this can happen if a misconfigured geoip service does not match the
-		// providers list we got.
-		log.Println("ERROR: did not get any useful selection. Is the geolocation service properly configured?")
-		eip.SelectedGateways = eip.Gateways
-	} else {
-		eip.SelectedGateways = gws
-	}
-}
-
-func (eip *eipService) sortGatewaysByTimezone(tzOffsetHours int) {
-	gws := []gatewayDistance{}
-
-	for _, gw := range eip.Gateways {
-		distance := 13
-		if gw.Location == eip.defaultGateway {
-			distance = -1
-		} else {
-			gwOffset, err := strconv.Atoi(eip.Locations[gw.Location].Timezone)
-			if err != nil {
-				log.Printf("Error sorting gateways: %v", err)
-			} else {
-				distance = tzDistance(tzOffsetHours, gwOffset)
-			}
-		}
-		gws = append(gws, gatewayDistance{gw, distance})
-	}
-	rand.Seed(time.Now().UnixNano())
-	cmp := func(i, j int) bool {
-		if gws[i].distance == gws[j].distance {
-			return rand.Intn(2) == 1
-		}
-		return gws[i].distance < gws[j].distance
-	}
-	sort.Slice(gws, cmp)
-
-	eip.SelectedGateways = make([]gatewayV3, len(eip.Gateways))
-	for i, gw := range gws {
-		eip.SelectedGateways[i] = gw.gateway
-	}
 }
 
 func (eip eipService) getOpenvpnArgs() []string {
@@ -267,23 +189,4 @@ func (eip eipService) getOpenvpnArgs() []string {
 		}
 	}
 	return args
-}
-
-type gatewayDistance struct {
-	gateway  gatewayV3
-	distance int
-}
-
-func tzDistance(offset1, offset2 int) int {
-	abs := func(x int) int {
-		if x < 0 {
-			return -x
-		}
-		return x
-	}
-	distance := abs(offset1 - offset2)
-	if distance > 12 {
-		distance = 24 - distance
-	}
-	return distance
 }

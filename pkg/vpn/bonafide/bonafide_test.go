@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package bonafide
 import (
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"reflect"
@@ -40,12 +41,13 @@ type nopCloser struct {
 
 func (nopCloser) Close() error { return nil }
 
-type client struct {
+type mockClient struct {
 	path string
 	geo  string
 }
 
-func (c client) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
+func (c mockClient) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
+	/* FIXME - should get the mocked geolocation configured too */
 	if strings.Contains(url, "api.black.riseup.net:9001/json") {
 		f, err := os.Open(c.geo)
 		return &http.Response{
@@ -61,7 +63,7 @@ func (c client) Post(url, contentType string, body io.Reader) (resp *http.Respon
 	}
 }
 
-func (c client) Do(req *http.Request) (*http.Response, error) {
+func (c mockClient) Do(req *http.Request) (*http.Response, error) {
 	f, err := os.Open(c.path)
 	return &http.Response{
 		Body:       f,
@@ -70,7 +72,7 @@ func (c client) Do(req *http.Request) (*http.Response, error) {
 }
 
 func TestAnonGetCert(t *testing.T) {
-	b := Bonafide{client: client{certPath, geoPath}}
+	b := Bonafide{client: mockClient{certPath, geoPath}}
 	b.auth = &anonymousAuthentication{}
 	cert, err := b.GetPemCertificate()
 	if err != nil {
@@ -109,9 +111,10 @@ func TestGatewayTzLocation(t *testing.T) {
 
 	for tzOffset, location := range values {
 		b := Bonafide{
-			client:        client{eipPath, geoPath},
+			client:        mockClient{eipPath, geoPath},
 			tzOffsetHours: tzOffset,
 		}
+		b.maxGateways = 99
 		gateways, err := b.GetGateways("openvpn")
 
 		if err != nil {
@@ -119,9 +122,8 @@ func TestGatewayTzLocation(t *testing.T) {
 			continue
 		}
 		if len(gateways) < 4 {
-			t.Errorf("Wrong number of gateways: %d", len(gateways))
-			continue
-
+			t.Errorf("Wrong number of gateways for tz %d: %d", tzOffset, len(gateways))
+			t.Fatal("aborting")
 		}
 		if gateways[0].Location != location {
 			t.Errorf("Wrong location for tz %d: %s, expected: %s", tzOffset, gateways[0].Location, location)
@@ -131,21 +133,22 @@ func TestGatewayTzLocation(t *testing.T) {
 
 func TestOpenvpnGateways(t *testing.T) {
 	b := Bonafide{
-		client: client{eipPath, geoPath},
+		client: mockClient{eipPath, geoPath},
 	}
+	b.maxGateways = 10
 	gateways, err := b.GetGateways("openvpn")
 	if err != nil {
 		t.Fatalf("getGateways returned an error: %v", err)
 	}
 	if len(gateways) == 0 {
-		t.Fatalf("No obfs4 gateways found")
+		t.Fatalf("No openvpn gateways found")
 	}
 
 	present := make([]bool, 6)
 	for _, g := range gateways {
 		i, err := strconv.Atoi(g.Host[0:1])
 		if err != nil {
-			t.Fatalf("unkonwn host %s: %v", g.Host, err)
+			t.Fatalf("unkown host %s: %v", g.Host, err)
 		}
 		present[i] = true
 	}
@@ -155,11 +158,12 @@ func TestOpenvpnGateways(t *testing.T) {
 			continue
 		case 5:
 			if p {
-				t.Errorf("Host %d should not have obfs4 transport", i)
+				t.Errorf("Host %d should not have openvpn transport", i)
 			}
 		default:
 			if !p {
-				t.Errorf("Host %d should have obfs4 transport", i)
+				log.Println(">> present", present)
+				t.Errorf("Host %d should have openvpn transport", i)
 			}
 		}
 	}
@@ -167,8 +171,9 @@ func TestOpenvpnGateways(t *testing.T) {
 
 func TestObfs4Gateways(t *testing.T) {
 	b := Bonafide{
-		client: client{eipPath, geoPath},
+		client: mockClient{eipPath, geoPath},
 	}
+	b.maxGateways = 10
 	gateways, err := b.GetGateways("obfs4")
 	if err != nil {
 		t.Fatalf("getGateways returned an error: %v", err)
@@ -237,6 +242,7 @@ func TestEipServiceV1Fallback(t *testing.T) {
 	b := Bonafide{
 		client: failingClient{eip1Path},
 	}
+	b.maxGateways = 10
 	gateways, err := b.GetGateways("obfs4")
 	if err != nil {
 		t.Fatalf("getGateways obfs4 returned an error: %v", err)
@@ -250,6 +256,6 @@ func TestEipServiceV1Fallback(t *testing.T) {
 		t.Fatalf("getGateways openvpn returned an error: %v", err)
 	}
 	if len(gateways) != 4 {
-		t.Fatalf("It not right number of gateways: %v", gateways)
+		t.Fatalf("Got wrong number of gateways: %v", gateways)
 	}
 }
