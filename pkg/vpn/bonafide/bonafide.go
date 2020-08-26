@@ -203,22 +203,13 @@ func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 	return b.eip.getGateways(transport), nil
 }
 
-func (b *Bonafide) SetDefaultGateway(name string) {
-	b.eip.setDefaultGateway(name)
-	b.sortGateways()
+func (b *Bonafide) SetManualGateway(name string) {
+	/* TODO use gateway-id instead - a location-id is probably more useful than
+	* the gateway hostname */
+	b.eip.setManualGateway(name)
 }
 
-func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
-	if b.eip == nil {
-		err := b.fetchEipJSON()
-		if err != nil {
-			return nil, err
-		}
-	}
-	return b.eip.getOpenvpnArgs(), nil
-}
-
-func (b *Bonafide) fetchGeolocation() ([]string, error) {
+func (b *Bonafide) requestBestGatewaysFromService() ([]string, error) {
 	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
 	So this is a workaround until we streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
@@ -254,12 +245,22 @@ func (b *Bonafide) fetchGeolocation() ([]string, error) {
 }
 
 func (b *Bonafide) sortGateways() {
-	geolocatedGateways, _ := b.fetchGeolocation()
+	serviceSelection, _ := b.requestBestGatewaysFromService()
 
-	if len(geolocatedGateways) > 0 {
-		b.eip.sortGatewaysByGeolocation(geolocatedGateways)
+	if len(serviceSelection) > 0 {
+		b.eip.autoSortGateways(serviceSelection)
 	} else {
 		log.Printf("Falling back to timezone heuristic for gateway selection")
 		b.eip.sortGatewaysByTimezone(b.tzOffsetHours)
 	}
+}
+
+func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
+	if b.eip == nil {
+		err := b.fetchEipJSON()
+		if err != nil {
+			return nil, err
+		}
+	}
+	return b.eip.getOpenvpnArgs(), nil
 }

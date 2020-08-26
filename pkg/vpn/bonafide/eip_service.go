@@ -16,14 +16,16 @@ import (
 
 type eipService struct {
 	Gateways             []gatewayV3
+	SelectedGateways     []gatewayV3
 	Locations            map[string]location
+	defaultGateway       string
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 	auth                 string
-	defaultGateway       string
 }
 
 type eipServiceV1 struct {
 	Gateways             []gatewayV1
+	SelectedGateways     []gatewayV1
 	Locations            map[string]location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 }
@@ -161,7 +163,8 @@ func decodeEIP1(body io.Reader) (*eipService, error) {
 
 func (eip eipService) getGateways(transport string) []Gateway {
 	gws := []Gateway{}
-	for _, g := range eip.Gateways {
+	// TODO check that len(selected) != 0
+	for _, g := range eip.SelectedGateways {
 		for _, t := range g.Capabilities.Transport {
 			if t.Type != transport {
 				continue
@@ -178,47 +181,27 @@ func (eip eipService) getGateways(transport string) []Gateway {
 			gws = append(gws, gateway)
 		}
 	}
+	// TODO return only top 3, at least for openvpn
 	return gws
 }
 
-func (eip *eipService) setDefaultGateway(name string) {
+func (eip *eipService) setManualGateway(name string) {
 	eip.defaultGateway = name
-}
 
-func (eip eipService) getOpenvpnArgs() []string {
-	args := []string{}
-	for arg, value := range eip.OpenvpnConfiguration {
-		switch v := value.(type) {
-		case string:
-			args = append(args, "--"+arg)
-			args = append(args, strings.Split(v, " ")...)
-		case bool:
-			if v {
-				args = append(args, "--"+arg)
-			}
-		default:
-			log.Printf("Unknown openvpn argument type: %s - %v", arg, value)
+	gws := make([]gatewayV3, 0)
+	for _, gw := range eip.Gateways {
+		if gw.Location == eip.defaultGateway {
+			gws = append(gws, gw)
+			break
 		}
 	}
-	return args
+	eip.SelectedGateways = gws
 }
 
-func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
+func (eip *eipService) autoSortGateways(serviceSelection []string) {
 	gws := make([]gatewayV3, 0)
 
-	/* TODO this probably should be moved out of this method */
-	if eip.defaultGateway != "" {
-		for _, gw := range eip.Gateways {
-			if gw.Location == eip.defaultGateway {
-				gws = append(gws, gw)
-				break
-			}
-		}
-		// a manually selected gateway means we do want exactly one remote
-		return
-	}
-
-	for _, host := range geolocatedGateways {
+	for _, host := range serviceSelection {
 		for _, gw := range eip.Gateways {
 			if gw.Host == host {
 				gws = append(gws, gw)
@@ -229,20 +212,11 @@ func (eip *eipService) sortGatewaysByGeolocation(geolocatedGateways []string) {
 	if len(gws) == 0 {
 		// this can happen if a misconfigured geoip service does not match the
 		// providers list we got.
-		log.Println("ERROR: avoiding to nullify eip.Gateways. Is the geolocation service properly configured?")
+		log.Println("ERROR: did not get any useful selection. Is the geolocation service properly configured?")
+		eip.SelectedGateways = eip.Gateways
 	} else {
-		if len(gws) > 2 {
-			eip.Gateways = gws[:3]
-		} else {
-			eip.Gateways = gws
-		}
-		log.Println("Picked best gateways for location:", eip.Gateways)
+		eip.SelectedGateways = gws
 	}
-}
-
-type gatewayDistance struct {
-	gateway  gatewayV3
-	distance int
 }
 
 func (eip *eipService) sortGatewaysByTimezone(tzOffsetHours int) {
@@ -271,9 +245,33 @@ func (eip *eipService) sortGatewaysByTimezone(tzOffsetHours int) {
 	}
 	sort.Slice(gws, cmp)
 
+	eip.SelectedGateways = make([]gatewayV3, len(eip.Gateways))
 	for i, gw := range gws {
-		eip.Gateways[i] = gw.gateway
+		eip.SelectedGateways[i] = gw.gateway
 	}
+}
+
+func (eip eipService) getOpenvpnArgs() []string {
+	args := []string{}
+	for arg, value := range eip.OpenvpnConfiguration {
+		switch v := value.(type) {
+		case string:
+			args = append(args, "--"+arg)
+			args = append(args, strings.Split(v, " ")...)
+		case bool:
+			if v {
+				args = append(args, "--"+arg)
+			}
+		default:
+			log.Printf("Unknown openvpn argument type: %s - %v", arg, value)
+		}
+	}
+	return args
+}
+
+type gatewayDistance struct {
+	gateway  gatewayV3
+	distance int
 }
 
 func tzDistance(offset1, offset2 int) int {

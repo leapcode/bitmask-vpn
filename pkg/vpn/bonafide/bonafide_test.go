@@ -28,21 +28,37 @@ import (
 
 const (
 	certPath   = "testdata/cert"
+	geoPath    = "testdata/geoloc.json"
 	eip1Path   = "testdata/eip-service.json"
 	eipPath    = "testdata/eip-service3.json"
 	eipPathSip = "testdata/eip-service3-sip.json"
 )
 
+type nopCloser struct {
+	io.Reader
+}
+
+func (nopCloser) Close() error { return nil }
+
 type client struct {
 	path string
+	geo  string
 }
 
 func (c client) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
-	f, err := os.Open(c.path)
-	return &http.Response{
-		Body:       f,
-		StatusCode: 200,
-	}, err
+	if strings.Contains(url, "api.black.riseup.net:9001/json") {
+		f, err := os.Open(c.geo)
+		return &http.Response{
+			Body:       f,
+			StatusCode: 200,
+		}, err
+	} else {
+		f, err := os.Open(c.path)
+		return &http.Response{
+			Body:       f,
+			StatusCode: 200,
+		}, err
+	}
 }
 
 func (c client) Do(req *http.Request) (*http.Response, error) {
@@ -54,7 +70,7 @@ func (c client) Do(req *http.Request) (*http.Response, error) {
 }
 
 func TestAnonGetCert(t *testing.T) {
-	b := Bonafide{client: client{certPath}}
+	b := Bonafide{client: client{certPath, geoPath}}
 	b.auth = &anonymousAuthentication{}
 	cert, err := b.GetPemCertificate()
 	if err != nil {
@@ -93,10 +109,11 @@ func TestGatewayTzLocation(t *testing.T) {
 
 	for tzOffset, location := range values {
 		b := Bonafide{
-			client:        client{eipPath},
+			client:        client{eipPath, geoPath},
 			tzOffsetHours: tzOffset,
 		}
 		gateways, err := b.GetGateways("openvpn")
+
 		if err != nil {
 			t.Errorf("getGateways returned an error: %v", err)
 			continue
@@ -114,7 +131,7 @@ func TestGatewayTzLocation(t *testing.T) {
 
 func TestOpenvpnGateways(t *testing.T) {
 	b := Bonafide{
-		client: client{eipPath},
+		client: client{eipPath, geoPath},
 	}
 	gateways, err := b.GetGateways("openvpn")
 	if err != nil {
@@ -150,7 +167,7 @@ func TestOpenvpnGateways(t *testing.T) {
 
 func TestObfs4Gateways(t *testing.T) {
 	b := Bonafide{
-		client: client{eipPath},
+		client: client{eipPath, geoPath},
 	}
 	gateways, err := b.GetGateways("obfs4")
 	if err != nil {
@@ -192,13 +209,11 @@ func TestObfs4Gateways(t *testing.T) {
 	}
 }
 
-/* TODO -- failClient instead? */
-
-type fallClient struct {
+type failingClient struct {
 	path string
 }
 
-func (c fallClient) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
+func (c failingClient) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
 	statusCode := 200
 	if strings.Contains(url, "3/config/eip-service.json") {
 		statusCode = 404
@@ -210,7 +225,7 @@ func (c fallClient) Post(url, contentType string, body io.Reader) (resp *http.Re
 	}, err
 }
 
-func (c fallClient) Do(req *http.Request) (*http.Response, error) {
+func (c failingClient) Do(req *http.Request) (*http.Response, error) {
 	f, err := os.Open(c.path)
 	return &http.Response{
 		Body:       f,
@@ -220,7 +235,7 @@ func (c fallClient) Do(req *http.Request) (*http.Response, error) {
 
 func TestEipServiceV1Fallback(t *testing.T) {
 	b := Bonafide{
-		client: fallClient{eip1Path},
+		client: failingClient{eip1Path},
 	}
 	gateways, err := b.GetGateways("obfs4")
 	if err != nil {

@@ -14,7 +14,7 @@
             "protocols": [
               "tcp"
             ]
-	  },
+          },
           {
             "type": "obfs4",
             "ports": [
@@ -23,11 +23,11 @@
             "protocols": [
               "tcp"
             ],
-	    "options": {
+            "options": {
               "cert": "obfs-cert",
               "iat-mode": "0"
-	    }
-	  }
+            }
+          }
         ],
         "user_ips": false
       },
@@ -49,7 +49,7 @@
             "protocols": [
               "tcp"
             ]
-	  }
+          }
         ],
         "user_ips": false
       },
@@ -71,7 +71,7 @@
             "protocols": [
               "tcp"
             ]
-	  },
+          },
           {
             "type": "obfs4",
             "ports": [
@@ -80,11 +80,11 @@
             "protocols": [
               "tcp"
             ],
-	    "options": {
+            "options": {
               "cert": "obfs-cert",
               "iat-mode": "0"
-	    }
-	  }
+            }
+          }
         ],
         "user_ips": false
       },
@@ -106,7 +106,7 @@
             "protocols": [
               "tcp"
             ]
-	  }
+          }
         ],
         "user_ips": false
       },
@@ -128,11 +128,11 @@
             "protocols": [
               "tcp"
             ],
-	    "options": {
+            "options": {
               "cert": "obfs-cert",
               "iat-mode": "0"
-	    }
-	  }
+            }
+          }
         ],
         "user_ips": false
       },
