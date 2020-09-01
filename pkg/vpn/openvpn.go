@@ -245,7 +245,7 @@ func (b *Bitmask) ListGateways(provider string) ([]string, error) {
 
 // UseGateway selects name as the default gateway
 func (b *Bitmask) UseGateway(name string) error {
-	b.bonafide.SetDefaultGateway(name)
+	b.bonafide.SetManualGateway(name)
 	return nil
 }
 

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.0
 import QtQuick.Extras 1.2
 
 import Qt.labs.platform 1.1 as LabsPlatform
@@ -8,13 +9,57 @@ import Qt.labs.platform 1.1 as LabsPlatform
 ApplicationWindow {
 
     id: app
-    visible: false
+    visible: true
+    width: 700
+    height: 700
 
     flags: Qt.WindowsStaysOnTopHint | Qt.Popup
 
     property var ctx
     property var loginDone
     property var allowEmptyPass
+
+    ColumnLayout{
+        anchors.centerIn: parent
+        width: parent.width
+        Layout.preferredHeight:  parent.height
+        visible: true
+
+        Text{
+            id: mainStatus
+            text: "Status: off"
+            font.pixelSize: 22
+            Layout.preferredWidth: parent.width
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Label {
+            text: "gateway selection:"
+            font.pixelSize: 20
+        }
+
+        ComboBox {
+          id: comboGw
+          editable: false
+          model: [ qsTr("Automatic"), qsTr("Paris"), qsTr("Amsterdam") ]
+          onAccepted: {
+              if (combo.find(currentText) === -1) {
+                 currentIndex = combo.find(editText)
+              }
+          }
+        }
+
+        ColumnLayout{
+            width: parent.width
+
+            Image {
+                id: worldMap
+                source: "qrc:/assets/svg/world.svg"
+                fillMode: Image.PreserveAspectCrop
+            }
+       }
+    }
+
 
     Connections {
         target: jsonModel
@@ -99,7 +144,9 @@ ApplicationWindow {
         allowEmptyPass = shouldAllowEmptyPass()
 
         /* TODO get appVisible flag from backend */
-        app.visible = false
+        app.visible = true;
+        show();
+        hide();
     }
 
     function toHuman(st) {

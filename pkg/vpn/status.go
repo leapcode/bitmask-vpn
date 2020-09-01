@@ -74,6 +74,7 @@ func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
 		}
 		if statusName == "CONNECTED" {
 			b.onGateway = strings.Split(stateEvent.String(), ": ")[1]
+			log.Println(">>> CONNECTED TO", b.onGateway)
 		}
 	}
 	b.statusCh <- Off
