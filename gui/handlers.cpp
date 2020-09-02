@@ -42,6 +42,11 @@ void Backend::donateSeen()
     DonateSeen();
 }
 
+void Backend::useGateway(QString label)
+{
+    UseGateway(toGoStr(label));
+}
+
 void Backend::login(QString username, QString password)
 {
     Login(toGoStr(username), toGoStr(password));

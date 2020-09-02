@@ -224,8 +224,12 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	return gws, err
 }
 
+func (b *Bonafide) GetGatewayDetails(label string) (Gateway, error) {
+	return b.gateways.getGatewayByLabel(label)
+}
+
 func (b *Bonafide) SetManualGateway(label string) {
-	b.gateways.setUserChoice(label)
+	b.gateways.setUserChoice([]byte(label))
 }
 
 func (b *Bonafide) SetAutomaticGateway() {

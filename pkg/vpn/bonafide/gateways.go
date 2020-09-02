@@ -16,14 +16,16 @@ const (
 // A Gateway is a representation of gateways that is independent of the api version.
 // If a given physical location offers different transports, they will appear as separate gateways.
 type Gateway struct {
-	Host      string
-	IPAddress string
-	Location  string
-	Ports     []string
-	Protocols []string
-	Options   map[string]string
-	Transport string
-	Label     string
+	Host         string
+	IPAddress    string
+	Location     string
+	LocationName string
+	CountryCode  string
+	Ports        []string
+	Protocols    []string
+	Options      map[string]string
+	Transport    string
+	Label        string
 }
 
 /* TODO add a String method with a human representation: Label (cc) */
@@ -35,18 +37,24 @@ type gatewayDistance struct {
 }
 
 type gatewayPool struct {
-	available []Gateway
+	available  []Gateway
+	userChoice []byte
 	/* ranked is, for now, just an array of hostnames (fetched from the
 	geoip service). it should be a map in the future, to keep track of
 	quantitative metrics */
-	ranked     []string
-	userChoice string
-	locations  map[string]location
+	ranked []string
+
+	/* TODO locations are just used to get the timezone for each gateway. I
+	* think it's easier to just merge that info into the version-agnostic
+	* Gateway, that is passed from the eipService, and do not worry with
+	* the location here */
+	locations map[string]Location
 }
 
 /* genLabels generates unique, human-readable labels for a gateway. It gives a serial
    number to each gateway in the same location (paris-1, paris-2,...). The
    current implementation will give a different label to each transport.
+   An alternative (to discuss) would be to give the same label to the same hostname.
 */
 func (p *gatewayPool) genLabels() {
 	acc := make(map[string]int)
@@ -59,7 +67,7 @@ func (p *gatewayPool) genLabels() {
 		gw.Label = gw.Location + "-" + strconv.Itoa(acc[gw.Location])
 		p.available[i] = gw
 	}
-	/* skip suffix if only one occurence */
+	/* skip suffix if only one occurrence */
 	for i, gw := range p.available {
 		if acc[gw.Location] == 1 {
 			gw.Label = gw.Location
@@ -102,11 +110,11 @@ func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 }
 
 func (p *gatewayPool) setAutomaticChoice() {
-	p.userChoice = ""
+	p.userChoice = []byte("")
 }
 
-func (p *gatewayPool) setUserChoice(label string) error {
-	if !p.isValidLabel(label) {
+func (p *gatewayPool) setUserChoice(label []byte) error {
+	if !p.isValidLabel(string(label)) {
 		return errors.New("bonafide: not a valid label for gateway choice")
 	}
 	p.userChoice = label
@@ -132,7 +140,7 @@ func (p *gatewayPool) setRanking(hostnames []string) {
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	if len(p.userChoice) != 0 {
-		gw, err := p.getGatewayByLabel(p.userChoice)
+		gw, err := p.getGatewayByLabel(string(p.userChoice))
 		gws = append(gws, gw)
 		return gws, err
 	} else if len(p.ranked) != 0 {

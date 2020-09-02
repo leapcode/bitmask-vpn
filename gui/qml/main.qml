@@ -6,12 +6,19 @@ import QtQuick.Extras 1.2
 
 import Qt.labs.platform 1.1 as LabsPlatform
 
+import "qrc:/js/maps.js" as Maps
+
 ApplicationWindow {
 
     id: app
     visible: true
-    width: 700
-    height: 700
+    width: 300
+    height: 600
+    maximumWidth: 300
+    minimumWidth: 300
+    maximumHeight: 600
+    minimumHeight: 600
+    // TODO get a nice background color
 
     flags: Qt.WindowsStaysOnTopHint | Qt.Popup
 
@@ -19,52 +26,121 @@ ApplicationWindow {
     property var loginDone
     property var allowEmptyPass
 
-    ColumnLayout{
-        anchors.centerIn: parent
-        width: parent.width
-        Layout.preferredHeight:  parent.height
+    onWidthChanged: displayGatewayMarker()
+    onHeightChanged: displayGatewayMarker()
+
+    GridLayout {
+
         visible: true
+        columns: 3
 
-        Text{
-            id: mainStatus
-            text: "Status: off"
-            font.pixelSize: 22
-            Layout.preferredWidth: parent.width
-            horizontalAlignment: Text.AlignHCenter
+        Item {
+            Layout.column: 2
+            Layout.topMargin: app.height * 0.15
+            Layout.leftMargin: app.width * 0.10
+
+            ColumnLayout {
+                Layout.alignment: Qt.AlignHCenter
+
+                Text{
+                    id: mainStatus
+                    text: "off"
+                    font.pixelSize: 26
+                    Layout.alignment: Text.AlignHCenter
+                }
+
+                Text{
+                    id: mainCurrentGateway
+                    text: ""
+                    font.pixelSize: 20
+                    Layout.alignment: Text.AlignHCenter
+                }
+
+                Button {
+                    id: mainOnBtn
+                    x: 80
+                    y: 200
+                    text: qsTr("on")
+                    visible: true
+                    onClicked: backend.switchOn()
+                }
+
+                Button {
+                    id: mainOffBtn
+                    x: 180
+                    y: 200
+                    text: qsTr("off")
+                    visible: false
+                    onClicked: backend.switchOff()
+                }
+
+                ComboBox {
+                    id: gwSelector
+                    editable: false
+                    model: [qsTr("Automatic")]
+                    onActivated: {
+                        console.debug("Selected gateway:", currentText);
+                        backend.useGateway(currentText.toString());
+                    }
+                }
+            }
         }
 
-        Label {
-            text: "gateway selection:"
-            font.pixelSize: 20
-        }
-
-        ComboBox {
-          id: comboGw
-          editable: false
-          model: [ qsTr("Automatic"), qsTr("Paris"), qsTr("Amsterdam") ]
-          onAccepted: {
-              if (combo.find(currentText) === -1) {
-                 currentIndex = combo.find(editText)
-              }
-          }
-        }
-
-        ColumnLayout{
-            width: parent.width
+        Item {
+            Layout.topMargin: app.height * 0.40
+            Layout.row: 3
+            Layout.column: 1
+            Layout.columnSpan: 3
 
             Image {
                 id: worldMap
+                width: app.width
                 source: "qrc:/assets/svg/world.svg"
-                fillMode: Image.PreserveAspectCrop
+                fillMode: Image.PreserveAspectFit
+                smooth: true
             }
-       }
+
+            Rectangle {
+                id: gwMarker
+                x: worldMap.width * 0.5
+                y: worldMap.height * 0.5
+                width: 10
+                height: 10
+                radius: 10
+                color: "red"
+                z: worldMap.z + 1
+            }
+
+        }
+    }
+
+
+    function displayGatewayMarker() {
+        let coords = {
+            'paris': {'x': 48, 'y': 2},
+            'miami': {'x': 25.7  , 'y': -80.2 },
+            'amsterdam': {'x': 52.4, 'y': 4.9 },
+            'montreal': {'x': 45.3, 'y': -73.4 },
+            'seattle': {'x': 47.4, 'y': -122.2 },
+        }
+        let city = ctx.currentGateway.split('-')[0]
+        let coord = coords[city]
+
+        // TODO the Robinson projection does not seem to fit super-nicely with
+        // our map, and this offset doesn't work with bigg-ish sizes. But good
+        // enough for a proof of concept - if we avoid resizing the window.
+        let xOffset = -1 * 0.10 * worldMap.width
+        let p = Maps.projectAbsolute(coord.x, coord.y, worldMap.width, 1, xOffset)
+        gwMarker.x = p.x
+        gwMarker.y = p.y
     }
 
 
     Connections {
         target: jsonModel
         onDataChanged: {
-            ctx = JSON.parse(jsonModel.getJson())
+            ctx = JSON.parse(jsonModel.getJson());
+            gwSelector.model = Object.keys(ctx.gateways)
 
             if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())
@@ -170,6 +246,28 @@ ApplicationWindow {
         }
     }
 
+    function toHumanWithLocation(st) {
+        switch(st) {
+            case "off":
+		//: %1 -> application name
+                return qsTr("%1 off").arg(ctx.appName);
+            case "on":
+		//: %1 -> application name
+                //: %2 -> current gateway
+                return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentGateway);
+            case "connecting":
+		//: %1 -> application name
+                //: %2 -> current gateway
+                return qsTr("Connecting to %1 - %2").arg(ctx.appName).arg(ctx.currentGateway);
+            case "stopping":
+		//: %1 -> application name
+                return qsTr("Stopping %1").arg(ctx.appName);
+            case "failed":
+		//: %1 -> application name
+                return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handed yet
+        }
+    }
+
     property var icons: {
         "off": "qrc:/assets/icon/png/black/vpn_off.png",
         "on": "qrc:/assets/icon/png/black/vpn_on.png",
@@ -177,8 +275,11 @@ ApplicationWindow {
         "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png"
     }
 
+    VpnState {
+        id: vpn
+    }
 
-    
+    SystemTrayIcon {
     LabsPlatform.SystemTrayIcon {
 
         id: systray
@@ -203,76 +304,6 @@ ApplicationWindow {
                 }
             }
 
-            StateGroup {
-                id: vpn
-                state: ctx ? ctx.status : ""
-
-                states: [
-                    State {
-                        name: "initializing"
-                    },
-                    State {
-                        name: "off"
-                        PropertyChanges {
-                            target: systray
-                            tooltip: toHuman("off")
-                            icon.source: icons["off"]
-                        }
-                        PropertyChanges {
-                            target: statusItem
-                            text: toHuman("off")
-                        }
-                    },
-                    State {
-                        name: "on"
-                        PropertyChanges {
-                            target: systray
-                            tooltip: toHuman("on")
-                            icon.source: icons["on"]
-                        }
-                        PropertyChanges {
-                            target: statusItem
-                            text: toHuman("on")
-                        }
-                    },
-                    State {
-                        name: "starting"
-                        PropertyChanges {
-                            target: systray
-                            tooltip: toHuman("connecting")
-                            icon.source: icons["wait"]
-                        }
-                        PropertyChanges {
-                            target: statusItem
-                            text: toHuman("connecting")
-                        }
-                    },
-                    State {
-                        name: "stopping"
-                        PropertyChanges {
-                            target: systray
-                            tooltip: toHuman("stopping")
-                            icon.source: icons["wait"]
-                        }
-                        PropertyChanges {
-                            target: statusItem
-                            text: toHuman("stopping")
-                        }
-                    },
-                    State {
-                        name: "failed"
-                        PropertyChanges {
-                            target: systray
-                            tooltip: toHuman("failed")
-                            icon.source: icons["blocked"]
-                        }
-                        PropertyChanges {
-                            target: statusItem
-                            text: toHuman("failed")
-                        }
-                    }
-                ]
-            }
 
             LabsPlatform.MenuItem {
                 id: statusItem
@@ -385,8 +416,6 @@ ApplicationWindow {
                 console.log("System doesn't support systray notifications")
             }
         }
-
-
     }
 
     DonateDialog {
@@ -432,5 +461,4 @@ ApplicationWindow {
         id: initFailure
         visible: false
     }
-
 }

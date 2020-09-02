@@ -29,6 +29,7 @@ type Bitmask interface {
 	ListGateways(provider string) ([]string, error)
 	UseGateway(name string) error
 	GetCurrentGateway() string
+	GetGatewayDetails(label string) (interface{}, error)
 	UseTransport(transport string) error
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)

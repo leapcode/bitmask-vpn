@@ -14,7 +14,7 @@ import (
 type eipService struct {
 	Gateways             []gatewayV3
 	defaultGateway       string
-	Locations            map[string]location
+	Locations            map[string]Location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 	auth                 string
 }
@@ -22,7 +22,7 @@ type eipService struct {
 type eipServiceV1 struct {
 	Gateways             []gatewayV1
 	defaultGateway       string
-	Locations            map[string]location
+	Locations            map[string]Location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 }
 
@@ -45,8 +45,8 @@ type gatewayV3 struct {
 	Location  string
 }
 
-type location struct {
-	CountryCode string
+type Location struct {
+	CountryCode string `json:"country_code"`
 	Hemisphere  string
 	Name        string
 	Timezone    string
@@ -159,13 +159,15 @@ func (eip eipService) getGateways() []Gateway {
 	for _, g := range eip.Gateways {
 		for _, t := range g.Capabilities.Transport {
 			gateway := Gateway{
-				Host:      g.Host,
-				IPAddress: g.IPAddress,
-				Location:  g.Location,
-				Ports:     t.Ports,
-				Protocols: t.Protocols,
-				Options:   t.Options,
-				Transport: t.Type,
+				Host:         g.Host,
+				IPAddress:    g.IPAddress,
+				Location:     g.Location,
+				Ports:        t.Ports,
+				Protocols:    t.Protocols,
+				Options:      t.Options,
+				Transport:    t.Type,
+				LocationName: eip.Locations[g.Location].Name,
+				CountryCode:  eip.Locations[g.Location].CountryCode,
 			}
 			gws = append(gws, gateway)
 		}

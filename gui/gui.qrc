@@ -2,6 +2,7 @@
     <qresource prefix="/">
 
         <file>qml/main.qml</file>
+        <file>qml/VpnState.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/DonateDialog.qml</file>
         <file>qml/LoginDialog.qml</file>
@@ -24,5 +25,7 @@
 
         <file alias="providers.json">providers/providers.json</file>
         <file>assets/svg/world.svg</file>
+        <file>js/maps.js</file>
+
     </qresource>
 </RCC>

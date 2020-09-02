@@ -25,6 +25,7 @@ import (
 	"strconv"
 	"strings"
 
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/shapeshifter"
 )
 
@@ -242,6 +243,14 @@ func (b *Bitmask) ListGateways(provider string) ([]string, error) {
 		gatewayNames[i] = gw.Label
 	}
 	return gatewayNames, nil
+}
+
+func (b *Bitmask) GetGatewayDetails(label string) (interface{}, error) {
+	gw, err := b.bonafide.GetGatewayDetails(label)
+	if err != nil {
+		return bonafide.Gateway{}, err
+	}
+	return gw, nil
 }
 
 // UseGateway selects a gateway, by label, as the default gateway

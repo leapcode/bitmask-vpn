@@ -8,6 +8,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 )
 
 const (
@@ -32,18 +33,20 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName         string `json:"appName"`
-	Provider        string `json:"provider"`
-	TosURL          string `json:"tosURL"`
-	HelpURL         string `json:"helpURL"`
-	AskForDonations bool   `json:"askForDonations"`
-	DonateDialog    bool   `json:"donateDialog"`
-	DonateURL       string `json:"donateURL"`
-	LoginDialog     bool   `json:"loginDialog"`
-	LoginOk         bool   `json:"loginOk"`
-	Version         string `json:"version"`
-	Errors          string `json:"errors"`
-	Status          status `json:"status"`
+	AppName         string                      `json:"appName"`
+	Provider        string                      `json:"provider"`
+	TosURL          string                      `json:"tosURL"`
+	HelpURL         string                      `json:"helpURL"`
+	AskForDonations bool                        `json:"askForDonations"`
+	DonateDialog    bool                        `json:"donateDialog"`
+	DonateURL       string                      `json:"donateURL"`
+	LoginDialog     bool                        `json:"loginDialog"`
+	LoginOk         bool                        `json:"loginOk"`
+	Version         string                      `json:"version"`
+	Errors          string                      `json:"errors"`
+	Status          status                      `json:"status"`
+	Gateways        map[string]bonafide.Gateway `json:"gateways"`
+	CurrentGateway  string                      `json:"currentGateway"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
@@ -51,6 +54,15 @@ type connectionCtx struct {
 
 func (c connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
+	if c.bm != nil {
+		c.Gateways = map[string]bonafide.Gateway{}
+		gateways, _ := c.bm.ListGateways("openvpn")
+		for _, label := range gateways {
+			gw, _ := c.bm.GetGatewayDetails(label)
+			c.Gateways[label] = gw.(bonafide.Gateway)
+		}
+		c.CurrentGateway = c.bm.GetCurrentGateway()
+	}
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)
 	if err != nil {

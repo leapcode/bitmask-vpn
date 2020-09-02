@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"strconv"
+	"time"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
@@ -54,10 +55,14 @@ func SwitchOff() {
 	go stopVPN()
 }
 
-// TODO implement Reconnect?
+// TODO implement Reconnect - do not tear whole fw down in between
 
 func UseGateway(label string) {
-	ctx.bm.UseGateway(label)
+	ctx.bm.UseGateway(string(label))
+	time.Sleep(200 * time.Millisecond)
+	SwitchOff()
+	time.Sleep(500 * time.Millisecond)
+	SwitchOn()
 }
 
 func UseTransport(label string) {
