@@ -30,6 +30,16 @@ func SwitchOff() {
 	backend.SwitchOff()
 }
 
+//export UseGateway
+func UseGateway(label string) {
+	backend.UseGateway(label)
+}
+
+//export UseTransport
+func UseTransport(transport string) {
+	backend.UseTransport(transport)
+}
+
 //export Quit
 func Quit() {
 	backend.Quit()

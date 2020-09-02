@@ -29,7 +29,7 @@ import (
 // Bitmask holds the bitmask client data
 type Bitmask struct {
 	tempdir          string
-	onGateway        string
+	onGateway        bonafide.Gateway
 	statusCh         chan string
 	managementClient *openvpn.MgmtClient
 	bonafide         *bonafide.Bonafide
@@ -45,12 +45,12 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	bonafide := bonafide.New()
+	bf := bonafide.New()
 	launch, err := newLauncher()
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, "", statusCh, nil, bonafide, launch, "", nil}
+	b := Bitmask{tempdir, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil}
 
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running

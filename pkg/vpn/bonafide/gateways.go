@@ -142,6 +142,14 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 	}
 }
 
+func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
+	if len(p.ranked) != 0 {
+		return p.getGatewaysByServiceRank(transport, 999)
+	} else {
+		return p.getGatewaysByTimezone(transport, tz, 999)
+	}
+}
+
 func (p *gatewayPool) getGatewaysByServiceRank(transport string, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	for _, host := range p.ranked {

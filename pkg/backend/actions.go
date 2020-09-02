@@ -19,3 +19,23 @@ func stopVPN() {
 		log.Println(err)
 	}
 }
+
+// TODO return bool?
+func useGateway(label string) {
+	err := ctx.bm.UseGateway(label)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func getGateway() string {
+	return ctx.bm.GetCurrentGateway()
+}
+
+// TODO return bool?
+func useTransport(transport string) {
+	err := ctx.bm.UseTransport(transport)
+	if err != nil {
+		log.Println(err)
+	}
+}

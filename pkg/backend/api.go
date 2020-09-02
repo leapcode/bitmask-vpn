@@ -54,6 +54,16 @@ func SwitchOff() {
 	go stopVPN()
 }
 
+// TODO implement Reconnect?
+
+func UseGateway(label string) {
+	ctx.bm.UseGateway(label)
+}
+
+func UseTransport(label string) {
+	ctx.bm.UseTransport(label)
+}
+
 func Quit() {
 	if ctx.autostart != nil {
 		ctx.autostart.Disable()

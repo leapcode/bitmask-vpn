@@ -197,6 +197,8 @@ func (b *Bonafide) maybeInitializeEIP() error {
 	return nil
 }
 
+// GetGateways filters by transport, and will return the maximum number defined
+// in bonafide.maxGateways, or the maximum by default (3).
 func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 	err := b.maybeInitializeEIP()
 	if err != nil {
@@ -211,12 +213,27 @@ func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 	return gws, err
 }
 
+// GetAllGateways only filters gateways by transport.
+// TODO could pass "any" instead?
+func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
+	err := b.maybeInitializeEIP()
+	if err != nil {
+		return nil, err
+	}
+	gws, err := b.gateways.getAll(transport, b.tzOffsetHours)
+	return gws, err
+}
+
 func (b *Bonafide) SetManualGateway(label string) {
 	b.gateways.setUserChoice(label)
 }
 
 func (b *Bonafide) SetAutomaticGateway() {
 	b.gateways.setAutomaticChoice()
+}
+
+func (b *Bonafide) GetGatewayByIP(ip string) (Gateway, error) {
+	return b.gateways.getGatewayByIP(ip)
 }
 
 /* TODO this still needs to be called periodically */

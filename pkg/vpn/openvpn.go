@@ -230,22 +230,23 @@ func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.check()
 }
 
-// ListGateways return the names of the gateways
+// ListGateways return the labels of the gateways (only for transport=openvpn, at the moment)
+// TODO return other transports too
 func (b *Bitmask) ListGateways(provider string) ([]string, error) {
-	gateways, err := b.bonafide.GetGateways("openvpn")
+	gateways, err := b.bonafide.GetAllGateways("openvpn")
 	if err != nil {
 		return nil, err
 	}
 	gatewayNames := make([]string, len(gateways))
 	for i, gw := range gateways {
-		gatewayNames[i] = gw.Location
+		gatewayNames[i] = gw.Label
 	}
 	return gatewayNames, nil
 }
 
-// UseGateway selects name as the default gateway
-func (b *Bitmask) UseGateway(name string) error {
-	b.bonafide.SetManualGateway(name)
+// UseGateway selects a gateway, by label, as the default gateway
+func (b *Bitmask) UseGateway(label string) error {
+	b.bonafide.SetManualGateway(label)
 	return nil
 }
 

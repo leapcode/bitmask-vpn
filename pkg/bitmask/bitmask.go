@@ -1,4 +1,4 @@
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ type Bitmask interface {
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	ListGateways(provider string) ([]string, error)
 	UseGateway(name string) error
+	GetCurrentGateway() string
 	UseTransport(transport string) error
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)
