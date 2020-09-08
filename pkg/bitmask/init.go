@@ -79,7 +79,7 @@ func ConfigureProvider(opts *ProviderOpts) {
 	emptyPass, err := strconv.ParseBool(opts.AuthEmptyPass)
 	if err == nil {
 		config.AuthEmptyPass = emptyPass
-		log.Println("DEBUG: provider allows empty pass", emptyPass)
+		log.Println("DEBUG: provider allows empty pass:", emptyPass)
 	}
 }
 
