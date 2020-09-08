@@ -40,6 +40,7 @@ type ProviderOpts struct {
 	AppName         string `json:"applicationName"`
 	BinaryName      string `json:"binaryName"`
 	Auth            string `json:"auth"`
+	AuthEmptyPass   string `json:"authEmptyPass"`
 	ProviderURL     string `json:"providerURL"`
 	DonateURL       string `json:"donateURL"`
 	ApiURL          string `json:"apiURL"`
@@ -62,6 +63,7 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.ApplicationName = opts.AppName
 	config.BinaryName = opts.BinaryName
 	config.Auth = opts.Auth
+
 	config.DonateURL = opts.DonateURL
 	config.HelpURL = opts.HelpURL
 	config.TosURL = opts.TosURL
@@ -72,6 +74,12 @@ func ConfigureProvider(opts *ProviderOpts) {
 	wantsDonations, err := strconv.ParseBool(opts.AskForDonations)
 	if err == nil {
 		config.AskForDonations = wantsDonations
+	}
+
+	emptyPass, err := strconv.ParseBool(opts.AuthEmptyPass)
+	if err == nil {
+		config.AuthEmptyPass = emptyPass
+		log.Println("DEBUG: provider allows empty pass", emptyPass)
 	}
 }
 

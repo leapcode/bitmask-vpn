@@ -6,6 +6,7 @@ var (
 	ApplicationName = ""
 	BinaryName      = ""
 	Auth            = ""
+	AuthEmptyPass   = false
 	DonateURL       = ""
 	AskForDonations = true
 	HelpURL         = ""
