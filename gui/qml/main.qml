@@ -46,7 +46,11 @@ ApplicationWindow {
     function showInitFailure(msg) {
       console.debug("ERRORS:", ctx.errors)
       if (msg == undefined) {
-          if (ctx.errors == 'bad_auth') {
+          if (ctx.errors == 'bad_auth_502') {
+                  msg = qsTr("Oops! The authentication service seems down. Please try again later")
+              initFailure.title = qsTr("Service Error")
+          }
+          else if (ctx.errors == 'bad_auth') {
               if (allowEmptyPass) {
                   // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
                   // Another option to consider is to customize the error strings while vendoring.

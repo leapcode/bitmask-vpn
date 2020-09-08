@@ -18,7 +18,11 @@ func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
 	if err != nil {
 		log.Printf("Error on login: %v", err)
-		ctx.Errors = "bad_auth"
+		if err.Error() == "Cannot get token: Error 502" {
+			ctx.Errors = "bad_auth_502"
+		} else {
+			ctx.Errors = "bad_auth"
+		}
 	} else if success {
 		log.Printf("Logged in as %s", username)
 		ctx.LoginOk = true
