@@ -6,6 +6,7 @@
         <file>qml/DonateDialog.qml</file>
         <file>qml/LoginDialog.qml</file>
         <file>qml/LoginOKDialog.qml</file>
+        <file>qml/FailDialog.qml</file>
 
         <file>assets/icon/png/black/vpn_off.png</file>
         <file>assets/icon/png/black/vpn_on.png</file>

@@ -37,16 +37,30 @@ ApplicationWindow {
                } else if ( ctx.errors == "nopolkit" ) {
                    showInitFailure(qsTr("Could not find polkit agent."))
                } else {
-                   //: %1 -> application name
-                   //: %2 -> error string
-                   showInitFailure(qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors))
-                   console.debug(ctx.errors)
+                   showInitFailure()
                }
             }
         }
     }
 
     function showInitFailure(msg) {
+      console.debug("ERRORS:", ctx.errors)
+      if (msg == undefined) {
+          if (ctx.errors == 'bad_auth') {
+              if (allowEmptyPass) {
+                  // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
+                  // Another option to consider is to customize the error strings while vendoring.
+                  msg = qsTr("Please check your Patron ID")
+              } else {
+                  msg = qsTr("Could not log in with those credentials, please retry")
+              }
+              initFailure.title = qsTr("Login Error")
+          } else {
+              //: %1 -> application name
+              //: %2 -> error string
+              msg = qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors)
+          }
+      }
       initFailure.text = msg
       initFailure.visible  = true
     }
@@ -249,6 +263,7 @@ ApplicationWindow {
         id: about
         visible: false
     }
+   
 
     LoginDialog {
         id: login
@@ -279,22 +294,8 @@ ApplicationWindow {
         visible: false
     }
 
-    MessageDialog {
+    FailDialog {
         id: initFailure
-        buttons: MessageDialog.Ok
-        modality: Qt.NonModal
-        title: qsTr("Initialization Error")
-        text: ""
         visible: false
-    	onAccepted: retryOrQuit()
-        onRejected: retryOrQuit()
-        
-        function retryOrQuit() {
-            if (ctx.loginDialog == 'true') {
-                login.visible = true
-            } else {
-                backend.quit()
-            }
-        }
     }
 }
