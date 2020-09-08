@@ -23,10 +23,11 @@ def generateProvidersJSON(configPath, outputJSONPath):
     providers = {}
     defaultProvider = getDefaultProvider(config)
     providers['default'] = defaultProvider
+    providers['providers'] = []
     providerData = getProviderData(defaultProvider, config)
     addCaData(providerData, configPath)
 
-    providers[defaultProvider] = providerData
+    providers['providers'].append(providerData)
     with open(outputJSONPath, 'w', encoding='utf-8') as f:
         json.dump(providers, f, ensure_ascii=False, indent=4)
 

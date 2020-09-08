@@ -8,7 +8,9 @@
 
 GoString toGoStr(QString s)
 {
-    char *c = s.toLocal8Bit().data();
+    // TODO verify that it's more correct 
+    // char *c = s.toLocal8Bit().data();
+    const char *c = s.toUtf8().constData();
     return (GoString){c, (long int)strlen(c)};
 }
 

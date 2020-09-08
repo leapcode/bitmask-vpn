@@ -4,6 +4,7 @@ package backend
 
 import (
 	"C"
+	"encoding/json"
 	"log"
 	"strconv"
 	"unsafe"
@@ -61,10 +62,30 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 	subscribe(event, f)
 }
 
+type Providers struct {
+	Default string `json:"default"`
+	Data    []InitOpts
+}
+
 type InitOpts struct {
-	Provider   string
-	AppName    string
-	SkipLaunch bool
+	Provider        string `json:"name"`
+	AppName         string `json:"applicationName"`
+	BinaryName      string `json:"binaryName"`
+	Auth            string `json:"auth"`
+	ProviderURL     string `json:"providerURL"`
+	TosURL          string `json:"tosURL"`
+	HelpURL         string `json:"helpURL"`
+	AskForDonations bool   `json:"askForDonations"`
+	SkipLaunch      bool
+}
+
+func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
+	opts := InitOpts{}
+	err := json.Unmarshal([]byte(providersJSON), &opts)
+	if err != nil {
+		log.Println("ERROR: %v", err)
+	}
+	return &opts
 }
 
 func InitializeBitmaskContext(opts *InitOpts) {

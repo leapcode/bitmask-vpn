@@ -7,6 +7,7 @@ package main
 
 import (
 	"C"
+	"log"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/backend"
@@ -53,8 +54,11 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 }
 
 //export InitializeBitmaskContext
-func InitializeBitmaskContext() {
-	opts := &backend.InitOpts{}
+func InitializeBitmaskContext(provider string, jsonPtr unsafe.Pointer, jsonLen C.int) {
+	log.Println("DEBUG: provider=", provider)
+	json := C.GoBytes(jsonPtr, jsonLen)
+	log.Println("DEBUG: json=", string(json))
+	opts := backend.InitOptsFromJSON(provider, string(json))
 	backend.InitializeBitmaskContext(opts)
 }
 
