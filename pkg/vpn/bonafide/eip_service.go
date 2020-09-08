@@ -14,11 +14,6 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
-const (
-	eip1API = config.APIURL + "1/config/eip-service.json"
-	eip3API = config.APIURL + "3/config/eip-service.json"
-)
-
 type eipService struct {
 	Gateways             []gatewayV3
 	Locations            map[string]location
@@ -83,6 +78,7 @@ func (b *Bonafide) setupAuthentication(i interface{}) {
 }
 
 func (b *Bonafide) fetchEipJSON() error {
+	eip3API := config.APIURL + "3/config/eip-service.json"
 	resp, err := b.client.Post(eip3API, "", nil)
 	for err != nil {
 		log.Printf("Error fetching eip v3 json: %v", err)
@@ -98,6 +94,7 @@ func (b *Bonafide) fetchEipJSON() error {
 		buf := make([]byte, 128)
 		resp.Body.Read(buf)
 		log.Printf("Error fetching eip v3 json")
+		eip1API := config.APIURL + "1/config/eip-service.json"
 		resp, err = b.client.Post(eip1API, "", nil)
 		if err != nil {
 			return err

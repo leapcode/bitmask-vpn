@@ -40,10 +40,6 @@ const (
 	certPathv1 = "1/cert"
 	certPathv3 = "3/cert"
 	authPathv3 = "3/auth"
-
-	certAPI  = config.APIURL + certPathv1
-	certAPI3 = config.APIURL + certPathv3
-	authAPI  = config.APIURL + authPathv3
 )
 
 type Bonafide struct {
@@ -185,11 +181,11 @@ func (b *Bonafide) getURL(object string) string {
 	if b.apiURL == "" {
 		switch object {
 		case "cert":
-			return certAPI
+			return config.APIURL + certPathv1
 		case "certv3":
-			return certAPI3
+			return config.APIURL + certPathv3
 		case "auth":
-			return authAPI
+			return config.APIURL + authPathv3
 		}
 	} else {
 		switch object {

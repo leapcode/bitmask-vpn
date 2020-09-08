@@ -2,8 +2,6 @@ package backend
 
 import (
 	"time"
-
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 // runDonationReminder checks every hour if we need to show the reminder,
@@ -17,13 +15,6 @@ func runDonationReminder() {
 			}
 		}
 	}()
-}
-
-func wantDonations() bool {
-	if config.AskForDonations == "true" {
-		return true
-	}
-	return false
 }
 
 func needsDonationReminder() bool {

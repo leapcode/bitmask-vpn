@@ -29,7 +29,10 @@ import (
 )
 
 const (
-	systemOpenvpnPath   = "/usr/sbin/openvpn"
+	systemOpenvpnPath = "/usr/sbin/openvpn"
+)
+
+var (
 	snapOpenvpnPath     = "/snap/bin/" + config.BinaryName + ".openvpn"
 	snapBitmaskRootPath = "/snap/bin/" + config.BinaryName + ".bitmask-root"
 )
