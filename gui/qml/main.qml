@@ -11,6 +11,7 @@ ApplicationWindow {
 
     property var ctx
     property var loginDone 
+    property var allowEmptyPass
 
     Connections {
         target: jsonModel
@@ -46,8 +47,20 @@ ApplicationWindow {
     }
 
     function showInitFailure(msg) {
-          initFailure.text = msg
-          initFailure.visible  = true
+      initFailure.text = msg
+      initFailure.visible  = true
+    }
+
+    function shouldAllowEmptyPass() {
+        let obj = JSON.parse(providers.getJson())
+        let active = obj['default']
+        let allProviders = obj['providers']
+        for (let i = 0; i < allProviders.length; i++) {
+            if (allProviders[i]['name'] === active) {
+                return (allProviders[i]['authEmptyPass'] === 'true')
+            }
+        }
+        return false
     }
 
     Component.onCompleted: {
@@ -59,8 +72,10 @@ ApplicationWindow {
          Loaders as a placeholder for all the many dialogs, or to load
          a nice splash screen etc...  */
 
-        console.debug("Pre-seeded providers:");
+        console.debug("DEBUG: Pre-seeded providers:");
         console.debug(providers.getJson());
+
+        allowEmptyPass = shouldAllowEmptyPass()
 
         app.visible = true;
         show();

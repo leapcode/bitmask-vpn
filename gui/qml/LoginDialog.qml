@@ -18,6 +18,7 @@ Dialog {
             id: password
             placeholderText: qsTr("password")
             echoMode: TextInput.PasswordEchoOnEdit
+            visible: !allowEmptyPass
         }
     }
 
