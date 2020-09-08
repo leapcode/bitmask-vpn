@@ -70,25 +70,27 @@ func writeToken(token []byte) {
 	tp := getTokenPath()
 	err := ioutil.WriteFile(tp, token, 0600)
 	if err != nil {
-		log.Println("BUG: cannot write token to", tp)
+		log.Println("BUG: cannot write token to", tp, err)
 	}
 }
 
 func readToken() ([]byte, error) {
 	f, err := os.Open(getTokenPath())
 	if err != nil {
-		log.Println("Error: cannot open token file")
+		log.Println("Error: cannot open token file", err)
 		return nil, err
 	}
 	token, err := ioutil.ReadAll(f)
 	if err != nil {
-		log.Println("Error: cannot read token")
+		log.Println("Error: cannot read token", err)
 		return nil, err
 	}
 	return token, nil
 }
 
 func hasRecentToken() bool {
+	/* See https://0xacab.org/leap/bitmask-vpn/-/issues/346 for ability to refresh tokens,
+	   when implemented that should be tried in a goroutine */
 	statinfo, err := os.Stat(getTokenPath())
 	if err != nil {
 		return false
