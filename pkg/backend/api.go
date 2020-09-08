@@ -63,35 +63,30 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 }
 
 type Providers struct {
-	Default string `json:"default"`
-	Data    []InitOpts
+	Default string                 `json:"default"`
+	Data    []bitmask.ProviderOpts `json:"providers"`
 }
 
 type InitOpts struct {
-	Provider        string `json:"name"`
-	AppName         string `json:"applicationName"`
-	BinaryName      string `json:"binaryName"`
-	Auth            string `json:"auth"`
-	ProviderURL     string `json:"providerURL"`
-	TosURL          string `json:"tosURL"`
-	HelpURL         string `json:"helpURL"`
-	AskForDonations bool   `json:"askForDonations"`
+	ProviderOptions *bitmask.ProviderOpts
 	SkipLaunch      bool
 }
 
 func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
-	opts := InitOpts{}
-	err := json.Unmarshal([]byte(providersJSON), &opts)
+	providers := Providers{}
+	err := json.Unmarshal([]byte(providersJSON), &providers)
 	if err != nil {
-		log.Println("ERROR: %v", err)
+		log.Println("ERROR while parsing json:", err)
 	}
-	return &opts
+	if len(providers.Data) != 1 {
+		panic("BUG: we do not support multi-provider yet")
+	}
+	providerOpts := &providers.Data[0]
+	return &InitOpts{providerOpts, false}
 }
 
 func InitializeBitmaskContext(opts *InitOpts) {
-	p := bitmask.GetConfiguredProvider()
-	opts.Provider = p.Provider
-	opts.AppName = p.AppName
+	bitmask.ConfigureProvider(opts.ProviderOptions)
 
 	initOnce.Do(func() { initializeContext(opts) })
 	if ctx.bm != nil {

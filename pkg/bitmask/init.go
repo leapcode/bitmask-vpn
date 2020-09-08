@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strconv"
 
 	"github.com/jmshal/go-locale"
 	"golang.org/x/text/message"
@@ -34,10 +35,44 @@ type ProviderInfo struct {
 	AppName  string
 }
 
+type ProviderOpts struct {
+	Provider        string `json:"name"`
+	AppName         string `json:"applicationName"`
+	BinaryName      string `json:"binaryName"`
+	Auth            string `json:"auth"`
+	ProviderURL     string `json:"providerURL"`
+	DonateURL       string `json:"donateURL"`
+	ApiURL          string `json:"apiURL"`
+	TosURL          string `json:"tosURL"`
+	HelpURL         string `json:"helpURL"`
+	GeolocationURL  string `json:"geolocationAPI"`
+	AskForDonations string `json:"askForDonations"`
+	CaCert          string `json:"caCertString"`
+}
+
 func GetConfiguredProvider() *ProviderInfo {
 	provider := config.Provider
 	appName := config.ApplicationName
 	return &ProviderInfo{provider, appName}
+}
+
+func ConfigureProvider(opts *ProviderOpts) {
+	config.Provider = opts.ProviderURL
+	config.ProviderName = opts.Provider
+	config.ApplicationName = opts.AppName
+	config.BinaryName = opts.BinaryName
+	config.Auth = opts.Auth
+	config.DonateURL = opts.DonateURL
+	config.HelpURL = opts.HelpURL
+	config.TosURL = opts.TosURL
+	config.APIURL = opts.ApiURL
+	config.GeolocationAPI = opts.GeolocationURL
+	config.CaCert = []byte(opts.CaCert)
+
+	wantsDonations, err := strconv.ParseBool(opts.AskForDonations)
+	if err == nil {
+		config.AskForDonations = wantsDonations
+	}
 }
 
 func InitializeLogger() {

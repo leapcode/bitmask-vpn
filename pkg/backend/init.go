@@ -14,13 +14,17 @@ import (
 // api uses the sync.Once primitive to call this.
 func initializeContext(opts *InitOpts) {
 	var st status = off
+
+	// TODO - now there's really no need to dance between opts and config anymore
+	// but this was the simplest transition. We should probably keep the multi-provider config in the backend too, and just
+	// switch the "active" here in the ctx, after the user has selected one in the combobox.
 	ctx = &connectionCtx{
-		AppName:         opts.AppName,
-		Provider:        opts.Provider,
+		AppName:         opts.ProviderOptions.AppName,
+		Provider:        opts.ProviderOptions.Provider,
 		TosURL:          config.TosURL,
 		HelpURL:         config.HelpURL,
 		DonateURL:       config.DonateURL,
-		AskForDonations: wantDonations(),
+		AskForDonations: config.AskForDonations,
 		DonateDialog:    false,
 		Version:         version.VERSION,
 		Status:          st,
