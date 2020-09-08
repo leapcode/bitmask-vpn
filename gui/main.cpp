@@ -145,8 +145,14 @@ int main(int argc, char **argv) {
     GoString statusChangedEvt = {stCh, (long int)strlen(stCh)};
     SubscribeToEvent(statusChangedEvt, (void *)onStatusChanged);
 
+    QJsonValue defaultProvider = providers->json().object().value("default");
+    /* we send json as bytes because it breaks as a simple string */
+    QString QProvidersJSON(providers->json().toJson(QJsonDocument::Compact));
+
     /* let the Go side initialize its internal state */
-    InitializeBitmaskContext();
+    InitializeBitmaskContext(
+            toGoStr(defaultProvider.toString()),
+            (char*)QProvidersJSON.toUtf8().data(), strlen(QProvidersJSON.toUtf8().data()));
 
     /* if requested, enable web api for controlling the VPN */
     if (webAPI) {
