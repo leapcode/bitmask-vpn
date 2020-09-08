@@ -239,7 +239,7 @@ func (b *Bonafide) fetchGeolocation() ([]string, error) {
 		client := &http.Client{}
 		_resp, err := client.Post(config.GeolocationAPI, "", nil)
 		if err != nil {
-			log.Println("ERROR: could not fetch geolocation:", fmt.Errorf("%s", err))
+			log.Printf("ERROR: could not fetch geolocation: %s\n", err)
 			return nil, err
 		}
 		resp = _resp
@@ -247,15 +247,15 @@ func (b *Bonafide) fetchGeolocation() ([]string, error) {
 
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		log.Println("ERROR: bad status code while fetching geolocation:", fmt.Errorf("%s", resp.Status))
-		return nil, fmt.Errorf("Get geolocation failed with status: %s", resp.Status)
+		log.Println("ERROR: bad status code while fetching geolocation:", resp.StatusCode)
+		return nil, fmt.Errorf("Get geolocation failed with status: %s", resp.StatusCode)
 	}
 
 	geo := &geoLocation{}
 	dataJSON, err := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(dataJSON, &geo)
 	if err != nil {
-		log.Println("ERROR: cannot parse geolocation json", fmt.Errorf("%s", err))
+		log.Printf("ERROR: cannot parse geolocation json: %s\n", err)
 		log.Println(string(dataJSON))
 		_ = fmt.Errorf("bad json")
 		return nil, err
