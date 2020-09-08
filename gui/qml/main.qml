@@ -17,6 +17,8 @@ ApplicationWindow {
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson());
 
+            // FIXME -- we need to inform the backend that we've already seen
+            // this. Otherwise this keeps popping randonmly on state changes.
             if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
@@ -28,6 +30,7 @@ ApplicationWindow {
                 loginOk.visible = true
             }
             if (ctx.errors ) {
+               login.visible = false
                if ( ctx.errors  == "nohelpers" ) {
                    showInitFailure(qsTr("Could not find helpers. Check your installation"))
                } else if ( ctx.errors == "nopolkit" ) {
@@ -268,7 +271,15 @@ ApplicationWindow {
         title: qsTr("Initialization Error")
         text: ""
         visible: false
-    	onAccepted: backend.quit()
-    	onRejected: backend.quit()
+    	onAccepted: retryOrQuit()
+        onRejected: retryOrQuit()
+        
+        function retryOrQuit() {
+            if (ctx.loginDialog == 'true') {
+                login.visible = true
+            } else {
+                backend.quit()
+            }
+        }
     }
 }
