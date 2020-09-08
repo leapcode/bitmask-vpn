@@ -40,14 +40,6 @@ def addCaData(data, configfile):
     with open(caFile) as ca:
         data['caCertString'] = ca.read().strip()
 
-def writeOutput(data, infile, outfile):
-
-    with open(infile) as infile:
-        s = Template(infile.read())
-
-    with open(outfile, 'w') as outf:
-        outf.write(s.substitute(data))
-
 def bail(msg=None):
     if not msg:
         print("ERROR: not enough arguments!")
