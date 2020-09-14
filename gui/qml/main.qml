@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 import QtQuick.Extras 1.2
 import Qt.labs.platform 1.1
@@ -25,6 +25,8 @@ ApplicationWindow {
                 donate.visible = true
             }
             if (ctx.loginDialog == 'true') {
+                console.debug(jsonModel.getJson())
+                console.debug("DEBUG: should display login")
                 login.visible = true
             }
             if (ctx.loginOk == 'true') {
@@ -267,7 +269,6 @@ ApplicationWindow {
         id: about
         visible: false
     }
-   
 
     LoginDialog {
         id: login

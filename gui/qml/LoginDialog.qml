@@ -3,8 +3,8 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 
 Dialog {
-    standardButtons: StandardButton.Ok
     title: qsTr("Login")
+    standardButtons: Dialog.Ok
 
     Column {
         anchors.fill: parent
@@ -27,7 +27,6 @@ Dialog {
         }
     }
 
-    visible: false
     onAccepted: backend.login(username.text, password.text)
     onRejected: backend.quit()
 
