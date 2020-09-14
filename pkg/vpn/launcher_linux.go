@@ -40,6 +40,7 @@ var (
 var bitmaskRootPaths = []string{
 	"/usr/sbin/bitmask-root",
 	"/usr/local/sbin/bitmask-root",
+	snapBitmaskRootPath,
 }
 
 type launcher struct {
@@ -59,27 +60,33 @@ func (l *launcher) close() error {
 func (l *launcher) check() (helpers bool, privilege bool, err error) {
 	hasHelpers, err := hasHelpers()
 	if err != nil {
+		log.Println("Error checking helpers")
 		return
 	}
 	if !hasHelpers {
+		log.Println("Could not find helpers")
 		return false, true, nil
 	}
 
 	isRunning, err := isPolkitRunning()
 	if err != nil {
+		log.Println("Error checking if polkit is running")
 		return
 	}
 
 	if !isRunning {
 		polkitPath := getPolkitPath()
 		if polkitPath == "" {
+			log.Println("Cannot find any usable polkit")
 			return true, false, nil
 		}
 		cmd := exec.Command("setsid", polkitPath)
 		err = cmd.Start()
 		if err != nil {
+			log.Println("Cannot launch polkit")
 			return
 		}
+		log.Println("Checking if polkit is running after attempted launch")
 		isRunning, err = isPolkitRunning()
 		return true, isRunning, err
 	}

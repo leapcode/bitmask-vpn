@@ -38,7 +38,7 @@ parts:
         mkdir -p $SNAPCRAFT_PART_INSTALL/snap/
         mkdir -p $SNAPCRAFT_PRIME/snap/
         echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
-        QT_SELECT=5 XBUILD=no TARGET={binaryName} ./build.sh
+        QT_SELECT=5 XBUILD=no TARGET=${binaryName} ./build.sh
         mkdir -p $SNAPCRAFT_PART_INSTALL/bin
         mv qtbuild/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
     override-prime: |
