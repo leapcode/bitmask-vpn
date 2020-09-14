@@ -18,7 +18,10 @@ then
     PATH="`pwd`/../mxe/usr/bin"/:$PATH
     CC=x86_64-w64-mingw32.static-gcc
 else
-    QMAKE=`which qmake`
+    if [ "$QMAKE" == "" ]
+    then
+        QMAKE=`which qmake`
+    fi
 fi
 
 
@@ -44,7 +47,7 @@ function buildGoLib {
 
 function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
-    echo ">> using qmake:" $QMAKE
+    echo "[+] Using qmake in:" $QMAKE
     mkdir -p qtbuild
     $QMAKE -o qtbuild/Makefile "CONFIG-=debug CONFIG+=release" $PROJECT
 }
