@@ -1,7 +1,5 @@
 package main
 
-//go:generate python3 ../branding/scripts/vendorize.py ../branding/templates/bitmaskvpn/config.go ../branding/config/vendor.conf ../pkg/config/config.go
-
 /* a wrapper around bitmask that exposes status to a QtQml gui.
    Have a look at the pkg/backend module for further enlightment. */
 
