@@ -1,5 +1,4 @@
-# FIXME: this should be overwritten by build templates
-TARGET=riseup-vpn
+#TARGET = $$BINARY_NAME
 
 CONFIG += qt staticlib
 windows:CONFIG += console
