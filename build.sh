@@ -10,6 +10,12 @@ PROJECT=bitmask.pro
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
+RELEASE=qtbuild/release
+
+if [ "$TARGET" == "" ]
+then
+    TARGET=riseup-vpn
+fi
 
 if [ "$XBUILD" == "$WIN64" ]
 then
@@ -40,7 +46,7 @@ function buildGoLib {
     if [ "$XBUILD" == "$WIN64" ]
     then
         echo "[+] Building Go library with mxe"
-        echo ">> using cc:" $CC
+        echo "[+] Using cc:" $CC
         CC=$CC CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
 }
@@ -59,3 +65,8 @@ buildGoLib
 buildQmake
 make -C qtbuild clean
 make -C qtbuild -j4 all
+
+# i would expect that passing QMAKE_TARGET would produce the right output, but nope.
+mv qtbuild/release/bitmask $RELEASE/$TARGET
+strip $RELEASE/$TARGET
+echo "[+] Binary is in" $RELEASE/$TARGET
