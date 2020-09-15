@@ -7,6 +7,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
+	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 )
 
 // initializeContext initializes an empty connStatus and assigns it to the
@@ -51,6 +52,13 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	}
 	bitmask.InitializeLogger()
 	ctx.cfg = config.ParseConfig()
+
+	err := pid.AcquirePID()
+	if err != nil {
+		log.Println("Error acquiring PID:", err)
+		errCh <- err.Error()
+		return
+	}
 
 	b, err := bitmask.InitializeBitmask(opts.SkipLaunch)
 	if err != nil {

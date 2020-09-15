@@ -11,6 +11,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
+	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 )
 
@@ -56,6 +57,7 @@ func Quit() {
 	if ctx.bm != nil {
 		ctx.bm.Close()
 	}
+	pid.ReleasePID()
 }
 
 func DonateAccepted() {

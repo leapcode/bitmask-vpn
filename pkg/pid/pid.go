@@ -35,7 +35,7 @@ func AcquirePID() error {
 	pid := syscall.Getpid()
 	current, err := getPID()
 	if err != nil {
-		return err
+		log.Print("Error reading pid file:", err)
 	}
 
 	if current != pid && pidRunning(current) {

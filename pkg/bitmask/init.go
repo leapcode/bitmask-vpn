@@ -26,7 +26,6 @@ import (
 	"golang.org/x/text/message"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
 )
 
@@ -106,13 +105,6 @@ func InitializeBitmask(skipLaunch bool) (Bitmask, error) {
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
-
-	err := pid.AcquirePID()
-	if err != nil {
-		log.Println("Error acquiring PID:", err)
-		return nil, err
-	}
-	defer pid.ReleasePID()
 
 	conf := config.ParseConfig()
 	conf.Printer = initPrinter()
