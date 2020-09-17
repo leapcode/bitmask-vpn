@@ -55,7 +55,7 @@ func (c client) Do(req *http.Request) (*http.Response, error) {
 
 func TestAnonGetCert(t *testing.T) {
 	b := Bonafide{client: client{certPath}}
-	b.auth = &AnonymousAuthentication{&b}
+	b.auth = &anonymousAuthentication{}
 	cert, err := b.GetPemCertificate()
 	if err != nil {
 		t.Fatal("getCert returned an error: ", err)

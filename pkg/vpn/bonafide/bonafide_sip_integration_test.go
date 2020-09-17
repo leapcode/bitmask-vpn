@@ -44,13 +44,20 @@ func getSIPCreds() SIPCreds {
 	return creds
 }
 
-func TestSIPIntegrationGetCert(t *testing.T) {
+func _TestSIPIntegrationGetCert(t *testing.T) {
+	// FIXME: we need to automatize the webapi start
 	creds := getSIPCreds()
 
 	b := New()
-	b.auth = &SipAuthentication{b}
-	b.SetCredentials(creds.userOk, creds.passOk)
 	b.apiURL = "http://localhost:8000/"
+	b.auth = &sipAuthentication{b.client, b.getURL("auth")}
+	ok, err := b.DoLogin(creds.userOk, creds.passOk)
+	if err != nil {
+		t.Fatal("DoLogin returned an error: ", err)
+	}
+	if !ok {
+		t.Fatal("Invalid credentials")
+	}
 
 	cert, err := b.GetPemCertificate()
 	if err != nil {
