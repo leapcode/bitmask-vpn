@@ -4,7 +4,7 @@
 #########################################################################
 
 IMAGE=bitmask-vpn
-REGISTRY=registry.0xacab.org/leap/docker
+REGISTRY=registry.0xacab.org/leap
 
 PROVIDER=riseup
 PRODUCT=$(shell echo $(PROVIDER) | sed -e "s/\b\(.\)/\u\1/g")VPN
