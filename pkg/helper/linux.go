@@ -30,10 +30,10 @@ const (
 	openvpnGroup      = "nogroup"
 	LogFolder         = "/var/log/"
 	systemOpenvpnPath = "/usr/sbin/openvpn"
-	snapOpenvpnPath   = "/snap/bin/" + config.BinaryName + ".openvpn"
 )
 
 var (
+	snapOpenvpnPath      = "/snap/bin/" + config.BinaryName + ".openvpn"
 	platformOpenvpnFlags = []string{
 		"--script-security", "1",
 		"--user", openvpnUser,

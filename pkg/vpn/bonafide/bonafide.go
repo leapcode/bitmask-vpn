@@ -244,7 +244,7 @@ func (b *Bonafide) fetchGeolocation() ([]string, error) {
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		log.Println("ERROR: bad status code while fetching geolocation:", resp.StatusCode)
-		return nil, fmt.Errorf("Get geolocation failed with status: %s", resp.StatusCode)
+		return nil, fmt.Errorf("Get geolocation failed with status: %d", resp.StatusCode)
 	}
 
 	geo := &geoLocation{}
