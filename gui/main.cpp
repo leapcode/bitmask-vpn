@@ -76,15 +76,50 @@ int main(int argc, char **argv) {
                 "main",
                 "Install helpers (linux only, requires sudo)."),
         },
+        {
+            {"v", "version"},
+            QApplication::translate(
+                "main",
+		"Version of the bitmask-vpn."),
+        },
+        {
+            {"o", "obfs4"},
+            QApplication::translate(
+                "main",
+		"Use obfs4 to obfuscate the traffic is available in the provider."),
+        },
+        {
+            {"a", "disable-autostart"},
+            QApplication::translate(
+                "main",
+		"Disable the autostart for the next run."),
+        },
+        {
+            {"s", "start-vpn"},
+            QApplication::translate(
+                "main",
+		"Start the vpn in turned 'on' or 'off'."),
+        },
     });
     QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web api port (default: 8080)"), "port", "8080");
     parser.addOption(webPortOption);
+    QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the vpn in turned 'on' or 'off'."), "status", "");
+    parser.addOption(startVPNOption);
     parser.process(app);
 
     bool hideSystray    = parser.isSet("no-systray");
     bool installHelpers = parser.isSet("install-helpers");
     bool webAPI         = parser.isSet("web-api");
     QString webPort     = parser.value("web-port");
+    bool version        = parser.isSet("version");
+    bool obfs4          = parser.isSet("obfs4");
+    bool disAutostart   = parser.isSet("disable-autostart");
+    QString startVPN    = parser.value("start-vpn");
+
+    if (version) {
+        qDebug() << backend.getVersion();
+        exit(0);
+    }
 
     if (hideSystray) {
         qDebug() << "Not showing systray icon because --no-systray option is set.";
@@ -152,7 +187,8 @@ int main(int argc, char **argv) {
     /* let the Go side initialize its internal state */
     InitializeBitmaskContext(
             toGoStr(defaultProvider.toString()),
-            (char*)QProvidersJSON.toUtf8().data(), strlen(QProvidersJSON.toUtf8().data()));
+            (char*)QProvidersJSON.toUtf8().data(), strlen(QProvidersJSON.toUtf8().data()),
+	    obfs4, disAutostart, toGoStr(startVPN));
 
     /* if requested, enable web api for controlling the VPN */
     if (webAPI) {

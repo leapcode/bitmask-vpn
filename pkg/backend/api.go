@@ -11,8 +11,8 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
-	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
+	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 )
 
 func Login(username, password string) {
@@ -48,6 +48,7 @@ func SwitchOff() {
 }
 
 func Quit() {
+	ctx.autostart.Disable()
 	if ctx.Status != off {
 		go setStatus(stopping)
 		ctx.cfg.SetUserStoppedVPN(false)
@@ -74,8 +75,11 @@ type Providers struct {
 }
 
 type InitOpts struct {
-	ProviderOptions *bitmask.ProviderOpts
-	SkipLaunch      bool
+	ProviderOptions  *bitmask.ProviderOpts
+	SkipLaunch       bool
+	Obfs4            bool
+	DisableAutostart bool
+	StartVPN         string
 }
 
 func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
@@ -88,7 +92,7 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 		panic("BUG: we do not support multi-provider yet")
 	}
 	providerOpts := &providers.Data[0]
-	return &InitOpts{providerOpts, false}
+	return &InitOpts{ProviderOptions: providerOpts}
 }
 
 func InitializeBitmaskContext(opts *InitOpts) {

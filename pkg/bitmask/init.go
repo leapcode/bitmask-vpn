@@ -17,13 +17,11 @@ package bitmask
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path"
 	"strconv"
-
-	"github.com/jmshal/go-locale"
-	"golang.org/x/text/message"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
@@ -89,27 +87,24 @@ func InitializeLogger() {
 	}
 }
 
-func initBitmask(printer *message.Printer) (Bitmask, error) {
+func initBitmask() (Bitmask, error) {
 	b, err := vpn.Init()
 	if err != nil {
 		log.Printf("An error ocurred starting bitmask: %v", err)
-		err = errors.New(printer.Sprintf(errorMsg, err))
+		err = errors.New(fmt.Sprintf(errorMsg, err))
 	}
 	return b, err
 }
 
-func InitializeBitmask(skipLaunch bool) (Bitmask, error) {
-	if skipLaunch {
+func InitializeBitmask(conf *config.Config) (Bitmask, error) {
+	if conf.SkipLaunch {
 		log.Println("Initializing bitmask, but not launching it...")
 	}
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
 
-	conf := config.ParseConfig()
-	conf.Printer = initPrinter()
-
-	b, err := initBitmask(conf.Printer)
+	b, err := initBitmask()
 	if err != nil {
 		return nil, err
 	}
@@ -119,39 +114,19 @@ func InitializeBitmask(skipLaunch bool) (Bitmask, error) {
 		return nil, err
 	}
 
-	if !skipLaunch {
+	if !conf.SkipLaunch {
 		err := maybeStartVPN(b, conf)
 		if err != nil {
 			log.Println("Error starting VPN: ", err)
 			return nil, err
 		}
 	}
-
-	var as Autostart
-	if skipLaunch || conf.DisableAustostart {
-		as = &dummyAutostart{}
-	} else {
-		as = newAutostart(config.ApplicationName, "")
-	}
-
-	err = as.Enable()
-	if err != nil {
-		log.Printf("Error enabling autostart: %v", err)
-	}
 	return b, nil
-}
-
-func initPrinter() *message.Printer {
-	locale, err := go_locale.DetectLocale()
-	if err != nil {
-		log.Println("Error detecting the system locale: ", err)
-	}
-
-	return message.NewPrinter(message.MatchLanguage(locale, "en"))
 }
 
 func setTransport(b Bitmask, conf *config.Config) error {
 	if conf.Obfs4 {
+		log.Printf("Use transport Obfs4")
 		err := b.UseTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)

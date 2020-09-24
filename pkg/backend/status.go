@@ -43,6 +43,7 @@ type connectionCtx struct {
 	Errors          string `json:"errors"`
 	Status          status `json:"status"`
 	bm              bitmask.Bitmask
+	autostart       bitmask.Autostart
 	cfg             *config.Config
 }
 

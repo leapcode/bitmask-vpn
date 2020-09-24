@@ -36,7 +36,7 @@ type Autostart interface {
 }
 
 // newAutostart creates a handler for the autostart of your platform
-func newAutostart(appName string, iconPath string) Autostart {
+func NewAutostart(appName string, iconPath string) Autostart {
 	exec := os.Args
 	if os.Getenv("SNAP") != "" {
 		re := regexp.MustCompile("/snap/([^/]*)/")
@@ -65,12 +65,12 @@ func newAutostart(appName string, iconPath string) Autostart {
 	}
 }
 
-type dummyAutostart struct{}
+type DummyAutostart struct{}
 
-func (a *dummyAutostart) Disable() error {
+func (a *DummyAutostart) Disable() error {
 	return nil
 }
 
-func (a *dummyAutostart) Enable() error {
+func (a *DummyAutostart) Enable() error {
 	return nil
 }
