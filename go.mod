@@ -11,7 +11,6 @@ require (
 	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/apparentlymart/go-openvpn-mgmt v0.0.0-20161009010951-9a305aecd7f2
 	github.com/dchest/siphash v1.2.1 // indirect
-	github.com/jmshal/go-locale v0.0.0-20190124211249-eb00fb25cc61
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 	github.com/rakyll/statik v0.1.7

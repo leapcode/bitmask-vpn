@@ -20,8 +20,6 @@ import (
 	"os"
 	"path"
 	"time"
-
-	"golang.org/x/text/message"
 )
 
 const (
@@ -39,16 +37,14 @@ type Config struct {
 	file struct {
 		LastReminded      time.Time
 		Donated           time.Time
-		SelectGateway     bool
 		Obfs4             bool
 		UserStoppedVPN    bool
 		DisableAustostart bool
 	}
-	SelectGateway     bool
 	Obfs4             bool
 	DisableAustostart bool
 	StartVPN          bool
-	Printer           *message.Printer
+	SkipLaunch        bool
 }
 
 // ParseConfig reads the configuration from the configuration file
@@ -64,7 +60,6 @@ func ParseConfig() *Config {
 		err = dec.Decode(&conf.file)
 	}
 
-	conf.SelectGateway = conf.file.SelectGateway
 	conf.Obfs4 = conf.file.Obfs4
 	conf.DisableAustostart = conf.file.DisableAustostart
 	conf.StartVPN = !conf.file.UserStoppedVPN

@@ -52,6 +52,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	}
 	bitmask.InitializeLogger()
 	ctx.cfg = config.ParseConfig()
+	setConfigOpts(opts, ctx.cfg)
 
 	err := pid.AcquirePID()
 	if err != nil {
@@ -60,12 +61,13 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		return
 	}
 
-	b, err := bitmask.InitializeBitmask(opts.SkipLaunch)
+	b, err := bitmask.InitializeBitmask(ctx.cfg)
 	if err != nil {
 		log.Println("error: cannot initialize bitmask")
 		errCh <- err.Error()
 		return
 	}
+	ctx.autostart = initializeAutostart(ctx.cfg)
 
 	helpers, privilege, err := b.VPNCheck()
 
@@ -84,4 +86,36 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	}
 
 	ctx.bm = b
+}
+
+func setConfigOpts(opts *InitOpts, conf *config.Config) {
+	conf.SkipLaunch = opts.SkipLaunch
+	if opts.StartVPN != "" {
+		if opts.StartVPN != "on" && opts.StartVPN != "off" {
+			log.Println("-start-vpn should be 'on' or 'off'")
+		} else {
+			conf.StartVPN = opts.StartVPN == "on"
+		}
+	}
+	if opts.Obfs4 {
+		conf.Obfs4 = opts.Obfs4
+	}
+	if opts.DisableAutostart {
+		conf.DisableAustostart = opts.DisableAutostart
+	}
+}
+
+func initializeAutostart(conf *config.Config) bitmask.Autostart {
+	autostart := bitmask.NewAutostart(config.ApplicationName, "")
+	if conf.SkipLaunch || conf.DisableAustostart {
+		autostart.Disable()
+		autostart = &bitmask.DummyAutostart{}
+	}
+
+	err := autostart.Enable()
+	if err != nil {
+		log.Printf("Error enabling autostart: %v", err)
+	}
+	return autostart
+
 }
