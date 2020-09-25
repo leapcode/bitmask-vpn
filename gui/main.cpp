@@ -38,20 +38,40 @@ void signalHandler(int) {
     exit(0);
 }
 
+QString getAppName(QJsonValue info, QString provider) {
+    for (auto p: info.toArray()) {
+        QJsonObject item = p.toObject();
+        if (item["name"] == provider) {
+            return item["applicationName"].toString();
+        }
+    }
+    return "BitmaskVPN";
+}
+
 int main(int argc, char **argv) {
     signal(SIGINT, signalHandler);
 
     Backend backend;
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication::setApplicationName(backend.getAppName());
     QApplication::setApplicationVersion(backend.getVersion());
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
 
+    /* load providers json */
+    QFile providerJson (":/providers.json");
+    providerJson.open(QIODevice::ReadOnly | QIODevice::Text);
+    QJsonModel *providers = new QJsonModel;
+    providers->loadJson(providerJson.readAll());
+    QJsonValue defaultProvider = providers->json().object().value("default");
+    QJsonValue providersInfo = providers->json().object().value("providers");
+    QString appName = getAppName(providersInfo, defaultProvider.toString());
+
+    QApplication::setApplicationName(appName);
+
     QCommandLineParser parser;
     parser.setApplicationDescription(
-        backend.getAppName() +
+        appName +
         QApplication::translate(
             "main", ": a fast and secure VPN. Powered by Bitmask."));
     parser.addHelpOption();
@@ -80,30 +100,24 @@ int main(int argc, char **argv) {
             {"v", "version"},
             QApplication::translate(
                 "main",
-		"Version of the bitmask-vpn."),
+                "Version of the bitmask-vpn."),
         },
         {
             {"o", "obfs4"},
             QApplication::translate(
                 "main",
-		"Use obfs4 to obfuscate the traffic is available in the provider."),
+                "Use obfs4 to obfuscate the traffic, if available in the provider."),
         },
         {
             {"a", "disable-autostart"},
             QApplication::translate(
                 "main",
-		"Disable the autostart for the next run."),
-        },
-        {
-            {"s", "start-vpn"},
-            QApplication::translate(
-                "main",
-		"Start the vpn in turned 'on' or 'off'."),
+                "Disable autostart for the next run."),
         },
     });
     QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web api port (default: 8080)"), "port", "8080");
     parser.addOption(webPortOption);
-    QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the vpn in turned 'on' or 'off'."), "status", "");
+    QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the vpn, either 'on' or 'off'."), "status", "");
     parser.addOption(startVPNOption);
     parser.process(app);
 
@@ -118,6 +132,11 @@ int main(int argc, char **argv) {
 
     if (version) {
         qDebug() << backend.getVersion();
+        exit(0);
+    }
+
+    if (startVPN != "" && startVPN != "on" && startVPN != "off") {
+        qDebug() << "Error: --start-vpn must be either 'on' or 'off'";
         exit(0);
     }
 
@@ -143,12 +162,6 @@ int main(int argc, char **argv) {
     QQmlContext *ctx = engine.rootContext();
 
     QJsonModel *model = new QJsonModel;
-
-    /* load providers json */
-    QFile providerJson (":/providers.json");
-    providerJson.open(QIODevice::ReadOnly | QIODevice::Text);
-    QJsonModel *providers = new QJsonModel;
-    providers->loadJson(providerJson.readAll());
 
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
@@ -180,7 +193,6 @@ int main(int argc, char **argv) {
     GoString statusChangedEvt = {stCh, (long int)strlen(stCh)};
     SubscribeToEvent(statusChangedEvt, (void *)onStatusChanged);
 
-    QJsonValue defaultProvider = providers->json().object().value("default");
     /* we send json as bytes because it breaks as a simple string */
     QString QProvidersJSON(providers->json().toJson(QJsonDocument::Compact));
 
@@ -188,7 +200,7 @@ int main(int argc, char **argv) {
     InitializeBitmaskContext(
             toGoStr(defaultProvider.toString()),
             (char*)QProvidersJSON.toUtf8().data(), strlen(QProvidersJSON.toUtf8().data()),
-	    obfs4, disAutostart, toGoStr(startVPN));
+            obfs4, disAutostart, toGoStr(startVPN));
 
     /* if requested, enable web api for controlling the VPN */
     if (webAPI) {
