@@ -8,8 +8,6 @@
 
 GoString toGoStr(QString s)
 {
-    // TODO verify that it's more correct 
-    // char *c = s.toLocal8Bit().data();
     const char *c = s.toUtf8().constData();
     return (GoString){c, (long int)strlen(c)};
 }
@@ -17,11 +15,6 @@ GoString toGoStr(QString s)
 
 Backend::Backend(QObject *parent) : QObject(parent)
 {
-}
-
-QString Backend::getAppName()
-{
-    return QString(GetAppName());
 }
 
 QString Backend::getVersion()

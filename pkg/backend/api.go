@@ -145,16 +145,6 @@ func EnableWebAPI(port string) {
 	go enableWebAPI(intPort)
 }
 
-/* these two are a bit redundant since we already add them to ctx. however, we
-   want to have them available before everything else, to be able to parse cli
-   arguments. In the long run, we probably want to move all vendoring to qt, so
-   this probably should not live in the backend, see #326*/
-
 func GetVersion() *C.char {
 	return C.CString(version.VERSION)
-}
-
-func GetAppName() *C.char {
-	p := bitmask.GetConfiguredProvider()
-	return C.CString(p.AppName)
 }

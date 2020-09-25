@@ -33,7 +33,6 @@ signals:
     void quitDone();
 
 public slots:
-    QString getAppName();
     QString getVersion();
     void switchOn();
     void switchOff();

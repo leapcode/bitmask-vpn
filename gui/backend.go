@@ -17,11 +17,6 @@ func GetVersion() *C.char {
 	return (*C.char)(backend.GetVersion())
 }
 
-//export GetAppName
-func GetAppName() *C.char {
-	return (*C.char)(backend.GetAppName())
-}
-
 //export Login
 func Login(username, password string) {
 	backend.Login(username, password)
