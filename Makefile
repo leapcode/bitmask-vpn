@@ -69,14 +69,9 @@ else
 	$(MAKE) _buildparts
 endif
 
-_buildparts: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
-build_%:
-	@echo "PLATFORM: ${PLATFORM}"
-	@mkdir -p build/bin/${PLATFORM}
-	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
-	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
-	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
+helper:
+	go build -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" cmd/bitmask-helper/main.go
 
 test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
@@ -227,6 +222,13 @@ package_snap:
 
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
+
+installer_win:
+	cp qtbuild/release/bitmask.exe branding/qtinstaller/packages/root.win_x86_64/data/${PROVIDER}-vpn.exe
+	windeployqt --qmldir gui/qml branding/qtinstaller/packages/root.win_x86_64/data/${PROVIDER}-vpn.exe
+	"/c/Qt/QtIFW-3.2.2/bin/binarycreator.exe" -c ./branding/qtinstaller/config/config.xml -p ./branding/qtinstaller/packages build/${PROVIDER}-vpn-${VERSION}-installer.exe
+
+# FIXME --- old nsis installer. deprecate, but probably we need something similar to sign all the binaries (helper, main app, installer...)
 
 package_win_stage_1:
 	@make -C build/${PROVIDER} pkg_win_stage_1

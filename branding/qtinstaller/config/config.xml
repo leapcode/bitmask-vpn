@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+	<Name>DemoLibVPN</Name>
+	<Version>0.0.1</Version>
+	<Title>DemoLibVPN Installer</Title>
+	<Publisher>LEAP Encryption Access Project</Publisher>
+	<StartMenuDir>DemoLibVPN</StartMenuDir>
+	<TargetDir>@ApplicationsDir@/DemoLibVPN</TargetDir>
+</Installer>

@@ -16,8 +16,6 @@
 package bitmask
 
 import (
-	"errors"
-	"fmt"
 	"log"
 	"os"
 	"path"
@@ -91,7 +89,6 @@ func initBitmask() (Bitmask, error) {
 	b, err := vpn.Init()
 	if err != nil {
 		log.Printf("An error ocurred starting bitmask: %v", err)
-		err = errors.New(fmt.Sprintf(errorMsg, err))
 	}
 	return b, err
 }

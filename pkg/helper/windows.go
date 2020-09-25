@@ -1,5 +1,5 @@
 // +build windows
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,31 +23,39 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"path"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
 )
 
-const (
-	svcName          = config.BinaryName + `-helper-v2`
-	appPath          = `C:\Program Files\` + config.ApplicationName + `\`
-	LogFolder        = appPath
-	openvpnPath      = appPath + `openvpn.exe`
-	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
-)
 
-type httpConf struct {
-	BindAddr string
-}
 
 var (
+	svcName          = BinaryName + `-helper-v2`
+	appPath          = getExecDir()
+	LogFolder        = appPath
+	openvpnPath      = path.Join(appPath, "openvpn.exe")
+	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
 	platformOpenvpnFlags = []string{
 		"--script-security", "1",
 		"--block-outside-dns",
 	}
 	httpServerConf = &httpConf{}
 )
+
+func getExecDir() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Fatal("Cannot find executable path")
+	}
+	return path.Dir(ex)
+}
+
+type httpConf struct {
+	BindAddr string
+}
+
 
 // parseCliArgs allows the helper binary to install/uninstall itself. It requires admin privileges.
 // However, be warned: if you intend to use it from the command line, you will have to compile it with the Go compiler yourself.

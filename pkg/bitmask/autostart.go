@@ -1,3 +1,5 @@
+// +build !windows
+
 // Copyright (C) 2018 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -35,7 +37,7 @@ type Autostart interface {
 	Enable() error
 }
 
-// newAutostart creates a handler for the autostart of your platform
+// NewAutostart creates a handler for the autostart of your platform
 func NewAutostart(appName string, iconPath string) Autostart {
 	exec := os.Args
 	if os.Getenv("SNAP") != "" {
