@@ -69,7 +69,9 @@ Component.prototype.createOperations = function()
         if (systemInfo.productType === "windows") {
              console.log("Adding shortcut entries");
              component.addElevatedOperation("Mkdir", "@StartMenuDir@");
-             component.addElevatedOperation("CreateShortcut", "@TargetDir@/demolib-vpn.exe", "@StartMenuDir@/DemoLibVPN.lnk", "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll", "iconId=2", "description=Start DemoLibVPN");
-             component.addElevatedOperation("CreateShortcut", "@TargetDir@/maintenancetool.exe", "@StartMenuDir@/uninstall.lnk", "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll", "iconId=2", "description=Uninstall application");
+             component.addElevatedOperation("CreateShortcut", "@TargetDir@/demolib-vpn.exe", "@StartMenuDir@/DemoLibVPN.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico", "description=Start DemoLibVPN");
+
+	     // TODO I think this one is not being created because the path doesn't exist yet. We might want to do this by hooking on the installation finished signal instead.
+             component.addElevatedOperation("CreateShortcut", "@TargetDir@/Uninstall-DemoLibVPN.exe", "@StartMenuDir@/Uninstall.lnk");
         }
 }

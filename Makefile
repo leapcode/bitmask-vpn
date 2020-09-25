@@ -8,6 +8,7 @@
 XBUILD ?= no
 SKIP_CACHECK ?= no
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
+TARGET ?= bitmask
 PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
@@ -20,12 +21,13 @@ SOURCE_GOLIB=gui/backend.go
 # detect OS, we use it for dependencies
 UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
+WININST_DATA = branding/qtinstaller/packages/root.win_x86_64/data/
 
 TEMPLATES = branding/templates
 SCRIPTS = branding/scripts
 
-all: icon locales build
-	
+all: icon locales helper build
+
 
 #########################################################################
 # go build
@@ -66,7 +68,7 @@ else ifeq (${XBUILD}, osx)
 	$(MAKE) build_cross_osx
 	$(MAKE) _build_done
 else
-	$(MAKE) _buildparts
+	@gui/build.sh
 endif
 
 
@@ -234,8 +236,9 @@ package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
 installer_win:
-	cp qtbuild/release/bitmask.exe branding/qtinstaller/packages/root.win_x86_64/data/${PROVIDER}-vpn.exe
-	windeployqt --qmldir gui/qml branding/qtinstaller/packages/root.win_x86_64/data/${PROVIDER}-vpn.exe
+	cp helper.exe ${WININST_DATA}
+	cp qtbuild/release/${TARGET}.exe ${WININST_DATA}${PROVIDER}-vpn.exe
+	windeployqt --qmldir gui/qml ${WININST_DATA}${PROVIDER}-vpn.exe
 	"/c/Qt/QtIFW-3.2.2/bin/binarycreator.exe" -c ./branding/qtinstaller/config/config.xml -p ./branding/qtinstaller/packages build/${PROVIDER}-vpn-${VERSION}-installer.exe
 
 # FIXME --- old nsis installer. deprecate, but probably we need something similar to sign all the binaries (helper, main app, installer...)
