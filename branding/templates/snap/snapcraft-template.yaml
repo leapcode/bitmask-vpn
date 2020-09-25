@@ -2,8 +2,8 @@ name: ${binaryName}
 version: ${version}
 summary: ${applicationName}, secure VPN. Powered by Bitmask.
 description: |
-  RiseupVPN is an easy, fast, and secure VPN service from riseup.net.
-  RiseupVPN does not require a user account, keep logs, or track you in
+  ${applicationName} is an easy, fast, and secure VPN service from ${providerURL}.
+  ${applicationName} does not require a user account, keep logs, or track you in
   any way. The service is paid for entirely by donations from users like you.
 grade: stable
 confinement: classic
