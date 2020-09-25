@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<DisplayName>DemoLibVPN For Windows</DisplayName>
+	<Description>Install DemoLibVPN</Description>
+	<Version>0.0.1-1</Version>
+	<ReleaseDate>2020-09-15</ReleaseDate>
+	<Default>true</Default>
+	<RequiresAdminRights>true</RequiresAdminRights>
+	<Script>installscript.js</Script>
+</Package>

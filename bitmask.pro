@@ -1,3 +1,4 @@
+#TARGET=bitmask
 #TARGET = $$BINARY_NAME
 
 CONFIG += qt staticlib

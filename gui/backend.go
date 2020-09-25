@@ -10,8 +10,8 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/backend"
 )
 
-//export GetVersion
-func GetVersion() *C.char {
+//export GetBitmaskVersion
+func GetBitmaskVersion() *C.char {
 	return (*C.char)(backend.GetVersion())
 }
 

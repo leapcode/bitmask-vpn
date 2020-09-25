@@ -141,10 +141,20 @@ ApplicationWindow {
             // left and right click seem to be working fine, so let's ignore this for now.
             switch (reason) {
             case SystemTrayIcon.Unknown:
-                break
+	        console.debug("reason: unknown")
+                menu.open()
+		break
             case SystemTrayIcon.Context:
+	        console.debug("activated: context")
+		if (Qt.platform.os !== "linux") {
+			menu.open()
+		}
                 break
             case SystemTrayIcon.DoubleClick:
+	        console.debug("activated: double click")
+		if (Qt.platform.os !== "linux") {
+			menu.open()
+		}
                 break
             case SystemTrayIcon.Trigger:
                 break

@@ -19,7 +19,7 @@ Backend::Backend(QObject *parent) : QObject(parent)
 
 QString Backend::getVersion()
 {
-    return QString(GetVersion());
+    return QString(GetBitmaskVersion());
 }
 
 void Backend::switchOn()

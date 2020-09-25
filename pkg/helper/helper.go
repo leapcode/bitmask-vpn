@@ -22,11 +22,16 @@
 package helper
 
 import (
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"encoding/json"
 	"log"
 	"net/http"
 	"os/exec"
+)
+
+var (
+	AppName = "DemoLibVPN"
+	BinaryName = "bitmask"
+	Version = "git"
 )
 
 type openvpnT struct {
@@ -82,6 +87,7 @@ func (openvpn *openvpnT) run(args []string) error {
 			return err
 		}
 	}
+	log.Println("OPENVPN PATH:", getOpenvpnPath())
 
 	// TODO: if it dies we should restart it
 	openvpn.cmd = exec.Command(getOpenvpnPath(), args...)
@@ -151,7 +157,7 @@ func firewallIsUpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(config.ApplicationName + "/" + config.Version + "\n"))
+	w.Write([]byte(AppName + "/" + Version + "\n"))
 	w.WriteHeader(http.StatusOK)
 }
 
