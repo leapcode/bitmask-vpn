@@ -29,9 +29,9 @@ import (
 )
 
 var (
-	AppName = "DemoLibVPN"
+	AppName    = "DemoLibVPN"
 	BinaryName = "bitmask"
-	Version = "git"
+	Version    = "git"
 )
 
 type openvpnT struct {

@@ -33,8 +33,10 @@ import (
 
 var (
 	svcName          = BinaryName + `-helper-v2`
+
+	// XXX this is set to c:\WINDOWS\system32 on initialization. Do not use it, use a function call instead.
 	appPath          = getExecDir()
-	LogFolder        = appPath
+	LogFolder        = getExecDir()
 	openvpnPath      = path.Join(appPath, "openvpn.exe")
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
 	platformOpenvpnFlags = []string{
@@ -47,9 +49,11 @@ var (
 func getExecDir() string {
 	ex, err := os.Executable()
 	if err != nil {
-		log.Fatal("Cannot find executable path")
+		log.Println("Cannot find executable path")
+		return ""
 	}
-	return path.Dir(ex)
+	/* XXX filepath.Abs is buggy, maybe because of spaces in the path. fuck it, this is good enough for now */
+	return strings.Replace(ex, "\\helper.exe", "", 1)
 }
 
 type httpConf struct {
@@ -131,11 +135,15 @@ func daemonize() {}
 func runServer(port int) {}
 
 func getOpenvpnPath() string {
-	if _, err := os.Stat(openvpnPath); !os.IsNotExist(err) {
-		return openvpnPath
+	openvpn := path.Join(getExecDir(), "openvpn.exe")
+	if _, err := os.Stat(openvpn); !os.IsNotExist(err) {
+		log.Println("DEBUG: openvpnpath found,", openvpnPath)
+		return openvpn
 	} else if _, err := os.Stat(chocoOpenvpnPath); !os.IsNotExist(err) {
+		log.Println("DEBUG: choco openvpn found,", chocoOpenvpnPath)
 		return chocoOpenvpnPath
 	}
+	log.Println("DEBUG: did not find system-wide openvpn...")
 	return "openvpn.exe"
 }
 
