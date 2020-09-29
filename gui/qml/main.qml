@@ -48,7 +48,7 @@ ApplicationWindow {
     function showInitFailure(msg) {
       console.debug("ERRORS:", ctx.errors)
       if (msg == undefined) {
-          if (ctx.errors == 'bad_auth_502') {
+          if (ctx.errors == 'bad_auth_502' || ctx.errors == 'bad_auth_timeout') {
                   msg = qsTr("Oops! The authentication service seems down. Please try again later")
               initFailure.title = qsTr("Service Error")
           }

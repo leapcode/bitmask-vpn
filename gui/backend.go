@@ -3,7 +3,6 @@ package main
 /* a wrapper around bitmask that exposes status to a QtQml gui.
    Have a look at the pkg/backend module for further enlightment. */
 
-// #cgo CXXFLAGS: -mmacosx-version-min=10.10
 import (
 	"C"
 	"unsafe"

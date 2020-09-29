@@ -85,6 +85,7 @@ func New() *Bonafide {
 				RootCAs: certs,
 			},
 		},
+		Timeout: time.Second * 10,
 	}
 	_, tzOffsetSeconds := time.Now().Zone()
 	tzOffsetHours := tzOffsetSeconds / secondsPerHour
@@ -129,6 +130,8 @@ func (b *Bonafide) DoLogin(username, password string) (bool, error) {
 	}
 
 	var err error
+
+	log.Println("Bonafide: getting token...")
 	b.token, err = b.auth.getToken(username, password)
 	if err != nil {
 		return false, err
