@@ -18,10 +18,12 @@ import (
 func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
 	if err != nil {
-		log.Printf("Error on login: %v", err)
-		if err.Error() == "Cannot get token: Error 502" {
+		if err.Error() == "TokenErrTimeout" {
+			ctx.Errors = "bad_auth_timeout"
+		} else if err.Error() == "TokenErrBadStatus 502" {
 			ctx.Errors = "bad_auth_502"
 		} else {
+			log.Println("ERROR: bad login", err)
 			ctx.Errors = "bad_auth"
 		}
 	} else if success {
@@ -29,7 +31,6 @@ func Login(username, password string) {
 		ctx.LoginOk = true
 		ctx.LoginDialog = false
 	} else {
-		// TODO: display login again with an err
 		log.Printf("Failed to login as %s", username)
 		ctx.LoginDialog = true
 		ctx.Errors = "bad_auth"

@@ -44,15 +44,21 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	}
 	credJSON, err := formatCredentials(user, password)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot encode credentials: %s", err)
+		log.Println("ERROR: cannot encode credentials.", err)
+		return nil, fmt.Errorf("TokenErrBadCred")
 	}
 	resp, err := a.client.Post(a.authURI, "text/json", strings.NewReader(credJSON))
 	if err != nil {
-		return nil, fmt.Errorf("Error on auth request: %v", err)
+		log.Println("ERROR: failed auth request", err)
+		if os.IsTimeout(err) {
+			return nil, fmt.Errorf("TokenErrTimeout")
+		} else {
+			return nil, fmt.Errorf("TokenErrBadPost")
+		}
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Cannot get token: Error %d", resp.StatusCode)
+		return nil, fmt.Errorf("TokenErrBadStatus %d", resp.StatusCode)
 	}
 	token, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
