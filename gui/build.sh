@@ -10,7 +10,10 @@ PROJECT=bitmask.pro
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
-RELEASE=qtbuild/release
+QTBUILD=build/qt
+RELEASE=$QTBUILD/release
+
+PLATFORM=$(uname -s)
 
 if [ "$TARGET" == "" ]
 then
@@ -36,6 +39,7 @@ function init {
     mkdir -p lib
 }
 
+# TODO this should be moved to the makefile
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
     $GO generate ./pkg/config/version/genver/gen.go
@@ -63,19 +67,36 @@ function buildGoLib {
 function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
-    mkdir -p qtbuild
-    $QMAKE -o qtbuild/Makefile "CONFIG-=debug CONFIG+=release" $PROJECT
+    mkdir -p $QTBUILD
+    $QMAKE -o $QTBUILD/Makefile "CONFIG-=debug CONFIG+=release" $PROJECT
+}
+
+function renameOutput {
+    # i would expect that passing QMAKE_TARGET would produce the right output, but nope.
+    if [ "$PLATFORM" == "Linux" ]
+    then
+    	mv $RELEASE/bitmask $RELEASE/$TARGET
+    	strip $RELEASE/$TARGET
+    	echo "[+] Binary is in" $RELEASE/$TARGET
+    fi
+    if [ "$PLATFORM" == "Darwin" ]
+    then
+    	rm -rf $RELEASE/$TARGET.app
+    	mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
+    	echo "[+] App is in" $RELEASE/$TARGET
+    fi
 }
 
 echo "[+] Building BitmaskVPN"
 
 lrelease bitmask.pro
+
+# FIXME move buildGoLib to the main makefile, to avoid redundant builds if possible
 buildGoLib
 buildQmake
-make -C qtbuild clean
-make -C qtbuild -j4 all
 
-# i would expect that passing QMAKE_TARGET would produce the right output, but nope.
-mv qtbuild/release/bitmask $RELEASE/$TARGET
-strip $RELEASE/$TARGET
-echo "[+] Binary is in" $RELEASE/$TARGET
+make -C $QTBUILD clean
+make -C $QTBUILD -j4 all
+
+renameOutput
+echo "[+] Done."

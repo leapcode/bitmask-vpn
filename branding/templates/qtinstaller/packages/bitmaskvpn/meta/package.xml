@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>RiseupVPN</DisplayName>
-    <Description>RiseupVPN</Description>
-    <Version>0.20.6-1</Version>
-    <ReleaseDate>2020-07-01</ReleaseDate>
+    <DisplayName>DemoLibVPN</DisplayName>
+    <Description>DemoLibVPN</Description>
+    <Version>0.20.9-1</Version>
+    <ReleaseDate>2020-10-01</ReleaseDate>
     <Default>false</Default>
     <RequiresAdminRights>true</RequiresAdminRights>
     <Script>install.js</Script>

@@ -32,8 +32,9 @@ def main():
     log.write("Copy launch daemon...\n")
     copyLaunchDaemon()
 
+    log.write("Trying to launch helper...\n")
     out = launchHelper()
-    log.write("Copy plist: %s \n" % str(ok))
+    log.write("result: %s \n" % str(out))
 
     grantPermissionsOnLogFolder()
     
@@ -52,6 +53,7 @@ def isHelperRunning():
 
 def unloadHelper():
     out = subprocess.call(["launchctl", "unload", HELPER_PLIST])
+    out2 = subprocess.call(["pkill", "-9", "bitmask-helper"])  # just in case
     return out == 0
 
 def fixHelperOwner(log):

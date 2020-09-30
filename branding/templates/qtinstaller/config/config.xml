@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>DemoLibVPN-0.0.1</Name>
+    <Version>0.0.1</Version>
+    <Title>DemoLibVPN Installer</Title>
+    <Publisher>LEAP Encryption Access Project</Publisher>
+    <TargetDir>@ApplicationsDir@/DemoLibVPN</TargetDir>
+    <RunProgram>@TargetDir@/demolib-vpn.app</RunProgram>
+    <RunProgramArguments>
+    </RunProgramArguments>
+    <StartMenuDir>DemoLibVPN</StartMenuDir>
+    <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
+    <!--
+    <RemoteRepositories>
+        <Repository>
+            <Url>http://localhost/repository/</Url>
+        </Repository>
+    </RemoteRepositories>
+    -->
+    <MaintenanceToolName>Uninstall-DemoLibVPN</MaintenanceToolName>
+    <WizardStyle>mac</WizardStyle>
+</Installer>
