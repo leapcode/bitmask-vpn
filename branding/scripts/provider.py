@@ -32,4 +32,3 @@ def getProviderData(provider, config):
         datetime.datetime.now())
 
     return d
-
