@@ -9,11 +9,9 @@ build_test:
   image: registry.0xacab.org/leap/bitmask-vpn:latest
   stage: build
   script:
-    - apt update
-    - apt install -y qtbase5-dev qttools5-dev-tools qt5-qmake g++ qtdeclarative5-dev qt5-default
     - make generate
     - make test
-    - ./build.sh
+    - make build
   tags:
     - linux
   artifacts:
