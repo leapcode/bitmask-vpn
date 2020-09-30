@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+# A short utility to get appname in compilation time.
+# This is a convenience to build helpers while we move the branding mechanism to a separate repo.
+
+import configparser
+
+import os
+import sys
+
+from provider import getDefaultProvider
+from provider import getProviderData
+
+def getData():
+    here = os.path.abspath(os.path.dirname(__file__))
+    configPath = os.path.join(here, '../../branding/config/vendor.conf')
+    if not os.path.isfile(configPath):
+        print("ERROR: path does not exist", config)
+        os.exit(1)
+    config = configparser.ConfigParser()
+    config.read(configPath)
+    defaultProvider = getDefaultProvider(config)
+    return getProviderData(getDefaultProvider(config), config)
+
+if __name__ == "__main__":
+    param = sys.argv[1]
+    if param == "appname":
+        field = "applicationName"
+    elif param == "binname":
+        field = "binaryName"
+    else:
+        print("ERROR: unknown param")
+        sys.exit(1)
+    
+    data = getData()
+    print(data[field])

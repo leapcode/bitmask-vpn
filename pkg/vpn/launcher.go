@@ -1,5 +1,5 @@
 // +build !linux
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -51,12 +51,12 @@ func probeHelperPort(port int) int {
 			break
 		}
 	}
+	log.Println("WARN: Cannot find working helper")
 	return 0
 }
 
 func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 	uri := "http://localhost:" + strconv.Itoa(port) + "/version"
-	log.Println("probing for helper at", uri)
 	resp, err := c.Get(uri)
 	if err != nil {
 		return false
@@ -68,9 +68,10 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 			return false
 		}
 		if strings.Contains(string(ver), config.ApplicationName) {
+			log.Println("DEBUG: Successfully probed for matching helper at", uri)
 			return true
 		} else {
-			log.Println("Another helper replied to our version request:", string(ver))
+			log.Println("DEBUG: Another helper seems to be running:", string(ver))
 		}
 	}
 	return false
@@ -157,7 +158,8 @@ func (l *launcher) send(path string, body []byte) error {
 
 	resErr, err := ioutil.ReadAll(res.Body)
 	if len(resErr) > 0 {
-		return fmt.Errorf("Helper returned an error: %q", resErr)
+		/* FIXME why do we trigger a fatal with this error? */
+		return fmt.Errorf("FATAL: Helper returned an error: %q", resErr)
 	}
 	return err
 }

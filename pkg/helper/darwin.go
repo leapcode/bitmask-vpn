@@ -50,24 +50,23 @@ const (
 func _getExecPath() string {
 	ex, err := os.Executable()
 	if err != nil {
-		log.Print("error while getting executable path!")
+		log.Print("ERROR: cannot find executable path")
 	}
 	return filepath.Dir(ex)
 }
 
-func getHelperPath() string {
-	execPath := _getExecPath()
-	hp := filepath.Join(execPath, "../../../", "bitmask-helper")
-	log.Println(">>> DEBUG: helper", hp)
-	return hp
+func getHelperDir() string {
+	d := _getExecPath()
+	log.Println(">>> DEBUG: helper dir", d)
+	return d
 }
 
 func getPlatformOpenvpnFlags() []string {
-	helperPath := getHelperPath()
+	helperDir := getHelperDir()
 	return []string{
 		"--script-security", "2",
-		"--up", helperPath + "client.up.sh",
-		"--down", helperPath + "client.down.sh",
+		"--up", filepath.Join(helperDir, "client.up.sh"),
+		"--down", filepath.Join(helperDir, "client.down.sh"),
 	}
 }
 
@@ -83,7 +82,7 @@ func daemonize() {
 		PidFilePerm: 0644,
 		LogFileName: "bitmask-helper.log",
 		LogFilePerm: 0640,
-		WorkDir:     "./",
+		WorkDir:     filepath.Join(getHelperDir(), "helper"),
 		Umask:       027,
 		Args:        []string{"[bitmask-helper]"},
 	}
@@ -107,8 +106,7 @@ func runServer(preferredPort int) {
 }
 
 func getOpenvpnPath() string {
-	execPath := _getExecPath()
-	openvpnPath := filepath.Join(execPath, "../../../", "openvpn.leap")
+	openvpnPath := filepath.Join(getHelperDir(), "openvpn.leap")
 	log.Println(">>> DEBUG: openvpn", openvpnPath)
 	return openvpnPath
 }
@@ -203,7 +201,7 @@ func loadBitmaskAnchor() error {
 }
 
 func getRulefilePath() (string, error) {
-	rulefilePath := filepath.Join(getHelperPath(), "helper", "bitmask.pf.conf")
+	rulefilePath := filepath.Join(getHelperDir(), "helper", "bitmask.pf.conf")
 	log.Println("DEBUG: rule file path", rulefilePath)
 
 	if _, err := os.Stat(rulefilePath); !os.IsNotExist(err) {

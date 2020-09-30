@@ -1,4 +1,3 @@
-#TARGET=bitmask
 #TARGET = $$BINARY_NAME
 
 CONFIG += qt staticlib
@@ -25,7 +24,8 @@ HEADERS += \
     gui/qjsonmodel.h \
     lib/libgoshim.h
 
-LIBS += -L../lib -lgoshim -lpthread
+# we build from build/qt
+LIBS += -L../../lib -lgoshim -lpthread
 
 RESOURCES += gui/gui.qrc
 

@@ -1,8 +1,6 @@
+!defined(INSTALLER, var):INSTALLER= "BitmaskVPN-Installer-git"
 TEMPLATE = aux
-
 CONFIG -= debug_and_release
-
-INSTALLER = RiseupVPN-Installer
 
 INPUT = $$PWD/config/config.xml $$PWD/packages
 inst.input = INPUT

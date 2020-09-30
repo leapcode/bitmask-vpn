@@ -8,7 +8,8 @@
 XBUILD ?= no
 SKIP_CACHECK ?= no
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
-TARGET ?= bitmask
+APPNAME ?= $(shell branding/scripts/getparam appname | tail -n 1)
+TARGET ?= $(shell branding/scripts/getparam binname | tail -n 1)
 PROVIDER_CONFIG ?= branding/config/vendor.conf
 DEFAULT_PROVIDER = branding/assets/default/
 VERSION ?= $(shell git describe)
@@ -21,16 +22,21 @@ SOURCE_GOLIB=gui/backend.go
 # detect OS, we use it for dependencies
 UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
+
+QTBUILD = build/qt
 WININST_DATA = branding/qtinstaller/packages/root.win_x86_64/data/
+OSX_DATA = build/installer/packages/bitmaskvpn/data/
+OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
+MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
+# XXX expired cert -codesign="${OSX_CERT}"
+	
+# TODO converge both OSX/WINDOWS
 
-TEMPLATES = branding/templates
 SCRIPTS = branding/scripts
-
-all: icon locales helper build
+TEMPLATES = branding/templates
 
 HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
 OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
-
 
 #########################################################################
 # go build
@@ -57,20 +63,23 @@ dependsDarwin:
 	@brew install --default-names gnu-sed
 
 ifeq ($(PLATFORM), darwin)
- EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
+EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
 else
- EXTRA_FLAGS =
+EXTRA_FLAGS =
 endif
-golib:
-	CGO_ENABLED=1 ${EXTRA_FLAGS} go build -buildmode=c-archive -o ${TARGET_GOLIB} ${SOURCE_GOLIB}
 
-build: build_helper build_openvpn
-	@XBUILD=no gui/build.sh
+golib:
+	# TODO stop building golib in gui/build.sh, it's redundant. 
+	# we should port the buildGoLib parts of the gui/build.sh script here
+	@echo "doing nothing"
+
+build: golib build_helper build_openvpn
+	@XBUILD=no TARGET=${TARGET} gui/build.sh
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
-	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${PROVIDER}VPN -X main.Version=${VERSION}" ./cmd/bitmask-helper/
+	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION}" ./cmd/bitmask-helper/
 
 build_old:
 ifeq (${XBUILD}, yes)
@@ -91,13 +100,38 @@ build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
 build_installer: check_qtifw build
-	cp -r qtbuild/release/${PROVIDER}-vpn.app installer/packages/${PROVIDER}vpn/data/
-	cp build/bin/${PLATFORM}/bitmask-helper installer/packages/${PROVIDER}vpn/data/
-	cp $(OPENVPN_BIN) installer/packages/${PROVIDER}vpn/data/openvpn.leap
-	cp branding/templates/osx/bitmask.pf.conf installer/packages/${PROVIDER}vpn/data/helper/bitmask.pf.conf
-	cp branding/templates/osx/client.up.sh installer/packages/${PROVIDER}vpn/data/
-	cp branding/templates/osx/client.down.sh installer/packages/${PROVIDER}vpn/data/
-	cd installer && qmake && make
+	echo "mkdir osx data"	
+	@mkdir -p ${OSX_DATA}
+	@cp -r ${TEMPLATES}/qtinstaller/config build/installer/
+	@cp -r ${TEMPLATES}/qtinstaller/packages build/installer/
+	@cp -r ${TEMPLATES}/qtinstaller/installer.pro build/installer/
+ifeq (${PLATFORM}, darwin)
+	@mkdir -p ${OSX_DATA}/helper
+	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${OSX_DATA}/helper/bitmask.pf.conf
+	@cp "${TEMPLATES}/osx/client.up.sh" ${OSX_DATA}/
+	@cp "${TEMPLATES}/osx/client.down.sh" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx/post-install.py" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx/se.leap.bitmask-helper.plist" ${OSX_DATA}/
+	@cp build/bin/${PLATFORM}/bitmask-helper ${OSX_DATA}/
+	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
+	#@cp $(OPENVPN_BIN) ${OSX_DATA}/openvpn.leap
+	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
+	@rm -f ${OSX_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
+	@echo "[+] Running macdeployqt"
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
+	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${OSX_DATA}/
+endif
+	@echo "[+] All templates, binaries and libraries copied to build/installer."
+	@echo "[+] Now building the installer."
+	@cd build/installer && qmake INSTALLER=${APPNAME}-installer-${VERSION} && make
+
+installer_win:
+	# XXX refactor with build_installer
+	cp helper.exe ${WININST_DATA}
+	cp ${QTBUILD}/release/${TARGET}.exe ${WININST_DATA}${TARGET}.exe
+	# XXX add sign step here
+	windeployqt --qmldir gui/qml ${WININST_DATA}${TARGET}.exe
+	"/c/Qt/QtIFW-3.2.2/bin/binarycreator.exe" -c ./branding/qtinstaller/config/config.xml -p ./branding/qtinstaller/packages build/${PROVIDER}-vpn-${VERSION}-installer.exe
 
 check_qtifw: 
 ifdef HAS_QTIFW
@@ -144,11 +178,8 @@ _build_xbuild_done:
 # --------- FIXME -----------------------------------------------------------------------
 
 clean:
-	@rm -rf installer/*.app
-	@rm -rf installer/packages/${PROVIDER}vpn/data/*.app
-	@rm -rf installer/packages/${PROVIDER}vpn/data/bitmask-helper
 	@rm -rf build/
-	@unlink branding/assets/default
+	@unlink branding/assets/default || true
 
 #########################################################################
 # build them all
@@ -218,6 +249,7 @@ tgz:
 	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
+# XXX port/deprecate -----------------------------------------------
 gen_pkg_win:
 	@mkdir -p build/${PROVIDER}/windows/
 	@cp -r ${TEMPLATES}/windows build/${PROVIDER}
@@ -240,6 +272,13 @@ endif
 	@cd build/${PROVIDER}/osx && python3 generate.py
 	@cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
+gen_pkg_deb:
+	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
+	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-debian.py build/${PROVIDER}/debian/data.json
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	@cd build/${PROVIDER}/debian && python3 generate.py
+	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
+
 gen_pkg_snap:
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
@@ -250,13 +289,6 @@ gen_pkg_snap:
 	@mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
 	@cp branding/assets/default/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
 	rm build/${PROVIDER}/snap/generate.py
-
-gen_pkg_deb:
-	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-debian.py build/${PROVIDER}/debian/data.json
-	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
-	@cd build/${PROVIDER}/debian && python3 generate.py
-	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 
 prepare_done:
 	@echo
@@ -285,24 +317,8 @@ package_snap:
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
-installer_win:
-	# XXX refactor with build_installer
-	cp helper.exe ${WININST_DATA}
-	cp qtbuild/release/${TARGET}.exe ${WININST_DATA}${PROVIDER}-vpn.exe
-	windeployqt --qmldir gui/qml ${WININST_DATA}${PROVIDER}-vpn.exe
-	"/c/Qt/QtIFW-3.2.2/bin/binarycreator.exe" -c ./branding/qtinstaller/config/config.xml -p ./branding/qtinstaller/packages build/${PROVIDER}-vpn-${VERSION}-installer.exe
-
-# FIXME --- old nsis installer. deprecate, but probably we need something similar to sign all the binaries (helper, main app, installer...)
-
-package_win_stage_1:
-	@make -C build/${PROVIDER} pkg_win_stage_1
-
-package_win_stage_2:
-	@make -C build/${PROVIDER} pkg_win_stage_2
-
 package_osx:
-	@make -C build/${PROVIDER} pkg_osx
-
+	@echo "tbd"
 
 
 #########################################################################
