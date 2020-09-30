@@ -2,15 +2,9 @@ package config
 
 var (
 	Provider        = ""
-	ProviderName    = ""
 	ApplicationName = ""
 	BinaryName      = ""
 	Auth            = ""
-	AuthEmptyPass   = false
-	DonateURL       = ""
-	AskForDonations = true
-	HelpURL         = ""
-	TosURL          = ""
 	APIURL          = ""
 	GeolocationAPI  = ""
 )
