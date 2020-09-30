@@ -19,7 +19,6 @@ import (
 	"log"
 	"os"
 	"path"
-	"strconv"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
@@ -35,14 +34,14 @@ type ProviderOpts struct {
 	AppName         string `json:"applicationName"`
 	BinaryName      string `json:"binaryName"`
 	Auth            string `json:"auth"`
-	AuthEmptyPass   string `json:"authEmptyPass"`
+	AuthEmptyPass   bool   `json:"authEmptyPass"`
 	ProviderURL     string `json:"providerURL"`
 	DonateURL       string `json:"donateURL"`
 	ApiURL          string `json:"apiURL"`
 	TosURL          string `json:"tosURL"`
 	HelpURL         string `json:"helpURL"`
 	GeolocationURL  string `json:"geolocationAPI"`
-	AskForDonations string `json:"askForDonations"`
+	AskForDonations bool   `json:"askForDonations"`
 	CaCert          string `json:"caCertString"`
 }
 
@@ -54,28 +53,11 @@ func GetConfiguredProvider() *ProviderInfo {
 
 func ConfigureProvider(opts *ProviderOpts) {
 	config.Provider = opts.ProviderURL
-	config.ProviderName = opts.Provider
 	config.ApplicationName = opts.AppName
 	config.BinaryName = opts.BinaryName
 	config.Auth = opts.Auth
-
-	config.DonateURL = opts.DonateURL
-	config.HelpURL = opts.HelpURL
-	config.TosURL = opts.TosURL
-	config.APIURL = opts.ApiURL
 	config.GeolocationAPI = opts.GeolocationURL
 	config.CaCert = []byte(opts.CaCert)
-
-	wantsDonations, err := strconv.ParseBool(opts.AskForDonations)
-	if err == nil {
-		config.AskForDonations = wantsDonations
-	}
-
-	emptyPass, err := strconv.ParseBool(opts.AuthEmptyPass)
-	if err == nil {
-		config.AuthEmptyPass = emptyPass
-		log.Println("DEBUG: provider allows empty pass:", emptyPass)
-	}
 }
 
 func InitializeLogger() {
