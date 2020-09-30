@@ -139,7 +139,16 @@ build_all_providers:
 # packaging templates
 #########################################################################
 
+vendor_init:
+	@./branding/scripts/init
+	# TODO we should do the prepare step here, store it in VENDOR_PATH
+
+vendor_check:
+	@./branding/scripts/check
+	# TODO move ca-check here
+
 vendor: gen_providers_json
+	# TODO merge with prepare, after moving the gen_pkg to vendor_init
 
 gen_providers_json:
 	@python3 branding/scripts/gen-providers-json.py branding/config/vendor.conf gui/providers/providers.json
