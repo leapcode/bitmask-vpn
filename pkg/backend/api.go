@@ -103,7 +103,9 @@ func InitializeBitmaskContext(opts *InitOpts) {
 		ctx.LoginDialog = ctx.bm.NeedsCredentials()
 		go ctx.updateStatus()
 	}
-	runDonationReminder()
+	if ctx.AskForDonations {
+		runDonationReminder()
+	}
 }
 
 func RefreshContext() *C.char {
