@@ -62,7 +62,8 @@ int main(int argc, char **argv) {
     QFile providerJson (":/providers.json");
     providerJson.open(QIODevice::ReadOnly | QIODevice::Text);
     QJsonModel *providers = new QJsonModel;
-    providers->loadJson(providerJson.readAll());
+    QByteArray providerJsonBytes = providerJson.readAll();
+    providers->loadJson(providerJsonBytes);
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
     QString appName = getAppName(providersInfo, defaultProvider.toString());
@@ -199,7 +200,7 @@ int main(int argc, char **argv) {
     /* let the Go side initialize its internal state */
     InitializeBitmaskContext(
             toGoStr(defaultProvider.toString()),
-            (char*)QProvidersJSON.toUtf8().data(), strlen(QProvidersJSON.toUtf8().data()),
+            (char*)providerJsonBytes.data(), providerJsonBytes.length(),
             obfs4, disAutostart, toGoStr(startVPN));
 
     /* if requested, enable web api for controlling the VPN */
