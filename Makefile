@@ -186,7 +186,7 @@ ifeq (,$(wildcard build/${PROVIDER}/assets))
 	@ln -s ../../branding/assets/default build/${PROVIDER}/assets
 endif
 ifeq (,$(wildcard build/${PROVIDER}/staging/openvpn-osx))
-	@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
+	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
 endif
 	@cp -r ${TEMPLATES}/osx build/${PROVIDER}
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-osx.py build/${PROVIDER}/osx/data.json
