@@ -117,5 +117,4 @@ func initializeAutostart(conf *config.Config) bitmask.Autostart {
 		log.Printf("Error enabling autostart: %v", err)
 	}
 	return autostart
-
 }
