@@ -57,6 +57,7 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.BinaryName = opts.BinaryName
 	config.Auth = opts.Auth
 	config.GeolocationAPI = opts.GeolocationURL
+	config.APIURL = opts.ApiURL
 	config.CaCert = []byte(opts.CaCert)
 }
 
@@ -67,10 +68,10 @@ func InitializeLogger() {
 	}
 }
 
-func initBitmask() (Bitmask, error) {
+func initBitmaskVPN() (Bitmask, error) {
 	b, err := vpn.Init()
 	if err != nil {
-		log.Printf("An error ocurred starting bitmask: %v", err)
+		log.Printf("An error ocurred starting bitmask vpn: %v", err)
 	}
 	return b, err
 }
@@ -83,7 +84,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 		os.MkdirAll(config.Path, os.ModePerm)
 	}
 
-	b, err := initBitmask()
+	b, err := initBitmaskVPN()
 	if err != nil {
 		return nil, err
 	}

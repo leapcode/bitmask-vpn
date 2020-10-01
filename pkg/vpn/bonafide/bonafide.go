@@ -48,7 +48,6 @@ type Bonafide struct {
 	tzOffsetHours int
 	auth          authentication
 	token         []byte
-	apiURL        string
 }
 
 type Gateway struct {
@@ -178,24 +177,13 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 }
 
 func (b *Bonafide) getURL(object string) string {
-	if b.apiURL == "" {
-		switch object {
-		case "cert":
-			return config.APIURL + certPathv1
-		case "certv3":
-			return config.APIURL + certPathv3
-		case "auth":
-			return config.APIURL + authPathv3
-		}
-	} else {
-		switch object {
-		case "cert":
-			return b.apiURL + certPathv1
-		case "certv3":
-			return b.apiURL + certPathv3
-		case "auth":
-			return b.apiURL + authPathv3
-		}
+	switch object {
+	case "cert":
+		return config.APIURL + certPathv1
+	case "certv3":
+		return config.APIURL + certPathv3
+	case "auth":
+		return config.APIURL + authPathv3
 	}
 	log.Println("BUG: unknown url object")
 	return ""

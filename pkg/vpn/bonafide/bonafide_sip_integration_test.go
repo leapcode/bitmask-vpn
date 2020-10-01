@@ -20,6 +20,8 @@ import (
 	"bytes"
 	"os"
 	"testing"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 type SIPCreds struct {
@@ -44,12 +46,16 @@ func getSIPCreds() SIPCreds {
 	return creds
 }
 
+func initTestConfigSIP() {
+	config.APIURL = "https://localhost:8000/"
+}
+
 func _TestSIPIntegrationGetCert(t *testing.T) {
 	// FIXME: we need to automatize the webapi start
+	initTestConfigSIP()
 	creds := getSIPCreds()
 
 	b := New()
-	b.apiURL = "http://localhost:8000/"
 	b.auth = &sipAuthentication{b.client, b.getURL("auth")}
 	ok, err := b.DoLogin(creds.userOk, creds.passOk)
 	if err != nil {
