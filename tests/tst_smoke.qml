@@ -21,8 +21,8 @@ TestCase {
 
     function test_loadCtx() {
         refresh()
-        compare(ctx.appName, "RiseupVPN", "can read appName?")
-        compare(ctx.tosURL, "https://riseup.net/tos", "can read tosURL?")
+        compare(ctx.appName, "DemoLibVPN", "can read appName?")
+        compare(ctx.tosURL, "https://libraryvpn.org/", "can read tosURL?")
         compare(ctx.status, "off", "is initial status off?")
     }
 }

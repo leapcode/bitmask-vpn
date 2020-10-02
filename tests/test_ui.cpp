@@ -6,6 +6,23 @@
 #include "../gui/qjsonmodel.h"
 #include "../lib/libgoshim.h"
 
+
+GoString _toGoStr(QString s)
+{
+    const char *c = s.toUtf8().constData();
+    return (GoString){c, (long int)strlen(c)};
+}
+
+QString getAppName(QJsonValue info, QString provider) {
+    for (auto p: info.toArray()) {
+        QJsonObject item = p.toObject();
+        if (item["name"] == provider) {
+            return item["applicationName"].toString();
+        }
+    }
+    return "BitmaskVPN";
+}
+
 class Helper :  public QObject
 {
     Q_OBJECT
@@ -40,9 +57,24 @@ public slots:
         QJsonModel *model = new QJsonModel;
         Helper *helper = new Helper(this);
 
-        InitializeTestBitmaskContext();
+        /* load providers json */
+        QFile providerJson (":/providers.json");
+        providerJson.open(QIODevice::ReadOnly | QIODevice::Text);
+        QJsonModel *providers = new QJsonModel;
+        QByteArray providerJsonBytes = providerJson.readAll();
+        providers->loadJson(providerJsonBytes);
+        QJsonValue defaultProvider = providers->json().object().value("default");
+        QJsonValue providersInfo = providers->json().object().value("providers");
+        QString appName = getAppName(providersInfo, defaultProvider.toString());
+
+        InitializeTestBitmaskContext(
+            _toGoStr(defaultProvider.toString()),
+            (char*)providerJsonBytes.data(), providerJsonBytes.length());
 
         ctx->setContextProperty("jsonModel", model);
+        ctx->setContextProperty("providers", providers);
+
+        /* helper for tests */
         ctx->setContextProperty("helper", helper);
     }
 };

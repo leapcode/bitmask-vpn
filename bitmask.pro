@@ -18,7 +18,6 @@ SOURCES += \
     gui/qjsonmodel.cpp \
     gui/handlers.cpp
 
-RESOURCES += gui/gui.qrc
 
 HEADERS += \
     gui/handlers.h \
@@ -26,6 +25,8 @@ HEADERS += \
     lib/libgoshim.h
 
 LIBS += -L../lib -lgoshim -lpthread
+
+RESOURCES += gui/gui.qrc
 
 DESTDIR = release
 OBJECTS_DIR = release/.obj
