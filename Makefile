@@ -7,7 +7,7 @@
 
 TAGS ?= gtk_3_18
 
-XBUILD ?= no
+XBUILD ?= win
 SKIP_CACHECK ?= no
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 PROVIDER_CONFIG ?= branding/config/vendor.conf
@@ -54,9 +54,13 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config upx curl
 	@brew install --default-names gnu-sed
 
-dependsCygwin:
-	@choco install -y golang python nssm nsis wget 7zip
+#dependsCygwin:
+#	@choco install -y golang python nssm nsis wget 7zip
+	
 
+dependsCYGWIN_NT-10.0:
+	@choco install -y golang python nssm nsis wget 7zip
+	
 build:
 ifeq (${XBUILD}, yes)
 	$(MAKE) build_cross_win
@@ -90,7 +94,7 @@ build_bitmaskd:
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
 
-CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
+CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=amd64 GOOS=windows CC="C:\cygwin64\bin\x86_64-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="C:\cygwin64\bin\x86_64-w64-mingw32-c++"
 PLATFORM_WIN = PLATFORM=windows
 EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
