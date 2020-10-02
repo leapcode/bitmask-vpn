@@ -8,6 +8,7 @@ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.12
 
 macx {
     LIBS += -framework Security
+    # TODO -- pass the vendor icon here from Makefile.
     ICON = branding/assets/riseup/icon.icns
 }
 
