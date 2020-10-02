@@ -4,11 +4,11 @@
     <Version>0.0.1</Version>
     <Title>DemoLibVPN Installer</Title>
     <Publisher>LEAP Encryption Access Project</Publisher>
-    <TargetDir>@ApplicationsDir@/DemoLibVPN</TargetDir>
-    <RunProgram>@TargetDir@/demolib-vpn.app</RunProgram>
+    <TargetDir>@ApplicationsDir@/DemoLibVPN.app</TargetDir>
+    <RunProgram>@TargetDir@/DemoLibVPN.app</RunProgram>
     <RunProgramArguments>
     </RunProgramArguments>
-    <StartMenuDir>DemoLibVPN</StartMenuDir>
+    <StartMenuDir>DemoLibVPN.app</StartMenuDir>
     <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
     <!--
     <RemoteRepositories>

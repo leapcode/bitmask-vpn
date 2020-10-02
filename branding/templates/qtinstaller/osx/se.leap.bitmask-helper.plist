@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>WorkingDirectory</key>
-	<string>/tmp</string>
+	<string>PATH</string>
 	<key>StandardOutPath</key>
-	<string>bitmask-helper.log</string>
+	<string>PATH/helper/bitmask-helper.log</string>
 	<key>StandardErrorPath</key>
-	<string>bitmask-helper-err.log</string>
+	<string>PATH/helper/bitmask-helper-err.log</string>
 	<key>GroupName</key>
 	<string>daemon</string>
 	<key>RunAtLoad</key>

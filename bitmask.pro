@@ -8,7 +8,7 @@ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.12
 
 macx {
     LIBS += -framework Security
-    ICON = ./branding/assets/riseup/icon.icns
+    ICON = branding/assets/riseup/icon.icns
 }
 
 QT += qml quick widgets
