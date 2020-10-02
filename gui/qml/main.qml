@@ -252,7 +252,7 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("Donate...")
-                visible: true
+                visible: ctx && ctx.donateURL
                 onTriggered: { donate.visible = true }
             }
 
