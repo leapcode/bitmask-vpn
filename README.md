@@ -38,15 +38,19 @@ Using homebrew:
 Linux
 ----------
 
-./build.sh
+```
+  make build
+```
 
 
 Running tests
 -------------
 
-sudo apt install qml-module-qttest
-make test
-make test_ui
+```
+  sudo apt install qml-module-qttest
+  make test
+  make test_ui
+```
 
 
 i18n
