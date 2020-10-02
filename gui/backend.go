@@ -59,9 +59,13 @@ func InitializeBitmaskContext(provider string,
 }
 
 //export InitializeTestBitmaskContext
-func InitializeTestBitmaskContext() {
-	opts := &backend.InitOpts{}
+func InitializeTestBitmaskContext(provider string,
+	jsonPtr unsafe.Pointer, jsonLen C.int) {
+	json := C.GoBytes(jsonPtr, jsonLen)
+	opts := backend.InitOptsFromJSON(provider, string(json))
+	opts.DisableAutostart = true
 	opts.SkipLaunch = true
+	opts.StartVPN = "no"
 	backend.InitializeBitmaskContext(opts)
 	backend.EnableMockBackend()
 }

@@ -12,8 +12,9 @@ HEADERS += \
     gui/qjsonmodel.h \
     gui/handlers.h
 
-
 LIBS += -L../lib -lgoshim -lpthread
+
+RESOURCES += tests/tests.qrc
 
 DESTDIR = build
 OBJECTS_DIR = build/.obj
