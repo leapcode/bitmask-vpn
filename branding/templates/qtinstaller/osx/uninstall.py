@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-# Post installation script for BitmaskVPN.
-# Please note that this installation will install ONE single helper with administrative privileges.
-# This means that, for the time being, you can only install ONE of the BitmaskVPN derivatives at the same time.
-# This might change in the future.
+# Uninstall script for BitmaskVPN.
 
 import os
 import shutil
@@ -16,15 +13,18 @@ HELPER_PLIST = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
 _dir = os.path.dirname(os.path.realpath(__file__))
 
 def main():
-    log = open(os.path.join(_dir, 'post-install.log'), 'w')
+    log = open(os.path.join('/tmp', 'bitmask-uninstall.log'), 'w')
     log.write('Checking for admin privileges...\n')
 
     _id = os.getuid()
-    if _id != 0:
+    log.write("UID: %s\n" % str(_id))
+    if int(_id) != 0:
       err  = "error: need to run as root. UID: %s\n" % str(_id)
       logErr(log, err)
     
     # failure: sys.exit(1)
+
+    log.write('Checking if helper is running')
     
     if isHelperRunning():
         log.write("Trying to stop bitmask-helper...\n")
@@ -32,20 +32,12 @@ def main():
         ok = unloadHelper()
         log.write("success: %s \n" % str(ok))
 
-    ok = fixHelperOwner(log)
-    log.write("chown helper: %s \n" % str(ok))
-
-    log.write("Copy launch daemon...\n")
-    copyLaunchDaemon()
-
-    log.write("Trying to launch helper...\n")
-    out = launchHelper()
+    log.write("Removing LaunchDaemon")
+    out = removeLaunchDaemon()
     log.write("result: %s \n" % str(out))
-
-    grantPermissionsOnLogFolder()
     
     # all done
-    log.write('post-install script: done\n')
+    log.write('uninstall script: done\n')
     sys.exit(0)
 
 
@@ -62,33 +54,8 @@ def unloadHelper():
     out2 = subprocess.call(["pkill", "-9", "bitmask-helper"])  # just in case
     return out == 0
 
-def fixHelperOwner(log):
-    path = os.path.join(_dir, HELPER)
-    try:
-        os.chown(path, 0, 0)
-    except OSError as exc:
-        log.write(str(exc))
-        return False
-    return True
-
-def copyLaunchDaemon():
-    plist = "se.leap.bitmask-helper.plist"
-    path = os.path.join(_dir, plist)
-    _p = _dir.replace("/", "\/")
-    subprocess.call(["sed", "-i.back", "s/PATH/%s/" % _p, path])
-    shutil.copy(path, HELPER_PLIST)
-
-def launchHelper():
-    out = subprocess.call(["launchctl", "load", HELPER_PLIST])
-    return out == 0
-
-def grantPermissionsOnLogFolder():
-    helperDir = os.path.join(_dir, 'helper')
-    try:
-        os.makedirs(helperDir)
-    except Exception:
-        pass
-    os.chown(helperDir, 0, 0)
+def removeLaunchDaemon():
+    return subprocess.call(["rm", "-f", HELPER_PLIST])
 
 def _getProcessList():
     _out = []

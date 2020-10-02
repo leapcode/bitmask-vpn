@@ -111,6 +111,7 @@ ifeq (${PLATFORM}, darwin)
 	@cp "${TEMPLATES}/osx/client.up.sh" ${OSX_DATA}/
 	@cp "${TEMPLATES}/osx/client.down.sh" ${OSX_DATA}/
 	@cp "${TEMPLATES}/qtinstaller/osx/post-install.py" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx/uninstall.py" ${OSX_DATA}/
 	@cp "${TEMPLATES}/qtinstaller/osx/se.leap.bitmask-helper.plist" ${OSX_DATA}/
 	@cp build/bin/${PLATFORM}/bitmask-helper ${OSX_DATA}/
 	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
