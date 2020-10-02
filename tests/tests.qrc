@@ -1,0 +1,6 @@
+<RCC>
+    <qresource>
+        <file alias="providers.json">providers.json</file>
+    </qresource>
+</RCC>
+
