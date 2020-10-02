@@ -5,7 +5,7 @@
 
 .PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
 
-XBUILD ?= no
+XBUILD ?= win
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
@@ -71,6 +71,24 @@ dependsDarwin:
 
 ifeq ($(PLATFORM), darwin)
 EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
+#dependsCygwin:
+#	@choco install -y golang python nssm nsis wget 7zip
+	
+
+dependsCYGWIN_NT-10.0:
+	@choco install -y golang python nssm nsis wget 7zip
+	
+build:
+ifeq (${XBUILD}, yes)
+	$(MAKE) build_cross_win
+	$(MAKE) build_cross_osx
+	$(MAKE) _build_xbuild_done
+else ifeq (${XBUILD}, win)
+	$(MAKE) build_cross_win
+	$(MAKE) _build_done
+else ifeq (${XBUILD}, osx)
+	$(MAKE) build_cross_osx
+	$(MAKE) _build_done
 else
 EXTRA_FLAGS =
 endif
@@ -98,6 +116,15 @@ build_golib: lib/libgoshim.a
 
 build_gui: relink_vendor
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
+CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=amd64 GOOS=windows CC="C:\cygwin64\bin\x86_64-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="C:\cygwin64\bin\x86_64-w64-mingw32-c++"
+PLATFORM_WIN = PLATFORM=windogit ws
+EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
+build_cross_win:
+	@echo "[+] Cross-building for windows..."
+	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
+	# workaround for helper: we use the go compiler
+	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
+	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
 
 build: build_golib build_helper build_gui
 
