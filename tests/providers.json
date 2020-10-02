@@ -1,0 +1,21 @@
+{
+    "default": "demolib",
+    "providers": [
+        {
+            "name": "demolib",
+            "applicationName": "DemoLibVPN",
+            "binaryName": "demolib-vpn",
+            "auth": "sip",
+            "authEmptyPass": true,
+            "providerURL": "vpnlib.bitmask.net",
+            "tosURL": "https://libraryvpn.org/",
+            "helpURL": "https://libraryvpn.org/",
+            "askForDonations": false,
+            "donateURL": "",
+            "apiURL": "https://api.vpnlib.bitmask.net:4430/",
+            "geolocationAPI": "https://getmyip.vpnlib.bitmask.net/json",
+            "caCertString": "-----BEGIN CERTIFICATE-----\nMIIBQzCB6aADAgECAgEBMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDExFQVAgUm9v\ndCBDQTAeFw0yMDA4MDYxOTA3NDRaFw0yNTA4MDYxOTEyNDRaMBcxFTATBgNVBAMT\nDExFQVAgUm9vdCBDQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIG5POr4cAdK\nkTavKpSJr8nW1V7HLpr27qKaShpk1TUy5ipaAlusmavGLxKsPE+i3AMlvf/f6ch3\n1MjAtIf5rYujJjAkMA4GA1UdDwEB/wQEAwICpDASBgNVHRMBAf8ECDAGAQH/AgEB\nMAoGCCqGSM49BAMCA0kAMEYCIQDXj280LNZbSbi0Y2WvtQrJBUw4wdm8qAeOeuH7\n6XiLEwIhAPBRsmst/ujcChsG2t6LpG+p8s4rfIfh8YLo/4qrcc5p\n-----END CERTIFICATE-----",
+            "timeStamp": "2020-09-25 13:05:47"
+        }
+    ]
+}

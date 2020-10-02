@@ -1,18 +1,17 @@
-Install it
-----------
+Build
+-----
 
 Install dependencies:
 
-TODO: add qt5 deps here
-
 ```
-  # make depends
+  sudo make depends
 ```
 
-Build the systray:
+Build the application:
+
 ```
-  $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  $ make build
+  git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  make build
 ```
 
 You need at least go 1.11. If you have something older and are using ubuntu, you can do:
@@ -29,19 +28,11 @@ OSX
 Using homebrew:
 
 ```
-  $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  $ make depends
-  $ make build
-
-```
-
-Linux
-----------
-
-```
+  git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  make depends
   make build
-```
 
+```
 
 Running tests
 -------------
@@ -64,13 +55,13 @@ https://www.transifex.com/otf/bitmask/RiseupVPN/
 
 When a string has being modified you need to regenerate the locales:
 ```
-  $ make generate_locales
+  make generate_locales
 ```
 
 
 To fetch the translations from transifex and rebuild the catalog.go (API\_TOKEN is the transifex API token):
 ```
-  $ API_TOKEN='xxxxxxxxxxx' make locales
+  API_TOKEN='xxxxxxxxxxx' make locales
 ```
 There is some bug on gotext and the catalog.go generated doesn't have a package, you will need to edit
 cmd/bitmask-vpn/catalog.go and to have a `package main` at the beginning of the file.
