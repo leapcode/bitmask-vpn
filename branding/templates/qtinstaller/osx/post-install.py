@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Post installation script for BitmaskVPN.
+# Please note that this installation will install ONE single helper with administrative privileges.
+# This means that, for the time being, you can only install ONE of the BitmaskVPN derivatives at the same time.
+# This might change in the future.
+
 import os
 import shutil
 import sys
