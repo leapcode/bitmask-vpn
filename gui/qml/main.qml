@@ -205,7 +205,7 @@ ApplicationWindow {
                     },
                     State {
                         name: "failed"
-                        PropertyChanges { target: systray; tooltip: toHuman("failed"); icon.source: icons["wait"] }
+                        PropertyChanges { target: systray; tooltip: toHuman("failed"); icon.source: icons["blocked"] }
                         PropertyChanges { target: statusItem; text: toHuman("failed") }
                     }
                 ]
