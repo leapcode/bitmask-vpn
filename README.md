@@ -46,6 +46,19 @@ In file included from /usr/include/gtk-3.0/gtk/gtk.h:106:0,
 ```
 They are expected and don't produce any problem on the systray.
 
+Windows
+---------
+Download cygwinn // https://cygwin.com/setup-x86_64.exe
+`````
+Install with the necessary packages (my case 64bit):
+mingw64-x86_64-gcc-core
+mingw64-x86_64-gcc-g++ 
+make
+
+
+````
+Add to Windows Path "C:\cygwin64\bin"
+
 
 Run it
 -------------
