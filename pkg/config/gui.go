@@ -24,6 +24,7 @@ import (
 
 const (
 	oneDay   = time.Hour * 24
+	oneWeek  = oneDay * 7
 	oneMonth = oneDay * 30
 )
 
@@ -72,7 +73,7 @@ func (c *Config) SetUserStoppedVPN(vpnStopped bool) error {
 }
 
 func (c *Config) NeedsDonationReminder() bool {
-	return !c.hasDonated() && c.file.LastReminded.Add(oneDay).Before(time.Now())
+	return !c.hasDonated() && c.file.LastReminded.Add(oneWeek).Before(time.Now())
 }
 
 func (c *Config) hasDonated() bool {
