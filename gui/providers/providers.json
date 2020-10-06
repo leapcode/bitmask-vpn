@@ -10,7 +10,7 @@
             "providerURL": "riseup.net",
             "tosURL": "https://riseup.net/tos",
             "helpURL": "https://riseup.net/support",
-            "askForDonations": "true",
+            "askForDonations": true,
             "donateURL": "https://riseup.net/vpn/donate",
             "apiURL": "https://api.black.riseup.net/",
             "geolocationAPI": "https://api.black.riseup.net:9001/json",
