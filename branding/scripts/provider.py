@@ -25,6 +25,8 @@ def getProviderData(provider, config):
 
     for value in keys:
         d[value] = c.get(value)
+        if value == 'askForDonations':
+            d[value] = bool(d[value])
 
     d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
         datetime.datetime.now())
