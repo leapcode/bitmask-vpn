@@ -3,6 +3,7 @@ set -e
 set -x
 
 XBUILD=${XBUILD-no}
+OSX_TARGET=10.11
 WIN64="win64"
 GO=`which go`
 
@@ -45,7 +46,6 @@ function buildGoLib {
     $GO generate ./pkg/config/version/genver/gen.go
     if [ "$PLATFORM" == "Darwin" ]
     then
-        OSX_TARGET=10.12
         GOOS=darwin
 	CC=clang
 	CGO_CFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
