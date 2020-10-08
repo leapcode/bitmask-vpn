@@ -48,7 +48,9 @@ func SwitchOff() {
 }
 
 func Quit() {
-	ctx.autostart.Disable()
+	if ctx.autostart != nil {
+		ctx.autostart.Disable()
+	}
 	if ctx.Status != off {
 		go setStatus(stopping)
 		ctx.cfg.SetUserStoppedVPN(false)
