@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
-
-    <Name>DemoLibVPN-0.0.1</Name>
-    <Version>0.0.1</Version>
-    <Title>DemoLibVPN Installer</Title>
+    <Name>$APPNAME-$VERSION</Name>
+    <Version>$VERSION</Version>
+    <Title>$APPNAME Installer ($VERSION)</Title>
     <Publisher>LEAP Encryption Access Project</Publisher>
-    <TargetDir>@ApplicationsDir@/DemoLibVPN.app</TargetDir>
-
-    <StartMenuDir>DemoLibVPN.app</StartMenuDir>
     <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
 
     <!--
@@ -18,15 +14,8 @@
     </RemoteRepositories>
     -->
 
-    <MaintenanceToolName>Uninstall-DemoLibVPN</MaintenanceToolName>
+    <MaintenanceToolName>Uninstall-$APPNAME</MaintenanceToolName>
 
-    <!-- osx run -->
-    <RunProgram>open</RunProgram>
-    <RunProgramDescription>Start DemoLibVPN now!</RunProgramDescription>
-      <RunProgramArguments>
-        <Argument>@TargetDir@</Argument>
-      </RunProgramArguments>
-    <WizardStyle>mac</WizardStyle>
-    <!-- end osx run -->
+    $PLATFORM_BLOCK
 
 </Installer>

@@ -24,14 +24,13 @@ UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
 
 QTBUILD = build/qt
+INSTALLER = build/installer
 WININST_DATA = branding/qtinstaller/packages/root.win_x86_64/data/
-OSX_DATA = build/installer/packages/bitmaskvpn/data/
+OSX_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
 OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
 MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
 # XXX expired cert -codesign="${OSX_CERT}"
 	
-# TODO converge both OSX/WINDOWS
-
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
@@ -99,28 +98,41 @@ endif
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
+debug_installer:
+	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
+
 build_installer: check_qtifw build
 	echo "mkdir osx data"	
 	@mkdir -p ${OSX_DATA}
-	@cp -r ${TEMPLATES}/qtinstaller/config build/installer/
-	@cp -r ${TEMPLATES}/qtinstaller/packages build/installer/
-	@cp -r ${TEMPLATES}/qtinstaller/installer.pro build/installer/
+	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
+	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
+	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
 ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${OSX_DATA}/helper
+	# TODO need to write this
+	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${OSX_DATA}/helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${OSX_DATA}/
 	@cp "${TEMPLATES}/osx/client.down.sh" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx/post-install.py" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx/uninstall.py" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx/se.leap.bitmask-helper.plist" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${OSX_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${OSX_DATA}/
 	@cp build/bin/${PLATFORM}/bitmask-helper ${OSX_DATA}/
 	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
+	# a working (old) version:
+	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
 	#@cp $(OPENVPN_BIN) ${OSX_DATA}/openvpn.leap
 	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
 	@rm -f ${OSX_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
 	@echo "[+] Running macdeployqt"
 	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${OSX_DATA}/
+endif
+ifeq (${PLATFORM}, windows)
+	@${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+endif
+ifeq (${PLATFORM}, linux)
+	@${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
 endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
@@ -246,22 +258,6 @@ gen_pkg_win:
 	@cp -r ${TEMPLATES}/windows build/${PROVIDER}
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-win.py build/${PROVIDER}/windows/data.json
 	@cd build/${PROVIDER}/windows && python3 generate.py
-	# TODO create/copy build/PROVIDER/assets/
-	# TODO create/copy build/PROVIDER/staging/
-
-gen_pkg_osx:
-	@mkdir -p build/${PROVIDER}/osx/scripts
-	@mkdir -p build/${PROVIDER}/staging
-ifeq (,$(wildcard build/${PROVIDER}/assets))
-	@ln -s ../../branding/assets/default build/${PROVIDER}/assets
-endif
-ifeq (,$(wildcard build/${PROVIDER}/staging/openvpn-osx))
-	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
-endif
-	@cp -r ${TEMPLATES}/osx build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-osx.py build/${PROVIDER}/osx/data.json
-	@cd build/${PROVIDER}/osx && python3 generate.py
-	@cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
 gen_pkg_deb:
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}

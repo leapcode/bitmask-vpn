@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>DemoLibVPN</DisplayName>
-    <Description>DemoLibVPN</Description>
-    <Version>0.20.9-1</Version>
-    <ReleaseDate>2020-10-01</ReleaseDate>
+    <DisplayName>$APPNAME</DisplayName>
+    <Description>$APPNAME</Description>
+    <Version>$VERSION</Version>
+    <ReleaseDate>$TIMESTAMP</ReleaseDate>
     <Default>false</Default>
     <RequiresAdminRights>true</RequiresAdminRights>
     <Script>install.js</Script>
