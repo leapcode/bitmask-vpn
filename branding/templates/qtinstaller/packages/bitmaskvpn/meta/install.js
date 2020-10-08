@@ -1,10 +1,64 @@
 /****************************************************************************
 **
-** Copyright (C) 2020 LEAP
+** Copyright (C) 2020 LEAP Encryption Access Project
 **
 ****************************************************************************/
 
+function majorVersion(str)
+{
+    return parseInt(str.split(".", 1));
+}
+
+function cancelInstaller(message)
+{
+    installer.setDefaultPageVisible(QInstaller.Introduction, false);
+    installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+    installer.setDefaultPageVisible(QInstaller.ComponentSelection, false);
+    installer.setDefaultPageVisible(QInstaller.ReadyForInstallation, false);
+    installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false);
+    installer.setDefaultPageVisible(QInstaller.PerformInstallation, false);
+    installer.setDefaultPageVisible(QInstaller.LicenseCheck, false);
+
+    var abortText = "<font color='red'>" + message +"</font>";
+    installer.setValue("FinishedText", abortText);
+}
+
 function Component() {
+    // Check whether OS is supported.
+    // start installer with -v to see debug output
+
+    console.log("OS: " + systemInfo.productType);
+    console.log("Kernel: " + systemInfo.kernelType + "/" + systemInfo.kernelVersion);
+
+    var validOs = false;
+
+    if (systemInfo.kernelType === "winnt") {
+        if (majorVersion(systemInfo.kernelVersion) >= 6)
+            validOs = true;
+    } else if (systemInfo.kernelType === "darwin") {
+        if (majorVersion(systemInfo.kernelVersion) >= 11)
+            validOs = true;
+    } else {
+        if (systemInfo.productType !== "ubuntu"
+                || systemInfo.productVersion !== "20.04") {
+            QMessageBox["warning"]("os.warning", "Installer",
+                                   "Note that the binaries are only tested on Ubuntu 20.04",
+                                   QMessageBox.Ok);
+        }
+        validOs = true;
+    }
+
+    if (!validOs) {
+        cancelInstaller("Installation on " + systemInfo.prettyProductName + " is not supported");
+        return;
+    }
+
+    console.log("CPU Architecture: " +  systemInfo.currentCpuArchitecture);
+
+    if ( systemInfo.kernelType === "winnt") {
+        installer.componentByName("root.win_x86_64").setValue("Default", "true");
+        installer.componentByName("root.win_x86_64").setValue("Virtual", "false");
+    }
 }
 
 Component.prototype.createOperations = function ()
@@ -31,7 +85,7 @@ Component.prototype.installationFinished = function()
 {
     console.log("DEBUG: running installationFinished");
     if (installer.isInstaller() && installer.status == QInstaller.Success) {
-        var argList = ["-a", "@TargetDir@/DemoLibVPN.app"];
+        var argList = ["-a", "@TargetDir@/$APPNAME.app"];
         try {
             installer.execute("touch", ["/tmp/install-finished"]);
             installer.execute("open", argList);
@@ -46,12 +100,12 @@ function postInstallWindows() {
     component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "start", "UNDOEXECUTE", "@TargetDir@/helper.exe", "stop");
     console.log("Adding shortcut entries");
     component.addElevatedOperation("Mkdir", "@StartMenuDir@");
-    component.addElevatedOperation("CreateShortcut", "@TargetDir@/demolib-vpn.exe", "@StartMenuDir@/DemoLibVPN.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico", "description=Start DemoLibVPN");
+    component.addElevatedOperation("CreateShortcut", "@TargetDir@/$BINNAME.exe", "@StartMenuDir@/$APPNAME.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico", "description=Start $APPNAME");
 
     // TODO I think this one is not being created because the path doesn't exist yet. We might want to do this by hooking on the installation finished signal instead.
     component.addElevatedOperation(
         "CreateShortcut",
-        "@TargetDir@/Uninstall-DemoLibVPN.exe",
+        "@TargetDir@/Uninstall-$APPNAME.exe",
         "@StartMenuDir@/Uninstall.lnk"
     );
 }
@@ -70,5 +124,5 @@ function postInstallOSX() {
 function postInstallLinux() {
     console.log("Post-installation for GNU/Linux");
     console.log("Maybe you want to use your package manager instead?");
-    component.addOperation("AppendFile", "/tmp/riseupvpn.log", "this is a test - written from the installer");
+    component.addOperation("AppendFile", "/tmp/bitmask-installer.log", "this is a test - written from the installer");
 }
