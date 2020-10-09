@@ -3,12 +3,13 @@ import os
 
 
 def getDefaultProvider(config):
-    provider = os.environ.get('PROVIDER')
-    if provider:
-        print('[+] Got provider {} from environment'.format(provider))
-    else:
+    if os.environ.get('VENDOR_PATH'):
         print('[+] Using default provider from config file')
         provider = config['default']['provider']
+    else:
+        provider = os.environ.get('PROVIDER')
+        if provider:
+            print('[+] Got provider {} from environment'.format(provider))
     return provider
 
 

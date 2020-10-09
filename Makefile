@@ -78,8 +78,8 @@ EXTRA_GO_LDFLAGS = "-H windowsgui"
 endif
 
 golib:
-	# TODO stop building golib in gui/build.sh, it's redundant. 
-	# we should port the buildGoLib parts of the gui/build.sh script here
+	# TODO port the buildGoLib parts of the gui/build.sh script here (issue #363)
+	# or at least call that function from here --
 	@echo "doing nothing"
 
 build_gui:
@@ -90,8 +90,7 @@ build: golib build_helper build_openvpn build_gui
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
-
-	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
+	@go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
 	@echo "build helper done."
 
 build_openvpn:
@@ -100,15 +99,13 @@ build_openvpn:
 debug_installer:
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 
-build_installer: # TODO re-add check_qtifw build
-	echo "mkdir osx data"	
+build_installer: check_qtifw build
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
 ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${INST_DATA}/helper
-	# TODO need to write this
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}
@@ -120,9 +117,9 @@ ifeq (${PLATFORM}, darwin)
 	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
 	# a working (old) version:
 	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
-	#@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
-	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
+	#FIXME FIXME @cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
 	@rm -f ${INST_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
+	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
 	@echo "[+] Running macdeployqt"
 	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${OSX_DATA}/
@@ -159,7 +156,7 @@ PLATFORM_WIN = PLATFORM=windows
 EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
 	@echo "[+] Cross-building for windows..."
-	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
+	@$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
 	# workaround for helper: we use the go compiler
 	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
 	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
@@ -213,12 +210,12 @@ endif
 vendor: gen_providers_json prepare_templates gen_pkg_snap gen_pkg_deb
 
 gen_providers_json:
-	@python3 branding/scripts/gen-providers-json.py branding/config/vendor.conf gui/providers/providers.json
+	@VENDOR_PATH=${VENDOR_PATH} branding/scripts/gen-providers-json gui/providers/providers.json
 
-prepare_templates: generate relink_default tgz
+prepare_templates: generate tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-vendor-make build/${PROVIDER}/vendor.mk
 
 generate:
 	@go generate gui/backend.go
@@ -232,25 +229,26 @@ tgz:
 	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
-# XXX port/deprecate --------------------------------------------------------------------------------------------------
+# FIXME port --------------------------------------------------------------------------------------------------
 
 gen_pkg_deb:
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-debian.py build/${PROVIDER}/debian/data.json
-	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 
 gen_pkg_snap:
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
 	@cp helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
 	@cp helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py
 	@rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
-	@mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
-	@cp branding/assets/default/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
-	rm build/${PROVIDER}/snap/generate.py
+	@mkdir -p build/${PROVIDER}/snap/gui && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	# FIXME is this png needed?? then add it to ASSETS_REQUIRED
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+	@rm build/${PROVIDER}/snap/generate.py
 
 # ---------------------------------------------------------------------------------------------------------------------
 

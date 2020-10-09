@@ -23,6 +23,7 @@ def generateProvidersJSON(configPath, outputJSONPath):
 
     providers = {}
     defaultProvider = getDefaultProvider(config)
+
     providers['default'] = defaultProvider
     providers['providers'] = []
     providerData = getProviderData(defaultProvider, config)
@@ -35,7 +36,7 @@ def generateProvidersJSON(configPath, outputJSONPath):
 def addCaData(data, configfile):
     provider = data.get('name').lower()
     folder, f = os.path.split(configfile)
-    caFile = os.path.join(folder, provider + '-ca.crt')
+    caFile = os.path.join(folder, provider, provider + '-ca.crt')
     if not os.path.isfile(caFile):
         bail('[!] Cannot find CA file in {path}'.format(path=caFile))
     with open(caFile) as ca:
@@ -44,7 +45,7 @@ def addCaData(data, configfile):
 def bail(msg=None):
     if not msg:
         print("ERROR: not enough arguments!")
-        print('Usage: {scriptname}.py <config> <output>'.format(
+        print('Usage: {scriptname}.py <output>'.format(
             scriptname=SCRIPT_NAME))
     else:
         print(msg)
@@ -52,13 +53,10 @@ def bail(msg=None):
 
 if __name__ == "__main__":
     print("[+] Generating providers.json...")
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         bail()
-    # TODO get BITMASK_BRANDING folder - get config from there, if possible.
-    env_provider_conf = os.environ.get('PROVIDER_CONFIG')
-    if env_provider_conf:
-        if os.path.isfile(env_provider_conf):
-            print("[+] Overriding provider config per "
-                  "PROVIDER_CONFIG variable")
-            configfile = env_provider_conf
-    generateProvidersJSON(sys.argv[1], sys.argv[2])
+
+    VENDOR_PATH = os.environ.get('VENDOR_PATH')
+    conf = os.path.join(VENDOR_PATH, 'vendor.conf')
+    output = sys.argv[1]
+    generateProvidersJSON(conf, output)
