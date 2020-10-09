@@ -2,13 +2,15 @@
 # (c) LEAP Encryption Access Project 2020
 # License: GPL
 
+import string
 import subprocess
 import sys
 import os
 
 VENDOR_PATH = None
+PROVIDER=None
 SCRIPT_NAME = sys.argv[0]
-CA_README = "config/CERT.Readme"
+CA_README = "CERT.Readme"
 ASSETS_README = "assets/FILES.Readme"
 
 def initVendor():
@@ -17,9 +19,9 @@ def initVendor():
         bail("ERROR: Please set VENDOR_PATH environment variable.")
     VENDOR_PATH = os.path.abspath(VENDOR_PATH)
     if os.path.isdir(VENDOR_PATH):
-        bail("ERROR: VENDOR_PATH folder already exists")
+        bail("ERROR: VENDOR_PATH folder already exists {path}".format(path=VENDOR_PATH))
 
-    for d in ["config", "assets", "pkg"]:
+    for d in ["assets"]:
         os.makedirs(os.path.join(VENDOR_PATH, d))
 
     initVendorConfig()
@@ -27,10 +29,12 @@ def initVendor():
     displayRepoInfo()
 
 def displayRepoInfo():
+    print()
     print("[+] Initialized repo in", VENDOR_PATH)
-    print(f"[ ] - Add the assets in the assets/ folder, see {ASSETS_README}.")
-    print(f"[ ] - Add the CA certificate in the config/ folder, see {CA_README}.")
-    print("[ ] - Remember to commit your changes.")
+    print()
+    print(f"- Please add all the needed assets. See {VENDOR_PATH}/{ASSETS_README}.")
+    print(f"- Add your provider's CA certificate, see see {VENDOR_PATH}/{PROVIDER}/{CA_README}.")
+    print("- Remember to commit your changes.")
     print()
     print("[+] After doing that, you can run 'make vendor_check' to validate the configuration for your provider.")
 
@@ -46,15 +50,42 @@ def bail(msg=None):
 def getVendorPath():
     return os.environ.get('VENDOR_PATH')
 
+def sanitize(word):
+    result = "" 
+    for letter in word: 
+        if letter in string.ascii_letters:
+            result = result + letter.lower() 
+    return result
+
+def getProvider():
+    provider = os.environ.get('PROVIDER')
+    if not provider:
+        provider = input('>   provider name? ')
+        provider = sanitize(provider)
+        print("[+] provider name:", provider)
+    return provider
+
+def getProviderURL():
+    url = os.environ.get('PROVIDER_URL')
+    if not url :
+        url = input('>   provider url?: https://')
+    return url.replace('https://', '').replace('/', '')
+
+def getAppName(provider):
+    return provider[0].capitalize() + provider[1:] + "VPN"
+
 def initVendorConfig():
+    with open(os.path.join(VENDOR_PATH, "vendor.conf"), "w") as f:
+        f.write(getConf())
 
-    with open(os.path.join(VENDOR_PATH, "config", "vendor.conf"), "w") as f:
-        f.write(CONF_TEMPLATE)
+    caDir = os.path.join(VENDOR_PATH, PROVIDER)
+    print("CADIR??", caDir)
 
-    with open(os.path.join(VENDOR_PATH, CA_README), "w") as f:
-        f.write(CA_INFO)
+    os.makedirs(caDir, exist_ok=True)
+    with open(os.path.join(caDir, CA_README), "w") as f:
+        f.write(getCAInfo())
 
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ASSETS_LIST")) as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ASSETS_REQUIRED")) as f:
         allAssets = f.read()
 
     with open(os.path.join(VENDOR_PATH, ASSETS_README), "w") as f:
@@ -69,33 +100,43 @@ def initGitRepo():
 
 CONF_TEMPLATE = """[default]
 
-provider = myprovider
+provider = {provider}
 
-[myprovider]
+[{provider}]
 
-name                = MyProvider
-applicationName     = MyProviderVPN
-binaryName          = myprovider-vpn
+name                = {provider}
+applicationName     = {appName} 
+binaryName          = {provider}-vpn
 
-providerURL         = example.org
+providerURL         = https://{providerURL}
 auth                = anon
-apiURL              = https://api.myprovider.net/
-caURL               = https://myprovider.net/ca.crt
+apiURL              = https://api.{providerURL}/
+caURL               = https://{providerURL}/ca.crt
 
-infoURL             = https://myprovider.net/vpn
-tosURL              = https://myprovider.net/tos
-helpURL             = https://myprovider.net/support
+infoURL             = https://{providerURL}/vpn
+tosURL              = https://{providerURL}/tos
+helpURL             = https://{providerURL}/support
 
-geolocationAPI      = https://myprovider.net:9001/json
+geolocationAPI      = https://{providerURL}:9001/json
 
-askForDonations     = true
-donateURL           = https://myprovider.net/vpn/donate
+askForDonations     = false
+donateURL           = https://{providerURL}/vpn/donate
 """
+
+def getConf():
+    return CONF_TEMPLATE.format(
+    provider=PROVIDER,
+    appName=getAppName(PROVIDER),
+    providerURL=PROVIDER_URL)
+
 
 CA_INFO = """Place in this folder your provider's CA certificate, with the name:
 
-    <providerName>-ca.crt
+    {provider}-ca.crt
 """
+
+def getCAInfo():
+    return CA_INFO.format(provider=PROVIDER)
 
 ASSETS_INFO = """This is the list of assets that you MUST place in this folder for your provider:
 
@@ -104,5 +145,8 @@ ASSETS_INFO = """This is the list of assets that you MUST place in this folder f
 if __name__ == "__main__":
     if len(sys.argv) != 1:
         bail()
+
     VENDOR_PATH = getVendorPath()
+    PROVIDER = getProvider()
+    PROVIDER_URL = getProviderURL()
     initVendor()

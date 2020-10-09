@@ -32,6 +32,7 @@ HEADERS += \
 LIBS += -L../../lib -lgoshim -lpthread
 
 RESOURCES += gui/gui.qrc
+RESOURCES += providers/riseup/vendor.qrc
 
 DESTDIR = release
 OBJECTS_DIR = release/.obj

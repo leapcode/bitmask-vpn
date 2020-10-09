@@ -7,11 +7,10 @@
 
 XBUILD ?= no
 SKIP_CACHECK ?= no
-PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
-APPNAME ?= $(shell branding/scripts/getparam appname | tail -n 1)
-TARGET ?= $(shell branding/scripts/getparam binname | tail -n 1)
-PROVIDER_CONFIG ?= branding/config/vendor.conf
-DEFAULT_PROVIDER = branding/assets/default/
+VENDOR_PATH ?= providers
+APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
+TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
+PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 VERSION ?= $(shell git describe)
 
 # go paths
@@ -205,38 +204,27 @@ test_ui: golib
 #########################################################################
 
 vendor_init:
-	@./branding/scripts/init
-	# TODO we should do the prepare step here, store it in VENDOR_PATH
+	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/init
 
 vendor_check:
-	@./branding/scripts/check
-	# TODO move ca-check here
+	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/check ${PROVIDER}
+ifeq (${SKIP_CACHECK}, no)
+	@VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/check-ca-crt ${PROVIDER}
+endif
 
-vendor: gen_providers_json
-	# TODO merge with prepare, after moving the gen_pkg to vendor_init
+vendor: gen_providers_json prepare_templates gen_pkg_snap gen_pkg_deb
 
 gen_providers_json:
 	@python3 branding/scripts/gen-providers-json.py branding/config/vendor.conf gui/providers/providers.json
-
-prepare: prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
 
 prepare_templates: generate relink_default tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
 	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
-ifeq (${SKIP_CACHECK}, no)
-	@${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
-endif
 
 generate:
 	@go generate gui/backend.go
 	@go generate pkg/config/version/genver/gen.go
-
-relink_default:
-ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
-	@cd branding/assets && unlink default
-endif
-	@cd branding/assets && ln -s ${PROVIDER} default
 
 TGZ_NAME = bitmask-vpn_${VERSION}-src
 TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
@@ -246,12 +234,7 @@ tgz:
 	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
-# XXX port/deprecate -----------------------------------------------
-gen_pkg_win:
-	@mkdir -p build/${PROVIDER}/windows/
-	@cp -r ${TEMPLATES}/windows build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-win.py build/${PROVIDER}/windows/data.json
-	@cd build/${PROVIDER}/windows && python3 generate.py
+# XXX port/deprecate --------------------------------------------------------------------------------------------------
 
 gen_pkg_deb:
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
@@ -271,9 +254,8 @@ gen_pkg_snap:
 	@cp branding/assets/default/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
 	rm build/${PROVIDER}/snap/generate.py
 
-prepare_done:
-	@echo
-	@echo 'Done. You can do "make build" now.'
+# ---------------------------------------------------------------------------------------------------------------------
+
 
 #########################################################################
 # packaging action

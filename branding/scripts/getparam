@@ -13,9 +13,10 @@ from provider import getProviderData
 
 def getData():
     here = os.path.abspath(os.path.dirname(__file__))
-    configPath = os.path.join(here, '../../branding/config/vendor.conf')
+    vendorPath = os.environ.get('VENDOR_PATH')
+    configPath = os.path.join(vendorPath, 'vendor.conf')
     if not os.path.isfile(configPath):
-        print("ERROR: path does not exist", config)
+        print("ERROR: path does not exist", configPath)
         os.exit(1)
     config = configparser.ConfigParser()
     config.read(configPath)
