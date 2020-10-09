@@ -41,7 +41,7 @@ void signalHandler(int) {
 QString getAppName(QJsonValue info, QString provider) {
     for (auto p: info.toArray()) {
         QJsonObject item = p.toObject();
-        if (item["name"] == provider) {
+        if (item["name"].toString().toLower() == provider.toLower()) {
             return item["applicationName"].toString();
         }
     }
