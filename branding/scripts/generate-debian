@@ -11,6 +11,7 @@ from provider import getProviderData
 
 
 VERSION = os.environ.get('VERSION', 'unknown')
+SCRIPT = 'generate-debian.py'
 
 
 def writeOutput(data, outfile):
@@ -18,27 +19,19 @@ def writeOutput(data, outfile):
     with open(outfile, 'w') as outf:
         outf.write(json.dumps(data))
 
-
 if __name__ == "__main__":
-    env_provider_conf = os.environ.get('PROVIDER_CONFIG')
-    if env_provider_conf:
-        if os.path.isfile(env_provider_conf):
-            print("[+] Overriding provider config per "
-                  "PROVIDER_CONFIG variable")
-            configfile = env_provider_conf
-
+    VENDOR_PATH = os.environ.get('VENDOR_PATH')
+    configFile = os.path.join(VENDOR_PATH, 'vendor.conf')
     config = configparser.ConfigParser()
-    config.read(configfile)
+    config.read(configFile)
     provider = getDefaultProvider(config)
     data = getProviderData(provider, config)
 
     if len(sys.argv) != 2:
-        print('Usage: generate-osx.py <output_file>')
+        print('Usage: {} <output_file>'.format(SCRIPT))
         sys.exit(1)
 
     outputf = sys.argv[1]
 
-    data['applicationNameLower'] = data.get('applicationName').lower()
-    data['URL'] = data.get('infoURL')
     data['version'] = VERSION
     writeOutput(data, outputf)
