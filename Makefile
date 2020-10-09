@@ -19,14 +19,17 @@ GOPATH = $(shell go env GOPATH)
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
-# detect OS, we use it for dependencies
+# detect OS
+ifeq ($(OS), Windows_NT)
+PLATFORM = windows
+else
 UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
+endif
 
 QTBUILD = build/qt
 INSTALLER = build/installer
-WININST_DATA = branding/qtinstaller/packages/root.win_x86_64/data/
-OSX_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
+INST_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
 OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
 MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
 # XXX expired cert -codesign="${OSX_CERT}"
@@ -34,7 +37,11 @@ MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
+ifeq ($(PLATFORM), windows)
+HAS_QTIFW := $(shell which binarycreator.exe)
+else
 HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
+endif
 OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 
 #########################################################################
@@ -78,22 +85,7 @@ build: golib build_helper build_openvpn
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
-	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION}" ./cmd/bitmask-helper/
-
-build_old:
-ifeq (${XBUILD}, yes)
-	$(MAKE) build_cross_win
-	$(MAKE) build_cross_osx
-	$(MAKE) _build_xbuild_done
-else ifeq (${XBUILD}, win)
-	$(MAKE) build_cross_win
-	$(MAKE) _build_done
-else ifeq (${XBUILD}, osx)
-	$(MAKE) build_cross_osx
-	$(MAKE) _build_done
-else
-	@gui/build.sh
-endif
+	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} -H windowsgui" ./cmd/bitmask-helper/
 
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
@@ -101,50 +93,50 @@ build_openvpn:
 debug_installer:
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 
-build_installer: check_qtifw build
+build_installer: # TODO re-add check_qtifw build
 	echo "mkdir osx data"	
-	@mkdir -p ${OSX_DATA}
+	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
 ifeq (${PLATFORM}, darwin)
-	@mkdir -p ${OSX_DATA}/helper
+	@mkdir -p ${INST_DATA}/helper
 	# TODO need to write this
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
-	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${OSX_DATA}/helper/bitmask.pf.conf
-	@cp "${TEMPLATES}/osx/client.up.sh" ${OSX_DATA}/
-	@cp "${TEMPLATES}/osx/client.down.sh" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${OSX_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${OSX_DATA}/
-	@cp build/bin/${PLATFORM}/bitmask-helper ${OSX_DATA}/
+	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
+	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}
+	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}
+	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_DATA}
+	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_DATA}
+	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}
+	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}
 	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
 	# a working (old) version:
 	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
-	#@cp $(OPENVPN_BIN) ${OSX_DATA}/openvpn.leap
+	#@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
 	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
-	@rm -f ${OSX_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
+	@rm -f ${INST_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
 	@echo "[+] Running macdeployqt"
 	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${OSX_DATA}/
 endif
 ifeq (${PLATFORM}, windows)
-	@${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}helper.exe
+	@cp branding/assets/${PROVIDER}/icon.ico ${INST_DATA}/icon.ico
+	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
+	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
+	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
+	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
+	# XXX add sign options
+	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
 endif
 ifeq (${PLATFORM}, linux)
-	@${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
 endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
 	@cd build/installer && qmake INSTALLER=${APPNAME}-installer-${VERSION} && make
-
-installer_win:
-	# XXX refactor with build_installer
-	cp helper.exe ${WININST_DATA}
-	cp ${QTBUILD}/release/${TARGET}.exe ${WININST_DATA}${TARGET}.exe
-	# XXX add sign step here
-	windeployqt --qmldir gui/qml ${WININST_DATA}${TARGET}.exe
-	"/c/Qt/QtIFW-3.2.2/bin/binarycreator.exe" -c ./branding/qtinstaller/config/config.xml -p ./branding/qtinstaller/packages build/${PROVIDER}-vpn-${VERSION}-installer.exe
 
 check_qtifw: 
 ifdef HAS_QTIFW
@@ -169,14 +161,6 @@ CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o
 PLATFORM_OSX = PLATFORM=darwin
 build_cross_osx:
 	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) _buildparts
-
-_build_done:
-	@echo
-	@echo 'Done. You can build your package now.'
-
-_build_xbuild_done:
-	@echo
-	@echo 'Done. You can do "make packages" now.'
 
 # --------- FIXME -----------------------------------------------------------------------
 

@@ -11,6 +11,9 @@ macx {
     # TODO -- pass the vendor icon here from Makefile.
     ICON = branding/assets/riseup/icon.icns
 }
+win32 {
+    RC_ICONS = branding/assets/riseup/icon.ico
+}
 
 QT += qml quick widgets
 
