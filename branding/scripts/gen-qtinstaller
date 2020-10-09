@@ -25,7 +25,7 @@ OS_CONFIG = {
     <!-- end osx -->
 """,
     'windows': """
-    <TargetDir>@ApplicationsDir@/DemoLibVPN</TargetDir>
+    <TargetDir>@ApplicationsDir@/$APPNAME</TargetDir>
     <StartMenuDir>$APPNAME</StartMenuDir>
 
     <RunProgram>@TargetDir@/$BINNAME.exe</RunProgram>
@@ -69,12 +69,23 @@ def generateConfig(data, platform, outDir):
          data=templateData)
 
 def generatePackageMetadata(data, platform, outDir):
+    appname = 'applicationName'
     templateData = {
-        'APPNAME': data['applicationName'],
+        'APPNAME': data[appname],
         'BINNAME': data['binaryName'],
         'VERSION': getVersion(),
         'TIMESTAMP': time.strftime('%Y-%m-%d')
     }
+    if platform == "windows":
+        p = data[appname] + " for Windows"
+    elif platform == "osx":
+        p = data[appname] + " for OSX"
+    elif platform == "linux":
+        p = data[appname] + " for GNU/Linux"
+    else:
+        p = data[appname]
+    templateData['APPNAME_PLATFORM'] = p
+
     renderTemplate(
          templatePath='../templates/qtinstaller/packages/bitmaskvpn/meta/package.xml',
          outPath=os.path.join(outDir, 'packages/bitmaskvpn/meta/package.xml'),

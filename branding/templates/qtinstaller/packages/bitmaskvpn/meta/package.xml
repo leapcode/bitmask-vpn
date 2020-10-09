@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
     <DisplayName>$APPNAME</DisplayName>
-    <Description>$APPNAME</Description>
+    <Description>$APPNAME_PLATFORM</Description>
     <Version>$VERSION</Version>
     <ReleaseDate>$TIMESTAMP</ReleaseDate>
     <Default>false</Default>

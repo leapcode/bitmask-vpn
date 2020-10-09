@@ -39,7 +39,6 @@ var (
 	LogFolder        = getExecDir()
 	openvpnPath      = path.Join(appPath, "openvpn.exe")
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
-	platformOpenvpnFlags = []string{
 	httpServerConf = &httpConf{}
 )
 

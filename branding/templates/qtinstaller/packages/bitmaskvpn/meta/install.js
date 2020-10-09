@@ -52,13 +52,8 @@ function Component() {
         cancelInstaller("Installation on " + systemInfo.prettyProductName + " is not supported");
         return;
     }
-
     console.log("CPU Architecture: " +  systemInfo.currentCpuArchitecture);
 
-    if ( systemInfo.kernelType === "winnt") {
-        installer.componentByName("root.win_x86_64").setValue("Default", "true");
-        installer.componentByName("root.win_x86_64").setValue("Virtual", "false");
-    }
 }
 
 Component.prototype.createOperations = function ()
