@@ -73,18 +73,26 @@ else
 EXTRA_FLAGS =
 endif
 
+ifeq ($(PLATFORM), windows)
+EXTRA_GO_LDFLAGS = "-H windowsgui"
+endif
+
 golib:
 	# TODO stop building golib in gui/build.sh, it's redundant. 
 	# we should port the buildGoLib parts of the gui/build.sh script here
 	@echo "doing nothing"
 
-build: golib build_helper build_openvpn
-	@XBUILD=no TARGET=${TARGET} gui/build.sh
+build_gui:
+	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH}/${PROVIDER} gui/build.sh
+
+build: golib build_helper build_openvpn build_gui
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
-	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} -H windowsgui" ./cmd/bitmask-helper/
+
+	go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
+	@echo "build helper done."
 
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh

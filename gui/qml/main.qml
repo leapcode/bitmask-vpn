@@ -42,6 +42,9 @@ ApplicationWindow {
                    showInitFailure()
                }
             }
+            if (ctx.donateURL) {
+                donateItem.visible = true
+            }
         }
     }
 
@@ -98,8 +101,8 @@ ApplicationWindow {
         allowEmptyPass = shouldAllowEmptyPass()
 
         app.visible = true;
-        show();
-        hide();
+        //show();
+        //hide();
     }
 
     function toHuman(st) {
@@ -251,8 +254,9 @@ ApplicationWindow {
             }
 
             MenuItem {
+                id: donateItem
                 text: qsTr("Donate...")
-                visible: ctx && ctx.donateURL
+                visible: ctx ? ctx.donateURL : false
                 onTriggered: { donate.visible = true }
             }
 

@@ -6,13 +6,19 @@ unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 
+!defined(VENDOR_PATH, var):VENDOR_PATH="providers/riseup"
+
+RESOURCES += gui/gui.qrc
+RESOURCES += $$VENDOR_PATH/vendor.qrc
+
+ICON = $$VENDOR_PATH/icon.png
+
 macx {
+    ICON = $$VENDOR_PATH/assets/icon.icns
     LIBS += -framework Security
-    # TODO -- pass the vendor icon here from Makefile.
-    ICON = branding/assets/riseup/icon.icns
 }
 win32 {
-    RC_ICONS = branding/assets/riseup/icon.ico
+    RC_ICONS = $$VENDOR_PATH/assets/icon.ico
 }
 
 QT += qml quick widgets
@@ -30,9 +36,6 @@ HEADERS += \
 
 # we build from build/qt
 LIBS += -L../../lib -lgoshim -lpthread
-
-RESOURCES += gui/gui.qrc
-RESOURCES += providers/riseup/vendor.qrc
 
 DESTDIR = release
 OBJECTS_DIR = release/.obj
