@@ -5,6 +5,7 @@ MessageDialog {
     title: qsTr("About")
     text: getText()
     informativeText: getVersion() 
+    icon: StandardIcon.Information
 
     function getText() {
         var _name = ctx ? ctx.appName : "vpn"

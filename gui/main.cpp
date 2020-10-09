@@ -152,6 +152,9 @@ int main(int argc, char **argv) {
     QTranslator translator;
     translator.load(QLocale(), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
     app.installTranslator(&translator);
+    /* set window icon */
+    app.setWindowIcon(QIcon(":/vendor/icon.svg"));
+
 
     QQmlApplicationEngine engine;
     QQmlContext *ctx = engine.rootContext();

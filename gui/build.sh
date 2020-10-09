@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
-set -x
+
+# DEBUG --------------
+# set -x
+# --------------------
 
 XBUILD=${XBUILD-no}
 OSX_TARGET=10.11
@@ -13,6 +16,7 @@ SOURCE_GOLIB=gui/backend.go
 
 QTBUILD=build/qt
 RELEASE=$QTBUILD/release
+VENDOR_PATH=${VENDOR_PATH-providers/riseup}
 
 PLATFORM=$(uname -s)
 LDFLAGS=""
@@ -72,8 +76,9 @@ function buildGoLib {
 function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
+    echo "[+] VENDOR_PATH:" $VENDOR_PATH
     mkdir -p $QTBUILD
-    $QMAKE -o $QTBUILD/Makefile "CONFIG-=debug CONFIG+=release" $PROJECT
+    $QMAKE -o $QTBUILD/Makefile "CONFIG-=debug CONFIG+=release VENDOR_PATH=${VENDOR_PATH}" $PROJECT
 }
 
 function renameOutput {

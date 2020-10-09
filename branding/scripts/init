@@ -12,6 +12,7 @@ PROVIDER=None
 SCRIPT_NAME = sys.argv[0]
 CA_README = "CERT.Readme"
 ASSETS_README = "assets/FILES.Readme"
+VENDOR_QRC = "vendor.qrc"
 
 def initVendor():
     global VENDOR_PATH
@@ -87,10 +88,14 @@ def initVendorConfig():
 
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ASSETS_REQUIRED")) as f:
         allAssets = f.read()
-
     with open(os.path.join(VENDOR_PATH, ASSETS_README), "w") as f:
         f.write(ASSETS_INFO)
         f.write(allAssets)
+
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../templates/vendor/vendor.qrc")) as f:
+        qrc = f.read()
+    with open(os.path.join(VENDOR_PATH, VENDOR_QRC), "w") as f:
+        f.write(qrc)
 
 def initGitRepo():
     out = subprocess.run(['git', 'init'], cwd=VENDOR_PATH)
