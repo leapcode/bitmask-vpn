@@ -57,7 +57,6 @@ func _getExecPath() string {
 
 func getHelperDir() string {
 	d := _getExecPath()
-	log.Println(">>> DEBUG: helper dir", d)
 	return d
 }
 
@@ -107,7 +106,7 @@ func runServer(preferredPort int) {
 
 func getOpenvpnPath() string {
 	openvpnPath := filepath.Join(getHelperDir(), "openvpn.leap")
-	log.Println(">>> DEBUG: openvpn", openvpnPath)
+	log.Println("openvpn path:", openvpnPath)
 	return openvpnPath
 }
 

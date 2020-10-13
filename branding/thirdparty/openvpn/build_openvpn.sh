@@ -11,10 +11,10 @@ set -e
 
 # [!] This needs to be updated for every release --------------------------
 OPENVPN="openvpn-2.4.9"
-MBEDTLS="mbedtls-2.23.0"
+MBEDTLS="mbedtls-2.24.0"
 LZO="lzo-2.10"
 ZLIB="zlib-1.2.11"
-MBEDTLS_SHA512="c2a04f659bf63522f10f6660c2d196d7f39a057ff5a382734ba3b839f463ead4e5c9bc0d21fb909d56fcd2ee4c711248be14861f388cd383385484d364247634"
+MBEDTLS_SHA512="5437ea57eb8b8af9446a796876aa2bfe3c59c88f926b1638c7e8a021a8bef9f4bc6cb1b254e7387e2afe095bd27c518060719726bbaf5478582a56c34315cfb8"
 LZO_SHA1="4924676a9bae5db58ef129dc1cebce3baa3c4b5d"
 # -------------------------------------------------------------------------
 
@@ -88,9 +88,9 @@ function build_mbedtls()
 	sha512=`${SHASUM} -a 512 -p ${MBEDTLS}.tar.gz | cut -d' ' -f 1`
 	
 	if [ "${MBEDTLS_SHA512}" = "${sha512}" ]; then
-	    echo "[+] sha1 verified ok"
+	    echo "[+] sha-512 verified ok"
 	else
-	    echo "[!] problem with sha1 verification"
+	    echo "[!] problem with sha-512 verification"
 	    exit 1
 	fi
 	tar zxvf $MBEDTLS.tar.gz
