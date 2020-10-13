@@ -35,12 +35,17 @@ parts:
     stage:
         - bin/${binaryName}
     override-build: |
+        # TODO - this still has some round corners for vendoring.
+        # Maybe we just need to put the providers.json in the VENDOR_PATH
+        # and pass it to gui/providers from some path that snap can access.
+        # Same for the vendor.qrc
         mkdir -p $SNAPCRAFT_PART_INSTALL/snap/
         mkdir -p $SNAPCRAFT_PRIME/snap/
         echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
-        QT_SELECT=5 XBUILD=no TARGET=${binaryName} make build
+        make build_golib
+        QT_SELECT=5 XBUILD=no TARGET=${binaryName} make build_gui
         mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-        mv qtbuild/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
+        mv build/qt/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
     override-prime: |
       rm -rf $SNAPCRAFT_PROJECT_DIR/snap/hooks/.mypy_cache
       snapcraftctl prime

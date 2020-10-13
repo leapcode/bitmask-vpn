@@ -82,12 +82,12 @@ PKGFILES = $(shell find pkg -type f -name '*.go')
 lib/%.a: $(PKGFILES)
 	@./gui/build.sh --just-golib
 
-golib: lib/libgoshim.a
+build_golib: lib/libgoshim.a
 
 build_gui:
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH}/${PROVIDER} gui/build.sh --skip-golib
 
-build: golib build_helper build_openvpn build_gui
+build: build_golib build_helper build_openvpn build_gui
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
