@@ -20,6 +20,7 @@ VENDOR_PATH=${VENDOR_PATH-providers/riseup}
 
 PLATFORM=$(uname -s)
 LDFLAGS=""
+BUILD_GOLIB="yes"
 
 if [ "$TARGET" == "" ]
 then
@@ -45,7 +46,6 @@ function init {
     mkdir -p lib
 }
 
-# TODO this should be moved to the makefile
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
     $GO generate ./pkg/config/version/genver/gen.go
@@ -101,16 +101,44 @@ function renameOutput {
     fi
 }
 
-echo "[+] Building BitmaskVPN"
+function buildDefault {
+    echo "[+] Building BitmaskVPN"
+    lrelease bitmask.pro
+    if [ "$BUILD_GOLIB" == "yes" ]
+    then
+        buildGoLib
+    fi
+    buildQmake
 
-lrelease bitmask.pro
+    make -C $QTBUILD clean
+    make -C $QTBUILD -j4 all
 
-# FIXME move buildGoLib to the main makefile, to avoid redundant builds if possible
-buildGoLib
-buildQmake
+    renameOutput
+    echo "[+] Done."
+}
 
-make -C $QTBUILD clean
-make -C $QTBUILD -j4 all
 
-renameOutput
-echo "[+] Done."
+for i in "$@"
+do
+case $i in
+    --skip-golib)
+    BUILD_GOLIB="no"
+    shift # past argument=value
+    ;;
+    --just-golib)
+    BUILD_GOLIB="just"
+    shift # past argument=value
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
+
+if [ "$BUILD_GOLIB" == "just" ]
+then
+    buildGoLib
+else
+    buildDefault
+fi
+
