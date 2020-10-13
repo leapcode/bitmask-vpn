@@ -15,10 +15,12 @@ def getDefaultProvider(config):
 
 def getProviderData(provider, config):
     print("[+] Configured provider:", provider)
-
-    c = config[provider]
+    try:
+        c = config[provider]
+    except Exception:
+        raise ValueError('Cannot find provider')
+        
     d = dict()
-
     keys = ('name', 'applicationName', 'binaryName', 'auth', 'authEmptyPass',
             'providerURL', 'tosURL', 'helpURL',
             'askForDonations', 'donateURL', 'apiURL',

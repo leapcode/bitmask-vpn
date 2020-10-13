@@ -35,11 +35,9 @@ OS_CONFIG = {
 """
 }
 
-
-
 def getData():
     config = configparser.ConfigParser()
-    configPath = os.path.join(here(), '../../branding/config/vendor.conf')
+    configPath = os.path.join(VENDOR_PATH, 'vendor.conf')
     config.read(configPath)
 
     provider = os.environ.get('PROVIDER')
@@ -120,7 +118,6 @@ def getVersion():
     return os.environ.get('VERSION', 'unknown')
 
 if __name__ == "__main__":
-    # TODO get from vendor - maybe just in provider module
     VENDOR_PATH = os.environ.get('VENDOR_PATH')
 
     if len(sys.argv) != 3:
