@@ -80,8 +80,6 @@ def initVendorConfig():
         f.write(getConf())
 
     caDir = os.path.join(VENDOR_PATH, PROVIDER)
-    print("CADIR??", caDir)
-
     os.makedirs(caDir, exist_ok=True)
     with open(os.path.join(caDir, CA_README), "w") as f:
         f.write(getCAInfo())
