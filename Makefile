@@ -107,21 +107,21 @@ ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${INST_DATA}/helper
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
-	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}
-	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}
-	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_DATA}
-	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_DATA}
-	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}
-	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}
+	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}/
+	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}/
+	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
 	# FIXME our static openvpn build fails with an "Assertion failed at crypto.c". Needs to be fixed!!! - kali
 	# a working (old) version:
 	#@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
 	#FIXME FIXME @cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
-	@rm -f ${INST_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${OSX_DATA}openvpn.leap
+	@rm -f ${INST_DATA}openvpn.leap && cp /usr/local/bin/openvpn ${INST_DATA}/openvpn.leap
 	@echo "WARNING: workaround for broken static build. Shipping homebrew dynamically linked instead"
 	@echo "[+] Running macdeployqt"
 	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
-	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${OSX_DATA}/
+	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
 ifeq (${PLATFORM}, windows)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
