@@ -32,15 +32,9 @@ const (
 	systemOpenvpnPath = "/usr/sbin/openvpn"
 )
 
-var (
-	snapOpenvpnPath     = "/snap/bin/" + config.BinaryName + ".openvpn"
-	snapBitmaskRootPath = "/snap/bin/" + config.BinaryName + ".bitmask-root"
-)
-
 var bitmaskRootPaths = []string{
 	"/usr/sbin/bitmask-root",
 	"/usr/local/sbin/bitmask-root",
-	snapBitmaskRootPath,
 }
 
 type launcher struct {
@@ -96,10 +90,8 @@ func (l *launcher) check() (helpers bool, privilege bool, err error) {
 
 func hasHelpers() (bool, error) {
 	/* TODO add polkit file too */
-	for _, f := range bitmaskRootPaths {
-		if _, err := os.Stat(f); err == nil {
-			return true, nil
-		}
+	if _, err := bitmaskRootPath(); err == nil {
+		return true, nil
 	}
 	return false, nil
 }
@@ -230,7 +222,7 @@ func runBitmaskRoot(arg ...string) error {
 
 func bitmaskRootPath() (string, error) {
 	if os.Getenv("SNAP") != "" {
-		path := snapBitmaskRootPath
+		path := "/snap/bin/" + config.BinaryName + ".bitmask-root"
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
 			return path, nil
 		}
@@ -246,7 +238,7 @@ func bitmaskRootPath() (string, error) {
 
 func getOpenvpnPath() string {
 	if os.Getenv("SNAP") != "" {
-		return snapOpenvpnPath
+		return "/snap/bin/" + config.BinaryName + ".openvpn"
 	}
 	return systemOpenvpnPath
 }
