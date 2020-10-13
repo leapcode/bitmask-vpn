@@ -77,13 +77,15 @@ ifeq ($(PLATFORM), windows)
 EXTRA_GO_LDFLAGS = "-H windowsgui"
 endif
 
-golib:
-	# TODO port the buildGoLib parts of the gui/build.sh script here (issue #363)
-	# or at least call that function from here --
-	@echo "doing nothing"
+
+PKGFILES = $(shell find pkg -type f -name '*.go')
+lib/%.a: $(PKGFILES)
+	@./gui/build.sh --just-golib
+
+golib: lib/libgoshim.a
 
 build_gui:
-	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH}/${PROVIDER} gui/build.sh
+	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH}/${PROVIDER} gui/build.sh --skip-golib
 
 build: golib build_helper build_openvpn build_gui
 
@@ -96,9 +98,6 @@ build_helper:
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
-debug_installer:
-	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
-
 build_installer: check_qtifw build
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
@@ -106,7 +105,7 @@ build_installer: check_qtifw build
 	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
 ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${INST_DATA}/helper
-	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}
 	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}
@@ -275,9 +274,6 @@ packages: package_deb package_snap package_osx package_win
 package_snap_in_docker:
 	@make -C docker package_snap
 
-package_win_in_docker:
-	@make -C docker package_win
-
 package_snap:
 	@unlink snap || true
 	@ln -s build/${PROVIDER}/snap snap
@@ -285,9 +281,6 @@ package_snap:
 
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
-
-package_osx:
-	@echo "tbd"
 
 
 #########################################################################
