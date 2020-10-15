@@ -2,9 +2,9 @@ windows build
 =============
 
 The build currently expects MINGW64 environment, on a native windows host.
-A cross-compiling procedure (at least for the application binaries) should be possible in the near future, using mxe.
+A cross-compiling procedure (at least for the application binaries) should be possible in the near future, using mxe. (There's already some support for it in `gui/build.sh`).
 
-You should install make, as well as a recent Qt5 version (for instance, with chocolatey: choco install make).
+You should instal: make, wget, as well as a recent Qt5 version (for instance, with chocolatey: choco install make && choco install wget).
 
 (In order to avoid makefiles, you are welcome to submit a port of the build scripts using powershell or cscript - see the build.wsf script in openvpn-build for inspiration).
 

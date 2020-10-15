@@ -91,9 +91,12 @@ Component.prototype.installationFinished = function()
 }
 
 function postInstallWindows() {
+    console.log("Trying to install OpenVPN tap driver");
+    component.addElevatedOperation("Execute", "@TargetDir@/tap-windows.exe");  /* TODO uninstall? */
+    console.log("Now trying to installer our helper");
     component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "install", "UNDOEXECUTE", "@TargetDir@/helper.exe", "remove");
     component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "start", "UNDOEXECUTE", "@TargetDir@/helper.exe", "stop");
-    console.log("Adding shortcut entries");
+    console.log("Adding shortcut entries/...");
     component.addElevatedOperation("Mkdir", "@StartMenuDir@");
     component.addElevatedOperation("CreateShortcut", "@TargetDir@/$BINNAME.exe", "@StartMenuDir@/$APPNAME.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico", "description=Start $APPNAME");
 

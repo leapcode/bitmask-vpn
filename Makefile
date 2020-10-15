@@ -36,6 +36,8 @@ MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
+TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe 
+
 ifeq ($(PLATFORM), windows)
 HAS_QTIFW := $(shell which binarycreator.exe)
 else
@@ -131,6 +133,8 @@ ifeq (${PLATFORM}, windows)
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
 	# XXX add sign options
 	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	# TODO stage it to save time
+	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
 endif
 ifeq (${PLATFORM}, linux)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
