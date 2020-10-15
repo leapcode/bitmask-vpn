@@ -73,11 +73,15 @@ EXTRA_FLAGS =
 endif
 
 ifeq ($(PLATFORM), windows)
-EXTRA_GO_LDFLAGS = "-H windowsgui"
+EXTRA_GO_LDFLAGS = "-H=windowsgui"
 endif
 
-
+ifeq ($(PLATFORM), windows)
+PKGFILES = $(wildcard "pkg/*") # syntax err in windows with find 
+else
 PKGFILES = $(shell find pkg -type f -name '*.go')
+endif
+
 lib/%.a: $(PKGFILES)
 	@./gui/build.sh --just-golib
 
@@ -118,9 +122,9 @@ ifeq (${PLATFORM}, darwin)
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
 ifeq (${PLATFORM}, windows)
-	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}helper.exe
-	@cp branding/assets/${PROVIDER}/icon.ico ${INST_DATA}/icon.ico
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
 	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
@@ -146,13 +150,13 @@ endif
 
 CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
 PLATFORM_WIN = PLATFORM=windows
-EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
+EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H=windowsgui" 
 build_cross_win:
 	@echo "[+] Cross-building for windows..."
 	@$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
 	# workaround for helper: we use the go compiler
 	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
-	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
+	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H=windowsgui" -o ../../build/bin/windows/bitmask-helper-go
 
 CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
 PLATFORM_OSX = PLATFORM=darwin

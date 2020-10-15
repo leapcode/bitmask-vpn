@@ -88,28 +88,13 @@ ApplicationWindow {
 
     Component.onCompleted: {
         loginDone = false;
-
+        console.debug("Platform:", Qt.platform.os);
         console.debug("DEBUG: Pre-seeded providers:");
         console.debug(providers.getJson());
+        allowEmptyPass = shouldAllowEmptyPass();
 
-        allowEmptyPass = shouldAllowEmptyPass()
-
-        console.debug("DEBUG platform":, Qt.platform.os)
-
-        if ("osx" == Qt.platform.os || "linux" == Qt.platform.os ) {
-            app.visible = false;
-        }
-
-        if ("windows" == Qt.platform.os) {
-            /* FIXME stupid as it sounds, windows doesn't like to have the systray icon
-             not being attached to an actual application window??
-             We can still use this quirk, and can use the AppWindow with deferred
-             Loaders as a placeholder for all the many dialogs, or to load
-             a nice splash screen etc...  */
-            app.visible = true;
-            app.show();
-            app.hide();
-        }
+	/* TODO get appVisible flag from backend */
+        app.visible = false;
     }
 
     function toHuman(st) {
