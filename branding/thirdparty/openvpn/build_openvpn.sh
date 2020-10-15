@@ -85,7 +85,7 @@ function build_mbedtls()
 	if [ ! -f $MBEDTLS.tar.gz ]; then
 	    $WGET https://github.com/ARMmbed/mbedtls/archive/$MBEDTLS.tar.gz
 	fi
-	sha512=`${SHASUM} -a 512 -p ${MBEDTLS}.tar.gz | cut -d' ' -f 1`
+	sha512=`${SHASUM} -a 512 ${MBEDTLS}.tar.gz | cut -d' ' -f 1`
 	
 	if [ "${MBEDTLS_SHA512}" = "${sha512}" ]; then
 	    echo "[+] sha-512 verified ok"
