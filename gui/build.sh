@@ -6,6 +6,8 @@ set -e
 # --------------------
 
 XBUILD=${XBUILD-no}
+VENDOR_PATH=${VENDOR_PATH-providers/riseup}
+
 OSX_TARGET=10.11
 WIN64="win64"
 GO=`which go`
@@ -16,7 +18,6 @@ SOURCE_GOLIB=gui/backend.go
 
 QTBUILD=build/qt
 RELEASE=$QTBUILD/release
-VENDOR_PATH=${VENDOR_PATH-providers/riseup}
 
 PLATFORM=$(uname -s)
 LDFLAGS=""
@@ -58,7 +59,7 @@ function buildGoLib {
     fi
     if [ "$PLATFORM" == "MINGW64_NT-10.0" ]
     then
-	LDFLAGS="-H=windowsgui"
+	LDFLAGS="-H windowsgui"
     fi
     if [ "$XBUILD" == "no" ]
     then
@@ -76,9 +77,8 @@ function buildGoLib {
 function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
-    echo "[+] VENDOR_PATH:" $VENDOR_PATH
     mkdir -p $QTBUILD
-    $QMAKE -o $QTBUILD/Makefile "CONFIG-=debug CONFIG+=release VENDOR_PATH=${VENDOR_PATH}" $PROJECT
+    $QMAKE -o "$QTBUILD/Makefile" CONFIG-=debug CONFIG+=release VENDOR_PATH=${VENDOR_PATH} $PROJECT
 }
 
 function renameOutput {
@@ -118,6 +118,7 @@ function buildDefault {
 }
 
 
+echo "[build.sh] VENDOR_PATH =" ${VENDOR_PATH}
 for i in "$@"
 do
 case $i in

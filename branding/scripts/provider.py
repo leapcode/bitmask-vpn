@@ -25,10 +25,11 @@ def getProviderData(provider, config):
             'providerURL', 'tosURL', 'helpURL',
             'askForDonations', 'donateURL', 'apiURL',
             'geolocationAPI', 'caCertString')
+    boolValues = ['askForDonations', 'authEmptyPass']
 
     for value in keys:
         d[value] = c.get(value)
-        if value == 'askForDonations':
+        if value in boolValues:
             d[value] = bool(d[value])
 
     d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
