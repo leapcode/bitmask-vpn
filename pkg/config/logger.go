@@ -28,7 +28,7 @@ func ConfigureLogger(logPath string) (io.Closer, error) {
 	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
 			err := os.MkdirAll(dir, 0700)
-			if err == nil {
+			if err != nil {
 				log.Println("ERROR: cannot create data dir:", dir)
 			}
 		}
