@@ -14,7 +14,7 @@
     </RemoteRepositories>
     -->
 
-    <MaintenanceToolName>Uninstall-$APPNAME</MaintenanceToolName>
+    <MaintenanceToolName>uninstall</MaintenanceToolName>
 
     $PLATFORM_BLOCK
 

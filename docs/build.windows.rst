@@ -1,10 +1,17 @@
-windows build notes (still some manual steps needed, this should be further automated).
-=======================================================================================
-(deprecated)
+windows build
+=============
 
-PROVIDER=DemoLib make helper
-INSTALLER_DATA=branding/qtinstaller/packages/root.win_x86_64/data/
-mkdir -p INSTALLER_DATA
-mv main.exe ${INSTALLER_DATA}/helper.exe
-TARGET=demolib-vpn make build
-TARGET=demolib-vpn make installer_win
+The build currently expects MINGW64 environment, on a native windows host.
+A cross-compiling procedure (at least for the application binaries) should be possible in the near future, using mxe.
+
+You should install make, as well as a recent Qt5 version (for instance, with chocolatey: choco install make).
+
+(In order to avoid makefiles, you are welcome to submit a port of the build scripts using powershell or cscript - see the build.wsf script in openvpn-build for inspiration).
+
+For the installer, install QtIFW for windows (tested with version 3.2.2).
+
+Assuming you have the vendor path in place and correctly configured, all you need to do is `make build_installer`::
+
+  export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
+  VENDOR_PATH=providers/
+  make build_installer
