@@ -51,6 +51,9 @@ func (b *Bitmask) StartVPN(provider string) error {
 }
 
 func (b *Bitmask) CanStartVPN() bool {
+	/* FIXME this is not enough. We should check, if provider needs
+	* credentials, if we have a valid token, otherwise remove it and
+	make sure that we're asking for the credentials input */
 	return !b.bonafide.NeedsCredentials()
 }
 

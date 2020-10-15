@@ -47,11 +47,12 @@ func probeHelperPort(port int) int {
 			return port
 		}
 		port++
-		if port > 65535 {
+		/* we could go until 65k, but there's really no need */
+		if port > 10000 {
 			break
 		}
 	}
-	log.Println("WARN: Cannot find working helper")
+	log.Println("WARN: Cannot find any working helper")
 	return 0
 }
 
@@ -72,6 +73,7 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 			return true
 		} else {
 			log.Println("DEBUG: Another helper seems to be running:", string(ver))
+			log.Println("DEBUG: But we were hoping to find:", config.ApplicationName)
 		}
 	}
 	return false

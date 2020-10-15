@@ -90,7 +90,7 @@ lib/%.a: $(PKGFILES)
 build_golib: lib/libgoshim.a
 
 build_gui:
-	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH}/${PROVIDER} gui/build.sh --skip-golib
+	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
 
 build: build_golib build_helper build_openvpn build_gui
 
@@ -126,14 +126,18 @@ endif
 ifeq (${PLATFORM}, windows)
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}helper.exe
+ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
+else
+	@cp ${VENDOR_PATH}/assets/icon.ico ${INST_DATA}/icon.ico
+endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
 	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
-	# XXX add sign options
+	# FIXME add sign options
 	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
-	# TODO stage it to save time
+	# TODO stage it to shave some time
 	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
 endif
 ifeq (${PLATFORM}, linux)
@@ -141,7 +145,7 @@ ifeq (${PLATFORM}, linux)
 endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
-	@cd build/installer && qmake INSTALLER=${APPNAME}-installer-${VERSION} && make
+	@cd build/installer && qmake VENDOR_PATH=${VENDOR_PATH} INSTALLER=${APPNAME}-installer-${VERSION} && make
 
 check_qtifw: 
 ifdef HAS_QTIFW
@@ -150,45 +154,9 @@ else
 	$(error "[!] Cannot find QTIFW. Please install it and add it to your PATH")
 endif
 
-# ----------- FIXME ------- old build, reuse or delete -----------------------------
-
-ARCH ?= amd64
-
-ifeq ($(ARCH), 386)
-	CCPath ?= i686-w64-mingw32-gcc
-	CXXPath ?= i686-w64-mingw32-c++
-else 
-	CCPath ?= x86_64-w64-mingw32-gcc
-	CXXPath ?= x86_64-w64-mingw32-c++--
-endif
-
-CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=$(ARCH) GOOS=windows CC=$(CCPath) CGO_LDFLAGS="-lssp" CXX=$(CXXPath)
-PLATFORM_WIN = PLATFORM=windows
-EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H=windowsgui" 
-build_cross_win:
-	@echo "[+] Cross-building for windows..."
-	@$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
-	# workaround for helper: we use the go compiler
-	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
-	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H=windowsgui" -o ../../build/bin/windows/bitmask-helper-go
-
-CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
-PLATFORM_OSX = PLATFORM=darwin
-build_cross_osx:
-	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) _buildparts
-
-# --------- FIXME -----------------------------------------------------------------------
-
 clean:
 	@rm -rf build/
 	@unlink branding/assets/default || true
-
-#########################################################################
-# build them all
-#########################################################################
-
-build_all_providers:
-	branding/scripts/build-all-providers
 
 ########################################################################
 # tests
@@ -240,28 +208,36 @@ tgz:
 	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
-# FIXME port --------------------------------------------------------------------------------------------------
 
 gen_pkg_deb:
+ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
 	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
+endif
 
 gen_pkg_snap:
+ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
 	@cp helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
 	@cp helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py
 	@rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
-	@mkdir -p build/${PROVIDER}/snap/gui && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	@mkdir -p build/${PROVIDER}/snap/gui
+ifeq (${VENDOR_PATH}, providers)
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
 	# FIXME is this png needed?? then add it to ASSETS_REQUIRED
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+else
+	@cp ${VENDOR_PATH}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	@cp ${VENDOR_PATH}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+endif
 	@rm build/${PROVIDER}/snap/generate.py
+endif
 
-# ---------------------------------------------------------------------------------------------------------------------
 
 
 #########################################################################
