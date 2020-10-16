@@ -24,18 +24,18 @@ For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or
 
 
 OSX
-----------
-Using homebrew:
+---
+
+You can install dependencies with homebrew:
 
 ```
   git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
   make depends
   make build
-
 ```
 
-Running tests
--------------
+Test
+----
 
 ```
   sudo apt install qml-module-qttest
@@ -44,33 +44,14 @@ Running tests
 ```
 
 
-i18n
-----
+Translations
+------------
 
-TODO: move this to developer docs
-
-The translations are done in transifex. To help us contribute your translations there and/or review the existing
-ones:
-https://www.transifex.com/otf/bitmask/RiseupVPN/
-
-When a string has being modified you need to regenerate the locales:
-```
-  make generate_locales
-```
+We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordinate translations. Any help is welcome!
 
 
-To fetch the translations from transifex and rebuild the catalog.go (API\_TOKEN is the transifex API token):
-```
-  API_TOKEN='xxxxxxxxxxx' make locales
-```
-There is some bug on gotext and the catalog.go generated doesn't have a package, you will need to edit
-cmd/bitmask-vpn/catalog.go and to have a `package main` at the beginning of the file.
-
-If you want to add a new language create the folder `locales/$lang` before running `make locales`.
-
-
-Report an issue
--------------------
+Bugs?
+-----
 
 When you report an issue include the following information:
 

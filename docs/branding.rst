@@ -53,11 +53,11 @@ Then you can build the binaries for some quick manual testing::
 
 Now you can build the installer for your host platform::
 
- make build_installer
+ make installer
 
 Previously we had a cross-compilation setup in place. Cross compilation will be added back in the future.
 
 For debian and snap packages (FIXME -- WORK IN PROGRESS):
 
-  make debian
-  make snap
+  make package_debian
+  make package_snap
