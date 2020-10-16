@@ -7,7 +7,7 @@
 
 TAGS ?= gtk_3_18
 
-XBUILD ?= win
+XBUILD ?= no
 SKIP_CACHECK ?= no
 PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 PROVIDER_CONFIG ?= branding/config/vendor.conf
@@ -94,7 +94,18 @@ build_bitmaskd:
 build_win:
 	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
 
-CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=amd64 GOOS=windows CC="C:\cygwin64\bin\x86_64-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="C:\cygwin64\bin\x86_64-w64-mingw32-c++"
+
+ARCH ?= amd64
+
+ifeq ($(ARCH), 386)
+	CCPath ?= i686-w64-mingw32-gcc
+	CXXPath ?= i686-w64-mingw32-c++
+else 
+	CCPath ?= x86_64-w64-mingw32-gcc
+	CXXPath ?= x86_64-w64-mingw32-c++
+endif
+
+CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=$(ARCH) GOOS=windows CC=$(CCPath) CGO_LDFLAGS="-lssp" CXX=$(CXXPath)
 PLATFORM_WIN = PLATFORM=windows
 EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
