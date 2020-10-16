@@ -103,7 +103,7 @@ build_helper:
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
-build_installer: check_qtifw build
+installer: check_qtifw build
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}

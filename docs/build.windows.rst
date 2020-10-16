@@ -13,5 +13,5 @@ For the installer, install QtIFW for windows (tested with version 3.2.2).
 Assuming you have the vendor path in place and correctly configured, all you need to do is `make build_installer`::
 
   export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
-  VENDOR_PATH=providers/
-  make build_installer
+  export VENDOR_PATH=providers
+  make vendor && make installer
