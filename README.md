@@ -48,17 +48,47 @@ They are expected and don't produce any problem on the systray.
 
 Windows
 ---------
+<<<<<<< HEAD
 Download cygwinn // https://cygwin.com/setup-x86_64.exe
 `````
 Install with the necessary packages (my case 64bit):
+=======
+Download cygwin // https://cygwin.com/setup-x86_64.exe
+```
+Install with the necessary packages:
+
+>>>>>>> 9901a4e... Readme update
 mingw64-x86_64-gcc-core
 mingw64-x86_64-gcc-g++ 
+and
+x86_64-w64-mingw32-c++
+x86_64-w64-mingw32-gcc
 make
 
+<<<<<<< HEAD
 
 ````
 Add to Windows Path "C:\cygwin64\bin"
 
+=======
+Add to windowspath "C:\cygwin64\bin"
+```
+Build it
+```
+make build 
+
+Build flags
+ARCH : 386 or amd64 (default: amd64)
+CCPAath and CXXPath are either paths of compiler or filenames in %PATH% (defaults: x86_64-w64-mingw32-gcc and x86_64-w64-mingw32-c++)
+
+Examples:
+make build ARCH=386
+make build ARCH=386 CCPath=i686-w64-mingw32-gcc CXXPath=i686-w64-mingw32-c++
+
+All options can be omitted! 
+
+```
+>>>>>>> 9901a4e... Readme update
 
 Run it
 -------------
@@ -66,10 +96,10 @@ The default build is a standalone systray. It still requires a helper and openvp
 [bitmask-root](https://0xacab.org/leap/bitmask-dev/blob/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root)
 for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bitmask-vpn/tree/master/pkg/helper/).
 
-To build and run it:
+Run it:
 ```
-  $ make build
   $ build/bin/bitmask-vpn
+
 ```
 
 
