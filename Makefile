@@ -5,7 +5,7 @@
 
 .PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
 
-XBUILD ?= win
+XBUILD ?= no
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
@@ -116,8 +116,19 @@ build_golib: lib/libgoshim.a
 
 build_gui: relink_vendor
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
-CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=amd64 GOOS=windows CC="C:\cygwin64\bin\x86_64-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="C:\cygwin64\bin\x86_64-w64-mingw32-c++"
-PLATFORM_WIN = PLATFORM=windogit ws
+
+ARCH ?= amd64
+
+ifeq ($(ARCH), 386)
+	CCPath ?= i686-w64-mingw32-gcc
+	CXXPath ?= i686-w64-mingw32-c++
+else 
+	CCPath ?= x86_64-w64-mingw32-gcc
+	CXXPath ?= x86_64-w64-mingw32-c++
+endif
+
+CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=$(ARCH) GOOS=windows CC=$(CCPath) CGO_LDFLAGS="-lssp" CXX=$(CXXPath)
+PLATFORM_WIN = PLATFORM=windows
 EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
 build_cross_win:
 	@echo "[+] Cross-building for windows..."

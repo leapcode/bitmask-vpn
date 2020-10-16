@@ -19,9 +19,7 @@ You need at least go 1.11. If you have something older and are using ubuntu, you
 
 For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
 
-<<<<<<< HEAD
 Test
-=======
 
 OSX
 ----------
@@ -90,7 +88,6 @@ In that case bitmask-systray assumes that you already have bitmaskd running. Run
 
 
 i18n
->>>>>>> acc5523... add package- and pathinfo for Cygwin on win10
 ----
 
 You can run some tests too.
