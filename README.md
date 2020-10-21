@@ -68,7 +68,7 @@ make build
 
 Build flags
 ARCH : 386 or amd64 (default: amd64)
-CCPAath and CXXPath are either paths of compiler or filenames in %PATH% (defaults: x86_64-w64-mingw32-gcc and x86_64-w64-mingw32-c++)
+CCPath and CXXPath are either paths of compiler or filenames in %PATH% (defaults: x86_64-w64-mingw32-gcc and x86_64-w64-mingw32-c++)
 
 Examples:
 make build ARCH=386
