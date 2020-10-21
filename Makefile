@@ -27,7 +27,7 @@ TEMPLATES = branding/templates
 SCRIPTS = branding/scripts
 
 all: icon locales build
-
+	
 
 #########################################################################
 # go build
@@ -41,9 +41,10 @@ install_go:
 	@sudo apt-get install golang-go
 
 depends:
-	-@make depends$(UNAME)
+	-@make depends$(patsubst CYGWIN%,Cygwin, $(UNAME)) 
 	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
-
+	
+	
 dependsLinux:
 	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
 	@make -C docker deps
@@ -54,12 +55,9 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config upx curl
 	@brew install --default-names gnu-sed
 
-#dependsCygwin:
-#	@choco install -y golang python nssm nsis wget 7zip
-	
-
-dependsCYGWIN_NT-10.0:
+dependsCygwin:
 	@choco install -y golang python nssm nsis wget 7zip
+
 	
 build:
 ifeq (${XBUILD}, yes)
