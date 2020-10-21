@@ -54,7 +54,7 @@ Install with the necessary packages:
 
 mingw64-x86_64-gcc-core
 mingw64-x86_64-gcc-g++ 
-and
+
 x86_64-w64-mingw32-c++
 x86_64-w64-mingw32-gcc
 make
