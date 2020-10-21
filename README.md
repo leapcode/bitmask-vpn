@@ -48,16 +48,10 @@ They are expected and don't produce any problem on the systray.
 
 Windows
 ---------
-<<<<<<< HEAD
-Download cygwinn // https://cygwin.com/setup-x86_64.exe
-`````
-Install with the necessary packages (my case 64bit):
-=======
 Download cygwin // https://cygwin.com/setup-x86_64.exe
 ```
 Install with the necessary packages:
 
->>>>>>> 9901a4e... Readme update
 mingw64-x86_64-gcc-core
 mingw64-x86_64-gcc-g++ 
 and
@@ -65,12 +59,6 @@ x86_64-w64-mingw32-c++
 x86_64-w64-mingw32-gcc
 make
 
-<<<<<<< HEAD
-
-````
-Add to Windows Path "C:\cygwin64\bin"
-
-=======
 Add to windowspath "C:\cygwin64\bin"
 ```
 Build it
@@ -88,7 +76,6 @@ make build ARCH=386 CCPath=i686-w64-mingw32-gcc CXXPath=i686-w64-mingw32-c++
 All options can be omitted! 
 
 ```
->>>>>>> 9901a4e... Readme update
 
 Run it
 -------------
