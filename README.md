@@ -78,6 +78,14 @@ make build ARCH=386 CCPath=i686-w64-mingw32-gcc CXXPath=i686-w64-mingw32-c++
 ```
 All options can be omitted! 
 
+#### Windows Run
+
+Rename bitmask-vpn to bitmask-vpn.exe to start with terminal output
+
+or
+
+run it with ```run bitmask-vpn``` without output
+
 Run it
 -------------
 The default build is a standalone systray. It still requires a helper and openvpn installed to work. For linux the helper is
