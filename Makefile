@@ -58,8 +58,9 @@ install_go:
 	@sudo apt-get install golang-go
 
 depends:
-	-@make depends$(UNAME)
-
+	-@make depends$(patsubst CYGWIN%,Cygwin, $(UNAME)) 
+	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
+	
 dependsLinux:
 	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls libqt5qml5 qtdeclarative5-dev qml-module-qt-labs-platform qml-module-qt-labs-qmlmodels qml-module-qtquick-extras qml-module-qtquick-dialogs
 	@make -C docker deps
@@ -69,13 +70,11 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
+
 ifeq ($(PLATFORM), darwin)
 EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
-#dependsCygwin:
-#	@choco install -y golang python nssm nsis wget 7zip
-	
 
-dependsCYGWIN_NT-10.0:
+dependsCygwin:
 	@choco install -y golang python nssm nsis wget 7zip
 	
 build:
