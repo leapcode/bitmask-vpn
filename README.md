@@ -61,22 +61,22 @@ make
 
 Add to windowspath "C:\cygwin64\bin"
 ```
-Build it
-----------
+#### Windows Build
+
 ```
 make build 
-
+```
 Build flags
+```
 ARCH : 386 or amd64 (default: amd64)
 CCPath and CXXPath are either paths of compiler or filenames in %PATH% (defaults: x86_64-w64-mingw32-gcc and x86_64-w64-mingw32-c++)
-
+```
 Examples:
+```
 make build ARCH=386
 make build ARCH=386 CCPath=i686-w64-mingw32-gcc CXXPath=i686-w64-mingw32-c++
-
-All options can be omitted! 
-
 ```
+All options can be omitted! 
 
 Run it
 -------------
@@ -86,6 +86,7 @@ for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bi
 
 Run it:
 ```
+  $ make build
   $ build/bin/bitmask-vpn
 
 ```
