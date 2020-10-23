@@ -53,18 +53,20 @@ function buildGoLib {
     if [ "$PLATFORM" == "Darwin" ]
     then
         GOOS=darwin
-	CC=clang
-	CGO_CFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
-	CGO_LDFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
+        CC=clang
+        CGO_CFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
+        CGO_LDFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
     fi
-    if [ "$PLATFORM" == "MINGW64_NT-10.0" ]
-    then
-	LDFLAGS="-H windowsgui"
-    fi
+
+    #if [ "$PLATFORM" == "MINGW64_NT-10.0" ]
+    #then
+    #    LDFLAGS="-H windowsgui"
+    #fi
+
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"
-        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -ldflags $LDFLAGS -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
+        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
     if [ "$XBUILD" == "$WIN64" ]
     then

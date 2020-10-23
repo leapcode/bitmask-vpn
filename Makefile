@@ -86,7 +86,7 @@ PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
 
 lib/%.a: $(PKGFILES)
-	@./gui/build.sh --just-golib
+	@XBUILD=no ./gui/build.sh --just-golib
 
 relink_vendor:
 ifeq ($(VENDOR_PATH), providers)
