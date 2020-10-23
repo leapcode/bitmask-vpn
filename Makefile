@@ -92,7 +92,7 @@ build_golib: lib/libgoshim.a
 build_gui:
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
 
-build: build_golib build_helper build_openvpn build_gui
+build: build_golib build_helper build_gui
 
 build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
@@ -103,7 +103,7 @@ build_helper:
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
-installer: check_qtifw build
+installer: check_qtifw build_openvpn build
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
