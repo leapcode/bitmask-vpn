@@ -7,6 +7,7 @@ lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 
 !defined(VENDOR_PATH, var):VENDOR_PATH="providers/riseup"
+
 message("[qmake] VENDOR_PATH: $$VENDOR_PATH")
 
 RESOURCES += gui/gui.qrc
