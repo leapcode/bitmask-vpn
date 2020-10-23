@@ -18,6 +18,7 @@ tools/transifex/transifex
 branding/assets/default
 lib/*
 qtbuild/*
+providers/assets
 
 .*.swp
 *.exe

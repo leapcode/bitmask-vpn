@@ -3,7 +3,7 @@
 # (c) LEAP Encryption Access Project, 2019-2020
 #########################################################################
 
-.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw
+.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
 
 XBUILD ?= no
 SKIP_CACHECK ?= no
@@ -44,6 +44,7 @@ else
 HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
 endif
 OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
+
 
 #########################################################################
 # go build
@@ -87,9 +88,15 @@ endif
 lib/%.a: $(PKGFILES)
 	@./gui/build.sh --just-golib
 
+relink_vendor:
+ifeq ($(VENDOR_PATH), providers)
+	@unlink providers/assets || true
+	@ln -s ${PROVIDER}/assets providers/assets
+endif
+
 build_golib: lib/libgoshim.a
 
-build_gui:
+build_gui: relink_vendor
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
 
 build: build_golib build_helper build_gui
