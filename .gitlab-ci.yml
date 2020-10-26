@@ -57,8 +57,10 @@ vendorize:
   image: registry.0xacab.org/leap/bitmask-vpn:latest
   stage: vendor
   script:
+    #- TODO build_all_providers script can be rescued when we achieve to bring back xbuild for win/osx.
+    # For now it only makes sense to build the snap.
     #- 'PROVIDERS="riseup calyx" make build_all_providers'
-    - 'PROVIDERS="riseup" make build_all_providers'
+    - 'PROVIDER="riseup" make package_snap'
   artifacts:
     name: installers-$CI_COMMIT_REF_NAME
     paths:
