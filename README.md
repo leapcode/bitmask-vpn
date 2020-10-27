@@ -1,16 +1,13 @@
 Build
 -----
 
-Install dependencies:
-
-```
-  sudo make depends
-```
-
-Build the application:
+Clone this repo, install dependencies and build the application. Dependencies
+assume debian packages, or homebrew for osx. For other systems try
+manually, or send us a patch.
 
 ```
   git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  sudo make depends
   make build
 ```
 
@@ -22,20 +19,10 @@ You need at least go 1.11. If you have something older and are using ubuntu, you
 
 For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
 
-
-OSX
----
-
-You can install dependencies with homebrew:
-
-```
-  git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  make depends
-  make build
-```
-
 Test
 ----
+
+You can run some tests too.
 
 ```
   sudo apt install qml-module-qttest
@@ -50,15 +37,18 @@ Translations
 We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordinate translations. Any help is welcome!
 
 
-Bugs?
------
+Bugs? Crashes? UI feedback? Any other suggestions or complains?
+---------------------------------------------------------------
 
-When you report an issue include the following information:
+When you are willing to [report an issue](https://0xacab.org/leap/bitmask-vpn/-/issues) please
+use the search tool first. if you cannot find your issue, please make sure to
+include the following information:
 
-* what you expected to see
-* what you got
-* the version of the program. You can check the version on the about page.
+* the platform you're using and the installation method.
+* the version of the program. You can check the version on the "about" menu.
+* what you expected to see.
+* what you got instead.
 * the logs of the program. The location of the logs depends on the OS:
-  * linux: `/home/<your user>/.config/leap/systray.log`
+  * gnu/linux: `/home/<your user>/.config/leap/systray.log`
   * OSX: `/Users/<your user>/Library/Preferences/leap/systray.log`, `/Applications/RiseupVPN.app/Contents/helper/helper.log` & `/Applications/RiseupVPN.app/Contents/helper/openvpn.log`
   * windows: `C:\Users\<your user>\AppData\Local\leap\systray.log`, `C:\Program Files\RiseupVPN\helper.log` & `C:\Program Files\RiseupVPN\openvp.log`
