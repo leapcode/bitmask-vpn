@@ -12,6 +12,7 @@ APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname 
 TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
 PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 VERSION ?= $(shell git describe)
+WINCERTPASS ?= pass
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -89,6 +90,9 @@ lib/%.a: $(PKGFILES)
 	@XBUILD=no ./gui/build.sh --just-golib
 
 relink_vendor:
+ifeq ($(PLATFORM), windows)
+	rm -rf providers/assets
+endif
 ifeq ($(VENDOR_PATH), providers)
 	@unlink providers/assets || true
 	@ln -s ${PROVIDER}/assets providers/assets
@@ -110,7 +114,30 @@ build_helper:
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
-installer: check_qtifw build_openvpn build
+dosign:
+ifeq (${PLATFORM}, windows)
+	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-file-version ${VERSION}
+	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-product-version ${VERSION}
+	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string CompanyName "LEAP Encryption Access Project"
+	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string FileDescription "VPN Application provided by ${PROVIDER}"
+	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} ${QTBUILD}/release/${TARGET}.exe
+	cp build/bin/${PLATFORM}/bitmask-helper build/bin/${PLATFORM}/bitmask-helper.exe
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-file-version ${VERSION}
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-product-version ${VERSION}
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string ProductName "bitmask-helper-v2"
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string CompanyName "LEAP Encryption Access Project"
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string FileDescription "Administrative helper for ${TARGET}"
+	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/bin/${PLATFORM}/bitmask-helper.exe
+endif
+
+checksign:
+ifeq (${PLATFORM}, windows)
+	@"c:\windows\system32\sigcheck.exe" ${QTBUILD}/release/${TARGET}.exe
+	@"c:\windows\system32\sigcheck.exe" build/bin/${PLATFORM}/bitmask-helper.exe
+	@"c:\windows\system32\sigcheck.exe" "/c/Program Files/OpenVPN/bin/openvpn.exe"
+endif
+
+installer: check_qtifw checksign
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
@@ -132,7 +159,7 @@ ifeq (${PLATFORM}, darwin)
 endif
 ifeq (${PLATFORM}, windows)
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
-	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}helper.exe
+	@cp build/bin/${PLATFORM}/bitmask-helper.exe ${INST_DATA}helper.exe
 ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
 else
@@ -142,8 +169,8 @@ endif
 	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
-	# FIXME add sign options
 	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	#@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
 	# TODO stage it to shave some time
 	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
 endif
@@ -153,6 +180,12 @@ endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
 	@cd build/installer && qmake VENDOR_PATH=${VENDOR_PATH} INSTALLER=${APPNAME}-installer-${VERSION} && make
+
+sign_installer:
+ifeq (${PLATFORM}, windows)
+	# TODO add flag to skip signing for regular builds
+	"c:\windows\system32\signtool.exe" sign -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/installer/${APPNAME}-installer-${VERSION}.exe
+endif
 
 check_qtifw: 
 ifdef HAS_QTIFW

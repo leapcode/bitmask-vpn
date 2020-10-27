@@ -15,3 +15,36 @@ Assuming you have the vendor path in place and correctly configured, all you nee
   export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
   export VENDOR_PATH=providers
   make vendor && make installer
+
+
+checking signatures
+-------------------
+we should be signing all binaries on a release build.
+
+to check the binaries have proper signatures, you can use the sigcheck
+utilities, part of the sysinternals suite:
+
+https://docs.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite
+
+unzip and place sigcheck.exe somewhere in your path.
+
+make sure to pass -accepteula parameter on some manual run so that it does not
+ask again.
+
+adding metadata to binaries
+---------------------------
+TODO: add metadata properly
+https://github.com/electron/rcedit/releases/tag/v1.1.1
+https://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
+
+the steps to do release signatures are::
+
+  make build
+  make dosign
+  make installer
+  make sign_installer
+
+
+unreviewed notes
+----------------
+see comment about patching dlls and windeployqt not being needed anymore https://stackoverflow.com/a/61910592
