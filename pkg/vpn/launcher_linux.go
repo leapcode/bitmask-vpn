@@ -100,9 +100,10 @@ func isPolkitRunning() (bool, error) {
 	// TODO shouldn't we also check for polkitd running?
 	var polkitProcNames = [...]string{
 		"polkit-gnome-authentication-agent-1",
-		"polkit-kde-authentication-agent-1",
+		"polkit-kde-auth",
 		"polkit-mate-authentication-agent-1",
 		"lxpolkit",
+		"lxqt-policykit-agent",
 		"lxsession",
 		"gnome-shell",
 		"gnome-flashback",
