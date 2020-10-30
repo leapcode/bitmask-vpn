@@ -44,6 +44,10 @@ the steps to do release signatures are::
   make installer
   make sign_installer
 
+or alltogether as::
+
+  make package_win_release
+
 
 unreviewed notes
 ----------------

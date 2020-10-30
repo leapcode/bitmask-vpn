@@ -119,14 +119,14 @@ ifeq (${PLATFORM}, windows)
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-file-version ${VERSION}
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-product-version ${VERSION}
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string CompanyName "LEAP Encryption Access Project"
-	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string FileDescription "VPN Application provided by ${PROVIDER}"
+	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string FileDescription "${APPNAME}"
 	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} ${QTBUILD}/release/${TARGET}.exe
 	cp build/bin/${PLATFORM}/bitmask-helper build/bin/${PLATFORM}/bitmask-helper.exe
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-file-version ${VERSION}
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-product-version ${VERSION}
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string ProductName "bitmask-helper-v2"
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string CompanyName "LEAP Encryption Access Project"
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string FileDescription "Administrative helper for ${TARGET}"
+	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string FileDescription "Administrative helper for ${APPNAME}"
 	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/bin/${PLATFORM}/bitmask-helper.exe
 endif
 
@@ -288,6 +288,10 @@ builder_image:
 	@make -C docker build
 
 packages: package_deb package_snap package_osx package_win
+
+package_win_release: build dosign installer sign_installer
+
+package_win: build installer
 
 package_snap_in_docker:
 	@make -C docker package_snap
