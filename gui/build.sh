@@ -58,11 +58,6 @@ function buildGoLib {
         CGO_LDFLAGS="-g -O2 -mmacosx-version-min=$OSX_TARGET"
     fi
 
-    #if [ "$PLATFORM" == "MINGW64_NT-10.0" ]
-    #then
-    #    LDFLAGS="-H windowsgui"
-    #fi
-
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"

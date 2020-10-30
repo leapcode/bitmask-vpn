@@ -1,7 +1,7 @@
 #TARGET = $$BINARY_NAME
 
 CONFIG += qt staticlib
-windows:CONFIG += console
+windows:CONFIG -= console
 unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11

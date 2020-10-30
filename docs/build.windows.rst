@@ -33,9 +33,6 @@ ask again.
 
 adding metadata to binaries
 ---------------------------
-TODO: add metadata properly
-https://github.com/electron/rcedit/releases/tag/v1.1.1
-https://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
 
 the steps to do release signatures are::
 
