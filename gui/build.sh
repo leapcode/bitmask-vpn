@@ -119,7 +119,6 @@ function buildDefault {
     echo "[+] Done."
 }
 
-
 echo "[build.sh] VENDOR_PATH =" ${VENDOR_PATH}
 for i in "$@"
 do
@@ -144,4 +143,3 @@ then
 else
     buildDefault
 fi
-
