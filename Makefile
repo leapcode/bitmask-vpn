@@ -84,28 +84,11 @@ endif
 
 ifeq ($(PLATFORM), windows)
 EXTRA_GO_LDFLAGS = "-H=windowsgui"
-# rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
-# PKGFILES = $(call rwildcard,.,*.go)
-PKGFILES = $(shell cmd /c dir /s /b)
+PKGFILES = $(shell cmd /c dir /s /b *.go)
 # $(info $(PKGFILES))
 else 
 PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
-
-# build:
-# ifeq (${XBUILD}, yes)
-# 	$(MAKE) build_cross_win
-# 	$(MAKE) build_cross_osx
-# 	$(MAKE) _build_xbuild_done
-# else ifeq (${XBUILD}, win)
-# 	$(MAKE) build_cross_win
-# 	$(MAKE) _build_done
-# else ifeq (${XBUILD}, osx)
-# 	$(MAKE) build_cross_osx
-# 	$(MAKE) _build_done
-# else
-# EXTRA_FLAGS =
-# endif
 
 lib/%.a: $(PKGFILES)
 	@XBUILD=no ./gui/build.sh --just-golib
@@ -120,26 +103,6 @@ build_golib: lib/libgoshim.a
 
 build_gui: relink_vendor
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
-
-# ARCH ?= amd64
-
-# ifeq ($(ARCH), 386)
-# 	CCPath ?= i686-w64-mingw32-gcc
-# 	CXXPath ?= i686-w64-mingw32-c++
-# else 
-# 	CCPath ?= x86_64-w64-mingw32-gcc
-# 	CXXPath ?= x86_64-w64-mingw32-c++
-# endif
-
-# CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=$(ARCH) GOOS=windows CC=$(CCPath) CGO_LDFLAGS="-lssp" CXX=$(CXXPath)
-# PLATFORM_WIN = PLATFORM=windows
-# EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
-# build_cross_win:
-# 	@echo "[+] Cross-building for windows..."
-# 	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
-# 	# workaround for helper: we use the go compiler
-# 	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
-# 	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
 
 build: build_golib build_helper build_gui
 
