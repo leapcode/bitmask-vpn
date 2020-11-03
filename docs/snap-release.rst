@@ -33,7 +33,7 @@ From the command line:
   # if we've built a release manually, we have to push it first. it gives us a
   # revision number that we use in the next step.
 
-  snapcraft push riseup-vpn_0.10.6+git_amd64.snap 
+  snapcraft upload riseup-vpn_0.10.6+git_amd64.snap 
   Preparing to push '/home/kali/leap/bitmask-dev/riseup-vpn_0.10.6+git_amd64.snap' to the store.
   Found cached source snap /home/kali/.cache/snapcraft/projects/riseup-vpn/snap_hashes/amd64/b5e9d106c823e3c83fce1ef81ad95d68c33fcada859eeb98233fc766863d39205c192fe5ee53def71c43886e40d3ab5b.
   Generating xdelta3 delta for riseup-vpn_0.10.6+git_amd64.snap.
