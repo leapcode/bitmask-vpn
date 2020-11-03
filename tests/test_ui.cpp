@@ -1,5 +1,5 @@
 // test_ui.cpp
-#include <QtQuickTest>
+#include <QtQuickTest/quicktest.h>
 #include <QQmlEngine>
 #include <QQmlContext>
 

@@ -237,7 +237,6 @@ ifeq (${PLATFORM}, linux)
 	@mkdir -p build/${PROVIDER}/snap/gui
 ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
-	# FIXME is this png needed?? then add it to ASSETS_REQUIRED
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
 else
 	@cp ${VENDOR_PATH}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
@@ -262,6 +261,7 @@ package_snap_in_docker:
 
 package_snap:
 	@unlink snap || true
+	@cp build/${PROVIDER}/snap/local/${TARGET}.desktop build/${PROVIDER}/snap/gui/
 	@ln -s build/${PROVIDER}/snap snap
 	@make -C build/${PROVIDER} pkg_snap
 

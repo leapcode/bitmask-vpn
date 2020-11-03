@@ -18,7 +18,7 @@ MessageDialog {
 
     onAccepted: {
         if (backend) {
-            Qt.openUrlExternally(ctx.donateURL)
+            Qt.openUrlExternally(Qt.resolvedUrl(ctx.donateURL))
             backend.donateAccepted()
         }
     }

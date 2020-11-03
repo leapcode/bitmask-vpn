@@ -64,3 +64,8 @@ CONFIG += lrelease embed_translations
 
 TRANSLATIONS += $$files(gui/i18n/*.ts, true)
 RESOURCES += $$files(gui/i18n/*.qm, true)
+
+# see https://stackoverflow.com/questions/5960192/qml-qt-openurlexternally#5960581
+# Needed for bringing browser from background to foreground using
+# QDesktopServices: https://bugreports.qt.io/browse/QTBUG-8336
+TARGET.CAPABILITY += SwEvent

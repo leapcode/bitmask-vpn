@@ -242,7 +242,11 @@ ApplicationWindow {
 
             MenuItem {
                 text: qsTr("Help...")
-                onTriggered: Qt.openUrlExternally(ctx.helpURL)
+
+                onTriggered: {
+                    console.debug(Qt.resolvedUrl(ctx.helpURL));
+                    Qt.openUrlExternally(Qt.resolvedUrl(ctx.helpURL))
+                }
             }
 
             MenuItem {
