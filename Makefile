@@ -168,12 +168,13 @@ clean:
 ########################################################################
 # tests
 #########################################################################
-
+qmllint:
+	@qmllint gui/qml/*.qml
 
 test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
 
-test_ui: golib
+test_ui: build_golib
 	@qmake -o tests/Makefile test.pro
 	@make -C tests clean
 	@make -C tests
