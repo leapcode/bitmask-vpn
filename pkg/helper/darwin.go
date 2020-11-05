@@ -1,5 +1,5 @@
 // +build darwin
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ package helper
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"log"
 	"os"
 	"os/exec"
@@ -36,34 +37,43 @@ import (
 	"strconv"
 	"strings"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/sevlyar/go-daemon"
 )
 
 const (
-	appPath     = "/Applications/" + config.ApplicationName + ".app/"
-	helperPath  = appPath + "Contents/helper/"
-	LogFolder   = helperPath
-	openvpnPath = appPath + "Contents/Resources/openvpn.leap"
-
-	rulefilePath   = helperPath + "bitmask.pf.conf"
 	bitmask_anchor = "com.apple/250.BitmaskFirewall"
 	gateways_table = "bitmask_gateways"
-
 	pfctl = "/sbin/pfctl"
+	LogFolder = "/var/log/"
 )
 
-var (
-	platformOpenvpnFlags = []string{
-		"--script-security", "2",
-		"--up", helperPath + "client.up.sh",
-		"--down", helperPath + "client.down.sh",
+func _getExecPath() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Print("ERROR: cannot find executable path")
 	}
-)
+	return filepath.Dir(ex)
+}
+
+func getHelperDir() string {
+	d := _getExecPath()
+	return d
+}
+
+func getPlatformOpenvpnFlags() []string {
+	helperDir := getHelperDir()
+	return []string{
+		"--script-security", "2",
+		"--up", filepath.Join(helperDir, "client.up.sh"),
+		"--down", filepath.Join(helperDir, "client.down.sh"),
+	}
+}
 
 func parseCliArgs() {
 	// OSX helper does not respond to arguments
 }
+
+func initializeService(port int) {}
 
 func daemonize() {
 	cntxt := &daemon.Context{
@@ -71,7 +81,7 @@ func daemonize() {
 		PidFilePerm: 0644,
 		LogFileName: "bitmask-helper.log",
 		LogFilePerm: 0640,
-		WorkDir:     "./",
+		WorkDir:     filepath.Join(getHelperDir(), "helper"),
 		Umask:       027,
 		Args:        []string{"[bitmask-helper]"},
 	}
@@ -95,6 +105,8 @@ func runServer(preferredPort int) {
 }
 
 func getOpenvpnPath() string {
+	openvpnPath := filepath.Join(getHelperDir(), "openvpn.leap")
+	log.Println("openvpn path:", openvpnPath)
 	return openvpnPath
 }
 
@@ -188,6 +200,9 @@ func loadBitmaskAnchor() error {
 }
 
 func getRulefilePath() (string, error) {
+	rulefilePath := filepath.Join(getHelperDir(), "helper", "bitmask.pf.conf")
+	log.Println("DEBUG: rule file path", rulefilePath)
+
 	if _, err := os.Stat(rulefilePath); !os.IsNotExist(err) {
 		return rulefilePath, nil
 	}

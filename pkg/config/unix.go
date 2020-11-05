@@ -18,7 +18,8 @@ package config
 
 import (
 	"os"
+	"path"
 )
 
 // Path for the config files
-var Path = os.Getenv("HOME") + "/.config/leap"
+var Path = path.Join(os.Getenv("HOME"), ".config", "leap")

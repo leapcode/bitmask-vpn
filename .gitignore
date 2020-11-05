@@ -9,11 +9,16 @@ cmd/bitmask-vpn/bitmask-vpn
 cmd/bitmask-helper/bitmask-helper
 /bitmask-connect
 cmd/bitmask-connect/bitmask-connect
+gui/i18n/*.qm
+/snap
 
 locales/*/out.gotext.json
 tools/transifex/transifex
 
 branding/assets/default
+lib/*
+qtbuild/*
+providers/assets
 
 .*.swp
 *.exe

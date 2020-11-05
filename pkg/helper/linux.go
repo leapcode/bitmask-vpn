@@ -1,5 +1,5 @@
 // +build linux
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018, 2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,16 +30,19 @@ const (
 	openvpnGroup      = "nogroup"
 	LogFolder         = "/var/log/"
 	systemOpenvpnPath = "/usr/sbin/openvpn"
-	snapOpenvpnPath   = "/snap/bin/" + config.BinaryName + ".openvpn"
 )
 
 var (
-	platformOpenvpnFlags = []string{
+	snapOpenvpnPath      = "/snap/bin/" + config.BinaryName + ".openvpn"
+)
+
+func getPlatformOpenvpnFlags() []string {
+	return []string{
 		"--script-security", "1",
 		"--user", openvpnUser,
 		"--group", openvpnGroup,
 	}
-)
+}
 
 func parseCliArgs() {
 	// linux helper does not reply to args

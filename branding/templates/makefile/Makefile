@@ -85,9 +85,11 @@ endif
 pkg_snap:
 	-@mkdir -p ../../deploy
 	@echo "[+] building snap..."
-	snapcraft build
+	cd ../..; \
+	snapcraft build; \
 	snapcraft snap
-	@mv $(BINNAME)* ../../deploy
+	-@rm ../../snap
+	@mv ../../$(BINNAME)* ../../deploy
 
 pkg_deb:
 	echo "[+] building debian package version" ${DEB_VERSION}

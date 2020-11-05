@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+
+# TODO check file list
+# TODO remove fom README
+
+VENDOR_PATH = None
+
+def getVendorPath():
+    global VENDOR_PATH
+    VENDOR_PATH = os.environ.get("VENDOR_PATH")
+    if not VENDOR_PATH:
+        print("[ERROR] VENDOR_PATH not set")
+        sys.exit(1)
+
+    if not os.path.isdir(os.path.abspath(VENDOR_PATH)):
+        print("[ERROR] VENDOR_PATH folder does not exist:", VENDOR_PATH)
+        sys.exit(1)
+
+def checkCAFile(provider):
+    caFile = os.path.join(os.path.abspath(VENDOR_PATH), provider, provider + '-ca.crt')
+    if not os.path.isfile(caFile):
+        print("ERROR: Missing provider CA file:", caFile)
+        sys.exit(1)
+    print('[+] CA file ok:', caFile)
+
+def checkAssets(provider):
+    top = os.path.join(os.path.abspath(VENDOR_PATH), 'assets')
+    if os.path.isdir(top):
+        ok = checkAssetFiles(top)
+        if ok:
+            return 
+    under = os.path.join(os.path.abspath(VENDOR_PATH), provider, 'assets')
+    if os.path.isdir(under):
+        ok = checkAssetFiles(under)
+        if ok:
+            return
+    print('[!] ERROR: cannot find some assets for provider {provider}'.format(provider=provider))
+    sys.exit(1)
+
+def checkAssetFiles(path):
+    for item in allAssets():
+        asset = os.path.join(path, item)
+        if not os.path.isfile(asset):
+            print("[!] Error: missing asset file:", asset) 
+            return False
+    return True
+
+def allAssets():
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ASSETS_REQUIRED")) as f:
+        allAssets = f.readlines()
+    return list(map(lambda s: s.strip(), allAssets))
+
+if __name__ == "__main__":
+    print("[+] Checking your provider config...")
+    provider = sys.argv[1]
+    if not provider:
+        print("ERROR: must pass provider as first argument")
+        sys.exit(1)
+    getVendorPath()
+    checkCAFile(provider)
+    checkAssets(provider)

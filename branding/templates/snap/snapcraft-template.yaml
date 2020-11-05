@@ -2,63 +2,127 @@ name: ${binaryName}
 version: ${version}
 summary: ${applicationName}, secure VPN. Powered by Bitmask.
 description: |
-        ${applicationName} is an easy, fast, and secure VPN service from ${providerURL}.
-        ${applicationName} does not require a user account, keep logs, or track you in
-        any way. The service is paid for entirely by donations from users like you.
+  ${applicationName} is an easy, fast, and secure VPN service from ${providerURL}.
+  ${applicationName} does not require a user account, keep logs, or track you in
+  any way. The service is paid for entirely by donations from users like you.
 grade: stable
 confinement: classic
 icon: snap/gui/icon.svg 
-base: core18
+base: core20
 
 parts:
-        bitmask-root:
-                plugin: dump
-                source: ../../helpers/
-                override-prime: |
-                        mkdir -p bin
-                        cp $SNAPCRAFT_PART_SRC/bitmask-root bin/
-                        chmod +x bin/bitmask-root
 
-        openvpn:
-                plugin: nil
-                stage-packages:
-                    - openvpn
-                prime:
-                    - -usr/share/doc
-                    - -usr/share/man
+  bitmask-root:
+    plugin: dump
+    source: helpers
+    source-type: local
+    override-prime: |
+      mkdir -p bin
+      cp $SNAPCRAFT_PART_SRC/bitmask-root bin/
+      chmod +x bin/bitmask-root
 
-        bitmask-vpn:
-                plugin: go
-                source: ../../cmd/bitmask-vpn
-                go-importpath: 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
-                go-packages:
-                        - 0xacab.org/leap/bitmask-vpn/cmd/bitmask-vpn
-                override-build: |
-                      mkdir $SNAPCRAFT_PRIME/snap
-                      echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
-                      mkdir -p $SNAPCRAFT_PRIME/usr/share/applications
-                      cp $SNAPCRAFT_STAGE/../snap/local/${binaryName}.desktop $SNAPCRAFT_PRIME/usr/share/applications/${binaryName}.desktop
-                      snapcraftctl build
-                override-prime: |
-                      rm -rf $SNAPCRAFT_PRIME/../snap/hooks/.mypy_cache
-                      snapcraftctl prime
-                build-packages:
-                    - pkg-config
-                    - patchelf
-                    - libpcre3-dev
-                    - libappindicator3-dev
-                    - libgtk-3-dev
-                stage-packages:
-                    - libpcre3
-                    - libappindicator3-1
-                    - zlib1g
+  openvpn:
+    plugin: nil
+    stage-packages: [openvpn]
+    prime:
+      - -usr/share/doc
+      - -usr/share/man
+
+  bitmask-vpn:
+    plugin: nil
+    source: .
+    source-type: local
+    stage:
+        - bin/${binaryName}
+    override-build: |
+        # TODO - this still has some round corners for vendoring.
+        # Maybe we just need to put the providers.json in the VENDOR_PATH
+        # and pass it to gui/providers from some path that snap can access.
+        # Same for the vendor.qrc
+        mkdir -p $SNAPCRAFT_PART_INSTALL/snap/
+        mkdir -p $SNAPCRAFT_PRIME/snap/
+        echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
+        make build_golib
+        QT_SELECT=5 XBUILD=no TARGET=${binaryName} make build_gui
+        mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+        mv build/qt/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
+    override-prime: |
+      rm -rf $SNAPCRAFT_PROJECT_DIR/snap/hooks/.mypy_cache
+      snapcraftctl prime
+    build-packages:
+      - pkg-config
+      - g++
+      - golang
+      - git
+      - make
+      - qt5-qmake
+      - qttools5-dev-tools
+      - qtdeclarative5-dev
+    stage-packages:  # for some reason they're not picked from here - duplicating in desktop-qt5.
+      - libqt5qml5
+      - libqt5quick5
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-qmlmodels
+      - qml-module-qt-labs-platform
+    after: [desktop-qt5]
+
+  desktop-qt5:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    plugin: make
+    make-parameters: ["FLAVOR=qt5"]
+    build-packages:
+      - build-essential
+      - qtbase5-dev
+      - dpkg-dev
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
+      - libxcb1
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5
+      - libqt5qml5
+      - libqt5quick5
+      - qml-module-qtquick2
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-dialogs
+      - qml-module-qtquick-extras
+      - qml-module-qt-labs-platform
+      - qml-module-qt-labs-qmlmodels
+      - try: [appmenu-qt5] # not available on core18
+
 apps:
-        launcher:
-                command: bin/bitmask-vpn
-                desktop: usr/share/applications/${binaryName}.desktop
-                environment:
-                        LD_LIBRARY_PATH: "$SNAP/usr/lib/$(gcc -print-multiarch):$SNAP/lib/$(gcc -print-multiarch):$LD_LIBRARY_PATH"
-        openvpn:
-                command: usr/sbin/openvpn
-        bitmask-root:
-                command: bin/bitmask-root
+
+  bitmask-root:
+    command: bin/bitmask-root
+
+  openvpn:
+    command: usr/sbin/openvpn
+    environment:
+      LD_LIBRARY_PATH: &library-path
+          $SNAP/lib:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+
+  launcher:
+    command: bin/${binaryName}
+    environment:
+      QT_PLUGIN_PATH: &path
+        $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml
+      LD_LIBRARY_PATH:
+        $SNAP/lib:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+      QML2_IMPORT_PATH:
+        $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml
+      # debug -------------
+      #QT_DEBUG_PLUGINS: 1
+      SNAP_DESKTOP_DEBUG: 1
+      # debug -------------

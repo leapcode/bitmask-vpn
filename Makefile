@@ -3,30 +3,47 @@
 # (c) LEAP Encryption Access Project, 2019-2020
 #########################################################################
 
-.PHONY: all get build build_bitmaskd icon locales generate_locales clean
-
-TAGS ?= gtk_3_18
+.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
 
 XBUILD ?= no
 SKIP_CACHECK ?= no
-PROVIDER ?= $(shell grep ^'provider =' branding/config/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
-PROVIDER_CONFIG ?= branding/config/vendor.conf
-DEFAULT_PROVIDER = branding/assets/default/
+VENDOR_PATH ?= providers
+APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
+TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
+PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 VERSION ?= $(shell git describe)
 
 # go paths
 GOPATH = $(shell go env GOPATH)
-SYSTRAY = 0xacab.org/leap/bitmask-vpn
-GOSYSTRAY = ${GOPATH}/src/${SYSTRAY}
+TARGET_GOLIB=lib/libgoshim.a
+SOURCE_GOLIB=gui/backend.go
 
-# detect OS, we use it for dependencies
+# detect OS
+ifeq ($(OS), Windows_NT)
+PLATFORM = windows
+else
 UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
+endif
 
-TEMPLATES = branding/templates
+QTBUILD = build/qt
+INSTALLER = build/installer
+INST_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
+OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
+MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
+# XXX expired cert -codesign="${OSX_CERT}"
+	
 SCRIPTS = branding/scripts
+TEMPLATES = branding/templates
 
-all: icon locales build
+TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe 
+
+ifeq ($(PLATFORM), windows)
+HAS_QTIFW := $(shell which binarycreator.exe)
+else
+HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
+endif
+OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 
 
 #########################################################################
@@ -41,116 +58,159 @@ install_go:
 	@sudo apt-get install golang-go
 
 depends:
-	-@make depends$(UNAME)
-	@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
-
+	-@make depends$(PLATFORM) 
+	#@go get -u golang.org/x/text/cmd/gotext github.com/cratonica/2goarray
+	
 dependsLinux:
-	@sudo apt install libgtk-3-dev libappindicator3-dev golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl
+	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls libqt5qml5 qtdeclarative5-dev qml-module-qt-labs-platform qml-module-qt-labs-qmlmodels qml-module-qtquick-extras qml-module-qtquick-dialogs
 	@make -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
-	# TODO - bootstrap homebrew if not there
-	@brew install python3 golang make pkg-config upx curl
+	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
+dependswindows:
 
-dependsCygwin:
 	@choco install -y golang python nssm nsis wget 7zip
 
-build:
-ifeq (${XBUILD}, yes)
-	$(MAKE) build_cross_win
-	$(MAKE) build_cross_osx
-	$(MAKE) _build_xbuild_done
-else ifeq (${XBUILD}, win)
-	$(MAKE) build_cross_win
-	$(MAKE) _build_done
-else ifeq (${XBUILD}, osx)
-	$(MAKE) build_cross_osx
-	$(MAKE) _build_done
-else
-	$(MAKE) _buildparts
+
+ifeq ($(PLATFORM), darwin)
+EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
+else 
+EXTRA_FLAGS =
 endif
 
-_buildparts: $(foreach path,$(wildcard cmd/*),build_$(patsubst cmd/%,%,$(path)))
 
-build_%:
+
+ifeq ($(PLATFORM), windows)
+EXTRA_GO_LDFLAGS = "-H=windowsgui"
+PKGFILES = $(shell cmd /c dir /s /b *.go)
+# $(info $(PKGFILES))
+else 
+PKGFILES = $(shell find pkg -type f -name '*.go')
+endif
+
+lib/%.a: $(PKGFILES)
+	@XBUILD=no ./gui/build.sh --just-golib
+
+relink_vendor:
+ifeq ($(VENDOR_PATH), providers)
+	@unlink providers/assets || true
+	@ln -s ${PROVIDER}/assets providers/assets
+endif
+
+build_golib: lib/libgoshim.a
+
+build_gui: relink_vendor
+	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
+
+build: build_golib build_helper build_gui
+
+build_helper:
 	@echo "PLATFORM: ${PLATFORM}"
 	@mkdir -p build/bin/${PLATFORM}
-	go build -tags $(TAGS) -ldflags "-s -w -X main.version=`git describe --tags` ${EXTRA_LDFLAGS}" -o build/bin/${PLATFORM}/$* ./cmd/$*
-	-@rm -rf build/${PROVIDER}/staging/${PLATFORM} && mkdir -p build/${PROVIDER}/staging/${PLATFORM}
-	-@ln -s ../../../bin/${PLATFORM}/$* build/${PROVIDER}/staging/${PLATFORM}/$*
+	@go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
+	@echo "build helper done."
 
-test:
-	@go test -tags "integration $(TAGS)" ./...
+build_openvpn:
+	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 
-build_bitmaskd:
-	@go build -tags "$(TAGS) bitmaskd" -ldflags "-X main.version=`git describe --tags`" ./cmd/*
+installer: check_qtifw build_openvpn build
+	@mkdir -p ${INST_DATA}
+	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
+	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
+	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
+ifeq (${PLATFORM}, darwin)
+	@mkdir -p ${INST_DATA}/helper
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
+	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
+	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}/
+	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}/
+	@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
+	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
+	@echo "[+] Running macdeployqt"
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
+	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
+endif
+ifeq (${PLATFORM}, windows)
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}helper.exe
+ifeq (${VENDOR_PATH}, providers)
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
+else
+	@cp ${VENDOR_PATH}/assets/icon.ico ${INST_DATA}/icon.ico
+endif
+	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
+	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
+	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
+	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
+	# FIXME add sign options
+	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	# TODO stage it to shave some time
+	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
+endif
+ifeq (${PLATFORM}, linux)
+	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
+endif
+	@echo "[+] All templates, binaries and libraries copied to build/installer."
+	@echo "[+] Now building the installer."
+	@cd build/installer && qmake VENDOR_PATH=${VENDOR_PATH} INSTALLER=${APPNAME}-installer-${VERSION} && make
 
-build_win:
-	powershell -Command '$$version=git describe --tags; go build -ldflags "-H windowsgui -X main.version=$$version" ./cmd/*'
-
-CROSS_WIN_FLAGS = CGO_ENABLED=1 GOARCH=386 GOOS=windows CC="/usr/bin/i686-w64-mingw32-gcc" CGO_LDFLAGS="-lssp" CXX="i686-w64-mingw32-c++"
-PLATFORM_WIN = PLATFORM=windows
-EXTRA_LDFLAGS_WIN = EXTRA_LDFLAGS="-H windowsgui" 
-build_cross_win:
-	@echo "[+] Cross-building for windows..."
-	$(CROSS_WIN_FLAGS) $(PLATFORM_WIN) $(EXTRA_LDFLAGS_WIN) $(MAKE) _buildparts
-	# workaround for helper: we use the go compiler
-	@echo "[+] Compiling helper with the Go compiler to work around missing stdout bug..."
-	cd cmd/bitmask-helper && GOOS=windows GOARCH=386 go build -ldflags "-X main.version=`git describe --tags` -H windowsgui" -o ../../build/bin/windows/bitmask-helper-go
-
-CROSS_OSX_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 CGO_ENABLED=1 GOOS=darwin CC="o64-clang"
-PLATFORM_OSX = PLATFORM=darwin
-build_cross_osx:
-	$(CROSS_OSX_FLAGS) $(PLATFORM_OSX) $(MAKE) _buildparts
-
-_build_done:
-	@echo
-	@echo 'Done. You can build your package now.'
-
-_build_xbuild_done:
-	@echo
-	@echo 'Done. You can do "make packages" now.'
+check_qtifw: 
+ifdef HAS_QTIFW
+	@echo "[+] Found QTIFW"
+else
+	$(error "[!] Cannot find QTIFW. Please install it and add it to your PATH")
+endif
 
 clean:
 	@rm -rf build/
-	@unlink branding/assets/default
+	@unlink branding/assets/default || true
 
-#########################################################################
-# build them all
+########################################################################
+# tests
 #########################################################################
 
-build_all_providers:
-	branding/scripts/build-all-providers
+
+test:
+	@go test -tags "integration $(TAGS)" ./pkg/...
+
+test_ui: golib
+	@qmake -o tests/Makefile test.pro
+	@make -C tests clean
+	@make -C tests
+	@./tests/build/test_ui
+
 
 #########################################################################
 # packaging templates
 #########################################################################
 
-prepare: re_vendor prepare_templates gen_pkg_win gen_pkg_osx gen_pkg_snap gen_pkg_deb prepare_done
+vendor_init:
+	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/init
 
-re_vendor:
-	# we update the module vendoring in case we're building with a different
-	# go version than in development
-	@go mod vendor
+vendor_check:
+	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/check ${PROVIDER}
+ifeq (${SKIP_CACHECK}, no)
+	@VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/check-ca-crt ${PROVIDER}
+endif
 
-prepare_templates: generate relink_default tgz
+vendor: gen_providers_json prepare_templates gen_pkg_snap gen_pkg_deb
+
+gen_providers_json:
+	@VENDOR_PATH=${VENDOR_PATH} branding/scripts/gen-providers-json gui/providers/providers.json
+
+prepare_templates: generate tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-vendor-make.py build/${PROVIDER}/vendor.mk
-ifeq (${SKIP_CACHECK}, no)
-	@${SCRIPTS}/check-ca-crt.py ${PROVIDER} ${PROVIDER_CONFIG}
-endif
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-vendor-make build/${PROVIDER}/vendor.mk
 
 generate:
-	@go generate cmd/bitmask-vpn/main.go
-
-relink_default:
-ifneq (,$(wildcard ${DEFAULT_PROVIDER}))
-	@cd branding/assets && unlink default
-endif
-	@cd branding/assets && ln -s ${PROVIDER} default
+	@go generate gui/backend.go
+	@go generate pkg/config/version/genver/gen.go
 
 TGZ_NAME = bitmask-vpn_${VERSION}-src
 TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
@@ -160,48 +220,37 @@ tgz:
 	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
 	@rm -rf $(TGZ_PATH)
 
-gen_pkg_win:
-	@mkdir -p build/${PROVIDER}/windows/
-	@cp -r ${TEMPLATES}/windows build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-win.py build/${PROVIDER}/windows/data.json
-	@cd build/${PROVIDER}/windows && python3 generate.py
-	# TODO create/copy build/PROVIDER/assets/
-	# TODO create/copy build/PROVIDER/staging/
 
-gen_pkg_osx:
-	@mkdir -p build/${PROVIDER}/osx/scripts
-	@mkdir -p build/${PROVIDER}/staging
-ifeq (,$(wildcard build/${PROVIDER}/assets))
-	@ln -s ../../branding/assets/default build/${PROVIDER}/assets
+gen_pkg_deb:
+ifeq (${PLATFORM}, linux)
+	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	@cd build/${PROVIDER}/debian && python3 generate.py
+	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 endif
-ifeq (,$(wildcard build/${PROVIDER}/staging/openvpn-osx))
-	@curl -L https://downloads.leap.se/thirdparty/osx/openvpn/openvpn -o build/${PROVIDER}/staging/openvpn-osx
-endif
-	@cp -r ${TEMPLATES}/osx build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-osx.py build/${PROVIDER}/osx/data.json
-	@cd build/${PROVIDER}/osx && python3 generate.py
-	@cd build/${PROVIDER}/osx/scripts && chmod +x preinstall postinstall
 
 gen_pkg_snap:
+ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-snap.py build/${PROVIDER}/snap/data.json
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
 	@cp helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
 	@cp helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py
 	@rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
-	@mkdir -p build/${PROVIDER}/snap/gui && cp branding/assets/default/icon.svg build/${PROVIDER}/snap/gui/icon.svg
-	@cp branding/assets/default/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+	@mkdir -p build/${PROVIDER}/snap/gui
+ifeq (${VENDOR_PATH}, providers)
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	# FIXME is this png needed?? then add it to ASSETS_REQUIRED
+	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+else
+	@cp ${VENDOR_PATH}/assets/icon.svg build/${PROVIDER}/snap/gui/icon.svg
+	@cp ${VENDOR_PATH}/assets/icon.png build/${PROVIDER}/snap/gui/${PROVIDER}-vpn.png
+endif
+	@rm build/${PROVIDER}/snap/generate.py
+endif
 
-gen_pkg_deb:
-	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
-	@VERSION=${VERSION} PROVIDER_CONFIG=${PROVIDER_CONFIG} ${SCRIPTS}/generate-debian.py build/${PROVIDER}/debian/data.json
-	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp branding/assets/default/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
-	@cd build/${PROVIDER}/debian && python3 generate.py
-	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 
-prepare_done:
-	@echo
-	@echo 'Done. You can do "make build" now.'
 
 #########################################################################
 # packaging action
@@ -215,24 +264,13 @@ packages: package_deb package_snap package_osx package_win
 package_snap_in_docker:
 	@make -C docker package_snap
 
-package_win_in_docker:
-	@make -C docker package_win
-
 package_snap:
+	@unlink snap || true
+	@ln -s build/${PROVIDER}/snap snap
 	@make -C build/${PROVIDER} pkg_snap
 
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
-
-package_win_stage_1:
-	@make -C build/${PROVIDER} pkg_win_stage_1
-
-package_win_stage_2:
-	@make -C build/${PROVIDER} pkg_win_stage_2
-
-package_osx:
-	@make -C build/${PROVIDER} pkg_osx
-
 
 
 #########################################################################
@@ -243,23 +281,12 @@ icon:
 	@make -C icon
 
 
-LANGS ?= $(foreach path,$(wildcard locales/*),$(patsubst locales/%,%,$(path)))
-empty :=
-space := $(empty) $(empty)
-lang_list := $(subst $(space),,$(foreach lang,$(LANGS),$(lang),))
+LANGS ?= $(foreach path,$(wildcard gui/i18n/main_*.ts),$(patsubst gui/i18n/main_%.ts,%,$(path)))
 
-locales: $(foreach lang,$(LANGS),get_$(lang)) cmd/bitmask-vpn/catalog.go
+locales: $(foreach lang,$(LANGS),get_$(lang))
 
 generate_locales:
-	@gotext update -lang=$(lang_list) ./pkg/systray ./pkg/bitmask
-	@make -C tools/transifex
+	@lupdate bitmask.pro
 
-locales/%/out.gotext.json: pkg/systray/systray.go pkg/systray/notificator.go pkg/bitmask/standalone.go pkg/bitmask/bitmaskd.go
-	@gotext update -lang=$* ./pkg/systray ./pkg/bitmask
-
-cmd/bitmask-vpn/catalog.go: $(foreach lang,$(LANGS),locales/$(lang)/messages.gotext.json)
-	@gotext update -lang=$(lang_list) -out cmd/bitmask-vpn/catalog.go ./pkg/systray ./pkg/bitmask
-
-get_%: locales/%/out.gotext.json
-	@make -C tools/transifex build
-	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/RiseupVPN/translation/${subst -,_,$*}/?file" | tools/transifex/transifex t2g locales/$*/
+get_%:
+	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/riseupvpn-test/translation/${subst -,_,$*}/?file" > gui/i18n/main_$*.ts

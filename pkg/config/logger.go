@@ -19,10 +19,20 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 )
 
 //ConfigureLogger to write logs into a file as well as the stderr
 func ConfigureLogger(logPath string) (io.Closer, error) {
+	dir := path.Dir(logPath)
+	if _, err := os.Stat(dir); err != nil {
+		if os.IsNotExist(err) {
+			err := os.MkdirAll(dir, 0700)
+			if err != nil {
+				log.Println("ERROR: cannot create data dir:", dir)
+			}
+		}
+	}
 	logFile, err := os.OpenFile(logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err == nil {
 		log.SetOutput(io.MultiWriter(logFile, os.Stderr))

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>$APPNAME</Name>
+    <Version>$VERSION</Version>
+    <Title>$APPNAME Installer ($VERSION)</Title>
+    <Publisher>LEAP Encryption Access Project</Publisher>
+    <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
+
+    <!--
+    <RemoteRepositories>
+      <Repository>
+        <Url>http://localhost/repository/</Url>
+      </Repository>
+    </RemoteRepositories>
+    -->
+
+    <MaintenanceToolName>uninstall</MaintenanceToolName>
+
+    $PLATFORM_BLOCK
+
+</Installer>

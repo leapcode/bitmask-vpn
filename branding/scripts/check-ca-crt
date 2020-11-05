@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import os
+import re
+import sys
+import configparser
+import urllib.request
+
+SCRIPT_NAME = 'check-ca-crt'
+VENDOR_PATH = None
+
+USAGE = '''Check that the stored provider CA matches the one announced online.
+Usage: {name} <provider>
+
+Example: {name} riseup'''.format(name=SCRIPT_NAME)
+
+
+def getLocalCert(provider):
+    with open(os.path.join(VENDOR_PATH, provider,
+              '{provider}-ca.crt'.format(provider=sanitize(provider).lower()))) as crt:
+        return crt.read().strip()
+
+
+def getRemoteCert(uri):
+    print("... checking cert from", uri)
+    fp = urllib.request.urlopen(uri)
+    remote_cert = fp.read().decode('utf-8').strip()
+    fp.close()
+    return remote_cert
+
+def getUriForProvider(provider, configfile):
+    c = configparser.ConfigParser()
+    c.read(configfile)
+    return c[provider]['caURL']
+
+def sanitize(s):
+    return re.sub(r'[^\w\s-]', '', s).strip()
+
+if __name__ == '__main__':
+    VENDOR_PATH = os.environ.get('VENDOR_PATH')
+
+    if not VENDOR_PATH:
+        print('[!] ERROR: Please set VENDOR_PATH variable first')
+        sys.exit(1)
+    if not os.path.isdir(os.path.abspath(VENDOR_PATH)):
+        print('[!] ERROR: VENDOR_PATH points to non-existent dir')
+        sys.exit(1)
+
+    if len(sys.argv) != 2:
+        print('[!] Not enough arguments')
+        print(USAGE)
+        sys.exit(1)
+
+    provider = sys.argv[1]
+    config = os.path.abspath(os.path.join(VENDOR_PATH, 'vendor.conf'))
+    if not os.path.isfile(config):
+        print('[!] ERROR: cannot open {config}')
+        sys.exit(1)
+
+    try:
+        uri = getUriForProvider(provider, config)
+    except IndexError:
+        print('[!] Misconfigured provider')
+        sys.exit(1)
+
+    local = getLocalCert(provider)
+    remote = getRemoteCert(uri)
+
+    try:
+        assert local == remote
+    except AssertionError:
+        print('[!] ERROR: remote and local CA certs do not match')
+        sys.exit(1)
+    else:
+        print('OK: local CA matches what provider announces')

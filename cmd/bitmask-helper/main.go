@@ -28,7 +28,10 @@ const (
 	logFile       = "helper.log"
 )
 
-var version string
+var (
+	Version string
+	AppName string
+)
 
 func main() {
 	logger, err := config.ConfigureLogger(path.Join(helper.LogFolder, logFile))
@@ -37,7 +40,8 @@ func main() {
 	} else {
 		defer logger.Close()
 	}
-	config.Version = version
+	helper.Version = Version
+	helper.AppName = AppName
 
 	// StartHelper is the main entry point - it also handles cli args in windows, and starts the http server.
 	helper.StartHelper(preferredPort)

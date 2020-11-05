@@ -1,0 +1,10 @@
+build/*
+*.h
+*.sh
+*.moc
+*.o
+*.stash
+Makefile
+test_ui
+moc_handlers.cpp
+moc_qjsonmodel.cpp

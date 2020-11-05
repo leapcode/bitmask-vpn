@@ -1,5 +1,5 @@
 // +build windows
-// Copyright (C) 2018 LEAP
+// Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,31 +23,46 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"path"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
 )
 
-const (
-	svcName          = config.BinaryName + `-helper-v2`
-	appPath          = `C:\Program Files\` + config.ApplicationName + `\`
-	LogFolder        = appPath
-	openvpnPath      = appPath + `openvpn.exe`
+
+
+var (
+	svcName          = BinaryName + `-helper-v2`
+
+	// XXX this is set to c:\WINDOWS\system32 on initialization. Do not use it, use a function call instead.
+	appPath          = getExecDir()
+	LogFolder        = getExecDir()
+	openvpnPath      = path.Join(appPath, "openvpn.exe")
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
+	httpServerConf = &httpConf{}
 )
+
+func getPlatformOpenvpnFlags() []string {
+	return []string{
+		"--script-security", "1",
+		"--block-outside-dns",
+	}
+}
+
+func getExecDir() string {
+	ex, err := os.Executable()
+	if err != nil {
+		log.Println("Cannot find executable path")
+		return ""
+	}
+	/* XXX filepath.Abs is buggy, maybe because of spaces in the path. fuck it, this is good enough for now */
+	return strings.Replace(ex, "\\helper.exe", "", 1)
+}
 
 type httpConf struct {
 	BindAddr string
 }
 
-var (
-	platformOpenvpnFlags = []string{
-		"--script-security", "1",
-		"--block-outside-dns",
-	}
-	httpServerConf = &httpConf{}
-)
 
 // parseCliArgs allows the helper binary to install/uninstall itself. It requires admin privileges.
 // However, be warned: if you intend to use it from the command line, you will have to compile it with the Go compiler yourself.
@@ -123,11 +138,15 @@ func daemonize() {}
 func runServer(port int) {}
 
 func getOpenvpnPath() string {
-	if _, err := os.Stat(openvpnPath); !os.IsNotExist(err) {
-		return openvpnPath
+	openvpn := path.Join(getExecDir(), "openvpn.exe")
+	if _, err := os.Stat(openvpn); !os.IsNotExist(err) {
+		log.Println("DEBUG: openvpnpath found,", openvpnPath)
+		return openvpn
 	} else if _, err := os.Stat(chocoOpenvpnPath); !os.IsNotExist(err) {
+		log.Println("DEBUG: choco openvpn found,", chocoOpenvpnPath)
 		return chocoOpenvpnPath
 	}
+	log.Println("DEBUG: did not find system-wide openvpn...")
 	return "openvpn.exe"
 }
 

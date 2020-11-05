@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+
+import configparser
+import json
+import os
+import sys
+import time
+
+from string import Template
+
+from provider import getDefaultProvider
+from provider import getProviderData
+
+OS_CONFIG = {
+    'osx': """
+    <!-- osx -->
+    <TargetDir>@ApplicationsDir@/$APPNAME.app</TargetDir>
+    <StartMenuDir>$APPNAME.app</StartMenuDir>
+    <RunProgram>open</RunProgram>
+    <RunProgramDescription>Start $APPNAME now!</RunProgramDescription>
+      <RunProgramArguments>
+        <Argument>@TargetDir@</Argument>
+      </RunProgramArguments>
+    <WizardStyle>mac</WizardStyle>
+    <!-- end osx -->
+""",
+    'windows': """
+    <TargetDir>@ApplicationsDir@/$APPNAME</TargetDir>
+    <StartMenuDir>$APPNAME</StartMenuDir>
+
+    <RunProgram>@TargetDir@/$BINNAME.exe</RunProgram>
+    <RunProgramArguments>
+    </RunProgramArguments>
+    <!-- end windows -->
+"""
+}
+
+def getData():
+    config = configparser.ConfigParser()
+    configPath = os.path.join(VENDOR_PATH, 'vendor.conf')
+    config.read(configPath)
+
+    provider = os.environ.get('PROVIDER')
+    if not provider:
+        provider = getDefaultProvider(config)
+    return getProviderData(provider, config)
+
+def generateQtInstallerBoilerplate(data, platform, outDir):
+    generateConfig(data, platform, outDir)
+    generatePackageMetadata(data, platform, outDir)
+
+def generateConfig(data, platform, outDir):
+    templateData = {
+        'APPNAME': data['applicationName'],
+        'BINNAME': data['binaryName'],
+        'VERSION': getVersion(),
+        'TIMESTAMP': time.strftime('%Y-%m-%d'),
+    }
+
+    platformStr = OS_CONFIG[platform]
+    platBlock = Template(platformStr).substitute(**templateData)
+    templateData['PLATFORM_BLOCK'] = platBlock
+
+    renderTemplate(
+         templatePath='../templates/qtinstaller/config/config.xml',
+         outPath=os.path.join(outDir, 'config/config.xml'),
+         data=templateData)
+
+def generatePackageMetadata(data, platform, outDir):
+    appname = 'applicationName'
+    templateData = {
+        'APPNAME': data[appname],
+        'BINNAME': data['binaryName'],
+        'VERSION': getVersion(),
+        'TIMESTAMP': time.strftime('%Y-%m-%d')
+    }
+    if platform == "windows":
+        p = data[appname] + " for Windows"
+    elif platform == "osx":
+        p = data[appname] + " for OSX"
+    elif platform == "linux":
+        p = data[appname] + " for GNU/Linux"
+    else:
+        p = data[appname]
+    templateData['APPNAME_PLATFORM'] = p
+
+    renderTemplate(
+         templatePath='../templates/qtinstaller/packages/bitmaskvpn/meta/package.xml',
+         outPath=os.path.join(outDir, 'packages/bitmaskvpn/meta/package.xml'),
+         data=templateData)
+
+    renderTemplate(
+         templatePath='../templates/qtinstaller/packages/bitmaskvpn/meta/install.js',
+         outPath=os.path.join(outDir, 'packages/bitmaskvpn/meta/install.js'),
+         data=templateData)
+
+def renderTemplate(templatePath=None, outPath=None, data=None):
+    with open(os.path.join(here(), templatePath), 'r') as f:
+        t = f.read()	
+    rendered = Template(t).substitute(**data)
+    os.makedirs(os.path.dirname(outPath), exist_ok=True)
+    with open(outPath, 'w') as out:
+        out.write(rendered)
+
+def here():
+    return os.path.abspath(os.path.dirname(__file__))
+
+def bail(msg=None):
+    if not msg:
+        print("ERROR: not enough arguments!")
+        print('Usage: {scriptname}.py <config> <output>'.format(
+            scriptname=SCRIPT_NAME))
+    else:
+        print(msg)
+    sys.exit(1)
+
+def getVersion():
+    return os.environ.get('VERSION', 'unknown')
+
+if __name__ == "__main__":
+    VENDOR_PATH = os.environ.get('VENDOR_PATH')
+
+    if len(sys.argv) != 3:
+        bail()
+    platform = sys.argv[1]
+    outDir = sys.argv[2]
+    print("[+] Generating qtinstaller files...")
+    data = getData()
+    generateQtInstallerBoilerplate(data, platform, outDir)

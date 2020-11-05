@@ -1,15 +1,14 @@
-Install it
-----------
+Build
+-----
 
-Install dependencies:
-```
-  # make depends
-```
+Clone this repo, install dependencies and build the application. Dependencies
+assume debian packages, or homebrew for osx. For other systems try
+manually, or send us a patch.
 
-Build the systray:
 ```
-  $ git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
-  $ make build
+  git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  sudo make depends
+  make build
 ```
 
 You need at least go 1.11. If you have something older and are using ubuntu, you can do:
@@ -20,6 +19,7 @@ You need at least go 1.11. If you have something older and are using ubuntu, you
 
 For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
 
+Test
 
 OSX
 ----------
@@ -46,6 +46,36 @@ In file included from /usr/include/gtk-3.0/gtk/gtk.h:106:0,
 ```
 They are expected and don't produce any problem on the systray.
 
+Windows
+---------
+Download cygwin // https://cygwin.com/setup-x86_64.exe
+```
+Install with the necessary packages:
+
+mingw64-x86_64-gcc-core
+mingw64-x86_64-gcc-g++ 
+and
+x86_64-w64-mingw32-c++
+x86_64-w64-mingw32-gcc
+make
+
+Add to windowspath "C:\cygwin64\bin"
+```
+Build it
+```
+make build 
+
+Build flags
+ARCH : 386 or amd64 (default: amd64)
+CCPAath and CXXPath are either paths of compiler or filenames in %PATH% (defaults: x86_64-w64-mingw32-gcc and x86_64-w64-mingw32-c++)
+
+Examples:
+make build ARCH=386
+make build ARCH=386 CCPath=i686-w64-mingw32-gcc CXXPath=i686-w64-mingw32-c++
+
+All options can be omitted! 
+
+```
 
 Run it
 -------------
@@ -53,10 +83,10 @@ The default build is a standalone systray. It still requires a helper and openvp
 [bitmask-root](https://0xacab.org/leap/bitmask-dev/blob/master/src/leap/bitmask/vpn/helpers/linux/bitmask-root)
 for windows and OSX there is [a helper written in go](https://0xacab.org/leap/bitmask-vpn/tree/master/pkg/helper/).
 
-To build and run it:
+Run it:
 ```
-  $ make build
   $ build/bin/bitmask-vpn
+
 ```
 
 
@@ -77,34 +107,33 @@ In that case bitmask-systray assumes that you already have bitmaskd running. Run
 i18n
 ----
 
-The translations are done in transifex. To help us contribute your translations there and/or review the existing
-ones:
-https://www.transifex.com/otf/bitmask/RiseupVPN/
+You can run some tests too.
 
-When a string has being modified you need to regenerate the locales:
 ```
-  $ make generate_locales
+  sudo apt install qml-module-qttest
+  make test
+  make test_ui
 ```
 
-To fetch the translations from transifex and rebuild the catalog.go (API\_TOKEN is the transifex API token):
-```
-  $ API_TOKEN='xxxxxxxxxxx' make locales
-```
-There is some bug on gotext and the catalog.go generated doesn't have a package, you will need to edit
-cmd/bitmask-vpn/catalog.go and to have a `package main` at the beginning of the file.
 
-If you want to add a new language create the folder `locales/$lang` before running `make locales`.
+Translations
+------------
+
+We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordinate translations. Any help is welcome!
 
 
-Report an issue
--------------------
+Bugs? Crashes? UI feedback? Any other suggestions or complains?
+---------------------------------------------------------------
 
-When you report an issue include the following information:
+When you are willing to [report an issue](https://0xacab.org/leap/bitmask-vpn/-/issues) please
+use the search tool first. if you cannot find your issue, please make sure to
+include the following information:
 
-* what you expected to see
-* what you got
-* the version of the program. You can check the version on the about page.
+* the platform you're using and the installation method.
+* the version of the program. You can check the version on the "about" menu.
+* what you expected to see.
+* what you got instead.
 * the logs of the program. The location of the logs depends on the OS:
-  * linux: `/home/<your user>/.config/leap/bitmaskd.log` & `/home/<your user>/.config/leap/systray.log`
+  * gnu/linux: `/home/<your user>/.config/leap/systray.log`
   * OSX: `/Users/<your user>/Library/Preferences/leap/systray.log`, `/Applications/RiseupVPN.app/Contents/helper/helper.log` & `/Applications/RiseupVPN.app/Contents/helper/openvpn.log`
   * windows: `C:\Users\<your user>\AppData\Local\leap\systray.log`, `C:\Program Files\RiseupVPN\helper.log` & `C:\Program Files\RiseupVPN\openvp.log`

@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import configparser
+import json
+import os
+import sys
+
+
+from provider import getDefaultProvider
+from provider import getProviderData
+
+OUTFILE = 'providers.json'
+SCRIPT_NAME = 'gen-providers-json'
+
+
+def generateProvidersJSON(configPath, outputJSONPath):
+    print("output:", outputJSONPath)
+    config = configparser.ConfigParser()
+    config.read(configPath)
+
+    # TODO as a first step, we just get the defaultProvider.
+    # For multi-provider, just add more providers to the dict
+
+    providers = {}
+    defaultProvider = getDefaultProvider(config)
+
+    providers['default'] = defaultProvider
+    providers['providers'] = []
+    providerData = getProviderData(defaultProvider, config)
+    addCaData(providerData, configPath)
+
+    providers['providers'].append(providerData)
+    with open(outputJSONPath, 'w', encoding='utf-8') as f:
+        json.dump(providers, f, ensure_ascii=False, indent=4)
+
+def addCaData(data, configfile):
+    provider = data.get('name').lower()
+    folder, f = os.path.split(configfile)
+    caFile = os.path.join(folder, provider, provider + '-ca.crt')
+    if not os.path.isfile(caFile):
+        bail('[!] Cannot find CA file in {path}'.format(path=caFile))
+    with open(caFile) as ca:
+        data['caCertString'] = ca.read().strip()
+
+def bail(msg=None):
+    if not msg:
+        print("ERROR: not enough arguments!")
+        print('Usage: {scriptname}.py <output>'.format(
+            scriptname=SCRIPT_NAME))
+    else:
+        print(msg)
+    sys.exit(1)
+
+if __name__ == "__main__":
+    print("[+] Generating providers.json...")
+    if len(sys.argv) != 2:
+        bail()
+
+    VENDOR_PATH = os.environ.get('VENDOR_PATH')
+    conf = os.path.join(VENDOR_PATH, 'vendor.conf')
+    output = sys.argv[1]
+    generateProvidersJSON(conf, output)
