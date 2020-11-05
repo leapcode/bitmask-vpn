@@ -5,6 +5,8 @@
     <Title>$APPNAME Installer ($VERSION)</Title>
     <Publisher>LEAP Encryption Access Project</Publisher>
     <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
+    <Logo>installer-logo.png</Logo>
+    <InstallerApplicationIcon>installer-icon</InstallerApplicationIcon>
 
     <!--
     <RemoteRepositories>

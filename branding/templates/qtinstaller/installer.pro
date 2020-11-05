@@ -5,7 +5,7 @@ CONFIG -= debug_and_release
 INPUT = $$PWD/config/config.xml $$PWD/packages
 inst.input = INPUT
 inst.output = $$INSTALLER
-inst.commands = binarycreator -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
+inst.commands = binarycreator --ignore-translations -c $$PWD/config/config.xml -p $$PWD/packages ${QMAKE_FILE_OUT}
 inst.CONFIG += target_predeps no_link combine
 
 QMAKE_EXTRA_COMPILERS += inst

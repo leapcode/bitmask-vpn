@@ -142,6 +142,9 @@ installer: check_qtifw checksign
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
+	@cp ${VENDOR_PATH}/assets/icon.ico ${INSTALLER}/config/installer-icon.ico
+	@cp ${VENDOR_PATH}/assets/icon.icns ${INSTALLER}/config/installer-icon.icns
+	@cp ${VENDOR_PATH}/assets/installer-logo.png ${INSTALLER}/config/installer-logo.png
 ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${INST_DATA}/helper
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}

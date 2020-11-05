@@ -21,16 +21,20 @@ OS_CONFIG = {
       <RunProgramArguments>
         <Argument>@TargetDir@</Argument>
       </RunProgramArguments>
+
     <WizardStyle>mac</WizardStyle>
     <!-- end osx -->
 """,
     'windows': """
+    <!-- windows -->
     <TargetDir>@ApplicationsDir@/$APPNAME</TargetDir>
     <StartMenuDir>$APPNAME</StartMenuDir>
 
     <RunProgram>@TargetDir@/$BINNAME.exe</RunProgram>
     <RunProgramArguments>
     </RunProgramArguments>
+
+    <WizardStyle>Modern</WizardStyle>
     <!-- end windows -->
 """
 }
