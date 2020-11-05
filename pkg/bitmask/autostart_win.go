@@ -1,4 +1,5 @@
 // +build windows
+
 package bitmask
 
 // Workaround for broken autostart package on windows.
