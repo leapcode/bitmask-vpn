@@ -85,15 +85,12 @@ function renameOutput {
     	mv $RELEASE/bitmask $RELEASE/$TARGET
     	strip $RELEASE/$TARGET
     	echo "[+] Binary is in" $RELEASE/$TARGET
-    fi
-    if [ "$PLATFORM" == "Darwin" ]
+    elif  [ "$PLATFORM" == "Darwin" ]
     then
     	rm -rf $RELEASE/$TARGET.app
     	mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
     	echo "[+] App is in" $RELEASE/$TARGET
-    fi
-    if [ "$PLATFORM" == "MINGW64_NT-10.0" ]
-    then
+    else # for MINGWIN or CYGWIN
     	mv $RELEASE/bitmask.exe $RELEASE/$TARGET.exe
     fi
 }

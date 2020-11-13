@@ -22,3 +22,7 @@ providers/assets
 
 .*.swp
 *.exe
+
+# IDE
+.idea
+.vs

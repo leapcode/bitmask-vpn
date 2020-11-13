@@ -20,10 +20,10 @@ TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
 # detect OS
+UNAME = $(shell uname -s)
 ifeq ($(OS), Windows_NT)
 PLATFORM = windows
 else
-UNAME = $(shell uname -s)
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
 endif
 
@@ -70,6 +70,13 @@ dependsDarwin:
 	@brew install python3 golang make pkg-config curl
 	@brew install --default-names gnu-sed
 
+dependsCYGWIN_NT-10.0:
+	@echo
+	@echo "==================================WARNING=================================="
+	@echo "You need to install all dependencies manually, please see README.md!"
+	@echo "==================================WARNING=================================="
+	@echo
+
 ifeq ($(PLATFORM), darwin)
 EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
 else
@@ -90,6 +97,14 @@ lib/%.a: $(PKGFILES)
 	@XBUILD=no ./gui/build.sh --just-golib
 
 relink_vendor:
+	@echo "==========RELINK VENDOR=========="
+	@echo "PLATFORM: ${PLATFORM}"
+	@echo "VENDOR_PATH: ${VENDOR_PATH}"
+	@echo "PROVIDER: ${PROVIDER}"
+ifeq ($(UNAME), CYGWIN_NT-10.0)
+	[ -L providers/assets ] || (CYGWIN=winsymlinks:nativestrict ln -s ${PROVIDER}/assets providers/assets)
+endif
+ifneq ($(UNAME), CYGWIN_NT-10.0)
 ifeq ($(PLATFORM), windows)
 	rm -rf providers/assets
 endif
@@ -97,19 +112,29 @@ ifeq ($(VENDOR_PATH), providers)
 	@unlink providers/assets || true
 	@ln -s ${PROVIDER}/assets providers/assets
 endif
+endif
+	@echo "==========RELINK VENDOR=========="
 
 build_golib: lib/libgoshim.a
 
 build_gui: relink_vendor
+	@echo "==========BUILD GUI=========="
+	@echo "TARGET: ${TARGET}"
+	@echo "VENDOR_PATH: ${VENDOR_PATH}"
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
+	@echo "==========BUILD GUI=========="
 
 build: build_golib build_helper build_gui
 
 build_helper:
+	@echo "==========BUILDER HELPER=========="
 	@echo "PLATFORM: ${PLATFORM}"
+	@echo "APPNAME: ${APPNAME}"
+	@echo "VERSION: ${VERSION}"
+	@echo "EXTRA_GO_LDFLAGS: ${EXTRA_GO_LDFLAGS}"
 	@mkdir -p build/bin/${PLATFORM}
 	@go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
-	@echo "build helper done."
+	@echo "==========BUILDER HELPER=========="
 
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
@@ -190,7 +215,7 @@ ifeq (${PLATFORM}, windows)
 	"c:\windows\system32\signtool.exe" sign -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/installer/${APPNAME}-installer-${VERSION}.exe
 endif
 
-check_qtifw: 
+check_qtifw:
 ifdef HAS_QTIFW
 	@echo "[+] Found QTIFW"
 else
@@ -201,9 +226,11 @@ clean:
 	@rm -rf build/
 	@unlink branding/assets/default || true
 
+
 ########################################################################
 # tests
 #########################################################################
+
 qmllint:
 	@qmllint gui/qml/*.qml
 
@@ -214,7 +241,11 @@ test_ui: build_golib
 	@qmake -o tests/Makefile test.pro
 	@make -C tests clean
 	@make -C tests
+ifeq ($(PLATFORM), windows)
+	@./tests/build/test_ui.exe
+else
 	@./tests/build/test_ui
+endif
 
 
 #########################################################################
@@ -280,7 +311,6 @@ else
 endif
 	@rm build/${PROVIDER}/snap/generate.py
 endif
-
 
 
 #########################################################################

@@ -1,12 +1,11 @@
-Build
------
+## Build
 
 Clone this repo, install dependencies and build the application. Dependencies
-assume debian packages, or homebrew for osx. For other systems try
+assume debian packages, or homebrew for osx. For Windows OS see corresponding section below. For other systems try
 manually, or send us a patch.
 
 ```
-  git clone 0xacab.org/leap/bitmask-vpn && cd bitmask-vpn
+  git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
   sudo make depends
   make build
 ```
@@ -19,8 +18,7 @@ You need at least go 1.11. If you have something older and are using ubuntu, you
 
 For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
 
-Test
-----
+## Test
 
 You can run some tests too.
 
@@ -30,6 +28,46 @@ You can run some tests too.
   make test_ui
 ```
 
+## Windows
+As for now app can be build on Win OS using `Cygwin` terminal.
+
+#### Precondition
+You need to have installed and added to your user PATH (mentioned version tested in Win10):
+1) Go (>= go1.15.4)
+2) QT (>= Qt5.12.9)
+3) QtIFW (>= QtIFW-4.0.0)
+4) Cygwin64 (>= 2.905 64 bit)
+5) Using Cygwin `Package Select` window install `python3` and `make` packages. 
+
+**Note:** for #5 you don't need to add packages to PATH they will available in `cygwin` after installation.
+
+#### Get Source
+```
+    git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
+```
+
+#### Build
+Build script uses a symbolic link in one of the stages. Unfortunately Cygwin can't create native symlink from local non   
+admin user due to windows security restriction. To avoid this issue we need to call next target from cygwin terminal as   
+Administrator. This need to be done only once. 
+```bash
+    make relink_vendor
+```
+
+After `relink_vendor` use this to build the app:
+```bash
+    make build
+```
+After successful build application will be available at: `build/qt/release/riseup-vpn.exe`
+
+#### Test
+
+To run tests:
+
+```bash
+    make test
+    make test_ui
+```
 
 Translations
 ------------
