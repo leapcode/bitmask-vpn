@@ -93,26 +93,26 @@ ApplicationWindow {
         console.debug(providers.getJson());
         allowEmptyPass = shouldAllowEmptyPass();
 
-	/* TODO get appVisible flag from backend */
+        /* TODO get appVisible flag from backend */
         app.visible = false;
     }
 
     function toHuman(st) {
         switch(st) {
             case "off":
-		//: %1 -> application name
+                //: %1 -> application name
                 return qsTr("%1 off").arg(ctx.appName);
             case "on":
-		//: %1 -> application name
+                //: %1 -> application name
                 return qsTr("%1 on").arg(ctx.appName);
             case "connecting":
-		//: %1 -> application name
+                //: %1 -> application name
                 return qsTr("Connecting to %1").arg(ctx.appName);
             case "stopping":
-		//: %1 -> application name
+                 //: %1 -> application name
                 return qsTr("Stopping %1").arg(ctx.appName);
             case "failed":
-		//: %1 -> application name
+                //: %1 -> application name
                 return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handed yet
         }
     }
@@ -135,25 +135,29 @@ ApplicationWindow {
             // produce a segfault when trying to call menu.open()
             // left and right click seem to be working fine, so let's ignore this for now.
             switch (reason) {
-            case SystemTrayIcon.Unknown:
-	        console.debug("reason: unknown")
-                menu.open()
-		break
-            case SystemTrayIcon.Context:
-	        console.debug("activated: context")
-		if (Qt.platform.os !== "linux") {
-			menu.open()
-		}
+                case SystemTrayIcon.Unknown:
+                    console.debug("reason: unknown")
+                    menu.open()
                 break
-            case SystemTrayIcon.DoubleClick:
-	        console.debug("activated: double click")
-		if (Qt.platform.os !== "linux") {
-			menu.open()
-		}
+                case SystemTrayIcon.Context:
+                    console.debug("activated: context")
+                    if (Qt.platform.os !== "linux") {
+                        menu.open()
+                    }
                 break
-            case SystemTrayIcon.Trigger:
+                case SystemTrayIcon.DoubleClick:
+                    console.debug("activated: double click")
+                    if (Qt.platform.os !== "linux") {
+                        menu.open()
+                    }
                 break
-            case SystemTrayIcon.MiddleClick:
+                case SystemTrayIcon.Trigger:
+                    console.debug("activated: left click")
+                    if (Qt.platform.os !== "linux") {
+                        menu.open()
+                    }
+                break
+                case SystemTrayIcon.MiddleClick:
                 break
             }
         }
@@ -165,6 +169,17 @@ ApplicationWindow {
             hide();
             if (systrayVisible) {
                 show();
+                showNotification("Is up and running. Please use system tray icon to control it.");
+            }
+        }
+
+        // Helper to show notification messages
+        function showNotification(msg) {
+            console.log("Going to show notification message: ", msg);
+            if (supportsMessages) {
+                showMessage("Riseup VPN", msg, null, 15000);
+            } else {
+                console.log("System doesn't support systray notifications");
             }
         }
 
