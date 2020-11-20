@@ -59,6 +59,16 @@ Do you want to donate now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/LoginDialog.qml" line="20"/>
+        <source>Patron ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LoginDialog.qml" line="24"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/LoginDialog.qml" line="35"/>
         <source>Enter your Patron ID</source>
         <translation type="unfinished"></translation>
@@ -71,16 +81,6 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/LoginDialog.qml" line="42"/>
         <source>You can check your Patron ID number in the back of your library card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/LoginDialog.qml" line="20"/>
-        <source>patron id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/LoginDialog.qml" line="24"/>
-        <source>password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -101,7 +101,7 @@ Do you want to donate now?</source>
     <name>main</name>
     <message>
         <location filename="../qml/main.qml" line="38"/>
-        <source>Could not find helpers. Check your installation</source>
+        <source>Could not find helpers. Please check your installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -238,17 +238,17 @@ Do you want to donate now?</source>
     </message>
     <message>
         <location filename="../main.cpp" line="83"/>
-        <source>Do not show the systray icon (useful together with gnome shell extension, or to control VPN by other means).</source>
+        <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
-        <source>Enable web api.</source>
+        <source>Enable Web API.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
-        <source>Install helpers (linux only, requires sudo).</source>
+        <source>Install helpers (Linux only, requires sudo).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -263,12 +263,12 @@ Do you want to donate now?</source>
     </message>
     <message>
         <location filename="../main.cpp" line="113"/>
-        <source>Web api port (default: 8080)</source>
+        <source>Web API port (default: 8080)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
-        <source>Start the vpn, either &apos;on&apos; or &apos;off&apos;.</source>
+        <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
