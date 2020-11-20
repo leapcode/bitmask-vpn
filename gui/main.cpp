@@ -82,20 +82,20 @@ int main(int argc, char **argv) {
             {"n", "no-systray"},
             QApplication::translate("main",
                                     "Do not show the systray icon (useful "
-                                    "together with gnome shell "
+                                    "together with Gnome Shell "
                                     "extension, or to control VPN by other means)."),
         },
         {
             {"w", "web-api"},
             QApplication::translate(
                 "main",
-                "Enable web api."),
+                "Enable Web API."),
         },
         {
             {"i", "install-helpers"},
             QApplication::translate(
                 "main",
-                "Install helpers (linux only, requires sudo)."),
+                "Install helpers (Linux only, requires sudo)."),
         },
         {
             {"o", "obfs4"},
@@ -110,9 +110,9 @@ int main(int argc, char **argv) {
                 "Disable autostart for the next run."),
         },
     });
-    QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web api port (default: 8080)"), "port", "8080");
+    QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web API port (default: 8080)"), "port", "8080");
     parser.addOption(webPortOption);
-    QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the vpn, either 'on' or 'off'."), "status", "");
+    QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the VPN, either 'on' or 'off'."), "status", "");
     parser.addOption(startVPNOption);
     parser.process(app);
 

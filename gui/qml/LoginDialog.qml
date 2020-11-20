@@ -17,11 +17,11 @@ Dialog {
         }
         TextField {
             id: username
-            placeholderText: qsTr("patron id")
+            placeholderText: qsTr("Patron ID")
         }
         TextField {
             id: password
-            placeholderText: qsTr("password")
+            placeholderText: qsTr("Password")
             echoMode: TextInput.PasswordEchoOnEdit
             visible: !allowEmptyPass
         }

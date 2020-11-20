@@ -35,7 +35,7 @@ ApplicationWindow {
             if (ctx.errors ) {
                login.visible = false
                if ( ctx.errors  == "nohelpers" ) {
-                   showInitFailure(qsTr("Could not find helpers. Check your installation"))
+                   showInitFailure(qsTr("Could not find helpers. Please check your installation"))
                } else if ( ctx.errors == "nopolkit" ) {
                    showInitFailure(qsTr("Could not find polkit agent."))
                } else {
