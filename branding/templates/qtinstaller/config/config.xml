@@ -4,6 +4,7 @@
     <Version>$VERSION</Version>
     <Title>$APPNAME Installer ($VERSION)</Title>
     <Publisher>LEAP Encryption Access Project</Publisher>
+    <ProductUrl>https://leap.se</ProductUrl>
     <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
     <Logo>installer-logo.png</Logo>
     <InstallerApplicationIcon>installer-icon</InstallerApplicationIcon>

@@ -5,6 +5,8 @@ windows:CONFIG -= console
 unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
+QMAKE_TARGET_BUNDLE_PREFIX = se.leap
+QMAKE_BUNDLE = $$TARGET
 
 !defined(VENDOR_PATH, var):VENDOR_PATH="providers/riseup"
 

@@ -13,6 +13,8 @@ TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname |
 PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
 VERSION ?= $(shell git describe)
 WINCERTPASS ?= pass
+OSXAPPPASS  ?= pass
+OSXMORDORUID ?= uid
 
 # go paths
 GOPATH = $(shell go env GOPATH)
@@ -30,9 +32,8 @@ endif
 QTBUILD = build/qt
 INSTALLER = build/installer
 INST_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
-OSX_CERT="Developer ID Installer: LEAP Encryption Access Project"
-MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite
-# XXX expired cert -codesign="${OSX_CERT}"
+OSX_CERT="Developer ID Application: LEAP Encryption Access Project"
+MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite -codesign="${OSX_CERT}"
 	
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
@@ -67,7 +68,7 @@ dependsLinux:
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
-	@brew install python3 golang make pkg-config curl
+	@brew install python3 golang make pkg-config curl create-dmg
 	@brew install --default-names gnu-sed
 
 dependsCYGWIN_NT-10.0:
@@ -214,6 +215,33 @@ ifeq (${PLATFORM}, windows)
 	# TODO add flag to skip signing for regular builds
 	"c:\windows\system32\signtool.exe" sign -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/installer/${APPNAME}-installer-${VERSION}.exe
 endif
+ifeq (${PLATFORM}, darwin)
+	gsed -i "s/com.yourcompany.installerbase/se.leap.bitmask.${TARGET}/g" build/installer/${APPNAME}-installer-${VERSION}.app/Contents/Info.plist
+	codesign -s ${OSX_CERT} --options "runtime" build/installer/${APPNAME}-installer-${VERSION}.app
+	ditto -ck --rsrc --sequesterRsrc build/installer/${APPNAME}-installer-${VERSION}.app build/installer/${APPNAME}-installer-${VERSION}.zip
+endif
+
+notarize_installer:
+# courtesy of https://skyronic.com/2019/07/app-notarization-for-qt-applications/
+ifeq (${PLATFORM}, darwin)
+	xcrun altool --notarize-app -t osx -f build/installer/${APPNAME}-installer-${VERSION}.zip --primary-bundle-id="se.leap.bitmask.${TARGET}" -u "info@leap.se" -p ${OSXAPPPASS}
+endif
+
+notarize_check:
+ifeq (${PLATFORM}, darwin)
+	xcrun altool --notarization-info ${OSXMORDORUID} -u "info@leap.se" -p ${OSXAPPPASS}
+endif
+
+notarize_staple:
+ifeq (${PLATFORM}, darwin)
+	xcrun stapler staple build/installer/${APPNAME}-installer-${VERSION}.app
+endif
+
+create_dmg:
+ifeq (${PLATFORM}, darwin)
+	@create-dmg deploy/${APPNAME}-${VERSION}.dmg build/installer/${APPNAME}-installer-${VERSION}.app
+endif
+
 
 check_qtifw:
 ifdef HAS_QTIFW
