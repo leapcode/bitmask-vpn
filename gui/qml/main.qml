@@ -170,7 +170,7 @@ ApplicationWindow {
             if (systrayVisible) {
                 show();
                 if (Qt.platform.os === "windows") {
-                    let appname: ctx ? ctx.appName: "VPN"
+                    let appname = ctx ? ctx.appName: "VPN";
                     showNotification(appname + " is up and running. Please use system tray icon to control it.");
                 }
             }
@@ -180,7 +180,7 @@ ApplicationWindow {
         function showNotification(msg) {
             console.log("Going to show notification message: ", msg);
             if (supportsMessages) {
-                let appname: ctx ? ctx.appName: "VPN"
+                let appname = ctx ? ctx.appName: "VPN";
                 showMessage(appname, msg, null, 15000);
             } else {
                 console.log("System doesn't support systray notifications");
