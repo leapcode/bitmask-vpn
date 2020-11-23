@@ -136,29 +136,29 @@ ApplicationWindow {
             // left and right click seem to be working fine, so let's ignore this for now.
             switch (reason) {
                 case SystemTrayIcon.Unknown:
-                    console.debug("reason: unknown")
+                    console.debug("activated: unknown event")
                     menu.open()
-                break
+                    break
                 case SystemTrayIcon.Context:
                     console.debug("activated: context")
                     if (Qt.platform.os !== "linux") {
                         menu.open()
                     }
-                break
+                    break
                 case SystemTrayIcon.DoubleClick:
                     console.debug("activated: double click")
                     if (Qt.platform.os !== "linux") {
                         menu.open()
                     }
-                break
+                    break
                 case SystemTrayIcon.Trigger:
                     console.debug("activated: left click")
                     if (Qt.platform.os !== "linux") {
                         menu.open()
                     }
-                break
+                    break
                 case SystemTrayIcon.MiddleClick:
-                break
+                    break
             }
         }
 
@@ -168,8 +168,9 @@ ApplicationWindow {
             console.debug("systray init completed")
             hide();
             if (systrayVisible) {
+                let appname: ctx ? ctx.appName: "VPN"
                 show();
-                showNotification("Is up and running. Please use system tray icon to control it.");
+                showNotification(appname + " is up and running. Please use system tray icon to control it.");
             }
         }
 
@@ -177,7 +178,8 @@ ApplicationWindow {
         function showNotification(msg) {
             console.log("Going to show notification message: ", msg);
             if (supportsMessages) {
-                showMessage("Riseup VPN", msg, null, 15000);
+                let appname: ctx ? ctx.appName: "VPN"
+                showMessage(appname, msg, null, 15000);
             } else {
                 console.log("System doesn't support systray notifications");
             }
