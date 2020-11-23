@@ -168,9 +168,11 @@ ApplicationWindow {
             console.debug("systray init completed")
             hide();
             if (systrayVisible) {
-                let appname: ctx ? ctx.appName: "VPN"
                 show();
-                showNotification(appname + " is up and running. Please use system tray icon to control it.");
+                if (Qt.platform.os === "windows") {
+                    let appname: ctx ? ctx.appName: "VPN"
+                    showNotification(appname + " is up and running. Please use system tray icon to control it.");
+                }
             }
         }
 
@@ -192,7 +194,7 @@ ApplicationWindow {
             StateGroup {
                 id: vpn
                 state: ctx ? ctx.status : ""
-            
+
                 states: [
                     State { name: "initializing" },
                     State {
