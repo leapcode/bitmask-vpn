@@ -12,8 +12,9 @@ HELPER_PLIST = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
 
 _dir = os.path.dirname(os.path.realpath(__file__))
 
-def main():
-    log = open(os.path.join('/tmp', 'bitmask-uninstall.log'), 'w')
+def main(stage="uninstall"):
+    logfile = "bitmask-{stage}.log".format(stage=stage)
+    log = open(os.path.join('/tmp', logfile), 'w')
     log.write('Checking for admin privileges...\n')
 
     _id = os.getuid()
@@ -37,7 +38,7 @@ def main():
     log.write("result: %s \n" % str(out))
     
     # all done
-    log.write('uninstall script: done\n')
+    log.write(stage + ' script: done\n')
     sys.exit(0)
 
 
@@ -67,4 +68,7 @@ def _getProcessList():
     return _out
 
 if __name__ == "__main__":
-    main()
+    stage="uninstall"
+    if len(sys.argv) > 2 and sys.argv[2] == "pre":
+        stage="pre-install"
+    main(stage)

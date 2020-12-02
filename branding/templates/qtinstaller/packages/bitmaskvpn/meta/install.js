@@ -70,6 +70,7 @@ Component.prototype.createOperations = function ()
     if (systemInfo.productType === "windows") {
         postInstallWindows();
     } else if (systemInfo.productType === "osx") {
+        preInstallOSX();
         postInstallOSX();
     } else {
         postInstallLinux();
@@ -91,6 +92,7 @@ Component.prototype.installationFinished = function()
 }
 
 function postInstallWindows() {
+    // TODO - check if we're on Windows10 or older, and use the needed tap-windows installer accordingly.
     console.log("Installing OpenVPN tap driver");
     component.addElevatedOperation("Execute", "@TargetDir@/tap-windows.exe", "/S", "/SELECT_UTILITIES=1");  /* TODO uninstall? */
     console.log("Now trying to install our helper");
@@ -105,6 +107,16 @@ function postInstallWindows() {
         "CreateShortcut",
         "@TargetDir@/Uninstall-$APPNAME.exe",
         "@StartMenuDir@/Uninstall.lnk"
+    );
+}
+
+function preInstallOSX() {
+    console.log("Pre-installation for OSX");
+    // TODO use installer filepath??
+    component.addElevatedOperation(
+	"Execute", "{0}",
+   	"@TargetDir@/uninstall.py", "pre",
+	"errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach the pre-install.log file."
     );
 }
 

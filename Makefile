@@ -98,7 +98,7 @@ lib/%.a: $(PKGFILES)
 	@XBUILD=no ./gui/build.sh --just-golib
 
 relink_vendor:
-	@echo "==========RELINK VENDOR=========="
+	@echo "============RELINK VENDOR============="
 	@echo "PLATFORM: ${PLATFORM}"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
 	@echo "PROVIDER: ${PROVIDER}"
@@ -114,28 +114,28 @@ ifeq ($(VENDOR_PATH), providers)
 	@ln -s ${PROVIDER}/assets providers/assets
 endif
 endif
-	@echo "==========RELINK VENDOR=========="
+	@echo "============RELINK VENDOR============="
 
 build_golib: lib/libgoshim.a
 
 build_gui: relink_vendor
-	@echo "==========BUILD GUI=========="
+	@echo "==============BUILD GUI==============="
 	@echo "TARGET: ${TARGET}"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
 	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
-	@echo "==========BUILD GUI=========="
+	@echo "============BUILD GUI================="
 
 build: build_golib build_helper build_gui
 
 build_helper:
-	@echo "==========BUILDER HELPER=========="
+	@echo "=============BUILDER HELPER==========="
 	@echo "PLATFORM: ${PLATFORM}"
 	@echo "APPNAME: ${APPNAME}"
 	@echo "VERSION: ${VERSION}"
 	@echo "EXTRA_GO_LDFLAGS: ${EXTRA_GO_LDFLAGS}"
 	@mkdir -p build/bin/${PLATFORM}
 	@go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
-	@echo "==========BUILDER HELPER=========="
+	@echo "===========BUILDER HELPER============="
 
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
