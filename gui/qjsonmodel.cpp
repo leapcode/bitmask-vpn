@@ -23,12 +23,15 @@
  * SOFTWARE.
  */
 
-#include <QFile>
+#include <mutex>
 #include <QDebug>
+#include <QFile>
 #include <QFont>
 
 #include "qjsonmodel.h"
 
+
+std::mutex mtx;
 
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem *parent)
 {
@@ -105,7 +108,6 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 
     if ( value.isObject())
     {
-
         //Get all QJsonValue childs
         for (QString key : value.toObject().keys()){
             QJsonValue v = value.toObject().value(key);
@@ -115,7 +117,6 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
             rootItem->appendChild(child);
 
         }
-
     }
 
     else if ( value.isArray())
@@ -123,7 +124,6 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
         //Get all QJsonValue childs
         int index = 0;
         for (QJsonValue v : value.toArray()){
-
             QJsonTreeItem * child = load(v,rootItem);
             child->setKey(QString::number(index));
             child->setType(v.type());
@@ -202,13 +202,16 @@ bool QJsonModel::load(QIODevice *device)
 
 bool QJsonModel::loadJson(const QByteArray &json)
 {
+    mtx.lock();
+
     auto const& jdoc = QJsonDocument::fromJson(json);
+    bool ok = false;
+
 
     if (!jdoc.isNull())
     {
         beginResetModel();
-
-        delete mRootItem;
+	delete mRootItem;
 
         if (jdoc.isArray()) {
             mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()));
@@ -219,43 +222,42 @@ bool QJsonModel::loadJson(const QByteArray &json)
         }
         endResetModel();
 
-        // ???
         emit dataChanged(QModelIndex(), QModelIndex(), {});
-        return true;
+        ok = true;
     }
 
-    qDebug()<<Q_FUNC_INFO<<"cannot load json";
-    return false;
+    if (!ok)
+    {
+	qDebug()<<Q_FUNC_INFO<<"ERROR: cannot load json";
+    }
+
+    mtx.unlock();
+    return ok;
 }
 
 
 QVariant QJsonModel::data(const QModelIndex &index, int role) const
 {
-
     if (!index.isValid())
         return QVariant();
 
 
     QJsonTreeItem *item = static_cast<QJsonTreeItem*>(index.internalPointer());
 
-
     switch (role) {
         case Roles::KeyRole:
             return item->key();
         case Roles::ValueRole:
             return item->value();
-        case Qt::DisplayRole:
-            {
-                if (index.column() == 0)
-                    return QString("%1").arg(item->key());
-                else if (index.column() == 1)
-                    return QString("%1").arg(item->value());
-                else
-                    return QString("");
-
+        case Qt::DisplayRole: {
+		if (index.column() == 0)
+		    return QString("%1").arg(item->key());
+		else if (index.column() == 1)
+		    return QString("%1").arg(item->value());
+		else
+		    return QString("");
             }
-        case Qt::EditRole:
-            {
+        case Qt::EditRole: {
                 if (index.column() == 1)
                     return QString("%1").arg(item->value());
                 else
@@ -366,8 +368,10 @@ Qt::ItemFlags QJsonModel::flags(const QModelIndex &index) const
 
 QJsonDocument QJsonModel::json() const
 {
+    mtx.lock();
 
     auto v = genJson(mRootItem);
+
     QJsonDocument doc;
 
     if (v.isObject()) {
@@ -376,13 +380,15 @@ QJsonDocument QJsonModel::json() const
         doc = QJsonDocument(v.toArray());
     }
 
+    mtx.unlock();
     return doc;
 }
 
-QJsonValue  QJsonModel::genJson(QJsonTreeItem * item) const
+QJsonValue QJsonModel::genJson(QJsonTreeItem * item) const
 {
     auto type   = item->type();
     int  nchild = item->childCount();
+
 
     if (QJsonValue::Object == type) {
         QJsonObject jo;
@@ -391,7 +397,7 @@ QJsonValue  QJsonModel::genJson(QJsonTreeItem * item) const
             auto key = ch->key();
             jo.insert(key, genJson(ch));
         }
-        return  jo;
+        return jo;
     } else if (QJsonValue::Array == type) {
         QJsonArray arr;
         for (int i = 0; i < nchild; ++i) {

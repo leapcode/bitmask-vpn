@@ -83,7 +83,7 @@ public:
     QJsonModel(const QString& fileName, QObject *parent = nullptr);
     QJsonModel(QIODevice * device, QObject *parent = nullptr);
     QJsonModel(const QByteArray& json, QObject *parent = nullptr);
-    ~QJsonModel();
+    virtual ~QJsonModel();
     bool load(const QString& fileName);
     bool load(QIODevice * device);
     bool loadJson(const QByteArray& json);
@@ -101,11 +101,8 @@ public:
 
 private:
     QJsonValue genJson(QJsonTreeItem *) const;
-
     QJsonTreeItem * mRootItem;
     QStringList mHeaders;
-
-
 };
 
 #endif // QJSONMODEL_H
