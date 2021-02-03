@@ -263,6 +263,21 @@ ApplicationWindow {
 
             MenuSeparator {}
 
+
+            MenuItem {
+                text: qsTr("About...")
+                onTriggered: { about.visible = true }
+            }
+
+            MenuItem {
+                id: donateItem
+                text: qsTr("Donate...")
+                visible: ctx ? ctx.donateURL : false
+                onTriggered: { donate.visible = true }
+            }
+
+            MenuSeparator {}
+
             MenuItem {
                 text: qsTr("Help...")
 
@@ -273,15 +288,11 @@ ApplicationWindow {
             }
 
             MenuItem {
-                id: donateItem
-                text: qsTr("Donate...")
-                visible: ctx ? ctx.donateURL : false
-                onTriggered: { donate.visible = true }
-            }
+                text: qsTr("Report a bug...")
 
-            MenuItem {
-                text: qsTr("About...")
-                onTriggered: { about.visible = true }
+                onTriggered: {
+                    Qt.openUrlExternally(Qt.resolvedUrl("https://0xacab.org/leap/bitmask-vpn/issues"))
+                }
             }
 
             MenuSeparator {}
