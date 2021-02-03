@@ -17,6 +17,7 @@ Dialog {
         }
         TextField {
             id: username
+            //: Ask for the library card number
             placeholderText: qsTr("Patron ID")
         }
         TextField {
@@ -32,6 +33,7 @@ Dialog {
 
     function getLoginText() {
         if (allowEmptyPass) {
+            //: Ask for the library card number
             return qsTr("Enter your Patron ID")
         } else {
             return qsTr("Log in with your library credentials")

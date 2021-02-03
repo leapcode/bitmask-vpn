@@ -59,6 +59,7 @@ ApplicationWindow {
               if (allowEmptyPass) {
                   // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
                   // Another option to consider is to customize the error strings while vendoring.
+                  //: Incorrect library card number
                   msg = qsTr("Please check your Patron ID")
               } else {
                   msg = qsTr("Could not log in with those credentials, please retry")
