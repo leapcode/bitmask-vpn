@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"sync"
+	"fmt" // DEBUG
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -19,6 +20,7 @@ const (
 )
 
 var statusMutex sync.Mutex
+var updateMutex sync.Mutex
 
 // ctx will be our glorious global object.
 // if we ever switch again to a provider-agnostic app, we should keep a map here.
@@ -55,10 +57,13 @@ func (c connectionCtx) toJson() ([]byte, error) {
 		log.Println(err)
 		return nil, err
 	}
+	fmt.Println(">>> ctx toJson done")
 	return b, nil
 }
 
 func (c connectionCtx) updateStatus() {
+	updateMutex.Lock()
+	defer updateMutex.Unlock()
 	if stStr, err := c.bm.GetStatus(); err != nil {
 		log.Printf("Error getting status: %v", err)
 	} else {

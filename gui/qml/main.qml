@@ -142,19 +142,20 @@ ApplicationWindow {
                     break
                 case SystemTrayIcon.Context:
                     console.debug("activated: context")
-                    if (Qt.platform.os !== "linux") {
+                    /* segfaults in osx and linux */
+                    if (Qt.platform.os === "windows") {
                         menu.open()
                     }
                     break
                 case SystemTrayIcon.DoubleClick:
                     console.debug("activated: double click")
-                    if (Qt.platform.os !== "linux") {
+                    if (Qt.platform.os === "windows") {
                         menu.open()
                     }
                     break
                 case SystemTrayIcon.Trigger:
                     console.debug("activated: left click")
-                    if (Qt.platform.os !== "linux") {
+                    if (Qt.platform.os === "windows") {
                         menu.open()
                     }
                     break
@@ -180,12 +181,14 @@ ApplicationWindow {
         // Helper to show notification messages
         function showNotification(msg) {
             console.log("Going to show notification message: ", msg);
+            /*
             if (supportsMessages) {
                 let appname = ctx ? ctx.appName: "VPN";
                 showMessage(appname, msg, null, 15000);
             } else {
                 console.log("System doesn't support systray notifications");
             }
+            */
         }
 
         menu: Menu {
