@@ -15,14 +15,12 @@ MessageDialog {
         var _donateTXT = ""
         if (_donateURL) {
             //: donation text of the about dialog
-            //: %1 -> donation URL
             _donateTXT = qsTr("<p>This service is paid for entirely by donations from users like you. <a href=\"%1\">Please donate</a>.</p>").arg(_donateURL)
         }
 	//: about dialog
 	//: %1 -> application name
 	//: %2 -> provider name
 	//: %3 -> donation text if activated
-	//: %4 -> TOS URL
         var _txt = qsTr(
             "<p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p> %3 <p>By using this application, you agree to the <a href=\"%4\">Terms of Service</a>. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.</p>").arg(_name).arg(_provider).arg(_donateTXT).arg(_tosURL)
         return _txt
