@@ -25,7 +25,7 @@ def main(stage="uninstall"):
     
     # failure: sys.exit(1)
 
-    log.write('Checking if helper is running')
+    log.write('Checking if helper is running\n')
     
     if isHelperRunning():
         log.write("Trying to stop bitmask-helper...\n")
@@ -33,7 +33,7 @@ def main(stage="uninstall"):
         ok = unloadHelper()
         log.write("success: %s \n" % str(ok))
 
-    log.write("Removing LaunchDaemon")
+    log.write("Removing LaunchDaemon\n")
     out = removeLaunchDaemon()
     log.write("result: %s \n" % str(out))
     
