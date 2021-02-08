@@ -211,7 +211,7 @@ bool QJsonModel::loadJson(const QByteArray &json)
     if (!jdoc.isNull())
     {
         beginResetModel();
-	delete mRootItem;
+        delete mRootItem;
 
         if (jdoc.isArray()) {
             mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()));
@@ -228,7 +228,7 @@ bool QJsonModel::loadJson(const QByteArray &json)
 
     if (!ok)
     {
-	qDebug()<<Q_FUNC_INFO<<"ERROR: cannot load json";
+        qDebug()<<Q_FUNC_INFO<<"ERROR: cannot load json";
     }
 
     mtx.unlock();
@@ -250,12 +250,12 @@ QVariant QJsonModel::data(const QModelIndex &index, int role) const
         case Roles::ValueRole:
             return item->value();
         case Qt::DisplayRole: {
-		if (index.column() == 0)
-		    return QString("%1").arg(item->key());
-		else if (index.column() == 1)
-		    return QString("%1").arg(item->value());
-		else
-		    return QString("");
+            if (index.column() == 0)
+                return QString("%1").arg(item->key());
+            else if (index.column() == 1)
+                return QString("%1").arg(item->value());
+            else
+                return QString("");
             }
         case Qt::EditRole: {
                 if (index.column() == 1)

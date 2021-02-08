@@ -49,30 +49,30 @@ ApplicationWindow {
     }
 
     function showInitFailure(msg) {
-      console.debug("ERRORS:", ctx.errors)
-      if (msg == undefined) {
-          if (ctx.errors == 'bad_auth_502' || ctx.errors == 'bad_auth_timeout') {
-                  msg = qsTr("Oops! The authentication service seems down. Please try again later")
-              initFailure.title = qsTr("Service Error")
-          }
-          else if (ctx.errors == 'bad_auth') {
-              if (allowEmptyPass) {
-                  // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
-                  // Another option to consider is to customize the error strings while vendoring.
-                  //: Incorrect library card number
-                  msg = qsTr("Please check your Patron ID")
-              } else {
-                  msg = qsTr("Could not log in with those credentials, please retry")
-              }
-              initFailure.title = qsTr("Login Error")
-          } else {
-              //: %1 -> application name
-              //: %2 -> error string
-              msg = qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors)
-          }
-      }
-      initFailure.text = msg
-      initFailure.visible  = true
+        console.debug("ERRORS:", ctx.errors)
+        if (msg == undefined) {
+            if (ctx.errors == 'bad_auth_502' || ctx.errors == 'bad_auth_timeout') {
+                    msg = qsTr("Oops! The authentication service seems down. Please try again later")
+                initFailure.title = qsTr("Service Error")
+            }
+            else if (ctx.errors == 'bad_auth') {
+                if (allowEmptyPass) {
+                    // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
+                    // Another option to consider is to customize the error strings while vendoring.
+                    //: Incorrect library card number
+                    msg = qsTr("Please check your Patron ID")
+                } else {
+                    msg = qsTr("Could not log in with those credentials, please retry")
+                }
+                initFailure.title = qsTr("Login Error")
+            } else {
+                //: %1 -> application name
+                //: %2 -> error string
+                msg = qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors)
+            }
+        }
+        initFailure.text = msg
+        initFailure.visible  = true
     }
 
     function shouldAllowEmptyPass() {
@@ -124,7 +124,7 @@ ApplicationWindow {
         "wait":    "qrc:/assets/icon/png/black/vpn_wait_0.png",
         "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png",
     }
-    
+
 
     SystemTrayIcon {
 
