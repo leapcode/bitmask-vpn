@@ -181,14 +181,12 @@ ApplicationWindow {
         // Helper to show notification messages
         function showNotification(msg) {
             console.log("Going to show notification message: ", msg);
-            /*
             if (supportsMessages) {
                 let appname = ctx ? ctx.appName: "VPN";
                 showMessage(appname, msg, null, 15000);
             } else {
                 console.log("System doesn't support systray notifications");
             }
-            */
         }
 
         menu: Menu {
