@@ -262,6 +262,10 @@ clean:
 qmllint:
 	@qmllint gui/qml/*.qml
 
+qmlfmt:
+	# needs https://github.com/jesperhh/qmlfmt in your path
+	@qmlfmt -w gui/qml/*.qml
+
 test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
 

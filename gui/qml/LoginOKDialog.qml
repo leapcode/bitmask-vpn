@@ -13,8 +13,8 @@ Dialog {
     }
 
     function _loginOk() {
-        visible: false;
-        backend.resetNotification("login_ok");
+        visible: false
+        backend.resetNotification("login_ok")
     }
 
     visible: false

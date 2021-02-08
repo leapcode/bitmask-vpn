@@ -10,13 +10,13 @@ ApplicationWindow {
     visible: false
 
     property var ctx
-    property var loginDone 
+    property var loginDone
     property var allowEmptyPass
 
     Connections {
         target: jsonModel
         onDataChanged: {
-            ctx = JSON.parse(jsonModel.getJson());
+            ctx = JSON.parse(jsonModel.getJson())
 
             // FIXME -- we need to inform the backend that we've already seen
             // this. Otherwise this keeps popping randonmly on state changes.
@@ -32,15 +32,16 @@ ApplicationWindow {
             if (ctx.loginOk == 'true') {
                 loginOk.visible = true
             }
-            if (ctx.errors ) {
-               login.visible = false
-               if ( ctx.errors  == "nohelpers" ) {
-                   showInitFailure(qsTr("Could not find helpers. Please check your installation"))
-               } else if ( ctx.errors == "nopolkit" ) {
-                   showInitFailure(qsTr("Could not find polkit agent."))
-               } else {
-                   showInitFailure()
-               }
+            if (ctx.errors) {
+                login.visible = false
+                if (ctx.errors == "nohelpers") {
+                    showInitFailure(
+                                qsTr("Could not find helpers. Please check your installation"))
+                } else if (ctx.errors == "nopolkit") {
+                    showInitFailure(qsTr("Could not find polkit agent."))
+                } else {
+                    showInitFailure()
+                }
             }
             if (ctx.donateURL) {
                 donateItem.visible = true
@@ -51,11 +52,11 @@ ApplicationWindow {
     function showInitFailure(msg) {
         console.debug("ERRORS:", ctx.errors)
         if (msg == undefined) {
-            if (ctx.errors == 'bad_auth_502' || ctx.errors == 'bad_auth_timeout') {
-                    msg = qsTr("Oops! The authentication service seems down. Please try again later")
+            if (ctx.errors == 'bad_auth_502'
+                    || ctx.errors == 'bad_auth_timeout') {
+                msg = qsTr("Oops! The authentication service seems down. Please try again later")
                 initFailure.title = qsTr("Service Error")
-            }
-            else if (ctx.errors == 'bad_auth') {
+            } else if (ctx.errors == 'bad_auth') {
                 if (allowEmptyPass) {
                     // For now, this is a libraryVPN, so we can be explicit about what credentials are here.
                     // Another option to consider is to customize the error strings while vendoring.
@@ -68,18 +69,19 @@ ApplicationWindow {
             } else {
                 //: %1 -> application name
                 //: %2 -> error string
-                msg = qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(ctx.errors)
+                msg = qsTr("Got an error starting %1: %2").arg(ctx.appName).arg(
+                            ctx.errors)
             }
         }
         initFailure.text = msg
-        initFailure.visible  = true
+        initFailure.visible = true
     }
 
     function shouldAllowEmptyPass() {
         let obj = JSON.parse(providers.getJson())
         let active = obj['default']
         let allProviders = obj['providers']
-        for (let i = 0; i < allProviders.length; i++) {
+        for (var i = 0; i < allProviders.length; i++) {
             if (allProviders[i]['name'] === active) {
                 return (allProviders[i]['authEmptyPass'] === 'true')
             }
@@ -88,43 +90,43 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        loginDone = false;
-        console.debug("Platform:", Qt.platform.os);
-        console.debug("DEBUG: Pre-seeded providers:");
-        console.debug(providers.getJson());
-        allowEmptyPass = shouldAllowEmptyPass();
+        loginDone = false
+        console.debug("Platform:", Qt.platform.os)
+        console.debug("DEBUG: Pre-seeded providers:")
+        console.debug(providers.getJson())
+        allowEmptyPass = shouldAllowEmptyPass()
 
         /* TODO get appVisible flag from backend */
-        app.visible = false;
+        app.visible = false
     }
 
     function toHuman(st) {
-        switch(st) {
-            case "off":
-                //: %1 -> application name
-                return qsTr("%1 off").arg(ctx.appName);
-            case "on":
-                //: %1 -> application name
-                return qsTr("%1 on").arg(ctx.appName);
-            case "connecting":
-                //: %1 -> application name
-                return qsTr("Connecting to %1").arg(ctx.appName);
-            case "stopping":
-                 //: %1 -> application name
-                return qsTr("Stopping %1").arg(ctx.appName);
-            case "failed":
-                //: %1 -> application name
-                return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handed yet
+        switch (st) {
+        case "off":
+            //: %1 -> application name
+            return qsTr("%1 off").arg(ctx.appName)
+        case "on":
+            //: %1 -> application name
+            return qsTr("%1 on").arg(ctx.appName)
+        case "connecting":
+            //: %1 -> application name
+            return qsTr("Connecting to %1").arg(ctx.appName)
+        case "stopping":
+            //: %1 -> application name
+            return qsTr("Stopping %1").arg(ctx.appName)
+        case "failed":
+            //: %1 -> application name
+            return qsTr("%1 blocking internet").arg(
+                        ctx.appName) // TODO failed is not handed yet
         }
     }
 
     property var icons: {
-        "off":     "qrc:/assets/icon/png/black/vpn_off.png",
-        "on":      "qrc:/assets/icon/png/black/vpn_on.png",
-        "wait":    "qrc:/assets/icon/png/black/vpn_wait_0.png",
-        "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png",
+        "off": "qrc:/assets/icon/png/black/vpn_off.png",
+        "on": "qrc:/assets/icon/png/black/vpn_on.png",
+        "wait": "qrc:/assets/icon/png/black/vpn_wait_0.png",
+        "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png"
     }
-
 
     SystemTrayIcon {
 
@@ -136,31 +138,31 @@ ApplicationWindow {
             // produce a segfault when trying to call menu.open()
             // left and right click seem to be working fine, so let's ignore this for now.
             switch (reason) {
-                case SystemTrayIcon.Unknown:
-                    console.debug("activated: unknown event")
+            case SystemTrayIcon.Unknown:
+                console.debug("activated: unknown event")
+                menu.open()
+                break
+            case SystemTrayIcon.Context:
+                console.debug("activated: context")
+                /* segfaults in osx and linux */
+                if (Qt.platform.os === "windows") {
                     menu.open()
-                    break
-                case SystemTrayIcon.Context:
-                    console.debug("activated: context")
-                    /* segfaults in osx and linux */
-                    if (Qt.platform.os === "windows") {
-                        menu.open()
-                    }
-                    break
-                case SystemTrayIcon.DoubleClick:
-                    console.debug("activated: double click")
-                    if (Qt.platform.os === "windows") {
-                        menu.open()
-                    }
-                    break
-                case SystemTrayIcon.Trigger:
-                    console.debug("activated: left click")
-                    if (Qt.platform.os === "windows") {
-                        menu.open()
-                    }
-                    break
-                case SystemTrayIcon.MiddleClick:
-                    break
+                }
+                break
+            case SystemTrayIcon.DoubleClick:
+                console.debug("activated: double click")
+                if (Qt.platform.os === "windows") {
+                    menu.open()
+                }
+                break
+            case SystemTrayIcon.Trigger:
+                console.debug("activated: left click")
+                if (Qt.platform.os === "windows") {
+                    menu.open()
+                }
+                break
+            case SystemTrayIcon.MiddleClick:
+                break
             }
         }
 
@@ -168,24 +170,26 @@ ApplicationWindow {
             icon.source = icons["off"]
             tooltip = qsTr("Checking status...")
             console.debug("systray init completed")
-            hide();
+            hide()
             if (systrayVisible) {
-                show();
+                show()
                 if (Qt.platform.os === "windows") {
-                    let appname = ctx ? ctx.appName: "VPN";
-                    showNotification(appname + " is up and running. Please use system tray icon to control it.");
+                    let appname = ctx ? ctx.appName : "VPN"
+                    showNotification(
+                                appname
+                                + " is up and running. Please use system tray icon to control it.")
                 }
             }
         }
 
         // Helper to show notification messages
         function showNotification(msg) {
-            console.log("Going to show notification message: ", msg);
+            console.log("Going to show notification message: ", msg)
             if (supportsMessages) {
-                let appname = ctx ? ctx.appName: "VPN";
-                showMessage(appname, msg, null, 15000);
+                let appname = ctx ? ctx.appName : "VPN"
+                showMessage(appname, msg, null, 15000)
             } else {
-                console.log("System doesn't support systray notifications");
+                console.log("System doesn't support systray notifications")
             }
         }
 
@@ -198,31 +202,68 @@ ApplicationWindow {
                 state: ctx ? ctx.status : ""
 
                 states: [
-                    State { name: "initializing" },
+                    State {
+                        name: "initializing"
+                    },
                     State {
                         name: "off"
-                        PropertyChanges { target: systray; tooltip: toHuman("off"); icon.source: icons["off"] }
-                        PropertyChanges { target: statusItem; text: toHuman("off") }
+                        PropertyChanges {
+                            target: systray
+                            tooltip: toHuman("off")
+                            icon.source: icons["off"]
+                        }
+                        PropertyChanges {
+                            target: statusItem
+                            text: toHuman("off")
+                        }
                     },
                     State {
                         name: "on"
-                        PropertyChanges { target: systray; tooltip: toHuman("on"); icon.source: icons["on"] }
-                        PropertyChanges { target: statusItem; text: toHuman("on") }
+                        PropertyChanges {
+                            target: systray
+                            tooltip: toHuman("on")
+                            icon.source: icons["on"]
+                        }
+                        PropertyChanges {
+                            target: statusItem
+                            text: toHuman("on")
+                        }
                     },
                     State {
                         name: "starting"
-                        PropertyChanges { target: systray; tooltip: toHuman("connecting"); icon.source: icons["wait"] }
-                        PropertyChanges { target: statusItem; text: toHuman("connecting") }
+                        PropertyChanges {
+                            target: systray
+                            tooltip: toHuman("connecting")
+                            icon.source: icons["wait"]
+                        }
+                        PropertyChanges {
+                            target: statusItem
+                            text: toHuman("connecting")
+                        }
                     },
                     State {
                         name: "stopping"
-                        PropertyChanges { target: systray; tooltip: toHuman("stopping"); icon.source: icons["wait"] }
-                        PropertyChanges { target: statusItem; text: toHuman("stopping") }
+                        PropertyChanges {
+                            target: systray
+                            tooltip: toHuman("stopping")
+                            icon.source: icons["wait"]
+                        }
+                        PropertyChanges {
+                            target: statusItem
+                            text: toHuman("stopping")
+                        }
                     },
                     State {
                         name: "failed"
-                        PropertyChanges { target: systray; tooltip: toHuman("failed"); icon.source: icons["blocked"] }
-                        PropertyChanges { target: statusItem; text: toHuman("failed") }
+                        PropertyChanges {
+                            target: systray
+                            tooltip: toHuman("failed")
+                            icon.source: icons["blocked"]
+                        }
+                        PropertyChanges {
+                            target: statusItem
+                            text: toHuman("failed")
+                        }
                     }
                 ]
             }
@@ -243,7 +284,8 @@ ApplicationWindow {
                 onTriggered: {
                     backend.switchOn()
                 }
-                visible: ctx ? (ctx.status == "off" || ctx.status == "failed") : false
+                visible: ctx ? (ctx.status == "off"
+                                || ctx.status == "failed") : false
             }
 
             MenuItem {
@@ -256,22 +298,26 @@ ApplicationWindow {
                 onTriggered: {
                     backend.switchOff()
                 }
-                visible: ctx ? (ctx.status == "on" || ctx.status == "starting" || ctx.status == "failed") : false
+                visible: ctx ? (ctx.status == "on" || ctx.status == "starting"
+                                || ctx.status == "failed") : false
             }
 
             MenuSeparator {}
 
-
             MenuItem {
                 text: qsTr("About...")
-                onTriggered: { about.visible = true }
+                onTriggered: {
+                    about.visible = true
+                }
             }
 
             MenuItem {
                 id: donateItem
                 text: qsTr("Donate...")
                 visible: ctx ? ctx.donateURL : false
-                onTriggered: { donate.visible = true }
+                onTriggered: {
+                    donate.visible = true
+                }
             }
 
             MenuSeparator {}
@@ -280,7 +326,7 @@ ApplicationWindow {
                 text: qsTr("Help...")
 
                 onTriggered: {
-                    console.debug(Qt.resolvedUrl(ctx.helpURL));
+                    console.debug(Qt.resolvedUrl(ctx.helpURL))
                     Qt.openUrlExternally(Qt.resolvedUrl(ctx.helpURL))
                 }
             }
@@ -289,7 +335,9 @@ ApplicationWindow {
                 text: qsTr("Report a bug...")
 
                 onTriggered: {
-                    Qt.openUrlExternally(Qt.resolvedUrl("https://0xacab.org/leap/bitmask-vpn/issues"))
+                    Qt.openUrlExternally(
+                                Qt.resolvedUrl(
+                                    "https://0xacab.org/leap/bitmask-vpn/issues"))
                 }
             }
 
@@ -317,7 +365,7 @@ ApplicationWindow {
         visible: false
     }
 
-    LoginOKDialog{
+    LoginOKDialog {
         id: loginOk
         visible: false
     }
