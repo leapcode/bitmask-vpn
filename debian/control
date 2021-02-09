@@ -1,0 +1,18 @@
+Source: riseup-vpn
+Section: net
+Priority: extra
+Maintainer: LEAP Encryption Access Project <debian@leap.se>
+Build-Depends: debhelper-compat (= 12), golang-go (>= 2:1.9), make, pkg-config, g++
+Standards-Version: 4.4.1
+Homepage: https://0xacab.org/leap/bitmask-vpn
+#Vcs-Browser: https://0xacab.org/leap/bitmask-vpn
+#Vcs-Git: https://0xacab.org/leap/bitmask-vpn.git
+
+Package: riseup-vpn
+Architecture: any
+Enhances: openvpn
+Depends: ${shlibs:Depends}, ${misc:Depends}, openvpn, policykit-1-gnome | polkit-1-auth-agent, python3
+Description: Easy, fast, and secure VPN service from riseup.net.
+ .
+ The service does not require a user account, keep logs, or track you in any
+ way. The service is paid for entirely by donations from users.

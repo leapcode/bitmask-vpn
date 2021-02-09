@@ -1,0 +1,56 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+export DH_VERBOSE = 1
+
+export DH_OPTIONS
+export GO111MODULE=on
+export GOCACHE=/tmp/gocache
+
+export DH_GOPKG = 0xacab.org/leap/bitmask-vpn
+
+export APPNAME = riseup-vpn
+
+ifeq ($(DEB_HOST_ARCH), i386)
+        export GOARCH := 386
+else ifeq ($(DEB_HOST_ARCH), amd64)
+        export GOARCH := amd64
+else ifeq ($(DEB_HOST_ARCH), armhf)
+        export GOARCH := arm
+else ifeq ($(DEB_HOST_ARCH), arm64)
+        export GOARCH := arm64
+endif
+
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+
+%:
+	dh $@
+
+
+override_dh_auto_build:
+	make build
+
+override_dh_install:
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/bin
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/sbin
+	cp $(CURDIR)/helpers/bitmask-root $(CURDIR)/debian/${APPNAME}/usr/sbin/
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
+	cp $(CURDIR)/helpers/se.leap.bitmask.policy $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
+	cp build/qt/release/${APPNAME} $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
+	strip $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
+	dh_install
+
+# dh_make generated override targets
+# This is example for Cmake (See https://bugs.debian.org/641051 )
+#override_dh_auto_configure:
+#	dh_auto_configure -- #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
+
