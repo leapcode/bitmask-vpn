@@ -1,8 +1,6 @@
-# An image to build and package the Bitmask Lite (RiseupVPN and other branded builds)
-# (c) LEAP Encryption Access Project 2018-2019
+# An image to build and package the BitmaskVPN (RiseupVPN and other branded builds)
+# (c) LEAP Encryption Access Project 2018-2021
 
-# we start with 18.04 (bionic) to match the core18 used in the snap
-# but we will have to install a couple of extras on top...
 FROM ubuntu:20.04 as builder
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>

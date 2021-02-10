@@ -2,6 +2,7 @@
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
 export DH_VERBOSE = 1
+export VERBOSE = 1
 
 export DH_OPTIONS
 export GO111MODULE=on

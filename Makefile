@@ -1,6 +1,6 @@
 #########################################################################
 # Multiplatform build and packaging recipes for BitmaskVPN
-# (c) LEAP Encryption Access Project, 2019-2020
+# (c) LEAP Encryption Access Project, 2019-2021
 #########################################################################
 
 .PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
@@ -11,7 +11,10 @@ VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
 TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
 PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | tr -d "[:space:]")
-VERSION ?= $(shell git describe)
+VERSION ?= $(shell git describe 2> /dev/null)
+ifeq ($(VERSION),)
+    VERSION := "unknown"
+endif
 WINCERTPASS ?= pass
 OSXAPPPASS  ?= pass
 OSXMORDORUID ?= uid
