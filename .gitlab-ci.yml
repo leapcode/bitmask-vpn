@@ -2,7 +2,7 @@
 stages:
   - build
   - push
-  - trigger
+  - debian
   - vendor
 
 build_test:
@@ -52,6 +52,16 @@ build_test:
 #   script:
 #     - echo "Triggering CI pipeline on https://0xacab.org/leap/riseup-vpn_package/pipelines"
 #     - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
+
+debian:
+  # TODO use a buster builder image, but upgrade golang version for compatibility
+  image: registry.0xacab.org/leap/bitmask-vpn:latest
+  stage: debian
+  script:
+    - 'PROVIDER="riseup" make vendor && rm -rf .build && mkdir -p .build && rm -f *.deb && cp -dR * .build/. && cd .build && debuild -us -uc'
+  artifacts:
+    paths:
+      - '*.deb'
 
 vendorize:
   image: registry.0xacab.org/leap/bitmask-vpn:latest

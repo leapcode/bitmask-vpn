@@ -3,8 +3,7 @@ Section: net
 Priority: extra
 Maintainer: LEAP Encryption Access Project <debian@leap.se>
 Build-Depends: debhelper-compat (= 12), golang-go (>= 2:1.9), make, pkg-config, g++, git,
-        qt5-qmake, qttools5-dev-tools, libqt5qml5, libqt5quick5, qtdeclarative5-dev,
-        qtbase5-dev
+        qt5-qmake, qttools5-dev-tools, qtbase5-dev, libqt5qml5, libqt5quick5, qtdeclarative5-dev
 Standards-Version: 4.4.1
 Homepage: https://0xacab.org/leap/bitmask-vpn
 #Vcs-Browser: https://0xacab.org/leap/bitmask-vpn
@@ -13,9 +12,10 @@ Homepage: https://0xacab.org/leap/bitmask-vpn
 Package: riseup-vpn
 Architecture: any
 Enhances: openvpn
-Depends: ${shlibs:Depends}, ${misc:Depends}, openvpn, policykit-1-gnome | polkit-1-auth-agent, python3,
+Depends: libqt5core5a, libqt5gui5 | libqt5gui5-gles, libqt5qml5, libqt5widgets5, libstdc++6,
         qml-module-qtquick2, qml-module-qtquick-controls, qml-module-qtquick-dialogs,
-        qml-module-qtquick-extras, qml-module-qt-labs-platform
+        qml-module-qtquick-extras, qml-module-qt-labs-platform,
+        openvpn, policykit-1-gnome | polkit-1-auth-agent, python3
 Description: Easy, fast, and secure VPN service from riseup.net.
  .
  The service does not require a user account, keep logs, or track you in any
