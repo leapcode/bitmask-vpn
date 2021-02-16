@@ -148,17 +148,17 @@ func firewallStopHandler(w http.ResponseWriter, r *http.Request) {
 
 func firewallIsUpHandler(w http.ResponseWriter, r *http.Request) {
 	if firewallIsUp() {
-		w.Write([]byte("true"))
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("true"))
 	} else {
-		w.Write([]byte("false"))
 		w.WriteHeader(http.StatusNoContent)
+		w.Write([]byte("false"))
 	}
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(AppName + "/" + Version + "\n"))
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(AppName + "/" + Version + "\n"))
 }
 
 func getArgs(r *http.Request) ([]string, error) {
