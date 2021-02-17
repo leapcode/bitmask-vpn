@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="lt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -36,7 +34,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -63,12 +61,12 @@ Ar norėtumėte paaukoti dabar?</translation>
     <message>
         <location filename="../qml/LoginDialog.qml" line="20"/>
         <source>Patron ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Patron ID</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="24"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Slaptažodis</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="35"/>
@@ -84,14 +82,6 @@ Ar norėtumėte paaukoti dabar?</translation>
         <location filename="../qml/LoginDialog.qml" line="42"/>
         <source>You can check your Patron ID number in the back of your library card</source>
         <translation>Savo Patron ID galite rasti kitoje bibliotekos kortelės pusėje</translation>
-    </message>
-    <message>
-        <source>patron id</source>
-        <translation type="vanished">patron id</translation>
-    </message>
-    <message>
-        <source>password</source>
-        <translation type="vanished">slaptažodis</translation>
     </message>
 </context>
 <context>
@@ -110,13 +100,9 @@ Ar norėtumėte paaukoti dabar?</translation>
 <context>
     <name>main</name>
     <message>
-        <source>Could not find helpers. Check your installation</source>
-        <translation type="vanished">Nepavyko rasti pagelbiklių. Patikrinkite savo diegimą</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="38"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepavyko rasti pagelbiklių. Patikrinkite savo diegimą</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="40"/>
@@ -251,31 +237,19 @@ Ar norėtumėte paaukoti dabar?</translation>
         <translation>: greitas ir saugus VPN. Veikia su Bitmask.</translation>
     </message>
     <message>
-        <source>Do not show the systray icon (useful together with gnome shell extension, or to control VPN by other means).</source>
-        <translation type="vanished">Nerodyti sistemos dėklo piktogramos (praverčia su Gnome apvalkalo plėtiniu arba siekiant kitokiu būdu valdyti VPN).</translation>
-    </message>
-    <message>
-        <source>Enable web api.</source>
-        <translation type="vanished">Įjungti saityno api.</translation>
-    </message>
-    <message>
-        <source>Install helpers (linux only, requires sudo).</source>
-        <translation type="vanished">Įdiegti pagelbiklius (tik Linux, reikalauja sudo).</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nerodyti sistemos dėklo piktogramos (praverčia su Gnome apvalkalo plėtiniu arba siekiant kitokiu būdu valdyti VPN).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation type="unfinished"></translation>
+        <translation>Įjungti saityno API.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation type="unfinished"></translation>
+        <translation>Įdiegti pagelbiklius (tik Linux, reikalauja sudo).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
@@ -290,20 +264,12 @@ Ar norėtumėte paaukoti dabar?</translation>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saityno API prievadas (numatytasis: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Web api port (default: 8080)</source>
-        <translation type="vanished">Saityno api prievadas (numatytasis: 8080)</translation>
-    </message>
-    <message>
-        <source>Start the vpn, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="vanished">Paleisti vpn, arba „on“, arba „off“.</translation>
+        <translation>Paleisti VPN, arba „on“, arba „off“.</translation>
     </message>
 </context>
 </TS>

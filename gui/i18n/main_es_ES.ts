@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es_ES" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -36,7 +34,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -63,12 +61,12 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/LoginDialog.qml" line="20"/>
         <source>Patron ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificación de Patrocinador</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="24"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraseña</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="35"/>
@@ -84,14 +82,6 @@ Do you want to donate now?</source>
         <location filename="../qml/LoginDialog.qml" line="42"/>
         <source>You can check your Patron ID number in the back of your library card</source>
         <translation>Puedes comprobar tu número de Identificación de Patrocinador en el reverso de tu tarjeta de biblioteca</translation>
-    </message>
-    <message>
-        <source>patron id</source>
-        <translation type="vanished">identificación de patrocinador</translation>
-    </message>
-    <message>
-        <source>password</source>
-        <translation type="vanished">contraseña</translation>
     </message>
 </context>
 <context>
@@ -110,13 +100,9 @@ Do you want to donate now?</source>
 <context>
     <name>main</name>
     <message>
-        <source>Could not find helpers. Check your installation</source>
-        <translation type="vanished">No se pudieron encontrar los programas auxiliares. Comprueba tu instalación</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="38"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudieron encontrar los programas auxiliares. Por favor, comprueba tu instalación</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="40"/>
@@ -251,31 +237,19 @@ Do you want to donate now?</source>
         <translation>: una VPN rápida y segura. Potenciada por Bitmask.</translation>
     </message>
     <message>
-        <source>Do not show the systray icon (useful together with gnome shell extension, or to control VPN by other means).</source>
-        <translation type="vanished">No mostrar el ícono en la bandeja del sistema (útil en conjunto con las extensiones de intérprete de comandos gnome, o para controlar la VPN por otros medios).</translation>
-    </message>
-    <message>
-        <source>Enable web api.</source>
-        <translation type="vanished">Habilitar API web</translation>
-    </message>
-    <message>
-        <source>Install helpers (linux only, requires sudo).</source>
-        <translation type="vanished">Instalar programas auxiliares (sólo en linux, requiere sudo).</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation type="unfinished"></translation>
+        <translation>No mostrar el ícono en la bandeja del sistema (útil en conjunto con las extensiones de Intérprete de Comandos Gnome, o para controlar la VPN por otros medios).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar API Web.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalar programas auxiliares (sólo en Linux, requiere sudo).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
@@ -290,20 +264,12 @@ Do you want to donate now?</source>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto para la API Web (por defecto: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Web api port (default: 8080)</source>
-        <translation type="vanished">Puerto para la API web (por defecto: 8080)</translation>
-    </message>
-    <message>
-        <source>Start the vpn, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="vanished">Iniciar la VPN, &apos;conectada&apos; o bien, &apos;desconectada&apos;.</translation>
+        <translation>Iniciar la VPN, &apos;conectada&apos; o bien, &apos;desconectada&apos;.</translation>
     </message>
 </context>
 </TS>

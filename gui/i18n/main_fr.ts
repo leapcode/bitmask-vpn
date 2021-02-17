@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -24,7 +22,7 @@
         <location filename="../qml/AboutDialog.qml" line="36"/>
         <source>%1 version: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>%1 version&#xa0;: %2</translation>
+        <translation>%1 version : %2</translation>
     </message>
 </context>
 <context>
@@ -36,13 +34,13 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
-        <translation>L’exploitation du service %1 coûte cher. Dans la mesure où ne nous voulons enregistrer aucun renseignement personnel à votre sujet, il n’y a ni compte ni facturation pour ce service. Mais si vous souhaitez toutefois que le service perdure, faites un don d’au moins 5&#xa0;$ mensuellement.
+        <translation>L’exploitation du service %1 coûte cher. Dans la mesure où ne nous voulons enregistrer aucun renseignement personnel à votre sujet, il n’y a ni compte ni facturation pour ce service. Mais si vous souhaitez toutefois que le service perdure, faites un don d’au moins 5 $ mensuellement.
 
-Voulez-vous faire un don maintenant&#x2009;?</translation>
+Voulez-vous faire un don maintenant ?</translation>
     </message>
 </context>
 <context>
@@ -63,17 +61,17 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
     <message>
         <location filename="../qml/LoginDialog.qml" line="20"/>
         <source>Patron ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID Patron</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="24"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="35"/>
         <source>Enter your Patron ID</source>
-        <translation>Saisissez votre ID&#xa0;Patron</translation>
+        <translation>Saisissez votre ID Patron</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="37"/>
@@ -83,15 +81,7 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
     <message>
         <location filename="../qml/LoginDialog.qml" line="42"/>
         <source>You can check your Patron ID number in the back of your library card</source>
-        <translation>Vous pouvez vérifier votre numéro d’ID&#xa0;Patron au verso de votre carte de papeterie</translation>
-    </message>
-    <message>
-        <source>patron id</source>
-        <translation type="vanished">id&#xa0;patron</translation>
-    </message>
-    <message>
-        <source>password</source>
-        <translation type="vanished">mot de passe</translation>
+        <translation>Vous pouvez vérifier votre numéro d’ID Patron au verso de votre carte de papeterie</translation>
     </message>
 </context>
 <context>
@@ -110,13 +100,9 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
 <context>
     <name>main</name>
     <message>
-        <source>Could not find helpers. Check your installation</source>
-        <translation type="vanished">Impossible de trouver les aides. Veuillez vérifier votre installation</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="38"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver les aides. Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="40"/>
@@ -136,7 +122,7 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
     <message>
         <location filename="../qml/main.qml" line="62"/>
         <source>Please check your Patron ID</source>
-        <translation>Veuillez confirmer votre ID&#xa0;Patron</translation>
+        <translation>Veuillez confirmer votre ID Patron</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="64"/>
@@ -152,7 +138,7 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
         <location filename="../qml/main.qml" line="70"/>
         <source>Got an error starting %1: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
-        <translation>Erreur de démarrage de %1&#xa0;: %2</translation>
+        <translation>Erreur de démarrage de %1 : %2</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="104"/>
@@ -248,34 +234,22 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
     <message>
         <location filename="../main.cpp" line="76"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation>&#xa0;: un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
-    </message>
-    <message>
-        <source>Do not show the systray icon (useful together with gnome shell extension, or to control VPN by other means).</source>
-        <translation type="vanished">Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome&#xa0;Shell ou pour contrôler le RPV par d’autres moyens).</translation>
-    </message>
-    <message>
-        <source>Enable web api.</source>
-        <translation type="vanished">Activer l’API Web.</translation>
-    </message>
-    <message>
-        <source>Install helpers (linux only, requires sudo).</source>
-        <translation type="vanished">Installer les aides (Linux seulement, «&#xa0;sudo&#xa0;» est requis). </translation>
+        <translation> : un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome Shell ou pour contrôler le RPV par d’autres moyens).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l’API Web.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation type="unfinished"></translation>
+        <translation>Installer les aides (Linux seulement, « sudo » est requis). </translation>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
@@ -290,20 +264,12 @@ Voulez-vous faire un don maintenant&#x2009;?</translation>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation type="unfinished"></translation>
+        <translation>Port de l’API Web (par défaut : 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Web api port (default: 8080)</source>
-        <translation type="vanished">Port de l’API Web api (par défaut&#xa0;: 8080)</translation>
-    </message>
-    <message>
-        <source>Start the vpn, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="vanished">Démarrer le RPV, soit Activer soit Désactiver</translation>
+        <translation>Démarrer le RPV, soit Activer soit Désactiver</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="et">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="et" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -36,7 +34,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -63,12 +61,12 @@ Kas soovid kohe annetada?</translation>
     <message>
         <location filename="../qml/LoginDialog.qml" line="20"/>
         <source>Patron ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="24"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Parool</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="35"/>
@@ -84,14 +82,6 @@ Kas soovid kohe annetada?</translation>
         <location filename="../qml/LoginDialog.qml" line="42"/>
         <source>You can check your Patron ID number in the back of your library card</source>
         <translation>Oma Patroni ID numbrit saad kontrollida oma raamatukogukaardi tagant</translation>
-    </message>
-    <message>
-        <source>patron id</source>
-        <translation type="vanished">patron id</translation>
-    </message>
-    <message>
-        <source>password</source>
-        <translation type="vanished">parool</translation>
     </message>
 </context>
 <context>
@@ -110,13 +100,9 @@ Kas soovid kohe annetada?</translation>
 <context>
     <name>main</name>
     <message>
-        <source>Could not find helpers. Check your installation</source>
-        <translation type="vanished">Abistajate leidmine ebaõnnestus. Palun kontrolli oma ühendust.</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="38"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="40"/>
@@ -251,31 +237,19 @@ Kas soovid kohe annetada?</translation>
         <translation>: kiire ja turvaline VPN. Kasutatud tarkvara on Bitmask.</translation>
     </message>
     <message>
-        <source>Do not show the systray icon (useful together with gnome shell extension, or to control VPN by other means).</source>
-        <translation type="vanished">Ära näita süsteemisalve ikooni  (kasulik koos gnome laienditega või VPN-i kontrollimiseks muude vahenditega).</translation>
-    </message>
-    <message>
-        <source>Enable web api.</source>
-        <translation type="vanished">Luba veebi API.</translation>
-    </message>
-    <message>
-        <source>Install helpers (linux only, requires sudo).</source>
-        <translation type="vanished">Paigalda abistajad (ainult linkuxile, vajab sudo-t).</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
@@ -290,20 +264,12 @@ Kas soovid kohe annetada?</translation>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Web api port (default: 8080)</source>
-        <translation type="vanished">Veebi API port (vaikeväärtus: 8080)</translation>
-    </message>
-    <message>
-        <source>Start the vpn, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="vanished">Käivita VPN. See on kas &apos;sees&apos; või &apos;väljas&apos;.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
