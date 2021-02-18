@@ -11,7 +11,7 @@ MessageDialog {
         var _name = ctx ? ctx.appName : "vpn"
         var _provider = ctx ? ctx.provider : "unknown"
         var _donateURL = ctx ? ctx.donateURL : ""
-        var _tosURL = ctx ? ctx.tosURL : "..."
+        var _tosURL = ctx ? ctx.tosURL : "…"
         var _donateTXT = ""
         if (_donateURL) {
             //: donation text of the about dialog

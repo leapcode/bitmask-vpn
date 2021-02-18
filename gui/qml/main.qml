@@ -168,7 +168,7 @@ ApplicationWindow {
 
         Component.onCompleted: {
             icon.source = icons["off"]
-            tooltip = qsTr("Checking status...")
+            tooltip = qsTr("Checking status…")
             console.debug("systray init completed")
             hide()
             if (systrayVisible) {
@@ -270,7 +270,7 @@ ApplicationWindow {
 
             MenuItem {
                 id: statusItem
-                text: qsTr("Checking status...")
+                text: qsTr("Checking status…")
                 enabled: false
             }
 
@@ -305,7 +305,7 @@ ApplicationWindow {
             MenuSeparator {}
 
             MenuItem {
-                text: qsTr("About...")
+                text: qsTr("About…")
                 onTriggered: {
                     about.visible = true
                 }
@@ -313,7 +313,7 @@ ApplicationWindow {
 
             MenuItem {
                 id: donateItem
-                text: qsTr("Donate...")
+                text: qsTr("Donate…")
                 visible: ctx ? ctx.donateURL : false
                 onTriggered: {
                     donate.visible = true
@@ -323,7 +323,7 @@ ApplicationWindow {
             MenuSeparator {}
 
             MenuItem {
-                text: qsTr("Help...")
+                text: qsTr("Help…")
 
                 onTriggered: {
                     console.debug(Qt.resolvedUrl(ctx.helpURL))
@@ -332,7 +332,7 @@ ApplicationWindow {
             }
 
             MenuItem {
-                text: qsTr("Report a bug...")
+                text: qsTr("Report a bug…")
 
                 onTriggered: {
                     Qt.openUrlExternally(

@@ -176,7 +176,7 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/main.qml" line="171"/>
         <location filename="../qml/main.qml" line="273"/>
-        <source>Checking status...</source>
+        <source>Checking status…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -201,22 +201,22 @@ Do you want to donate now?</source>
     </message>
     <message>
         <location filename="../qml/main.qml" line="326"/>
-        <source>Help...</source>
+        <source>Help…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="316"/>
-        <source>Donate...</source>
+        <source>Donate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="308"/>
-        <source>About...</source>
+        <source>About…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="335"/>
-        <source>Report a bug...</source>
+        <source>Report a bug…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
