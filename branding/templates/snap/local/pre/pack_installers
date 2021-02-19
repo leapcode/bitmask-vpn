@@ -21,7 +21,7 @@ with open(INSTALL, 'w') as install:
     install.write('# by the script at "snap/local/pre/pack_installers"\n')
     install.write('import subprocess\n')
     install.write('import os\n')
-    install.write('from base64 import decodestring as decode\n')
+    install.write('from base64 import decodebytes as decode\n')
     install.write("""
 POLKIT = {polkit}
 
