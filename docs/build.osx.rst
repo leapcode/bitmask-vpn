@@ -9,11 +9,12 @@ have to sign and then notarize with their service. here are some notes that use
 ad-hoc targets in the main makefile, but we should keep an eye on any future
 integration of this process in the more or less official Qt tools (QTIFW).
 
-First, we build the regular installer
+First, we build the regular installer (use RELEASE=yes to do a codesign step
+with macqtdeploy, note that this increases build time considerably):
 
 ```
 make build
-make installer
+RELEASE=yes make installer
 make sign_installer
 ```
 
@@ -22,6 +23,18 @@ don't know what is this pass, you can create one in your Apple developer
 account. Contact their friendly support for more info, but don't expect they
 understand you do not really own any Apple Hardware. Sense of humor is not
 universal.
+
+Security -> App-specific passwords -> Generate
+If you need to revoke these tokens, click on 'view history'.
+
+https://appleid.apple.com/account/manage
+
+According to https://developer.apple.com/documentation/xcode/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow:
+
+To avoid including your password as cleartext in a script, you can provide a
+reference to a keychain item, as shown in the previous example. This assumes
+the keychain holds a keychain item named AC_PASSWORD with an account value
+matching the username AC_USERNAME.
 
 ```
 export OSXAPPPASS=my-apple-app-pass
@@ -37,7 +50,7 @@ altool[5281:91963] No errors uploading 'build/installer/RiseupVPN-installer-0.20
 RequestUUID = fe9a4324-bdcb-4c52-b857-f089dc904695
 
 OSXMORDORUID=fe9a4324-bdcb-4c52-b857-f089dc904695 make notarize_check
-xcrun altool --notarization-info fe9a4324-bdcb-4c52-b857-f089dc904695 -u "info@leap.se" -p nvaq-xdhq-wrho-ouuu
+xcrun altool --notarization-info fe9a4324-bdcb-4c52-b857-f089dc904695 -u "info@leap.se" -p my-apple-app-pass
 2020-12-11 22:21:59.940 altool[5787:96428] No errors getting notarization info.
 
    RequestUUID: fe9a4324-bdcb-4c52-b857-f089dc904695

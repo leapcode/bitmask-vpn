@@ -6,6 +6,7 @@
 .PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
 
 XBUILD ?= no
+RELEASE ?= no
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
@@ -34,10 +35,16 @@ endif
 
 QTBUILD = build/qt
 INSTALLER = build/installer
-INST_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
 OSX_CERT="Developer ID Application: LEAP Encryption Access Project"
-MACDEPLOYQT_OPTS = -appstore-compliant -qmldir=gui/qml -always-overwrite -codesign="${OSX_CERT}"
-	
+MACDEPLOYQT_OPTS = -appstore-compliant -always-overwrite -codesign="${OSX_CERT}"
+
+ifeq ($(PLATFORM), darwin)
+INST_ROOT =${INSTALLER}/packages/bitmaskvpn/data/
+INST_DATA = ${INST_ROOT}/${APPNAME}.app/
+else
+INST_DATA = ${INSTALLER}/packages/bitmaskvpn/data/
+endif
+
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
@@ -114,7 +121,7 @@ ifeq ($(PLATFORM), windows)
 endif
 ifeq ($(VENDOR_PATH), providers)
 	@unlink providers/assets || true
-	@ln -s ${PROVIDER}/assets providers/assets
+	@ln -s ${PROVIDER}/assets providers/assets || true
 endif
 endif
 	@echo "============RELINK VENDOR============="
@@ -180,13 +187,18 @@ ifeq (${PLATFORM}, darwin)
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}/
 	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_ROOT}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_ROOT}/
+	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}
 	@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
-	@echo "[+] Running macdeployqt"
-	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app ${MACDEPLOYQT_OPTS}
+ifeq (${RELEASE}, yes)
+	@echo "[+] Running macdeployqt (release mode)"
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/qml ${MACDEPLOYQT_OPTS}
+else
+	@echo "[+] Running macdeployqt (debug mode)"
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/qml
+endif
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
 ifeq (${PLATFORM}, windows)

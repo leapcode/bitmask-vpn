@@ -14,12 +14,12 @@ from provider import getProviderData
 OS_CONFIG = {
     'osx': """
     <!-- osx -->
-    <TargetDir>@ApplicationsDir@/$APPNAME.app</TargetDir>
+    <TargetDir>/Applications/$APPNAME</TargetDir>
     <StartMenuDir>$APPNAME.app</StartMenuDir>
     <RunProgram>open</RunProgram>
     <RunProgramDescription>Start $APPNAME now!</RunProgramDescription>
       <RunProgramArguments>
-        <Argument>@TargetDir@</Argument>
+        <Argument>@TargetDir@/$APPNAME.app</Argument>
       </RunProgramArguments>
 
     <WizardStyle>mac</WizardStyle>

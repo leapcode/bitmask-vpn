@@ -58,6 +58,9 @@ function Component() {
 
 Component.prototype.createOperations = function ()
 {
+    if (systemInfo.productType === "osx") {
+        preInstallOSX();
+    }
     // This will actually install the files
     component.createOperations();
 
@@ -70,24 +73,10 @@ Component.prototype.createOperations = function ()
     if (systemInfo.productType === "windows") {
         postInstallWindows();
     } else if (systemInfo.productType === "osx") {
-        preInstallOSX();
+        uninstallOSX();
         postInstallOSX();
     } else {
         postInstallLinux();
-    }
-}
-
-Component.prototype.installationFinished = function()
-{
-    console.log("DEBUG: running installationFinished");
-    if (installer.isInstaller() && installer.status == QInstaller.Success) {
-        var argList = ["-a", "@TargetDir@/$APPNAME.app"];
-        try {
-            installer.execute("touch", ["/tmp/install-finished"]);
-            installer.execute("open", argList);
-        } catch(e) {
-            console.log(e);
-        }
     }
 }
 
@@ -111,12 +100,26 @@ function postInstallWindows() {
 }
 
 function preInstallOSX() {
-    console.log("Pre-installation for OSX");
+    console.log("Pre-installation for OSX: check for running bitmask");
+    component.addOperation(
+	"Execute", "{1}", "pgrep", "bitmask-vpn$$", /* $$$$ is escaped by python template: the old app binary was called bitmask-vpn */ 
+	"errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
+    );
+    component.addOperation(
+	"Execute", "{1}", "pgrep", "bitmask$$", /* $$$$ is escaped by python template: we don't want to catch bitmask app */
+	"errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app and run this installer again.",
+        "UNDOEXECUTE", "{1}", "pgrep", "bitmask$$", /* $$$$ is escaped: we dont want bitmask app */
+	"errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app before trying to run the uninstaller again."
+    );
+}
+
+function uninstallOSX() {
+    console.log("Pre-installation for OSX: uninstall previous helpers");
     // TODO use installer filepath??
     component.addElevatedOperation(
 	"Execute", "{0}",
    	"@TargetDir@/uninstall.py", "pre",
-	"errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach the pre-install.log file."
+	"errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach /tmp/bitmask-uninstall.log"
     );
 }
 

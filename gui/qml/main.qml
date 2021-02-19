@@ -9,6 +9,8 @@ ApplicationWindow {
     id: app
     visible: false
 
+    flags: Qt.FramelessWindowWint | Qt.WindowsStaysOnTopHint | Qt.Popup
+
     property var ctx
     property var loginDone
     property var allowEmptyPass
@@ -308,6 +310,8 @@ ApplicationWindow {
                 text: qsTr("About…")
                 onTriggered: {
                     about.visible = true
+                    app.focus = true
+                    requestActivate()
                 }
             }
 

@@ -5,15 +5,18 @@
 # This means that, for the time being, you can only install ONE of the BitmaskVPN derivatives at the same time.
 # This might change in the future.
 
+import glob
 import os
 import shutil
 import sys
 import subprocess
+import time
 
 HELPER = "bitmask-helper"
 HELPER_PLIST = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
 
 _dir = os.path.dirname(os.path.realpath(__file__))
+_appdir = glob.glob('{}/*VPN.app'.format(_dir))[0]
 
 def main():
     log = open(os.path.join(_dir, 'post-install.log'), 'w')
@@ -21,10 +24,9 @@ def main():
 
     _id = os.getuid()
     if _id != 0:
-      err  = "error: need to run as root. UID: %s\n" % str(_id)
-      logErr(log, err)
-    
-    # failure: sys.exit(1)
+      err  = "ERROR: need to run as root. UID: %s\n" % str(_id)
+      log.write(err)
+      sys.exit(1)
     
     if isHelperRunning():
         log.write("Trying to stop bitmask-helper...\n")
@@ -48,22 +50,19 @@ def main():
     log.write('post-install script: done\n')
     sys.exit(0)
 
-
-def logErr(log, msg):
-    log.write(msg)
-    sys.exit(1)
-
 def isHelperRunning():
     ps = _getProcessList()
     return HELPER in ps 
 
 def unloadHelper():
     out = subprocess.call(["launchctl", "unload", HELPER_PLIST])
+    time.sleep(0.5)
     out2 = subprocess.call(["pkill", "-9", "bitmask-helper"])  # just in case
+    time.sleep(0.5)
     return out == 0
 
 def fixHelperOwner(log):
-    path = os.path.join(_dir, HELPER)
+    path = os.path.join(_appdir, HELPER)
     try:
         os.chown(path, 0, 0)
     except OSError as exc:
@@ -74,8 +73,9 @@ def fixHelperOwner(log):
 def copyLaunchDaemon():
     plist = "se.leap.bitmask-helper.plist"
     path = os.path.join(_dir, plist)
-    _p = _dir.replace("/", "\/")
-    subprocess.call(["sed", "-i.back", "s/PATH/%s/" % _p, path])
+    _p = os.path.join(_dir, _appdir)
+    _p2= _p.replace("/", "\/")
+    subprocess.call(["sed", "-i.back", "s/PATH/%s/" % _p2, path])
     shutil.copy(path, HELPER_PLIST)
 
 def launchHelper():
@@ -83,7 +83,7 @@ def launchHelper():
     return out == 0
 
 def grantPermissionsOnLogFolder():
-    helperDir = os.path.join(_dir, 'helper')
+    helperDir = os.path.join(_appdir, 'helper')
     try:
         os.makedirs(helperDir)
     except Exception:
