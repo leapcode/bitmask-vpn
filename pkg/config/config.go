@@ -7,4 +7,5 @@ var (
 	Auth            = ""
 	APIURL          = ""
 	GeolocationAPI  = ""
+)
 var CaCert = []byte("")

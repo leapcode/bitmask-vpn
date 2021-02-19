@@ -37,28 +37,28 @@ func TestGatewayPool(t *testing.T) {
 		t.Fatal("gatewayPool labels not what expected. Got:", labels)
 	}
 
-	if pool.userChoice != "" {
+	if pool.userChoice != nil {
 		t.Fatal("userChoice should be empty by default")
 	}
 
-	err = pool.setUserChoice("foo")
+	err = pool.setUserChoice([]byte("foo"))
 	if err == nil {
 		t.Fatal("gatewayPool should not let you set a foo gateway")
 	}
-	err = pool.setUserChoice("a-1")
+	err = pool.setUserChoice([]byte("a-1"))
 	if err != nil {
 		t.Fatal("location 'a-1' should be a valid label")
 	}
-	err = pool.setUserChoice("c-2")
+	err = pool.setUserChoice([]byte("c-2"))
 	if err != nil {
 		t.Fatal("location 'c-2' should be a valid label")
 	}
-	if pool.userChoice != "c-2" {
+	if string(pool.userChoice) != "c-2" {
 		t.Fatal("userChoice should be c-2")
 	}
 
 	pool.setAutomaticChoice()
-	if pool.userChoice != "" {
+	if string(pool.userChoice) != "" {
 		t.Fatal("userChoice should be empty after auto selection")
 	}
 

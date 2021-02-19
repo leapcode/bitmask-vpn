@@ -40,7 +40,7 @@ type gatewayPool struct {
 	available  []Gateway
 	userChoice []byte
 	/* ranked is, for now, just an array of hostnames (fetched from the
-	geoip service). it should be a map in the future, to keep track of
+	menshen service). it should be a map in the future, to keep track of
 	quantitative metrics */
 	ranked []string
 
