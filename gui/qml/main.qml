@@ -18,10 +18,10 @@ ApplicationWindow {
     minimumWidth: 300
     maximumHeight: 600
     minimumHeight: 600
-    // TODO get a nice background color
 
     flags: Qt.WindowsStaysOnTopHint | Qt.Popup
 
+    // TODO get a nice background color
     property var ctx
     property var loginDone
     property var allowEmptyPass
@@ -42,14 +42,14 @@ ApplicationWindow {
             ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter
 
-                Text{
+                Text {
                     id: mainStatus
                     text: "off"
                     font.pixelSize: 26
                     Layout.alignment: Text.AlignHCenter
                 }
 
-                Text{
+                Text {
                     id: mainCurrentGateway
                     text: ""
                     font.pixelSize: 20
@@ -79,8 +79,8 @@ ApplicationWindow {
                     editable: false
                     model: [qsTr("Automatic")]
                     onActivated: {
-                        console.debug("Selected gateway:", currentText);
-                        backend.useGateway(currentText.toString());
+                        console.debug("Selected gateway:", currentText)
+                        backend.useGateway(currentText.toString())
                     }
                 }
             }
@@ -110,18 +110,31 @@ ApplicationWindow {
                 color: "red"
                 z: worldMap.z + 1
             }
-
         }
     }
 
-
     function displayGatewayMarker() {
         let coords = {
-            'paris': {'x': 48, 'y': 2},
-            'miami': {'x': 25.7  , 'y': -80.2 },
-            'amsterdam': {'x': 52.4, 'y': 4.9 },
-            'montreal': {'x': 45.3, 'y': -73.4 },
-            'seattle': {'x': 47.4, 'y': -122.2 },
+            "paris": {
+                "x": 48,
+                "y": 2
+            },
+            "miami": {
+                "x": 25.7,
+                "y": -80.2
+            },
+            "amsterdam": {
+                "x": 52.4,
+                "y": 4.9
+            },
+            "montreal": {
+                "x": 45.3,
+                "y": -73.4
+            },
+            "seattle": {
+                "x": 47.4,
+                "y": -122.2
+            }
         }
         let city = ctx.currentGateway.split('-')[0]
         let coord = coords[city]
@@ -130,16 +143,16 @@ ApplicationWindow {
         // our map, and this offset doesn't work with bigg-ish sizes. But good
         // enough for a proof of concept - if we avoid resizing the window.
         let xOffset = -1 * 0.10 * worldMap.width
-        let p = Maps.projectAbsolute(coord.x, coord.y, worldMap.width, 1, xOffset)
+        let p = Maps.projectAbsolute(coord.x, coord.y, worldMap.width,
+                                     1, xOffset)
         gwMarker.x = p.x
         gwMarker.y = p.y
     }
 
-
     Connections {
         target: jsonModel
         onDataChanged: {
-            ctx = JSON.parse(jsonModel.getJson());
+            ctx = JSON.parse(jsonModel.getJson())
             gwSelector.model = Object.keys(ctx.gateways)
 
             if (ctx.donateDialog == 'true') {
@@ -220,9 +233,8 @@ ApplicationWindow {
         allowEmptyPass = shouldAllowEmptyPass()
 
         /* TODO get appVisible flag from backend */
-        app.visible = true;
-        show();
-        hide();
+        app.visible = true
+        app.raise()
     }
 
     function toHuman(st) {
@@ -247,24 +259,26 @@ ApplicationWindow {
     }
 
     function toHumanWithLocation(st) {
-        switch(st) {
-            case "off":
-		//: %1 -> application name
-                return qsTr("%1 off").arg(ctx.appName);
-            case "on":
-		//: %1 -> application name
-                //: %2 -> current gateway
-                return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentGateway);
-            case "connecting":
-		//: %1 -> application name
-                //: %2 -> current gateway
-                return qsTr("Connecting to %1 - %2").arg(ctx.appName).arg(ctx.currentGateway);
-            case "stopping":
-		//: %1 -> application name
-                return qsTr("Stopping %1").arg(ctx.appName);
-            case "failed":
-		//: %1 -> application name
-                return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handed yet
+        switch (st) {
+        case "off":
+            //: %1 -> application name
+            return qsTr("%1 off").arg(ctx.appName)
+        case "on":
+            //: %1 -> application name
+            //: %2 -> current gateway
+            return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentGateway)
+        case "connecting":
+            //: %1 -> application name
+            //: %2 -> current gateway
+            return qsTr("Connecting to %1 - %2").arg(ctx.appName).arg(
+                        ctx.currentGateway)
+        case "stopping":
+            //: %1 -> application name
+            return qsTr("Stopping %1").arg(ctx.appName)
+        case "failed":
+            //: %1 -> application name
+            return qsTr("%1 blocking internet").arg(
+                        ctx.appName) // TODO failed is not handed yet
         }
     }
 
@@ -279,7 +293,6 @@ ApplicationWindow {
         id: vpn
     }
 
-    SystemTrayIcon {
     LabsPlatform.SystemTrayIcon {
 
         id: systray
@@ -298,12 +311,11 @@ ApplicationWindow {
                 target: systray
                 onActivatedSignal: {
                     if (Qt.platform.os === "windows" || desktop === "LXQt") {
-                      console.debug("open systray menu");
-                      systrayMenu.open();
+                        console.debug("open systray menu")
+                        systrayMenu.open()
                     }
                 }
             }
-
 
             LabsPlatform.MenuItem {
                 id: statusItem
@@ -387,7 +399,6 @@ ApplicationWindow {
                 onTriggered: backend.quit()
             }
         }
-
 
         Component.onCompleted: {
             icon.source = icons["off"]
