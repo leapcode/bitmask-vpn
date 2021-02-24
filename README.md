@@ -37,7 +37,7 @@ You need to have installed and added to your user PATH (mentioned version tested
 4) Cygwin64 (>= 2.905 64 bit)
 5) Using Cygwin `Package Select` window install `python3` and `make` packages. 
 
-**Note:** for #5 you don't need to add packages to PATH they will available in `cygwin` after installation.
+**Note:** for \#5 you don't need to add packages to PATH they will available in `cygwin` after installation.
 
 #### Get Source
 ```
