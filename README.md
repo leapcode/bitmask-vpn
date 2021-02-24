@@ -10,13 +10,11 @@ manually, or send us a patch.
   make build
 ```
 
-You need at least go 1.11. If you have something older and are using ubuntu, you can do:
+You need at least go 1.11. 
 
-```
-  make install_go
-```
+If you have Ubuntu Bionic/18.04, the package in the repositories is too old. To resolve this, you can do `make install_go`. Do not do this if you have a later version.
 
-For other situations, have a look at https://github.com/golang/go/wiki/Ubuntu or https://golang.org/dl/
+For other situations, have a look at https://github.com/golang/go/wiki#working-with-go
 
 ## Test
 
@@ -78,7 +76,7 @@ We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordina
 Bugs? Crashes? UI feedback? Any other suggestions or complains?
 ---------------------------------------------------------------
 
-When you are willing to [report an issue](https://0xacab.org/leap/bitmask-vpn/-/issues) please
+When you are willing to [report an issue](http://wmj5kiic7b6kjplpbvwadnht2nh2qnkbnqtcv3dyvpqtz7ssbssftxid.onion:44203/leap/bitmask-vpn/-/issues) please
 use the search tool first. if you cannot find your issue, please make sure to
 include the following information:
 
