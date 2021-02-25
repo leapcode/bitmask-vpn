@@ -76,7 +76,7 @@ We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordina
 Bugs? Crashes? UI feedback? Any other suggestions or complains?
 ---------------------------------------------------------------
 
-When you are willing to [report an issue](http://0xacab.org/leap/bitmask-vpn/-/issues) please
+When you are willing to [report an issue](https://0xacab.org/leap/bitmask-vpn/-/issues) please
 use the search tool first. if you cannot find your issue, please make sure to
 include the following information:
 
