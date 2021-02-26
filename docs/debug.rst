@@ -12,28 +12,33 @@ stop the privileged helper.
 
 First, see if the helper is running:
 
-.. code::bash
+.. code:: bash
+
   pgrep bitmask-helper
 
 To stop it:
 
-.. code::bash
+.. code:: bash
+
   sudo launchctl unload /Library/LaunchDaemons/se.leap.bitmask-helper.plist
 
 To start it:
 
-.. code::bash
+.. code:: bash
+
   sudo launchctl load /Library/LaunchDaemons/se.leap.bitmask-helper.plist
   sudo launchctl start /Library/LaunchDaemons/se.leap.bitmask-helper.plist
 
 Check that it's running:
 
-.. code::bash
+.. code:: bash
+
   pgrep bitmask-helper
 
 Manually check that the web api is running, and that it reports a version that matches what you currently have installed:
 
-.. code::bash
+.. code:: bash
+
   curl http://localhost:7171/version
 
 Also, you can check that the path near the end of the file /Library/LaunchDaemons/se.leap.bitmask-helper.plist
@@ -43,7 +48,8 @@ Cleaning up
 ~~~~~~~~~~~
 If you have things messed up and you want to completely delete the bitmask-helper:
 
-.. code::bash
+.. code:: bash
+
   sudo launchctl unload /Library/LaunchDaemons/se.leap.bitmask-helper.plist
   sudo rm -rf /Library/LaunchDaemons/se.leap.bitmask-helper.plist
 

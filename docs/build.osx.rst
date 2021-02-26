@@ -7,6 +7,7 @@ Cheat-sheet
 tl;dr:
 
 .. code:: bash
+
   export RELEASE=yes
   export OSXAPPPASS=my-apple-app-pass
   make clean && make vendor && make build
@@ -28,6 +29,7 @@ First, we build the regular installer (use RELEASE=yes to do a codesign step
 with macqtdeploy, note that this increases build time considerably):
 
 .. code:: bash
+
   make build
   RELEASE=yes make installer
   make sign_installer
@@ -60,6 +62,7 @@ environment variable to check the status of the notarization process. Obviously,
 you need to be in posession of a valid membership
 
 .. code:: bash
+
   altool[5281:91963] No errors uploading 'build/installer/RiseupVPN-installer-0.20.4-175-gee4eb90.zip'.
   RequestUUID = fe9a4324-bdcb-4c52-b857-f089dc904695
   
@@ -77,10 +80,12 @@ you need to be in posession of a valid membership
 If everything is ok, now you can finish the process, stapling the notarization info and creating the dmg.
 
 .. code:: bash
+
   make notarize_staple
   make create_dmg
 
 If everything went well, you should have a .dmg for your release under the `deploy` folder.
 
 .. code:: bash
+
   created: /Users/admin/leap/bitmask-vpn/deploy/RiseupVPN-0.20.4-175-gee4eb90.dmg
