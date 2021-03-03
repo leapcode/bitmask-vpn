@@ -2,14 +2,15 @@ import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 import QtQuick.Extras 1.2
-import Qt.labs.platform 1.1
+
+import Qt.labs.platform 1.1 as LabsPlatform
 
 ApplicationWindow {
 
     id: app
     visible: false
 
-    flags: Qt.FramelessWindowWint | Qt.WindowsStaysOnTopHint | Qt.Popup
+    flags: Qt.WindowsStaysOnTopHint | Qt.Popup
 
     property var ctx
     property var loginDone
@@ -130,74 +131,31 @@ ApplicationWindow {
         "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png"
     }
 
-    SystemTrayIcon {
+
+    
+    LabsPlatform.SystemTrayIcon {
 
         id: systray
         visible: systrayVisible
+        signal activatedSignal
 
         onActivated: {
-            // this looks like a widget bug. middle click (reasons 3 or 4)
-            // produce a segfault when trying to call menu.open()
-            // left and right click seem to be working fine, so let's ignore this for now.
-            switch (reason) {
-            case SystemTrayIcon.Unknown:
-                console.debug("activated: unknown event")
-                menu.open()
-                break
-            case SystemTrayIcon.Context:
-                console.debug("activated: context")
-                /* segfaults in osx and linux */
-                if (Qt.platform.os === "windows") {
-                    menu.open()
-                }
-                break
-            case SystemTrayIcon.DoubleClick:
-                console.debug("activated: double click")
-                if (Qt.platform.os === "windows") {
-                    menu.open()
-                }
-                break
-            case SystemTrayIcon.Trigger:
-                console.debug("activated: left click")
-                if (Qt.platform.os === "windows") {
-                    menu.open()
-                }
-                break
-            case SystemTrayIcon.MiddleClick:
-                break
-            }
+            systray.activatedSignal()
         }
 
-        Component.onCompleted: {
-            icon.source = icons["off"]
-            tooltip = qsTr("Checking status…")
-            console.debug("systray init completed")
-            hide()
-            if (systrayVisible) {
-                show()
-                if (Qt.platform.os === "windows") {
-                    let appname = ctx ? ctx.appName : "VPN"
-                    showNotification(
-                                appname
-                                + " is up and running. Please use system tray icon to control it.")
-                }
-            }
-        }
-
-        // Helper to show notification messages
-        function showNotification(msg) {
-            console.log("Going to show notification message: ", msg)
-            if (supportsMessages) {
-                let appname = ctx ? ctx.appName : "VPN"
-                showMessage(appname, msg, null, 15000)
-            } else {
-                console.log("System doesn't support systray notifications")
-            }
-        }
-
-        menu: Menu {
+        menu: LabsPlatform.Menu {
 
             id: systrayMenu
+
+            Connections {
+                target: systray
+                onActivatedSignal: {
+                    if (Qt.platform.os === "windows" || desktop === "LXQt") {
+                      console.debug("open systray menu");
+                      systrayMenu.open();
+                    }
+                }
+            }
 
             StateGroup {
                 id: vpn
@@ -270,13 +228,13 @@ ApplicationWindow {
                 ]
             }
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 id: statusItem
                 text: qsTr("Checking status…")
                 enabled: false
             }
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: {
                     if (vpn.state == "failed")
                         qsTr("Reconnect")
@@ -290,7 +248,7 @@ ApplicationWindow {
                                 || ctx.status == "failed") : false
             }
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: {
                     if (ctx && ctx.status == "starting")
                         qsTr("Cancel")
@@ -304,9 +262,9 @@ ApplicationWindow {
                                 || ctx.status == "failed") : false
             }
 
-            MenuSeparator {}
+            LabsPlatform.MenuSeparator {}
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: qsTr("About…")
                 onTriggered: {
                     about.visible = true
@@ -315,7 +273,7 @@ ApplicationWindow {
                 }
             }
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 id: donateItem
                 text: qsTr("Donate…")
                 visible: ctx ? ctx.donateURL : false
@@ -324,9 +282,9 @@ ApplicationWindow {
                 }
             }
 
-            MenuSeparator {}
+            LabsPlatform.MenuSeparator {}
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: qsTr("Help…")
 
                 onTriggered: {
@@ -335,7 +293,7 @@ ApplicationWindow {
                 }
             }
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: qsTr("Report a bug…")
 
                 onTriggered: {
@@ -345,13 +303,44 @@ ApplicationWindow {
                 }
             }
 
-            MenuSeparator {}
+            LabsPlatform.MenuSeparator {}
 
-            MenuItem {
+            LabsPlatform.MenuItem {
                 text: qsTr("Quit")
                 onTriggered: backend.quit()
             }
         }
+
+
+        Component.onCompleted: {
+            icon.source = icons["off"]
+            tooltip = qsTr("Checking status…")
+            console.debug("systray init completed")
+            hide()
+            if (systrayVisible) {
+                console.log("show systray")
+                show()
+                if (Qt.platform.os === "windows") {
+                    let appname = ctx ? ctx.appName : "VPN"
+                    showNotification(
+                                appname
+                                + " is up and running. Please use system tray icon to control it.")
+                }
+            }
+        }
+
+        // Helper to show notification messages
+        function showNotification(msg) {
+            console.log("Going to show notification message: ", msg)
+            if (supportsMessages) {
+                let appname = ctx ? ctx.appName : "VPN"
+                showMessage(appname, msg, null, 15000)
+            } else {
+                console.log("System doesn't support systray notifications")
+            }
+        }
+
+
     }
 
     DonateDialog {
@@ -376,7 +365,7 @@ ApplicationWindow {
 
     MessageDialog {
         id: errorStartingVPN
-        buttons: MessageDialog.Ok
+        //buttons: MessageDialog.Ok
         modality: Qt.NonModal
         title: qsTr("Error starting VPN")
         text: ""
@@ -386,7 +375,7 @@ ApplicationWindow {
 
     MessageDialog {
         id: authAgent
-        buttons: MessageDialog.Ok
+        //buttons: MessageDialog.Ok
         modality: Qt.NonModal
         title: qsTr("Missing authentication agent")
         text: qsTr("Could not find a polkit authentication agent. Please run one and try again.")
@@ -397,4 +386,5 @@ ApplicationWindow {
         id: initFailure
         visible: false
     }
+
 }

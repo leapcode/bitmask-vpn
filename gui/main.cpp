@@ -161,6 +161,8 @@ int main(int argc, char **argv) {
 
     QJsonModel *model = new QJsonModel;
 
+    QString desktop = QString::fromStdString(getEnv("XDG_CURRENT_DESKTOP"));
+
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
     ctx->setContextProperty("backend", &backend);
@@ -168,6 +170,7 @@ int main(int argc, char **argv) {
     /* set the json model, load providers.json */
     ctx->setContextProperty("jsonModel", model);
     ctx->setContextProperty("providers", providers);
+    ctx->setContextProperty("desktop", desktop);
 
     /* set some useful flags */
     ctx->setContextProperty("systrayVisible", !hideSystray);
