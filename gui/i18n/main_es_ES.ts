@@ -7,19 +7,19 @@
         <translation>Acerca de</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="19"/>
+        <location filename="../qml/AboutDialog.qml" line="18"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
-        <extracomment>donation text of the about dialog %1 -&gt; donation URL</extracomment>
+        <extracomment>donation text of the about dialog</extracomment>
         <translation>&lt;p&gt;El costo de este servicio está cubierto por completo por donaciones de usuarios como tú. &lt;a href=&quot;%1&quot;&gt;Por favor, dona&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../qml/AboutDialog.qml" line="26"/>
         <source>&lt;p&gt;%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.&lt;/p&gt; %3 &lt;p&gt;By using this application, you agree to the &lt;a href=&quot;%4&quot;&gt;Terms of Service&lt;/a&gt;. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.&lt;/p&gt;</source>
-        <extracomment>about dialog %1 -&gt; application name %2 -&gt; provider name %3 -&gt; donation text if activated %4 -&gt; TOS URL</extracomment>
+        <extracomment>about dialog %1 -&gt; application name %2 -&gt; provider name %3 -&gt; donation text if activated</extracomment>
         <translation>&lt;p&gt;%1 es un servicio de VPN fácil, rápido y seguro de %2. %1 no requiere una cuenta de usuario, no mantiene registros ni te rastrea de manera alguna.&lt;/p&gt; %3 &lt;p&gt;Al usar esta aplicación, manifiestas tu acuerdo con los &lt;a href=&quot;%4&quot;&gt;Términos de Servicio&lt;/a&gt;. Este servicio es provisto como viene, sin garantía alguna, y está destinado a personas que trabajan para hacer del mundo un lugar mejor.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/AboutDialog.qml" line="36"/>
+        <location filename="../qml/AboutDialog.qml" line="37"/>
         <source>%1 version: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
         <translation>Versión de %1: %2</translation>
@@ -59,27 +59,29 @@ Do you want to donate now?</source>
         <translation>Iniciar Sesión</translation>
     </message>
     <message>
-        <location filename="../qml/LoginDialog.qml" line="20"/>
+        <location filename="../qml/LoginDialog.qml" line="21"/>
         <source>Patron ID</source>
+        <extracomment>Ask for the library card number</extracomment>
         <translation>Identificación de Patrocinador</translation>
     </message>
     <message>
-        <location filename="../qml/LoginDialog.qml" line="24"/>
+        <location filename="../qml/LoginDialog.qml" line="25"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../qml/LoginDialog.qml" line="35"/>
+        <location filename="../qml/LoginDialog.qml" line="37"/>
         <source>Enter your Patron ID</source>
+        <extracomment>Ask for the library card number</extracomment>
         <translation>Ingresa tu Identificación de Patrocinador</translation>
     </message>
     <message>
-        <location filename="../qml/LoginDialog.qml" line="37"/>
+        <location filename="../qml/LoginDialog.qml" line="39"/>
         <source>Log in with your library credentials</source>
         <translation>Inicia sesión con tus credenciales de biblioteca</translation>
     </message>
     <message>
-        <location filename="../qml/LoginDialog.qml" line="42"/>
+        <location filename="../qml/LoginDialog.qml" line="44"/>
         <source>You can check your Patron ID number in the back of your library card</source>
         <translation>Puedes comprobar tu número de Identificación de Patrocinador en el reverso de tu tarjeta de biblioteca</translation>
     </message>
@@ -100,134 +102,140 @@ Do you want to donate now?</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="38"/>
+        <location filename="../qml/main.qml" line="39"/>
         <source>Could not find helpers. Please check your installation</source>
         <translation>No se pudieron encontrar los programas auxiliares. Por favor, comprueba tu instalación</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="40"/>
+        <location filename="../qml/main.qml" line="41"/>
         <source>Could not find polkit agent.</source>
         <translation>No se pudo encontrar el agente polkit.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="55"/>
+        <location filename="../qml/main.qml" line="57"/>
         <source>Oops! The authentication service seems down. Please try again later</source>
         <translation>¡Epa! El servicio de autenticación está caído. Por favor intenta de nuevo más tarde</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="56"/>
+        <location filename="../qml/main.qml" line="58"/>
         <source>Service Error</source>
         <translation>Error en el Servicio</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="62"/>
+        <location filename="../qml/main.qml" line="64"/>
         <source>Please check your Patron ID</source>
+        <extracomment>Incorrect library card number</extracomment>
         <translation>Por favor comprueba tu Identificación de Patrocinador</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="64"/>
+        <location filename="../qml/main.qml" line="66"/>
         <source>Could not log in with those credentials, please retry</source>
         <translation>No se pudo iniciar sesión con esas credenciales, por favor vuelve a intentar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="68"/>
         <source>Login Error</source>
         <translation>Error de Inicio de sesión</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="70"/>
+        <location filename="../qml/main.qml" line="72"/>
         <source>Got an error starting %1: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
         <translation>Se produjo un error iniciando %1: %2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="104"/>
+        <location filename="../qml/main.qml" line="107"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 desconectada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="107"/>
+        <location filename="../qml/main.qml" line="110"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 conectada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="110"/>
+        <location filename="../qml/main.qml" line="113"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Conectando a %1</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="113"/>
+        <location filename="../qml/main.qml" line="116"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Deteniendo %1</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="116"/>
+        <location filename="../qml/main.qml" line="119"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>$1 bloqueando Internet</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="163"/>
-        <location filename="../qml/main.qml" line="211"/>
-        <source>Checking status...</source>
+        <location filename="../qml/main.qml" line="171"/>
+        <location filename="../qml/main.qml" line="273"/>
+        <source>Checking status…</source>
         <translation>Comprobando estado...</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="218"/>
+        <location filename="../qml/main.qml" line="280"/>
         <source>Reconnect</source>
         <translation>Reconectar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
+        <location filename="../qml/main.qml" line="282"/>
         <source>Turn on</source>
         <translation>Activar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="231"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="233"/>
+        <location filename="../qml/main.qml" line="296"/>
         <source>Turn off</source>
         <translation>Desactivar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="244"/>
-        <source>Help...</source>
+        <location filename="../qml/main.qml" line="326"/>
+        <source>Help…</source>
         <translation>Ayuda...</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="254"/>
-        <source>Donate...</source>
+        <location filename="../qml/main.qml" line="316"/>
+        <source>Donate…</source>
         <translation>Donar...</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
-        <source>About...</source>
+        <location filename="../qml/main.qml" line="308"/>
+        <source>About…</source>
         <translation>Acerca de...</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="267"/>
+        <location filename="../qml/main.qml" line="335"/>
+        <source>Report a bug…</source>
+        <translation>Informar sobre un error…</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="347"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="297"/>
+        <location filename="../qml/main.qml" line="377"/>
         <source>Error starting VPN</source>
         <translation>Error iniciando VPN</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="307"/>
+        <location filename="../qml/main.qml" line="387"/>
         <source>Missing authentication agent</source>
         <translation>Falta agente de autentificación</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="388"/>
         <source>Could not find a polkit authentication agent. Please run one and try again.</source>
         <translation>No se pudo encontrar un agente de autentificación polkit. Por favor corre uno e intenta de nuevo.</translation>
     </message>
