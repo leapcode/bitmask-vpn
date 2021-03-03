@@ -57,3 +57,19 @@ Make sure that "pgrep bitmask-helper" does not return any pid.
 
 Now you can move /Applications/RiseupVPN.app to the Trash, and launch a
 recent installer to get a clean install.
+
+Windows
+-------
+In Windows you can use PowerShell to see if there's an old service Running (it
+can be from RiseupVPN, CalyxVPN, LibraryVPN etc...).
+
+.. code:: powershell
+
+  PS C:\Users\admin> Get-Service bitmask-helper-v2
+
+You can also stop it (needs admin)
+
+.. code:: powershell
+
+  PS C:\Users\admin> Stop-Service bitmask-helper-v2
+

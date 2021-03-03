@@ -10,10 +10,11 @@ You should instal: make, wget, as well as a recent Qt5 version (for instance, wi
 
 For the installer, install QtIFW for windows (tested with version 3.2.2).
 
-Assuming you have the vendor path in place and correctly configured, all you need to do is `make build_installer`::
+Assuming you have the vendor path in place and correctly configured, all you need to do is `make installer`::
 
   export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
   export VENDOR_PATH=providers
+  export PROVIDER=riseup
   make vendor && make installer
 
 

@@ -17,7 +17,7 @@ def getData():
     configPath = os.path.join(vendorPath, 'vendor.conf')
     if not os.path.isfile(configPath):
         print("ERROR: path does not exist", configPath)
-        os.exit(1)
+        sys.exit(1)
     config = configparser.ConfigParser()
     config.read(configPath)
     defaultProvider = getDefaultProvider(config)

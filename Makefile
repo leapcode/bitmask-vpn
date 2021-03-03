@@ -109,21 +109,26 @@ lib/%.a: $(PKGFILES)
 
 relink_vendor:
 	@echo "============RELINK VENDOR============="
-	@echo "PLATFORM: ${PLATFORM}"
+	@echo "PLATFORM: ${PLATFORM} (${UNAME})"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
 	@echo "PROVIDER: ${PROVIDER}"
-ifeq ($(UNAME), CYGWIN_NT-10.0)
-	[ -L providers/assets ] || (CYGWIN=winsymlinks:nativestrict ln -s ${PROVIDER}/assets providers/assets)
-endif
-ifneq ($(UNAME), CYGWIN_NT-10.0)
 ifeq ($(PLATFORM), windows)
-	rm -rf providers/assets
+	@rm -rf providers/assets || true
+ifeq ($(UNAME), MINGW64_NT-10.0)
+ifeq ($(VENDOR_PATH), providers)
+	@cp -r providers/${PROVIDER}/assets providers/assets || true
 endif
+endif # end mingw
+ifeq ($(UNAME), CYGWIN_NT-10.0)
+	@[ -L providers/assets ] || (CYGWIN=winsymlinks:nativestrict ln -s ${PROVIDER}/assets providers/assets)
+endif # end cygwin
+else # not windows: linux/osx
 ifeq ($(VENDOR_PATH), providers)
 	@unlink providers/assets || true
 	@ln -s ${PROVIDER}/assets providers/assets || true
 endif
 endif
+
 	@echo "============RELINK VENDOR============="
 
 build_golib: lib/libgoshim.a
@@ -210,11 +215,14 @@ else
 	@cp ${VENDOR_PATH}/assets/icon.ico ${INST_DATA}/icon.ico
 endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
-	# FIXME get the signed binaries with curl from openvpn downloads page - see if we have to adapt the openvpn-build to install tap drivers etc from our installer.
+	# FIXME get the signed binaries with curl from openvpn downloads page.
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
+ifeq (${RELEASE}, yes)
+	@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+else
 	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
-	#@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+endif
 	# TODO stage it to shave some time
 	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
 endif

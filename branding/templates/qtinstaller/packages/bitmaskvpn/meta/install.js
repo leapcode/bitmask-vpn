@@ -61,6 +61,9 @@ Component.prototype.createOperations = function ()
     if (systemInfo.productType === "osx") {
         preInstallOSX();
     }
+    if (systemInfo.productType === "windows") {
+	preInstallWindows();
+    }
     // This will actually install the files
     component.createOperations();
 
@@ -80,11 +83,28 @@ Component.prototype.createOperations = function ()
     }
 }
 
+function preInstallWindows() {
+    console.log("Pre-installation for Windows: check for running bitmask");
+    component.addOperation(
+	"Execute", "{1}", "powershell", "-NonInteractive", "-NoProfile", "-command", "try {Get-Process $BINNAME} catch { exit 1}",
+	"errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
+    );
+    /* Remove-Service only introduced in PS 6.0 */
+    component.addElevatedOperation(
+	"Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+	"try {Get-Service bitmask-helper-v2} catch {exit 0}; try {Stop-Service bitmask-helper-v2} catch {}; try {$$srv = Get-Service bitmask-helper-v2; if ($$srv.Status -eq 'Running') {exit 1} else {exit 0};} catch {exit 0}",
+	"errormessage=It seems that bitmask-helper-v2 service is running, and we could not stop it. Please manually uninstall any previous RiseupVPN or CalyxVPN client and run this installer again.",
+    );
+}
+
 function postInstallWindows() {
     // TODO - check if we're on Windows10 or older, and use the needed tap-windows installer accordingly.
     console.log("Installing OpenVPN tap driver");
-    component.addElevatedOperation("Execute", "@TargetDir@/tap-windows.exe", "/S", "/SELECT_UTILITIES=1");  /* TODO uninstall? */
-    console.log("Now trying to install our helper");
+    component.addElevatedOperation("Execute", "@TargetDir@/tap-windows.exe", "/S", "/SELECT_UTILITIES=1");  /* TODO uninstall */
+    /* remove an existing service, if it is stopped. Remove-Service is only in PS>6, and sc.exe delete leaves some garbage on the registry, so let's use the binary itself */
+    console.log("Removing any previously installer helper...");
+    component.addElevatedOperation("Execute", "{0,1}", "@TargetDir@/helper.exe", "remove");
+    console.log("Now trying to install latest helper");
     component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "install", "UNDOEXECUTE", "@TargetDir@/helper.exe", "remove");
     component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "start", "UNDOEXECUTE", "@TargetDir@/helper.exe", "stop");
     console.log("Adding shortcut entries/...");
