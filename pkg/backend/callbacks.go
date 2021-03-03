@@ -2,7 +2,6 @@ package backend
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 	"unsafe"
 )
@@ -40,14 +39,18 @@ const OnStatusChanged string = "OnStatusChanged"
 func subscribe(event string, fp unsafe.Pointer) {
 	callbackMutex.Lock()
 	defer callbackMutex.Unlock()
-	e := &Events{}
-	v := reflect.Indirect(reflect.ValueOf(&e))
-	hf := v.Elem().FieldByName(event)
-	if reflect.ValueOf(hf).IsZero() {
-		fmt.Println("ERROR: not a valid event:", event)
-	} else {
-		callbacks[event] = (*[0]byte)(fp)
-	}
+	/* I'm commenting this check because it imposes 1.14, which is only in buster-backports.
+	   We can re-add it after buster is oldstable
+	   e := &Events{}
+	   v := reflect.Indirect(reflect.ValueOf(&e))
+	   hf := v.Elem().FieldByName(event)
+	   if reflect.ValueOf(hf).IsZero() {
+	           fmt.Println("ERROR: not a valid event:", event)
+	   } else {
+	           callbacks[event] = (*[0]byte)(fp)
+	   }
+	*/
+	callbacks[event] = (*[0]byte)(fp)
 }
 
 // trigger fires a callback from C-land.
