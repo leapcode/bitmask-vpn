@@ -19,7 +19,7 @@ ApplicationWindow {
     maximumHeight: 600
     minimumHeight: 600
 
-    flags: Qt.WindowsStaysOnTopHint | Qt.Popup
+    flags: Qt.WindowsStaysOnTopHint
 
     // TODO get a nice background color
     property var ctx
