@@ -15,7 +15,12 @@ Assuming you have the vendor path in place and correctly configured, all you nee
   export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
   export VENDOR_PATH=providers
   export PROVIDER=riseup
+  make generate # FIXME this is not called in win
   make vendor && make installer
+
+If you're doing a final release::
+
+  export RELEASE=yes
 
 
 checking signatures
@@ -42,7 +47,7 @@ the steps to do release signatures are::
   make installer
   make sign_installer
 
-or alltogether as::
+or all together as::
 
   make package_win_release
 

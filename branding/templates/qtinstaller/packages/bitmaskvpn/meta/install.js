@@ -62,7 +62,7 @@ Component.prototype.createOperations = function ()
         preInstallOSX();
     }
     if (systemInfo.productType === "windows") {
-	preInstallWindows();
+        preInstallWindows();
     }
     // This will actually install the files
     component.createOperations();
@@ -86,14 +86,14 @@ Component.prototype.createOperations = function ()
 function preInstallWindows() {
     console.log("Pre-installation for Windows: check for running bitmask");
     component.addOperation(
-	"Execute", "{1}", "powershell", "-NonInteractive", "-NoProfile", "-command", "try {Get-Process $BINNAME} catch { exit 1}",
-	"errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
+        "Execute", "{1}", "powershell", "-NonInteractive", "-NoProfile", "-command", "try {Get-Process $BINNAME} catch { exit 1}",
+        "errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
     );
     /* Remove-Service only introduced in PS 6.0 */
     component.addElevatedOperation(
-	"Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
-	"try {Get-Service bitmask-helper-v2} catch {exit 0}; try {Stop-Service bitmask-helper-v2} catch {}; try {$$srv = Get-Service bitmask-helper-v2; if ($$srv.Status -eq 'Running') {exit 1} else {exit 0};} catch {exit 0}",
-	"errormessage=It seems that bitmask-helper-v2 service is running, and we could not stop it. Please manually uninstall any previous RiseupVPN or CalyxVPN client and run this installer again.",
+        "Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+        "try {Get-Service bitmask-helper-v2} catch {exit 0}; try {Stop-Service bitmask-helper-v2} catch {}; try {$$srv = Get-Service bitmask-helper-v2; if ($$srv.Status -eq 'Running') {exit 1} else {exit 0};} catch {exit 0}",
+        "errormessage=It seems that bitmask-helper-v2 service is running, and we could not stop it. Please manually uninstall any previous RiseupVPN or CalyxVPN client and run this installer again.",
     );
 }
 
@@ -122,14 +122,14 @@ function postInstallWindows() {
 function preInstallOSX() {
     console.log("Pre-installation for OSX: check for running bitmask");
     component.addOperation(
-	"Execute", "{1}", "pgrep", "bitmask-vpn$$", /* $$$$ is escaped by python template: the old app binary was called bitmask-vpn */ 
-	"errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
+        "Execute", "{1}", "pgrep", "bitmask-vpn$$", /* $$$$ is escaped by python template: the old app binary was called bitmask-vpn */ 
+        "errormessage=It seems that an old RiseupVPN client is running. Please exit the app and run this installer again.",
     );
     component.addOperation(
-	"Execute", "{1}", "pgrep", "bitmask$$", /* $$$$ is escaped by python template: we don't want to catch bitmask app */
-	"errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app and run this installer again.",
+        "Execute", "{1}", "pgrep", "bitmask$$", /* $$$$ is escaped by python template: we don't want to catch bitmask app */
+        "errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app and run this installer again.",
         "UNDOEXECUTE", "{1}", "pgrep", "bitmask$$", /* $$$$ is escaped: we dont want bitmask app */
-	"errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app before trying to run the uninstaller again."
+        "errormessage=It seems RiseupVPN, CalyxVPN or LibraryVPN are running. Please exit the app before trying to run the uninstaller again."
     );
 }
 
@@ -137,18 +137,18 @@ function uninstallOSX() {
     console.log("Pre-installation for OSX: uninstall previous helpers");
     // TODO use installer filepath??
     component.addElevatedOperation(
-	"Execute", "{0}",
-   	"@TargetDir@/uninstall.py", "pre",
-	"errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach /tmp/bitmask-uninstall.log"
+        "Execute", "{0}",
+        "@TargetDir@/uninstall.py", "pre",
+        "errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach /tmp/bitmask-uninstall.log"
     );
 }
 
 function postInstallOSX() {
     console.log("Post-installation for OSX");
     component.addElevatedOperation(
-	"Execute", "{0}",
-   	"@TargetDir@/post-install.py",
-	"errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the post-install.log file.",
+        "Execute", "{0}",
+        "@TargetDir@/post-install.py",
+        "errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the post-install.log file.",
         "UNDOEXECUTE",
         "@TargetDir@/uninstall.py"
     );
