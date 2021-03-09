@@ -4,18 +4,21 @@
 # Builds OpenVPN statically against mbedtls (aka polarssl).
 # Requirements:  cmake
 # Output: ~/openvpn_build/sbin/openvpn-x.y.z
+# License: GPLv3 or later
 #############################################################################
 
 set -e
 #set -x
 
 # [!] This needs to be updated for every release --------------------------
-OPENVPN="openvpn-2.4.9"
-MBEDTLS="mbedtls-2.24.0"
+OPENVPN="openvpn-2.5.1"
+OPENSSL="1.1.1j"
+MBEDTLS="2.25.0"
 LZO="lzo-2.10"
 ZLIB="zlib-1.2.11"
-MBEDTLS_SHA512="5437ea57eb8b8af9446a796876aa2bfe3c59c88f926b1638c7e8a021a8bef9f4bc6cb1b254e7387e2afe095bd27c518060719726bbaf5478582a56c34315cfb8"
 LZO_SHA1="4924676a9bae5db58ef129dc1cebce3baa3c4b5d"
+OPENSSL_SHA256="aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf"
+MBEDTLS_SHA256="f838f670f51070bc6b4ebf0c084affd9574652ded435b064969f36ce4e8b586d"
 # -------------------------------------------------------------------------
 
 platform='unknown'
@@ -55,7 +58,7 @@ MAKE="make -j4"
 function build_zlib()
 {
         gpg --fetch-keys $ZLIB_KEYS
-	mkdir $SRC/zlib && cd $SRC/zlib
+	mkdir -p $SRC/zlib && cd $SRC/zlib
 
 	if [ ! -f $ZLIB.tar.gz ]; then
 	    $WGET https://zlib.net/$ZLIB.tar.gz
@@ -75,41 +78,13 @@ function build_zlib()
 	make install DESTDIR=$BASE
 }
 
-########### ##################################################################
-# MBEDTLS # ##################################################################
-########### ##################################################################
-
-function build_mbedtls()
-{
-	mkdir -p $SRC/polarssl && cd $SRC/polarssl
-	if [ ! -f $MBEDTLS.tar.gz ]; then
-	    $WGET https://github.com/ARMmbed/mbedtls/archive/$MBEDTLS.tar.gz
-	fi
-	sha512=`${SHASUM} -a 512 ${MBEDTLS}.tar.gz | cut -d' ' -f 1`
-	
-	if [ "${MBEDTLS_SHA512}" = "${sha512}" ]; then
-	    echo "[+] sha-512 verified ok"
-	else
-	    echo "[!] problem with sha-512 verification"
-	    exit 1
-	fi
-	tar zxvf $MBEDTLS.tar.gz
-	cd mbedtls-$MBEDTLS
-	mkdir -p build
-	cd build
-	cmake ..
-	$MAKE
-	make install DESTDIR=$BASE/install
-}
-
-
 ######## ####################################################################
 # LZO2 # ####################################################################
 ######## ####################################################################
 
 function build_lzo2()
 {
-	mkdir $SRC/lzo2 && cd $SRC/lzo2
+	mkdir -p $SRC/lzo2 && cd $SRC/lzo2
 	if [ ! -f $LZO.tar.gz ]; then
 	    $WGET http://www.oberhumer.com/opensource/lzo/download/$LZO.tar.gz
 	fi
@@ -133,13 +108,118 @@ function build_lzo2()
 	make install DESTDIR=$BASE
 }
 
+########### ##################################################################
+# OPENSSL # ##################################################################
+########### ##################################################################
+
+function build_openssl()
+{
+	cd $BASE
+	mkdir -p $SRC/openssl && cd $SRC/openssl/
+	if [ ! -f openssl-$OPENSSL.tar.gz ]; then
+	    $WGET https://www.openssl.org/source/openssl-$OPENSSL.tar.gz
+	fi
+	sha256=`${SHASUM} -a 256 openssl-${OPENSSL}.tar.gz | cut -d' ' -f 1`
+	
+	if [ "${OPENSSL_SHA256}" = "${sha256}" ]; then
+	    echo "[+] sha-256 verified ok"
+	else
+	    echo "[!] problem with sha-256 verification"
+            echo "[ ] expected: " ${OPENSSL_SHA256}
+            echo "[ ] got:      " ${sha256}
+	    exit 1
+	fi
+	tar zxvf openssl-$OPENSSL.tar.gz
+	cd openssl-$OPENSSL
+	# Kudos to Jonathan K. Bullard from Tunnelblick.
+	# TODO pass cc/arch if osx
+	./Configure darwin64-x86_64-cc no-shared zlib no-asm --openssldir="$DEST"
+	make build_libs build_apps openssl.pc libssl.pc libcrypto.pc
+	make DESTDIR=$DEST install_sw
+}
+
+########### ##################################################################
+# MBEDTLS # ##################################################################
+########### ##################################################################
+
+function build_mbedtls()
+{
+	mkdir -p $SRC/mbedtls && cd $SRC/mbedtls
+	if [ ! -f v$MBEDTLS.tar.gz ]; then
+	    $WGET https://github.com/ARMmbed/mbedtls/archive/v$MBEDTLS.tar.gz
+	fi
+	sha256=`${SHASUM} -a 256 v${MBEDTLS}.tar.gz | cut -d' ' -f 1`
+	
+	if [ "${MBEDTLS_SHA256}" = "${sha256}" ]; then
+	    echo "[+] sha-256 verified ok"
+	else
+	    echo "[!] problem with sha-256 verification"
+            echo "[ ] expected: " ${MBEDTLS_SHA256}
+            echo "[ ] got:      " ${sha256}
+	    exit 1
+	fi
+	tar zxvf v$MBEDTLS.tar.gz
+	cd mbedtls-$MBEDTLS
+        #scripts/config.pl full   ## available for mbedtls 2.16
+        scripts/config.py full    ## available for mbedtls 2.25
+	mkdir -p build
+	cd build
+	cmake ..
+	$MAKE
+	make install DESTDIR=$DEST
+}
+
 ########### #################################################################
 # OPENVPN # #################################################################
+# OPENSSL # #################################################################
 ########### #################################################################
 
-function build_openvpn()
+function build_openvpn_openssl()
 {
-	mkdir $SRC/openvpn && cd $SRC/openvpn
+	mkdir -p $SRC/openvpn && cd $SRC/openvpn
+	gpg --fetch-keys $OPENVPN_KEYS
+	if [ ! -f "$OPENVPN.tar.gz" ]; then
+            $WGET https://build.openvpn.net/downloads/releases/$OPENVPN.tar.gz
+            $WGET https://build.openvpn.net/downloads/releases/$OPENVPN.tar.gz.asc
+	fi
+	gpg --verify $OPENVPN.tar.gz.asc && echo "[+] gpg verification ok"
+	tar zxvf $OPENVPN.tar.gz
+	cd $OPENVPN
+
+	
+	CFLAGS="$CFLAGS -D __APPLE_USE_RFC_3542 -I$DEST/usr/local/include" \
+	LZO_CFLAGS="-I$DEST/include" \
+	LZO_LIBS="$DEST/lib/liblzo2.a" \
+	OPENSSL_CFLAGS=-I$DEST/usr/local/include/ \
+	OPENSSL_SSL_CFLAGS=-I$DEST/usr/local/include/ \
+	OPENSSL_LIBS="$DEST/usr/local/lib/libssl.a $DEST/usr/local/lib/libcrypto.a $DEST/lib/libz.a" \
+	OPENSSL_SSL_LIBS="$DEST/usr/local/lib/libssl.a" \
+	OPENSSL_CRYPTO_LIBS="$DEST/usr/local/lib/libcrypto.a" \
+	LDFLAGS=$LDFLAGS \
+	CPPFLAGS=$CPPFLAGS \
+	CXXFLAGS=$CXXFLAGS \
+	$CONFIGURE \
+	--disable-lz4 \
+	--disable-unit-tests \
+	--disable-plugin-auth-pam \
+	--enable-small \
+	--disable-debug
+	$MAKE LIBS="-all-static"
+	make install DESTDIR=$BASE/openvpn
+	mkdir -p $BASE/sbin/
+	cp $BASE/openvpn/install/sbin/openvpn $BASE/sbin/$OPENVPN
+	strip $BASE/sbin/$OPENVPN
+}
+
+
+########### #################################################################
+# OPENVPN # #################################################################
+# MBEDTLS # #################################################################
+########### #################################################################
+
+function build_openvpn_mbedtls()
+{
+	mkdir -p $SRC/openvpn && cd $SRC/openvpn
 	gpg --fetch-keys $OPENVPN_KEYS
 	if [ ! -f $OPENVPN.tar.gz ]; then
             $WGET https://build.openvpn.net/downloads/releases/$OPENVPN.tar.gz
@@ -149,17 +229,18 @@ function build_openvpn()
 	tar zxvf $OPENVPN.tar.gz
 	cd $OPENVPN
 
-	MBEDTLS_CFLAGS=-I$BASE/install/usr/local/include/ \
+	MBEDTLS_CFLAGS=-I$DEST/usr/local/include/ \
 	MBEDTLS_LIBS="$DEST/usr/local/lib/libmbedtls.a $DEST/usr/local/lib/libmbedcrypto.a $DEST/usr/local/lib/libmbedx509.a" \
 	LDFLAGS=$LDFLAGS \
 	CPPFLAGS=$CPPFLAGS \
-	CFLAGS="$CFLAGS -I$BASE/install/usr/local/include" \
+	CFLAGS="$CFLAGS -I$DEST/usr/local/include" \
 	CXXFLAGS=$CXXFLAGS \
 	$CONFIGURE \
 	--disable-plugin-auth-pam \
-	--with-crypto-library=mbedtls \
-	--enable-small \
-	--disable-debug
+	--with-crypto-library=mbedtls
+	# TODO debug first
+	#--enable-small \
+	#--disable-debug
 
 	$MAKE LIBS="-all-static -lz -llzo2"
 	make install DESTDIR=$BASE/openvpn
@@ -173,8 +254,10 @@ function build_all()
 	echo "[+] Building" $OPENVPN
 	build_zlib
 	build_lzo2
-	build_mbedtls
-	build_openvpn
+	build_openssl
+	build_openvpn_openssl
+	#build_mbedtls  # broken, see #311
+	#build_openvpn_mbedtls
 }
 
 function main()
