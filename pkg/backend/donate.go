@@ -4,12 +4,12 @@ import (
 	"time"
 )
 
-// runDonationReminder checks every hour if we need to show the reminder,
+// runDonationReminder checks every six hours if we need to show the reminder,
 // and trigger the launching of the dialog if needed.
 func runDonationReminder() {
 	go func() {
 		for {
-			time.Sleep(time.Hour)
+			time.Sleep(time.Hour * 6)
 			if needsDonationReminder() {
 				showDonate()
 			}
@@ -19,6 +19,14 @@ func runDonationReminder() {
 
 func needsDonationReminder() bool {
 	return ctx.cfg.NeedsDonationReminder()
+}
+
+/* to be called from the gui, the visibility toggle will be updated on the next
+   status change */
+func donateSeen() {
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
+	ctx.DonateDialog = false
 }
 
 func donateAccepted() {

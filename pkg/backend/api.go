@@ -68,6 +68,10 @@ func DonateAccepted() {
 	donateAccepted()
 }
 
+func DonateSeen() {
+	donateSeen()
+}
+
 func SubscribeToEvent(event string, f unsafe.Pointer) {
 	subscribe(event, f)
 }

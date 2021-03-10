@@ -40,6 +40,11 @@ func DonateAccepted() {
 	backend.DonateAccepted()
 }
 
+//export DonateSeen
+func DonateSeen() {
+	backend.DonateSeen()
+}
+
 //export SubscribeToEvent
 func SubscribeToEvent(event string, f unsafe.Pointer) {
 	backend.SubscribeToEvent(event, f)

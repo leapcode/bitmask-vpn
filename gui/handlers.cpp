@@ -37,6 +37,11 @@ void Backend::donateAccepted()
     DonateAccepted();
 }
 
+void Backend::donateSeen()
+{
+    DonateSeen();
+}
+
 void Backend::login(QString username, QString password)
 {
     Login(toGoStr(username), toGoStr(password));

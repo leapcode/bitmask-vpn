@@ -21,11 +21,10 @@ ApplicationWindow {
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson())
 
-            // FIXME -- we need to inform the backend that we've already seen
-            // this. Otherwise this keeps popping randonmly on state changes.
             if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())
                 donate.visible = true
+                backend.donateSeen()
             }
             if (ctx.loginDialog == 'true') {
                 console.debug(jsonModel.getJson())
