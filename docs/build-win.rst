@@ -51,6 +51,15 @@ or all together as::
 
   make package_win_release
 
+Uploading installer
+-------------------
+
+Since 0.21.2, we're hashing and signing the installers::
+
+  export FILE=deploy/RiseupVPN-installer-0.21.2.exe
+  make sign_artifact
+  make upload_artifact
+
 
 unreviewed notes
 ----------------

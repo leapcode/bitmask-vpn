@@ -393,6 +393,14 @@ package_snap:
 package_deb:
 	@make -C build/${PROVIDER} pkg_deb
 
+sign_artifact:
+	@find ${FILE} -type f -not -name "*.asc" -print0 | xargs -0 -n1 -I{} sha256sum -b "{}" | sed 's/*deploy\///' > ${FILE}.sha256
+	@gpg --clear-sign --armor ${FILE}.sha256
+
+upload_artifact:
+	scp ${FILE} downloads.leap.se:./
+	scp ${FILE}.sha256.asc downloads.leap.se:./
+
 
 #########################################################################
 # icons & locales
