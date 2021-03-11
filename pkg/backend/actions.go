@@ -2,14 +2,14 @@ package backend
 
 import (
 	"log"
-	"os"
 )
 
 func startVPN() {
+	setError("")
 	err := ctx.bm.StartVPN(ctx.Provider)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Println("ERROR: ", err)
+		setError(err.Error())
 	}
 }
 

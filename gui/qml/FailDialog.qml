@@ -16,7 +16,11 @@ MessageDialog {
         if (ctx.loginDialog == 'true') {
             login.visible = true
         } else {
-            backend.quit()
+            // FIXME - we probably want to distinguish 
+            // fatal from recoverable errors. For the time being
+            // we can avoid quitting so that people can try reconnects if it's
+            // a network problem, it's confusing to quit the app.
+            // backend.quit()
         }
     }
 }

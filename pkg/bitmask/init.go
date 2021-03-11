@@ -97,8 +97,10 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 	if !conf.SkipLaunch {
 		err := maybeStartVPN(b, conf)
 		if err != nil {
+			// we don't want this error to avoid initialization of
+			// the bitmask object. If we cannot autostart it's not
+			// so terrible.
 			log.Println("Error starting VPN: ", err)
-			return nil, err
 		}
 	}
 	return b, nil

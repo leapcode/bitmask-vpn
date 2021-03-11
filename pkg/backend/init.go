@@ -47,7 +47,7 @@ func checkErrors(errCh chan string) {
 
 func initializeBitmask(errCh chan string, opts *InitOpts) {
 	if ctx == nil {
-		log.Println("bug: cannot initialize bitmask, ctx is nil!")
+		log.Println("BUG: cannot initialize bitmask, ctx is nil!")
 		os.Exit(1)
 	}
 	bitmask.InitializeLogger()
@@ -63,7 +63,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 
 	b, err := bitmask.InitializeBitmask(ctx.cfg)
 	if err != nil {
-		log.Println("error: cannot initialize bitmask")
+		log.Println("ERROR: cannot initialize bitmask")
 		errCh <- err.Error()
 		return
 	}
@@ -72,19 +72,18 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	helpers, privilege, err := b.VPNCheck()
 
 	if err != nil {
-		log.Println("error doing vpn check")
+		log.Println("ERROR: vpn check")
 		errCh <- err.Error()
 	}
 
 	if helpers == false {
-		log.Println("no helpers")
+		log.Println("ERROR: no helpers")
 		errCh <- "nohelpers"
 	}
 	if privilege == false {
-		log.Println("no polkit")
+		log.Println("ERROR: no polkit")
 		errCh <- "nopolkit"
 	}
-
 	ctx.bm = b
 }
 

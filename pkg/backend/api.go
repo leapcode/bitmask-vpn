@@ -38,6 +38,12 @@ func Login(username, password string) {
 	go ctx.updateStatus()
 }
 
+func setError(err string) {
+	ctx.Errors = err
+	go setStatus(off)
+	go ctx.updateStatus()
+}
+
 func SwitchOn() {
 	go setStatus(starting)
 	go startVPN()

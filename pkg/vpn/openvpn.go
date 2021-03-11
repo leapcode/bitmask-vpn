@@ -47,7 +47,8 @@ func (b *Bitmask) StartVPN(provider string) error {
 	if !b.CanStartVPN() {
 		return errors.New("BUG: cannot start vpn")
 	}
-	return b.startOpenVPN(proxy)
+	err := b.startOpenVPN(proxy)
+	return err
 }
 
 func (b *Bitmask) CanStartVPN() bool {
