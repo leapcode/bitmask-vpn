@@ -1,3 +1,35 @@
+## Install 
+
+# snap
+
+```
+sudo snap install riseup-vpn --classic
+```
+
+You can track beta channel, where we push versions to test:
+
+```
+sudo snap install riseup-vpn --classic --beta
+```
+
+# arch
+
+[There's a package in AUR](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that)
+
+```
+yaourt -Sy riseup-vpn-git
+```
+
+# deb
+
+We haven't updated deb.leap.se repo yet 😞 (see #466), but if you *really* desire a debian
+package you can build your own for the time being:
+
+```
+debuild -us -uc
+sudo dpkg -i ../riseup-vpn*.deb
+```
+
 ## Build
 
 Clone this repo, install dependencies and build the application. Dependencies
