@@ -64,7 +64,6 @@ parts:
       - qml-module-qtquick-controls
       - qml-module-qtquick-dialogs
       - qml-module-qtquick-extras
-      - qml-module-qt-labs-qmlmodels
       - qml-module-qt-labs-platform
     after: [desktop-qt5]
 
@@ -94,12 +93,12 @@ parts:
       - libqt5svg5
       - libqt5qml5
       - libqt5quick5
+      - qt5-style-plugins
       - qml-module-qtquick2
       - qml-module-qtquick-controls
       - qml-module-qtquick-dialogs
       - qml-module-qtquick-extras
       - qml-module-qt-labs-platform
-      - qml-module-qt-labs-qmlmodels
       - try: [appmenu-qt5] # not available on core18
 
 apps:
@@ -121,8 +120,9 @@ apps:
       LD_LIBRARY_PATH:
         $SNAP/lib:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
       QML2_IMPORT_PATH:
-        $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml
+        $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/usr/lib/x86_64-linux-gnu/qt5/qml
       # debug -------------
       #QT_DEBUG_PLUGINS: 1
       SNAP_DESKTOP_DEBUG: 1
+      QT_STYLE_OVERRIDE: Fusion
       # debug -------------
