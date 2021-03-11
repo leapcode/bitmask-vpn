@@ -85,7 +85,7 @@ func New() *Bonafide {
 				RootCAs: certs,
 			},
 		},
-		Timeout: time.Second * 10,
+		Timeout: time.Second * 30,
 	}
 	_, tzOffsetSeconds := time.Now().Zone()
 	tzOffsetHours := tzOffsetSeconds / secondsPerHour
