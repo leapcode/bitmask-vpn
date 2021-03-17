@@ -1,13 +1,14 @@
 import QtQuick 2.9
-import QtQuick.Controls 1.4
+import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
-import QtQuick.Extras 1.2
+import QtQuick.Controls 1.4
 
-import Qt.labs.platform 1.1 as LabsPlatform
+//import QtQuick.Extras 1.2
+import Qt.labs.platform 1.0
 
-ApplicationWindow {
-
+//as LabsPlatform
+Window {
     id: app
     visible: true
     width: 300
@@ -229,7 +230,7 @@ ApplicationWindow {
         id: vpn
     }
 
-    LabsPlatform.SystemTrayIcon {
+    SystemTrayIcon {
 
         id: systray
         visible: systrayVisible
@@ -239,7 +240,12 @@ ApplicationWindow {
             systray.activatedSignal()
         }
 
-        menu: LabsPlatform.Menu {
+
+        /* the systray menu cannot be buried in a child qml file because
+         * otherwise the ids are not available
+         * from other components
+         */
+        menu: Menu {
 
             id: systrayMenu
 
@@ -253,13 +259,61 @@ ApplicationWindow {
                 }
             }
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 id: statusItem
                 text: qsTr("Checking status…")
                 enabled: false
             }
 
-            LabsPlatform.MenuItem {
+            MenuItem {
+                id: autoSelectionItem
+                text: qsTr("automatic")
+                checkable: true
+                checked: true
+                enabled: false
+            }
+
+
+            /* a minimal segfault for submenu */
+            // Menu {}
+
+            /* this segfaults too (but it's the way to do dynamic item creation */
+
+            /*
+            Menu {
+                id: manualGatewaysSubmenu
+                title: qsTr("Manual Gateways")
+                enabled: true
+
+                Instantiator {
+                    id: manualGatewayInstantiator
+                    //model: settings.recentFiles
+
+                    delegate: MenuItem {
+                        text: "test gateway"
+                    }
+
+                    onObjectAdded: manualGatewaysSubmenu.insertItem(index, object)
+                    onObjectRemoved: manualGatewaysSubmenu.removeItem(object)
+                }
+
+                MenuSeparator {}
+            }
+            */
+            MenuSeparator {}
+
+            MenuItem {
+                id: manualSelectionItem
+                text: qsTr("Pick gateway…")
+                checkable: true
+                checked: false
+                enabled: true
+            }
+
+            MenuSeparator {}
+
+
+            MenuItem {
                 text: {
                     if (vpn.state == "failed")
                         qsTr("Reconnect")
@@ -273,7 +327,7 @@ ApplicationWindow {
                                 || ctx.status == "failed") : false
             }
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 text: {
                     if (ctx && ctx.status == "starting")
                         qsTr("Cancel")
@@ -287,9 +341,9 @@ ApplicationWindow {
                                 || ctx.status == "failed") : false
             }
 
-            LabsPlatform.MenuSeparator {}
+            MenuSeparator {}
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 text: qsTr("About…")
                 onTriggered: {
                     about.visible = true
@@ -298,7 +352,7 @@ ApplicationWindow {
                 }
             }
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 id: donateItem
                 text: qsTr("Donate…")
                 visible: ctx ? ctx.donateURL : false
@@ -307,9 +361,9 @@ ApplicationWindow {
                 }
             }
 
-            LabsPlatform.MenuSeparator {}
+            MenuSeparator {}
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 text: qsTr("Help…")
 
                 onTriggered: {
@@ -318,7 +372,7 @@ ApplicationWindow {
                 }
             }
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 text: qsTr("Report a bug…")
 
                 onTriggered: {
@@ -328,9 +382,9 @@ ApplicationWindow {
                 }
             }
 
-            LabsPlatform.MenuSeparator {}
+            MenuSeparator {}
 
-            LabsPlatform.MenuItem {
+            MenuItem {
                 text: qsTr("Quit")
                 onTriggered: backend.quit()
             }
