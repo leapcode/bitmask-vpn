@@ -23,9 +23,6 @@ Window {
     property var loginDone
     property var allowEmptyPass
 
-    onWidthChanged: displayGatewayMarker()
-    onHeightChanged: displayGatewayMarker()
-
     GridLayout {
 
         visible: true
@@ -37,6 +34,7 @@ Window {
             Layout.leftMargin: app.width * 0.10
 
             ColumnLayout {
+
                 Layout.alignment: Qt.AlignHCenter
 
                 Text {
@@ -88,7 +86,8 @@ Window {
         target: jsonModel
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson())
-            console.debug(jsonModel.getJson())
+            // TODO pass QML_DEBUG variable to be hyper-verbose
+            //console.debug(jsonModel.getJson())
             gwSelector.model = Object.keys(ctx.gateways)
 
             if (ctx.donateDialog == 'true') {
@@ -194,6 +193,8 @@ Window {
         }
     }
 
+    /* TODO change this!!! automatic: Paris (FR) */
+
     function toHumanWithLocation(st) {
         switch (st) {
         case "off":
@@ -202,12 +203,12 @@ Window {
         case "on":
             //: %1 -> application name
             //: %2 -> current gateway
-            return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentGateway)
+            return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentLocation)
         case "connecting":
             //: %1 -> application name
             //: %2 -> current gateway
             return qsTr("Connecting to %1 - %2").arg(ctx.appName).arg(
-                        ctx.currentGateway)
+                        ctx.currentLocation)
         case "stopping":
             //: %1 -> application name
             return qsTr("Stopping %1").arg(ctx.appName)

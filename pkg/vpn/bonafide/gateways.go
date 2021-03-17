@@ -33,14 +33,6 @@ type Load struct {
 	Fullness string
 }
 
-/*
-func (g *cityMap) Get(key string) []string {
-	if val, ok := g.gws[key]; ok {
-		return val
-	}
-}
-*/
-
 /* gatewayDistance is used in the timezone distance fallback */
 type gatewayDistance struct {
 	gateway  Gateway
@@ -92,18 +84,18 @@ func (p *gatewayPool) isValidCity(city string) bool {
 }
 
 /* returns a map of city: hostname for the ui to use */
-func (p *gatewayPool) pickGatewayForCities() map[string]string {
+func (p *gatewayPool) pickGatewayForCities(transport string) map[string]Gateway {
 	cities := p.getCities()
-	cm := make(map[string]string)
+	cm := make(map[string]Gateway)
 	for _, city := range cities {
-		gw, _ := p.getRandomGatewayByCity(city)
-		cm[city] = gw.Host
+		gw, _ := p.getRandomGatewayByCity(city, transport)
+		cm[city] = gw
 	}
 	return cm
 }
 
 /* this method should only be used if we have no usable menshen list */
-func (p *gatewayPool) getRandomGatewayByCity(city string) (Gateway, error) {
+func (p *gatewayPool) getRandomGatewayByCity(city, transport string) (Gateway, error) {
 	if !p.isValidCity(city) {
 		return Gateway{}, errors.New("bonafide: BUG not a valid city: " + city)
 	}
@@ -115,11 +107,11 @@ func (p *gatewayPool) getRandomGatewayByCity(city string) (Gateway, error) {
 	r := rand.New(s)
 	host := gws[r.Intn(len(gws))]
 	for _, gw := range p.available {
-		if gw.Host == host {
+		if (gw.Host == host) && (gw.Transport == transport) {
 			return gw, nil
 		}
 	}
-	return Gateway{}, errors.New("bonafide: BUG should not reach here")
+	return Gateway{}, errors.New("bonafide: BUG could not find any gateway for that location")
 }
 
 func (p *gatewayPool) getGatewayByHost(host string) (Gateway, error) {
@@ -173,7 +165,7 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 	if len(p.userChoice) != 0 {
 		/* FIXME this is random because we still do not get menshen to return us load. after "new" menshen is deployed,
 		   we can just get them by the order menshen reeturned */
-		gw, err := p.getRandomGatewayByCity(string(p.userChoice))
+		gw, err := p.getRandomGatewayByCity(string(p.userChoice), transport)
 		gws = append(gws, gw)
 		return gws, err
 	} else if len(p.recommended) != 0 {

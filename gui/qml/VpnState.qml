@@ -54,7 +54,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainCurrentGateway
-                text: qsTr("Connected to ") + ctx.currentGateway
+                text: qsTr("Connected to ") + ctx.currentLocation
             }
             PropertyChanges {
                 target: mainOnBtn

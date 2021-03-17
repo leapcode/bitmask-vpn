@@ -231,9 +231,8 @@ func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.check()
 }
 
-func (b *Bitmask) ListGatewaysByCity(transport string) (map[string]string, error) {
-	/* TODO filter by transport */
-	gwForCities, err := b.bonafide.PickGatewayForCities()
+func (b *Bitmask) ListGatewaysByCity(transport string) (map[string]bonafide.Gateway, error) {
+	gwForCities, err := b.bonafide.PickGatewayForCities(transport)
 	return gwForCities, err
 }
 

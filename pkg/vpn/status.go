@@ -90,6 +90,10 @@ func (b *Bitmask) GetCurrentGateway() string {
 	return b.onGateway.Host
 }
 
+func (b *Bitmask) GetCurrentLocation() string {
+	return b.onGateway.LocationName
+}
+
 func (b *Bitmask) getOpenvpnState() (string, error) {
 	if b.managementClient == nil {
 		return "", fmt.Errorf("No management connected")
