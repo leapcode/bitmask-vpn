@@ -13,8 +13,17 @@ const (
 	maxGateways = 3
 )
 
+// Load reflects the fullness metric that menshen returns, if available.
+type Load struct {
+	Host     string
+	Fullness string
+}
+
 // A Gateway is a representation of gateways that is independent of the api version.
-// If a given physical location offers different transports, they will appear as separate gateways.
+// If a given physical location offers different transports, they will appear
+// as separate gateways, so make sure to filter them.
+// TODO We should include also the fullness metric here, so that it's easier to the UI to
+// represent them without any extra call.
 type Gateway struct {
 	Host         string
 	IPAddress    string
@@ -25,12 +34,7 @@ type Gateway struct {
 	Protocols    []string
 	Options      map[string]string
 	Transport    string
-}
-
-// Load reflects the fullness metric that menshen returns, if available.
-type Load struct {
-	Host     string
-	Fullness string
+	Fullness     float32
 }
 
 /* gatewayDistance is used in the timezone distance fallback */
@@ -40,9 +44,13 @@ type gatewayDistance struct {
 }
 
 type gatewayPool struct {
+	/* available is the unordered list of gateways from eip-service, we use if as source-of-truth for now.
+	TODO we might want to remove gateways if they are not returned by menshen due to being overloaded */
 	available  []Gateway
 	userChoice []byte
-	byCity     map[string][]string
+
+	/* byCity is a map from location to an array of hostnames */
+	byCity map[string][]string
 
 	/* recommended is an array of hostnames, fetched from the old geoip service.
 	 *  this should be deprecated in favor of recommendedWithLoad when new menshen is deployed */
@@ -83,7 +91,7 @@ func (p *gatewayPool) isValidCity(city string) bool {
 	return valid
 }
 
-/* returns a map of city: hostname for the ui to use */
+/* returns a map of city: gateway for the ui to use */
 func (p *gatewayPool) pickGatewayForCities(transport string) map[string]Gateway {
 	cities := p.getCities()
 	cm := make(map[string]Gateway)
@@ -94,7 +102,10 @@ func (p *gatewayPool) pickGatewayForCities(transport string) map[string]Gateway 
 	return cm
 }
 
-/* this method should only be used if we have no usable menshen list */
+/* this method should only be used if we have no usable menshen list.
+* TODO if we do have an usable menshen list, we can just traverse "recommended"
+* and return, in order, at most max gateways for the selected location.
+ */
 func (p *gatewayPool) getRandomGatewayByCity(city, transport string) (Gateway, error) {
 	if !p.isValidCity(city) {
 		return Gateway{}, errors.New("bonafide: BUG not a valid city: " + city)
@@ -114,6 +125,7 @@ func (p *gatewayPool) getRandomGatewayByCity(city, transport string) (Gateway, e
 	return Gateway{}, errors.New("bonafide: BUG could not find any gateway for that location")
 }
 
+/* used when we select a hostname in the ui and we want to know the gateway details */
 func (p *gatewayPool) getGatewayByHost(host string) (Gateway, error) {
 	for _, gw := range p.available {
 		if gw.Host == host {
@@ -123,6 +135,7 @@ func (p *gatewayPool) getGatewayByHost(host string) (Gateway, error) {
 	return Gateway{}, errors.New("bonafide: not a valid host name")
 }
 
+/* used when we want to know gateway details after we know what IP openvpn has connected to */
 func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 	for _, gw := range p.available {
 		if gw.IPAddress == ip {
@@ -132,10 +145,12 @@ func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 	return Gateway{}, errors.New("bonafide: not a valid ip address")
 }
 
+/* this perhaps could be made more explicit */
 func (p *gatewayPool) setAutomaticChoice() {
 	p.userChoice = []byte("")
 }
 
+/* set a user manual override for gateway location */
 func (p *gatewayPool) setUserChoice(city []byte) error {
 	if !p.isValidCity(string(city)) {
 		return errors.New("bonafide: not a valid city for gateway choice")
@@ -144,6 +159,7 @@ func (p *gatewayPool) setUserChoice(city []byte) error {
 	return nil
 }
 
+/* set the recommended field from an ordered array. needs to be modified if menshen passed an array of Loads */
 func (p *gatewayPool) setRecommendedGateways(hostnames []string) {
 	hosts := make([]string, 0)
 	for _, gw := range p.available {
@@ -160,11 +176,13 @@ func (p *gatewayPool) setRecommendedGateways(hostnames []string) {
 	p.recommended = hostnames
 }
 
+/* get at most max gateways. the method of picking depends on whether we're
+* doing manual override, and if we got useful info from menshen */
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	if len(p.userChoice) != 0 {
 		/* FIXME this is random because we still do not get menshen to return us load. after "new" menshen is deployed,
-		   we can just get them by the order menshen reeturned */
+		   we can just get them by the order menshen returned */
 		gw, err := p.getRandomGatewayByCity(string(p.userChoice), transport)
 		gws = append(gws, gw)
 		return gws, err
@@ -183,6 +201,7 @@ func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
 	}
 }
 
+/* picks at most max gateways, filtering by transport, from the ordered list menshen returned */
 func (p *gatewayPool) getGatewaysFromMenshen(transport string, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	for _, host := range p.recommended {
@@ -202,6 +221,7 @@ end:
 	return gws, nil
 }
 
+/* the old timezone based heuristic, when everything goes wrong */
 func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	gwVector := []gatewayDistance{}
