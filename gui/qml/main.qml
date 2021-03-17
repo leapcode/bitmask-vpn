@@ -6,8 +6,6 @@ import QtQuick.Extras 1.2
 
 import Qt.labs.platform 1.1 as LabsPlatform
 
-import "qrc:/js/maps.js" as Maps
-
 ApplicationWindow {
 
     id: app
@@ -85,68 +83,6 @@ ApplicationWindow {
                 }
             }
         }
-
-        Item {
-            Layout.topMargin: app.height * 0.40
-            Layout.row: 3
-            Layout.column: 1
-            Layout.columnSpan: 3
-
-            Image {
-                id: worldMap
-                width: app.width
-                source: "qrc:/assets/svg/world.svg"
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-            }
-
-            Rectangle {
-                id: gwMarker
-                x: worldMap.width * 0.5
-                y: worldMap.height * 0.5
-                width: 10
-                height: 10
-                radius: 10
-                color: "red"
-                z: worldMap.z + 1
-            }
-        }
-    }
-
-    function displayGatewayMarker() {
-        let coords = {
-            "paris": {
-                "x": 48,
-                "y": 2
-            },
-            "miami": {
-                "x": 25.7,
-                "y": -80.2
-            },
-            "amsterdam": {
-                "x": 52.4,
-                "y": 4.9
-            },
-            "montreal": {
-                "x": 45.3,
-                "y": -73.4
-            },
-            "seattle": {
-                "x": 47.4,
-                "y": -122.2
-            }
-        }
-        let city = ctx.currentGateway.split('-')[0]
-        let coord = coords[city]
-
-        // TODO the Robinson projection does not seem to fit super-nicely with
-        // our map, and this offset doesn't work with bigg-ish sizes. But good
-        // enough for a proof of concept - if we avoid resizing the window.
-        let xOffset = -1 * 0.10 * worldMap.width
-        let p = Maps.projectAbsolute(coord.x, coord.y, worldMap.width,
-                                     1, xOffset)
-        gwMarker.x = p.x
-        gwMarker.y = p.y
     }
 
     Connections {

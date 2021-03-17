@@ -36,16 +36,9 @@ StateGroup {
                 target: mainOffBtn
                 visible: false
             }
-            PropertyChanges {
-                target: gwMarker
-                color: "red"
-            }
         },
         State {
             name: "on"
-            StateChangeScript {
-                script: displayGatewayMarker()
-            }
             PropertyChanges {
                 target: systray
                 tooltip: toHuman("on")
@@ -70,10 +63,6 @@ StateGroup {
             PropertyChanges {
                 target: mainOffBtn
                 visible: true
-            }
-            PropertyChanges {
-                target: gwMarker
-                color: "green"
             }
         },
         State {
@@ -103,10 +92,6 @@ StateGroup {
                 target: mainOffBtn
                 visible: true
             }
-            PropertyChanges {
-                target: gwMarker
-                color: "orange"
-            }
         },
         State {
             name: "stopping"
@@ -135,10 +120,6 @@ StateGroup {
                 target: mainOffBtn
                 visible: false
             }
-            PropertyChanges {
-                target: gwMarker
-                color: "orange"
-            }
         },
         State {
             name: "failed"
@@ -166,10 +147,6 @@ StateGroup {
             PropertyChanges {
                 target: mainOffBtn
                 visible: false
-            }
-            PropertyChanges {
-                target: gwMarker
-                color: "red"
             }
         }
     ]
