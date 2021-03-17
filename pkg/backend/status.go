@@ -33,33 +33,36 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName         string                      `json:"appName"`
-	Provider        string                      `json:"provider"`
-	TosURL          string                      `json:"tosURL"`
-	HelpURL         string                      `json:"helpURL"`
-	AskForDonations bool                        `json:"askForDonations"`
-	DonateDialog    bool                        `json:"donateDialog"`
-	DonateURL       string                      `json:"donateURL"`
-	LoginDialog     bool                        `json:"loginDialog"`
-	LoginOk         bool                        `json:"loginOk"`
-	Version         string                      `json:"version"`
-	Errors          string                      `json:"errors"`
-	Status          status                      `json:"status"`
-	Gateways        map[string]bonafide.Gateway `json:"gateways"`
-	CurrentGateway  string                      `json:"currentGateway"`
-	bm              bitmask.Bitmask
-	autostart       bitmask.Autostart
-	cfg             *config.Config
+	AppName         string `json:"appName"`
+	Provider        string `json:"provider"`
+	TosURL          string `json:"tosURL"`
+	HelpURL         string `json:"helpURL"`
+	AskForDonations bool   `json:"askForDonations"`
+	DonateDialog    bool   `json:"donateDialog"`
+	DonateURL       string `json:"donateURL"`
+	LoginDialog     bool   `json:"loginDialog"`
+	LoginOk         bool   `json:"loginOk"`
+	Version         string `json:"version"`
+	Errors          string `json:"errors"`
+	Status          status `json:"status"`
+	/* XXX rename to GatewaysByCity */
+	Gateways       map[string]bonafide.Gateway `json:"gateways"`
+	CurrentGateway string                      `json:"currentGateway"`
+	bm             bitmask.Bitmask
+	autostart      bitmask.Autostart
+	cfg            *config.Config
 }
 
 func (c connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
 		c.Gateways = map[string]bonafide.Gateway{}
-		gateways, _ := c.bm.ListGateways("openvpn")
-		for _, label := range gateways {
-			gw, _ := c.bm.GetGatewayDetails(label)
-			c.Gateways[label] = gw.(bonafide.Gateway)
+		/* FIXME this returns hostnames, could return bonafide gateway directly */
+		gateways, _ := c.bm.ListGatewaysByCity("openvpn")
+		log.Println(">>> got gws for cities", gateways)
+		for city, host := range gateways {
+			gw, _ := c.bm.GetGatewayDetails(host)
+			c.Gateways[city] = gw.(bonafide.Gateway)
 		}
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 	}

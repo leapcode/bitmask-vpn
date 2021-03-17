@@ -64,9 +64,9 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 }
 
 func webGatewayList(w http.ResponseWriter, r *http.Request) {
-	gws, err := ctx.bm.ListGateways(ctx.Provider)
+	gws, err := ctx.bm.ListGatewaysByCity(ctx.Provider)
 	if err != nil {
-		fmt.Fprintf(w, "ListGateways() err: %v", err)
+		fmt.Fprintf(w, "ListGatewaysByCity() err: %v", err)
 	}
 	gwJson, _ := json.Marshal(gws)
 	fmt.Fprintf(w, string(gwJson))

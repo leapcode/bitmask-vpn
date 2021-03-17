@@ -231,22 +231,14 @@ func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.check()
 }
 
-// ListGateways return the labels of the gateways (only for transport=openvpn, at the moment)
-// TODO return other transports too
-func (b *Bitmask) ListGateways(provider string) ([]string, error) {
-	gateways, err := b.bonafide.GetAllGateways("openvpn")
-	if err != nil {
-		return nil, err
-	}
-	gatewayNames := make([]string, len(gateways))
-	for i, gw := range gateways {
-		gatewayNames[i] = gw.Label
-	}
-	return gatewayNames, nil
+func (b *Bitmask) ListGatewaysByCity(transport string) (map[string]string, error) {
+	/* TODO filter by transport */
+	gwForCities, err := b.bonafide.PickGatewayForCities()
+	return gwForCities, err
 }
 
-func (b *Bitmask) GetGatewayDetails(label string) (interface{}, error) {
-	gw, err := b.bonafide.GetGatewayDetails(label)
+func (b *Bitmask) GetGatewayDetails(host string) (interface{}, error) {
+	gw, err := b.bonafide.GetGatewayDetails(host)
 	if err != nil {
 		return bonafide.Gateway{}, err
 	}

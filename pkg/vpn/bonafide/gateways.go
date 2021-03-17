@@ -33,27 +33,24 @@ type Load struct {
 	Fullness string
 }
 
+/*
+func (g *cityMap) Get(key string) []string {
+	if val, ok := g.gws[key]; ok {
+		return val
+	}
+}
+*/
+
+/* gatewayDistance is used in the timezone distance fallback */
 type gatewayDistance struct {
 	gateway  Gateway
 	distance int
 }
 
-/* a map between locations and hostnames, to be able to select by city */
-type cityMap struct {
-	gws map[string][]string
-}
-
-func (g *cityMap) Get(key string) []string {
-	if val, ok := g.gws[key]; ok {
-		return val
-	}
-	return make([]string, 0)
-}
-
 type gatewayPool struct {
 	available  []Gateway
 	userChoice []byte
-	byCity     cityMap
+	byCity     map[string][]string
 
 	/* recommended is an array of hostnames, fetched from the old geoip service.
 	 *  this should be deprecated in favor of recommendedWithLoad when new menshen is deployed */
@@ -70,9 +67,14 @@ type gatewayPool struct {
 func (p *gatewayPool) populateCityList() {
 	for _, gw := range p.available {
 		loc := gw.Location
-		gws := p.cityMap.Get(loc)
-		p.cityMap[loc] = append(gws, gw.Host)
+		gws := p.byCity[loc]
+		if len(gws) == 0 {
+			p.byCity[loc] = []string{gw.Host}
+		} else {
+			p.byCity[loc] = append(gws, gw.Host)
+		}
 	}
+	log.Println(p.byCity)
 }
 
 func (p *gatewayPool) getCities() []string {
@@ -89,12 +91,23 @@ func (p *gatewayPool) isValidCity(city string) bool {
 	return valid
 }
 
+/* returns a map of city: hostname for the ui to use */
+func (p *gatewayPool) pickGatewayForCities() map[string]string {
+	cities := p.getCities()
+	cm := make(map[string]string)
+	for _, city := range cities {
+		gw, _ := p.getRandomGatewayByCity(city)
+		cm[city] = gw.Host
+	}
+	return cm
+}
+
 /* this method should only be used if we have no usable menshen list */
 func (p *gatewayPool) getRandomGatewayByCity(city string) (Gateway, error) {
 	if !p.isValidCity(city) {
 		return Gateway{}, errors.New("bonafide: BUG not a valid city: " + city)
 	}
-	gws := p.byCity.Get(city)
+	gws := p.byCity[city]
 	if len(gws) == 0 {
 		return Gateway{}, errors.New("bonafide: BUG no gw for city " + city)
 	}
@@ -109,54 +122,14 @@ func (p *gatewayPool) getRandomGatewayByCity(city string) (Gateway, error) {
 	return Gateway{}, errors.New("bonafide: BUG should not reach here")
 }
 
-/* genLabels generates unique, human-readable labels for a gateway. It gives a serial
-   number to each gateway in the same location (paris-1, paris-2,...). The
-   current implementation will give a different label to each transport.
-   An alternative (to discuss) would be to give the same label to the same hostname.
-func (p *gatewayPool) genLabels() {
-	acc := make(map[string]int)
-	for i, gw := range p.available {
-		if _, count := acc[gw.Location]; !count {
-			acc[gw.Location] = 1
-		} else {
-			acc[gw.Location] += 1
-		}
-		gw.Label = gw.Location + "-" + strconv.Itoa(acc[gw.Location])
-		p.available[i] = gw
-	}
-	for i, gw := range p.available {
-		if acc[gw.Location] == 1 {
-			gw.Label = gw.Location
-			p.available[i] = gw
-		}
-	}
-}
-*/
-
-/*
-func (p *gatewayPool) getLabels() []string {
-	labels := make([]string, 0)
+func (p *gatewayPool) getGatewayByHost(host string) (Gateway, error) {
 	for _, gw := range p.available {
-		labels = append(labels, gw.Label)
-	}
-	return labels
-}
-
-func (p *gatewayPool) isValidLabel(label string) bool {
-	labels := p.getLabels()
-	valid := stringInSlice(label, labels)
-	return valid
-}
-
-func (p *gatewayPool) getGatewayByLabel(label string) (Gateway, error) {
-	for _, gw := range p.available {
-		if gw.Label == label {
+		if gw.Host == host {
 			return gw, nil
 		}
 	}
-	return Gateway{}, errors.New("bonafide: not a valid label")
+	return Gateway{}, errors.New("bonafide: not a valid host name")
 }
-*/
 
 func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 	for _, gw := range p.available {
@@ -179,7 +152,7 @@ func (p *gatewayPool) setUserChoice(city []byte) error {
 	return nil
 }
 
-func (p *gatewayPool) setRanking(hostnames []string) {
+func (p *gatewayPool) setRecommendedGateways(hostnames []string) {
 	hosts := make([]string, 0)
 	for _, gw := range p.available {
 		hosts = append(hosts, gw.Host)
@@ -277,6 +250,7 @@ func newGatewayPool(eip *eipService) *gatewayPool {
 	p := gatewayPool{}
 	p.available = eip.getGateways()
 	p.locations = eip.Locations
+	p.byCity = make(map[string][]string, 0)
 	p.populateCityList()
 	return &p
 }

@@ -4,10 +4,8 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.4
 
-//import QtQuick.Extras 1.2
 import Qt.labs.platform 1.0
 
-//as LabsPlatform
 Window {
     id: app
     visible: true
@@ -90,6 +88,7 @@ Window {
         target: jsonModel
         onDataChanged: {
             ctx = JSON.parse(jsonModel.getJson())
+            console.debug(jsonModel.getJson())
             gwSelector.model = Object.keys(ctx.gateways)
 
             if (ctx.donateDialog == 'true') {
@@ -277,29 +276,6 @@ Window {
             /* a minimal segfault for submenu */
             // Menu {}
 
-            /* this segfaults too (but it's the way to do dynamic item creation */
-
-            /*
-            Menu {
-                id: manualGatewaysSubmenu
-                title: qsTr("Manual Gateways")
-                enabled: true
-
-                Instantiator {
-                    id: manualGatewayInstantiator
-                    //model: settings.recentFiles
-
-                    delegate: MenuItem {
-                        text: "test gateway"
-                    }
-
-                    onObjectAdded: manualGatewaysSubmenu.insertItem(index, object)
-                    onObjectRemoved: manualGatewaysSubmenu.removeItem(object)
-                }
-
-                MenuSeparator {}
-            }
-            */
             MenuSeparator {}
 
             MenuItem {

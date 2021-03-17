@@ -77,7 +77,7 @@ func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
 			gw, err := b.bonafide.GetGatewayByIP(ip)
 			if err == nil {
 				b.onGateway = gw
-				log.Println("Connected to gateway:", b.onGateway.Label)
+				log.Println("Connected to gateway:", b.onGateway.Host)
 			} else {
 				log.Println("ERROR: connected to unknown gateway", ip)
 			}
@@ -87,7 +87,7 @@ func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
 }
 
 func (b *Bitmask) GetCurrentGateway() string {
-	return b.onGateway.Label
+	return b.onGateway.Host
 }
 
 func (b *Bitmask) getOpenvpnState() (string, error) {

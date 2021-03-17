@@ -26,7 +26,7 @@ type Bitmask interface {
 	GetStatus() (string, error)
 	InstallHelpers() error
 	VPNCheck() (helpers bool, priviledge bool, err error)
-	ListGateways(provider string) ([]string, error)
+	ListGatewaysByCity(provider string) (map[string]string, error)
 	UseGateway(name string) error
 	GetCurrentGateway() string
 	GetGatewayDetails(label string) (interface{}, error)

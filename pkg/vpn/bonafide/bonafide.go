@@ -192,7 +192,7 @@ func (b *Bonafide) maybeInitializeEIP() error {
 			return err
 		}
 		b.gateways = newGatewayPool(b.eip)
-		b.fetchGatewayRanking()
+		b.fetchGatewaysFromMenshen()
 	}
 	return nil
 }
@@ -224,8 +224,13 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	return gws, err
 }
 
-func (b *Bonafide) GetGatewayDetails(label string) (Gateway, error) {
-	return b.gateways.getGatewayByLabel(label)
+func (b *Bonafide) PickGatewayForCities() (map[string]string, error) {
+	return b.gateways.pickGatewayForCities(), nil
+}
+
+func (b *Bonafide) GetGatewayDetails(host string) (Gateway, error) {
+	gw, err := b.gateways.getGatewayByHost(host)
+	return gw, err
 }
 
 func (b *Bonafide) SetManualGateway(label string) {
@@ -241,7 +246,7 @@ func (b *Bonafide) GetGatewayByIP(ip string) (Gateway, error) {
 }
 
 /* TODO this still needs to be called periodically */
-func (b *Bonafide) fetchGatewayRanking() error {
+func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
 	So this is a workaround until we streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
@@ -272,7 +277,7 @@ func (b *Bonafide) fetchGatewayRanking() error {
 	}
 
 	log.Println("Got sorted gateways:", geo.SortedGateways)
-	b.gateways.setRanking(geo.SortedGateways)
+	b.gateways.setRecommendedGateways(geo.SortedGateways)
 	return nil
 }
 
