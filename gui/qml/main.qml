@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 import Qt.labs.platform 1.0
@@ -9,12 +9,12 @@ import Qt.labs.platform 1.0
 Window {
     id: app
     visible: true
-    width: 300
+    width: 500
     height: 600
-    maximumWidth: 300
+    maximumWidth: 600
     minimumWidth: 300
-    maximumHeight: 600
-    minimumHeight: 600
+    maximumHeight: 500
+    minimumHeight: 300
 
     flags: Qt.WindowsStaysOnTopHint
 
@@ -23,32 +23,44 @@ Window {
     property var loginDone
     property var allowEmptyPass
 
-    GridLayout {
+    TabBar {
+        id: bar
+        width: parent.width
+        TabButton {
+            text: qsTr("Info")
+        }
+        TabButton {
+            text: qsTr("Gateways")
+        }
+    }
 
-        visible: true
-        columns: 3
+    StackLayout {
+
+        anchors.fill: parent
+        currentIndex: bar.currentIndex
 
         Item {
-            Layout.column: 2
-            Layout.topMargin: app.height * 0.15
-            Layout.leftMargin: app.width * 0.10
 
-            ColumnLayout {
+            id: infoTab
+            anchors.centerIn: parent
 
-                Layout.alignment: Qt.AlignHCenter
+            Column {
+
+                anchors.centerIn: parent
+                spacing: 5
 
                 Text {
                     id: mainStatus
                     text: "off"
                     font.pixelSize: 26
-                    Layout.alignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 Text {
                     id: mainCurrentGateway
                     text: ""
                     font.pixelSize: 20
-                    Layout.alignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 SwitchDelegate {
@@ -57,6 +69,7 @@ Window {
 
                     text: qsTr("")
                     checked: false
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     Connections {
                         onCheckedChanged: {
@@ -104,20 +117,35 @@ Window {
                         visible: vpntoggle.down || vpntoggle.highlighted
                         color: vpntoggle.down ? "#bdbebf" : "#eeeeee"
                     }
-                }
+                } // end switchdelegate
+            }
+        }
+
+        Item {
+
+            id: gatewayTab
+            anchors.centerIn: parent
+
+            Column {
+
+                anchors.centerIn: parent
+                spacing: 10
 
                 ComboBox {
                     id: gwSelector
                     editable: false
+                    anchors.horizontalCenter: parent.horizontalCenter
+
                     model: [qsTr("Automatic")]
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
                         backend.useGateway(currentText.toString())
                     }
                 }
-            }
-        }
-    }
+            } // end columnlayout
+        } // end item 
+    } // end stacklayout
+
 
     Connections {
         target: jsonModel
