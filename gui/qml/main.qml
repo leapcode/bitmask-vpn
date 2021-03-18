@@ -63,6 +63,7 @@ Window {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
+
                 SwitchDelegate {
 
                     id: vpntoggle
@@ -118,6 +119,15 @@ Window {
                         color: vpntoggle.down ? "#bdbebf" : "#eeeeee"
                     }
                 } // end switchdelegate
+
+                Text {
+                    id: manualOverrideWarning
+                    font.pixelSize: 10
+                    color: "grey"
+                    text: qsTr("Location has been manually set.")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: manualSelectionButton.checked
+                }
             }
         }
 
@@ -131,9 +141,19 @@ Window {
                 anchors.centerIn: parent
                 spacing: 10
 
+                RadioButton {
+                    id: autoSelectionButton
+                    checked: true
+                    text: qsTr("Automatic")
+                }
+                RadioButton {
+                    id: manualSelectionButton
+                    text: qsTr("Manual")
+                }
                 ComboBox {
                     id: gwSelector
                     editable: false
+                    visible: manualSelectionButton.checked
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     model: [qsTr("Automatic")]
