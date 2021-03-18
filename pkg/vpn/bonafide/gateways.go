@@ -79,8 +79,13 @@ func (p *gatewayPool) populateCityList() {
 
 func (p *gatewayPool) getCities() []string {
 	c := make([]string, 0)
-	for city, _ := range p.byCity {
-		c = append(c, city)
+	if p == nil || p.byCity == nil || len(p.byCity) == 0 {
+		return c
+	}
+	if len(p.byCity) != 0 {
+		for city := range p.byCity {
+			c = append(c, city)
+		}
 	}
 	return c
 }
@@ -196,9 +201,8 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
 	if len(p.recommended) != 0 {
 		return p.getGatewaysFromMenshen(transport, 999)
-	} else {
-		return p.getGatewaysByTimezone(transport, tz, 999)
 	}
+	return p.getGatewaysByTimezone(transport, tz, 999)
 }
 
 /* picks at most max gateways, filtering by transport, from the ordered list menshen returned */
@@ -235,9 +239,8 @@ func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max
 		if err != nil {
 			log.Printf("Error sorting gateways: %v", err)
 			return gws, err
-		} else {
-			distance = tzDistance(tzOffsetHours, gwOffset)
 		}
+		distance = tzDistance(tzOffsetHours, gwOffset)
 		gwVector = append(gwVector, gatewayDistance{gw, distance})
 	}
 	rand.Seed(time.Now().UnixNano())
@@ -262,7 +265,7 @@ func newGatewayPool(eip *eipService) *gatewayPool {
 	p := gatewayPool{}
 	p.available = eip.getGateways()
 	p.locations = eip.Locations
-	p.byCity = make(map[string][]string, 0)
+	p.byCity = make(map[string][]string)
 	p.populateCityList()
 	return &p
 }
