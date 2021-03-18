@@ -17,6 +17,10 @@ StateGroup {
                 icon.source: icons["off"]
             }
             PropertyChanges {
+                target: vpntoggle
+                checked: false
+            }
+            PropertyChanges {
                 target: statusItem
                 text: toHuman("off")
             }
@@ -28,14 +32,6 @@ StateGroup {
                 target: mainCurrentGateway
                 text: ""
             }
-            PropertyChanges {
-                target: mainOnBtn
-                visible: true
-            }
-            PropertyChanges {
-                target: mainOffBtn
-                visible: false
-            }
         },
         State {
             name: "on"
@@ -43,6 +39,10 @@ StateGroup {
                 target: systray
                 tooltip: toHuman("on")
                 icon.source: icons["on"]
+            }
+            PropertyChanges {
+                target: vpntoggle
+                checked: true
             }
             PropertyChanges {
                 target: statusItem
@@ -55,14 +55,6 @@ StateGroup {
             PropertyChanges {
                 target: mainCurrentGateway
                 text: qsTr("Connected to ") + ctx.currentLocation
-            }
-            PropertyChanges {
-                target: mainOnBtn
-                visible: false
-            }
-            PropertyChanges {
-                target: mainOffBtn
-                visible: true
             }
         },
         State {
@@ -84,14 +76,6 @@ StateGroup {
                 target: mainCurrentGateway
                 text: ""
             }
-            PropertyChanges {
-                target: mainOnBtn
-                visible: false
-            }
-            PropertyChanges {
-                target: mainOffBtn
-                visible: true
-            }
         },
         State {
             name: "stopping"
@@ -112,14 +96,6 @@ StateGroup {
                 target: mainCurrentGateway
                 text: ""
             }
-            PropertyChanges {
-                target: mainOnBtn
-                visible: true
-            }
-            PropertyChanges {
-                target: mainOffBtn
-                visible: false
-            }
         },
         State {
             name: "failed"
@@ -139,14 +115,6 @@ StateGroup {
             PropertyChanges {
                 target: mainCurrentGateway
                 text: ""
-            }
-            PropertyChanges {
-                target: mainOnBtn
-                visible: true
-            }
-            PropertyChanges {
-                target: mainOffBtn
-                visible: false
             }
         }
     ]

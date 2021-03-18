@@ -52,9 +52,8 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 		log.Println("ERROR: failed auth request", err)
 		if os.IsTimeout(err) {
 			return nil, fmt.Errorf("TokenErrTimeout")
-		} else {
-			return nil, fmt.Errorf("TokenErrBadPost")
 		}
+		return nil, fmt.Errorf("TokenErrBadPost")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {

@@ -141,7 +141,7 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 		/* try cached token */
 		token, err := b.auth.getToken("", "")
 		if err != nil {
-			return nil, errors.New("BUG: This service needs login, but we were not logged in.")
+			return nil, errors.New("bug: this service needs login, but we were not logged in")
 		}
 		b.token = token
 	}

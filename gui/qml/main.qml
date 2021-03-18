@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.12
 
 import Qt.labs.platform 1.0
 
@@ -51,22 +51,59 @@ Window {
                     Layout.alignment: Text.AlignHCenter
                 }
 
-                Button {
-                    id: mainOnBtn
-                    x: 80
-                    y: 200
-                    text: qsTr("on")
-                    visible: true
-                    onClicked: backend.switchOn()
-                }
+                SwitchDelegate {
 
-                Button {
-                    id: mainOffBtn
-                    x: 180
-                    y: 200
-                    text: qsTr("off")
-                    visible: false
-                    onClicked: backend.switchOff()
+                    id: vpntoggle
+
+                    text: qsTr("")
+                    checked: false
+
+                    Connections {
+                        onCheckedChanged: {
+                            if (vpntoggle.checked == true && ctx.status == "off") {
+                                backend.switchOn()
+                            }
+                            if (vpntoggle.checked === false && ctx.status == "on") {
+                                backend.switchOff()
+                            }
+                        }
+                    }
+
+                    contentItem: Text {
+                        rightPadding: vpntoggle.indicator.width + control.spacing
+                        text: vpntoggle.text
+                        font: vpntoggle.font
+                        opacity: enabled ? 1.0 : 0.3
+                        color: vpntoggle.down ? "#17a81a" : "#21be2b"
+                        elide: Text.ElideRight
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    indicator: Rectangle {
+                        implicitWidth: 48
+                        implicitHeight: 26
+                        x: vpntoggle.width - width - vpntoggle.rightPadding
+                        y: parent.height / 2 - height / 2
+                        radius: 13
+                        color: vpntoggle.checked ? "#17a81a" : "transparent"
+                        border.color: vpntoggle.checked ? "#17a81a" : "#cccccc"
+
+                        Rectangle {
+                            x: vpntoggle.checked ? parent.width - width : 0
+                            width: 26
+                            height: 26
+                            radius: 13
+                            color: vpntoggle.down ? "#cccccc" : "#ffffff"
+                            border.color: vpntoggle.checked ? (vpntoggle.down ? "#17a81a" : "#21be2b") : "#999999"
+                        }
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 100
+                        implicitHeight: 40
+                        visible: vpntoggle.down || vpntoggle.highlighted
+                        color: vpntoggle.down ? "#bdbebf" : "#eeeeee"
+                    }
                 }
 
                 ComboBox {
