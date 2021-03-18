@@ -18,10 +18,12 @@ Window {
 
     flags: Qt.WindowsStaysOnTopHint
 
-    // TODO get a nice background color
     property var ctx
     property var loginDone
     property var allowEmptyPass
+
+    // TODO get a nice background color for this mainwindow. It should be customizable.
+    // TODO refactorize all this mess into discrete components.
 
     TabBar {
         id: bar
@@ -145,6 +147,8 @@ Window {
                     id: autoSelectionButton
                     checked: true
                     text: qsTr("Automatic")
+                    // TODO still needs to change to automatic on the backend, and maybe note
+                    // that the change will be effective on the next reconnect.
                 }
                 RadioButton {
                     id: manualSelectionButton
@@ -162,7 +166,7 @@ Window {
                         backend.useGateway(currentText.toString())
                     }
                 }
-            } // end columnlayout
+            } // end column
         } // end item 
     } // end stacklayout
 
@@ -330,6 +334,7 @@ Window {
          * otherwise the ids are not available
          * from other components
          */
+
         menu: Menu {
 
             id: systrayMenu
