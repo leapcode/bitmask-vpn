@@ -15,10 +15,6 @@
 
 package bitmask
 
-import (
-	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
-)
-
 type Bitmask interface {
 	GetStatusCh() <-chan string
 	Close()
@@ -30,12 +26,10 @@ type Bitmask interface {
 	GetStatus() (string, error)
 	InstallHelpers() error
 	VPNCheck() (helpers bool, priviledge bool, err error)
-	/* this is kind of breaking the abstract interface, maybe we don't need this anymore */
-	ListGatewaysByCity(protocol string) (map[string]bonafide.Gateway, error)
+	ListLocationFullness(protocol string) map[string]float64
 	UseGateway(name string) error
 	GetCurrentGateway() string
 	GetCurrentLocation() string
-	GetGatewayDetails(label string) (interface{}, error)
 	UseTransport(transport string) error
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)

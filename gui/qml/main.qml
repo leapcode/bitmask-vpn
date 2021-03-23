@@ -177,7 +177,7 @@ Window {
             ctx = JSON.parse(jsonModel.getJson())
             // TODO pass QML_DEBUG variable to be hyper-verbose
             //console.debug(jsonModel.getJson())
-            gwSelector.model = Object.keys(ctx.gateways)
+            gwSelector.model = Object.keys(ctx.locations)
 
             if (ctx.donateDialog == 'true') {
                 console.debug(jsonModel.getJson())

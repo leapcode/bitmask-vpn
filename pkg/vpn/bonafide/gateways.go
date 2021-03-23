@@ -34,7 +34,7 @@ type Gateway struct {
 	Protocols    []string
 	Options      map[string]string
 	Transport    string
-	Fullness     float32
+	Fullness     float64
 }
 
 /* gatewayDistance is used in the timezone distance fallback */
@@ -96,13 +96,13 @@ func (p *gatewayPool) isValidCity(city string) bool {
 	return valid
 }
 
-/* returns a map of city: gateway for the ui to use */
-func (p *gatewayPool) pickGatewayForCities(transport string) map[string]Gateway {
+/* returns a map of location: fullness for the ui to use */
+func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 {
 	cities := p.getCities()
-	cm := make(map[string]Gateway)
+	cm := make(map[string]float64)
 	for _, city := range cities {
 		gw, _ := p.getRandomGatewayByCity(city, transport)
-		cm[city] = gw
+		cm[city] = gw.Fullness
 	}
 	return cm
 }

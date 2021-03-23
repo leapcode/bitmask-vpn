@@ -224,13 +224,8 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	return gws, err
 }
 
-func (b *Bonafide) PickGatewayForCities(transport string) (map[string]Gateway, error) {
-	return b.gateways.pickGatewayForCities(transport), nil
-}
-
-func (b *Bonafide) GetGatewayDetails(host string) (Gateway, error) {
-	gw, err := b.gateways.getGatewayByHost(host)
-	return gw, err
+func (b *Bonafide) ListLocationFullness(transport string) map[string]float64 {
+	return b.gateways.listLocationFullness(transport)
 }
 
 func (b *Bonafide) SetManualGateway(label string) {

@@ -64,12 +64,11 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 }
 
 func webGatewayList(w http.ResponseWriter, r *http.Request) {
-	gws, err := ctx.bm.ListGatewaysByCity(ctx.Provider)
+	locationJson, err := json.Marshal(ctx.bm.ListLocationFullness("openvpn"))
 	if err != nil {
-		fmt.Fprintf(w, "ListGatewaysByCity() err: %v", err)
+		fmt.Fprintf(w, "Error converting json: %v", err)
 	}
-	gwJson, _ := json.Marshal(gws)
-	fmt.Fprintf(w, string(gwJson))
+	fmt.Fprintf(w, string(locationJson))
 }
 
 // TODO

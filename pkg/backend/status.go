@@ -8,7 +8,6 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 )
 
 const (
@@ -33,22 +32,21 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName         string `json:"appName"`
-	Provider        string `json:"provider"`
-	TosURL          string `json:"tosURL"`
-	HelpURL         string `json:"helpURL"`
-	AskForDonations bool   `json:"askForDonations"`
-	DonateDialog    bool   `json:"donateDialog"`
-	DonateURL       string `json:"donateURL"`
-	LoginDialog     bool   `json:"loginDialog"`
-	LoginOk         bool   `json:"loginOk"`
-	Version         string `json:"version"`
-	Errors          string `json:"errors"`
-	Status          status `json:"status"`
-	/* XXX perhaps rename to GatewaysByCity */
-	Gateways        map[string]bonafide.Gateway `json:"gateways"`
-	CurrentGateway  string                      `json:"currentGateway"`
-	CurrentLocation string                      `json:"currentLocation"`
+	AppName         string             `json:"appName"`
+	Provider        string             `json:"provider"`
+	TosURL          string             `json:"tosURL"`
+	HelpURL         string             `json:"helpURL"`
+	AskForDonations bool               `json:"askForDonations"`
+	DonateDialog    bool               `json:"donateDialog"`
+	DonateURL       string             `json:"donateURL"`
+	LoginDialog     bool               `json:"loginDialog"`
+	LoginOk         bool               `json:"loginOk"`
+	Version         string             `json:"version"`
+	Errors          string             `json:"errors"`
+	Status          status             `json:"status"`
+	Locations       map[string]float64 `json:"locations"`
+	CurrentGateway  string             `json:"currentGateway"`
+	CurrentLocation string             `json:"currentLocation"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
@@ -57,11 +55,7 @@ type connectionCtx struct {
 func (c connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
-		gws, err := c.bm.ListGatewaysByCity("openvpn")
-		if err != nil {
-			log.Println("error getting gateways for city")
-		}
-		c.Gateways = gws
+		c.Locations = c.bm.ListLocationFullness("openvpn")
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 		c.CurrentLocation = c.bm.GetCurrentLocation()
 	}
