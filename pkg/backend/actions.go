@@ -20,14 +20,6 @@ func stopVPN() {
 	}
 }
 
-// TODO return bool?
-func useGateway(label string) {
-	err := ctx.bm.UseGateway(label)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
 func getGateway() string {
 	return ctx.bm.GetCurrentGateway()
 }

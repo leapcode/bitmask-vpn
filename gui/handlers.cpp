@@ -42,9 +42,9 @@ void Backend::donateSeen()
     DonateSeen();
 }
 
-void Backend::useGateway(QString label)
+void Backend::useLocation(QString label)
 {
-    UseGateway(toGoStr(label));
+    UseLocation(toGoStr(label));
 }
 
 void Backend::login(QString username, QString password)

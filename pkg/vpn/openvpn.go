@@ -235,9 +235,8 @@ func (b *Bitmask) ListLocationFullness(transport string) map[string]float64 {
 }
 
 // UseGateway selects a gateway, by label, as the default gateway
-func (b *Bitmask) UseGateway(label string) error {
+func (b *Bitmask) UseGateway(label string) {
 	b.bonafide.SetManualGateway(label)
-	return nil
 }
 
 // UseTransport selects an obfuscation transport to use

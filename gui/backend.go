@@ -30,9 +30,9 @@ func SwitchOff() {
 	backend.SwitchOff()
 }
 
-//export UseGateway
-func UseGateway(label string) {
-	backend.UseGateway(label)
+//export UseLocation
+func UseLocation(label string) {
+	backend.UseLocation(label)
 }
 
 //export UseTransport

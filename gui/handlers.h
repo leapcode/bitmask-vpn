@@ -36,7 +36,7 @@ public slots:
     void switchOff();
     void donateAccepted();
     void donateSeen();
-    void useGateway(QString username);
+    void useLocation(QString username);
     void login(QString username, QString password);
     void resetError(QString errlabel);
     void resetNotification(QString label);

@@ -51,8 +51,7 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 		}
 		gwLabel := r.FormValue("gw")
 		fmt.Fprintf(w, "selected gateway: %s\n", gwLabel)
-		// FIXME catch error here, return it (error code)
-		useGateway(gwLabel)
+		ctx.bm.UseGateway(gwLabel)
 		// TODO make sure we don't tear the fw down on reconnect...
 		SwitchOff()
 		// a little sleep is needed, though, because iptables takes some time

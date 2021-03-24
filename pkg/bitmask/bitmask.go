@@ -27,7 +27,7 @@ type Bitmask interface {
 	InstallHelpers() error
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	ListLocationFullness(protocol string) map[string]float64
-	UseGateway(name string) error
+	UseGateway(name string)
 	GetCurrentGateway() string
 	GetCurrentLocation() string
 	UseTransport(transport string) error

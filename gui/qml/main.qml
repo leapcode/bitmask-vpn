@@ -163,7 +163,7 @@ Window {
                     model: [qsTr("Automatic")]
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
-                        backend.useGateway(currentText.toString())
+                        backend.useLocation(currentText.toString())
                     }
                 }
             } // end column

@@ -57,8 +57,8 @@ func SwitchOff() {
 
 // TODO implement Reconnect - do not tear whole fw down in between
 
-func UseGateway(label string) {
-	ctx.bm.UseGateway(string(label))
+func UseLocation(label string) {
+	ctx.bm.UseGateway(label)
 	time.Sleep(200 * time.Millisecond)
 	SwitchOff()
 	time.Sleep(500 * time.Millisecond)
