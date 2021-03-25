@@ -89,3 +89,17 @@ If everything went well, you should have a .dmg for your release under the `depl
 .. code:: bash
 
   created: /Users/admin/leap/bitmask-vpn/deploy/RiseupVPN-0.20.4-175-gee4eb90.dmg
+
+Setting up OSX from qemu
+------------------------
+
+Check https://github.com/kholia/OSX-KVM
+
+Compiling in old OSX versions
+-----------------------------
+
+You can download old versions of Xcode from https://developer.apple.com/download/more/
+
+Version table:
+
+* High Sierra: Xcode 10.1
