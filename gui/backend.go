@@ -35,6 +35,11 @@ func UseLocation(label string) {
 	backend.UseLocation(label)
 }
 
+//export UseAutomaticGateway
+func UseAutomaticGateway() {
+	backend.UseAutomaticGateway()
+}
+
 //export UseTransport
 func UseTransport(transport string) {
 	backend.UseTransport(transport)

@@ -55,10 +55,31 @@ func SwitchOff() {
 	go stopVPN()
 }
 
+func UseLocation(label string) {
+	if ctx.ManualLocation && label == ctx.CurrentLocation {
+		return
+	}
+
+	ctx.bm.UseGateway(label)
+	go trigger(OnStatusChanged)
+	if label != ctx.CurrentLocation {
+		reconnect()
+	}
+}
+
+func UseAutomaticGateway() {
+	if !ctx.ManualLocation {
+		return
+	}
+
+	ctx.bm.UseAutomaticGateway()
+	go trigger(OnStatusChanged)
+	reconnect()
+}
+
 // TODO implement Reconnect - do not tear whole fw down in between
 
-func UseLocation(label string) {
-	ctx.bm.UseGateway(label)
+func reconnect() {
 	time.Sleep(200 * time.Millisecond)
 	SwitchOff()
 	time.Sleep(500 * time.Millisecond)

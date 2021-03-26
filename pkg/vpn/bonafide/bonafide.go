@@ -236,6 +236,13 @@ func (b *Bonafide) SetAutomaticGateway() {
 	b.gateways.setAutomaticChoice()
 }
 
+func (b *Bonafide) IsManualLocation() bool {
+	if b.gateways == nil {
+		return false
+	}
+	return b.gateways.isManualLocation()
+}
+
 func (b *Bonafide) GetGatewayByIP(ip string) (Gateway, error) {
 	return b.gateways.getGatewayByIP(ip)
 }

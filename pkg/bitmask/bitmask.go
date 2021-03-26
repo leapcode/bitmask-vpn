@@ -28,8 +28,11 @@ type Bitmask interface {
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	ListLocationFullness(protocol string) map[string]float64
 	UseGateway(name string)
+	UseAutomaticGateway()
 	GetCurrentGateway() string
 	GetCurrentLocation() string
+	GetCurrentCountry() string
+	IsManualLocation() bool
 	UseTransport(transport string) error
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)

@@ -94,6 +94,14 @@ func (b *Bitmask) GetCurrentLocation() string {
 	return b.onGateway.LocationName
 }
 
+func (b *Bitmask) GetCurrentCountry() string {
+	return b.onGateway.CountryCode
+}
+
+func (b *Bitmask) IsManualLocation() bool {
+	return b.bonafide.IsManualLocation()
+}
+
 func (b *Bitmask) getOpenvpnState() (string, error) {
 	if b.managementClient == nil {
 		return "", fmt.Errorf("No management connected")

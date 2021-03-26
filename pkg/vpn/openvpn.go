@@ -239,6 +239,12 @@ func (b *Bitmask) UseGateway(label string) {
 	b.bonafide.SetManualGateway(label)
 }
 
+// UseAutomaticGateway sets the gateway to be selected automatically
+// best gateway will be used
+func (b *Bitmask) UseAutomaticGateway() {
+	b.bonafide.SetAutomaticGateway()
+}
+
 // UseTransport selects an obfuscation transport to use
 func (b *Bitmask) UseTransport(transport string) error {
 	if transport != "obfs4" {

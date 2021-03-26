@@ -164,6 +164,10 @@ func (p *gatewayPool) setUserChoice(city []byte) error {
 	return nil
 }
 
+func (p *gatewayPool) isManualLocation() bool {
+	return len(p.userChoice) != 0
+}
+
 /* set the recommended field from an ordered array. needs to be modified if menshen passed an array of Loads */
 func (p *gatewayPool) setRecommendedGateways(hostnames []string) {
 	hosts := make([]string, 0)

@@ -25,6 +25,10 @@ StateGroup {
                 text: toHuman("off")
             }
             PropertyChanges {
+                target: autoSelectionItem
+		text: qsTr("Best")
+            }
+            PropertyChanges {
                 target: mainStatus
                 text: toHuman("off")
             }
@@ -46,7 +50,18 @@ StateGroup {
             }
             PropertyChanges {
                 target: statusItem
-                text: toHumanWithLocation("on")
+                text: toHuman("on")
+            }
+            PropertyChanges {
+                target: autoSelectionItem
+		text: {
+			if (autoSelectionButton.checked) {
+				//: %1 -> location to which the client is connected to
+				qsTr("Best (%1)").arg(locationStr())
+			} else {
+				qsTr("Best")
+			}
+		}
             }
             PropertyChanges {
                 target: mainStatus
@@ -54,7 +69,8 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainCurrentGateway
-                text: qsTr("Connected to ") + ctx.currentLocation
+		//: %1 -> location to which the client is connected to
+                text: qsTr("Connected to %1").arg(locationStr())
             }
         },
         State {
@@ -66,7 +82,18 @@ StateGroup {
             }
             PropertyChanges {
                 target: statusItem
-                text: toHumanWithLocation("connecting")
+                text: toHuman("connecting")
+            }
+            PropertyChanges {
+                target: autoSelectionItem
+		text: {
+			if (autoSelectionButton.checked) {
+				//: %1 -> location to which the client is connected to
+				qsTr("Best (%1)").arg(locationStr())
+			} else {
+				qsTr("Best")
+			}
+		}
             }
             PropertyChanges {
                 target: mainStatus
@@ -89,6 +116,10 @@ StateGroup {
                 text: toHuman("stopping")
             }
             PropertyChanges {
+                target: autoSelectionItem
+		text: qsTr("Best")
+            }
+            PropertyChanges {
                 target: mainStatus
                 text: toHuman("stopping")
             }
@@ -107,6 +138,10 @@ StateGroup {
             PropertyChanges {
                 target: statusItem
                 text: toHuman("failed")
+            }
+            PropertyChanges {
+                target: autoSelectionItem
+		text: qsTr("Best")
             }
             PropertyChanges {
                 target: mainStatus

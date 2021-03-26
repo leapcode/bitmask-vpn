@@ -32,7 +32,7 @@ Window {
             text: qsTr("Info")
         }
         TabButton {
-            text: qsTr("Gateways")
+            text: qsTr("Location")
         }
     }
 
@@ -128,7 +128,7 @@ Window {
                     color: "grey"
                     text: qsTr("Location has been manually set.")
                     anchors.horizontalCenter: parent.horizontalCenter
-                    visible: manualSelectionButton.checked
+                    visible: isManualLocation()
                 }
             }
         }
@@ -145,14 +145,15 @@ Window {
 
                 RadioButton {
                     id: autoSelectionButton
-                    checked: true
-                    text: qsTr("Automatic")
-                    // TODO still needs to change to automatic on the backend, and maybe note
-                    // that the change will be effective on the next reconnect.
+                    checked: !isManualLocation()
+                    text: qsTr("Best")
+		    onClicked: backend.useAutomaticGateway()
                 }
                 RadioButton {
                     id: manualSelectionButton
+                    checked: isManualLocation()
                     text: qsTr("Manual")
+		    onClicked: setGwSelection()
                 }
                 ComboBox {
                     id: gwSelector
@@ -160,7 +161,7 @@ Window {
                     visible: manualSelectionButton.checked
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    model: [qsTr("Automatic")]
+                    model: [qsTr("Best")]
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
                         backend.useLocation(currentText.toString())
@@ -249,6 +250,24 @@ Window {
         return false
     }
 
+    function isManualLocation() {
+	if (!ctx) {
+            return false
+	}
+	return ctx.manualLocation == "true"
+    }
+
+    function setGwSelection() {
+	if (!ctx.currentLocation) {
+		return
+	}
+
+	const location = ctx.currentLocation.toLowerCase()
+	const idx = gwSelector.model.indexOf(location)
+	gwSelector.currentIndex = idx
+	backend.useLocation(location)
+    }
+
     Component.onCompleted: {
         loginDone = false
         console.debug("Platform:", Qt.platform.os)
@@ -282,30 +301,8 @@ Window {
         }
     }
 
-    /* TODO change this!!! automatic: Paris (FR) */
-
-    function toHumanWithLocation(st) {
-        switch (st) {
-        case "off":
-            //: %1 -> application name
-            return qsTr("%1 off").arg(ctx.appName)
-        case "on":
-            //: %1 -> application name
-            //: %2 -> current gateway
-            return qsTr("%1 on - %2").arg(ctx.appName).arg(ctx.currentLocation)
-        case "connecting":
-            //: %1 -> application name
-            //: %2 -> current gateway
-            return qsTr("Connecting to %1 - %2").arg(ctx.appName).arg(
-                        ctx.currentLocation)
-        case "stopping":
-            //: %1 -> application name
-            return qsTr("Stopping %1").arg(ctx.appName)
-        case "failed":
-            //: %1 -> application name
-            return qsTr("%1 blocking internet").arg(
-                        ctx.appName) // TODO failed is not handed yet
-        }
+    function locationStr() {
+	    return ctx.currentLocation + ", " + ctx.currentCountry
     }
 
     property var icons: {
@@ -355,26 +352,34 @@ Window {
                 enabled: false
             }
 
+            MenuSeparator {}
+
             MenuItem {
                 id: autoSelectionItem
-                text: qsTr("automatic")
+                text: qsTr("Best")
                 checkable: true
-                checked: true
-                enabled: false
+                checked: !isManualLocation()
+                onTriggered: {
+                	backend.useAutomaticGateway()
+                }
             }
 
 
             /* a minimal segfault for submenu */
             // Menu {}
 
-            MenuSeparator {}
-
             MenuItem {
                 id: manualSelectionItem
-                text: qsTr("Pick gateway…")
+		text: {
+			if (isManualLocation()) {
+				locationStr()
+			} else {
+				qsTr("Pick location…")
+			}
+		}
                 checkable: true
-                checked: false
-                enabled: true
+                checked: isManualLocation()
+                onTriggered: setGwSelection()
             }
 
             MenuSeparator {}

@@ -47,17 +47,21 @@ type connectionCtx struct {
 	Locations       map[string]float64 `json:"locations"`
 	CurrentGateway  string             `json:"currentGateway"`
 	CurrentLocation string             `json:"currentLocation"`
+	CurrentCountry  string             `json:"currentCountry"`
+	ManualLocation  bool               `json:"manualLocation"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
 }
 
-func (c connectionCtx) toJson() ([]byte, error) {
+func (c *connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
 		c.Locations = c.bm.ListLocationFullness("openvpn")
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 		c.CurrentLocation = c.bm.GetCurrentLocation()
+		c.CurrentCountry = c.bm.GetCurrentCountry()
+		c.ManualLocation = c.bm.IsManualLocation()
 	}
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)

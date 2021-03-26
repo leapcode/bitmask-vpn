@@ -47,6 +47,11 @@ void Backend::useLocation(QString label)
     UseLocation(toGoStr(label));
 }
 
+void Backend::useAutomaticGateway()
+{
+    UseAutomaticGateway();
+}
+
 void Backend::login(QString username, QString password)
 {
     Login(toGoStr(username), toGoStr(password));
