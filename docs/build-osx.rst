@@ -17,10 +17,21 @@ tl;dr:
   make notarize_staple
   make create_dmg
 
+Pre-requisites
+-------------------
+
+* You will need a full Xcode installation (cli tools that homebrew install are not enough).
+* Manually Install the Qt Installer Framework and place it in your path https://download.qt.io/official_releases/qt-installer-framework/4.0.1/
+* git, make, gpg, golang, qt5. You can get them all with homebrew by doing:
+
+.. code::bash
+
+  make depends
+
 Sign the release
 -------------------
 
-in recent osx releases, it's not ok to just sign the insallers anymore. you
+In recent osx releases, it's not ok to just sign the installers anymore. You
 have to sign and then notarize with their service. here are some notes that use
 ad-hoc targets in the main makefile, but we should keep an eye on any future
 integration of this process in the more or less official Qt tools (QTIFW).

@@ -78,8 +78,9 @@ dependsLinux:
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
-	@brew install python3 golang make pkg-config curl create-dmg
+	@brew install git gpg golang make pkg-config curl qt5
 	@brew install --default-names gnu-sed
+	@brew link qt5
 
 dependsCYGWIN_NT-10.0:
 	@echo
