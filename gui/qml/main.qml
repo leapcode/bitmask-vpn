@@ -320,10 +320,15 @@ Window {
 
         id: systray
         visible: systrayVisible
-        signal activatedSignal
 
         onActivated: {
-            systray.activatedSignal()
+	    if (reason != SystemTrayIcon.Context) {
+		if (app.visible) {
+		    app.hide()
+		} else {
+		    app.show()
+		}
+            }
         }
 
 
@@ -335,16 +340,6 @@ Window {
         menu: Menu {
 
             id: systrayMenu
-
-            Connections {
-                target: systray
-                onActivatedSignal: {
-                    if (Qt.platform.os === "windows" || desktop === "LXQt") {
-                        console.debug("open systray menu")
-                        systrayMenu.open()
-                    }
-                }
-            }
 
             MenuItem {
                 id: statusItem
