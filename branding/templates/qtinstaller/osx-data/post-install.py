@@ -71,12 +71,12 @@ def fixHelperOwner(log):
     return True
 
 def copyLaunchDaemon():
+    appDir = os.path.join(_dir, _appdir)
     plist = "se.leap.bitmask-helper.plist"
-    path = os.path.join(_dir, plist)
-    _p = os.path.join(_dir, _appdir)
-    _p2= _p.replace("/", "\/")
-    subprocess.call(["sed", "-i.back", "s/PATH/%s/" % _p2, path])
-    shutil.copy(path, HELPER_PLIST)
+    plistFile = os.path.join(appDir, plist)
+    escapedPath = appDir.replace("/", "\/")
+    subprocess.call(["sed", "-i.back", "s/PATH/%s/g" % escapedPath, plistFile])
+    shutil.copy(plistFile, HELPER_PLIST)
 
 def launchHelper():
     out = subprocess.call(["launchctl", "load", HELPER_PLIST])
