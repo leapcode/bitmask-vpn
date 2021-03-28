@@ -34,6 +34,7 @@ func initializeContext(opts *InitOpts) {
 	go trigger(OnStatusChanged)
 	go checkErrors(errCh)
 	initializeBitmask(errCh, opts)
+	go trigger(OnStatusChanged)
 }
 
 func checkErrors(errCh chan string) {

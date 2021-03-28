@@ -225,6 +225,10 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 }
 
 func (b *Bonafide) ListLocationFullness(transport string) map[string]float64 {
+	err := b.maybeInitializeEIP()
+	if err != nil {
+		log.Println("Error fetching eip-service.json:", err)
+	}
 	return b.gateways.listLocationFullness(transport)
 }
 
