@@ -28,33 +28,33 @@ func TestGatewayPool(t *testing.T) {
 	if len(pool.available) != 7 {
 		t.Fatal("Expected 7 initial gateways, got", len(g.available))
 	}
-	expectedLabels := []string{"a-1", "a-2", "b-1", "b-2", "b-3", "c-1", "c-2"}
+	expectedLabels := []string{"a", "b", "c"}
 	sort.Strings(expectedLabels)
 
-	labels := pool.getLabels()
+	labels := pool.getLocations()
 	sort.Strings(labels)
 	if !reflect.DeepEqual(expectedLabels, labels) {
 		t.Fatal("gatewayPool labels not what expected. Got:", labels)
 	}
 
-	if pool.userChoice != nil {
+	if pool.userChoice != "" {
 		t.Fatal("userChoice should be empty by default")
 	}
 
-	err = pool.setUserChoice([]byte("foo"))
+	err = pool.setUserChoice("foo")
 	if err == nil {
 		t.Fatal("gatewayPool should not let you set a foo gateway")
 	}
-	err = pool.setUserChoice([]byte("a-1"))
+	err = pool.setUserChoice("a")
 	if err != nil {
-		t.Fatal("location 'a-1' should be a valid label")
+		t.Fatal("location 'a' should be a valid label")
 	}
-	err = pool.setUserChoice([]byte("c-2"))
+	err = pool.setUserChoice("c")
 	if err != nil {
-		t.Fatal("location 'c-2' should be a valid label")
+		t.Fatal("location 'c' should be a valid label")
 	}
-	if string(pool.userChoice) != "c-2" {
-		t.Fatal("userChoice should be c-2")
+	if string(pool.userChoice) != "c" {
+		t.Fatal("userChoice should be c")
 	}
 
 	pool.setAutomaticChoice()
@@ -62,14 +62,14 @@ func TestGatewayPool(t *testing.T) {
 		t.Fatal("userChoice should be empty after auto selection")
 	}
 
-	gw, err := pool.getGatewayByLabel("foo")
+	gw, err := pool.getRandomGatewayByLocation("foo", "openvpn")
 	if err == nil {
 		t.Fatal("should get an error with invalid label")
 	}
 
-	gw, err = pool.getGatewayByLabel("a-1")
+	gw, err = pool.getRandomGatewayByLocation("a", "openvpn")
 	if gw.IPAddress != "1.1.1.1" {
-		t.Fatal("expected to get gw 1.1.1.1 with label a-1")
+		t.Fatal("expected to get gw 1.1.1.1 with label a")
 	}
 
 	gw, err = pool.getGatewayByIP("1.1.1.1")

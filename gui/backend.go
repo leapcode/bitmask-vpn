@@ -32,7 +32,10 @@ func SwitchOff() {
 
 //export UseLocation
 func UseLocation(label string) {
-	backend.UseLocation(label)
+	// a bit of a hack to force the compiler to copy the string
+	// so the original C++ string will not be used as it will be changed down the line
+	location := string([]byte(label))
+	backend.UseLocation(location)
 }
 
 //export UseAutomaticGateway

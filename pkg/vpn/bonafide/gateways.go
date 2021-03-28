@@ -22,8 +22,6 @@ type Load struct {
 // A Gateway is a representation of gateways that is independent of the api version.
 // If a given physical location offers different transports, they will appear
 // as separate gateways, so make sure to filter them.
-// TODO We should include also the fullness metric here, so that it's easier to the UI to
-// represent them without any extra call.
 type Gateway struct {
 	Host         string
 	IPAddress    string
@@ -47,10 +45,10 @@ type gatewayPool struct {
 	/* available is the unordered list of gateways from eip-service, we use if as source-of-truth for now.
 	TODO we might want to remove gateways if they are not returned by menshen due to being overloaded */
 	available  []Gateway
-	userChoice []byte
+	userChoice string
 
-	/* byCity is a map from location to an array of hostnames */
-	byCity map[string][]string
+	/* byLocation is a map from location to an array of hostnames */
+	byLocation map[string][]string
 
 	/* recommended is an array of hostnames, fetched from the old geoip service.
 	 *  this should be deprecated in favor of recommendedWithLoad when new menshen is deployed */
@@ -67,42 +65,42 @@ type gatewayPool struct {
 func (p *gatewayPool) populateCityList() {
 	for _, gw := range p.available {
 		loc := gw.Location
-		gws := p.byCity[loc]
+		gws := p.byLocation[loc]
 		if len(gws) == 0 {
-			p.byCity[loc] = []string{gw.Host}
+			p.byLocation[loc] = []string{gw.Host}
 		} else {
-			p.byCity[loc] = append(gws, gw.Host)
+			p.byLocation[loc] = append(gws, gw.Host)
 		}
 	}
-	log.Println(p.byCity)
 }
 
-func (p *gatewayPool) getCities() []string {
+func (p *gatewayPool) getLocations() []string {
 	c := make([]string, 0)
-	if p == nil || p.byCity == nil || len(p.byCity) == 0 {
+	if p == nil || p.byLocation == nil || len(p.byLocation) == 0 {
 		return c
 	}
-	if len(p.byCity) != 0 {
-		for city := range p.byCity {
+	if len(p.byLocation) != 0 {
+		for city := range p.byLocation {
 			c = append(c, city)
 		}
 	}
 	return c
 }
 
-func (p *gatewayPool) isValidCity(city string) bool {
-	cities := p.getCities()
-	valid := stringInSlice(city, cities)
+func (p *gatewayPool) isValidLocation(location string) bool {
+	locations := p.getLocations()
+	valid := stringInSlice(location, locations)
 	return valid
 }
 
 /* returns a map of location: fullness for the ui to use */
 func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 {
-	cities := p.getCities()
+	locations := p.getLocations()
 	cm := make(map[string]float64)
-	for _, city := range cities {
-		gw, _ := p.getRandomGatewayByCity(city, transport)
-		cm[city] = gw.Fullness
+	for _, location := range locations {
+		// TODO: we should get the best fullness
+		gw, _ := p.getRandomGatewayByLocation(location, transport)
+		cm[location] = gw.Fullness
 	}
 	return cm
 }
@@ -111,13 +109,13 @@ func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 
 * TODO if we do have an usable menshen list, we can just traverse "recommended"
 * and return, in order, at most max gateways for the selected location.
  */
-func (p *gatewayPool) getRandomGatewayByCity(city, transport string) (Gateway, error) {
-	if !p.isValidCity(city) {
-		return Gateway{}, errors.New("bonafide: BUG not a valid city: " + city)
+func (p *gatewayPool) getRandomGatewayByLocation(location, transport string) (Gateway, error) {
+	if !p.isValidLocation(location) {
+		return Gateway{}, errors.New("bonafide: BUG not a valid location: " + location)
 	}
-	gws := p.byCity[city]
+	gws := p.byLocation[location]
 	if len(gws) == 0 {
-		return Gateway{}, errors.New("bonafide: BUG no gw for city " + city)
+		return Gateway{}, errors.New("bonafide: BUG no gw for location: " + location)
 	}
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s)
@@ -152,15 +150,15 @@ func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 
 /* this perhaps could be made more explicit */
 func (p *gatewayPool) setAutomaticChoice() {
-	p.userChoice = []byte("")
+	p.userChoice = ""
 }
 
 /* set a user manual override for gateway location */
-func (p *gatewayPool) setUserChoice(city []byte) error {
-	if !p.isValidCity(string(city)) {
+func (p *gatewayPool) setUserChoice(location string) error {
+	if !p.isValidLocation(location) {
 		return errors.New("bonafide: not a valid city for gateway choice")
 	}
-	p.userChoice = city
+	p.userChoice = location
 	return nil
 }
 
@@ -189,10 +187,10 @@ func (p *gatewayPool) setRecommendedGateways(hostnames []string) {
 * doing manual override, and if we got useful info from menshen */
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
-	if len(p.userChoice) != 0 {
+	if p.isManualLocation() {
 		/* FIXME this is random because we still do not get menshen to return us load. after "new" menshen is deployed,
 		   we can just get them by the order menshen returned */
-		gw, err := p.getRandomGatewayByCity(string(p.userChoice), transport)
+		gw, err := p.getRandomGatewayByLocation(p.userChoice, transport)
 		gws = append(gws, gw)
 		return gws, err
 	} else if len(p.recommended) != 0 {
@@ -269,7 +267,7 @@ func newGatewayPool(eip *eipService) *gatewayPool {
 	p := gatewayPool{}
 	p.available = eip.getGateways()
 	p.locations = eip.Locations
-	p.byCity = make(map[string][]string)
+	p.byLocation = make(map[string][]string)
 	p.populateCityList()
 	return &p
 }

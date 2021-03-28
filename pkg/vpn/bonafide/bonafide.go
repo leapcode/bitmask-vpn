@@ -229,7 +229,7 @@ func (b *Bonafide) ListLocationFullness(transport string) map[string]float64 {
 }
 
 func (b *Bonafide) SetManualGateway(label string) {
-	b.gateways.setUserChoice([]byte(label))
+	b.gateways.setUserChoice(label)
 }
 
 func (b *Bonafide) SetAutomaticGateway() {
