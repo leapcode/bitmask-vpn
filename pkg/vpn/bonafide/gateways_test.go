@@ -62,17 +62,17 @@ func TestGatewayPool(t *testing.T) {
 		t.Fatal("userChoice should be empty after auto selection")
 	}
 
-	gw, err := pool.getRandomGatewayByLocation("foo", "openvpn")
+	_, err = pool.getRandomGatewaysByLocation("foo", "openvpn")
 	if err == nil {
 		t.Fatal("should get an error with invalid label")
 	}
 
-	gw, err = pool.getRandomGatewayByLocation("a", "openvpn")
-	if gw.IPAddress != "1.1.1.1" {
+	gws, err := pool.getRandomGatewaysByLocation("a", "openvpn")
+	if gws[0].IPAddress != "1.1.1.1" {
 		t.Fatal("expected to get gw 1.1.1.1 with label a")
 	}
 
-	gw, err = pool.getGatewayByIP("1.1.1.1")
+	gw, err := pool.getGatewayByIP("1.1.1.1")
 	if err != nil {
 		t.Fatal("expected to get gw a with ip 1.1.1.1")
 	}

@@ -75,7 +75,7 @@ Window {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Connections {
-                        onCheckedChanged: {
+                        function onCheckedChanged() {
                             if (vpntoggle.checked == true && ctx.status == "off") {
                                 backend.switchOn()
                             }
@@ -166,6 +166,30 @@ Window {
                         console.debug("Selected gateway:", currentText)
                         backend.useLocation(currentText.toString())
                     }
+
+		    delegate: ItemDelegate {
+			// TODO: we could use icons
+			// https://doc.qt.io/qt-5/qml-qtquick-controls2-abstractbutton.html#icon-prop
+			background: Rectangle {
+			    color: {
+			        const fullness = ctx.locations[modelData]
+			        if (fullness >= 0 && fullness < 0.4) {
+			            "#83fc5a"
+			        } else if (fullness >= 0.4 && fullness < 0.75) {
+			            "#fcb149"
+			        } else if (fullness >= 0.75) {
+			            "#fc5a5d"
+			        } else {
+			            "#ffffff"
+			        }
+		            }
+			}
+			contentItem: Text {
+			    text: modelData
+			    font: gwSelector.font
+			    color: "#000000"
+			}
+		    }
                 }
             } // end column
         } // end item 
@@ -174,10 +198,10 @@ Window {
 
     Connections {
         target: jsonModel
-        onDataChanged: {
+        function onDataChanged() {
             ctx = JSON.parse(jsonModel.getJson())
             // TODO pass QML_DEBUG variable to be hyper-verbose
-            //console.debug(jsonModel.getJson())
+	    //console.debug(jsonModel.getJson())
             gwSelector.model = Object.keys(ctx.locations)
 
             if (ctx.donateDialog == 'true') {

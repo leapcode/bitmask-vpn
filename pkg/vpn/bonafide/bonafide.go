@@ -59,13 +59,20 @@ type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
+type geoGateway struct {
+	Host     string  `json:"host"`
+	Fullness float64 `json:"fullness"`
+	Overload bool    `json:"overload"`
+}
+
 type geoLocation struct {
-	IPAddress      string   `json:"ip"`
-	Country        string   `json:"cc"`
-	City           string   `json:"city"`
-	Latitude       float64  `json:"lat"`
-	Longitude      float64  `json:"lon"`
-	SortedGateways []string `json:"gateways"`
+	IPAddress      string       `json:"ip"`
+	Country        string       `json:"cc"`
+	City           string       `json:"city"`
+	Latitude       float64      `json:"lat"`
+	Longitude      float64      `json:"lon"`
+	Gateways       []string     `json:"gateways"`
+	SortedGateways []geoGateway `json:"sortedGateways"`
 }
 
 // New Bonafide: Initializes a Bonafide object. By default, no Credentials are passed.
@@ -192,8 +199,12 @@ func (b *Bonafide) maybeInitializeEIP() error {
 			return err
 		}
 		b.gateways = newGatewayPool(b.eip)
-		b.fetchGatewaysFromMenshen()
 	}
+
+	// FIXME: let's update the menshen gateways every time we 'maybe initilize EIP'
+	//        in a future we might want to be more clever on when to do that
+	//        (when opening the locations tab in the UI, only on reconnects, ...)
+	b.fetchGatewaysFromMenshen()
 	return nil
 }
 
@@ -225,10 +236,6 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 }
 
 func (b *Bonafide) ListLocationFullness(transport string) map[string]float64 {
-	err := b.maybeInitializeEIP()
-	if err != nil {
-		log.Println("Error fetching eip-service.json:", err)
-	}
 	return b.gateways.listLocationFullness(transport)
 }
 
@@ -251,7 +258,6 @@ func (b *Bonafide) GetGatewayByIP(ip string) (Gateway, error) {
 	return b.gateways.getGatewayByIP(ip)
 }
 
-/* TODO this still needs to be called periodically */
 func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
 	So this is a workaround until we streamline that behavior */
@@ -282,8 +288,8 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 		return err
 	}
 
-	log.Println("Got sorted gateways:", geo.SortedGateways)
-	b.gateways.setRecommendedGateways(geo.SortedGateways)
+	log.Println("Got sorted gateways:", geo.Gateways)
+	b.gateways.setRecommendedGateways(geo)
 	return nil
 }
 
