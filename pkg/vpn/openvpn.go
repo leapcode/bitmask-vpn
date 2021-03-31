@@ -35,20 +35,21 @@ const (
 
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
-	var proxy string
-	if b.transport != "" {
-		var err error
-		proxy, err = b.startTransport()
-		if err != nil {
-			return err
-		}
-	}
-
 	if !b.CanStartVPN() {
 		return errors.New("BUG: cannot start vpn")
 	}
-	err := b.startOpenVPN(proxy)
-	return err
+
+	var err error
+	b.certPemPath, err = b.getCert()
+	if err != nil {
+		return err
+	}
+	b.openvpnArgs, err = b.bonafide.GetOpenvpnArgs()
+	if err != nil {
+		return err
+	}
+
+	return b.startOpenVPN()
 }
 
 func (b *Bitmask) CanStartVPN() bool {
@@ -110,17 +111,9 @@ func (b *Bitmask) listenShapeErr() {
 	}
 }
 
-func (b *Bitmask) startOpenVPN(proxy string) error {
-	certPemPath, err := b.getCert()
-	if err != nil {
-		return err
-	}
-	arg, err := b.bonafide.GetOpenvpnArgs()
-	if err != nil {
-		return err
-	}
-
-	if proxy == "" {
+func (b *Bitmask) startOpenVPN() error {
+	arg := b.openvpnArgs
+	if b.transport == "" {
 		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
 			return err
@@ -136,6 +129,11 @@ func (b *Bitmask) startOpenVPN(proxy string) error {
 			}
 		}
 	} else {
+		proxy, err := b.startTransport()
+		if err != nil {
+			return err
+		}
+
 		gateways, err := b.bonafide.GetGateways(b.transport)
 		if err != nil {
 			return err
@@ -153,8 +151,8 @@ func (b *Bitmask) startOpenVPN(proxy string) error {
 		"--management-client",
 		"--management", openvpnManagementAddr, openvpnManagementPort,
 		"--ca", b.getCaCertPath(),
-		"--cert", certPemPath,
-		"--key", certPemPath)
+		"--cert", b.certPemPath,
+		"--key", b.certPemPath)
 	return b.launch.openvpnStart(arg...)
 }
 
@@ -186,6 +184,35 @@ func (b *Bitmask) StopVPN() error {
 	return b.launch.openvpnStop()
 }
 
+// Reconnect to the VPN
+func (b *Bitmask) Reconnect() error {
+	if !b.CanStartVPN() {
+		return errors.New("BUG: cannot start vpn")
+	}
+
+	status, err := b.GetStatus()
+	if err != nil {
+		return err
+	}
+	log.Println("reconnect")
+	if status != Off {
+		if b.shapes != nil {
+			b.shapes.Close()
+			b.shapes = nil
+		}
+		err = b.launch.openvpnStop()
+		if err != nil {
+			return err
+		}
+	}
+
+	err = b.launch.firewallStop()
+	if err != nil {
+		return err
+	}
+	return b.startOpenVPN()
+}
+
 // ReloadFirewall restarts the firewall
 func (b *Bitmask) ReloadFirewall() error {
 	err := b.launch.firewallStop()
@@ -199,7 +226,7 @@ func (b *Bitmask) ReloadFirewall() error {
 	}
 
 	if status != Off {
-		gateways, err := b.bonafide.GetGateways("openvpn")
+		gateways, err := b.bonafide.GetAllGateways("any")
 		if err != nil {
 			return err
 		}

@@ -36,6 +36,8 @@ type Bitmask struct {
 	launch           *launcher
 	transport        string
 	shapes           *shapeshifter.ShapeShifter
+	certPemPath      string
+	openvpnArgs      []string
 }
 
 // Init the connection to bitmask
@@ -50,8 +52,9 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil}
+	b := Bitmask{tempdir, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}}
 
+	b.launch.firewallStop()
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running
 		from a previous one, but first we need to complete all the

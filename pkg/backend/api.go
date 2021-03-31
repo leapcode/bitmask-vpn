@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"strconv"
-	"time"
+	"strings"
 	"unsafe"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
@@ -62,8 +62,8 @@ func UseLocation(label string) {
 
 	ctx.bm.UseGateway(label)
 	go trigger(OnStatusChanged)
-	if label != ctx.CurrentLocation {
-		reconnect()
+	if ctx.Status == on && label != strings.ToLower(ctx.CurrentLocation) {
+		ctx.bm.Reconnect()
 	}
 }
 
@@ -74,16 +74,9 @@ func UseAutomaticGateway() {
 
 	ctx.bm.UseAutomaticGateway()
 	go trigger(OnStatusChanged)
-	reconnect()
-}
-
-// TODO implement Reconnect - do not tear whole fw down in between
-
-func reconnect() {
-	time.Sleep(200 * time.Millisecond)
-	SwitchOff()
-	time.Sleep(500 * time.Millisecond)
-	SwitchOn()
+	if ctx.Status == on {
+		ctx.bm.Reconnect()
+	}
 }
 
 func UseTransport(label string) {

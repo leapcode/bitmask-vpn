@@ -225,7 +225,7 @@ func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 }
 
 // GetAllGateways only filters gateways by transport.
-// TODO could pass "any" instead?
+// if "any" is provided it will return all gateways for all transports
 func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	err := b.maybeInitializeEIP()
 	if err != nil {
