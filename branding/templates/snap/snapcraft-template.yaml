@@ -62,6 +62,7 @@ parts:
       - libqt5qml5
       - libqt5quick5
       - qml-module-qtquick-controls
+      - qml-module-qtquick-controls2
       - qml-module-qtquick-dialogs
       - qml-module-qtquick-extras
       - qml-module-qt-labs-platform
@@ -96,6 +97,7 @@ parts:
       - qt5-style-plugins
       - qml-module-qtquick2
       - qml-module-qtquick-controls
+      - qml-module-qtquick-controls2
       - qml-module-qtquick-dialogs
       - qml-module-qtquick-extras
       - qml-module-qt-labs-platform
