@@ -38,7 +38,7 @@ manually, or send us a patch.
 
 ```
   git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
-  sudo make depends
+  sudo make depends  # do not use sudo in osx 
   make build
 ```
 
