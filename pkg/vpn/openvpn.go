@@ -265,7 +265,17 @@ func (b *Bitmask) StopVPN() error {
 		b.obfsvpnProxy.Stop()
 		b.obfsvpnProxy = nil
 	}
-	return b.launch.openvpnStop()
+	b.stopFromManagement()
+	b.launch.openvpnStop()
+	return nil
+}
+
+func (b *Bitmask) stopFromManagement() error {
+	if b.managementClient == nil {
+		return fmt.Errorf("No management connected")
+	}
+	b.managementClient.SendSignal("SIGTERM")
+	return nil
 }
 
 // Reconnect to the VPN

@@ -43,7 +43,7 @@ endif
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
-TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe
+OPENVPN_WINDOWS_INSTALLER = https://build.openvpn.net/downloads/releases/OpenVPN-2.5.1-I601-amd64.msi
 
 HAS_QTIFW != which binarycreator.exe 2>/dev/null || PATH=$(PATH) which binarycreator
 OPENVPN_BIN != echo -n "$(HOME)/openvpn_build/sbin/$$(grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
@@ -160,21 +160,11 @@ ifeq (${PLATFORM}, windows)
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string CompanyName "LEAP Encryption Access Project"
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string FileDescription "${APPNAME}"
 	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} ${QTBUILD}/release/${TARGET}.exe
-	# XXX need to deprecate helper and embrace interactive service
-	cp build/bin/${PLATFORM}/bitmask-helper build/bin/${PLATFORM}/bitmask-helper.exe
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-file-version ${VERSION}
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-product-version ${VERSION}
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string ProductName "bitmask-helper-v2"
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string CompanyName "LEAP Encryption Access Project"
-	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-version-string FileDescription "Administrative helper for ${APPNAME}"
-	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} build/bin/${PLATFORM}/bitmask-helper.exe
 endif
 
 checksign:
 ifeq (${PLATFORM}, windows)
 	@"c:\windows\system32\sigcheck.exe" ${QTBUILD}/release/${TARGET}.exe
-	@"c:\windows\system32\sigcheck.exe" build/bin/${PLATFORM}/bitmask-helper.exe
-	@"c:\windows\system32\sigcheck.exe" "/c/Program Files/OpenVPN/bin/openvpn.exe"
 endif
 
 installer: check_qtifw checksign
@@ -207,29 +197,24 @@ endif
 endif
 ifeq (${PLATFORM}, windows)
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
-	@cp build/bin/${PLATFORM}/bitmask-helper.exe ${INST_DATA}helper.exe
 ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
 else
 	@cp ${VENDOR_PATH}/assets/icon.ico ${INST_DATA}/icon.ico
 endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
-	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
-	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
 ifeq (${RELEASE}, yes)
-	#@windeployqt --release --qmldir gui/components ${INST_DATA}${TARGET}.exe
-	#FIXME -- cannot find platform plugin
-	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
+	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe  # FIXME --release flag cannot find platform plugin
 else
 	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
-	# TODO stage it to shave some time
-	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
 	# XXX this is a workaround for missing libs after windeployqt ---
 	@cp /c/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll ${INST_DATA}
 	@cp /c/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll ${INST_DATA}
 	@cp /c/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll ${INST_DATA}
 	@cp -r /c/Qt/5.15.2/mingw81_64/qml ${INST_DATA}
+	# TODO stage it
+	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}openvpn-installer.msi
 endif
 ifeq (${PLATFORM}, linux)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}

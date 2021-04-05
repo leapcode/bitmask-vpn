@@ -40,6 +40,7 @@ var bitmaskRootPaths = []string{
 type launcher struct {
 	openvpnCh chan []string
 	failed    bool
+	mngPass   string
 }
 
 func newLauncher() (*launcher, error) {

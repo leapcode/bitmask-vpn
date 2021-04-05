@@ -99,24 +99,18 @@ function preInstallWindows() {
 }
 
 function postInstallWindows() {
-    // TODO - check if we're on Windows10 or older, and use the needed tap-windows installer accordingly.
-    console.log("Installing OpenVPN tap driver");
-    component.addElevatedOperation("Execute", "@TargetDir@/tap-windows.exe", "/S", "/SELECT_UTILITIES=1");  /* TODO uninstall */
-    /* remove an existing service, if it is stopped. Remove-Service is only in PS>6, and sc.exe delete leaves some garbage on the registry, so let's use the binary itself */
-    console.log("Removing any previously installer helper...");
-    component.addElevatedOperation("Execute", "{0,1}", "@TargetDir@/helper.exe", "remove");
-    console.log("Now trying to install latest helper");
-    component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "install", "UNDOEXECUTE", "@TargetDir@/helper.exe", "remove");
-    component.addElevatedOperation("Execute", "@TargetDir@/helper.exe", "start", "UNDOEXECUTE", "@TargetDir@/helper.exe", "stop");
-    console.log("Adding shortcut entries/...");
+    // TODO - we probably need to package different flavors of the installer for windows 8, arm, i386 etc, and change the installer we ship too.
+    console.log("Installing OpenVPN binaries and service");
+    component.addElevatedOperation("Execute", "{0}", "msiexec", "/i", "@TargetDir@\\openvpn-installer.msi", "ADDLOCAL=OpenVPN.Service,OpenVPN,Drivers,Drivers.TAPWindows6,Drivers.Wintun", "/passive")
+    console.log("Adding shortcut entries...");
     component.addElevatedOperation("Mkdir", "@StartMenuDir@");
-    component.addElevatedOperation("CreateShortcut", "@TargetDir@/$BINNAME.exe", "@StartMenuDir@/$APPNAME.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/icon.ico", "description=Start $APPNAME");
+    component.addElevatedOperation("CreateShortcut", "@TargetDir@\\$BINNAME.exe", "@StartMenuDir@\\$APPNAME.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@\\icon.ico", "description=Start $APPNAME");
 
     // TODO I think this one is not being created because the path doesn't exist yet. We might want to do this by hooking on the installation finished signal instead.
     component.addElevatedOperation(
         "CreateShortcut",
-        "@TargetDir@/Uninstall-$APPNAME.exe",
-        "@StartMenuDir@/Uninstall.lnk"
+        "@TargetDir@\\Uninstall-$APPNAME.exe",
+        "@StartMenuDir@\\Uninstall.lnk"
     );
 }
 

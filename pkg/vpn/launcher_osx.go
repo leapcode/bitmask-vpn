@@ -1,5 +1,5 @@
-// +build !linux
-// Copyright (C) 2018-2020 LEAP
+// +build osx
+// Copyright (C) 2018-2021 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import (
 type launcher struct {
 	helperAddr string
 	failed     bool
+	mngPass    string
 }
 
 const initialHelperPort = 7171

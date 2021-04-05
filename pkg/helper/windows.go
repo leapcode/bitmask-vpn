@@ -42,8 +42,9 @@ var (
 
 func getPlatformOpenvpnFlags() []string {
 	return []string{
-		"--script-security", "1",
+		"--script-security", "0",
 		"--block-outside-dns",
+		"--redirect-gateway",
 	}
 }
 
