@@ -142,6 +142,7 @@ func maybeStartVPN(b Bitmask, conf *config.Config) error {
 	}
 
 	if b.CanStartVPN() {
+		log.Println("DEBUG starting")
 		err := b.StartVPN(config.Provider)
 		conf.SetUserStoppedVPN(false)
 		return err

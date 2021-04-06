@@ -16,10 +16,13 @@
 package vpn
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"path"
 	"path/filepath"
@@ -38,6 +41,7 @@ const (
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
 	if !b.CanStartVPN() {
+		log.Println("BUG cannot start")
 		return errors.New("BUG: cannot start vpn")
 	}
 
@@ -109,8 +113,34 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
 }
 
+// generates a password and returns the path for a temporary file where this password is written
+func (b *Bitmask) generateManagementPassword() string {
+	pass := getRandomPass(12)
+	tmpFile, err := ioutil.TempFile(b.tempdir, "leap-vpn-")
+	if err != nil {
+		log.Fatal("Cannot create temporary file", err)
+	}
+	tmpFile.Write([]byte(pass))
+	b.launch.mngPass = pass
+	return tmpFile.Name()
+}
+
 func (b *Bitmask) startOpenVPN() error {
 	arg := b.openvpnArgs
+	/*
+		XXX has this changed??
+		 arg, err := b.bonafide.GetOpenvpnArgs()
+		 if err != nil {
+		 	return err
+		 }
+	*/
+	/*
+		XXX and this??
+		 certPemPath, err := b.getCert()
+		 if err != nil {
+		 	return err
+		 }
+	*/
 	b.statusCh <- Starting
 	if b.GetTransport() == "obfs4" {
 		gateways, err := b.bonafide.GetGateways("obfs4")
@@ -178,10 +208,12 @@ func (b *Bitmask) startOpenVPN() error {
 	// not overriding (or duplicating) some of the options we're adding here.
 	log.Println("VERB", verb)
 
+	passFile := b.generateManagementPassword()
+
 	arg = append(arg,
 		"--verb", openvpnVerb,
 		"--management-client",
-		"--management", openvpnManagementAddr, openvpnManagementPort,
+		"--management", openvpnManagementAddr, openvpnManagementPort, passFile,
 		"--ca", b.getTempCaCertPath(),
 		"--cert", b.certPemPath,
 		"--key", b.certPemPath,
@@ -265,17 +297,15 @@ func (b *Bitmask) StopVPN() error {
 		b.obfsvpnProxy.Stop()
 		b.obfsvpnProxy = nil
 	}
-	b.stopFromManagement()
+	b.tryStopFromManagement()
 	b.launch.openvpnStop()
 	return nil
 }
 
-func (b *Bitmask) stopFromManagement() error {
-	if b.managementClient == nil {
-		return fmt.Errorf("No management connected")
+func (b *Bitmask) tryStopFromManagement() {
+	if b.managementClient != nil {
+		b.managementClient.SendSignal("SIGTERM")
 	}
-	b.managementClient.SendSignal("SIGTERM")
-	return nil
 }
 
 // Reconnect to the VPN
@@ -410,4 +440,11 @@ func (b *Bitmask) getTempCertPemPath() string {
 
 func (b *Bitmask) getTempCaCertPath() string {
 	return path.Join(b.tempdir, "cacert.pem")
+}
+
+func getRandomPass(l int) string {
+	buff := make([]byte, int(math.Round(float64(l)/float64(1.33333333333))))
+	rand.Read(buff)
+	str := base64.RawURLEncoding.EncodeToString(buff)
+	return str[:l] // strip 1 extra character we get from odd length results
 }

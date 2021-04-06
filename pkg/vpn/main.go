@@ -27,8 +27,8 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/management"
 	obfsvpn "0xacab.org/leap/obfsvpn/client"
-
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
@@ -38,7 +38,7 @@ type Bitmask struct {
 	onGateway        bonafide.Gateway
 	ptGateway        bonafide.Gateway
 	statusCh         chan string
-	managementClient *openvpn.MgmtClient
+	managementClient *management.MgmtClient
 	bonafide         *bonafide.Bonafide
 	launch           *launcher
 	transport        string
@@ -138,6 +138,7 @@ func (b *Bitmask) Close() {
 	if err != nil {
 		log.Printf("There was an error closing the launcher: %v", err)
 	}
+	time.Sleep(1 * time.Second)
 	err = os.RemoveAll(b.tempdir)
 	if err != nil {
 		log.Printf("There was an error removing temp dir: %v", err)

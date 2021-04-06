@@ -8,9 +8,13 @@ require (
 	0xacab.org/leap/obfsvpn v0.0.0-20220626143947-feff527c00e5
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0
 	git.torproject.org/pluggable-transports/snowflake.git v1.1.0
+	github.com/ProtonMail/go-autostart v0.0.0-20181114175602-c5272053443a
 	github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
+	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/apparentlymart/go-openvpn-mgmt v0.0.0-20200929191752-4d2ce95ae600
 	github.com/cretz/bine v0.2.0
+	github.com/dchest/siphash v1.2.1 // indirect
+	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 	github.com/pion/webrtc/v3 v3.1.41
 	github.com/sevlyar/go-daemon v0.1.5

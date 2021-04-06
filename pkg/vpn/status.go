@@ -20,7 +20,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/management"
 )
 
 const (
@@ -47,23 +47,24 @@ var statusNames = map[string]string{
 
 func (b *Bitmask) openvpnManagement() {
 	// TODO: we should warn the user on ListenAndServe errors
-	newConnection := func(conn openvpn.IncomingConn) {
-		eventCh := make(chan openvpn.Event, 10)
+	newConnection := func(conn management.IncomingConn) {
+		eventCh := make(chan management.Event, 10)
 		log.Println("New connection into the management")
 		b.managementClient = conn.Open(eventCh)
+		b.managementClient.SendPassword(b.launch.mngPass)
 		b.managementClient.SetStateEvents(true)
 		b.eventHandler(eventCh)
 	}
-	log.Fatal(openvpn.ListenAndServe(
+	log.Fatal(management.ListenAndServe(
 		fmt.Sprintf("%s:%s", openvpnManagementAddr, openvpnManagementPort),
-		openvpn.IncomingConnHandlerFunc(newConnection),
+		management.IncomingConnHandlerFunc(newConnection),
 	))
 }
 
-func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
+func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 	for event := range eventCh {
 		log.Printf("Event: %v", event)
-		stateEvent, ok := event.(*openvpn.StateEvent)
+		stateEvent, ok := event.(*management.StateEvent)
 		if !ok {
 			continue
 		}
