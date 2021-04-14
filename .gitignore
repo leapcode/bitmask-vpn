@@ -3,6 +3,7 @@ __pycache__
 build
 dist
 deploy
+staging_dir
 /bitmask-vpn
 cmd/bitmask-vpn/bitmask-vpn
 /bitmask-helper

@@ -1,5 +1,5 @@
-riseup-vpn (0.21.2) unstable; urgency=medium
+riseup-vpn (0.21.2.1) groovy; urgency=medium
 
   * Initial Release.
 
- -- Kali Kaneko <kali@leap.se>  Tue, 09 Feb 2021 20:26:52 +0100
+ -- kali kaneko (leap communications) <kali@leap.se>  Tue, 09 Feb 2021 20:26:52 +0100

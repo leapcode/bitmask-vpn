@@ -1,7 +1,7 @@
-The Debian Package riseup-vpn
-----------------------------
+riseup-vpn
+-----------
 
 Initial debianization of bitmask-vpn repo. This is a native package for
 riseup-vpn, branded clients will use a template based on that one.
 
- -- Kali Kaneko <kali@leap.se>  Tue, 09 Feb 2021 20:26:52 +0100
+ -- kali kaneko <kali@leap.se>  Tue, 09 Feb 2021 20:26:52 +0100
