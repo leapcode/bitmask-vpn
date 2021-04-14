@@ -144,6 +144,9 @@ build_gui: relink_vendor
 build: build_golib build_helper build_gui
 
 build_helper:
+ifeq ($(PLATFORM), linux)
+# no helper needed for linux, we use polkit/bitmask-root
+else
 	@echo "=============BUILDER HELPER==========="
 	@echo "PLATFORM: ${PLATFORM}"
 	@echo "APPNAME: ${APPNAME}"
@@ -152,6 +155,7 @@ build_helper:
 	@mkdir -p build/bin/${PLATFORM}
 	@go build -o build/bin/${PLATFORM}/bitmask-helper -ldflags "-X main.AppName=${APPNAME} -X main.Version=${VERSION} ${EXTRA_GO_LDFLAGS}" ./cmd/bitmask-helper/
 	@echo "===========BUILDER HELPER============="
+endif
 
 build_openvpn:
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
