@@ -21,6 +21,8 @@ lib/*
 qtbuild/*
 providers/assets
 
+debian/files
+
 .*.swp
 *.exe
 

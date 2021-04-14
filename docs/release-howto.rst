@@ -1,7 +1,9 @@
-how to make a release
+Release procedure
 =====================
-1. Tag the release
-2. Build the latest builder image:
+1. Bump the static release file in `pkg/version`. After a release, this should read something like `0.21.2+git`. This file is used to generate version strings from tarballs.
+
+2. Tag the release
+3. Build the latest builder image:
 
 ```
 make builder_image
@@ -18,13 +20,7 @@ make package_snap_in_docker
 
 4. Build the windows installer:
 
-This is a bit complicated, since it is a two-stage build. It will need you have
-cloned the secrets folder containing the windows authenticode. You also have to
-have wine (32 bits) installed in your host machine.
-
-```
-make package_win_in_docker
-```
+(TBD)
 
 5. Build the OSX package: 
 
