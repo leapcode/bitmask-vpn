@@ -1,0 +1,6 @@
+tar-ignore=".git/*"
+tar-ignore="staging_dir/*"
+tar-ignore="build/*"
+tar-ignore="deploy/*"
+tar-ignore="\.*"
+tar-ignore="cmd/*"
