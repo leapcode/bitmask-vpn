@@ -275,7 +275,7 @@ else
 endif
 
 clean:
-	@rm lib/*
+	@rm -rf lib/*
 	@rm -rf build/
 	@unlink branding/assets/default || true
 
