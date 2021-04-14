@@ -33,6 +33,10 @@ endif
 %:
 	dh $@
 
+override_dh_auto_test:
+	#FIXME tests try to contact riseup api, need to be mocked
+	#make -j4 test
+
 override_dh_auto_build:
 	make build
 
