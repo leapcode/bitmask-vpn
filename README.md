@@ -12,6 +12,11 @@ You can track beta channel, where we push versions to test:
 sudo snap install riseup-vpn --classic --beta
 ```
 
+<iframe
+src="https://snapcraft.io/riseup-vpn/embedded?button=white&channels=true"
+frameborder="0" width="100%" height="380px" style="border: 1px solid #CCC;
+border-radius: 2px;"></iframe>
+
 # arch
 
 [There's a package in AUR](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that)
