@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.12
 
 StateGroup {
 
@@ -26,7 +26,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-		text: qsTr("Best")
+                text: qsTr("Best")
             }
             PropertyChanges {
                 target: mainStatus
@@ -54,14 +54,14 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-		text: {
-			if (autoSelectionButton.checked) {
-				//: %1 -> location to which the client is connected to
-				qsTr("Best (%1)").arg(locationStr())
-			} else {
-				qsTr("Best")
-			}
-		}
+                text: {
+                    if (autoSelectionButton.checked) {
+                        //: %1 -> location to which the client is connected to
+                        qsTr("Best (%1)").arg(locationStr())
+                    } else {
+                        qsTr("Best")
+                    }
+                }
             }
             PropertyChanges {
                 target: mainStatus
@@ -69,7 +69,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainCurrentGateway
-		//: %1 -> location to which the client is connected to
+                //: %1 -> location to which the client is connected to
                 text: qsTr("Connected to %1").arg(locationStr())
             }
         },
@@ -86,14 +86,14 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-		text: {
-			if (autoSelectionButton.checked) {
-				//: %1 -> location to which the client is connected to
-				qsTr("Best (%1)").arg(locationStr())
-			} else {
-				qsTr("Best")
-			}
-		}
+                text: {
+                    if (autoSelectionButton.checked) {
+                        //: %1 -> location to which the client is connected to
+                        qsTr("Best (%1)").arg(locationStr())
+                    } else {
+                        qsTr("Best")
+                    }
+                }
             }
             PropertyChanges {
                 target: mainStatus
@@ -117,7 +117,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-		text: qsTr("Best")
+                text: qsTr("Best")
             }
             PropertyChanges {
                 target: mainStatus
@@ -141,7 +141,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-		text: qsTr("Best")
+                text: qsTr("Best")
             }
             PropertyChanges {
                 target: mainStatus

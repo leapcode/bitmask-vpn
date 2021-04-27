@@ -16,15 +16,12 @@ Window {
     maximumHeight: 500
     minimumHeight: 300
 
-    flags: Qt.WindowsStaysOnTopHint
-
     property var ctx
     property var loginDone
     property var allowEmptyPass
 
     // TODO get a nice background color for this mainwindow. It should be customizable.
     // TODO refactorize all this mess into discrete components.
-
     TabBar {
         id: bar
         width: parent.width
@@ -65,7 +62,6 @@ Window {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-
                 SwitchDelegate {
 
                     id: vpntoggle
@@ -76,17 +72,19 @@ Window {
 
                     Connections {
                         function onCheckedChanged() {
-                            if (vpntoggle.checked == true && ctx.status == "off") {
+                            if (vpntoggle.checked == true
+                                    && ctx.status == "off") {
                                 backend.switchOn()
                             }
-                            if (vpntoggle.checked === false && ctx.status == "on") {
+                            if (vpntoggle.checked === false
+                                    && ctx.status == "on") {
                                 backend.switchOff()
                             }
                         }
                     }
 
                     contentItem: Text {
-                        rightPadding: vpntoggle.indicator.width + control.spacing
+                        rightPadding: vpntoggle.indicator.width + vpntoggle.spacing
                         text: vpntoggle.text
                         font: vpntoggle.font
                         opacity: enabled ? 1.0 : 0.3
@@ -147,13 +145,13 @@ Window {
                     id: autoSelectionButton
                     checked: !isManualLocation()
                     text: qsTr("Best")
-		    onClicked: backend.useAutomaticGateway()
+                    onClicked: backend.useAutomaticGateway()
                 }
                 RadioButton {
                     id: manualSelectionButton
                     checked: isManualLocation()
                     text: qsTr("Manual")
-		    onClicked: setGwSelection()
+                    onClicked: setGwSelection()
                 }
                 ComboBox {
                     id: gwSelector
@@ -167,41 +165,44 @@ Window {
                         backend.useLocation(currentText.toString())
                     }
 
-		    delegate: ItemDelegate {
-			// TODO: we could use icons
-			// https://doc.qt.io/qt-5/qml-qtquick-controls2-abstractbutton.html#icon-prop
-			background: Rectangle {
-			    color: {
-			        const fullness = ctx.locations[modelData]
-			        if (fullness >= 0 && fullness < 0.4) {
-			            "#83fc5a"
-			        } else if (fullness >= 0.4 && fullness < 0.75) {
-			            "#fcb149"
-			        } else if (fullness >= 0.75) {
-			            "#fc5a5d"
-			        } else {
-			            "#ffffff"
-			        }
-		            }
-			}
-			contentItem: Text {
-			    text: modelData
-			    font: gwSelector.font
-			    color: "#000000"
-			}
-		    }
+                    delegate: ItemDelegate {
+                        // TODO: we could use icons
+                        // https://doc.qt.io/qt-5/qml-qtquick-controls2-abstractbutton.html#icon-prop
+                        background: Rectangle {
+                            color: {
+                                "#ffffff"
+                                // FIXME locations is not defined when we launch
+                                /*
+                                const fullness = ctx.locations[modelData]
+                                if (fullness >= 0 && fullness < 0.4) {
+                                    "#83fc5a"
+                                } else if (fullness >= 0.4 && fullness < 0.75) {
+                                    "#fcb149"
+                                } else if (fullness >= 0.75) {
+                                    "#fc5a5d"
+                                } else {
+                                    "#ffffff"
+                                }
+                                */
+                            }
+                        }
+                        contentItem: Text {
+                            text: modelData
+                            font: gwSelector.font
+                            color: "#000000"
+                        }
+                    }
                 }
             } // end column
-        } // end item 
+        } // end item
     } // end stacklayout
-
 
     Connections {
         target: jsonModel
         function onDataChanged() {
             ctx = JSON.parse(jsonModel.getJson())
             // TODO pass QML_DEBUG variable to be hyper-verbose
-	    //console.debug(jsonModel.getJson())
+            //console.debug(jsonModel.getJson())
             gwSelector.model = Object.keys(ctx.locations)
 
             if (ctx.donateDialog == 'true') {
@@ -275,21 +276,21 @@ Window {
     }
 
     function isManualLocation() {
-	if (!ctx) {
+        if (!ctx) {
             return false
-	}
-	return ctx.manualLocation == "true"
+        }
+        return ctx.manualLocation == "true"
     }
 
     function setGwSelection() {
-	if (!ctx.currentLocation) {
-		return
-	}
+        if (!ctx.currentLocation) {
+            return
+        }
 
-	const location = ctx.currentLocation.toLowerCase()
-	const idx = gwSelector.model.indexOf(location)
-	gwSelector.currentIndex = idx
-	backend.useLocation(location)
+        const location = ctx.currentLocation.toLowerCase()
+        const idx = gwSelector.model.indexOf(location)
+        gwSelector.currentIndex = idx
+        backend.useLocation(location)
     }
 
     Component.onCompleted: {
@@ -326,7 +327,7 @@ Window {
     }
 
     function locationStr() {
-	    return ctx.currentLocation + ", " + ctx.currentCountry
+        return ctx.currentLocation + ", " + ctx.currentCountry
     }
 
     property var icons: {
@@ -346,12 +347,12 @@ Window {
         visible: systrayVisible
 
         onActivated: {
-	    if (reason != SystemTrayIcon.Context) {
-		if (app.visible) {
-		    app.hide()
-		} else {
-		    app.show()
-		}
+            if (reason != SystemTrayIcon.Context) {
+                if (app.visible) {
+                    app.hide()
+                } else {
+                    app.show()
+                }
             }
         }
 
@@ -360,7 +361,6 @@ Window {
          * otherwise the ids are not available
          * from other components
          */
-
         menu: Menu {
 
             id: systrayMenu
@@ -379,30 +379,27 @@ Window {
                 checkable: true
                 checked: !isManualLocation()
                 onTriggered: {
-                	backend.useAutomaticGateway()
+                    backend.useAutomaticGateway()
                 }
             }
 
-
             /* a minimal segfault for submenu */
             // Menu {}
-
             MenuItem {
                 id: manualSelectionItem
-		text: {
-			if (isManualLocation()) {
-				locationStr()
-			} else {
-				qsTr("Pick location…")
-			}
-		}
+                text: {
+                    if (isManualLocation()) {
+                        locationStr()
+                    } else {
+                        qsTr("Pick location…")
+                    }
+                }
                 checkable: true
                 checked: isManualLocation()
                 onTriggered: setGwSelection()
             }
 
             MenuSeparator {}
-
 
             MenuItem {
                 text: {
@@ -482,7 +479,7 @@ Window {
         }
 
         Component.onCompleted: {
-            icon.source = icons["off"]
+            systray.icon.source = icons["off"]
             tooltip = qsTr("Checking status…")
             console.debug("systray init completed")
             hide()

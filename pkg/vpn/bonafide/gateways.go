@@ -92,6 +92,9 @@ func (p *gatewayPool) isValidLocation(location string) bool {
 func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 {
 	locations := p.getLocations()
 	cm := make(map[string]float64)
+	if len(locations) == 0 {
+		return cm
+	}
 	if len(p.recommended) != 0 {
 		for _, gw := range p.recommended {
 			if _, ok := cm[gw.gateway.Location]; ok {
