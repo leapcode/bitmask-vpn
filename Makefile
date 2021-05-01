@@ -7,6 +7,8 @@
 
 XBUILD ?= no
 RELEASE ?= no
+QMAKE ?= qmake
+LRELEASE ?= lrelease
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
@@ -138,7 +140,7 @@ build_gui: relink_vendor
 	@echo "==============BUILD GUI==============="
 	@echo "TARGET: ${TARGET}"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
-	@XBUILD=no TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
+	@XBUILD=no QMAKE=${QMAKE} LRELEASE=${LRELEASE} TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} gui/build.sh --skip-golib
 	@echo "============BUILD GUI================="
 
 build: build_golib build_helper build_gui

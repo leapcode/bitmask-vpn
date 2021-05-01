@@ -1,6 +1,9 @@
 #TARGET = $$BINARY_NAME
 
 CONFIG += qt staticlib
+CONFIG+=force_debug_info
+CONFIG+=debug_and_release
+#CONFIG+=release
 windows:CONFIG -= console
 unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
@@ -25,7 +28,7 @@ win32 {
     RC_ICONS = $$VENDOR_PATH/assets/icon.ico
 }
 
-QT += qml quick widgets
+QT += qml widgets quick
 
 SOURCES += \
     gui/main.cpp \

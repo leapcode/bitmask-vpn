@@ -6,6 +6,7 @@ set -e
 # --------------------
 
 XBUILD=${XBUILD-no}
+LRELEASE=${LRELEASE-lrelease}
 VENDOR_PATH=${VENDOR_PATH-providers/riseup}
 
 OSX_TARGET=10.11
@@ -18,6 +19,7 @@ SOURCE_GOLIB=gui/backend.go
 
 QTBUILD=build/qt
 RELEASE=$QTBUILD/release
+DEBUGP=$QTBUILD/debug
 
 PLATFORM=$(uname -s)
 LDFLAGS=""
@@ -75,29 +77,37 @@ function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
     mkdir -p $QTBUILD
-    $QMAKE -o "$QTBUILD/Makefile" CONFIG-=debug CONFIG+=release VENDOR_PATH=${VENDOR_PATH} $PROJECT
+    $QMAKE -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH=${VENDOR_PATH} $PROJECT
+    #CONFIG=+force_debug_info CONFIG+=debug CONFIG+=debug_and_release
 }
 
 function renameOutput {
     # i would expect that passing QMAKE_TARGET would produce the right output, but nope.
     if [ "$PLATFORM" == "Linux" ]
     then
-    	mv $RELEASE/bitmask $RELEASE/$TARGET
-    	strip $RELEASE/$TARGET
-    	echo "[+] Binary is in" $RELEASE/$TARGET
+        if [ "$DEBUG" == "1" ]
+        then
+          echo "[+] Selecting DEBUG build"
+          mv $DEBUGP/bitmask $RELEASE/$TARGET
+        else
+          echo "[+] Selecting RELEASE build"
+          mv $RELEASE/bitmask $RELEASE/$TARGET
+          strip $RELEASE/$TARGET
+        fi
+        echo "[+] Binary is in" $RELEASE/$TARGET
     elif  [ "$PLATFORM" == "Darwin" ]
     then
-    	rm -rf $RELEASE/$TARGET.app
-    	mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
-    	echo "[+] App is in" $RELEASE/$TARGET
+        rm -rf $RELEASE/$TARGET.app
+        mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
+        echo "[+] App is in" $RELEASE/$TARGET
     else # for MINGWIN or CYGWIN
-    	mv $RELEASE/bitmask.exe $RELEASE/$TARGET.exe
+        mv $RELEASE/bitmask.exe $RELEASE/$TARGET.exe
     fi
 }
 
 function buildDefault {
     echo "[+] Building BitmaskVPN"
-    lrelease bitmask.pro
+    $LRELEASE bitmask.pro
     if [ "$BUILD_GOLIB" == "yes" ]
     then
         buildGoLib

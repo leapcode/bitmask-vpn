@@ -1,12 +1,11 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs 1.2 // TODO use native dialogs in labs.platform
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.4
 
 import Qt.labs.platform 1.0
 
-Window {
+ApplicationWindow {
     id: app
     visible: true
     width: 500
@@ -19,6 +18,11 @@ Window {
     property var ctx
     property var loginDone
     property var allowEmptyPass
+
+    onSceneGraphError: function(error, msg) {
+        console.debug("ERROR while initializing scene")
+        console.debug(msg)
+    }
 
     // TODO get a nice background color for this mainwindow. It should be customizable.
     // TODO refactorize all this mess into discrete components.
@@ -164,6 +168,7 @@ Window {
                         console.debug("Selected gateway:", currentText)
                         backend.useLocation(currentText.toString())
                     }
+
 
                     delegate: ItemDelegate {
                         // TODO: we could use icons
@@ -482,10 +487,10 @@ Window {
             systray.icon.source = icons["off"]
             tooltip = qsTr("Checking status…")
             console.debug("systray init completed")
-            hide()
+            //hide()
             if (systrayVisible) {
                 console.log("show systray")
-                show()
+                //show()
                 if (Qt.platform.os === "windows") {
                     let appname = ctx ? ctx.appName : "VPN"
                     showNotification(
