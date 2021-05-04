@@ -336,10 +336,10 @@ ApplicationWindow {
     }
 
     property var icons: {
-        "off": "qrc:/assets/icon/png/black/vpn_off.png",
-        "on": "qrc:/assets/icon/png/black/vpn_on.png",
-        "wait": "qrc:/assets/icon/png/black/vpn_wait_0.png",
-        "blocked": "qrc:/assets/icon/png/black/vpn_blocked.png"
+        "off": "qrc:/assets/icon/png/white/vpn_off.png",
+        "on": "qrc:/assets/icon/png/white/vpn_on.png",
+        "wait": "qrc:/assets/icon/png/white/vpn_wait_0.png",
+        "blocked": "qrc:/assets/icon/png/white/vpn_blocked.png"
     }
 
     VpnState {
