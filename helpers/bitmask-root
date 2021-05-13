@@ -144,6 +144,7 @@ ALLOWED_FLAGS = {
     "--auth": ["CIPHER"],
     "--management": ["DIR||IP", "UNIXSOCKET||NUMBER"],
     "--management-client-user": ["USER"],
+    "--route": ["IP", "IP", "NETGW"],
     "--cert": ["FILE"],
     "--key": ["FILE"],
     "--ca": ["FILE"],
@@ -164,6 +165,7 @@ PARAM_FORMATS = {
     "FILE": lambda s: os.path.isfile(s),
     "DIR": lambda s: os.path.isdir(os.path.split(s)[0]),
     "UNIXSOCKET": lambda s: s == "unix",
+    "NETGW": lambda s: s == "net_gateway",
     "UID": lambda s: re.match("^[a-zA-Z0-9]+$", s)
 }
 
