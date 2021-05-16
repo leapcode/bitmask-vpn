@@ -74,12 +74,17 @@ func (b *Bitmask) eventHandler(eventCh <-chan openvpn.Event) {
 		}
 		if statusName == "CONNECTED" {
 			ip := strings.Split(stateEvent.String(), ": ")[1]
-			gw, err := b.bonafide.GetGatewayByIP(ip)
-			if err == nil {
-				b.onGateway = gw
-				log.Println("Connected to gateway:", b.onGateway.Host)
+			if ip == "127.0.0.1" {
+				// we're using pluggable transports
+				b.onGateway = b.ptGateway
 			} else {
-				log.Println("ERROR: connected to unknown gateway", ip)
+				gw, err := b.bonafide.GetGatewayByIP(ip)
+				if err == nil {
+					b.onGateway = gw
+					log.Println("Connected to gateway:", b.onGateway.Host)
+				} else {
+					log.Println("ERROR: connected to unknown gateway", ip)
+				}
 			}
 		}
 	}

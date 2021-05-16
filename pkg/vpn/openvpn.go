@@ -59,7 +59,8 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.bonafide.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransport() (proxy string, err error) {
+func (b *Bitmask) startTransport(host string) (proxy string, err error) {
+	// TODO configure port if not available
 	proxy = "127.0.0.1:4430"
 	if b.shapes != nil {
 		return proxy, nil
@@ -75,9 +76,13 @@ func (b *Bitmask) startTransport() (proxy string, err error) {
 	}
 
 	for _, gw := range gateways {
+		if gw.Host != host {
+			continue
+		}
 		if _, ok := gw.Options["cert"]; !ok {
 			continue
 		}
+		log.Println("Selected Gateway:", gw.Host, gw.IPAddress)
 		b.shapes = &shapeshifter.ShapeShifter{
 			Cert:      gw.Options["cert"],
 			Target:    gw.IPAddress + ":" + gw.Ports[0],
@@ -95,6 +100,7 @@ func (b *Bitmask) startTransport() (proxy string, err error) {
 			log.Printf("Can't connect to transport %s: %v", b.transport, err)
 			continue
 		}
+		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
 		return proxy, nil
 	}
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
@@ -112,8 +118,10 @@ func (b *Bitmask) listenShapeErr() {
 }
 
 func (b *Bitmask) startOpenVPN() error {
-	arg := b.openvpnArgs
+	arg := []string{}
+	// Empty transport means we get only the openvpn gateways
 	if b.transport == "" {
+		arg = b.openvpnArgs
 		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
 			return err
@@ -129,15 +137,23 @@ func (b *Bitmask) startOpenVPN() error {
 			}
 		}
 	} else {
-		proxy, err := b.startTransport()
-		if err != nil {
-			return err
-		}
-
+		// For now, obf4 is the only supported Pluggable Transport
 		gateways, err := b.bonafide.GetGateways(b.transport)
 		if err != nil {
 			return err
 		}
+		if len(gateways) == 0 {
+			log.Printf("ERROR No gateway for transport %s in provider", b.transport)
+			return errors.New("ERROR: cannot find any gateway for selected transport")
+		}
+
+		gw := gateways[0]
+		proxy, err := b.startTransport(gw.Host)
+		if err != nil {
+			return err
+		}
+		b.ptGateway = gw
+
 		err = b.launch.firewallStart(gateways)
 		if err != nil {
 			return err
@@ -145,14 +161,16 @@ func (b *Bitmask) startOpenVPN() error {
 
 		proxyArgs := strings.Split(proxy, ":")
 		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "tcp4")
+		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	}
 	arg = append(arg,
-		"--verb", "1",
+		"--verb", "3",
 		"--management-client",
 		"--management", openvpnManagementAddr, openvpnManagementPort,
 		"--ca", b.getCaCertPath(),
 		"--cert", b.certPemPath,
-		"--key", b.certPemPath)
+		"--key", b.certPemPath,
+		"--persist-tun")
 	return b.launch.openvpnStart(arg...)
 }
 

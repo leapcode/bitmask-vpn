@@ -30,6 +30,7 @@ import (
 type Bitmask struct {
 	tempdir          string
 	onGateway        bonafide.Gateway
+	ptGateway        bonafide.Gateway
 	statusCh         chan string
 	managementClient *openvpn.MgmtClient
 	bonafide         *bonafide.Bonafide
@@ -52,7 +53,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}}
+	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}}
 
 	b.launch.firewallStop()
 	/*
