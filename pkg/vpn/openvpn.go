@@ -1,4 +1,4 @@
-// Copyright (C) 2018-2020 LEAP
+// Copyright (C) 2018-2021 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -177,6 +177,7 @@ func (b *Bitmask) startOpenVPN() error {
 }
 
 func (b *Bitmask) getCert() (certPath string, err error) {
+	failed := false
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
 		// reuse cert. for the moment we're not writing one there, this is
@@ -191,9 +192,26 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 			log.Println("Fetching certificate to", certPath)
 			cert, err := b.bonafide.GetPemCertificate()
 			if err != nil {
-				return "", err
+				log.Println(err)
+				failed = true
 			}
 			err = ioutil.WriteFile(certPath, cert, 0600)
+			if err != nil {
+				failed = true
+			}
+		}
+	}
+	if failed || !isValidCert(certPath) {
+		cert, err := b.bonafide.GetPemCertificateNoDNS()
+		if cert != nil {
+			log.Println("Successfully did certificate bypass")
+			err = nil
+		} else {
+			err = errors.New("Cannot get vpn certificate")
+		}
+		err = ioutil.WriteFile(certPath, cert, 0600)
+		if err != nil {
+			failed = true
 		}
 	}
 	return certPath, err

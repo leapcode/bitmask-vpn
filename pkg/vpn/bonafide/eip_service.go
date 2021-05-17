@@ -83,6 +83,13 @@ func (b *Bonafide) fetchEipJSON() error {
 		// TODO why exactly 1 retry? Make it configurable, for tests
 		time.Sleep(retryFetchJSONSeconds * time.Second)
 		resp, err = b.client.Post(eip3API, "", nil)
+		if err != nil {
+			// TODO it might be that it's not an error, but an empty file or whatever done
+			// by DNS poisoning. Should try to parse the file.
+			uri := b.getURLNoDNS("eip")
+			log.Println("Fetching ", uri)
+			resp, err = b.client.Post(uri, "", nil)
+		}
 	}
 	defer resp.Body.Close()
 
