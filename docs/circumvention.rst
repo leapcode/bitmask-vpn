@@ -9,9 +9,23 @@ Bootstrapping the connection
 
 There are two different steps where circumvention can be used: boostrapping the
 connection (getting a certificate and the configuration files) and using an
-obfuscated transport protocol. At the moment RiseupVPN offers obfs4 transport
-"bridges" (you can try them with the `--obfs4` command line argument). For the
-initial bootstrap, there are a couple of techniques that will be attempted.
+obfuscated transport protocol. 
+
+For the initial bootstrap, there are a couple of techniques that will be
+attempted. If this fails, please open an issue with the relevant log
+information.
+
+Obfuscated bridges
+-----------------------------
+
+At the moment RiseupVPN offers obfs4 transport "bridges" (you can try them with
+the `--obfs4` command line argument, a way to enable them from the gui will be
+following soon).
+
+If you know you need bridges but the current ones do not work for you, please
+get in contact. We're interested in learning what are the specific censorship
+measures being deployed in your concrete location, and we could work together
+to enable new bridges.
 
 Getting certificates off-band
 -----------------------------

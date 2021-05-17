@@ -202,6 +202,8 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 		}
 	}
 	if failed || !isValidCert(certPath) {
+		d := config.APIURL[8 : len(config.APIURL)-1]
+		logDnsLookup(d)
 		cert, err := b.bonafide.GetPemCertificateNoDNS()
 		if cert != nil {
 			log.Println("Successfully did certificate bypass")
@@ -214,6 +216,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 			failed = true
 		}
 	}
+
 	return certPath, err
 }
 
