@@ -68,7 +68,7 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
-	err = ioutil.WriteFile(b.getCaCertPath(), config.CaCert, 0600)
+	err = ioutil.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
 
 	go b.openvpnManagement()
 	return &b, err

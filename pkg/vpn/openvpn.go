@@ -22,9 +22,11 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/shapeshifter"
 )
 
@@ -167,7 +169,7 @@ func (b *Bitmask) startOpenVPN() error {
 		"--verb", "3",
 		"--management-client",
 		"--management", openvpnManagementAddr, openvpnManagementPort,
-		"--ca", b.getCaCertPath(),
+		"--ca", b.getTempCaCertPath(),
 		"--cert", b.certPemPath,
 		"--key", b.certPemPath,
 		"--persist-tun")
@@ -175,17 +177,25 @@ func (b *Bitmask) startOpenVPN() error {
 }
 
 func (b *Bitmask) getCert() (certPath string, err error) {
-	certPath = b.getCertPemPath()
-
-	if _, err := os.Stat(certPath); os.IsNotExist(err) {
-		log.Println("Fetching certificate to", certPath)
-		cert, err := b.bonafide.GetPemCertificate()
-		if err != nil {
-			return "", err
+	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
+	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
+		// reuse cert. for the moment we're not writing one there, this is
+		// only to allow users to get certs off-band and place them there
+		// as a last-resort fallback for circumvention.
+		certPath = persistentCertFile
+		err = nil
+	} else {
+		// download one fresh
+		certPath = b.getTempCertPemPath()
+		if _, err := os.Stat(certPath); os.IsNotExist(err) {
+			log.Println("Fetching certificate to", certPath)
+			cert, err := b.bonafide.GetPemCertificate()
+			if err != nil {
+				return "", err
+			}
+			err = ioutil.WriteFile(certPath, cert, 0600)
 		}
-		err = ioutil.WriteFile(certPath, cert, 0600)
 	}
-
 	return certPath, err
 }
 
@@ -299,10 +309,10 @@ func (b *Bitmask) UseTransport(transport string) error {
 	return nil
 }
 
-func (b *Bitmask) getCertPemPath() string {
+func (b *Bitmask) getTempCertPemPath() string {
 	return path.Join(b.tempdir, "openvpn.pem")
 }
 
-func (b *Bitmask) getCaCertPath() string {
+func (b *Bitmask) getTempCaCertPath() string {
 	return path.Join(b.tempdir, "cacert.pem")
 }
