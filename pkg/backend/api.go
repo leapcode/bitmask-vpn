@@ -63,7 +63,7 @@ func UseLocation(label string) {
 	ctx.bm.UseGateway(label)
 	go trigger(OnStatusChanged)
 	if ctx.Status == on && label != strings.ToLower(ctx.CurrentLocation) {
-		ctx.bm.Reconnect()
+		go ctx.bm.Reconnect()
 	}
 }
 
