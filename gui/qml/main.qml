@@ -8,9 +8,9 @@ import Qt.labs.platform 1.0
 ApplicationWindow {
     id: app
     visible: true
-    width: 500
+    width: 300
     height: 600
-    maximumWidth: 600
+    maximumWidth: 300
     minimumWidth: 300
     maximumHeight: 500
     minimumHeight: 300
@@ -24,16 +24,19 @@ ApplicationWindow {
         console.debug(msg)
     }
 
-    // TODO get a nice background color for this mainwindow. It should be customizable.
-    // TODO refactorize all this mess into discrete components.
+    // TODO refactor into discrete components.
+
     TabBar {
         id: bar
         width: parent.width
         TabButton {
-            text: qsTr("Info")
+            text: qsTr("Status")
         }
         TabButton {
             text: qsTr("Location")
+        }
+        TabButton {
+            text: qsTr("Bridges")
         }
     }
 
@@ -47,93 +50,121 @@ ApplicationWindow {
             id: infoTab
             anchors.centerIn: parent
 
-            Column {
+            Rectangle {
+                id: background
+                anchors.fill: parent;
+                anchors.topMargin: 40;
 
-                anchors.centerIn: parent
-                spacing: 5
-
-                Text {
-                    id: mainStatus
-                    text: "off"
-                    font.pixelSize: 26
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Text {
-                    id: mainCurrentGateway
-                    text: ""
-                    font.pixelSize: 20
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                SwitchDelegate {
-
-                    id: vpntoggle
-
-                    text: qsTr("")
-                    checked: false
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Connections {
-                        function onCheckedChanged() {
-                            if (vpntoggle.checked == true
-                                    && ctx.status == "off") {
-                                backend.switchOn()
-                            }
-                            if (vpntoggle.checked === false
-                                    && ctx.status == "on") {
-                                backend.switchOff()
-                            }
-                        }
-                    }
-
-                    contentItem: Text {
-                        rightPadding: vpntoggle.indicator.width + vpntoggle.spacing
-                        text: vpntoggle.text
-                        font: vpntoggle.font
-                        opacity: enabled ? 1.0 : 0.3
-                        color: vpntoggle.down ? "#17a81a" : "#21be2b"
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    indicator: Rectangle {
-                        implicitWidth: 48
-                        implicitHeight: 26
-                        x: vpntoggle.width - width - vpntoggle.rightPadding
-                        y: parent.height / 2 - height / 2
-                        radius: 13
-                        color: vpntoggle.checked ? "#17a81a" : "transparent"
-                        border.color: vpntoggle.checked ? "#17a81a" : "#cccccc"
-
-                        Rectangle {
-                            x: vpntoggle.checked ? parent.width - width : 0
-                            width: 26
-                            height: 26
-                            radius: 13
-                            color: vpntoggle.down ? "#cccccc" : "#ffffff"
-                            border.color: vpntoggle.checked ? (vpntoggle.down ? "#17a81a" : "#21be2b") : "#999999"
-                        }
-                    }
-
-                    background: Rectangle {
-                        implicitWidth: 100
-                        implicitHeight: 40
-                        visible: vpntoggle.down || vpntoggle.highlighted
-                        color: vpntoggle.down ? "#bdbebf" : "#eeeeee"
-                    }
-                } // end switchdelegate
-
-                Text {
-                    id: manualOverrideWarning
-                    font.pixelSize: 10
-                    color: "grey"
-                    text: qsTr("Location has been manually set.")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: isManualLocation()
+                Image {
+                    source: "qrc:/assets/img/bird.jpg";
+                    fillMode: Image.PreserveAspectCrop;
+                    anchors.fill: parent; 
+                    opacity: 0.8;
                 }
             }
-        }
+
+            Item {
+                id: connBox
+                anchors.centerIn: parent
+
+                width: 300
+                height: 300
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "white"
+                    opacity: 0.3
+                    layer.enabled: true
+                }
+
+                Column {
+
+                    anchors.centerIn: parent
+                    spacing: 5
+
+                    Text {
+                        id: mainStatus
+                        text: "off"
+                        font.pixelSize: 26
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    Text {
+                        id: mainCurrentGateway
+                        text: ""
+                        font.pixelSize: 20
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    SwitchDelegate {
+
+                        id: vpntoggle
+
+                        text: qsTr("")
+                        checked: false
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        Connections {
+                            function onCheckedChanged() {
+                                if (vpntoggle.checked == true
+                                        && ctx.status == "off") {
+                                    backend.switchOn()
+                                }
+                                if (vpntoggle.checked === false
+                                        && ctx.status == "on") {
+                                    backend.switchOff()
+                                }
+                            }
+                        }
+
+                        contentItem: Text {
+                            rightPadding: vpntoggle.indicator.width + vpntoggle.spacing
+                            text: vpntoggle.text
+                            font: vpntoggle.font
+                            opacity: enabled ? 1.0 : 0.5
+                            color: vpntoggle.down ? "#17a81a" : "#21be2b"
+                            elide: Text.ElideRight
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        indicator: Rectangle {
+                            implicitWidth: 48
+                            implicitHeight: 26
+                            x: vpntoggle.width - width - vpntoggle.rightPadding
+                            y: parent.height / 2 - height / 2
+                            radius: 13
+                            color: vpntoggle.checked ? "#17a81a" : "transparent"
+                            border.color: vpntoggle.checked ? "#17a81a" : "#cccccc"
+
+                            Rectangle {
+                                x: vpntoggle.checked ? parent.width - width : 0
+                                width: 26
+                                height: 26
+                                radius: 13
+                                color: vpntoggle.down ? "#cccccc" : "#ffffff"
+                                border.color: vpntoggle.checked ? (vpntoggle.down ? "#17a81a" : "#21be2b") : "#999999"
+                            }
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 100
+                            implicitHeight: 40
+                            visible: vpntoggle.down || vpntoggle.highlighted
+                            color: vpntoggle.down ? "#17a81a" : "#eeeeee"
+                        }
+                    } // end switchdelegate
+
+                    Text {
+                        id: manualOverrideWarning
+                        font.pixelSize: 10
+                        color: "grey"
+                        text: qsTr("Location has been manually set.")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: isManualLocation()
+                    }
+                } // end column
+            } // end inner item
+        } // end outer item
 
         Item {
 
@@ -148,7 +179,7 @@ ApplicationWindow {
                 RadioButton {
                     id: autoSelectionButton
                     checked: !isManualLocation()
-                    text: qsTr("Best")
+                    text: qsTr("Recommended")
                     onClicked: backend.useAutomaticGateway()
                 }
                 RadioButton {
@@ -163,7 +194,7 @@ ApplicationWindow {
                     visible: manualSelectionButton.checked
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    model: [qsTr("Best")]
+                    model: [qsTr("Recommended")]
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
                         backend.useLocation(currentText.toString())
@@ -197,6 +228,45 @@ ApplicationWindow {
                             color: "#000000"
                         }
                     }
+                }
+            } // end column
+        } // end item
+
+        Item {
+
+            id: bridgesTab
+            anchors.centerIn: parent
+            width: parent.width
+
+            Column {
+
+                anchors.centerIn: parent
+                spacing: 10
+                width: parent.width
+
+                CheckBox {
+                    checked: false
+                    text: qsTr("Use obfs4 bridges")
+                    font.pixelSize: 14
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Text {
+                    id: bridgesInfo
+                    width: 250
+                    color: "grey"
+                    text: qsTr("Select a bridge only if you know that you need it to evade censorship in your country or local network.")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    wrapMode: Text.WordWrap 
+                }
+                Text {
+                    id: bridgeReconnect
+                    width: 250
+                    font.pixelSize: 12
+                    color: "red"
+                    text: qsTr("The change will take effect next time you connect to the VPN.")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    wrapMode: Text.WordWrap 
+                    visible: true
                 }
             } // end column
         } // end item

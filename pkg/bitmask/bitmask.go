@@ -30,6 +30,8 @@ type Bitmask interface {
 	ListLocationFullness(protocol string) map[string]float64
 	UseGateway(name string)
 	UseAutomaticGateway()
+	GetTransport() string
+	SetTransport(string) error
 	GetCurrentGateway() string
 	GetCurrentLocation() string
 	GetCurrentCountry() string

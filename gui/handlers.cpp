@@ -52,6 +52,16 @@ void Backend::useAutomaticGateway()
     UseAutomaticGateway();
 }
 
+void Backend::useTransport(QString transport)
+{
+    UseTransport(toGoStr(transport));
+}
+
+QString Backend::getTransport()
+{
+    return QString(GetTransport());
+}
+
 void Backend::login(QString username, QString password)
 {
     Login(toGoStr(username), toGoStr(password));

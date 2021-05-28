@@ -57,7 +57,8 @@ type connectionCtx struct {
 func (c *connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
-		c.Locations = c.bm.ListLocationFullness("openvpn")
+		transport := c.bm.GetTransport()
+		c.Locations = c.bm.ListLocationFullness(transport)
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 		c.CurrentLocation = c.bm.GetCurrentLocation()
 		c.CurrentCountry = c.bm.GetCurrentCountry()

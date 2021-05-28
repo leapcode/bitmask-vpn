@@ -49,7 +49,7 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
-		gwLabel := r.FormValue("gw")
+		gwLabel := r.FormValue("transport")
 		fmt.Fprintf(w, "selected gateway: %s\n", gwLabel)
 		ctx.bm.UseGateway(gwLabel)
 		// TODO make sure we don't tear the fw down on reconnect...
@@ -63,23 +63,48 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 }
 
 func webGatewayList(w http.ResponseWriter, r *http.Request) {
-	locationJson, err := json.Marshal(ctx.bm.ListLocationFullness("openvpn"))
+	transport := ctx.bm.GetTransport()
+	locationJson, err := json.Marshal(ctx.bm.ListLocationFullness(transport))
 	if err != nil {
 		fmt.Fprintf(w, "Error converting json: %v", err)
 	}
 	fmt.Fprintf(w, string(locationJson))
 }
 
-// TODO
 func webTransportGet(w http.ResponseWriter, r *http.Request) {
+	t, err := json.Marshal(ctx.bm.GetTransport())
+	if err != nil {
+		fmt.Fprintf(w, "Error converting json: %v", err)
+	}
+	fmt.Fprintf(w, string(t))
+
 }
 
-// TODO
 func webTransportSet(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		if err := r.ParseForm(); err != nil {
+			fmt.Fprintf(w, "ParseForm() err: %v", err)
+			return
+		}
+		t := r.FormValue("transport")
+		if isValidTransport(t) {
+			fmt.Fprintf(w, "Selected transport: %s\n", t)
+			go ctx.bm.SetTransport(string(t))
+		} else {
+			fmt.Fprintf(w, "Unknown transport: %s\n", t)
+		}
+	default:
+		fmt.Fprintf(w, "Only POST supported.")
+	}
 }
 
-// TODO
 func webTransportList(w http.ResponseWriter, r *http.Request) {
+	t, err := json.Marshal([]string{"openvpn", "obfs4"})
+	if err != nil {
+		fmt.Fprintf(w, "Error converting json: %v", err)
+	}
+	fmt.Fprintf(w, string(t))
 }
 
 func webQuit(w http.ResponseWriter, r *http.Request) {
@@ -97,10 +122,19 @@ func enableWebAPI(port int) {
 	http.Handle("/vpn/gw/get", CheckAuth(http.HandlerFunc(webGatewayGet), token))
 	http.Handle("/vpn/gw/set", CheckAuth(http.HandlerFunc(webGatewaySet), token))
 	http.Handle("/vpn/gw/list", CheckAuth(http.HandlerFunc(webGatewayList), token))
-	//http.Handle("/vpn/transport/get", CheckAuth(http.HandlerFunc(webTransportGet), token))
-	//http.Handle("/vpn/transport/set", CheckAuth(http.HandlerFunc(webTransportSet), token))
-	//http.Handle("/vpn/transport/list", CheckAuth(http.HandlerFunc(webTransportList), token))
+	http.Handle("/vpn/transport/get", CheckAuth(http.HandlerFunc(webTransportGet), token))
+	http.Handle("/vpn/transport/set", CheckAuth(http.HandlerFunc(webTransportSet), token))
+	http.Handle("/vpn/transport/list", CheckAuth(http.HandlerFunc(webTransportList), token))
 	http.Handle("/vpn/status", CheckAuth(http.HandlerFunc(webStatus), token))
 	http.Handle("/vpn/quit", CheckAuth(http.HandlerFunc(webQuit), token))
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
+}
+
+func isValidTransport(t string) bool {
+	for _, b := range []string{"openvpn", "obfs4"} {
+		if b == t {
+			return true
+		}
+	}
+	return false
 }

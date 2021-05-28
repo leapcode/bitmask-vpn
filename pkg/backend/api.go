@@ -83,6 +83,10 @@ func UseTransport(label string) {
 	ctx.bm.UseTransport(label)
 }
 
+func GetTransport() *C.char {
+	return C.CString(ctx.bm.GetTransport())
+}
+
 func Quit() {
 	if ctx.autostart != nil {
 		ctx.autostart.Disable()

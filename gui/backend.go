@@ -48,6 +48,11 @@ func UseTransport(transport string) {
 	backend.UseTransport(transport)
 }
 
+//export GetTransport
+func GetTransport() *C.char {
+	return (*C.char)(backend.GetTransport())
+}
+
 //export Quit
 func Quit() {
 	backend.Quit()

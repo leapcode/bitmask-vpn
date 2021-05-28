@@ -22,6 +22,7 @@
         <file>assets/icon/png/white/vpn_wait_1.png</file>
         <file>assets/icon/png/white/vpn_wait_2.png</file>
         <file>assets/icon/png/white/vpn_wait_3.png</file>
+        <file>assets/img/bird.jpg</file>
 
         <file alias="providers.json">providers/providers.json</file>
     </qresource>

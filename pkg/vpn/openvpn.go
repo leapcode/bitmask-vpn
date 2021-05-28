@@ -121,26 +121,8 @@ func (b *Bitmask) listenShapeErr() {
 
 func (b *Bitmask) startOpenVPN() error {
 	arg := []string{}
-	// Empty transport means we get only the openvpn gateways
-	if b.transport == "" {
-		arg = b.openvpnArgs
-		gateways, err := b.bonafide.GetGateways("openvpn")
-		if err != nil {
-			return err
-		}
-		err = b.launch.firewallStart(gateways)
-		if err != nil {
-			return err
-		}
-
-		for _, gw := range gateways {
-			for _, port := range gw.Ports {
-				arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
-			}
-		}
-	} else {
-		// For now, obf4 is the only supported Pluggable Transport
-		gateways, err := b.bonafide.GetGateways(b.transport)
+	if b.GetTransport() == "obfs4" {
+		gateways, err := b.bonafide.GetGateways("obfs4")
 		if err != nil {
 			return err
 		}
@@ -164,6 +146,22 @@ func (b *Bitmask) startOpenVPN() error {
 		proxyArgs := strings.Split(proxy, ":")
 		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
+	} else {
+		arg = b.openvpnArgs
+		gateways, err := b.bonafide.GetGateways("openvpn")
+		if err != nil {
+			return err
+		}
+		err = b.launch.firewallStart(gateways)
+		if err != nil {
+			return err
+		}
+
+		for _, gw := range gateways {
+			for _, port := range gw.Ports {
+				arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+			}
+		}
 	}
 	arg = append(arg,
 		"--verb", "3",
@@ -171,8 +169,8 @@ func (b *Bitmask) startOpenVPN() error {
 		"--management", openvpnManagementAddr, openvpnManagementPort,
 		"--ca", b.getTempCaCertPath(),
 		"--cert", b.certPemPath,
-		"--key", b.certPemPath,
-		"--persist-tun")
+		"--key", b.certPemPath)
+	//"--persist-tun")
 	return b.launch.openvpnStart(arg...)
 }
 
@@ -327,6 +325,23 @@ func (b *Bitmask) UseTransport(transport string) error {
 		return fmt.Errorf("Transport %s not implemented", transport)
 	}
 	b.transport = transport
+	return nil
+}
+
+func (b *Bitmask) GetTransport() string {
+	if b.transport == "obfs4" {
+		return "obfs4"
+	} else {
+		return "openvpn"
+	}
+}
+
+func (b *Bitmask) SetTransport(t string) error {
+	if t != "openvpn" && t != "obfs4" {
+		return errors.New("Transport not supported: " + t)
+	}
+	log.Println("Setting transport to", t)
+	b.transport = t
 	return nil
 }
 
