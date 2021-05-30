@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 
+import "logic.js" as Logic
+
 StateGroup {
 
     state: ctx ? ctx.status : ""
@@ -11,9 +13,12 @@ StateGroup {
         },
         State {
             name: "off"
+            StateChangeScript {
+                script: Logic.setStatus("off");
+            }
             PropertyChanges {
                 target: systray
-                tooltip: toHuman("off")
+                tooltip: Logic.toHuman("off")
                 icon.source: icons["off"]
             }
             PropertyChanges {
@@ -22,15 +27,15 @@ StateGroup {
             }
             PropertyChanges {
                 target: statusItem
-                text: toHuman("off")
+                text: Logic.toHuman("off")
             }
             PropertyChanges {
                 target: autoSelectionItem
-                text: qsTr("Best")
+                text: qsTr("Recommended")
             }
             PropertyChanges {
                 target: mainStatus
-                text: toHuman("off")
+                text: Logic.toHuman("off")
             }
             PropertyChanges {
                 target: mainCurrentGateway
@@ -39,9 +44,16 @@ StateGroup {
         },
         State {
             name: "on"
+            StateChangeScript {
+                script: {
+                    Logic.setNeedsReconnect(false);
+                    brReconnect = false;
+                }
+
+            }
             PropertyChanges {
                 target: systray
-                tooltip: toHuman("on")
+                tooltip: Logic.toHuman("on")
                 icon.source: icons["on"]
             }
             PropertyChanges {
@@ -50,7 +62,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: statusItem
-                text: toHuman("on")
+                text: Logic.toHuman("on")
             }
             PropertyChanges {
                 target: autoSelectionItem
@@ -65,7 +77,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainStatus
-                text: toHuman("on")
+                text: Logic.toHuman("on")
             }
             PropertyChanges {
                 target: mainCurrentGateway
@@ -77,12 +89,12 @@ StateGroup {
             name: "starting"
             PropertyChanges {
                 target: systray
-                tooltip: toHuman("connecting")
+                tooltip: Logic.toHuman("connecting")
                 icon.source: icons["wait"]
             }
             PropertyChanges {
                 target: statusItem
-                text: toHuman("connecting")
+                text: Logic.toHuman("connecting")
             }
             PropertyChanges {
                 target: autoSelectionItem
@@ -108,12 +120,12 @@ StateGroup {
             name: "stopping"
             PropertyChanges {
                 target: systray
-                tooltip: toHuman("stopping")
+                tooltip: Logic.toHuman("stopping")
                 icon.source: icons["wait"]
             }
             PropertyChanges {
                 target: statusItem
-                text: toHuman("stopping")
+                text: Logic.toHuman("stopping")
             }
             PropertyChanges {
                 target: autoSelectionItem
@@ -121,7 +133,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainStatus
-                text: toHuman("stopping")
+                text: Logic.toHuman("stopping")
             }
             PropertyChanges {
                 target: mainCurrentGateway
@@ -132,12 +144,12 @@ StateGroup {
             name: "failed"
             PropertyChanges {
                 target: systray
-                tooltip: toHuman("failed")
+                tooltip: Logic.toHuman("failed")
                 icon.source: icons["wait"]
             }
             PropertyChanges {
                 target: statusItem
-                text: toHuman("failed")
+                text: Logic.toHuman("failed")
             }
             PropertyChanges {
                 target: autoSelectionItem
@@ -145,7 +157,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: mainStatus
-                text: toHuman("failed")
+                text: Logic.toHuman("failed")
             }
             PropertyChanges {
                 target: mainCurrentGateway

@@ -5,6 +5,8 @@ import QtQuick.Controls 2.4
 
 import Qt.labs.platform 1.0
 
+import "logic.js" as Logic
+
 ApplicationWindow {
     id: app
     visible: true
@@ -18,26 +20,16 @@ ApplicationWindow {
     property var ctx
     property var loginDone
     property var allowEmptyPass
+    property var needsRestart
+
 
     onSceneGraphError: function(error, msg) {
         console.debug("ERROR while initializing scene")
         console.debug(msg)
     }
 
-    // TODO refactor into discrete components.
-
-    TabBar {
+    MainBar {
         id: bar
-        width: parent.width
-        TabButton {
-            text: qsTr("Status")
-        }
-        TabButton {
-            text: qsTr("Location")
-        }
-        TabButton {
-            text: qsTr("Bridges")
-        }
     }
 
     StackLayout {
@@ -50,17 +42,8 @@ ApplicationWindow {
             id: infoTab
             anchors.centerIn: parent
 
-            Rectangle {
+            BackgroundImage {
                 id: background
-                anchors.fill: parent;
-                anchors.topMargin: 40;
-
-                Image {
-                    source: "qrc:/assets/img/bird.jpg";
-                    fillMode: Image.PreserveAspectCrop;
-                    anchors.fill: parent; 
-                    opacity: 0.8;
-                }
             }
 
             Item {
@@ -96,13 +79,8 @@ ApplicationWindow {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    SwitchDelegate {
-
+                    VPNSwitch {
                         id: vpntoggle
-
-                        text: qsTr("")
-                        checked: false
-                        anchors.horizontalCenter: parent.horizontalCenter
 
                         Connections {
                             function onCheckedChanged() {
@@ -116,50 +94,10 @@ ApplicationWindow {
                                 }
                             }
                         }
+                    }
 
-                        contentItem: Text {
-                            rightPadding: vpntoggle.indicator.width + vpntoggle.spacing
-                            text: vpntoggle.text
-                            font: vpntoggle.font
-                            opacity: enabled ? 1.0 : 0.5
-                            color: vpntoggle.down ? "#17a81a" : "#21be2b"
-                            elide: Text.ElideRight
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        indicator: Rectangle {
-                            implicitWidth: 48
-                            implicitHeight: 26
-                            x: vpntoggle.width - width - vpntoggle.rightPadding
-                            y: parent.height / 2 - height / 2
-                            radius: 13
-                            color: vpntoggle.checked ? "#17a81a" : "transparent"
-                            border.color: vpntoggle.checked ? "#17a81a" : "#cccccc"
-
-                            Rectangle {
-                                x: vpntoggle.checked ? parent.width - width : 0
-                                width: 26
-                                height: 26
-                                radius: 13
-                                color: vpntoggle.down ? "#cccccc" : "#ffffff"
-                                border.color: vpntoggle.checked ? (vpntoggle.down ? "#17a81a" : "#21be2b") : "#999999"
-                            }
-                        }
-
-                        background: Rectangle {
-                            implicitWidth: 100
-                            implicitHeight: 40
-                            visible: vpntoggle.down || vpntoggle.highlighted
-                            color: vpntoggle.down ? "#17a81a" : "#eeeeee"
-                        }
-                    } // end switchdelegate
-
-                    Text {
+                    LocationText {
                         id: manualOverrideWarning
-                        font.pixelSize: 10
-                        color: "grey"
-                        text: qsTr("Location has been manually set.")
-                        anchors.horizontalCenter: parent.horizontalCenter
                         visible: isManualLocation()
                     }
                 } // end column
@@ -200,7 +138,6 @@ ApplicationWindow {
                         backend.useLocation(currentText.toString())
                     }
 
-
                     delegate: ItemDelegate {
                         // TODO: we could use icons
                         // https://doc.qt.io/qt-5/qml-qtquick-controls2-abstractbutton.html#icon-prop
@@ -232,44 +169,10 @@ ApplicationWindow {
             } // end column
         } // end item
 
-        Item {
-
+        BridgesItem {
             id: bridgesTab
-            anchors.centerIn: parent
-            width: parent.width
+        }
 
-            Column {
-
-                anchors.centerIn: parent
-                spacing: 10
-                width: parent.width
-
-                CheckBox {
-                    checked: false
-                    text: qsTr("Use obfs4 bridges")
-                    font.pixelSize: 14
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-                Text {
-                    id: bridgesInfo
-                    width: 250
-                    color: "grey"
-                    text: qsTr("Select a bridge only if you know that you need it to evade censorship in your country or local network.")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    wrapMode: Text.WordWrap 
-                }
-                Text {
-                    id: bridgeReconnect
-                    width: 250
-                    font.pixelSize: 12
-                    color: "red"
-                    text: qsTr("The change will take effect next time you connect to the VPN.")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    wrapMode: Text.WordWrap 
-                    visible: true
-                }
-            } // end column
-        } // end item
     } // end stacklayout
 
     Connections {
@@ -374,36 +277,13 @@ ApplicationWindow {
         console.debug("DEBUG: Pre-seeded providers:")
         console.debug(providers.getJson())
         allowEmptyPass = shouldAllowEmptyPass()
+        needsRestart = false;
 
         /* TODO get appVisible flag from backend */
         app.visible = true
         app.raise()
     }
 
-    function toHuman(st) {
-        switch (st) {
-        case "off":
-            //: %1 -> application name
-            return qsTr("%1 off").arg(ctx.appName)
-        case "on":
-            //: %1 -> application name
-            return qsTr("%1 on").arg(ctx.appName)
-        case "connecting":
-            //: %1 -> application name
-            return qsTr("Connecting to %1").arg(ctx.appName)
-        case "stopping":
-            //: %1 -> application name
-            return qsTr("Stopping %1").arg(ctx.appName)
-        case "failed":
-            //: %1 -> application name
-            return qsTr("%1 blocking internet").arg(
-                        ctx.appName) // TODO failed is not handed yet
-        }
-    }
-
-    function locationStr() {
-        return ctx.currentLocation + ", " + ctx.currentCountry
-    }
 
     property var icons: {
         "off": "qrc:/assets/icon/png/white/vpn_off.png",
@@ -557,10 +437,8 @@ ApplicationWindow {
             systray.icon.source = icons["off"]
             tooltip = qsTr("Checking status…")
             console.debug("systray init completed")
-            //hide()
             if (systrayVisible) {
                 console.log("show systray")
-                //show()
                 if (Qt.platform.os === "windows") {
                     let appname = ctx ? ctx.appName : "VPN"
                     showNotification(
@@ -570,6 +448,7 @@ ApplicationWindow {
             }
         }
 
+        // TODO move to logic, pass ctx
         // Helper to show notification messages
         function showNotification(msg) {
             console.log("Going to show notification message: ", msg)
@@ -604,7 +483,6 @@ ApplicationWindow {
 
     MessageDialog {
         id: errorStartingVPN
-        //buttons: MessageDialog.Ok
         modality: Qt.NonModal
         title: qsTr("Error starting VPN")
         text: ""
@@ -614,7 +492,6 @@ ApplicationWindow {
 
     MessageDialog {
         id: authAgent
-        //buttons: MessageDialog.Ok
         modality: Qt.NonModal
         title: qsTr("Missing authentication agent")
         text: qsTr("Could not find a polkit authentication agent. Please run one and try again.")
@@ -625,4 +502,11 @@ ApplicationWindow {
         id: initFailure
         visible: false
     }
+
+    function locationStr() {
+        return ctx.currentLocation + ", " + ctx.currentCountry
+    }
+
+    property alias brReconnect:bridgesTab.displayReconnect
+
 }
