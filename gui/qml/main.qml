@@ -507,6 +507,14 @@ ApplicationWindow {
         return ctx.currentLocation + ", " + ctx.currentCountry
     }
 
+    function useBridges(value) {
+        if (value==true) {
+            backend.setTransport("obfs4")
+        } else {
+            backend.setTransport("openvpn")
+        }
+    }
+
     property alias brReconnect:bridgesTab.displayReconnect
 
 }

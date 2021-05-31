@@ -319,30 +319,31 @@ func (b *Bitmask) UseAutomaticGateway() {
 	b.bonafide.SetAutomaticGateway()
 }
 
-// UseTransport selects an obfuscation transport to use
-func (b *Bitmask) UseTransport(transport string) error {
-	if transport != "obfs4" {
-		return fmt.Errorf("Transport %s not implemented", transport)
+// SetTransport selects an obfuscation transport to use
+func (b *Bitmask) SetTransport(t string) error {
+	if t != "openvpn" && t != "obfs4" {
+		return fmt.Errorf("Transport %s not implemented", t)
 	}
-	b.transport = transport
+	log.Println("Setting transport to", t)
+	// compare and set string looks strange, but if assigning directly
+	// we're getting some kind of corruption with the transport string.
+	// I suspect something's
+	// not quite right with the c<->go char pointers handling.
+	if t == "obfs4" {
+		b.transport = "obfs4"
+	} else if t == "openvpn" {
+		b.transport = "openvpn"
+	}
 	return nil
 }
 
+// GetTransport gets the obfuscation transport to use. Only obfs4 available for now.
 func (b *Bitmask) GetTransport() string {
 	if b.transport == "obfs4" {
 		return "obfs4"
 	} else {
 		return "openvpn"
 	}
-}
-
-func (b *Bitmask) SetTransport(t string) error {
-	if t != "openvpn" && t != "obfs4" {
-		return errors.New("Transport not supported: " + t)
-	}
-	log.Println("Setting transport to", t)
-	b.transport = t
-	return nil
 }
 
 func (b *Bitmask) getTempCertPemPath() string {

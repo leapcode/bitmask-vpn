@@ -19,8 +19,7 @@ Obfuscated bridges
 -----------------------------
 
 At the moment RiseupVPN offers obfs4 transport "bridges" (you can try them with
-the `--obfs4` command line argument, a way to enable them from the gui will be
-following soon).
+the `--obfs4` command line argument, or by checking the "use obfs4 bridges" checkbox on the preferences panel.
 
 If you know you need bridges but the current ones do not work for you, please
 get in contact. We're interested in learning what are the specific censorship

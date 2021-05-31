@@ -79,8 +79,8 @@ func UseAutomaticGateway() {
 	}
 }
 
-func UseTransport(label string) {
-	ctx.bm.UseTransport(label)
+func SetTransport(label string) {
+	ctx.bm.SetTransport(label)
 }
 
 func GetTransport() *C.char {

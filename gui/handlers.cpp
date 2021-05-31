@@ -52,9 +52,9 @@ void Backend::useAutomaticGateway()
     UseAutomaticGateway();
 }
 
-void Backend::useTransport(QString transport)
+void Backend::setTransport(QString transport)
 {
-    UseTransport(toGoStr(transport));
+    SetTransport(toGoStr(transport));
 }
 
 QString Backend::getTransport()

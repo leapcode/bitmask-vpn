@@ -109,7 +109,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 func setTransport(b Bitmask, conf *config.Config) error {
 	if conf.Obfs4 {
 		log.Printf("Use transport Obfs4")
-		err := b.UseTransport("obfs4")
+		err := b.SetTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)
 			return err

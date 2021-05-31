@@ -9,6 +9,8 @@ Item {
     anchors.centerIn: parent
     width: parent.width
     property alias displayReconnect: bridgeReconnect.visible
+    // TODO get obfs4Available from backend, in case provider doesn't have it
+    visible: true
 
     Column {
 
@@ -26,11 +28,13 @@ Item {
                 if (checked) {
                     Logic.setNeedsReconnect(true);
                     bridgeReconnect.visible = true;
+                    app.useBridges(true);
                 } else {
                     // This would also need a "needs reconnect" for de-selecting bridges the next time.
                     // better to wait and see the new connection widgets though
                     Logic.setNeedsReconnect(false);
                     bridgeReconnect.visible = false;
+                    app.useBridges(false);
                 }
             }
         }
@@ -42,6 +46,7 @@ Item {
             text: qsTr("Select a bridge only if you know that you need it to evade censorship in your country or local network.")
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap 
+            visible: !bridgeReconnect.visible
         }
 
         Text {
@@ -49,10 +54,10 @@ Item {
             width: 250
             font.pixelSize: 12
             color: "red"
-            text: qsTr("We will attempt to connect to a bridge the next time you connect to the VPN.")
+            text: qsTr("An obfs4 bridge will be used the next time you connect to the VPN.")
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap 
-            visible: false;
+            visible: false
         }
     }
 }

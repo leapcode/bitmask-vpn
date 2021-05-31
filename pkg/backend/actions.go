@@ -24,9 +24,8 @@ func getGateway() string {
 	return ctx.bm.GetCurrentGateway()
 }
 
-// TODO return bool?
-func useTransport(transport string) {
-	err := ctx.bm.UseTransport(transport)
+func setTransport(t string) {
+	err := ctx.bm.SetTransport(t)
 	if err != nil {
 		log.Println(err)
 	}

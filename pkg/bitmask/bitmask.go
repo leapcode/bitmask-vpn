@@ -36,7 +36,6 @@ type Bitmask interface {
 	GetCurrentLocation() string
 	GetCurrentCountry() string
 	IsManualLocation() bool
-	UseTransport(transport string) error
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)
 }

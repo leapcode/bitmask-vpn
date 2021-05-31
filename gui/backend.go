@@ -43,9 +43,9 @@ func UseAutomaticGateway() {
 	backend.UseAutomaticGateway()
 }
 
-//export UseTransport
-func UseTransport(transport string) {
-	backend.UseTransport(transport)
+//export SetTransport
+func SetTransport(transport string) {
+	backend.SetTransport(string(transport))
 }
 
 //export GetTransport

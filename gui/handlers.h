@@ -38,7 +38,7 @@ public slots:
     void donateSeen();
     void useLocation(QString username);
     void useAutomaticGateway();
-    void useTransport(QString transport);
+    void setTransport(QString transport);
     QString getTransport();
     void login(QString username, QString password);
     void resetError(QString errlabel);
