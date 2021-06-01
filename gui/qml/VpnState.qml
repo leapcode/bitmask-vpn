@@ -69,9 +69,9 @@ StateGroup {
                 text: {
                     if (autoSelectionButton.checked) {
                         //: %1 -> location to which the client is connected to
-                        qsTr("Best (%1)").arg(locationStr())
+                        qsTr("Recommended (%1)").arg(locationStr())
                     } else {
-                        qsTr("Best")
+                        qsTr("Recommended")
                     }
                 }
             }
@@ -101,9 +101,9 @@ StateGroup {
                 text: {
                     if (autoSelectionButton.checked) {
                         //: %1 -> location to which the client is connected to
-                        qsTr("Best (%1)").arg(locationStr())
+                        qsTr("Recommended (%1)").arg(locationStr())
                     } else {
-                        qsTr("Best")
+                        qsTr("Recommended")
                     }
                 }
             }
@@ -129,7 +129,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-                text: qsTr("Best")
+                text: qsTr("Recommended")
             }
             PropertyChanges {
                 target: mainStatus
@@ -153,7 +153,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
-                text: qsTr("Best")
+                text: qsTr("Recommended")
             }
             PropertyChanges {
                 target: mainStatus

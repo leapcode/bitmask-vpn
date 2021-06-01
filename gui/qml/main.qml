@@ -9,7 +9,7 @@ import "logic.js" as Logic
 
 ApplicationWindow {
     id: app
-    visible: true
+    visible: false
     width: 300
     height: 600
     maximumWidth: 300
@@ -118,7 +118,10 @@ ApplicationWindow {
                     id: autoSelectionButton
                     checked: !isManualLocation()
                     text: qsTr("Recommended")
-                    onClicked: backend.useAutomaticGateway()
+                    onClicked: {
+                        backend.useAutomaticGateway()
+                        manualSelectionItem.checked = false
+                    }
                 }
                 RadioButton {
                     id: manualSelectionButton
@@ -136,6 +139,7 @@ ApplicationWindow {
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
                         backend.useLocation(currentText.toString())
+                        manualSelectionItem.checked = true
                     }
 
                     delegate: ItemDelegate {
@@ -253,6 +257,18 @@ ApplicationWindow {
         if (!ctx.currentLocation) {
             return
         }
+        if (!isManualLocation()) {
+            //manualSelectionItem.checked = isManualLocation()
+            manualSelectionItem.checked = false
+            bar.currentIndex = 1
+            app.visible = true
+            app.hide()
+            app.show()
+            app.raise()
+            return
+        }
+
+        // last used manual selection
         const location = ctx.currentLocation.toLowerCase()
         const idx = gwSelector.model.indexOf(location)
         gwSelector.currentIndex = idx
@@ -265,8 +281,8 @@ ApplicationWindow {
         allowEmptyPass = Logic.shouldAllowEmptyPass(providers)
         needsRestart = false;
         /* TODO get appVisible flag from backend */
-        app.visible = true
-        app.raise()
+        //app.visible = true
+        //app.raise()
     }
 
 
@@ -285,17 +301,6 @@ ApplicationWindow {
 
         id: systray
         visible: systrayVisible
-
-        onActivated: {
-            if (reason != SystemTrayIcon.Context) {
-                if (app.visible) {
-                    app.hide()
-                } else {
-                    app.show()
-                }
-            }
-        }
-
 
         /* the systray menu cannot be buried in a child qml file because
          * otherwise the ids are not available
@@ -320,6 +325,7 @@ ApplicationWindow {
                 checked: !isManualLocation()
                 onTriggered: {
                     backend.useAutomaticGateway()
+                    manualSelectionItem.checked = false
                 }
             }
 
