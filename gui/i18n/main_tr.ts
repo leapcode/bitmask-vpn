@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -26,6 +28,24 @@
     </message>
 </context>
 <context>
+    <name>BridgesItem</name>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="24"/>
+        <source>Use obfs4 bridges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="46"/>
+        <source>Select a bridge only if you know that you need it to evade censorship in your country or local network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="57"/>
+        <source>An obfs4 bridge will be used the next time you connect to the VPN.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DonateDialog</name>
     <message>
         <location filename="../qml/DonateDialog.qml" line="6"/>
@@ -34,7 +54,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -49,6 +69,14 @@ Do you want to donate now?</source>
         <location filename="../qml/FailDialog.qml" line="5"/>
         <source>Initialization Error</source>
         <translation>Başlatma Hatası</translation>
+    </message>
+</context>
+<context>
+    <name>LocationText</name>
+    <message>
+        <location filename="../qml/LocationText.qml" line="6"/>
+        <source>Location has been manually set.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -100,142 +128,247 @@ Do you want to donate now?</source>
     </message>
 </context>
 <context>
+    <name>MainBar</name>
+    <message>
+        <location filename="../qml/MainBar.qml" line="7"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainBar.qml" line="10"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainBar.qml" line="13"/>
+        <source>Bridges</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VPNSwitch</name>
+    <message>
+        <location filename="../qml/VPNSwitch.qml" line="10"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VpnState</name>
+    <message>
+        <location filename="../qml/VpnState.qml" line="34"/>
+        <location filename="../qml/VpnState.qml" line="74"/>
+        <location filename="../qml/VpnState.qml" line="106"/>
+        <location filename="../qml/VpnState.qml" line="132"/>
+        <location filename="../qml/VpnState.qml" line="156"/>
+        <source>Recommended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/VpnState.qml" line="72"/>
+        <location filename="../qml/VpnState.qml" line="104"/>
+        <source>Recommended (%1)</source>
+        <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/VpnState.qml" line="85"/>
+        <source>Connected to %1</source>
+        <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/VpnState.qml" line="112"/>
+        <source>Connecting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>logic</name>
+    <message>
+        <location filename="../qml/logic.js" line="24"/>
+        <source>%1 off</source>
+        <extracomment>%1 -&gt; application name</extracomment>
+        <translation type="unfinished">%1 kapalı</translation>
+    </message>
+    <message>
+        <location filename="../qml/logic.js" line="27"/>
+        <source>%1 on</source>
+        <extracomment>%1 -&gt; application name</extracomment>
+        <translation type="unfinished">%1 açık</translation>
+    </message>
+    <message>
+        <location filename="../qml/logic.js" line="30"/>
+        <source>Connecting to %1</source>
+        <extracomment>%1 -&gt; application name</extracomment>
+        <translation type="unfinished">%1 uygulamasına bağlanılıyor</translation>
+    </message>
+    <message>
+        <location filename="../qml/logic.js" line="33"/>
+        <source>Stopping %1</source>
+        <extracomment>%1 -&gt; application name</extracomment>
+        <translation type="unfinished">%1 durduruluyor</translation>
+    </message>
+    <message>
+        <location filename="../qml/logic.js" line="36"/>
+        <source>%1 blocking internet</source>
+        <extracomment>%1 -&gt; application name</extracomment>
+        <translation type="unfinished">%1 interneti engelliyor</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="39"/>
+        <location filename="../qml/main.qml" line="208"/>
         <source>Could not find helpers. Please check your installation</source>
         <translation>Yardımcılar bulunamıyor, lütfen kurulumunuzu kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="41"/>
+        <location filename="../qml/main.qml" line="210"/>
         <source>Could not find polkit agent.</source>
         <translation>polkit vekili bulunamıyor.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="57"/>
+        <location filename="../qml/main.qml" line="226"/>
         <source>Oops! The authentication service seems down. Please try again later</source>
         <translation>Eyvah! Kimlik doğrulama hizmeti çalışmıyor gözüküyor. Lütfen daha sonra tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="58"/>
+        <location filename="../qml/main.qml" line="227"/>
         <source>Service Error</source>
         <translation>Hizmet Hatası</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="64"/>
+        <location filename="../qml/main.qml" line="233"/>
         <source>Please check your Patron ID</source>
         <extracomment>Incorrect library card number</extracomment>
         <translation>Lütfen Patron kimliğinizi kontrol edin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="235"/>
         <source>Could not log in with those credentials, please retry</source>
         <translation>Bu kimlik bilgileriyle giriş yapılamıyor, lütfen tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="68"/>
+        <location filename="../qml/main.qml" line="237"/>
         <source>Login Error</source>
         <translation>Giriş Hatası</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="72"/>
+        <location filename="../qml/main.qml" line="241"/>
         <source>Got an error starting %1: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
         <translation>%1 başlatılırken bir hata oluştu: %2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="107"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 kapalı</translation>
+        <translation type="vanished">%1 kapalı</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="110"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 açık</translation>
+        <translation type="vanished">%1 açık</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="113"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 uygulamasına bağlanılıyor</translation>
+        <translation type="vanished">%1 uygulamasına bağlanılıyor</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="116"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 durduruluyor</translation>
+        <translation type="vanished">%1 durduruluyor</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="119"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 interneti engelliyor</translation>
+        <translation type="vanished">%1 interneti engelliyor</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="171"/>
-        <location filename="../qml/main.qml" line="273"/>
+        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>Checking status…</source>
         <translation>Durum denetleniyor…</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Reconnect</source>
         <translation>Yeniden bağlan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="355"/>
         <source>Turn on</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="367"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="369"/>
         <source>Turn off</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="326"/>
+        <location filename="../qml/main.qml" line="401"/>
         <source>Help…</source>
         <translation>Yardım…</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="316"/>
+        <location filename="../qml/main.qml" line="391"/>
         <source>Donate…</source>
         <translation>Bağış yapın…</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="120"/>
+        <location filename="../qml/main.qml" line="138"/>
+        <source>Recommended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="129"/>
+        <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="323"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="340"/>
+        <source>Pick location…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="381"/>
         <source>About…</source>
         <translation>Hakkında…</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="335"/>
+        <location filename="../qml/main.qml" line="410"/>
         <source>Report a bug…</source>
         <translation>Hata bildir…</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="347"/>
+        <location filename="../qml/main.qml" line="422"/>
         <source>Quit</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="377"/>
+        <location filename="../qml/main.qml" line="467"/>
         <source>Error starting VPN</source>
         <translation>VPN başlatma hatası</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="387"/>
+        <location filename="../qml/main.qml" line="476"/>
         <source>Missing authentication agent</source>
         <translation>Kimlik doğrulama vekili bulunamıyor</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="388"/>
+        <location filename="../qml/main.qml" line="477"/>
         <source>Could not find a polkit authentication agent. Please run one and try again.</source>
         <translation>Bir polkit kimlik doğrulama vekili bulunamıyor. Bir tane çalıştırın ve tekrar deneyin.</translation>
     </message>

@@ -28,6 +28,24 @@
     </message>
 </context>
 <context>
+    <name>BridgesItem</name>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="24"/>
+        <source>Use obfs4 bridges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="46"/>
+        <source>Select a bridge only if you know that you need it to evade censorship in your country or local network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/BridgesItem.qml" line="57"/>
+        <source>An obfs4 bridge will be used the next time you connect to the VPN.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DonateDialog</name>
     <message>
         <location filename="../qml/DonateDialog.qml" line="6"/>
@@ -48,6 +66,14 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/FailDialog.qml" line="5"/>
         <source>Initialization Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LocationText</name>
+    <message>
+        <location filename="../qml/LocationText.qml" line="6"/>
+        <source>Location has been manually set.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -100,142 +126,222 @@ Do you want to donate now?</source>
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>MainBar</name>
     <message>
-        <location filename="../qml/main.qml" line="39"/>
-        <source>Could not find helpers. Please check your installation</source>
+        <location filename="../qml/MainBar.qml" line="7"/>
+        <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="41"/>
-        <source>Could not find polkit agent.</source>
+        <location filename="../qml/MainBar.qml" line="10"/>
+        <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="57"/>
-        <source>Oops! The authentication service seems down. Please try again later</source>
+        <location filename="../qml/MainBar.qml" line="13"/>
+        <source>Bridges</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VPNSwitch</name>
+    <message>
+        <location filename="../qml/VPNSwitch.qml" line="10"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VpnState</name>
+    <message>
+        <location filename="../qml/VpnState.qml" line="34"/>
+        <location filename="../qml/VpnState.qml" line="74"/>
+        <location filename="../qml/VpnState.qml" line="106"/>
+        <location filename="../qml/VpnState.qml" line="132"/>
+        <location filename="../qml/VpnState.qml" line="156"/>
+        <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="58"/>
-        <source>Service Error</source>
+        <location filename="../qml/VpnState.qml" line="72"/>
+        <location filename="../qml/VpnState.qml" line="104"/>
+        <source>Recommended (%1)</source>
+        <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="64"/>
-        <source>Please check your Patron ID</source>
-        <extracomment>Incorrect library card number</extracomment>
+        <location filename="../qml/VpnState.qml" line="85"/>
+        <source>Connected to %1</source>
+        <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
-        <source>Could not log in with those credentials, please retry</source>
+        <location filename="../qml/VpnState.qml" line="112"/>
+        <source>Connecting...</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>logic</name>
     <message>
-        <location filename="../qml/main.qml" line="68"/>
-        <source>Login Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="72"/>
-        <source>Got an error starting %1: %2</source>
-        <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="107"/>
+        <location filename="../qml/logic.js" line="24"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="110"/>
+        <location filename="../qml/logic.js" line="27"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="113"/>
+        <location filename="../qml/logic.js" line="30"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="116"/>
+        <location filename="../qml/logic.js" line="33"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="119"/>
+        <location filename="../qml/logic.js" line="36"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="171"/>
-        <location filename="../qml/main.qml" line="273"/>
+        <location filename="../qml/main.qml" line="208"/>
+        <source>Could not find helpers. Please check your installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="210"/>
+        <source>Could not find polkit agent.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="226"/>
+        <source>Oops! The authentication service seems down. Please try again later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="227"/>
+        <source>Service Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="233"/>
+        <source>Please check your Patron ID</source>
+        <extracomment>Incorrect library card number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="235"/>
+        <source>Could not log in with those credentials, please retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="237"/>
+        <source>Login Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="241"/>
+        <source>Got an error starting %1: %2</source>
+        <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="429"/>
         <source>Checking status…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Reconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="355"/>
         <source>Turn on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="367"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="369"/>
         <source>Turn off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="326"/>
+        <location filename="../qml/main.qml" line="401"/>
         <source>Help…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="316"/>
+        <location filename="../qml/main.qml" line="391"/>
         <source>Donate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="120"/>
+        <location filename="../qml/main.qml" line="138"/>
+        <source>Recommended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="129"/>
+        <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="323"/>
+        <source>Best</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="340"/>
+        <source>Pick location…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="381"/>
         <source>About…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="335"/>
+        <location filename="../qml/main.qml" line="410"/>
         <source>Report a bug…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="347"/>
+        <location filename="../qml/main.qml" line="422"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="377"/>
+        <location filename="../qml/main.qml" line="467"/>
         <source>Error starting VPN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="387"/>
+        <location filename="../qml/main.qml" line="476"/>
         <source>Missing authentication agent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="388"/>
+        <location filename="../qml/main.qml" line="477"/>
         <source>Could not find a polkit authentication agent. Please run one and try again.</source>
         <translation type="unfinished"></translation>
     </message>
