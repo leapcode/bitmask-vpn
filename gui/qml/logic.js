@@ -34,6 +34,35 @@ function toHuman(st) {
     case "failed":
         //: %1 -> application name
         return qsTr("%1 blocking internet").arg(
-                    ctx.appName) // TODO failed is not handed yet
+                    ctx.appName) // TODO failed is not handled yet
     }
+}
+
+// Helper to show notification messages
+function showNotification(ctx, msg) {
+    console.log("Going to show notification message: ", msg)
+    if (supportsMessages) {
+        let appname = ctx ? ctx.appName : "VPN"
+        showMessage(appname, msg, null, 15000)
+    } else {
+        console.log("System doesn't support systray notifications")
+    }
+}
+
+function shouldAllowEmptyPass(providers) {
+    let obj = JSON.parse(providers.getJson())
+    let active = obj['default']
+    let allProviders = obj['providers']
+    for (var i = 0; i < allProviders.length; i++) {
+        if (allProviders[i]['name'] === active) {
+            return (allProviders[i]['authEmptyPass'] === 'true')
+        }
+    }
+    return false
+}
+
+function debugInit() {
+    console.debug("Platform:", Qt.platform.os)
+    console.debug("DEBUG: Pre-seeded providers:")
+    console.debug(providers.getJson())
 }

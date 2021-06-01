@@ -241,18 +241,6 @@ ApplicationWindow {
         initFailure.visible = true
     }
 
-    function shouldAllowEmptyPass() {
-        let obj = JSON.parse(providers.getJson())
-        let active = obj['default']
-        let allProviders = obj['providers']
-        for (var i = 0; i < allProviders.length; i++) {
-            if (allProviders[i]['name'] === active) {
-                return (allProviders[i]['authEmptyPass'] === 'true')
-            }
-        }
-        return false
-    }
-
     function isManualLocation() {
         if (!ctx) {
             return false
@@ -264,7 +252,6 @@ ApplicationWindow {
         if (!ctx.currentLocation) {
             return
         }
-
         const location = ctx.currentLocation.toLowerCase()
         const idx = gwSelector.model.indexOf(location)
         gwSelector.currentIndex = idx
@@ -272,13 +259,10 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        Logic.debugInit()
         loginDone = false
-        console.debug("Platform:", Qt.platform.os)
-        console.debug("DEBUG: Pre-seeded providers:")
-        console.debug(providers.getJson())
-        allowEmptyPass = shouldAllowEmptyPass()
+        allowEmptyPass = Logic.shouldAllowEmptyPass(providers)
         needsRestart = false;
-
         /* TODO get appVisible flag from backend */
         app.visible = true
         app.raise()
@@ -441,22 +425,11 @@ ApplicationWindow {
                 console.log("show systray")
                 if (Qt.platform.os === "windows") {
                     let appname = ctx ? ctx.appName : "VPN"
-                    showNotification(
-                                appname
-                                + " is up and running. Please use system tray icon to control it.")
+                    Logic.showNotification(
+                        ctx,
+                        appname
+                        + " is up and running. Please use system tray icon to control it.")
                 }
-            }
-        }
-
-        // TODO move to logic, pass ctx
-        // Helper to show notification messages
-        function showNotification(msg) {
-            console.log("Going to show notification message: ", msg)
-            if (supportsMessages) {
-                let appname = ctx ? ctx.appName : "VPN"
-                showMessage(appname, msg, null, 15000)
-            } else {
-                console.log("System doesn't support systray notifications")
             }
         }
     }
