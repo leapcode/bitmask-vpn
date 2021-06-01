@@ -58,8 +58,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	err := pid.AcquirePID()
 	if err != nil {
 		log.Println("Error acquiring PID:", err)
-		errCh <- err.Error()
-		return
+		log.Fatal(err.Error())
 	}
 
 	b, err := bitmask.InitializeBitmask(ctx.cfg)
