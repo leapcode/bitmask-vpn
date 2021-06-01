@@ -103,13 +103,14 @@ StateGroup {
                         //: %1 -> location to which the client is connected to
                         qsTr("Recommended (%1)").arg(locationStr())
                     } else {
+                        //: Clickable item to switch to the recommended location
                         qsTr("Recommended")
                     }
                 }
             }
             PropertyChanges {
                 target: mainStatus
-                text: qsTr("Connecting...")
+                text: qsTr("Connecting…")
             }
             PropertyChanges {
                 target: mainCurrentGateway
@@ -129,6 +130,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
+                //: Clickable item to switch to the recommended location
                 text: qsTr("Recommended")
             }
             PropertyChanges {
@@ -153,6 +155,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: autoSelectionItem
+                //: Clickable item to swicth to the recommended location
                 text: qsTr("Recommended")
             }
             PropertyChanges {

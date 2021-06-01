@@ -148,7 +148,7 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -156,10 +156,13 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/VpnState.qml" line="34"/>
         <location filename="../qml/VpnState.qml" line="74"/>
-        <location filename="../qml/VpnState.qml" line="106"/>
-        <location filename="../qml/VpnState.qml" line="132"/>
-        <location filename="../qml/VpnState.qml" line="156"/>
+        <location filename="../qml/VpnState.qml" line="107"/>
+        <location filename="../qml/VpnState.qml" line="134"/>
+        <location filename="../qml/VpnState.qml" line="159"/>
         <source>Recommended</source>
+        <extracomment>Clickable item to switch to the recommended location
+----------
+Clickable item to swicth to the recommended location</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -176,8 +179,8 @@ Do you want to donate now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/VpnState.qml" line="112"/>
-        <source>Connecting...</source>
+        <location filename="../qml/VpnState.qml" line="113"/>
+        <source>Connecting…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -297,17 +300,13 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/main.qml" line="120"/>
         <location filename="../qml/main.qml" line="138"/>
+        <location filename="../qml/main.qml" line="323"/>
         <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="129"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="323"/>
-        <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

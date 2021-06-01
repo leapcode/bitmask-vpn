@@ -320,7 +320,7 @@ ApplicationWindow {
 
             MenuItem {
                 id: autoSelectionItem
-                text: qsTr("Best")
+                text: qsTr("Recommended")
                 checkable: true
                 checked: !isManualLocation()
                 onTriggered: {
