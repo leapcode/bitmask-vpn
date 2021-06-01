@@ -81,6 +81,7 @@ func UseAutomaticGateway() {
 
 func SetTransport(label string) {
 	ctx.bm.SetTransport(label)
+	go trigger(OnStatusChanged)
 }
 
 func GetTransport() *C.char {
