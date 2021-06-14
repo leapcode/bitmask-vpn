@@ -1,0 +1,7 @@
+0.21.6
+======
+
+- A new and shiny gateway selector!
+- Allow to select obfs4 gateways (bridges)
+- Ability to define explicit allowed addresses for local networks.
+
