@@ -254,15 +254,11 @@ ApplicationWindow {
     }
 
     function setGwSelection() {
-        if (!ctx.currentLocation) {
-            return
-        }
+
         if (!isManualLocation()) {
-            //manualSelectionItem.checked = isManualLocation()
             manualSelectionItem.checked = false
             bar.currentIndex = 1
             app.visible = true
-            app.hide()
             app.show()
             app.raise()
             return
@@ -381,7 +377,6 @@ ApplicationWindow {
                 text: qsTr("About…")
                 onTriggered: {
                     about.visible = true
-                    app.focus = true
                     requestActivate()
                 }
             }
