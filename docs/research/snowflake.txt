@@ -1,0 +1,77 @@
+Initial brainstorm
+==================
+
+Date: 16 Jun 2021
+Authors: cyberta, kali
+
+Goal
+====
+
+Using snowflake to help circumvent blocks on leap VPN.
+
+Assumptions
+===========
+
+* 1. Not all the gateways (or obfs4 endpoints, or tls proxies etc) are blocked.
+
+Phases
+======
+* 1. Use snowflake ONLY in the bootstrap of the VPN connection <- we're here now.
+* 2. Use snowflake as a pluggable transport to tunnel an openvpn connection - aka "mutual aid" scenario.
+
+
+Comparison of approaches
+========================
+
+Approach A: depend on Tor binary
+--------------------------------
+
+- Pros: 
+    + no complexity on the backend side
+    + probably more snowflake proxies available
+    + we might even depend on a preinstalled tor binary instead of shipping it -> no negative effect on app size
+- Cons: 
+    + Not valid for PHASE 2 (actually moving traffic)
+    + Shipping Tor binary (how big is it, static?) - but we can just assume that an user that needs to use this is sufficiently motivated to install Tor
+    + Need to control failures, probably more difficult than with a better integrated solution
+    + SLOW - need to stablish the circuit, bootstrap can get interrupted, either by censorship or other reasons.
+      - BUT: Is it possible to build a single-hop circuit?
+    + This whole approach for this phase might be a good PoC, but stupid -
+    under censorship, we should expect DNS blocking, so if we're going to rely
+    on domain fronting, we could just domain-front the api (plus the certs,
+    there can be some complexities there). - However Domain fronting is
+    probably going to die sooner or later
+
+    QUESTION: what's the status of azure df? what's the status of the
+    alternatives to domain fronting for snowflake? (cecylia was working on
+    this, should look for the issue) 
+
+Approach B: no dependency on Tor
+--------------------------------------------------------
+This is a bit fuzzy, because we could still improve over the previous approach
+by using Tor as a library.
+
+- Pros:
+    + no Tor binary dependencies, only go code.
+    + might be a solution to route vpn traffic: a censorship resistant approach
+    that might not require sysadmins to regularly change ips for the PT bridges 
+    + less boring :), explorative work that might get further funding
+    + little bit faster (no establishment of the circuit, no additional 3 tor hops) to fetch data from the api
+- Cons:
+    + We need to fork or modify snowflake :(
+
+      + We need to change the webrt connection proxy <-> tor relay by something else.
+
+    + Either maintain the fork ourselves, or convince Tor of making
+    modification s that allow a more generic "snowflake-not-as-a-Tor-transport"
+    codebase -> this is a key point that we should explore with tor
+    anticensorship team, I think. agreed
+    + We *will* always have a much lesser pool of volunteers than what Tor is
+    able to nurture (Tor is orders of magnitude better funded/governed than
+    leap is).
+    See  https://snowflake-broker.torproject.net/debug - we don't have traction
+    to have some 100s of volunteers, even with the expected churning rates.
+    + wrt. routing VPN traffic: how well does the ephemerality of the proxies
+    play with the users expectation of a uninterrupted internet connection -
+    really good point. is it preferrable bad internet or no internet at all? we
+    need to start asking people.
