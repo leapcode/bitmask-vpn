@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="et">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="et" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -32,17 +30,17 @@
     <message>
         <location filename="../qml/BridgesItem.qml" line="24"/>
         <source>Use obfs4 bridges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="46"/>
         <source>Select a bridge only if you know that you need it to evade censorship in your country or local network.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="57"/>
         <source>An obfs4 bridge will be used the next time you connect to the VPN.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -54,7 +52,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -76,7 +74,7 @@ Kas soovid kohe annetada?</translation>
     <message>
         <location filename="../qml/LocationText.qml" line="6"/>
         <source>Location has been manually set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -90,7 +88,7 @@ Kas soovid kohe annetada?</translation>
         <location filename="../qml/LoginDialog.qml" line="21"/>
         <source>Patron ID</source>
         <extracomment>Ask for the library card number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="25"/>
@@ -132,25 +130,25 @@ Kas soovid kohe annetada?</translation>
     <message>
         <location filename="../qml/MainBar.qml" line="7"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Staatus</translation>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="10"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="13"/>
         <source>Bridges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,25 +163,25 @@ Kas soovid kohe annetada?</translation>
         <extracomment>Clickable item to switch to the recommended location
 ----------
 Clickable item to swicth to the recommended location</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="72"/>
         <location filename="../qml/VpnState.qml" line="104"/>
         <source>Recommended (%1)</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="85"/>
         <source>Connected to %1</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="113"/>
         <source>Connecting…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -192,31 +190,31 @@ Clickable item to swicth to the recommended location</extracomment>
         <location filename="../qml/logic.js" line="24"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 väljas</translation>
+        <translation>%1 väljas</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="27"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 sees</translation>
+        <translation>%1 sees</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="30"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">Ühendumine rakendusega %1</translation>
+        <translation>Ühendumine rakendusega %1</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="33"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 peatamine</translation>
+        <translation>%1 peatamine</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="36"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 - internet blokeeritud</translation>
+        <translation>%1 - internet blokeeritud</translation>
     </message>
 </context>
 <context>
@@ -224,7 +222,7 @@ Clickable item to swicth to the recommended location</extracomment>
     <message>
         <location filename="../qml/main.qml" line="208"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="210"/>
@@ -264,35 +262,10 @@ Clickable item to swicth to the recommended location</extracomment>
         <translation>Rakendust %1 käivitades anti veateade: %2</translation>
     </message>
     <message>
-        <source>%1 off</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 väljas</translation>
-    </message>
-    <message>
-        <source>%1 on</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 sees</translation>
-    </message>
-    <message>
-        <source>Connecting to %1</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">Ühendumine rakendusega %1</translation>
-    </message>
-    <message>
-        <source>Stopping %1</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 peatamine</translation>
-    </message>
-    <message>
-        <source>%1 blocking internet</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 - internet blokeeritud</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="315"/>
         <location filename="../qml/main.qml" line="429"/>
         <source>Checking status…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="353"/>
@@ -317,39 +290,39 @@ Clickable item to swicth to the recommended location</extracomment>
     <message>
         <location filename="../qml/main.qml" line="401"/>
         <source>Help…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="391"/>
         <source>Donate…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="120"/>
         <location filename="../qml/main.qml" line="138"/>
         <location filename="../qml/main.qml" line="323"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="129"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="340"/>
         <source>Pick location…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="381"/>
         <source>About…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="410"/>
         <source>Report a bug…</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qml/main.qml" line="422"/>
@@ -379,17 +352,17 @@ Clickable item to swicth to the recommended location</extracomment>
     <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
@@ -404,12 +377,12 @@ Clickable item to swicth to the recommended location</extracomment>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

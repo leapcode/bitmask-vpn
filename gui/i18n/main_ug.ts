@@ -1,28 +1,28 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../qml/AboutDialog.qml" line="5"/>
         <source>About</source>
-        <translation>À propos</translation>
+        <translation>ھەققىدە</translation>
     </message>
     <message>
         <location filename="../qml/AboutDialog.qml" line="18"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
         <extracomment>donation text of the about dialog</extracomment>
-        <translation>&lt;p&gt;Ce service est entièrement financé par les dons d’utilisateurs tels que vous. &lt;a href=&quot;%1&quot;&gt;Veuillez faire un don&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;بۇ مۇلازىمەتنىڭ چىقىمىنى سىزگە ئوخشاش سېخى خەيرپەرۋەرلەر ئۈستىگە ئالغان. &lt;a href=&quot;%1&quot;&gt;قېنى ئىئانە قىلىڭ&lt;/a&gt;. &lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../qml/AboutDialog.qml" line="26"/>
         <source>&lt;p&gt;%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.&lt;/p&gt; %3 &lt;p&gt;By using this application, you agree to the &lt;a href=&quot;%4&quot;&gt;Terms of Service&lt;/a&gt;. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.&lt;/p&gt;</source>
         <extracomment>about dialog %1 -&gt; application name %2 -&gt; provider name %3 -&gt; donation text if activated</extracomment>
-        <translation>&lt;p&gt;%1 est un service de RPV simple, rapide et sécurisé offert par %2. %1 n’exige aucun compte utilisateur, ne conserve aucun journal, ni ne vous suit à la trace d’aucune manière.&lt;/p&gt; %3 &lt;p&gt;En utilisant cette application, vous acceptez les &lt;a href=&quot;%4&quot;&gt;Conditions générales d’utilisation&lt;/a&gt;. Ce service est fourni tel quel, sans aucune garantie et s’adresse aux personnes qui œuvrent à la création d’un monde meilleur.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;%1 بولسا %2 تەمىنلىگەن قولاي، تېز ھەم بىخەتەر VPN مۇلازىمىتى. %1 سىزنىڭ بىر قوللانغۇچى ھېسابى تەمىنلىشىڭىزنى تەلەپ قىلمايدۇ، خاتىرە قالدۇرمايدۇ، ياكى ھەرقانداق بىر شەكىلدە ئىز قوغلىمايدۇ.&lt;/p&gt;%3&lt;p&gt; بۇ يۇمتالنى ئىشلەتكىنىڭىز، سىزنىڭ &lt;a href=&quot;%4&quot;&gt;مۇلازىمەت ماددىلىرىنى&lt;/a&gt;قوبۇل قىلغىنىڭىزدۇر. بۇ مۇلازىمەت ئۆز-پېتى تەمىنلىنىدۇ، ھېچقانداق كاپالىتى يوق. دۇنيانى تېخىمۇ ياخشى بىر يەر قىلىش ئۈچۈن ئىشلەۋاتقان كىشىلەر ئۈچۈن لايھىيەلەندى. </translation>
     </message>
     <message>
         <location filename="../qml/AboutDialog.qml" line="37"/>
         <source>%1 version: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>%1 version : %2</translation>
+        <translation>%1 نەشرى: %2</translation>
     </message>
 </context>
 <context>
@@ -30,17 +30,17 @@
     <message>
         <location filename="../qml/BridgesItem.qml" line="24"/>
         <source>Use obfs4 bridges</source>
-        <translation>Utiliser des ponts obfs4</translation>
+        <translation>Obfs4 كۆۋرۈكلىرىنى ئىشلىتىڭ</translation>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="46"/>
         <source>Select a bridge only if you know that you need it to evade censorship in your country or local network.</source>
-        <translation>Ne sélectionnez un pont que si vous savez que vous en avez besoin pour échapper à la censure dans votre pays ou sur votre réseau local.</translation>
+        <translation>ئەگەر پەقەت دۆلىتىڭىز ياكى يەرلىك تورىڭىزدىكى سانسۈرلىمەلەردىن قېچىشىڭىز لازىملىقىنى بىلسىڭىز، بىر obsf4 كۆرۈكىنى تاللاڭ.</translation>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="57"/>
         <source>An obfs4 bridge will be used the next time you connect to the VPN.</source>
-        <translation>Un pont obfs4 sera utilisé la prochaine fois que vous vous connecterez au RPV.</translation>
+        <translation>بىر obfs4 كۆۋرۈكى سىز كېيىنكى قېتىم VPN غا ئۇلانغاندا ئىشلىتىلىدۇ.</translation>
     </message>
 </context>
 <context>
@@ -48,7 +48,7 @@
     <message>
         <location filename="../qml/DonateDialog.qml" line="6"/>
         <source>Donate</source>
-        <translation>Faire un don</translation>
+        <translation>ئىئانە</translation>
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
@@ -56,9 +56,9 @@
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
-        <translation>L’exploitation du service %1 coûte cher. Dans la mesure où ne nous voulons enregistrer aucun renseignement personnel à votre sujet, il n’y a ni compte ni facturation pour ce service. Mais si vous souhaitez toutefois que le service perdure, faites un don d’au moins 5 $ mensuellement.
+        <translation>بۇ %1 مۇلازىمىتىنى ماڭغۇزۇش قىممەتكە توختايدۇ. چۈنكى بىز سىزنىڭ خۇسۇسىي ئۇچۇرلىرىڭىزنى ساقلىمايمىز. بۇ مۇلازىمەتتە ھېچقانداق ھېسابات ياكى تالون يوق. ئەمما سىز بۇ مۇلازىمەتنىڭ داۋاملىشىشىنى خالىسىڭىز، ھەر ئايدا بولمىدى دېگەندە 5$ ئىئانە قىلىپ قويارسىز.
 
-Voulez-vous faire un don maintenant ?</translation>
+ھازىرلا ئىئانە قىلامسىز؟</translation>
     </message>
 </context>
 <context>
@@ -66,7 +66,7 @@ Voulez-vous faire un don maintenant ?</translation>
     <message>
         <location filename="../qml/FailDialog.qml" line="5"/>
         <source>Initialization Error</source>
-        <translation>Erreur d’initialisation</translation>
+        <translation>دەسلەپكىلەشتۈرۈشتە خاتالق</translation>
     </message>
 </context>
 <context>
@@ -74,7 +74,7 @@ Voulez-vous faire un don maintenant ?</translation>
     <message>
         <location filename="../qml/LocationText.qml" line="6"/>
         <source>Location has been manually set.</source>
-        <translation>L’emplacement a été défini manuellement.</translation>
+        <translation>ئورنى قولدا تەڭشەلدى.</translation>
     </message>
 </context>
 <context>
@@ -82,34 +82,34 @@ Voulez-vous faire un don maintenant ?</translation>
     <message>
         <location filename="../qml/LoginDialog.qml" line="6"/>
         <source>Login</source>
-        <translation>Connexion</translation>
+        <translation>كىرىش</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="21"/>
         <source>Patron ID</source>
         <extracomment>Ask for the library card number</extracomment>
-        <translation>ID Patron</translation>
+        <translation>خوجايىن كىملىگى</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="25"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation>شىفرەسى</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="37"/>
         <source>Enter your Patron ID</source>
         <extracomment>Ask for the library card number</extracomment>
-        <translation>Saisissez votre ID Patron</translation>
+        <translation>خوجايىن كىملىگىڭىزنى كىرىڭ</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="39"/>
         <source>Log in with your library credentials</source>
-        <translation>Connectez-vous avec vos identifiants pour la papeterie</translation>
+        <translation>كۇتۇپخانا شىفرىلىرىڭىز بىلەن كىرىڭ</translation>
     </message>
     <message>
         <location filename="../qml/LoginDialog.qml" line="44"/>
         <source>You can check your Patron ID number in the back of your library card</source>
-        <translation>Vous pouvez vérifier votre numéro d’ID Patron au verso de votre carte de papeterie</translation>
+        <translation>سىز خوجايىن كىملىك نومۇرىنى كۇتۇپخانا كارتىنىڭ ئارقىسىدىن تەكشۈرەلەيسىز.</translation>
     </message>
 </context>
 <context>
@@ -117,12 +117,12 @@ Voulez-vous faire un don maintenant ?</translation>
     <message>
         <location filename="../qml/LoginOKDialog.qml" line="7"/>
         <source>Login Successful</source>
-        <translation>La connexion est réussie</translation>
+        <translation>مۇۋەپپىقىيەتلىك كىردىڭىز</translation>
     </message>
     <message>
         <location filename="../qml/LoginOKDialog.qml" line="11"/>
         <source>Login successful. You can now start the VPN.</source>
-        <translation>La connexion est réussie. Vous pouvez maintenant lancer le RPV.</translation>
+        <translation>مۇۋەپپىيەتلىك كىردىڭىز. ئەمدى VPNنى قوزغىتىڭ</translation>
     </message>
 </context>
 <context>
@@ -130,17 +130,17 @@ Voulez-vous faire un don maintenant ?</translation>
     <message>
         <location filename="../qml/MainBar.qml" line="7"/>
         <source>Status</source>
-        <translation>État</translation>
+        <translation>ھالەت</translation>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="10"/>
         <source>Location</source>
-        <translation>Emplacement</translation>
+        <translation>ئورنى</translation>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="13"/>
         <source>Bridges</source>
-        <translation>Ponts</translation>
+        <translation>كۆۋرۈكلەر</translation>
     </message>
 </context>
 <context>
@@ -163,25 +163,25 @@ Voulez-vous faire un don maintenant ?</translation>
         <extracomment>Clickable item to switch to the recommended location
 ----------
 Clickable item to swicth to the recommended location</extracomment>
-        <translation>Recommandé</translation>
+        <translation>تەۋسىيە</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="72"/>
         <location filename="../qml/VpnState.qml" line="104"/>
         <source>Recommended (%1)</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation>Recommandé (%1)</translation>
+        <translation>تەۋسىيە (%1)</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="85"/>
         <source>Connected to %1</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation>Connecté à %1</translation>
+        <translation>‏گە ئۇلىنىۋاتىدۇ  %1</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="113"/>
         <source>Connecting…</source>
-        <translation>Connexion...</translation>
+        <translation>ئۇلىنىۋاتىدۇ…</translation>
     </message>
 </context>
 <context>
@@ -190,31 +190,31 @@ Clickable item to swicth to the recommended location</extracomment>
         <location filename="../qml/logic.js" line="24"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 est désactivée</translation>
+        <translation>%1 ئېتىش</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="27"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 est activée</translation>
+        <translation>%1 ئېچىش</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="30"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Connexion à %1</translation>
+        <translation>گە ئۇلىنىۋاتىدۇ %1</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="33"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Arrêt de %1</translation>
+        <translation>توختىدى%1</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="36"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 bloque Internet</translation>
+        <translation>%1 ئىنتېرنېت تاقالغان</translation>
     </message>
 </context>
 <context>
@@ -222,167 +222,167 @@ Clickable item to swicth to the recommended location</extracomment>
     <message>
         <location filename="../qml/main.qml" line="208"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation>Impossible de trouver les aides. Veuillez vérifier votre installation</translation>
+        <translation>ياردەمچىنى تاپالمىدىم. توغرا قاچىلىدىڭىزمۇ تەكشۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="210"/>
         <source>Could not find polkit agent.</source>
-        <translation>Impossible de trouver l’agent polkit</translation>
+        <translation>پولكىت ئاگېنتىسىنى تاپالمدىدىم.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="226"/>
         <source>Oops! The authentication service seems down. Please try again later</source>
-        <translation>Oups. Le service d&apos;authentification semble être hors service. Veuillez essayer plus tard</translation>
+        <translation>ئاپلا! سالاھىيەت مۇلازىمىتى ئىشتىن توختىغاندەك قىلىدۇ. سەل تۇرۇپ قايتا سىناڭ.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="227"/>
         <source>Service Error</source>
-        <translation>Erreur de service</translation>
+        <translation>مۇلازىمەت خاتالىقى</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="233"/>
         <source>Please check your Patron ID</source>
         <extracomment>Incorrect library card number</extracomment>
-        <translation>Veuillez confirmer votre ID Patron</translation>
+        <translation>خوجايىن كىملىگىڭىزنى تەكشۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="235"/>
         <source>Could not log in with those credentials, please retry</source>
-        <translation>Impossible de se connecter avec ces identifiants, veuillez réessayer</translation>
+        <translation>بۇ شىفرەلەر بىلەن كىرەلمىدىڭىز، قايتا سىناڭ</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="237"/>
         <source>Login Error</source>
-        <translation>Erreur de connexion</translation>
+        <translation>كىرىش خاتاسى</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="241"/>
         <source>Got an error starting %1: %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; error string</extracomment>
-        <translation>Erreur de démarrage de %1 : %2</translation>
+        <translation>دىن باشلانغان يەردە خاتالىق كۆرۈلدى %1: %2</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="315"/>
         <location filename="../qml/main.qml" line="429"/>
         <source>Checking status…</source>
-        <translation>Vérification de l’état…</translation>
+        <translation>ھالىتى تەكشۈرىلىۋاتىدۇ…</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="353"/>
         <source>Reconnect</source>
-        <translation>Se reconnecter</translation>
+        <translation>قايتا ئۇلاش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="355"/>
         <source>Turn on</source>
-        <translation>Activer</translation>
+        <translation>ئېتىش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="367"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="369"/>
         <source>Turn off</source>
-        <translation>Désactiver</translation>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="401"/>
         <source>Help…</source>
-        <translation>Aide…</translation>
+        <translation>ياردەم…</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="391"/>
         <source>Donate…</source>
-        <translation>Faire un don…</translation>
+        <translation>ئىئانە…</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="120"/>
         <location filename="../qml/main.qml" line="138"/>
         <location filename="../qml/main.qml" line="323"/>
         <source>Recommended</source>
-        <translation>Recommandé</translation>
+        <translation>تەۋسىيە</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="129"/>
         <source>Manual</source>
-        <translation>Manuel</translation>
+        <translation>قوللانما</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="340"/>
         <source>Pick location…</source>
-        <translation>Choisir un emplacement…</translation>
+        <translation>چوققا ئورنى…</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="381"/>
         <source>About…</source>
-        <translation>À propos…</translation>
+        <translation>ھەققىدە ...</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="410"/>
         <source>Report a bug…</source>
-        <translation>Signaler un bogue…</translation>
+        <translation>بىر خاتانى مەلۇم قىلىش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="422"/>
         <source>Quit</source>
-        <translation>Fermer</translation>
+        <translation>چىقىش</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="467"/>
         <source>Error starting VPN</source>
-        <translation>Erreur de démarrage du RPV</translation>
+        <translation>VPNنى  قوزغىتىشتا خاتالىق</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="476"/>
         <source>Missing authentication agent</source>
-        <translation>L’agent d’authentification manque</translation>
+        <translation>كىملىك توغرۇلاش ئاگېنتى يوقالغان</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="477"/>
         <source>Could not find a polkit authentication agent. Please run one and try again.</source>
-        <translation>Impossible de trouver un agent d’authentification polkit. Veuillez en exécuter un et réessayer.</translation>
+        <translation>پولكىت ئاگېنتىنى تاپالمىدىم، بىرسىنى ئجرا قىلىپ تەكرار سىناڭ.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="76"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation> : un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
+        <translation>تېز ھەم بىخەتەر VPN بىتماسك تەرىپىدىن سۇنۇلىدۇ.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="83"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome Shell ou pour contrôler le RPV par d’autres moyens).</translation>
+        <translation>سېستىما تەگلىكىدە سىن رەسىمنى كۆرسەتمە (Gnome پوستى كېڭەيتىلمىلىرى، ياكى باشقا ئۇشۇلدا VPNنى كونترول قىلىشتەك ھەر ئىككى ئىشتا قوللىنىشچان)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="90"/>
         <source>Enable Web API.</source>
-        <translation>Activer l’API Web.</translation>
+        <translation>ئاكتىپلاشWeb API.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Installer les aides (Linux seulement, « sudo » est requis). </translation>
+        <translation>ياردمچى قاچىلاش (پەقەتلا لىناكىس ئۈچۈن، لازىم sudo).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="102"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Utiliser obfs4 pour brouiller le trafic, si proposé par le fournisseur.</translation>
+        <translation>ئەگەر تەمىنلىگۈچىدە بولسا، obfs4 نى قاتناشنى مۈجىمەللەشتۈرۈشكە ئىشلىتىش.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="108"/>
         <source>Disable autostart for the next run.</source>
-        <translation>Désactiver le démarrage automatique pour la prochaine exécution.</translation>
+        <translation>كېيىنكى قېتىم باشلىتىلغاندا ئاپتۇماتىك قوزغىتىشنى چەكلەش</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="113"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Port de l’API Web (par défaut : 8080)</translation>
+        <translation>Web API پورتى (ئەستىكىسى: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="115"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation>Démarrer le RPV, soit Activer soit Désactiver</translation>
+        <translation>VPN باشلات، مەيلى &quot;ئوچۇق&quot; ياكى &quot;ئېتىك&quot; بولسۇن</translation>
     </message>
 </context>
 </TS>

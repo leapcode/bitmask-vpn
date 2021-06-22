@@ -1,7 +1,7 @@
 0.21.6
 ======
 
-- A new and shiny gateway selector!
-- Allow to select obfs4 gateways (bridges)
-- Ability to define explicit allowed addresses for local networks.
-
+- First iteration of the gateway selector.
+- Allow to select obfs4 gateways (bridges) to bypass censorship.
+- Ability to define explicitly allowed addresses for local networks.
+- Update translations. New locales: greek, farsi, hungarian, dutch, polish and uyghur.

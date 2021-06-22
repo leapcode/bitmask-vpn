@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es_ES" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -32,17 +30,17 @@
     <message>
         <location filename="../qml/BridgesItem.qml" line="24"/>
         <source>Use obfs4 bridges</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar puentes obfs4</translation>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="46"/>
         <source>Select a bridge only if you know that you need it to evade censorship in your country or local network.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona un puente solamente si sabes que lo necesitas para evadir la censura en tu país o red local.</translation>
     </message>
     <message>
         <location filename="../qml/BridgesItem.qml" line="57"/>
         <source>An obfs4 bridge will be used the next time you connect to the VPN.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un puente obfs4 será usado la próxima vez que conectes a la VPN.</translation>
     </message>
 </context>
 <context>
@@ -54,7 +52,7 @@
     </message>
     <message>
         <location filename="../qml/DonateDialog.qml" line="14"/>
-        <source>The %1 service is expensive to run. Because we don&apos;t want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
+        <source>The %1 service is expensive to run. Because we don't want to store personal information about you, there are no accounts or billing for this service. But if you want the service to continue, donate at least $5 each month.
 
 Do you want to donate now?</source>
         <extracomment>donate dialog %1 -&gt; application name</extracomment>
@@ -76,7 +74,7 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/LocationText.qml" line="6"/>
         <source>Location has been manually set.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ubicación ha sido establecida manualmente.</translation>
     </message>
 </context>
 <context>
@@ -132,25 +130,25 @@ Do you want to donate now?</source>
     <message>
         <location filename="../qml/MainBar.qml" line="7"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="10"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubicación</translation>
     </message>
     <message>
         <location filename="../qml/MainBar.qml" line="13"/>
         <source>Bridges</source>
-        <translation type="unfinished"></translation>
+        <translation>Puentes</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,25 +163,25 @@ Do you want to donate now?</source>
         <extracomment>Clickable item to switch to the recommended location
 ----------
 Clickable item to swicth to the recommended location</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Recomendado</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="72"/>
         <location filename="../qml/VpnState.qml" line="104"/>
         <source>Recommended (%1)</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Recomendado (%1)</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="85"/>
         <source>Connected to %1</source>
         <extracomment>%1 -&gt; location to which the client is connected to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Conectado a %1</translation>
     </message>
     <message>
         <location filename="../qml/VpnState.qml" line="113"/>
         <source>Connecting…</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectando...</translation>
     </message>
 </context>
 <context>
@@ -192,31 +190,31 @@ Clickable item to swicth to the recommended location</extracomment>
         <location filename="../qml/logic.js" line="24"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 desconectada</translation>
+        <translation>%1 desconectada</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="27"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">%1 conectada</translation>
+        <translation>%1 conectada</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="30"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">Conectando a %1</translation>
+        <translation>Conectando a %1</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="33"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">Deteniendo %1</translation>
+        <translation>Deteniendo %1</translation>
     </message>
     <message>
         <location filename="../qml/logic.js" line="36"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="unfinished">$1 bloqueando Internet</translation>
+        <translation>$1 bloqueando Internet</translation>
     </message>
 </context>
 <context>
@@ -264,31 +262,6 @@ Clickable item to swicth to the recommended location</extracomment>
         <translation>Se produjo un error iniciando %1: %2</translation>
     </message>
     <message>
-        <source>%1 off</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 desconectada</translation>
-    </message>
-    <message>
-        <source>%1 on</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">%1 conectada</translation>
-    </message>
-    <message>
-        <source>Connecting to %1</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">Conectando a %1</translation>
-    </message>
-    <message>
-        <source>Stopping %1</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">Deteniendo %1</translation>
-    </message>
-    <message>
-        <source>%1 blocking internet</source>
-        <extracomment>%1 -&gt; application name</extracomment>
-        <translation type="vanished">$1 bloqueando Internet</translation>
-    </message>
-    <message>
         <location filename="../qml/main.qml" line="315"/>
         <location filename="../qml/main.qml" line="429"/>
         <source>Checking status…</source>
@@ -329,17 +302,17 @@ Clickable item to swicth to the recommended location</extracomment>
         <location filename="../qml/main.qml" line="138"/>
         <location filename="../qml/main.qml" line="323"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>Recomendado</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="129"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="340"/>
         <source>Pick location…</source>
-        <translation type="unfinished"></translation>
+        <translation>Elegir ubicación...</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="381"/>
