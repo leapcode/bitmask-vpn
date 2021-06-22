@@ -276,9 +276,10 @@ ApplicationWindow {
         loginDone = false
         allowEmptyPass = Logic.shouldAllowEmptyPass(providers)
         needsRestart = false;
-        /* TODO get appVisible flag from backend */
-        //app.visible = true
-        //app.raise()
+        if (!systrayAvailable) {
+          app.visible = true
+          app.raise()
+        }
     }
 
 

@@ -117,6 +117,7 @@ int main(int argc, char **argv) {
     parser.process(app);
 
     bool hideSystray    = parser.isSet("no-systray");
+    bool availableSystray = true;
     bool installHelpers = parser.isSet("install-helpers");
     bool webAPI         = parser.isSet("web-api");
     QString webPort     = parser.value("web-port");
@@ -146,7 +147,8 @@ int main(int argc, char **argv) {
     }
 
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        qDebug() << "No systray icon available. Things might not work for now, sorry...";
+        qDebug() << "No systray icon available.";
+        availableSystray = false;
     }
 
     QTranslator translator;
@@ -174,6 +176,7 @@ int main(int argc, char **argv) {
 
     /* set some useful flags */
     ctx->setContextProperty("systrayVisible", !hideSystray);
+    ctx->setContextProperty("systrayAvailable", availableSystray);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
