@@ -1,4 +1,5 @@
 #include <csignal>
+#include <unistd.h>
 #include <QApplication>
 #include <QTimer>
 #include <QTranslator>
@@ -143,6 +144,11 @@ int main(int argc, char **argv) {
     if (installHelpers) {
         qDebug() << "Will try to install helpers with sudo";
         InstallHelpers();
+        exit(0);
+    }
+
+    if (getuid() == 0) {
+        qDebug() << "Please don't run as root. Aborting.";
         exit(0);
     }
 
