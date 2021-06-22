@@ -35,6 +35,7 @@ func initializeContext(opts *InitOpts) {
 	go checkErrors(errCh)
 	initializeBitmask(errCh, opts)
 	go trigger(OnStatusChanged)
+	ctx.delayCheckForGateways()
 }
 
 func checkErrors(errCh chan string) {
