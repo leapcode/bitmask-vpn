@@ -21,7 +21,8 @@ ApplicationWindow {
     property var loginDone
     property var allowEmptyPass
     property var needsRestart
-
+    property var needsDonate
+    property var shownDonate
 
     onSceneGraphError: function(error, msg) {
         console.debug("ERROR while initializing scene")
@@ -189,9 +190,7 @@ ApplicationWindow {
             gwSelector.model = Object.keys(ctx.locations)
 
             if (ctx.donateDialog == 'true') {
-                console.debug(jsonModel.getJson())
-                donate.visible = true
-                backend.donateSeen()
+                Logic.setNeedsDonate(true);
             }
             if (ctx.loginDialog == 'true') {
                 console.debug(jsonModel.getJson())
@@ -276,6 +275,7 @@ ApplicationWindow {
         loginDone = false
         allowEmptyPass = Logic.shouldAllowEmptyPass(providers)
         needsRestart = false;
+        shownDonate = false;
         if (!systrayAvailable) {
           app.visible = true
           app.raise()

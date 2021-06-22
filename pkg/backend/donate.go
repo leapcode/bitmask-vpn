@@ -15,6 +15,8 @@ func runDonationReminder() {
 			}
 		}
 	}()
+	// to test manually, uncomment this line.
+	// time.AfterFunc(1*time.Minute, func() { showDonate() })
 }
 
 func needsDonationReminder() bool {

@@ -48,6 +48,12 @@ StateGroup {
                 script: {
                     Logic.setNeedsReconnect(false);
                     brReconnect = false;
+
+                    if (needsDonate && !shownDonate) {
+                        donate.visible = true;
+                        shownDonate = true;
+                        backend.donateSeen();
+                    }
                 }
 
             }

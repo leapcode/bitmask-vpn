@@ -1,5 +1,13 @@
-let status = 'off';
-let needsReconnect = false;
+var status = 'off';
+var needsReconnect = false;
+
+function setNeedsReconnect(val) {
+    needsReconnect = val;
+}
+
+function getNeedsReconnect() {
+    return needsReconnect;
+}
 
 function setStatus(st) {
     status = st;
@@ -9,12 +17,8 @@ function getStatus() {
     return status;
 }
 
-function setNeedsReconnect(val) {
-    needsReconnect = val;
-}
-
-function getNeedsReconnect() {
-    return needsReconnect;
+function setNeedsDonate(val) {
+    needsDonate = val;
 }
 
 function toHuman(st) {
