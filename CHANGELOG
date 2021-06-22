@@ -3,6 +3,6 @@
 
 - First iteration of the gateway selector.
 - Allow to select obfs4 gateways (bridges) to bypass censorship.
-- Ability to define explicitly allowed addresses for local networks.
+- Ability to define explicitely allowed addresses for local networks.
 - Make the donate dialog less intrusive (#470)
 - Updated translations. New locales: greek, farsi, hungarian, dutch, polish and uyghur.
