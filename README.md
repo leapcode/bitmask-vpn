@@ -35,6 +35,8 @@ debuild -us -uc
 sudo dpkg -i ../riseup-vpn*.deb
 ```
 
+If you're using ubuntu, you can use [kali's ppa](https://launchpad.net/~kalikaneko/+archive/ubuntu/ppa).
+
 ## Build
 
 Clone this repo, install dependencies and build the application. Dependencies
