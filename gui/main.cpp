@@ -147,10 +147,12 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
+#ifdef Q_OS_UNIX
     if (getuid() == 0) {
         qDebug() << "Please don't run as root. Aborting.";
         exit(0);
     }
+#endif
 
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
         qDebug() << "No systray icon available.";
