@@ -226,7 +226,9 @@ endif
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
 ifeq (${RELEASE}, yes)
-	@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	#@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	#FIXME -- cannot find platform plugin
+	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
 else
 	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
 endif
