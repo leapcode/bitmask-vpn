@@ -51,7 +51,8 @@ function init {
 
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
-    $GO generate ./pkg/config/version/genver/gen.go
+    $GO generate -mod=vendor ./pkg/config/version/genver/gen.go || echo "[!] Error on go generate"
+
     if [ "$PLATFORM" == "Darwin" ]
     then
         GOOS=darwin
@@ -63,7 +64,7 @@ function buildGoLib {
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"
-        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
+        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -mod=vendor -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
     if [ "$XBUILD" == "$WIN64" ]
     then
