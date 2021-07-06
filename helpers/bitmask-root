@@ -59,7 +59,6 @@ cmdcheck = subprocess.check_output
 #
 # CONSTANTS
 
-
 def get_no_group_name():
     """
     Return the right group name to use for the current OS.
@@ -80,11 +79,17 @@ def get_no_group_name():
         except KeyError:
             return None
 
+def is_ipv6_disabled():
+    """
+    Return True if ipv6 support is disabled by the kernel.
+    """
+    code = os.system("sysctl -a 2>/dev/null | grep all.disable_ipv6 | grep 1")
+    return code == 0
 
 def tostr(s):
     return s.decode('utf-8')
 
-VERSION = "13"
+VERSION = "14"
 SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
@@ -137,6 +142,11 @@ FIXED_FLAGS = [
 
 if OPENVPN_GROUP is not None:
     FIXED_FLAGS.extend(["--group", OPENVPN_GROUP])
+
+if is_ipv6_disabled():
+    FIXED_FLAGS.extend([
+        "--pull-filter", "ignore", "ifconfig-ipv6",
+        "--pull-filter", "ignore", "route-ipv6"])
 
 ALLOWED_FLAGS = {
     "--remote": ["IP", "NUMBER", "PROTO"],
@@ -204,7 +214,6 @@ syslog.openlog(SCRIPT)
 #
 # UTILITY
 #
-
 
 def is_valid_address(value):
     """
