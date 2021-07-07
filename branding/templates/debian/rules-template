@@ -32,20 +32,17 @@ APPNAME = ${binaryName}
 override_dh_auto_test:
 
 override_dh_auto_build:
-	mkdir -p /tmp/gocache
-	rm -rf src/0xacab.org/leap/bitmask-vpn/tools/transifex
-	rm -rf obj-$(DEB_BUILD_GNU_TYPE)/src/0xacab.org/leap/bitmask-vpn/tools/transifex
-	rm -rf tools
-	dh_auto_build -O--buildsystem=golang -- -ldflags "-X main.version=$(VERSION)"
+	make build
 
 override_dh_install:
+	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/bin
 	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/sbin
-	cp $(CURDIR)/helpers/bitmask-root $(CURDIR)/debian/${binaryName}/usr/sbin/
+	cp $(CURDIR)/helpers/bitmask-root $(CURDIR)/debian/${APPNAME}/usr/sbin/
 	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
-	cp $(CURDIR)/helpers/se.leap.bitmask.policy   $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
-	rm -fr $(CURDIR)/debian/${APPNAME}/usr/share/gocode
-	strip $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-vpn
-	mv $(CURDIR)/debian/${APPNAME}/usr/bin/bitmask-vpn $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
-	mkdir -p $(CURDIR)/debian/${APPNAME}/usr/share/${APPNAME}
-	cp $(CURDIR)/debian/icons/scalable/icon.svg $(CURDIR)/debian/${APPNAME}/usr/share/${APPNAME}/icon.svg
+	cp $(CURDIR)/helpers/se.leap.bitmask.policy $(CURDIR)/debian/${APPNAME}/usr/share/polkit-1/actions
+	cp build/qt/release/${APPNAME} $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
+	strip $(CURDIR)/debian/${APPNAME}/usr/bin/${APPNAME}
 	dh_install
+
+override_dh_dwz:
+	echo "skipping dh_dwz"
