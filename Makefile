@@ -353,7 +353,11 @@ gen_pkg_deb:
 ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
+ifeq (${VENDOR_PATH}, providers)
 	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+else
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+endif
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 endif

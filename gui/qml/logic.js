@@ -65,6 +65,11 @@ function shouldAllowEmptyPass(providers) {
     return false
 }
 
+function getSelectedProvider(providers) {
+    let obj = JSON.parse(providers.getJson())
+    return obj['default']
+}
+
 function debugInit() {
     console.debug("Platform:", Qt.platform.os)
     console.debug("DEBUG: Pre-seeded providers:")
