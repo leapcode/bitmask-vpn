@@ -252,6 +252,16 @@ ApplicationWindow {
         return ctx.manualLocation == "true"
     }
 
+    function hasMultipleGateways() {
+        // could also count the gateways
+        let provider = Logic.getSelectedProvider(providers);
+        if (provider == "riseup") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function setGwSelection() {
 
         if (!isManualLocation()) {
@@ -341,7 +351,7 @@ ApplicationWindow {
             MenuItem {
                 id: manualSelectionItem
                 text: {
-                    if (isManualLocation()) {
+                    if (isManualLocation() != "") {
                         locationStr()
                     } else {
                         qsTr("Pick location…")
@@ -350,6 +360,12 @@ ApplicationWindow {
                 checkable: true
                 checked: isManualLocation()
                 onTriggered: setGwSelection()
+                visible: hasMultipleGateways()
+            }
+
+            MenuItem {
+                text: qsTr("Preferences…")
+                visible: !hasMultipleGateways()
             }
 
             MenuSeparator {}
@@ -490,7 +506,11 @@ ApplicationWindow {
     }
 
     function locationStr() {
-        return ctx.currentLocation + ", " + ctx.currentCountry
+        if (ctx.currentLocation && ctx.currentCountry) {
+            return ctx.currentLocation + ", " + ctx.currentCountry
+        } else {
+            return ""
+        }
     }
 
     function useBridges(value) {
