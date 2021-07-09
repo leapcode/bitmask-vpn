@@ -88,10 +88,12 @@ ApplicationWindow {
                                 if (vpntoggle.checked == true
                                         && ctx.status == "off") {
                                     backend.switchOn()
+                                    vpntoggle.checkable = false
                                 }
                                 if (vpntoggle.checked === false
                                         && ctx.status == "on") {
                                     backend.switchOff()
+                                    vpntoggle.checkable = false
                                 }
                             }
                         }
@@ -114,6 +116,7 @@ ApplicationWindow {
 
                 anchors.centerIn: parent
                 spacing: 10
+                //width: parent.width
 
                 RadioButton {
                     id: autoSelectionButton
@@ -124,12 +127,14 @@ ApplicationWindow {
                         manualSelectionItem.checked = false
                     }
                 }
+
                 RadioButton {
                     id: manualSelectionButton
                     checked: isManualLocation()
                     text: qsTr("Manual")
                     onClicked: setGwSelection()
                 }
+
                 ComboBox {
                     id: gwSelector
                     editable: false
@@ -139,6 +144,12 @@ ApplicationWindow {
                     model: [qsTr("Recommended")]
                     onActivated: {
                         console.debug("Selected gateway:", currentText)
+                        if (ctx.status == "off") {
+                            gwNextConnectionText.visible = true
+                        }
+                        if (ctx.status == "on") {
+                            gwReconnectText.visible = true
+                        }
                         backend.useLocation(currentText.toString())
                         manualSelectionItem.checked = true
                     }
@@ -170,7 +181,31 @@ ApplicationWindow {
                             color: "#000000"
                         }
                     }
+
                 }
+
+                Text {
+                    id: gwReconnectText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 180
+                    font.pixelSize: 12
+                    color: "green"
+                    wrapMode: Text.WordWrap 
+                    text: qsTr("Reconnecting to the selected gateway…")
+                    visible: false
+                }
+
+                Text {
+                    id: gwNextConnectionText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 180
+                    font.pixelSize: 12
+                    color: "green"
+                    wrapMode: Text.WordWrap 
+                    text: qsTr("This gateway will be used for next connection.")
+                    visible: false
+                }
+
             } // end column
         } // end item
 
@@ -213,6 +248,11 @@ ApplicationWindow {
             }
             if (ctx.donateURL) {
                 donateItem.visible = true
+            }
+
+            if (ctx.status == "on") {
+                gwNextConnectionText.visible = false
+                gwReconnectText.visible = false
             }
         }
     }

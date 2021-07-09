@@ -5,26 +5,9 @@ import QtQuick.Controls 2.4
 
 SwitchDelegate {
 
-    //id: vpntoggle
-
     text: qsTr("")
     checked: false
     anchors.horizontalCenter: parent.horizontalCenter
-
-    /*
-    Connections {
-        function onCheckedChanged() {
-            if (vpntoggle.checked == true
-                    && ctx.status == "off") {
-                backend.switchOn()
-            }
-            if (vpntoggle.checked === false
-                    && ctx.status == "on") {
-                backend.switchOff()
-            }
-        }
-    }
-    */
 
     contentItem: Text {
         rightPadding: vpntoggle.indicator.width + vpntoggle.spacing

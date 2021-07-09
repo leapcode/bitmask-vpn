@@ -24,6 +24,7 @@ StateGroup {
             PropertyChanges {
                 target: vpntoggle
                 checked: false
+                checkable: true
             }
             PropertyChanges {
                 target: statusItem
@@ -65,6 +66,7 @@ StateGroup {
             PropertyChanges {
                 target: vpntoggle
                 checked: true
+                checkable: true
             }
             PropertyChanges {
                 target: statusItem
@@ -122,6 +124,11 @@ StateGroup {
                 target: mainCurrentGateway
                 text: ""
             }
+            PropertyChanges {
+                target: vpntoggle
+                checked: true
+                checkable: false
+            }
         },
         State {
             name: "stopping"
@@ -147,6 +154,11 @@ StateGroup {
                 target: mainCurrentGateway
                 text: ""
             }
+            PropertyChanges {
+                target: vpntoggle
+                checked: false
+                checkable: false
+            }
         },
         State {
             name: "failed"
@@ -171,6 +183,11 @@ StateGroup {
             PropertyChanges {
                 target: mainCurrentGateway
                 text: ""
+            }
+            PropertyChanges {
+                target: vpntoggle
+                checked: false
+                checkable: true
             }
         }
     ]

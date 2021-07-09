@@ -121,6 +121,7 @@ func (b *Bitmask) listenShapeErr() {
 
 func (b *Bitmask) startOpenVPN() error {
 	arg := []string{}
+	b.statusCh <- Starting
 	if b.GetTransport() == "obfs4" {
 		gateways, err := b.bonafide.GetGateways("obfs4")
 		if err != nil {
@@ -251,8 +252,9 @@ func (b *Bitmask) Reconnect() error {
 	if err != nil {
 		return err
 	}
-	log.Println("reconnect")
+	log.Println("DEBUG Reconnecting")
 	if status != Off {
+		b.statusCh <- Stopping
 		if b.shapes != nil {
 			b.shapes.Close()
 			b.shapes = nil
@@ -264,6 +266,7 @@ func (b *Bitmask) Reconnect() error {
 	}
 
 	err = b.launch.firewallStop()
+	// FIXME - there's a window in which we might leak traffic here!
 	if err != nil {
 		return err
 	}
