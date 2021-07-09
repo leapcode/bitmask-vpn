@@ -280,8 +280,10 @@ ApplicationWindow {
         /* this is a temporary workaround until general GUI revamp for 0.21.8 */
         let provider = Logic.getSelectedProvider(providers);
         if (provider == "calyx") {
-            background.backgroundVisible = false;
             background.color = "#8EA844";
+            background.backgroundVisible = false;
+            gwSelector.visible = false;
+            manualSelectionButton.visible = false;
         }
 
         if (!systrayAvailable) {
