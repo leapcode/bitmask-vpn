@@ -11,7 +11,7 @@ Rectangle {
 
     Image {
         source: parent.backgroundSrc;
-        visible: parent.backgroundVisible;
+        visible: backgroundVisible;
         fillMode: Image.PreserveAspectCrop;
         anchors.fill: parent; 
         opacity: 0.8;
