@@ -303,7 +303,6 @@ ApplicationWindow {
     }
 
     function setGwSelection() {
-
         if (!isManualLocation()) {
             manualSelectionItem.checked = false
             bar.currentIndex = 1
@@ -312,12 +311,18 @@ ApplicationWindow {
             app.raise()
             return
         }
-
         // last used manual selection
         const location = ctx.currentLocation.toLowerCase()
         const idx = gwSelector.model.indexOf(location)
         gwSelector.currentIndex = idx
         backend.useLocation(location)
+    }
+
+    function showMainWindow() {
+            bar.currentIndex = 0
+            app.visible = true
+            app.show()
+            app.raise()
     }
 
     Component.onCompleted: {
@@ -406,6 +411,7 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Preferences…")
                 visible: !hasMultipleGateways()
+                onTriggered: showMainWindow()
             }
 
             MenuSeparator {}

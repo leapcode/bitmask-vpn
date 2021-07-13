@@ -1,8 +1,8 @@
 Censorship Circumvention
 ================================================================================
 
-This document contains some advice for using BitmaskVPN for censorship
-circumvention.
+This document contains some advice for using BitmaskVPN (or any of its
+derivatives) for censorship circumvention.
 
 Bootstrapping the connection
 -----------------------------
