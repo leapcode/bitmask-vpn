@@ -8,6 +8,7 @@ set -e
 XBUILD=${XBUILD-no}
 LRELEASE=${LRELEASE-lrelease}
 VENDOR_PATH=${VENDOR_PATH-providers/riseup}
+APPNAME=${APPNAME-BitmaskVPN}
 
 OSX_TARGET=10.11
 WIN64="win64"
@@ -100,6 +101,9 @@ function renameOutput {
     then
         rm -rf $RELEASE/$TARGET.app
         mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
+	mv $RELEASE/$TARGET.app/Contents/MacOS/bitmask $RELEASE/$TARGET.app/Contents/MacOS/$APPNAME
+	# bsd sed
+	sed -i '' "s/>bitmask/>${APPNAME}/" $RELEASE/$TARGET.app/Contents/Info.plist
         echo "[+] App is in" $RELEASE/$TARGET
     else # for MINGWIN or CYGWIN
         mv $RELEASE/bitmask.exe $RELEASE/$TARGET.exe
