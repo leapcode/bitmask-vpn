@@ -257,6 +257,7 @@ notarize_all:
 	APPNAME=${APPNAME} VERSION=${VERSION} TARGET=${TARGET} OSXAPPPASS=${OSXAPPPASS} branding/scripts/osx-stapler.sh
 
 # --------------------
+# TODO test and remove
 
 notarize_installer:
 # courtesy of https://skyronic.com/2019/07/app-notarization-for-qt-applications/
@@ -278,8 +279,8 @@ create_dmg:
 ifeq (${PLATFORM}, darwin)
 	@create-dmg deploy/${APPNAME}-${VERSION}.dmg build/installer/${APPNAME}-installer-${VERSION}.app
 endif
-
 # --------------------
+
 
 
 check_qtifw:

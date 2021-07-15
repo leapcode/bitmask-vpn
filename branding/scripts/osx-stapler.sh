@@ -14,9 +14,9 @@ requestInfo=$(xcrun altool --notarize-app \
 	-u ${USER} \
 	-p ${OSXAPPPASS})
 
-uuid=$(python branding/scripts/osx-get-uuid.py $requestInfo)
+uuid=$(python3 branding/scripts/osx-staple-uuid.py $requestInfo)
 
-current_status = "in progress"
+current_status="in progress"
 
 while [[ "$currentStatus" == "in progress" ]]; do
 
@@ -25,7 +25,7 @@ sleep 15
 statusResponse=$(xcrun altool --notarization-info "$uuid" \
     --username ${USER} \
     --password ${OSXAPPPASS})
-current_status=$(python branding/scripts/osx-get-status.py $statusResponse)
+current_status=$(python3 branding/scripts/osx-staple-status.py $statusResponse)
 done
 
 
