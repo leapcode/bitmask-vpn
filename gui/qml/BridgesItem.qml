@@ -26,15 +26,15 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 if (checked) {
-                    Logic.setNeedsReconnect(true);
-                    bridgeReconnect.visible = true;
-                    app.useBridges(true);
+                    Logic.setNeedsReconnect(true)
+                    bridgeReconnect.visible = true
+                    app.useBridges(true)
                 } else {
                     // This would also need a "needs reconnect" for de-selecting bridges the next time.
                     // better to wait and see the new connection widgets though
-                    Logic.setNeedsReconnect(false);
-                    bridgeReconnect.visible = false;
-                    app.useBridges(false);
+                    Logic.setNeedsReconnect(false)
+                    bridgeReconnect.visible = false
+                    app.useBridges(false)
                 }
             }
         }
@@ -45,7 +45,7 @@ Item {
             color: "grey"
             text: qsTr("Select a bridge only if you know that you need it to evade censorship in your country or local network.")
             anchors.horizontalCenter: parent.horizontalCenter
-            wrapMode: Text.WordWrap 
+            wrapMode: Text.WordWrap
             visible: !bridgeReconnect.visible
         }
 
@@ -56,7 +56,7 @@ Item {
             color: "red"
             text: qsTr("An obfs4 bridge will be used the next time you connect to the VPN.")
             anchors.horizontalCenter: parent.horizontalCenter
-            wrapMode: Text.WordWrap 
+            wrapMode: Text.WordWrap
             visible: false
         }
     }

@@ -29,10 +29,11 @@ func initializeContext(opts *InitOpts) {
 		DonateDialog:    false,
 		Version:         version.VERSION,
 		Status:          st,
+		IsReady:         false,
 	}
 	errCh := make(chan string)
-	go trigger(OnStatusChanged)
 	go checkErrors(errCh)
+	// isReady is set after Bitmask initialization
 	initializeBitmask(errCh, opts)
 	go trigger(OnStatusChanged)
 	ctx.delayCheckForGateways()
@@ -86,6 +87,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		errCh <- "nopolkit"
 	}
 	ctx.bm = b
+	ctx.IsReady = true
 }
 
 func setConfigOpts(opts *InitOpts, conf *config.Config) {

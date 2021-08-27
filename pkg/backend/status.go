@@ -49,6 +49,7 @@ type connectionCtx struct {
 	CurrentLocation string             `json:"currentLocation"`
 	CurrentCountry  string             `json:"currentCountry"`
 	ManualLocation  bool               `json:"manualLocation"`
+	IsReady         bool               `json:"isReady"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config

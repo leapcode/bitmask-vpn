@@ -1,9 +1,10 @@
 import QtQuick 2.9
-import QtQuick.Dialogs 1.2 // TODO use native dialogs in labs.platform
+import QtQuick.Dialogs 1.2
+// TODO use native dialogs in labs.platform
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.4
 
-import Qt.labs.platform 1.0
+import Qt.labs.platform 1.0 as Labs
 
 import "logic.js" as Logic
 
@@ -24,7 +25,7 @@ ApplicationWindow {
     property var needsDonate
     property var shownDonate
 
-    onSceneGraphError: function(error, msg) {
+    onSceneGraphError: function (error, msg) {
         console.debug("ERROR while initializing scene")
         console.debug(msg)
     }
@@ -116,8 +117,8 @@ ApplicationWindow {
 
                 anchors.centerIn: parent
                 spacing: 10
-                //width: parent.width
 
+                //width: parent.width
                 RadioButton {
                     id: autoSelectionButton
                     checked: !isManualLocation()
@@ -161,6 +162,7 @@ ApplicationWindow {
                             color: {
                                 "#ffffff"
                                 // FIXME locations is not defined when we launch
+
                                 /*
                                 const fullness = ctx.locations[modelData]
                                 if (fullness >= 0 && fullness < 0.4) {
@@ -181,7 +183,6 @@ ApplicationWindow {
                             color: "#000000"
                         }
                     }
-
                 }
 
                 Text {
@@ -190,7 +191,7 @@ ApplicationWindow {
                     width: 180
                     font.pixelSize: 12
                     color: "green"
-                    wrapMode: Text.WordWrap 
+                    wrapMode: Text.WordWrap
                     text: qsTr("Reconnecting to the selected gateway…")
                     visible: false
                 }
@@ -201,31 +202,29 @@ ApplicationWindow {
                     width: 180
                     font.pixelSize: 12
                     color: "green"
-                    wrapMode: Text.WordWrap 
+                    wrapMode: Text.WordWrap
                     text: qsTr("This gateway will be used for next connection.")
                     visible: false
                 }
-
             } // end column
         } // end item
 
         BridgesItem {
             id: bridgesTab
         }
-
     } // end stacklayout
 
     Connections {
         target: jsonModel
         function onDataChanged() {
             ctx = JSON.parse(jsonModel.getJson())
+
             // TODO pass QML_DEBUG variable to be hyper-verbose
             //console.debug(jsonModel.getJson())
-
             gwSelector.model = Object.keys(ctx.locations)
 
             if (ctx.donateDialog == 'true') {
-                Logic.setNeedsDonate(true);
+                Logic.setNeedsDonate(true)
             }
             if (ctx.loginDialog == 'true') {
                 console.debug(jsonModel.getJson())
@@ -294,11 +293,11 @@ ApplicationWindow {
 
     function hasMultipleGateways() {
         // could also count the gateways
-        let provider = Logic.getSelectedProvider(providers);
+        let provider = Logic.getSelectedProvider(providers)
         if (provider == "riseup") {
-            return true;
+            return true
         } else {
-            return false;
+            return false
         }
     }
 
@@ -319,34 +318,33 @@ ApplicationWindow {
     }
 
     function showMainWindow() {
-            bar.currentIndex = 0
-            app.visible = true
-            app.show()
-            app.raise()
+        bar.currentIndex = 0
+        app.visible = true
+        app.show()
+        app.raise()
     }
 
     Component.onCompleted: {
         Logic.debugInit()
         loginDone = false
         allowEmptyPass = Logic.shouldAllowEmptyPass(providers)
-        needsRestart = false;
-        shownDonate = false;
+        needsRestart = false
+        shownDonate = false
 
         /* this is a temporary workaround until general GUI revamp for 0.21.8 */
-        let provider = Logic.getSelectedProvider(providers);
+        let provider = Logic.getSelectedProvider(providers)
         if (provider == "calyx") {
-            background.color = "#8EA844";
-            background.backgroundVisible = false;
-            gwSelector.visible = false;
-            manualSelectionButton.visible = false;
+            background.color = "#8EA844"
+            background.backgroundVisible = false
+            gwSelector.visible = false
+            manualSelectionButton.visible = false
         }
 
         if (!systrayAvailable) {
-          app.visible = true
-          app.raise()
+            app.visible = true
+            app.raise()
         }
     }
-
 
     property var icons: {
         "off": "qrc:/assets/icon/png/white/vpn_off.png",
@@ -363,6 +361,7 @@ ApplicationWindow {
 
         id: systray
         visible: systrayVisible
+
 
         /* the systray menu cannot be buried in a child qml file because
          * otherwise the ids are not available
@@ -501,9 +500,8 @@ ApplicationWindow {
                 if (Qt.platform.os === "windows") {
                     let appname = ctx ? ctx.appName : "VPN"
                     Logic.showNotification(
-                        ctx,
-                        appname
-                        + " is up and running. Please use system tray icon to control it.")
+                                ctx, appname
+                                + " is up and running. Please use system tray icon to control it.")
                 }
             }
         }
@@ -560,13 +558,12 @@ ApplicationWindow {
     }
 
     function useBridges(value) {
-        if (value==true) {
+        if (value == true) {
             backend.setTransport("obfs4")
         } else {
             backend.setTransport("openvpn")
         }
     }
 
-    property alias brReconnect:bridgesTab.displayReconnect
-
+    property alias brReconnect: bridgesTab.displayReconnect
 }

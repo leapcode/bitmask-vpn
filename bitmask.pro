@@ -1,6 +1,9 @@
 #TARGET = $$BINARY_NAME
 
+QT += quickcontrols2
+CONFIG += c++11
 CONFIG += qt staticlib
+CONFIG += qtquickcompiler
 CONFIG+=force_debug_info
 CONFIG+=debug_and_release
 #CONFIG+=release
@@ -10,6 +13,12 @@ lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 QMAKE_TARGET_BUNDLE_PREFIX = se.leap
 QMAKE_BUNDLE = $$TARGET
+
+# The following define makes your compiler emit warnings if you use
+# any feature of Qt which as been marked deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
 
 !defined(VENDOR_PATH, var):VENDOR_PATH="providers/riseup"
 

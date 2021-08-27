@@ -83,7 +83,7 @@ func InitializeBitmaskContext(provider string,
 	opts.Obfs4 = obfs4
 	opts.DisableAutostart = disableAutostart
 	opts.StartVPN = startVPN
-	backend.InitializeBitmaskContext(opts)
+	go backend.InitializeBitmaskContext(opts)
 }
 
 //export InitializeTestBitmaskContext

@@ -14,7 +14,7 @@ StateGroup {
         State {
             name: "off"
             StateChangeScript {
-                script: Logic.setStatus("off");
+                script: Logic.setStatus("off")
             }
             PropertyChanges {
                 target: systray
@@ -47,16 +47,15 @@ StateGroup {
             name: "on"
             StateChangeScript {
                 script: {
-                    Logic.setNeedsReconnect(false);
-                    brReconnect = false;
+                    Logic.setNeedsReconnect(false)
+                    brReconnect = false
 
                     if (needsDonate && !shownDonate) {
-                        donate.visible = true;
-                        shownDonate = true;
-                        backend.donateSeen();
+                        donate.visible = true
+                        shownDonate = true
+                        backend.donateSeen()
                     }
                 }
-
             }
             PropertyChanges {
                 target: systray
