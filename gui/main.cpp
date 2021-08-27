@@ -5,6 +5,7 @@
 #include <QTranslator>
 #include <QCommandLineParser>
 #include <QQuickWindow>
+#include <QQuickStyle>
 #include <QSystemTrayIcon>
 #include <QtQml>
 
@@ -137,9 +138,8 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-    if (hideSystray) {
+    if (hideSystray)
         qDebug() << "Not showing systray icon because --no-systray option is set.";
-    }
 
     if (installHelpers) {
         qDebug() << "Will try to install helpers with sudo";
@@ -159,11 +159,13 @@ int main(int argc, char **argv) {
         availableSystray = false;
     }
 
+    /* set window icon */
+    app.setWindowIcon(QIcon(":/vendor/icon.svg"));
+
+    /* load translations */
     QTranslator translator;
     translator.load(QLocale(), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
     app.installTranslator(&translator);
-    /* set window icon */
-    app.setWindowIcon(QIcon(":/vendor/icon.svg"));
 
 
     QQmlApplicationEngine engine;
@@ -172,6 +174,7 @@ int main(int argc, char **argv) {
     QJsonModel *model = new QJsonModel;
 
     QString desktop = QString::fromStdString(getEnv("XDG_CURRENT_DESKTOP"));
+    QString debug = QString::fromStdString(getEnv("DEBUG"));
 
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
@@ -185,8 +188,10 @@ int main(int argc, char **argv) {
     /* set some useful flags */
     ctx->setContextProperty("systrayVisible", !hideSystray);
     ctx->setContextProperty("systrayAvailable", availableSystray);
+    ctx->setContextProperty("qmlDebug", debug == "1");
 
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    QQuickStyle::setStyle("Material");
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     /* connect the jsonChanged signal explicitely.
         In the lambda, we reload the json in the model every time we receive an
@@ -215,9 +220,11 @@ int main(int argc, char **argv) {
             obfs4, disAutostart, toGoStr(startVPN));
 
     /* if requested, enable web api for controlling the VPN */
-    if (webAPI) {
+    if (webAPI)
         EnableWebAPI(toGoStr(webPort));
-    };
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     /* kick off your shoes, put your feet up */
     return app.exec();
