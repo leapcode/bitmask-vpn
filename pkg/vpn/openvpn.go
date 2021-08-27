@@ -160,7 +160,12 @@ func (b *Bitmask) startOpenVPN() error {
 
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
-				arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+
+				if os.Getenv("UDP") == "1" && port != "53" {
+					arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
+				} else {
+					arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+				}
 			}
 		}
 	}
