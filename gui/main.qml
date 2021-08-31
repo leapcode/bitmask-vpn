@@ -1,21 +1,23 @@
+
+
 /*
  TODO (ui rewrite)
  - [x] add systray
  - [x] systray status
  - [x] splash screen
- - [ ] splash delay/transitions
- - [ ] nested states
- - [ ] splash init errors
- - [ ] font: monserrat
- - [ ] donation dialog
- - [ ] add gateway to systray
- - [ ] control actions from systray
+ - [x] splash delay/transitions
+ - [x] font: monserrat
+ - [x] nested states
+ - [x] splash init errors
  - [ ] minimize/hide from systray
- - [ ] parse ctx flags (need dialog, etc)
  - [ ] gateway selector
  - [ ] bridges
+ - [ ] control actions from systray
+ - [ ] add gateway to systray
+ - [ ] donation dialog
+ - [ ] parse ctx flags (need dialog, etc)
+ - [ ] udp support
 */
-
 import QtQuick 2.0
 import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
@@ -40,6 +42,9 @@ ApplicationWindow {
     Material.accent: Material.Green
 
     property var ctx
+    property var error: ""
+    property bool isDonationService: false
+    property bool showDonationReminder: false
 
     property var icons: {
         "off": "qrc:/assets/icon/png/white/vpn_off.png",
@@ -48,64 +53,77 @@ ApplicationWindow {
         "blocked": "qrc:/assets/icon/png/white/vpn_blocked.png"
     }
 
+    FontLoader {
+        id: lightFont
+        source: "qrc:/montserrat-light.ttf"
+    }
+
+    FontLoader {
+        id: boldFont
+        source: "qrc:/montserrat-bold.ttf"
+    }
+
+    font.family: lightFont.name
+
     Loader {
-	id: loader
-	asynchronous: true
-	anchors.fill: parent
+        id: loader
+        asynchronous: true
+        anchors.fill: parent
     }
 
     Systray {
-	id: systray
+        id: systray
     }
+
 
     Connections {
-	target: jsonModel
-	function onDataChanged() {
-	    ctx = JSON.parse(jsonModel.getJson())
+        target: jsonModel
+        function onDataChanged() {
+            let j = jsonModel.getJson()
             if (qmlDebug) {
-                console.debug(jsonModel.getJson())
+                console.debug(j)
             }
+            ctx = JSON.parse(j)
+            if (ctx.errors) {
+                console.debug("errors, setting root.error")
+                root.error = ctx.errors
+            } else {
+                root.error = ""
+            }
+            if (ctx.donateURL) {
+                isDonationService = true;
+            }
+            if (ctx.donateDialog == 'true') {
+                showDonationReminder = true;
+            }
+            //gwSelector.model = Object.keys(ctx.locations)
+            // TODO check donation
+            //if (needsDonate && !shownDonate) {
+            //    donate.visible = true;
+            //    shownDonate = true;
+            //    // move this to onClick of "close" for widget
+            //    backend.donateSeen();
+            //}
+            // TODO refactor donate widget into main view (with close window!)
+            //if (ctx.status == "on") {
+            //    gwNextConnectionText.visible = false
+            //    gwReconnectText.visible = false
+            // when: vpn.status == "on"
+            //}
 
-	    // FIXME -- use nested state machines for all these cases.
-
-	    //gwSelector.model = Object.keys(ctx.locations)
-
-	    /*
-	    if (ctx.donateDialog == 'true') {
-		Logic.setNeedsDonate(true);
-	    }
-	    if (ctx.loginDialog == 'true') {
-		console.debug(jsonModel.getJson())
-		console.debug("DEBUG: should display login")
-		login.visible = true
-	    }
-	    if (ctx.loginOk == 'true') {
-		loginOk.visible = true
-	    }
-	    if (ctx.errors) {
-		login.visible = false
-		if (ctx.errors == "nohelpers") {
-		    showInitFailure(
-				qsTr("Could not find helpers. Please check your installation"))
-		} else if (ctx.errors == "nopolkit") {
-		    showInitFailure(qsTr("Could not find polkit agent."))
-		} else {
-		    showInitFailure()
-		}
-	    }
-	    if (ctx.donateURL) {
-		donateItem.visible = true
-	    }
-
-	    if (ctx.status == "on") {
-		gwNextConnectionText.visible = false
-		gwReconnectText.visible = false
-	    }
-	    */
-	}
+            /*
+            TODO libraries need login 
+            if (ctx.loginDialog == 'true') {
+                login.visible = true
+            }
+            if (ctx.loginOk == 'true') {
+                loginOk.visible = true
+            }
+            */
+        }
     }
 
-    onSceneGraphError: function(error, msg) {
+    onSceneGraphError: function (error, msg) {
         console.debug("ERROR while initializing scene")
         console.debug(msg)
     }

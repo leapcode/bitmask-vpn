@@ -4,18 +4,15 @@ import "../themes/themes.js" as Theme
 import "../themes"
 
 Label {
-    FontLoader {
-        id: boldFont
-        source: "qrc:/oxanium-bold.ttf"
+    color: "black"
+
+    font {
+        pixelSize: Theme.fontSize * 1.5
+        family: boldFont.name
+        bold: true
     }
 
-    font.pixelSize: Theme.fontSize * 1.55555
-    //font.family: boldFont.name
-    font.bold: true
-    //color: Theme.fontColorDark
-    color: "black"
     text: parent.text
-    //wrapMode: Text.WordWrap
     Accessible.name: text
     Accessible.role: Accessible.StaticText
 }

@@ -26,6 +26,10 @@ Page {
             delegate: ItemDelegate {
                 width: parent.width
                 text: model.text
+                visible: {
+                    if (isDonationService) {return true}
+                    return model.text != qsTr("Donate")
+                }
                 highlighted: ListView.isCurrentItem
                 icon.color: "transparent"
                 icon.source: model.icon

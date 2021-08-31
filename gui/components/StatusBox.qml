@@ -19,27 +19,33 @@ Item {
 
     Rectangle {
         id: statusBoxBackground
-        anchors.fill: parent
-        anchors.margins: 20
-        anchors.bottomMargin: 30
         height: 300
         radius: 10
         color: Theme.bgColor
-        border.color: Theme.accentOff
-        border.width: 2
         antialiasing: true
+        anchors {
+            fill: parent
+            margins: 20
+            bottomMargin: 30
+        }
+        border {
+            color: Theme.accentOff
+            width: 2
+        }
     }
 
     ToolButton {
         id: settingsButton
         objectName: "settingsButton"
+        font.pixelSize: Qt.application.font.pixelSize * 1.2
         opacity: 1
 
-        font.pixelSize: Qt.application.font.pixelSize * 1.6
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: Theme.windowMargin + 10
-        anchors.leftMargin: Theme.windowMargin + 10
+        anchors {
+            top: parent.top
+            left: parent.left
+            topMargin: Theme.windowMargin + 10
+            leftMargin: Theme.windowMargin + 10
+        }
 
         onClicked: {
             if (stackView.depth > 1) {
@@ -51,75 +57,78 @@ Item {
 
         Icon {
             id: settingsImage
-            width: 24
-            height: 24
-            // TODO move arrow left to toolbar top
+            width: 16
+            height: 16
+            anchors.centerIn: settingsButton
             source: stackView.depth
                     > 1 ? "../resources/arrow-left.svg" : "../resources/gear-fill.svg"
-            anchors.centerIn: settingsButton
+        }
+    }
+
+    Rectangle {
+        id: statusLabelWrapper
+        height: 45
+        anchors {
+            top: statusBoxBackground.top
+            topMargin: 40
+            horizontalCenter: parent.horizontalCenter
+        }
+        BoldLabel {
+            id: connectionState
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            text: ""
         }
     }
 
     Column {
         id: col
-        anchors.centerIn: parent
-        anchors.topMargin: 24
         width: parent.width * 0.8
-
-        BoldLabel {
-            id: connectionState
-            text: ""
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
+        anchors.horizontalCenter: parent.horizontalCenter
 
         VerticalSpacer {
             id: spacerPreImg
-            visible: false
-            height: 40
+            visible: true
+            height: 150
         }
 
         Image {
             id: connectionImage
-            height: 200
+            height: 160
             source: "../resources/spy.gif"
+            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
         }
 
         VerticalSpacer {
             id: spacerPostImg
-            visible: false
-            height: 35
+            visible: true
+            height: 30
         }
 
         MaterialButton {
             id: toggleVPN
+            spacing: 8
+
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.alignment: Qt.AlignBottom
-            font.capitalization: Font.Capitalize
-            spacing: 8
+
+            font {
+                capitalization: Font.Capitalize
+                family: lightFont.name
+                bold: false
+            }
 
             onClicked: {
                 if (vpn.state === "on") {
-                    console.debug("should turn off")
                     backend.switchOff()
                 } else if (vpn.state === "off") {
-                    console.debug("should turn on")
                     backend.switchOn()
                 } else {
                     console.debug("unknown state")
                 }
             }
-
-
-            /*
-             XXX this hijacks click events, so better no pointing for now.
-            MouseArea {
-                anchors.fill: toggleVPN
-                hoverEnabled: true
-                cursorShape: !hoverEnabled ? Qt.ForbiddenCursor : Qt.PointingHandCursor
-            }
-            */
         }
     }
 }
