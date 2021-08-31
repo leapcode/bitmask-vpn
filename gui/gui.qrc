@@ -3,6 +3,7 @@
 
         <file>main.qml</file>
 
+        <!-- gui components -->
         <file>themes/themes.js</file>
         <file>components/MainView.qml</file>
         <file>components/Splash.qml</file>
@@ -23,6 +24,10 @@
         <file>components/Icon.qml</file>
         <file>components/MaterialButton.qml</file>
         <file>components/VPNState.qml</file>
+        <file>components/InitErrors.qml</file>
+        <file>components/ErrorBox.qml</file>
+
+        <!-- resources, assets -->
         <file>resources/icon-noshield.svg</file>
         <file>resources/location.svg</file>
         <file>resources/settings.svg</file>
@@ -43,8 +48,13 @@
         <file>resources/riseup-icon.svg</file>
         <file>resources/spy.gif</file>
         <file>resources/quit.svg</file>
+        <file>resources/alert.svg</file>
 
-        <!-- old, to remove -->
+        <!-- fonts -->
+        <file alias="montserrat-light.ttf">resources/fonts/Montserrat-Regular.ttf</file>
+        <file alias="montserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
+
+        <!-- begin, to remove -->
         <file>qml/VpnState.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/DonateDialog.qml</file>
@@ -57,7 +67,7 @@
         <file>qml/VPNSwitch.qml</file>
         <file>qml/BridgesItem.qml</file>
         <file>qml/logic.js</file>
-        <!-- to remove -->
+        <!-- end, to remove -->
 
         <file>assets/icon/png/black/vpn_off.png</file>
         <file>assets/icon/png/black/vpn_on.png</file>

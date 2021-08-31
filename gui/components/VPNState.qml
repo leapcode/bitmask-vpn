@@ -4,15 +4,21 @@ import QtQuick.Controls 2.12
 import "../themes/themes.js" as Theme
 
 StateGroup {
+    property var initializing: "initializing"
+    property var off: "off"
+    property var on: "on"
+    property var starting: "starting"
+    property var stopping: "stopping"
+    property var failed: "failed"
 
-    state: ctx ? ctx.status : "off"
+    state: ctx ? ctx.status : vpnStates.off
 
     states: [
         State {
-            name: "initializing"
+            name: initializing
         },
         State {
-            name: "off"
+            name: off
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Connection\nUnsecured")
@@ -24,10 +30,6 @@ StateGroup {
             PropertyChanges {
                 target: connectionImage
                 source: "../resources/spy.gif"
-                //anchors.right: parent.right
-                //anchors.rightMargin: -8
-                // XXX need to nulify horizontalcenter somehow,
-                // it gets fixed to parent.center
             }
             PropertyChanges {
                 target: toggleVPN
@@ -42,16 +44,14 @@ StateGroup {
                 text: toHuman("off")
             }
             StateChangeScript {
-                script: {
-
-                }
+                script: {}
             }
         },
         State {
-            name: "on"
+            name: on
             PropertyChanges {
                 target: connectionState
-                text: qsTr("Connection\nSecure")
+                text: qsTr("Connection\nSecured")
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -60,17 +60,6 @@ StateGroup {
             PropertyChanges {
                 target: connectionImage
                 source: "../resources/riseup-icon.svg"
-                // TODO need to offset the logo or increase the image
-                // to fixed height
-                height: 120
-            }
-            PropertyChanges {
-                target: spacerPreImg
-                visible: true
-            }
-            PropertyChanges {
-                target: spacerPostImg
-                visible: true
             }
             PropertyChanges {
                 target: toggleVPN
@@ -86,20 +75,11 @@ StateGroup {
                 text: toHuman("on")
             }
             StateChangeScript {
-                script: {
-
-                    // TODO check donation
-                    //if (needsDonate && !shownDonate) {
-                    //    donate.visible = true;
-                    //    shownDonate = true;
-                    //    backend.donateSeen();
-                    //}
-                }
+                script: {}
             }
         },
         State {
-            name: "starting"
-            //when: toggleVPN.pressed == true
+            name: starting
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Connecting")
@@ -127,13 +107,11 @@ StateGroup {
                 text: toHuman("connecting")
             }
             StateChangeScript {
-                script: {
-
-                }
+                script: {}
             }
         },
         State {
-            name: "stopping"
+            name: stopping
             PropertyChanges {
                 target: connectionState
                 text: "Switching\nOff"
@@ -141,6 +119,12 @@ StateGroup {
             PropertyChanges {
                 target: statusBoxBackground
                 border.color: Theme.accentConnecting
+            }
+            PropertyChanges {
+                // ?? is this image correct?
+                target: connectionImage
+                source: "../resources/birds.svg"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {
                 target: systray
@@ -153,23 +137,39 @@ StateGroup {
             }
         },
         State {
-            name: "failed"
-            // TODO
+            name: failed
         }
     ]
-
-
-    /*
-    transitions: Transition {
-        from: "off"
-        to: "starting"
-        reversible: true
-
-        ParallelAnimation {
-            ColorAnimation { duration: 500 }
+    transitions: [
+        Transition {
+            to: on
+            ColorAnimation {
+                target: statusBoxBackground
+                duration: 500
+            }
+        },
+        Transition {
+            to: off
+            ColorAnimation {
+                target: statusBoxBackground
+                duration: 500
+            }
+        },
+        Transition {
+            to: starting
+            ColorAnimation {
+                target: statusBoxBackground
+                duration: 500
+            }
+        },
+        Transition {
+            to: stopping
+            ColorAnimation {
+                target: statusBoxBackground
+                duration: 500
+            }
         }
-    }
-    */
+    ]
     function toHuman(st) {
         switch (st) {
         case "off":

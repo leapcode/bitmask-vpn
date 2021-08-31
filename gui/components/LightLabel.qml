@@ -11,7 +11,6 @@ Text {
 
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
-    //lineHeightMode: Text.FixedHeight
     wrapMode: Text.Wrap
 
     Accessible.role: Accessible.StaticText

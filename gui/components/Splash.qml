@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.0
 Page {
     id: splash
     property int timeoutInterval: 1600
+    property alias errors: splashErrorBox
 
     Column {
         width: parent.width * 0.8
@@ -24,7 +25,13 @@ Page {
             fillMode: Image.PreserveAspectFit
         }
 
-        Spinner {}
+        Spinner {
+            id: splashSpinner
+        }
+
+        InitErrors {
+            id: splashErrorBox
+        }
     }
 
     Timer {
@@ -39,10 +46,10 @@ Page {
     }
 
     function loadMainViewWhenReady() {
-        console.debug("ready?")
+        if (root.error != "") {
+            return
+        }
         if (ctx && ctx.isReady) {
-            console.debug("ready?", ctx.isReady)
-            // FIXME check errors == None
             loader.source = "MainView.qml"
         } else {
             delay(100, loadMainViewWhenReady)
