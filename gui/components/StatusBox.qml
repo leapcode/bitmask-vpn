@@ -7,6 +7,7 @@ import QtQuick.Templates 2.12 as T
 import QtQuick.Controls.impl 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Material.impl 2.12
+
 import "../themes/themes.js" as Theme
 
 Item {
@@ -18,10 +19,15 @@ Item {
     }
 
     Rectangle {
+        color: Theme.bgColor
+        anchors.fill: parent
+    }
+
+    Rectangle {
         id: statusBoxBackground
+        color: Theme.fgColor
         height: 300
         radius: 10
-        color: Theme.bgColor
         antialiasing: true
         anchors {
             fill: parent
@@ -124,6 +130,7 @@ Item {
                 if (vpn.state === "on") {
                     backend.switchOff()
                 } else if (vpn.state === "off") {
+                    vpn.startingUI = true
                     backend.switchOn()
                 } else {
                     console.debug("unknown state")

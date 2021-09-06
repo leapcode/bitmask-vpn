@@ -2,15 +2,17 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
 
-Page {
+import "../themes/themes.js" as Theme
+
+ThemedPage {
     title: qsTr("Preferences")
 
     Column {
         id: prefCol
         // FIXME the checkboxes seem to have a bigger lineHeight themselves, need to pack more.
         spacing: 1
-        topPadding: root.width * 0.1
-        leftPadding: root.width * 0.15
+        topPadding: root.width * 0.05
+        leftPadding: root.width * 0.1
         rightPadding: root.width * 0.15
 
         Rectangle {
@@ -18,6 +20,7 @@ Page {
             visible: false
             height: 40
             width: 300
+            color: Theme.bgColor
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -38,12 +41,20 @@ Page {
             id: useBridgesCheckBox
             checked: false
             text: qsTr("Use obfs4 bridges")
+            onClicked: {
+                // TODO there's a corner case that needs to be dealt with in the backend,
+                // if an user has a manual location selected and switches to bridges:
+                // we need to fallback to "auto" selection if such location does not 
+                // offer bridges
+                useBridges(checked)
+            }
         }
 
         CheckBox {
             id: useSnowflake
-            checked: false
             text: qsTr("Use Snowflake (experimental)")
+            enabled: false
+            checked: false
         }
 
         Label {
@@ -53,8 +64,9 @@ Page {
 
         CheckBox {
             id: useUDP
-            checked: false
             text: qsTr("UDP")
+            enabled: false
+            checked: false
         }
     }
 
@@ -69,11 +81,11 @@ Page {
                 }
                 PropertyChanges {
                     target: useBridgesCheckBox
-                    checkable: false
+                    enabled: false
                 }
                 PropertyChanges {
                     target: useUDP
-                    checkable: false
+                    enabled: false
                 }
             },
             State {
@@ -84,11 +96,11 @@ Page {
                 }
                 PropertyChanges {
                     target: useBridgesCheckBox
-                    checkable: false
+                    enabled: false
                 }
                 PropertyChanges {
                     target: useUDP
-                    checkable: false
+                    enabled: false
                 }
             },
             State {
@@ -99,13 +111,29 @@ Page {
                 }
                 PropertyChanges {
                     target: useBridgesCheckBox
-                    checkable: true
+                    enabled: true
                 }
                 PropertyChanges {
                     target: useUDP
-                    checkable: true
+                    enabled: true
                 }
             }
         ]
+    }
+
+    function useBridges(value) {
+        if (value == true) {
+            console.debug("use obfs4")
+            backend.setTransport("obfs4")
+        } else {
+            console.debug("use regular")
+            backend.setTransport("openvpn")
+        }
+    }
+
+    Component.onCompleted: {
+        if (ctx && ctx.transport == "obfs4") {
+            useBridgesCheckBox.checked = true
+        }
     }
 }

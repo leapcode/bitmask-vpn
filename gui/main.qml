@@ -9,9 +9,9 @@
  - [x] font: monserrat
  - [x] nested states
  - [x] splash init errors
- - [ ] minimize/hide from systray
- - [ ] gateway selector
+ - [.] gateway selector
  - [ ] bridges
+ - [ ] minimize/hide from systray
  - [ ] control actions from systray
  - [ ] add gateway to systray
  - [ ] donation dialog
@@ -43,8 +43,13 @@ ApplicationWindow {
 
     property var ctx
     property var error: ""
+
+    // TODO can move properties to some state sub-item to unclutter
     property bool isDonationService: false
     property bool showDonationReminder: false
+    property var locationsModel: []
+    // TODO get from persistance
+    property var selectedGateway: "auto"
 
     property var icons: {
         "off": "qrc:/assets/icon/png/white/vpn_off.png",
@@ -84,6 +89,9 @@ ApplicationWindow {
                 console.debug(j)
             }
             ctx = JSON.parse(j)
+            if (ctx != undefined) {
+                locationsModel = Object.keys(ctx.locations)
+            }
             if (ctx.errors) {
                 console.debug("errors, setting root.error")
                 root.error = ctx.errors
@@ -96,7 +104,7 @@ ApplicationWindow {
             if (ctx.donateDialog == 'true') {
                 showDonationReminder = true;
             }
-            //gwSelector.model = Object.keys(ctx.locations)
+
             // TODO check donation
             //if (needsDonate && !shownDonate) {
             //    donate.visible = true;

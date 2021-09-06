@@ -82,44 +82,12 @@ Page {
         }
     }
 
-    Drawer {
-        id: locationsDrawer
-
-        width: root.width
-        height: root.height
-
-        ListView {
-            focus: true
-            currentIndex: -1
-            anchors.fill: parent
-
-            delegate: ItemDelegate {
-                width: parent.width
-                text: model.text
-                highlighted: ListView.isCurrentItem
-                onClicked: {
-                    locationsDrawer.close()
-                    model.triggered()
-                }
-            }
-
-            model: ListModel {
-                ListElement {
-                    text: qsTr("Montreal, CA")
-                    triggered: function () {}
-                }
-                ListElement {
-                    text: qsTr("Paris, FR")
-                    triggered: function () {}
-                }
-            }
-
-            ScrollIndicator.vertical: ScrollIndicator {}
-        }
+    header: Header {
+        id: header
     }
-
-    header: Header {}
-    footer: Footer {}
+    footer: Footer {
+        id: footer
+    }
 
     Dialog {
         id: aboutDialog

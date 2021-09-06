@@ -278,12 +278,23 @@ func (b *Bonafide) ListLocationFullness(transport string) map[string]float64 {
 	return b.gateways.listLocationFullness(transport)
 }
 
+func (b *Bonafide) ListLocationLabels(transport string) map[string][]string {
+	return b.gateways.listLocationLabels(transport)
+}
+
 func (b *Bonafide) SetManualGateway(label string) {
 	b.gateways.setUserChoice(label)
 }
 
 func (b *Bonafide) SetAutomaticGateway() {
 	b.gateways.setAutomaticChoice()
+}
+
+func (b *Bonafide) GetBestLocation(transport string) string {
+	if b.gateways == nil {
+		return ""
+	}
+	return b.gateways.getBestLocation(transport, b.tzOffsetHours)
 }
 
 func (b *Bonafide) IsManualLocation() bool {
