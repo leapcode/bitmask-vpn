@@ -326,6 +326,10 @@ func (b *Bitmask) ListLocationFullness(transport string) map[string]float64 {
 	return b.bonafide.ListLocationFullness(transport)
 }
 
+func (b *Bitmask) ListLocationLabels(transport string) map[string][]string {
+	return b.bonafide.ListLocationLabels(transport)
+}
+
 // UseGateway selects a gateway, by label, as the default gateway
 func (b *Bitmask) UseGateway(label string) {
 	b.bonafide.SetManualGateway(label)

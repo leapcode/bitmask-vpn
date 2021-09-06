@@ -11,17 +11,49 @@ StateGroup {
     property var stopping: "stopping"
     property var failed: "failed"
 
-    state: ctx ? ctx.status : vpnStates.off
+    property bool startingUI: false
+
+    state: ctx ? ctx.status : off
 
     states: [
         State {
             name: initializing
         },
         State {
-            name: off
+            when: ctx && ctx.status == "off" && startingUI == true
             PropertyChanges {
                 target: connectionState
-                text: qsTr("Connection\nUnsecured")
+                text: qsTr("Connecting")
+            }
+            PropertyChanges {
+                target: statusBoxBackground
+                border.color: Theme.accentConnecting
+            }
+            PropertyChanges {
+                target: connectionImage
+                source: "../resources/birds.svg"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            PropertyChanges {
+                target: toggleVPN
+                enabled: false
+                text: ("...")
+            }
+            PropertyChanges {
+                target: systray
+                tooltip: toHuman("connecting")
+                icon.source: icons["wait"]
+            }
+            PropertyChanges {
+                target: systray.statusItem
+                text: toHuman("connecting")
+            }
+        },
+        State {
+            name: "off"
+            PropertyChanges {
+                target: connectionState
+                text: qsTr("Unsecured\nConnection")
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -33,6 +65,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: toggleVPN
+                enabled: true
                 text: qsTr("Turn on")
             }
             PropertyChanges {
@@ -44,14 +77,16 @@ StateGroup {
                 text: toHuman("off")
             }
             StateChangeScript {
-                script: {}
+                script: {
+                    console.debug("status off")
+                }
             }
         },
         State {
             name: on
             PropertyChanges {
                 target: connectionState
-                text: qsTr("Connection\nSecured")
+                text: qsTr("Secured\nConnection")
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -63,6 +98,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: toggleVPN
+                enabled: true
                 text: qsTr("Turn off")
             }
             PropertyChanges {
@@ -75,7 +111,9 @@ StateGroup {
                 text: toHuman("on")
             }
             StateChangeScript {
-                script: {}
+                script: {
+                    vpn.startingUI = false
+                }
             }
         },
         State {
@@ -95,6 +133,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: toggleVPN
+                enabled: true
                 text: qsTr("Cancel")
             }
             PropertyChanges {
@@ -107,7 +146,9 @@ StateGroup {
                 text: toHuman("connecting")
             }
             StateChangeScript {
-                script: {}
+                script: {
+                    vpn.startingUI = false
+                }
             }
         },
         State {

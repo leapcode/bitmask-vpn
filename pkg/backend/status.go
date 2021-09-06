@@ -32,24 +32,27 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName         string             `json:"appName"`
-	Provider        string             `json:"provider"`
-	TosURL          string             `json:"tosURL"`
-	HelpURL         string             `json:"helpURL"`
-	AskForDonations bool               `json:"askForDonations"`
-	DonateDialog    bool               `json:"donateDialog"`
-	DonateURL       string             `json:"donateURL"`
-	LoginDialog     bool               `json:"loginDialog"`
-	LoginOk         bool               `json:"loginOk"`
-	Version         string             `json:"version"`
-	Errors          string             `json:"errors"`
-	Status          status             `json:"status"`
-	Locations       map[string]float64 `json:"locations"`
-	CurrentGateway  string             `json:"currentGateway"`
-	CurrentLocation string             `json:"currentLocation"`
-	CurrentCountry  string             `json:"currentCountry"`
-	ManualLocation  bool               `json:"manualLocation"`
-	IsReady         bool               `json:"isReady"`
+	AppName         string              `json:"appName"`
+	Provider        string              `json:"provider"`
+	TosURL          string              `json:"tosURL"`
+	HelpURL         string              `json:"helpURL"`
+	AskForDonations bool                `json:"askForDonations"`
+	DonateDialog    bool                `json:"donateDialog"`
+	DonateURL       string              `json:"donateURL"`
+	LoginDialog     bool                `json:"loginDialog"`
+	LoginOk         bool                `json:"loginOk"`
+	Version         string              `json:"version"`
+	Errors          string              `json:"errors"`
+	Status          status              `json:"status"`
+	Locations       map[string]float64  `json:"locations"`
+	LocationLabels  map[string][]string `json:"locationLabels"`
+	CurrentGateway  string              `json:"currentGateway"`
+	CurrentLocation string              `json:"currentLocation"`
+	CurrentCountry  string              `json:"currentCountry"`
+	BestLocation    string              `json:"bestLocation"`
+	Transport       string              `json:"transport"`
+	ManualLocation  bool                `json:"manualLocation"`
+	IsReady         bool                `json:"isReady"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
@@ -60,9 +63,12 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 	if c.bm != nil {
 		transport := c.bm.GetTransport()
 		c.Locations = c.bm.ListLocationFullness(transport)
+		c.LocationLabels = c.bm.ListLocationLabels(transport)
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 		c.CurrentLocation = c.bm.GetCurrentLocation()
 		c.CurrentCountry = c.bm.GetCurrentCountry()
+		c.BestLocation = c.bm.GetBestLocation(transport)
+		c.Transport = transport
 		c.ManualLocation = c.bm.IsManualLocation()
 	}
 	defer statusMutex.Unlock()

@@ -103,6 +103,10 @@ func (b *Bitmask) GetCurrentCountry() string {
 	return b.onGateway.CountryCode
 }
 
+func (b *Bitmask) GetBestLocation(transport string) string {
+	return b.bonafide.GetBestLocation(transport)
+}
+
 func (b *Bitmask) IsManualLocation() bool {
 	return b.bonafide.IsManualLocation()
 }

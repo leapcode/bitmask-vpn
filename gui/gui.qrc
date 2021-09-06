@@ -6,15 +6,18 @@
         <!-- gui components -->
         <file>themes/themes.js</file>
         <file>components/MainView.qml</file>
+        <file>components/ThemedPage.qml</file>
         <file>components/Splash.qml</file>
         <file>components/Home.qml</file>
         <file>components/Header.qml</file>
         <file>components/Footer.qml</file>
+        <file>components/WrappedRadioButton.qml</file>
         <file>components/StatusBox.qml</file>
         <file>components/Spinner.qml</file>
         <file>components/Systray.qml</file>
         <file>components/Help.qml</file>
         <file>components/Locations.qml</file>
+        <file>components/SignalIcon.qml</file>
         <file>components/Preferences.qml</file>
         <file>components/BoldLabel.qml</file>
         <file>components/LightLabel.qml</file>

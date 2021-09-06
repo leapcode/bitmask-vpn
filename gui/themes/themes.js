@@ -48,4 +48,9 @@ const blueButton = {
     "focusBorder": blueFocusBorder,
 };
 
-const bgColor = "white";
+const bgColor = "#f3f3f3";
+const fgColor = "#ffffff";
+
+const signalGood = "green";
+const signalMedium = "orange";
+const signalLow = "red";

@@ -113,6 +113,20 @@ func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 
 	return cm
 }
 
+/* returns a map of location: labels for the ui to use */
+func (p *gatewayPool) listLocationLabels(transport string) map[string][]string {
+	cm := make(map[string][]string)
+	locations := p.getLocations()
+	if len(locations) == 0 {
+		return cm
+	}
+	for _, loc := range locations {
+		current := p.locations[loc]
+		cm[loc] = []string{current.Name, current.CountryCode}
+	}
+	return cm
+}
+
 /* this method should only be used if we have no usable menshen list. */
 func (p *gatewayPool) getRandomGatewaysByLocation(location, transport string) ([]Gateway, error) {
 	if !p.isValidLocation(location) {
@@ -272,6 +286,19 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 	} else {
 		return p.getGatewaysByTimezone(transport, tz, max)
 	}
+}
+
+/* returns the location for the first recommended gateway */
+func (p *gatewayPool) getBestLocation(transport string, tz int) string {
+	best, err := p.getBest(transport, tz, 1)
+	if err != nil {
+		return ""
+	}
+	if len(best) != 1 {
+		return ""
+	}
+	return best[0].Location
+
 }
 
 func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {

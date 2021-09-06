@@ -4,7 +4,8 @@ import QtGraphicalEffects 1.0
 
 Page {
     id: splash
-    property int timeoutInterval: 1600
+    property int timeoutInterval: 200
+    //property int timeoutInterval: 1600
     property alias errors: splashErrorBox
 
     Column {
@@ -40,7 +41,7 @@ Page {
 
     function delay(delayTime, cb) {
         splashTimer.interval = delayTime
-        splashTimer.repeat = false
+        splashTimer.repeat = true
         splashTimer.triggered.connect(cb)
         splashTimer.start()
     }
@@ -50,9 +51,13 @@ Page {
             return
         }
         if (ctx && ctx.isReady) {
+            splashTimer.stop()
             loader.source = "MainView.qml"
         } else {
-            delay(100, loadMainViewWhenReady)
+            if (!splashTimer.running) {
+              console.debug('delay...')
+              delay(500, loadMainViewWhenReady)
+            }
         }
     }
 
@@ -65,7 +70,5 @@ Page {
         }
     }
 
-    Component.onCompleted: {
-
-    }
+    Component.onCompleted: {}
 }
