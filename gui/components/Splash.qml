@@ -4,8 +4,7 @@ import QtGraphicalEffects 1.0
 
 Page {
     id: splash
-    property int timeoutInterval: 200
-    //property int timeoutInterval: 1600
+    property int timeoutInterval: qmlDebug ? 200 : 1600
     property alias errors: splashErrorBox
 
     Column {
