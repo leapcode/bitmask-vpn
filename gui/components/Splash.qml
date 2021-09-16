@@ -19,14 +19,20 @@ Page {
 
         Image {
             id: connectionImage
-            height: 200
+            height: 180
             anchors.horizontalCenter: parent.horizontalCenter
             source: "../resources/icon-noshield.svg"
             fillMode: Image.PreserveAspectFit
         }
 
-        Spinner {
-            id: splashSpinner
+        VerticalSpacer {
+            visible: true
+            height: root.height * 0.10
+        }
+
+        ProgressBar {
+            anchors.horizontalCenter: parent.horizontalCenter
+            indeterminate: true
         }
 
         InitErrors {
