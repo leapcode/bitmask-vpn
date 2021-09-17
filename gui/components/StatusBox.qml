@@ -29,6 +29,7 @@ Item {
         height: 300
         radius: 10
         antialiasing: true
+
         anchors {
             fill: parent
             margins: 20
@@ -76,7 +77,7 @@ Item {
         height: 45
         anchors {
             top: statusBoxBackground.top
-            topMargin: 40
+            topMargin: 25
             horizontalCenter: parent.horizontalCenter
         }
         BoldLabel {
@@ -96,7 +97,7 @@ Item {
         VerticalSpacer {
             id: spacerPreImg
             visible: true
-            height: 150
+            height: 120
         }
 
         Image {
@@ -110,7 +111,8 @@ Item {
         VerticalSpacer {
             id: spacerPostImg
             visible: true
-            height: 30
+            height: 20
+            Layout.alignment: Qt.AlignBottom
         }
 
         MaterialButton {
@@ -128,7 +130,7 @@ Item {
             }
 
             onClicked: {
-                if (vpn.state === "on") {
+                if (vpn.state === "on" | vpn.state === "starting") {
                     backend.switchOff()
                 } else if (vpn.state === "off") {
                     vpn.startingUI = true

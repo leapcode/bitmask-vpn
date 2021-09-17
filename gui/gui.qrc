@@ -11,6 +11,7 @@
         <file>components/Home.qml</file>
         <file>components/Header.qml</file>
         <file>components/Footer.qml</file>
+        <file>components/About.qml</file>
         <file>components/WrappedRadioButton.qml</file>
         <file>components/StatusBox.qml</file>
         <file>components/Spinner.qml</file>
@@ -54,8 +55,9 @@
         <file>resources/alert.svg</file>
 
         <!-- fonts -->
-        <file alias="montserrat-light.ttf">resources/fonts/Montserrat-Regular.ttf</file>
-        <file alias="montserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
+        <file alias="poppins-light.ttf">resources/fonts/Poppins-Thin.ttf</file>
+        <file alias="poppins-bold.ttf">resources/fonts/Poppins-Light.ttf</file>
+        <file alias="monserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
 
         <!-- begin, to remove -->
         <file>qml/VpnState.qml</file>

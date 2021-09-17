@@ -8,7 +8,7 @@ Label {
 
     font {
         pixelSize: Theme.fontSize * 1.5
-        family: boldFont.name
+        family: boldFontMonserrat.name
         bold: true
     }
 

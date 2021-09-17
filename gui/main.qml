@@ -9,7 +9,7 @@
  - [x] font: monserrat
  - [x] nested states
  - [x] splash init errors
- - [.] gateway selector
+ - [x] gateway selector
  - [ ] bridges
  - [ ] minimize/hide from systray
  - [ ] control actions from systray
@@ -29,14 +29,19 @@ import "./components"
 ApplicationWindow {
 
     id: root
-
     visible: true
-    width: 360
-    height: 520
-    minimumWidth: 300
-    maximumWidth: 300
-    minimumHeight: 500
-    maximumHeight: 500
+
+    property int appHeight: 460
+    property int appWidth: 260
+
+    width: appWidth
+    minimumWidth: appWidth
+    maximumWidth: appWidth
+
+    height: appHeight
+    minimumHeight: appHeight
+    maximumHeight: appHeight
+
 
     title: ctx ? ctx.appName : "VPN"
     Material.accent: Material.Green
@@ -60,12 +65,17 @@ ApplicationWindow {
 
     FontLoader {
         id: lightFont
-        source: "qrc:/montserrat-light.ttf"
+        source: "qrc:/poppins-light.ttf"
     }
 
     FontLoader {
         id: boldFont
-        source: "qrc:/montserrat-bold.ttf"
+        source: "qrc:/poppins-bold.ttf"
+    }
+
+    FontLoader {
+        id: boldFontMonserrat
+        source: "qrc:/monserrat-bold.ttf"
     }
 
     font.family: lightFont.name

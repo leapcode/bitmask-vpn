@@ -21,9 +21,12 @@ ToolBar {
         ToolButton {
             id: gwButton
             visible: hasMultipleGateways()
+
             anchors {
                 verticalCenter: parent.verticalCenter
-                leftMargin: 20
+                leftMargin: 10
+                // TODO discuss where this should be aligned
+                //leftMargin: 22
                 left: parent.left
                 verticalCenterOffset: 5
             }
@@ -40,6 +43,7 @@ ToolBar {
         Label {
             id: locationLabel
             anchors.left: gwButton.right
+            anchors.leftMargin: -7
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 7
             text: locationStr()

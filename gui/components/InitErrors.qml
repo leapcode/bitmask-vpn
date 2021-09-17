@@ -11,7 +11,7 @@ ErrorBox {
             name: "noerror"
             when: root.error == ""
             PropertyChanges {
-                target: splashSpinner
+                target: splashProgress
                 visible: true
             }
             PropertyChanges {
@@ -23,7 +23,7 @@ ErrorBox {
             name: "nohelpers"
             when: root.error == "nohelpers"
             PropertyChanges {
-                target: splashSpinner
+                target: splashProgress
                 visible: false
             }
             PropertyChanges {

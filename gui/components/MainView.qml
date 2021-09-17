@@ -51,7 +51,7 @@ Page {
                     text: qsTr("Donate")
                     icon: "../resources/donate.svg"
                     triggered: function () {
-                        aboutDialog.open()
+                        donateDialog.open()
                     }
                 }
                 ListElement {
@@ -66,7 +66,8 @@ Page {
                     text: qsTr("About")
                     icon: "../resources/about.svg"
                     triggered: function () {
-                        aboutDialog.open()
+                        stackView.push("About.qml")
+                        settingsDrawer.close()
                     }
                 }
                 ListElement {
@@ -90,14 +91,53 @@ Page {
     }
 
     Dialog {
-        id: aboutDialog
-        title: qsTr("About")
-        Label {
-            anchors.fill: parent
-            text: qsTr("RiseupVPN\nhttps://riseupvpn.net/vpn")
+        id: donateDialog 
+        width: 350
+        title: qsTr("Please donate!")
+        standardButtons: Dialog.Ok
+
+        Text {
+            id: donateText
+            width: 300
+            wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
+            anchors {
+                topMargin: 20
+                bottomMargin: 40
+                horizontalCenter: parent.horizontalCenter
+            }
+            font.pixelSize: 12
+            text: qsTr("This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts.")
         }
 
-        standardButtons: StandardButton.Ok
+        Label {
+            id: donateURL
+            anchors {
+                top: donateText.bottom
+                topMargin: 20
+                horizontalCenter: parent.horizontalCenter
+            }
+            font.pixelSize: 14
+            text: getLink(ctx.donateURL)
+            onLinkActivated: Qt.openUrlExternally(ctx.donateURL)
+        }
+
+
+        Image {
+            height: 50
+            source: "../resources/donate.svg"
+            fillMode: Image.PreserveAspectFit
+            anchors {
+                topMargin: 20
+                top: donateURL.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+        }
+
+        onAccepted: Qt.openUrlExternally(ctx.donateURL)
+    }
+
+    function getLink(url) {
+        return "<a href='#'>" + url + "</a>"
     }
 }
