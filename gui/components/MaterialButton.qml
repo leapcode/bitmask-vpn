@@ -5,6 +5,8 @@ import QtQuick.Controls.impl 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Material.impl 2.12
 
+import "../themes/themes.js" as Theme
+
 T.Button {
     id: control
 
@@ -42,13 +44,13 @@ T.Button {
     }
 
     background: Rectangle {
-        implicitWidth: 64
+        implicitWidth: 68
         implicitHeight: control.Material.buttonHeight
 
         radius: 4
         border.color: "black"
         border.width: 1
-        color: !control.enabled ? control.Material.buttonDisabledColor : control.highlighted ? control.Material.highlightedButtonColor : control.Material.buttonColor
+        color: !control.enabled ? control.Material.buttonDisabledColor : control.highlighted ? control.Material.highlightedButtonColor : Theme.buttonColor
 
         PaddedRectangle {
             y: parent.height - 4

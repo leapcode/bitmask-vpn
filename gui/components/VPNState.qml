@@ -61,7 +61,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/spy.gif"
+                source: "../resources/icon-noshield.svg"
             }
             PropertyChanges {
                 target: toggleVPN

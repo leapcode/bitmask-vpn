@@ -27,7 +27,7 @@ Page {
 
         VerticalSpacer {
             visible: true
-            height: root.height * 0.10
+            height: root.height * 0.22
         }
 
         ProgressBar {

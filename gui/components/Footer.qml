@@ -23,10 +23,16 @@ ToolBar {
             visible: hasMultipleGateways()
             anchors {
                 verticalCenter: parent.verticalCenter
-                leftMargin: 10
+                leftMargin: 20
                 left: parent.left
                 verticalCenterOffset: 5
             }
+            /*
+            background.implicitHeight: 32
+            background.implicitWidth: 32
+            */
+            icon.width: 20
+            icon.height: 20
             icon.source: stackView.depth > 1 ? "" : "../resources/globe.svg"
             onClicked: stackView.push("Locations.qml")
         }
@@ -35,7 +41,7 @@ ToolBar {
             id: locationLabel
             anchors.left: gwButton.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 5
+            anchors.verticalCenterOffset: 7
             text: locationStr()
             color: getLocationColor()
         }
