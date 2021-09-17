@@ -125,3 +125,7 @@ func (b *Bitmask) getOpenvpnState() (string, error) {
 	}
 	return status, nil
 }
+
+func (b *Bitmask) isFailed() bool {
+	return b.launch.failed
+}

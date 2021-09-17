@@ -39,10 +39,11 @@ var bitmaskRootPaths = []string{
 
 type launcher struct {
 	openvpnCh chan []string
+	failed    bool
 }
 
 func newLauncher() (*launcher, error) {
-	l := launcher{make(chan []string, 1)}
+	l := launcher{make(chan []string, 1), false}
 	go l.openvpnRunner()
 	return &l, nil
 }
@@ -139,7 +140,7 @@ func getPolkitPath() string {
 		// now we get weird
 		"/usr/libexec/policykit-1-pantheon/pantheon-agent-polkit",
 		"/usr/lib/polkit-1-dde/dde-polkit-agent",
-		// do you know some we"re still missing? :)
+		// do you know some we"re still missing? please send a merge request :)
 	}
 
 	for _, polkit := range polkitPaths {
@@ -191,6 +192,8 @@ func (l *launcher) openvpnRunner(arg ...string) {
 			err := runBitmaskRoot(arg...)
 			if err != nil {
 				log.Printf("An error ocurred running openvpn: %v", err)
+				l.openvpnCh <- nil
+				l.failed = true
 			}
 		}
 	}

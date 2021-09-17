@@ -39,6 +39,7 @@ type Bitmask struct {
 	shapes           *shapeshifter.ShapeShifter
 	certPemPath      string
 	openvpnArgs      []string
+	failed           bool
 }
 
 // Init the connection to bitmask
@@ -53,7 +54,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}}
+	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}, false}
 
 	b.launch.firewallStop()
 	/*
