@@ -34,6 +34,7 @@ import (
 
 type launcher struct {
 	helperAddr string
+	failed     bool
 }
 
 const initialHelperPort = 7171
@@ -82,7 +83,7 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 func newLauncher() (*launcher, error) {
 	helperPort := probeHelperPort(initialHelperPort)
 	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
-	return &launcher{helperAddr}, nil
+	return &launcher{helperAddr, false}, nil
 }
 
 func (l *launcher) close() error {
