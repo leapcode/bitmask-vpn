@@ -43,14 +43,14 @@ Item {
     ToolButton {
         id: settingsButton
         objectName: "settingsButton"
-        font.pixelSize: Qt.application.font.pixelSize * 1.2
+        font.pixelSize: Qt.application.font.pixelSize * 1.6
         opacity: 1
 
         anchors {
             top: parent.top
             left: parent.left
-            topMargin: Theme.windowMargin + 10
-            leftMargin: Theme.windowMargin + 10
+            topMargin: Theme.windowMargin + 5
+            leftMargin: Theme.windowMargin + 5
         }
 
         onClicked: {
@@ -102,7 +102,7 @@ Item {
         Image {
             id: connectionImage
             height: 160
-            source: "../resources/spy.gif"
+            source: "../resources/icon-noshield.svg"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
         }
@@ -121,6 +121,7 @@ Item {
             Layout.alignment: Qt.AlignBottom
 
             font {
+                pixelSize: Theme.buttonFontSize
                 capitalization: Font.Capitalize
                 family: lightFont.name
                 bold: false
