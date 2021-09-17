@@ -14,7 +14,7 @@ Page {
 
         VerticalSpacer {
             visible: true
-            height: root.height * 0.10
+            height: root.height * 0.25
         }
 
         Image {
@@ -27,10 +27,11 @@ Page {
 
         VerticalSpacer {
             visible: true
-            height: root.height * 0.22
+            height: root.height * 0.05
         }
 
         ProgressBar {
+            id: splashProgress
             anchors.horizontalCenter: parent.horizontalCenter
             indeterminate: true
         }

@@ -48,7 +48,7 @@ const blueButton = {
     "focusBorder": blueFocusBorder,
 };
 
-const buttonFontSize = 20;
+const buttonFontSize = 18;
 const buttonColor = "#eeeeee";
 
 const bgColor = "#f3f3f3";

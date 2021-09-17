@@ -47,11 +47,13 @@ ThemedPage {
         height: 100
         radius: 10
         color: "white"
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
             margins: 10
         }
+
         Rectangle {
             anchors {
                 fill: parent
