@@ -149,6 +149,7 @@ func (b *Bitmask) startOpenVPN() error {
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
 		arg = b.openvpnArgs
+		log.Println("args passed to bitmask-root:", arg)
 		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
 			return err
@@ -160,11 +161,12 @@ func (b *Bitmask) startOpenVPN() error {
 
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
-
-				if os.Getenv("UDP") == "1" && port != "53" {
-					arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
-				} else {
-					arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+				if port != "53" {
+					if os.Getenv("UDP") == "1" {
+						arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
+					} else {
+						arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+					}
 				}
 			}
 		}
@@ -182,6 +184,7 @@ func (b *Bitmask) startOpenVPN() error {
 }
 
 func (b *Bitmask) getCert() (certPath string, err error) {
+	log.Println("Getting certificate...")
 	failed := false
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
@@ -302,12 +305,17 @@ func (b *Bitmask) ReloadFirewall() error {
 
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
-	status, err := b.getOpenvpnState()
-	if err != nil {
-		status = Off
-	}
-	if status == Off && b.launch.firewallIsUp() {
-		return Failed, nil
+	status := Off
+	if b.isFailed() {
+		status = Failed
+	} else {
+		status, err := b.getOpenvpnState()
+		if err != nil {
+			status = Off
+		}
+		if status == Off && b.launch.firewallIsUp() {
+			return Failed, nil
+		}
 	}
 	return status, nil
 }
