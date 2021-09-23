@@ -25,6 +25,14 @@ border-radius: 2px;"></iframe>
 yaourt -Sy riseup-vpn-git
 ```
 
+# gentoo
+
+An ebuild is available in Gentoo's [main repository](https://packages.gentoo.org/packages/net-vpn/riseup-vpn).
+
+```
+emerge riseup-vpn
+```
+
 # deb
 
 We haven't updated deb.leap.se repo yet 😞 (see #466), but if you *really* desire a debian
