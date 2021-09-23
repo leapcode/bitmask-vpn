@@ -106,7 +106,7 @@ def swhich(binary):
 
     :rtype: str
     """
-    for folder in ["/sbin", "/usr/sbin", "/usr/local/sbin"]:
+    for folder in ["/bin", "/sbin", "/usr/bin", "/usr/sbin", "/usr/local/sbin"]:
         path = os.path.join(folder, binary)
         if os.path.isfile(path):
             return path
