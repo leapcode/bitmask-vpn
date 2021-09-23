@@ -65,13 +65,13 @@ function buildGoLib {
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"
-        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -mod=vendor -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
+        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -mod=vendor -buildmode=c-archive -ldflags="-extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
     if [ "$XBUILD" == "$WIN64" ]
     then
         echo "[+] Building Go library with mxe"
         echo "[+] Using cc:" $CC
-        CC=$CC CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-archive -o $TARGET_GOLIB $SOURCE_GOLIB
+        CC=$CC CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-archive -ldflags="-extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
 }
 
@@ -79,7 +79,7 @@ function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
     mkdir -p $QTBUILD
-    $QMAKE -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH=${VENDOR_PATH} $PROJECT
+    $QMAKE -early QMAKE_CC=$CC QMAKE_CXX=$CXX QMAKE_LINK=$CXX -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH=${VENDOR_PATH} $PROJECT
     #CONFIG=+force_debug_info CONFIG+=debug CONFIG+=debug_and_release
 }
 
@@ -120,7 +120,7 @@ function buildDefault {
     buildQmake
 
     make -C $QTBUILD clean
-    make -C $QTBUILD -j4 all
+    make -C $QTBUILD $MAKEFLAGS all
 
     renameOutput
     echo "[+] Done."
