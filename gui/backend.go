@@ -53,6 +53,11 @@ func GetTransport() *C.char {
 	return (*C.char)(backend.GetTransport())
 }
 
+//export SetUDP
+func SetUDP(udp bool) {
+	backend.SetUDP(udp)
+}
+
 //export Quit
 func Quit() {
 	backend.Quit()

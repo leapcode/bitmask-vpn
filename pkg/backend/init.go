@@ -103,13 +103,13 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 		conf.Obfs4 = opts.Obfs4
 	}
 	if opts.DisableAutostart {
-		conf.DisableAustostart = opts.DisableAutostart
+		conf.DisableAutostart = opts.DisableAutostart
 	}
 }
 
 func initializeAutostart(conf *config.Config) bitmask.Autostart {
 	autostart := bitmask.NewAutostart(config.ApplicationName, "")
-	if conf.SkipLaunch || conf.DisableAustostart {
+	if conf.SkipLaunch || conf.DisableAutostart {
 		autostart.Disable()
 		autostart = &bitmask.DummyAutostart{}
 	}

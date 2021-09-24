@@ -57,6 +57,11 @@ void Backend::setTransport(QString transport)
     SetTransport(toGoStr(transport));
 }
 
+void Backend::setUDP(bool udp)
+{
+    SetUDP(udp);
+}
+
 QString Backend::getTransport()
 {
     return QString(GetTransport());

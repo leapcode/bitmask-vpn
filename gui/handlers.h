@@ -39,6 +39,7 @@ public slots:
     void useLocation(QString username);
     void useAutomaticGateway();
     void setTransport(QString transport);
+    void setUDP(bool udp);
     QString getTransport();
     void login(QString username, QString password);
     void resetError(QString errlabel);
