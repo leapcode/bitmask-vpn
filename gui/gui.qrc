@@ -2,6 +2,7 @@
     <qresource prefix="/">
 
         <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
 
         <!-- gui components -->
         <file>themes/themes.js</file>

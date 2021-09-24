@@ -173,6 +173,7 @@ int main(int argc, char **argv) {
 
     QJsonModel *model = new QJsonModel;
 
+    // FIXME use qgetenv
     QString desktop = QString::fromStdString(getEnv("XDG_CURRENT_DESKTOP"));
     QString debug = QString::fromStdString(getEnv("DEBUG"));
 
@@ -190,7 +191,10 @@ int main(int argc, char **argv) {
     ctx->setContextProperty("systrayAvailable", availableSystray);
     ctx->setContextProperty("qmlDebug", debug == "1");
 
-    QQuickStyle::setStyle("Material");
+    //XXX we're doing configuration via config file, but this is a mechanism
+    //to change to Dark Theme if desktop has it.
+    //qputenv("QT_QUICK_CONTROLS_MATERIAL_VARIANT", "Dense");
+    //QQuickStyle::setStyle("Material");
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     /* connect the jsonChanged signal explicitely.

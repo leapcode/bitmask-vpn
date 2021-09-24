@@ -9,8 +9,9 @@ ThemedPage {
 
     Column {
         id: prefCol
-        // FIXME the checkboxes seem to have a bigger lineHeight themselves, need to pack more.
-        spacing: 1
+        // FIXME checkboxes in Material style force lineHeights too big.
+        // need to override the style
+        // See: https://bugreports.qt.io/browse/QTBUG-95385
         topPadding: root.width * 0.05
         leftPadding: root.width * 0.1
         rightPadding: root.width * 0.15
