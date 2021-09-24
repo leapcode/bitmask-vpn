@@ -23,10 +23,3 @@ func stopVPN() {
 func getGateway() string {
 	return ctx.bm.GetCurrentGateway()
 }
-
-func setTransport(t string) {
-	err := ctx.bm.SetTransport(t)
-	if err != nil {
-		log.Println(err)
-	}
-}

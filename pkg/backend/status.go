@@ -51,6 +51,7 @@ type connectionCtx struct {
 	CurrentCountry  string              `json:"currentCountry"`
 	BestLocation    string              `json:"bestLocation"`
 	Transport       string              `json:"transport"`
+	UseUDP          bool                `json:"udp"`
 	ManualLocation  bool                `json:"manualLocation"`
 	IsReady         bool                `json:"isReady"`
 	bm              bitmask.Bitmask
@@ -69,6 +70,7 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.CurrentCountry = c.bm.GetCurrentCountry()
 		c.BestLocation = c.bm.GetBestLocation(transport)
 		c.Transport = transport
+		c.UseUDP = c.cfg.UDP // TODO initialize bitmask too
 		c.ManualLocation = c.bm.IsManualLocation()
 	}
 	defer statusMutex.Unlock()

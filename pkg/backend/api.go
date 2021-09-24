@@ -80,7 +80,21 @@ func UseAutomaticGateway() {
 }
 
 func SetTransport(label string) {
-	ctx.bm.SetTransport(label)
+	err := ctx.bm.SetTransport(label)
+	if err != nil {
+		log.Println(err)
+	}
+	if label == "obfs4" {
+		ctx.cfg.SetUseObfs4(true)
+	} else {
+		ctx.cfg.SetUseObfs4(false)
+	}
+	go trigger(OnStatusChanged)
+}
+
+func SetUDP(udp bool) {
+	log.Println("DEBUG setting UDP")
+	ctx.cfg.SetUseUDP(udp)
 	go trigger(OnStatusChanged)
 }
 

@@ -67,6 +67,9 @@ ThemedPage {
             text: qsTr("UDP")
             enabled: false
             checked: false
+            onClicked: {
+                doUseUDP(checked)
+            }
         }
     }
 
@@ -128,6 +131,16 @@ ThemedPage {
         } else {
             console.debug("use regular")
             backend.setTransport("openvpn")
+        }
+    }
+
+    function doUseUDP(value) {
+        if (value == true) {
+            console.debug("use udp")
+            backend.setUDP(true)
+        } else {
+            console.debug("use tcp")
+            backend.setUDP(false)
         }
     }
 

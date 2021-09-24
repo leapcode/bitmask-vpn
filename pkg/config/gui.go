@@ -36,16 +36,18 @@ var (
 // Config holds the configuration of the systray
 type Config struct {
 	file struct {
-		LastReminded      time.Time
-		Donated           time.Time
-		Obfs4             bool
-		UserStoppedVPN    bool
-		DisableAustostart bool
+		LastReminded     time.Time
+		Donated          time.Time
+		Obfs4            bool
+		UserStoppedVPN   bool
+		DisableAutostart bool
+		UDP              bool
 	}
-	Obfs4             bool
-	DisableAustostart bool
-	StartVPN          bool
-	SkipLaunch        bool
+	SkipLaunch       bool
+	Obfs4            bool
+	DisableAutostart bool
+	StartVPN         bool
+	UDP              bool
 }
 
 // ParseConfig reads the configuration from the configuration file
@@ -62,7 +64,7 @@ func ParseConfig() *Config {
 	}
 
 	conf.Obfs4 = conf.file.Obfs4
-	conf.DisableAustostart = conf.file.DisableAustostart
+	conf.DisableAutostart = conf.file.DisableAutostart
 	conf.StartVPN = !conf.file.UserStoppedVPN
 	return &conf
 }
@@ -87,6 +89,18 @@ func (c *Config) SetLastReminded() error {
 
 func (c *Config) SetDonated() error {
 	c.file.Donated = time.Now()
+	return c.save()
+}
+
+func (c *Config) SetUseObfs4(val bool) error {
+	c.Obfs4 = val
+	c.file.Obfs4 = val
+	return c.save()
+}
+
+func (c *Config) SetUseUDP(val bool) error {
+	c.UDP = val
+	c.file.UDP = val
 	return c.save()
 }
 
