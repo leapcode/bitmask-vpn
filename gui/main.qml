@@ -2,21 +2,11 @@
 
 /*
  TODO (ui rewrite)
- - [x] add systray
- - [x] systray status
- - [x] splash screen
- - [x] splash delay/transitions
- - [x] font: monserrat
- - [x] nested states
- - [x] splash init errors
- - [x] gateway selector
- - [ ] bridges
+ See https://0xacab.org/leap/bitmask-vpn/-/issues/523
+ - [x] udp support
  - [ ] minimize/hide from systray
  - [ ] control actions from systray
  - [ ] add gateway to systray
- - [ ] donation dialog
- - [ ] parse ctx flags (need dialog, etc)
- - [ ] udp support
 */
 import QtQuick 2.0
 import QtQuick.Controls 2.4
@@ -42,7 +32,6 @@ ApplicationWindow {
     minimumHeight: appHeight
     maximumHeight: appHeight
 
-
     title: ctx ? ctx.appName : "VPN"
     Material.accent: Material.Green
 
@@ -56,6 +45,7 @@ ApplicationWindow {
     // TODO get from persistance
     property var selectedGateway: "auto"
 
+    // FIXME get svg icons
     property var icons: {
         "off": "qrc:/assets/icon/png/white/vpn_off.png",
         "on": "qrc:/assets/icon/png/white/vpn_on.png",
@@ -90,7 +80,6 @@ ApplicationWindow {
         id: systray
     }
 
-
     Connections {
         target: jsonModel
         function onDataChanged() {
@@ -100,7 +89,8 @@ ApplicationWindow {
             }
             ctx = JSON.parse(j)
             if (ctx != undefined) {
-                locationsModel = Object.keys(ctx.locations)
+                locationsModel = getSortedLocations()
+                console.debug("Got sorted locations:" + locationsModel)
             }
             if (ctx.errors) {
                 console.debug("errors, setting root.error")
@@ -109,10 +99,10 @@ ApplicationWindow {
                 root.error = ""
             }
             if (ctx.donateURL) {
-                isDonationService = true;
+                isDonationService = true
             }
             if (ctx.donateDialog == 'true') {
-                showDonationReminder = true;
+                showDonationReminder = true
             }
 
             // TODO check donation
@@ -122,15 +112,9 @@ ApplicationWindow {
             //    // move this to onClick of "close" for widget
             //    backend.donateSeen();
             //}
-            // TODO refactor donate widget into main view (with close window!)
-            //if (ctx.status == "on") {
-            //    gwNextConnectionText.visible = false
-            //    gwReconnectText.visible = false
-            // when: vpn.status == "on"
-            //}
 
             /*
-            TODO libraries need login 
+            TODO libraries need login
             if (ctx.loginDialog == 'true') {
                 login.visible = true
             }
@@ -139,6 +123,23 @@ ApplicationWindow {
             }
             */
         }
+    }
+
+    function getSortedLocations() {
+        let obj = ctx.locations
+        var arr = []
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                arr.push({
+                             "key": prop,
+                             "value": obj[prop]
+                         })
+            }
+        }
+        arr.sort(function (a, b) {
+            return a.value - b.value
+        }).reverse()
+        return Array.from(arr, (k,_) => k.key);
     }
 
     onSceneGraphError: function (error, msg) {

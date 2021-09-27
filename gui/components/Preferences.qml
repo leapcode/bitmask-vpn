@@ -34,9 +34,9 @@ ThemedPage {
             Rectangle {
                 id: turnOffWarning
                 visible: false
-                height: 40
+                height: 20
                 width: parent.width
-                color: Theme.bgColor
+                color: "white"
 
 
                 Label {

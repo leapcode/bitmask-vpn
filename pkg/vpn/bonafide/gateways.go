@@ -96,14 +96,18 @@ func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 
 		return cm
 	}
 	if len(p.recommended) != 0 {
-		for _, gw := range p.recommended {
+		for idx, gw := range p.recommended {
 			if gw.gateway.Transport != transport {
 				continue
 			}
 			if _, ok := cm[gw.gateway.Location]; ok {
 				continue
 			}
-			cm[gw.gateway.Location] = gw.Fullness
+			if gw.Fullness != -1 {
+				cm[gw.gateway.Location] = gw.Fullness
+			} else {
+				cm[gw.gateway.Location] = 1 - float64(idx)/float64(len(p.recommended))
+			}
 		}
 	} else {
 		for _, location := range locations {
