@@ -5,10 +5,8 @@ import QtGraphicalEffects 1.0
 
 import "../themes/themes.js" as Theme
 
+
 /* TODO
- [ ] build a better gateway object list (location, user-friendly, country, bridge, etc)
- [ ] ui: mark manual override icon somehow?
- [ ] ui: auto radiobutton should use also the bridge icon
  [ ] corner case: manual override, not full list yet
      [ ] persist bridges
      [ ] persist manual selection
@@ -17,13 +15,12 @@ import "../themes/themes.js" as Theme
      (I think the backend should discard any manual selection when selecting bridges...
       unless the current selection provides the bridge, in which case we can maintain it)
  */
-
 ThemedPage {
 
     id: locationPage
     title: qsTr("Select Location")
 
-    // TODO add ScrollIndicator 
+    // TODO add ScrollIndicator
     // https://doc.qt.io/qt-5.12//qml-qtquick-controls2-scrollindicator.html
 
     //: this is in the radio button for the auto selection
@@ -68,7 +65,7 @@ ThemedPage {
             WrappedRadioButton {
                 id: autoRadioButton
                 anchors.top: recommendedLabel.bottom
-                text: getAutoLabel() 
+                text: getAutoLabel()
                 ButtonGroup.group: locsel
                 checked: false
                 onClicked: {
@@ -84,85 +81,109 @@ ThemedPage {
         id: manualBox
         visible: root.locationsModel.length > 0
         width: root.width * 0.90
-        height: getManualBoxHeight()
         radius: 10
         color: Theme.fgColor
+        height: root.height * 0.60
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: autoBox.bottom
             margins: 10
         }
-        Rectangle {
-            anchors {
-                fill: parent
-                margins: 10
-            }
-            Label {
-                id: manualLabel
-                text: manualSelectionLabel
-                font.bold: true
-            }
-            Label {
-                id: bridgeWarning
-                text: onlyBridgesWarning
-                color: "gray"
-                visible: isBridgeSelected()
-                wrapMode: Text.Wrap
-                anchors {
-                    topMargin: 5
-                    top: manualLabel.bottom
-                }
-                font.pixelSize: Theme.fontSize - 3
-            }
-            ColumnLayout {
-                id: gatewayListColumn
+
+        ScrollView {
+            id: frame
+            clip: true
+            anchors.fill: parent
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
+            Flickable {
+                id: flickable
+                contentHeight: getManualBoxHeight()
                 width: parent.width
-                spacing: 1
-                anchors.top: getManualAnchor()
 
-                Repeater {
-                    id: gwManualSelectorList
-                    width: parent.width
-                    model: root.locationsModel
-
-                    RowLayout {
-                        width: parent.width
-                        WrappedRadioButton {
-                            text: getLocationLabel(modelData)
-                            location: modelData
-                            ButtonGroup.group: locsel
-                            checked: false
-                            enabled: locationPage.switching ? false : true
-                            onClicked: {
-                                if (ctx.status == "on") {
-                                    locationPage.switching = true
-                                }
-                                root.selectedGateway = location
-                                backend.useLocation(location)
-                            }
-                        }
-                        Item {
-                            Layout.fillWidth: true
-                        }
-                        Image {
-                            height: 16
-                            width: 16
-                            visible: isBridgeSelected()
-                            source: "../resources/bridge.png"
-                            Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 10
-                        }
-			SignalIcon {
-                            // TODO mocked!
-			    quality: getSignalFor(modelData)
-			    Layout.alignment: Qt.AlignRight
-			    Layout.rightMargin: 20
-			}
+                ScrollIndicator.vertical: ScrollIndicator {
+                    size: 5
+                    contentItem: Rectangle {
+                        implicitWidth: 5
+                        implicitHeight: 100
+                        color: "grey"
                     }
                 }
-            }
-        }
-    }
+
+                Rectangle {
+                    anchors {
+                        fill: parent
+                        margins: 10
+                    }
+                    Label {
+                        id: manualLabel
+                        text: manualSelectionLabel
+                        font.bold: true
+                    }
+                    Label {
+                        id: bridgeWarning
+                        text: onlyBridgesWarning
+                        color: "gray"
+                        visible: isBridgeSelected()
+                        wrapMode: Text.Wrap
+                        anchors {
+                            topMargin: 5
+                            top: manualLabel.bottom
+                        }
+                        font.pixelSize: Theme.fontSize - 3
+                    }
+
+                    ColumnLayout {
+                        id: gatewayListColumn
+                        width: parent.width
+                        spacing: 1
+                        anchors.top: getManualAnchor()
+
+                        Repeater {
+                            id: gwManualSelectorList
+                            width: parent.width
+                            model: root.locationsModel
+
+                            RowLayout {
+                                width: parent.width
+                                WrappedRadioButton {
+                                    text: getLocationLabel(modelData)
+                                    location: modelData
+                                    ButtonGroup.group: locsel
+                                    checked: false
+                                    enabled: locationPage.switching ? false : true
+                                    onClicked: {
+                                        if (ctx.status == "on") {
+                                            locationPage.switching = true
+                                        }
+                                        root.selectedGateway = location
+                                        backend.useLocation(location)
+                                    }
+                                }
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Image {
+                                    height: 16
+                                    width: 16
+                                    visible: isBridgeSelected()
+                                    source: "../resources/bridge.png"
+                                    Layout.alignment: Qt.AlignRight
+                                    Layout.rightMargin: 10
+                                }
+                                SignalIcon {
+                                    quality: getSignalFor(modelData)
+                                    Layout.alignment: Qt.AlignRight
+                                    Layout.rightMargin: 20
+                                }
+                            }
+                        }
+                    }
+                }
+            } //flickable
+        } // scrollview
+    } // manualbox
 
     StateGroup {
         states: [
@@ -199,7 +220,9 @@ ThemedPage {
     }
 
     function getLocationLabel(location) {
-        if (!ctx) { return ""}
+        if (!ctx) {
+            return ""
+        }
         let l = ctx.locationLabels[location]
         return l[0] + ", " + l[1]
     }
@@ -213,13 +236,13 @@ ThemedPage {
     }
 
     function getSignalFor(location) {
-        switch(location) {
-        case "amsterdam":
-        case "paris":
+        // this is an ad-hoc solution for the no-menshen, riseup case.
+        // when menshen is deployed we'll want to tweak the values for each bucket.
+        let load = ctx.locations[location]
+        switch (true) {
+        case (load > 0.5):
             return "good"
-        case "newyork":
-            return "medium"
-        case "montreal":
+        case (load > 0.25):
             return "medium"
         default:
             return "low"
@@ -244,14 +267,14 @@ ThemedPage {
 
     Component.onCompleted: {
         if (root.selectedGateway == "auto") {
-            autoRadioButton.checked = true;
+            autoRadioButton.checked = true
         } else {
             let match = false
-            for (var i=1; i<locsel.buttons.length; i++) {
+            for (var i = 1; i < locsel.buttons.length; i++) {
                 let b = locsel.buttons[i]
                 if (b.location == root.selectedGateway) {
-                    match = true;
-                    b.checked = true;
+                    match = true
+                    b.checked = true
                 }
             }
         }
