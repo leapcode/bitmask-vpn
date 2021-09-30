@@ -27,7 +27,8 @@ ThemedPage {
 
             Text {
                 width: parent.width - 40
-                font.pixelSize: 11
+                color: Theme.fontColor
+                font.pixelSize: 12
                 wrapMode: Label.Wrap
                 text: getText()
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -36,23 +37,30 @@ ThemedPage {
 
             VerticalSpacer {
                 visible: true
-                height: 20
+                height: 10
             }
 
             Image {
-                height: 80
+                id: aboutIcon
+                height: 60
                 source: "../resources/icon-noshield.svg"
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
-            TextEdit {
-                width: parent.width - 40
-                font.pixelSize: 10
-                readOnly: true
-                selectByMouse: true
-                text: getVersion()
+            Rectangle {
+                anchors.top: aboutIcon.bottom
+                width: 100
                 anchors.horizontalCenter: parent.horizontalCenter
+                TextEdit {
+                    width: 100
+                    font.pixelSize: 10
+                    readOnly: true
+                    selectByMouse: true
+                    text: getVersion()
+                    //horizontalAlignment: Text.AlignCenter
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
 
             VerticalSpacer {
@@ -89,7 +97,7 @@ ThemedPage {
         var _ver = ctx ? ctx.version : "unknown"
         //: %1 -> application name
         //: %2 -> version string
-        var _txt = qsTr("%1 version: %2").arg(_name).arg(_ver)
+        var _txt = qsTr("%1 version: \n%2").arg(_name).arg(_ver)
         return _txt
     }
 }

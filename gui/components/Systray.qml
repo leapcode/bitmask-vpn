@@ -20,6 +20,13 @@ Labs.SystemTrayIcon {
         Labs.MenuSeparator {}
 
         Labs.MenuItem {
+            text: qsTr("Donate")
+            onTriggered: root.openDonateDialog()
+        }
+
+        Labs.MenuSeparator {}
+
+        Labs.MenuItem {
             text: qsTr("Quit")
             onTriggered: backend.quit()
         }

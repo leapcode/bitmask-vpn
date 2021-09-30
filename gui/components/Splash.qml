@@ -32,8 +32,9 @@ Page {
 
         ProgressBar {
             id: splashProgress
-            anchors.horizontalCenter: parent.horizontalCenter
+            width: appWidth * 0.8 - 60
             indeterminate: true
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         InitErrors {

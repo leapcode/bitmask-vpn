@@ -117,6 +117,8 @@ Item {
 
         MaterialButton {
             id: toggleVPN
+            // FIXME - this is a workaround. It will BREAK with i18n
+            width: 100
             spacing: 8
 
             anchors.horizontalCenter: parent.horizontalCenter

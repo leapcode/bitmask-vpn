@@ -64,10 +64,13 @@ ThemedPage {
             }
             WrappedRadioButton {
                 id: autoRadioButton
-                anchors.top: recommendedLabel.bottom
                 text: getAutoLabel()
                 ButtonGroup.group: locsel
                 checked: false
+                anchors {
+                    top: recommendedLabel.bottom
+                    leftMargin: -5
+                }
                 onClicked: {
                     root.selectedGateway = "auto"
                     console.debug("Selected gateway: auto")
@@ -165,10 +168,12 @@ ThemedPage {
                                     Layout.fillWidth: true
                                 }
                                 Image {
-                                    height: 16
-                                    width: 16
+                                    height: 30
+                                    width: 30
+                                    smooth: true
                                     visible: isBridgeSelected()
-                                    source: "../resources/bridge.png"
+                                    fillMode: Image.PreserveAspectFit
+                                    source: "../resources/bridge.svg"
                                     Layout.alignment: Qt.AlignRight
                                     Layout.rightMargin: 10
                                 }
