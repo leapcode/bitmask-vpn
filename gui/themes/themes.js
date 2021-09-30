@@ -27,11 +27,19 @@ const desktopAppWidth = 360;
 const darkFocusBorder = fontColor;
 const lightFocusBorder = "#d5d3e0";
 
-const accentOff = "#af0909";
-const accentConnecting = "#FFCC33";
-const accentOn = "#669933";
+const red = "#af0909";
+const yellow = "#ffcc33";
+const green = "#669933";
 
-const blue = "#0060DF";
+const accentOff = red;
+const accentConnecting = yellow;
+const accentOn = green;
+
+const signalLow = red;
+const signalMedium = yellow;
+const signalGood = green;
+
+const blue = "#007ac6";
 const blueHovered = "#0250BB";
 const bluePressed = "#054096";
 const blueDisabled = "#a3c0f3";
@@ -53,7 +61,3 @@ const buttonColor = "#eeeeee";
 
 const bgColor = "#f3f3f3";
 const fgColor = "#ffffff";
-
-const signalGood = "green";
-const signalMedium = "orange";
-const signalLow = "red";

@@ -22,7 +22,7 @@ ApplicationWindow {
     visible: true
 
     property int appHeight: 460
-    property int appWidth: 260
+    property int appWidth: 280
 
     width: appWidth
     minimumWidth: appWidth
@@ -52,6 +52,8 @@ ApplicationWindow {
         "wait": "qrc:/assets/icon/png/white/vpn_wait_0.png",
         "blocked": "qrc:/assets/icon/png/white/vpn_blocked.png"
     }
+
+    signal openDonateDialog()
 
     FontLoader {
         id: lightFont
@@ -90,7 +92,7 @@ ApplicationWindow {
             ctx = JSON.parse(j)
             if (ctx != undefined) {
                 locationsModel = getSortedLocations()
-                console.debug("Got sorted locations:" + locationsModel)
+                //console.debug("Got sorted locations: " + locationsModel)
             }
             if (ctx.errors) {
                 console.debug("errors, setting root.error")

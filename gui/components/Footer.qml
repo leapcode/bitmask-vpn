@@ -34,18 +34,22 @@ ToolBar {
             background.implicitHeight: 32
             background.implicitWidth: 32
             */
-            icon.width: 20
-            icon.height: 20
-            icon.source: stackView.depth > 1 ? "" : "../resources/globe.svg"
+            icon {
+                width: 20
+                height: 20
+                source: stackView.depth > 1 ? "" : "../resources/globe.svg"
+            }
             onClicked: stackView.push("Locations.qml")
         }
 
         Label {
             id: locationLabel
-            anchors.left: gwButton.right
-            anchors.leftMargin: -7
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 7
+            anchors {
+                left: gwButton.right
+                leftMargin: -7
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: 7
+            }
             text: locationStr()
             color: getLocationColor()
         }
@@ -57,14 +61,17 @@ ToolBar {
 
         Image {
             id: bridge
+            smooth: true
             visible: isBridgeSelected()
-            height: 24
-            width: 24
-            source: "../resources/bridge.png"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 5
-            anchors.right: gwQuality.left
-            anchors.rightMargin: 10
+            width: 40
+            source: "../resources/bridge.svg"
+            fillMode: Image.PreserveAspectFit
+            anchors {
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: 5
+                right: gwQuality.left
+                rightMargin: 10
+            }
         }
 
         Image {
@@ -75,7 +82,7 @@ ToolBar {
             anchors.right: parent.right
             anchors.rightMargin: 20
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 5
+            anchors.verticalCenterOffset: 0
             // TODO refactor with SignalIcon
             ColorOverlay{
                 anchors.fill: gwQuality

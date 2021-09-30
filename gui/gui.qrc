@@ -13,9 +13,10 @@
         <file>components/Header.qml</file>
         <file>components/Footer.qml</file>
         <file>components/About.qml</file>
+        <file>components/MaterialRadioButton.qml</file>
+        <file>components/MaterialRadioIndicator.qml</file>
         <file>components/WrappedRadioButton.qml</file>
         <file>components/StatusBox.qml</file>
-        <file>components/Spinner.qml</file>
         <file>components/Systray.qml</file>
         <file>components/Help.qml</file>
         <file>components/Locations.qml</file>
@@ -42,14 +43,14 @@
         <file>resources/tools.svg</file>
         <file>resources/help.svg</file>
         <file>resources/about.svg</file>
-        <file>resources/bridge.png</file>
+        <file>resources/bridge.svg</file>
         <file>resources/gear-fill.svg</file>
         <file>resources/reception-0.svg</file>
         <file>resources/reception-2.svg</file>
         <file>resources/reception-4.svg</file>
         <file>resources/arrow-left.svg</file>
         <file>resources/globe.svg</file>
-        <file>resources/birds.svg</file>
+        <file>resources/ravens.svg</file>
         <file>resources/riseup-icon.svg</file>
         <file>resources/spy.gif</file>
         <file>resources/quit.svg</file>

@@ -31,7 +31,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/birds.svg"
+                source: "../resources/ravens.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {
@@ -128,7 +128,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/birds.svg"
+                source: "../resources/ravens.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {
@@ -164,7 +164,7 @@ StateGroup {
             PropertyChanges {
                 // ?? is this image correct?
                 target: connectionImage
-                source: "../resources/birds.svg"
+                source: "../resources/ravens.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {

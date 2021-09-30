@@ -4,6 +4,8 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.14
 
+import "../themes/themes.js" as Theme
+
 Page {
 
     StackView {
@@ -90,11 +92,20 @@ Page {
         id: footer
     }
 
+    Keys.onPressed: {
+        // shortcuts for avid users :)
+        // bug: doesnt work until the stack is pushed once
+        if (event.key == Qt.Key_G && stackView.depth == 1) {
+            console.debug("Open Locations")
+            stackView.push("Locations.qml")
+        }
+    }
+
     Dialog {
         id: donateDialog 
-        width: 350
+        width: root.appWidth
         title: qsTr("Please donate!")
-        standardButtons: Dialog.Ok
+        standardButtons: Dialog.Yes | Dialog.No
 
         Text {
             id: donateText
@@ -107,7 +118,7 @@ Page {
                 horizontalCenter: parent.horizontalCenter
             }
             font.pixelSize: 12
-            text: qsTr("This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts.")
+            text: qsTr("This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?")
         }
 
         Label {
@@ -118,26 +129,32 @@ Page {
                 horizontalCenter: parent.horizontalCenter
             }
             font.pixelSize: 14
+            textFormat: Text.RichText
             text: getLink(ctx.donateURL)
             onLinkActivated: Qt.openUrlExternally(ctx.donateURL)
         }
 
 
         Image {
-            height: 50
+            height: 40
             source: "../resources/donate.svg"
             fillMode: Image.PreserveAspectFit
             anchors {
                 topMargin: 20
                 top: donateURL.bottom
+                bottomMargin: 50
                 horizontalCenter: parent.horizontalCenter
             }
         }
 
-        onAccepted: Qt.openUrlExternally(ctx.donateURL)
+        onYes: Qt.openUrlExternally(ctx.donateURL)
     }
 
     function getLink(url) {
-        return "<a href='#'>" + url + "</a>"
+        return "<style>a:link {color:'" + Theme.blue + "'; }</style><a href='#'>" + url + "</a>"
+    }
+
+    Component.onCompleted: {
+        root.openDonateDialog.connect(donateDialog.open)
     }
 }

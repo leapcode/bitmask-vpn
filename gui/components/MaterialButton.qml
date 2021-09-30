@@ -30,6 +30,7 @@ T.Button {
                                || control.hovered ? 2 : 0 : control.down ? 8 : 2
     Material.background: flat ? "transparent" : undefined
 
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
