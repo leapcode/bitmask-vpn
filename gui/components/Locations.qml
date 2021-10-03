@@ -41,7 +41,7 @@ ThemedPage {
     Rectangle {
         id: autoBox
         width: root.width * 0.90
-        height: 100
+        height: 90
         radius: 10
         color: "white"
 
@@ -86,7 +86,7 @@ ThemedPage {
         width: root.width * 0.90
         radius: 10
         color: Theme.fgColor
-        height: root.height * 0.60
+        height: getManualBoxHeight()
 
         anchors {
             horizontalCenter: parent.horizontalCenter
@@ -141,7 +141,10 @@ ThemedPage {
                         id: gatewayListColumn
                         width: parent.width
                         spacing: 1
-                        anchors.top: getManualAnchor()
+                        anchors {
+                            topMargin: 10
+                            top: getManualAnchor()
+                        }
 
                         Repeater {
                             id: gwManualSelectorList
@@ -233,11 +236,14 @@ ThemedPage {
     }
 
     function getManualBoxHeight() {
-        let h = gatewayListColumn.height + manualLabel.height
+        let h = Math.min(
+            root.locationsModel.length * 35,
+            root.appHeight - autoBox.height - 100
+        )
         if (bridgeWarning.visible) {
             h += bridgeWarning.height
         }
-        return h + 15
+        return h + 30
     }
 
     function getSignalFor(location) {

@@ -15,7 +15,11 @@ ToolBar {
 
     ToolButton {
         id: settingsButton
-        anchors.left: parent.left
+        anchors {
+            left: parent.left
+            // margin needed at least for the Locations panel
+            leftMargin: 5
+        }
         font.pixelSize: Qt.application.font.pixelSize * 1.6
         icon.source: "../resources/arrow-left.svg"
         onClicked: {
