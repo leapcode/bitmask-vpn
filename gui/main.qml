@@ -3,8 +3,6 @@
 /*
  TODO (ui rewrite)
  See https://0xacab.org/leap/bitmask-vpn/-/issues/523
- - [x] udp support
- - [ ] minimize/hide from systray
  - [ ] control actions from systray
  - [ ] add gateway to systray
 */
@@ -142,6 +140,17 @@ ApplicationWindow {
             return a.value - b.value
         }).reverse()
         return Array.from(arr, (k,_) => k.key);
+    }
+
+    function bringToFront() {
+        // FIXME does not work properly, at least on linux 
+        if (visibility == 3) {
+            showNormal()
+        } else {
+            show() 
+        }
+        raise()
+        requestActivate()
     }
 
     onSceneGraphError: function (error, msg) {

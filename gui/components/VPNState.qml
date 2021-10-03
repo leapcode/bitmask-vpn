@@ -37,7 +37,9 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: false
-                text: ("...")
+                // XXX this is a fake cancel, won't do anything at this point. We need
+                // to queue this action for when the openvpn process becomes available.
+                text: ("Cancel")
             }
             PropertyChanges {
                 target: systray
