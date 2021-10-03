@@ -243,7 +243,7 @@ ThemedPage {
         if (bridgeWarning.visible) {
             h += bridgeWarning.height
         }
-        return h + 30
+        return h + 50
     }
 
     function getSignalFor(location) {

@@ -16,6 +16,7 @@
         <file>components/MaterialRadioButton.qml</file>
         <file>components/MaterialRadioIndicator.qml</file>
         <file>components/WrappedRadioButton.qml</file>
+        <file>components/MaterialCheckBox.qml</file>
         <file>components/StatusBox.qml</file>
         <file>components/Systray.qml</file>
         <file>components/Help.qml</file>
