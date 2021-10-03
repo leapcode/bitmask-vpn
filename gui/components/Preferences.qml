@@ -70,7 +70,7 @@ ThemedPage {
                 Layout.preferredWidth: 240
             }
 
-            CheckBox {
+            MaterialCheckBox {
                 id: useBridgesCheckBox
                 checked: false
                 text: qsTr("Use obfs4 bridges")
@@ -94,7 +94,7 @@ ThemedPage {
                 }
             }
 
-            CheckBox {
+            MaterialCheckBox {
                 id: useSnowflake
                 //wrapMode: Label.Wrap
                 text: qsTr("Use Snowflake (experimental)")
@@ -122,7 +122,7 @@ ThemedPage {
                 Layout.rightMargin: 10
             }
 
-            CheckBox {
+            MaterialCheckBox {
                 id: useUDP
                 text: qsTr("UDP")
                 enabled: false
