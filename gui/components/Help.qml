@@ -21,10 +21,12 @@ ThemedPage {
             text: getDummyLink(qsTr("Report a bug"))
             onLinkActivated: Qt.openUrlExternally(issueTracker)
         }
+        /* XXX needs implementation in the backend
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Open logs")
         }
+        */
     }
 
     function getDummyLink(text) {

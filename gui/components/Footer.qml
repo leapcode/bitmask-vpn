@@ -82,7 +82,7 @@ ToolBar {
             anchors.right: parent.right
             anchors.rightMargin: 20
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 0
+            anchors.verticalCenterOffset: 2
             // TODO refactor with SignalIcon
             ColorOverlay{
                 anchors.fill: gwQuality

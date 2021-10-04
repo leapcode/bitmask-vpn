@@ -1,7 +1,8 @@
 .pragma library
 
 const borderColor = "#6D6D6E";
-const fontColor = "#6D6D6E";
+//const fontColor = "#6D6D6E";
+const fontColor = "#666666";
 const fontColorDark = "#3D3D3D";
 const fontFamily = "Metropolis";
 const fontBoldFamily = "OxaniumBold";
@@ -22,6 +23,8 @@ const listSpacing = 8;
 const maxTextWidth = 296;
 const windowMargin = 16;
 const popupMargin = 24;
+
+// XXX unused? move definitions here
 const desktopAppHeight = 520;
 const desktopAppWidth = 360;
 const darkFocusBorder = fontColor;

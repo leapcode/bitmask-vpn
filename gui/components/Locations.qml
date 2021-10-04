@@ -8,7 +8,7 @@ import "../themes/themes.js" as Theme
 
 /* TODO
  [ ] corner case: manual override, not full list yet
-     [ ] persist bridges
+     [x] persist bridges
      [ ] persist manual selection
      [ ] display the location we know
  [ ] corner case: user selects bridges with manual selection
