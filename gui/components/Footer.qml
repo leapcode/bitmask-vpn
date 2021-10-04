@@ -42,13 +42,33 @@ ToolBar {
             onClicked: stackView.push("Locations.qml")
         }
 
+        Image {
+            id: lightning 
+            smooth: true
+            visible: ctx != undefined & root.selectedGateway == "auto"
+            width: 16
+            source: "../resources/lightning.svg"
+            fillMode: Image.PreserveAspectFit
+            anchors {
+                left: gwButton.right
+                leftMargin: -10
+                verticalCenterOffset: -6
+            }
+            ColorOverlay{
+                anchors.fill: lightning
+                source: lightning
+                color: getLocationColor()
+                antialiasing: true
+            }
+        }
+
         Label {
             id: locationLabel
             anchors {
-                left: gwButton.right
-                leftMargin: -7
+                left: lightning.right
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: 7
+                leftMargin: (ctx != undefined & root.selectedGateway == "auto") ? 0 : -12
             }
             text: locationStr()
             color: getLocationColor()
@@ -79,10 +99,12 @@ ToolBar {
             height: 24
             width: 24
             source: "../resources/reception-0.svg"
-            anchors.right: parent.right
-            anchors.rightMargin: 20
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 2
+            anchors {
+                right: parent.right
+                rightMargin: 20
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: 2
+            }
             // TODO refactor with SignalIcon
             ColorOverlay{
                 anchors.fill: gwQuality
@@ -125,15 +147,18 @@ ToolBar {
         if (ctx && ctx.status == "on") {
             if (ctx.currentLocation && ctx.currentCountry) {
                 let s = ctx.currentLocation + ", " + ctx.currentCountry
+                /*
                 if (root.selectedGateway == "auto") {
                     s = "🗲 " + s
                 }
+                */
                 return s
             }
         }
         if (root.selectedGateway == "auto") {
             if (ctx && ctx.locations && ctx.bestLocation) {
-                return "🗲 " + getCanonicalLocation(ctx.bestLocation)
+                //return "🗲 " + getCanonicalLocation(ctx.bestLocation)
+                return getCanonicalLocation(ctx.bestLocation)
             } else {
                 return qsTr("Recommended")
             }
@@ -188,7 +213,6 @@ ToolBar {
     }
 
     function isFooterVisible() {
-        console.debug(stackView.depth)
         if (stackView.depth > 1) {
             return false
         }

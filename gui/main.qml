@@ -78,9 +78,6 @@ ApplicationWindow {
         source: "qrc:/roboto-bold.ttf"
     }
 
-    font.family: robotoFont.name
-    font.weight: Font.Light
-
     Loader {
         id: loader
         asynchronous: true
@@ -171,5 +168,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
         loader.source = "components/Splash.qml"
+        if (Qt.platform.os === "osx") {
+            // XXX workaround for custom font not working in osx
+            root.font.family = robotoFont.name
+            root.font.weight = Font.Light
+        }
     }
 }
