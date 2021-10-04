@@ -60,6 +60,7 @@ ThemedPage {
                 id: recommendedLabel
                 //: Location Selection: label for radio button that selects automatically
                 text: qsTr("Recommended")
+		font.weight: Font.Bold
                 font.bold: true
             }
             WrappedRadioButton {
@@ -203,7 +204,7 @@ ThemedPage {
                 }
             },
             State {
-                when: ctx && ctx.status == "on"
+                when: ctx != undefined && ctx.status == "on"
                 PropertyChanges {
                     target: manualLabel
                     text: manualSelectionLabel

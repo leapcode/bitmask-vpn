@@ -62,6 +62,7 @@
         <file alias="poppins-bold.ttf">resources/fonts/Poppins-Light.ttf</file>
         <file alias="monserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
         <file alias="roboto.ttf">resources/fonts/Roboto-Regular.ttf</file>
+        <file alias="roboto-bold.ttf">resources/fonts/Roboto-Bold.ttf</file>
 
         <!-- begin, to remove -->
         <file>qml/VpnState.qml</file>

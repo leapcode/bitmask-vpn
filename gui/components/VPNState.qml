@@ -20,7 +20,7 @@ StateGroup {
             name: initializing
         },
         State {
-            when: ctx && ctx.status == "off" && startingUI == true
+            when: ctx != undefined && ctx.status == "off" && startingUI == true
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Connecting")

@@ -130,7 +130,7 @@ Page {
             }
             font.pixelSize: 14
             textFormat: Text.RichText
-            text: getLink(ctx.donateURL)
+            text: getLink(ctx)
             onLinkActivated: Qt.openUrlExternally(ctx.donateURL)
         }
 
@@ -150,7 +150,11 @@ Page {
         onYes: Qt.openUrlExternally(ctx.donateURL)
     }
 
-    function getLink(url) {
+    function getLink(ctx) {
+	if (!ctx) {
+		return ""
+	}
+	let url = ctx.donateURL
         return "<style>a:link {color:'" + Theme.blue + "'; }</style><a href='#'>" + url + "</a>"
     }
 
