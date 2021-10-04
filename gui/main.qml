@@ -68,7 +68,18 @@ ApplicationWindow {
         source: "qrc:/monserrat-bold.ttf"
     }
 
-    font.family: lightFont.name
+    FontLoader {
+        id: robotoFont
+        source: "qrc:/roboto.ttf"
+    }
+
+    FontLoader {
+        id: robotoBoldFont
+        source: "qrc:/roboto-bold.ttf"
+    }
+
+    font.family: robotoFont.name
+    font.weight: Font.Light
 
     Loader {
         id: loader

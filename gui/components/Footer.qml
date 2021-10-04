@@ -11,7 +11,7 @@ ToolBar {
     Material.background: Theme.bgColor
     Material.foreground: "black"
     Material.elevation: 0
-    visible: stackView.depth > 1 && ctx !== undefined ? false : true
+    visible: isFooterVisible()
 
     Item {
 
@@ -185,5 +185,13 @@ ToolBar {
         } else {
             return false
         }
+    }
+
+    function isFooterVisible() {
+        console.debug(stackView.depth)
+        if (stackView.depth > 1) {
+            return false
+        }
+        return true
     }
 }

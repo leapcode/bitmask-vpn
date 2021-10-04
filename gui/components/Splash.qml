@@ -57,7 +57,7 @@ Page {
         if (root.error != "") {
             return
         }
-        if (ctx && ctx.isReady) {
+        if (ctx && ctx.isReady || qmlDebug) {
             splashTimer.stop()
             loader.source = "MainView.qml"
         } else {

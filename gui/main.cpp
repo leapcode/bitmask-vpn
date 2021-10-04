@@ -1,5 +1,6 @@
 #include <csignal>
 #include <unistd.h>
+#include <QtGui/qfontdatabase.h>
 #include <QApplication>
 #include <QTimer>
 #include <QTranslator>
@@ -54,6 +55,12 @@ int main(int argc, char **argv) {
     signal(SIGINT, signalHandler);
 
     Backend backend;
+
+    const int fontId = QFontDatabase::addApplicationFont(":/resources/fonts/Roboto-Regular.ttf");
+    if (fontId == -1)
+        qWarning() << "Failed to add Roboto as app font";
+    else
+        qDebug() << QFontDatabase::applicationFontFamilies(fontId);
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setApplicationVersion(backend.getVersion());
