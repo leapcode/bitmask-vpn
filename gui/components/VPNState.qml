@@ -31,7 +31,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/ravens.svg"
+                source: "../resources/ravens.gif"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {
@@ -130,7 +130,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/ravens.svg"
+                source: "../resources/ravens.gif"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {

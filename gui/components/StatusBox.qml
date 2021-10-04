@@ -100,13 +100,19 @@ Item {
             height: 120
         }
 
-        Image {
+        AnimatedImage {
             id: connectionImage
             height: 160
+            speed: 0.8
             source: "../resources/icon-noshield.svg"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
+            onStatusChanged: playing = (status == AnimatedImage.Ready)
         }
+        // TODO this can be synced with opacity serial animation, see
+        // https://doc.qt.io/qt-5/qml-qtquick-animatedimage.html#example-usage
+        // If you want to customize your asset, here's how:
+        // convert -delay 50 -loop 0 ravens2_*.png ravens.gif
 
         VerticalSpacer {
             id: spacerPostImg
