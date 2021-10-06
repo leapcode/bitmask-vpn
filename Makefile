@@ -72,11 +72,11 @@ install_go:
 	@sudo apt-get install golang-go
 
 depends:
-	-@make depends$(UNAME)
+	-@${MAKE} depends$(UNAME)
 
 dependsLinux:
 	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls2 libqt5qml5 qtdeclarative5-dev qml-module-qt-labs-platform qml-module-qtquick-extras qml-module-qtquick-dialogs
-	@make -C docker deps
+	@${MAKE} -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
 dependsDarwin:
@@ -108,7 +108,7 @@ PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
 
 lib/%.a: $(PKGFILES)
-	@XBUILD=no ./gui/build.sh --just-golib
+	@XBUILD=no MAKE=${MAKE} ./gui/build.sh --just-golib
 
 relink_vendor:
 	@echo "============RELINK VENDOR============="
@@ -136,14 +136,14 @@ endif
 
 build_golib: lib/libgoshim.a
 
-build_gui: relink_vendor
+build_gui: build_golib relink_vendor
 	@echo "==============BUILD GUI==============="
 	@echo "TARGET: ${TARGET}"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
-	@XBUILD=no QMAKE=${QMAKE} LRELEASE=${LRELEASE} TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} APPNAME=${APPNAME} gui/build.sh --skip-golib
+	@XBUILD=no MAKE=${MAKE} QMAKE=${QMAKE} LRELEASE=${LRELEASE} TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} APPNAME=${APPNAME} gui/build.sh --skip-golib
 	@echo "============BUILD GUI================="
 
-build: build_golib build_helper build_gui
+build: build_helper build_gui
 
 build_helper:
 ifeq ($(PLATFORM), linux)
@@ -240,7 +240,7 @@ ifeq (${PLATFORM}, linux)
 endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
-	@cd build/installer && qmake VENDOR_PATH=${VENDOR_PATH} INSTALLER=${APPNAME}-installer-${VERSION} && make
+	@cd build/installer && ${QMAKE} VENDOR_PATH=${VENDOR_PATH} INSTALLER=${APPNAME}-installer-${VERSION} && ${MAKE}
 
 sign_installer:
 ifeq (${PLATFORM}, windows)
@@ -311,9 +311,9 @@ test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
 
 test_ui: build_golib
-	@qmake -o tests/Makefile test.pro
-	@make -C tests clean
-	@make -C tests
+	@${QMAKE} -o tests/Makefile test.pro
+	@${MAKE} -C tests clean
+	@${MAKE} -C tests
 ifeq ($(PLATFORM), windows)
 	@./tests/build/test_ui.exe
 else
@@ -397,7 +397,7 @@ run:
 	./build/qt/release/riseup-vpn
 
 builder_image:
-	@make -C docker build
+	@${MAKE} -C docker build
 
 packages: package_deb package_snap package_osx package_win
 
@@ -406,16 +406,16 @@ package_win_release: build dosign installer sign_installer
 package_win: build installer
 
 package_snap_in_docker:
-	@make -C docker package_snap
+	@${MAKE} -C docker package_snap
 
 package_snap:
 	@unlink snap || true
 	@cp build/${PROVIDER}/snap/local/${TARGET}.desktop build/${PROVIDER}/snap/gui/
 	@ln -s build/${PROVIDER}/snap snap
-	@make -C build/${PROVIDER} pkg_snap
+	@${MAKE} -C build/${PROVIDER} pkg_snap
 
 package_deb:
-	@make -C build/${PROVIDER} pkg_deb
+	@${MAKE} -C build/${PROVIDER} pkg_deb
 
 sign_artifact:
 	@find ${FILE} -type f -not -name "*.asc" -print0 | xargs -0 -n1 -I{} sha256sum -b "{}" | sed 's/*deploy\///' > ${FILE}.sha256
@@ -431,7 +431,7 @@ upload_artifact:
 #########################################################################
 
 icon:
-	@make -C icon
+	@${MAKE} -C icon
 
 
 LANGS ?= $(foreach path,$(wildcard gui/i18n/main_*.ts),$(patsubst gui/i18n/main_%.ts,%,$(path)))

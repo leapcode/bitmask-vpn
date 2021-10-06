@@ -18,6 +18,7 @@ PROJECT=bitmask.pro
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
+MAKE=${MAKE:=make}
 QTBUILD=build/qt
 RELEASE=$QTBUILD/release
 DEBUGP=$QTBUILD/debug
@@ -119,8 +120,8 @@ function buildDefault {
     fi
     buildQmake
 
-    make -C $QTBUILD clean
-    make -C $QTBUILD $MAKEFLAGS all
+    $MAKE -C $QTBUILD clean
+    $MAKE -C $QTBUILD $MAKEFLAGS all
 
     renameOutput
     echo "[+] Done."
