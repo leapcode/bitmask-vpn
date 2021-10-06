@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.4
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.14
@@ -25,19 +25,16 @@ ToolBar {
             anchors {
                 verticalCenter: parent.verticalCenter
                 leftMargin: 10
-                // TODO discuss where this should be aligned
-                //leftMargin: 22
                 left: parent.left
                 verticalCenterOffset: 5
             }
-            /*
-            background.implicitHeight: 32
-            background.implicitWidth: 32
-            */
             icon {
                 width: 20
                 height: 20
                 source: stackView.depth > 1 ? "" : "../resources/globe.svg"
+            }
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
             }
             onClicked: stackView.push("Locations.qml")
         }
@@ -64,14 +61,19 @@ ToolBar {
 
         Label {
             id: locationLabel
+            text: locationStr()
+            color: getLocationColor()
             anchors {
                 left: lightning.right
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: 7
                 leftMargin: (ctx != undefined & root.selectedGateway == "auto") ? 0 : -12
             }
-            text: locationStr()
-            color: getLocationColor()
+            MouseArea {
+                cursorShape: Qt.PointingHandCursor
+                anchors.fill: parent
+                onClicked: stackView.push("Locations.qml")
+            }
         }
 
         Item {
