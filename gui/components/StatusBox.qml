@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.14
 import QtQuick.Layouts 1.14
@@ -29,7 +29,6 @@ Item {
         height: 300
         radius: 10
         antialiasing: true
-
         anchors {
             fill: parent
             margins: 20
@@ -46,14 +45,15 @@ Item {
         objectName: "settingsButton"
         font.pixelSize: Qt.application.font.pixelSize * 1.6
         opacity: 1
-
         anchors {
             top: parent.top
             left: parent.left
             topMargin: Theme.windowMargin + 5
             leftMargin: Theme.windowMargin + 5
         }
-
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+        }
         onClicked: {
             if (stackView.depth > 1) {
                 stackView.pop()
@@ -126,15 +126,16 @@ Item {
             // FIXME - this is a workaround. It will BREAK with i18n
             width: 100
             spacing: 8
-
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.alignment: Qt.AlignBottom
-
             font {
                 pixelSize: Theme.buttonFontSize
                 capitalization: Font.Capitalize
                 family: lightFont.name
                 bold: false
+            }
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
             }
 
             onClicked: {

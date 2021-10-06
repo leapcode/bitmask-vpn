@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.14
 import QtGraphicalEffects 1.0
@@ -60,7 +60,7 @@ ThemedPage {
                 id: recommendedLabel
                 //: Location Selection: label for radio button that selects automatically
                 text: qsTr("Recommended")
-		font.weight: Font.Bold
+                font.weight: Font.Bold
                 font.bold: true
             }
             WrappedRadioButton {
@@ -71,6 +71,9 @@ ThemedPage {
                 anchors {
                     top: recommendedLabel.bottom
                     leftMargin: -5
+                }
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
                 }
                 onClicked: {
                     root.selectedGateway = "auto"
@@ -131,11 +134,11 @@ ThemedPage {
                         color: "gray"
                         visible: isBridgeSelected()
                         wrapMode: Text.Wrap
+                        font.pixelSize: Theme.fontSize - 3
                         anchors {
                             topMargin: 5
                             top: manualLabel.bottom
                         }
-                        font.pixelSize: Theme.fontSize - 3
                     }
 
                     ColumnLayout {
@@ -160,6 +163,9 @@ ThemedPage {
                                     ButtonGroup.group: locsel
                                     checked: false
                                     enabled: locationPage.switching ? false : true
+                                    HoverHandler {
+                                        cursorShape: Qt.PointingHandCursor
+                                    }
                                     onClicked: {
                                         if (ctx.status == "on") {
                                             locationPage.switching = true
