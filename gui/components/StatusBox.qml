@@ -86,6 +86,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             text: ""
+            FadeBehavior on text { }
         }
     }
 
@@ -100,6 +101,11 @@ Item {
             height: 120
         }
 
+        // TODO this can be synced with opacity serial animation, see
+        // https://doc.qt.io/qt-5/qml-qtquick-animatedimage.html#example-usage
+        // If you want to customize your asset, here's how:
+        // convert -delay 50 -loop 0 ravens2_*.png ravens.gif
+
         AnimatedImage {
             id: connectionImage
             height: 160
@@ -107,12 +113,17 @@ Item {
             source: "../resources/icon-noshield.svg"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
-            onStatusChanged: playing = (status == AnimatedImage.Ready)
+            OpacityAnimator on opacity{
+                id: fadeIn
+                from: 0.5;
+                to: 1;
+                duration: 1000
+            }
+            onStatusChanged: {
+                playing = (status == AnimatedImage.Ready)
+                fadeIn.start()
+            }
         }
-        // TODO this can be synced with opacity serial animation, see
-        // https://doc.qt.io/qt-5/qml-qtquick-animatedimage.html#example-usage
-        // If you want to customize your asset, here's how:
-        // convert -delay 50 -loop 0 ravens2_*.png ravens.gif
 
         VerticalSpacer {
             id: spacerPostImg

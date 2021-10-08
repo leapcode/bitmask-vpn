@@ -9,6 +9,7 @@
         <file>components/MainView.qml</file>
         <file>components/ThemedPage.qml</file>
         <file>components/Splash.qml</file>
+        <file>components/FadeBehavior.qml</file>
         <file>components/Home.qml</file>
         <file>components/Header.qml</file>
         <file>components/Footer.qml</file>
