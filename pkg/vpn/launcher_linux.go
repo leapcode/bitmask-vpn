@@ -215,7 +215,8 @@ func runBitmaskRoot(arg ...string) error {
 	}
 	arg = append([]string{bitmaskRoot}, arg...)
 
-	out, err := exec.Command("pkexec", arg...).Output()
+	cmd := exec.Command("pkexec", arg...)
+	out, err := cmd.Output()
 	if err != nil && arg[2] != "isup" {
 		log.Println("Error while running bitmask-root:")
 		log.Println("args: ", arg)

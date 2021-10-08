@@ -95,6 +95,7 @@ func SetTransport(label string) {
 func SetUDP(udp bool) {
 	log.Println("DEBUG setting UDP")
 	ctx.cfg.SetUseUDP(udp)
+	ctx.bm.UseUDP(udp)
 	go trigger(OnStatusChanged)
 }
 
