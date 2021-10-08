@@ -155,19 +155,22 @@ StateGroup {
         },
         State {
             name: stopping
+            /*
+            this transition is bad. let's just remove the status
+            switch...
             PropertyChanges {
                 target: connectionState
                 text: "Switching\nOff"
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentConnecting
-            }
-            PropertyChanges {
-                // ?? is this image correct?
                 target: connectionImage
                 source: "../resources/ravens.svg"
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
+            */
+            PropertyChanges {
+                target: statusBoxBackground
+                border.color: Theme.accentConnecting
             }
             PropertyChanges {
                 target: systray
