@@ -39,6 +39,7 @@ type Bitmask struct {
 	shapes           *shapeshifter.ShapeShifter
 	certPemPath      string
 	openvpnArgs      []string
+	udp              bool
 	failed           bool
 }
 
@@ -54,7 +55,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}, false}
+	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}, false, false}
 
 	b.launch.firewallStop()
 	/*
@@ -106,4 +107,9 @@ func (b *Bitmask) NeedsCredentials() bool {
 
 func (b *Bitmask) DoLogin(username, password string) (bool, error) {
 	return b.bonafide.DoLogin(username, password)
+}
+
+func (b *Bitmask) UseUDP(udp bool) error {
+	b.udp = udp
+	return nil
 }

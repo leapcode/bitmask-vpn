@@ -1,15 +1,16 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.14
 import QtQuick.Controls.Material 2.1
 
 import "../themes/themes.js" as Theme
 
+// TODO
+// [ ] disable UDP if provider doesn't support it
+// [ ] disable UDP if the platform doesn't support it
+
 ThemedPage {
     title: qsTr("Preferences")
-
-    // TODO - convert "boxed" themedpage with white background into
-    // a QML template.
 
     Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -27,9 +28,6 @@ ThemedPage {
         ColumnLayout {
             id: prefCol
             width: root.appWidth * 0.80
-            // FIXME checkboxes in Material style force lineHeights too big.
-            // need to override the style
-            // See: https://bugreports.qt.io/browse/QTBUG-95385
 
             Rectangle {
                 id: turnOffWarning
@@ -37,7 +35,6 @@ ThemedPage {
                 height: 20
                 width: parent.width
                 color: "white"
-
 
                 Label {
                     color: "red"
@@ -48,7 +45,6 @@ ThemedPage {
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
             }
-
 
             Label {
                 id: circumLabel
@@ -72,25 +68,30 @@ ThemedPage {
 
             MaterialCheckBox {
                 id: useBridgesCheckBox
+                enabled: areBridgesAvailable()
                 checked: false
                 text: qsTr("Use obfs4 bridges")
-	        // TODO refactor - this sets wrapMode on checkbox
-		contentItem: Label {
-			text: useBridgesCheckBox.text
-			font: useBridgesCheckBox.font
-			horizontalAlignment: Text.AlignLeft
-			verticalAlignment: Text.AlignVCenter
-			leftPadding: useBridgesCheckBox.indicator.width + useBridgesCheckBox.spacing
-			wrapMode: Label.Wrap
-		}
+                // TODO refactor - this sets wrapMode on checkbox
+                contentItem: Label {
+                    text: useBridgesCheckBox.text
+                    font: useBridgesCheckBox.font
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: useBridgesCheckBox.indicator.width + useBridgesCheckBox.spacing
+                    wrapMode: Label.Wrap
+                }
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
-		onClicked: {
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
+                }
+                onClicked: {
                     // TODO there's a corner case that needs to be dealt with in the backend,
                     // if an user has a manual location selected and switches to bridges:
-                    // we need to fallback to "auto" selection if such location does not 
+                    // we need to fallback to "auto" selection if such location does not
                     // offer bridges
                     useBridges(checked)
+                    useUDP.enabled = !checked
                 }
             }
 
@@ -100,6 +101,9 @@ ThemedPage {
                 text: qsTr("Use Snowflake (experimental)")
                 enabled: false
                 checked: false
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
+                }
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
             }
@@ -129,8 +133,12 @@ ThemedPage {
                 checked: false
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
+                }
                 onClicked: {
                     doUseUDP(checked)
+                    useBridgesCheckBox.enabled = areBridgesAvailable()
                 }
             }
         }
@@ -187,6 +195,12 @@ ThemedPage {
         ]
     }
 
+    function areBridgesAvailable() {
+        // FIXME check if provider offers it
+        let providerSupport = true
+        return providerSupport && !useUDP.checked
+    }
+
     function useBridges(value) {
         if (value == true) {
             console.debug("use obfs4")
@@ -214,6 +228,9 @@ ThemedPage {
     Component.onCompleted: {
         if (ctx && ctx.transport == "obfs4") {
             useBridgesCheckBox.checked = true
+        }
+        if (ctx && ctx.udp == "true") {
+            useUDP.checked = true
         }
     }
 }

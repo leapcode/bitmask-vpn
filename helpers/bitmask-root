@@ -89,12 +89,15 @@ def is_ipv6_disabled():
 def tostr(s):
     return s.decode('utf-8')
 
-VERSION = "14"
+VERSION = "15"
 SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
-# for the time being, we're hardcoding tcp on connection params.
-NAMESERVER = NAMESERVER_TCP
+
+if os.getenv("UDP") == "1":
+    NAMESERVER = NAMESERVER_UDP
+else:
+    NAMESERVER = NAMESERVER_TCP
 BITMASK_CHAIN = "bitmask"
 BITMASK_CHAIN_NAT_OUT = "bitmask"
 BITMASK_CHAIN_NAT_POST = "bitmask_postrouting"

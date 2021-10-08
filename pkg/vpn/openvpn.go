@@ -145,6 +145,7 @@ func (b *Bitmask) startOpenVPN() error {
 		}
 
 		proxyArgs := strings.Split(proxy, ":")
+		// TODO pass UDP flag
 		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
@@ -162,9 +163,11 @@ func (b *Bitmask) startOpenVPN() error {
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
 				if port != "53" {
-					if os.Getenv("UDP") == "1" {
+					if b.udp {
+						os.Setenv("UDP", "1")
 						arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
 					} else {
+						os.Setenv("UDP", "0")
 						arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
 					}
 				}

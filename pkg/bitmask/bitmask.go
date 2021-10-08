@@ -34,6 +34,7 @@ type Bitmask interface {
 	UseAutomaticGateway()
 	GetTransport() string
 	SetTransport(string) error
+	UseUDP(bool) error
 	GetCurrentGateway() string
 	GetCurrentLocation() string
 	GetCurrentCountry() string
