@@ -32,6 +32,13 @@ then
     TARGET=riseup-vpn
 fi
 
+# XXX for some reason, MAKEFLAGS is set to "w"
+# by debhelper
+if [ "$MAKEFLAGS" == "w" ]
+then
+    MAKEFLAGS=
+fi
+
 if [ "$XBUILD" == "$WIN64" ]
 then
     # TODO allow to override vars
