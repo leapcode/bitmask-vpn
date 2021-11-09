@@ -79,6 +79,8 @@ func getAPIAddr(provider string) string {
 	switch provider {
 	case "riseup.net":
 		return "198.252.153.107"
+	case "float.hexacab.org":
+		return "198.252.153.106"
 	case "calyx.net":
 		return "162.247.73.194"
 	default:
