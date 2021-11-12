@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -80,14 +81,19 @@ func (b *Bonafide) fetchEipJSON() error {
 	resp, err := b.client.Post(eip3API, "", nil)
 	for err != nil {
 		resp, err = b.client.Post(eip3API, "", nil)
+
 		if err != nil {
+			log.Println("Error fetching eip v3 json:" + eip3API)
+			if os.Getenv("DEBUG") == "1" {
+				log.Println(err)
+			}
 			// TODO it might be that we get no error, but an empty file or whatever done
 			// by DNS poisoning. Should try to parse the file.
 			uri := b.getURLNoDNS("eip")
 			resp, err = b.client.Post(uri, "", nil)
 		}
 		if err != nil {
-			log.Printf("Error fetching eip v3 json: %v", err)
+			log.Printf("Error again fetching eip v3 json: %v", err)
 			time.Sleep(retryFetchJSONSeconds * time.Second)
 		}
 	}
