@@ -1,0 +1,14 @@
+{
+    "motd": [{
+        "begin":    "Jan 1 2021 00:00:00",
+        "end":      "Dec 31 2021 23:59:00",
+        "type":     "daily",
+        "platform": "all",
+        "text": [
+          { "lang": "en",
+            "str": "This is a <a href='https://leap.se'>test!</a>"},
+          { "lang": "es",
+            "str": "Esto es una <a href='https://leap.se'>pruebita!</a>"}
+        ]}
+    ]
+}
