@@ -54,6 +54,8 @@ Urgency: normal ✓
 Languages: 2 ✓
 ```
 
+Use `motd-cli -url https://example.com/motd.json` to validate a remote file.
+
 Notes: I'm considering adding an explicit layer of verification of the motd
 payload. Please comment on
 [#554](https://0xacab.org/leap/bitmask-vpn/-/issues/554) if you have an opinion

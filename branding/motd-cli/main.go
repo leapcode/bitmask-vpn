@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -86,15 +88,22 @@ type LocalizedText struct {
 }
 
 func main() {
-	// TODO pass url flag too, to fetch and validate remote file
 	file := flag.String("file", "", "file to validate")
+	url := flag.String("url", "", "url to validate")
 	flag.Parse()
-	f := *file
-	if f == "" {
-		f = defaultFile
-	}
 
-	fmt.Println("file:", f)
+	f := *file
+	u := *url
+
+	if u != "" {
+		fmt.Println("url:", u)
+		f = downloadToTempFile(u)
+	} else {
+		if f == "" {
+			f = defaultFile
+		}
+		fmt.Println("file:", f)
+	}
 	m := parseFile(f)
 	fmt.Printf("count: %v\n", m.Length())
 	fmt.Println()
@@ -108,6 +117,24 @@ func main() {
 			os.Exit(1)
 		}
 	}
+}
+
+func downloadToTempFile(url string) string {
+	resp, err := http.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	out, err := ioutil.TempFile("/tmp/", "motd-linter")
+	if err != nil {
+		panic(err)
+	}
+	defer out.Close()
+
+	_, _ = io.Copy(out, resp.Body)
+	fmt.Println("File downloaded to", out.Name())
+	return out.Name()
 }
 
 func parseFile(f string) Messages {
