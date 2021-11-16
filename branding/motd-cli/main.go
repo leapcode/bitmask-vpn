@@ -28,20 +28,24 @@ type Message struct {
 	End      string          `json:"end"`
 	Type     string          `json:"type"`
 	Platform string          `json:"platform"`
+	Urgency  string          `json:"urgency"`
 	Text     []LocalizedText `json:"text"`
 }
 
 func (m *Message) IsValid() bool {
 	valid := (m.IsValidBegin() && m.IsValidEnd() &&
-		m.IsValidType() && m.IsValidPlatform() && m.HasLocalizedText())
+		m.IsValidType() && m.IsValidPlatform() && m.IsValidUrgency() &&
+		m.HasLocalizedText())
 	return valid
 }
 
 func (m *Message) IsValidBegin() bool {
+	// FIXME check that begin is before 1y for instance
 	return true
 }
 
 func (m *Message) IsValidEnd() bool {
+	// FIXME check end is within next year/months
 	return true
 }
 
@@ -63,8 +67,17 @@ func (m *Message) IsValidPlatform() bool {
 	}
 }
 
+func (m *Message) IsValidUrgency() bool {
+	switch m.Urgency {
+	case "normal", "critical":
+		return true
+	default:
+		return false
+	}
+}
+
 func (m *Message) HasLocalizedText() bool {
-	return true
+	return len(m.Text) > 0
 }
 
 type LocalizedText struct {
@@ -89,6 +102,7 @@ func main() {
 		fmt.Printf("Message %d %v\n-----------\n", i+1, mark(msg.IsValid()))
 		fmt.Printf("Type: %s %v\n", msg.Type, mark(msg.IsValidType()))
 		fmt.Printf("Platform: %s %v\n", msg.Platform, mark(msg.IsValidPlatform()))
+		fmt.Printf("Urgency: %s %v\n", msg.Urgency, mark(msg.IsValidUrgency()))
 		fmt.Printf("Languages: %d %v\n", len(msg.Text), mark(msg.HasLocalizedText()))
 		if !msg.IsValid() {
 			os.Exit(1)

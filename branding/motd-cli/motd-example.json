@@ -4,6 +4,7 @@
         "end":      "Dec 31 2021 23:59:00",
         "type":     "daily",
         "platform": "all",
+        "urgency":  "normal",
         "text": [
           { "lang": "en",
             "str": "This is a <a href='https://leap.se'>test!</a>"},

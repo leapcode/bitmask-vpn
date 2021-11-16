@@ -19,6 +19,7 @@ The structure of the `motd.json` file is like follows:
         "end":      "Dec 31 2021 23:59:00",
         "type":     "daily",
         "platform": "all",
+        "urgency":  "normal",
         "text": [
           { "lang": "en",
             "str": "This is a <a href='https://leap.se'>test!</a>"},
@@ -33,7 +34,8 @@ Valid values are:
 
 * Begin, End are date strings, like "Jan 1 2021 00:00:00".
 * Type: "once" for a one-shot message, "daily" for a message that is displayed daily during the specified duration.
-* Platform: one of "windows", "linux", "osx" or "all".
+* Platform: one of "windows", "osx", "snap", "linux", or "all".
+* Urgency: either "normal" or "critical".
 
 The text message can contain links.
 
@@ -48,6 +50,7 @@ Message 1 ✓
 -----------
 Type: daily ✓
 Platform: all ✓
+Urgency: normal ✓
 Languages: 2 ✓
 ```
 
