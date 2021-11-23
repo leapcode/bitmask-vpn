@@ -75,7 +75,7 @@ depends:
 	-@${MAKE} depends$(UNAME)
 
 dependsLinux:
-	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls2 libqt5qml5 qtdeclarative5-dev qml-module-qt-labs-platform qml-module-qtquick-extras qml-module-qtquick-dialogs
+	@sudo apt install golang pkg-config dh-golang golang-golang-x-text-dev cmake devscripts fakeroot debhelper curl g++ qt5-qmake qttools5-dev-tools qtdeclarative5-dev qml-module-qtquick-controls2 libqt5qml5 qtdeclarative5-dev qtquickcontrols2-5-dev libqt5svg5-dev qml-module-qt-labs-platform qml-module-qtquick-extras qml-module-qtquick-dialogs
 	@${MAKE} -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
 
