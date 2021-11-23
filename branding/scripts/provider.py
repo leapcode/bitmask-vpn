@@ -2,14 +2,15 @@ import datetime
 import os
 
 
-def getDefaultProvider(config):
+def getDefaultProviders(config):
+    # returns a list of providers
     provider = os.environ.get('PROVIDER')
     if provider:
         print('[+] Got provider {} from environment'.format(provider))
     else:
         print('[+] Using default provider from config file')
         provider = config['default']['provider']
-    return provider
+    return provider.split(',')
 
 
 def getProviderData(provider, config):

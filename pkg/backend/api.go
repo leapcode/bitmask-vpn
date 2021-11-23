@@ -5,7 +5,9 @@ package backend
 import (
 	"C"
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -150,10 +152,20 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 	if err != nil {
 		log.Println("ERROR while parsing json:", err)
 	}
+	var providerOpts *bitmask.ProviderOpts
+	providerOpts = &providers.Data[0]
 	if len(providers.Data) != 1 {
-		panic("BUG: we do not support multi-provider yet")
+		chosenProvider := os.Getenv("LEAP_PROVIDER")
+		if chosenProvider != "" {
+			for _, p := range providers.Data {
+				if p.Provider == chosenProvider {
+					log.Println("Selecting provider: " + chosenProvider)
+					return &InitOpts{ProviderOptions: &p}
+				}
+			}
+			panic("BUG: unknown provider")
+		}
 	}
-	providerOpts := &providers.Data[0]
 	return &InitOpts{ProviderOptions: providerOpts}
 }
 

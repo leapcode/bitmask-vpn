@@ -8,7 +8,7 @@ import sys
 
 import configparser
 
-from provider import getDefaultProvider
+from provider import getDefaultProviders
 from provider import getProviderData
 
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     configFile = os.path.join(VENDOR_PATH, 'vendor.conf')
     config = configparser.ConfigParser()
     config.read(configFile)
-    provider = getDefaultProvider(config)
+    provider = getDefaultProviders(config)[0]
     data = getProviderData(provider, config)
 
     if len(sys.argv) != 2:
