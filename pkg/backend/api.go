@@ -5,7 +5,6 @@ package backend
 import (
 	"C"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
