@@ -6,16 +6,18 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
-const defaultFile = "motd-example.json"
+/* TODO move structs to pkg/config/motd module, import from there */
 
+const defaultFile = "motd-example.json"
 const OK = "✓"
 const WRONG = "☓"
-
-/* TODO move structs to pkg/config/motd module, import from there */
+const TimeString = "02 Jan 06 15:04 -0700" // RFC822 with numeric zone
 
 type Messages struct {
 	Messages []Message `json:"motd"`
@@ -42,12 +44,29 @@ func (m *Message) IsValid() bool {
 }
 
 func (m *Message) IsValidBegin() bool {
-	// FIXME check that begin is before 1y for instance
+	_, err := time.Parse(TimeString, m.Begin)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
 	return true
 }
 
 func (m *Message) IsValidEnd() bool {
-	// FIXME check end is within next year/months
+	endTime, err := time.Parse(TimeString, m.End)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	beginTime, err := time.Parse(TimeString, m.Begin)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	if !beginTime.Before(endTime) {
+		log.Println("begin ts should be before end")
+		return false
+	}
 	return true
 }
 
@@ -104,7 +123,10 @@ func main() {
 		}
 		fmt.Println("file:", f)
 	}
-	m := parseFile(f)
+	m, err := parseFile(f)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Printf("count: %v\n", m.Length())
 	fmt.Println()
 	for i, msg := range m.Messages {
@@ -137,7 +159,7 @@ func downloadToTempFile(url string) string {
 	return out.Name()
 }
 
-func parseFile(f string) Messages {
+func parseFile(f string) (Messages, error) {
 	jsonFile, err := os.Open(f)
 	if err != nil {
 		panic(err)
@@ -147,9 +169,13 @@ func parseFile(f string) Messages {
 	if err != nil {
 		panic(err)
 	}
+	return parseJsonStr(byteVal)
+}
+
+func parseJsonStr(b []byte) (Messages, error) {
 	var m Messages
-	json.Unmarshal(byteVal, &m)
-	return m
+	json.Unmarshal(b, &m)
+	return m, nil
 }
 
 func mark(val bool) string {
