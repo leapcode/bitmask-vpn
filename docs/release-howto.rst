@@ -29,3 +29,5 @@ make package_snap_in_docker
 6. Build the debian package:
 
 (TBD)
+
+7. Upload builds, renew the *-latest* symlinks and their `lastver` files (important!)
