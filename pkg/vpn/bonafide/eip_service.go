@@ -76,6 +76,26 @@ func (b *Bonafide) setupAuthentication(i interface{}) {
 	}
 }
 
+func (b *Bonafide) IsUDPAvailable() bool {
+	if b.eip == nil {
+		return false
+	}
+	for _, gw := range b.eip.Gateways {
+		for _, t := range gw.Capabilities.Transport {
+			if t.Type == "openvpn" {
+				for _, proto := range t.Protocols {
+					if proto == "udp" {
+						return true
+					}
+				}
+			}
+
+		}
+
+	}
+	return false
+}
+
 func (b *Bonafide) fetchEipJSON() error {
 	eip3API := config.APIURL + "3/config/eip-service.json"
 	resp, err := b.client.Post(eip3API, "", nil)

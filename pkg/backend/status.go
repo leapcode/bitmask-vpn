@@ -52,6 +52,7 @@ type connectionCtx struct {
 	BestLocation    string              `json:"bestLocation"`
 	Transport       string              `json:"transport"`
 	UseUDP          bool                `json:"udp"`
+	OffersUDP       bool                `json:"offersUdp"`
 	ManualLocation  bool                `json:"manualLocation"`
 	IsReady         bool                `json:"isReady"`
 	CanUpgrade      bool                `json:"canUpgrade"`
@@ -73,6 +74,7 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.BestLocation = c.bm.GetBestLocation(transport)
 		c.Transport = transport
 		c.UseUDP = c.cfg.UDP // TODO initialize bitmask too
+		c.OffersUDP = c.bm.OffersUDP()
 		c.ManualLocation = c.bm.IsManualLocation()
 		c.CanUpgrade = c.bm.CanUpgrade()
 		c.Motd = c.bm.GetMotd()

@@ -5,10 +5,6 @@ import QtQuick.Controls.Material 2.1
 
 import "../themes/themes.js" as Theme
 
-// TODO
-// [ ] disable UDP if provider doesn't support it
-// [ ] disable UDP if the platform doesn't support it
-
 ThemedPage {
     title: qsTr("Preferences")
 
@@ -116,7 +112,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("UDP can make the VPN faster")
+                text: qsTr("UDP can make the VPN faster, but it might be blocked on certain networks")
                 width: parent.width
                 color: "gray"
                 visible: true
@@ -124,6 +120,7 @@ ThemedPage {
                 font.pixelSize: Theme.fontSize - 3
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
+                Layout.preferredWidth: 240
             }
 
             MaterialCheckBox {
@@ -231,6 +228,9 @@ ThemedPage {
         }
         if (ctx && ctx.udp == "true") {
             useUDP.checked = true
+        }
+        if (ctx && ctx.offersUdp == "false") {
+            useUDP.enabled = false
         }
     }
 }

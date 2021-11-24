@@ -43,6 +43,7 @@ type Bitmask struct {
 	certPemPath      string
 	openvpnArgs      []string
 	udp              bool
+	offersUdp        bool
 	failed           bool
 	canUpgrade       bool
 	motd             []motd.Message
@@ -67,7 +68,7 @@ func Init() (*Bitmask, error) {
 		bonafide.Gateway{},
 		bonafide.Gateway{}, statusCh, nil, bf, launch,
 		"", nil, "", []string{},
-		false, false, false,
+		false, false, false, false,
 		[]motd.Message{}, ""}
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
@@ -148,6 +149,10 @@ func (b *Bitmask) DoLogin(username, password string) (bool, error) {
 func (b *Bitmask) UseUDP(udp bool) error {
 	b.udp = udp
 	return nil
+}
+
+func (b *Bitmask) OffersUDP() bool {
+	return b.bonafide.IsUDPAvailable()
 }
 
 func (b *Bitmask) GetMotd() string {
