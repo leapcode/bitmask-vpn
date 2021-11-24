@@ -39,9 +39,10 @@ Valid values are:
 
 The text message can contain links.
 
-You can use the `motd-cli` tool to parse and validate the json:
+You can use the `motd-cli` tool in this folder to parse and validate the json:
 
 ```
+go build
 ❯ ./motd-cli
 file: motd-example.json
 count: 1
