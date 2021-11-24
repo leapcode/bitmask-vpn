@@ -67,21 +67,6 @@
         <file alias="roboto.ttf">resources/fonts/Roboto-Regular.ttf</file>
         <file alias="roboto-bold.ttf">resources/fonts/Roboto-Bold.ttf</file>
 
-        <!-- begin, to remove -->
-        <file>qml/VpnState.qml</file>
-        <file>qml/AboutDialog.qml</file>
-        <file>qml/DonateDialog.qml</file>
-        <file>qml/LoginDialog.qml</file>
-        <file>qml/LoginOKDialog.qml</file>
-        <file>qml/FailDialog.qml</file>
-        <file>qml/MainBar.qml</file>
-        <file>qml/BackgroundImage.qml</file>
-        <file>qml/LocationText.qml</file>
-        <file>qml/VPNSwitch.qml</file>
-        <file>qml/BridgesItem.qml</file>
-        <file>qml/logic.js</file>
-        <!-- end, to remove -->
-
         <file>assets/icon/png/black/vpn_off.png</file>
         <file>assets/icon/png/black/vpn_on.png</file>
         <file>assets/icon/png/black/vpn_wait_0.png</file>
