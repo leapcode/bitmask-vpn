@@ -17,8 +17,10 @@ func initializeContext(opts *InitOpts) {
 	var st status = off
 
 	// TODO - now there's really no need to dance between opts and config anymore
-	// but this was the simplest transition. We should probably keep the multi-provider config in the backend too, and just
-	// switch the "active" here in the ctx, after the user has selected one in the combobox.
+	// but this was the simplest transition. We should probably keep the
+	// multi-provider config in the backend too, and just
+	// switch the "active" here in the ctx, after the user has selected one
+	// in the combobox.
 	ctx = &connectionCtx{
 		AppName:         opts.ProviderOptions.AppName,
 		Provider:        opts.ProviderOptions.Provider,

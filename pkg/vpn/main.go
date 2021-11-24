@@ -16,11 +16,14 @@
 package vpn
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
+	"0xacab.org/leap/bitmask-vpn/pkg/motd"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/shapeshifter"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
@@ -41,6 +44,9 @@ type Bitmask struct {
 	openvpnArgs      []string
 	udp              bool
 	failed           bool
+	canUpgrade       bool
+	motd             []motd.Message
+	provider         string
 }
 
 // Init the connection to bitmask
@@ -55,8 +61,18 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := Bitmask{tempdir, bonafide.Gateway{}, bonafide.Gateway{}, statusCh, nil, bf, launch, "", nil, "", []string{}, false, false}
 
+	b := Bitmask{
+		tempdir,
+		bonafide.Gateway{},
+		bonafide.Gateway{}, statusCh, nil, bf, launch,
+		"", nil, "", []string{},
+		false, false, false,
+		[]motd.Message{}, ""}
+	// FIXME multiprovider: need to pass provider name early on
+	// XXX we want to block on these, but they can timeout if we're blocked.
+	b.checkForUpgrades()
+	b.checkForMOTD()
 	b.launch.firewallStop()
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running
@@ -75,6 +91,26 @@ func Init() (*Bitmask, error) {
 	go b.openvpnManagement()
 
 	return &b, err
+}
+
+func (b *Bitmask) SetProvider(p string) {
+	b.provider = p
+}
+
+func (b *Bitmask) checkForUpgrades() {
+
+	// SNAPS have their own way of upgrading. We probably should also try to detect
+	// if we've been installed via another package manager.
+	// For now, it's maybe a good idea to disable the UI check in linux, and be
+	// way more strict in windows/osx.
+	if os.Getenv("SNAP") != "" {
+		return
+	}
+	b.canUpgrade = version.CanUpgrade()
+}
+
+func (b *Bitmask) checkForMOTD() {
+	b.motd = motd.FetchLatest()
 }
 
 // GetStatusCh returns a channel that will recieve VPN status changes
@@ -112,4 +148,16 @@ func (b *Bitmask) DoLogin(username, password string) (bool, error) {
 func (b *Bitmask) UseUDP(udp bool) error {
 	b.udp = udp
 	return nil
+}
+
+func (b *Bitmask) GetMotd() string {
+	bytes, err := json.Marshal(b.motd)
+	if err != nil {
+		log.Println("WARN error marshalling motd")
+	}
+	return string(bytes)
+}
+
+func (b *Bitmask) CanUpgrade() bool {
+	return b.canUpgrade
 }

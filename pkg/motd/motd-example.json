@@ -1,0 +1,15 @@
+{
+    "motd": [{
+        "begin":    "01 Nov 21 00:00 -0700",
+        "end":      "31 Jan 22 00:00 -0700",
+        "type":     "daily",
+        "platform": "all",
+        "urgency":  "normal",
+        "text": [
+          { "lang": "en",
+            "str": "Thanks for using RiseupVPN! Please report us <a href='https://0xacab.org/leap/bitmask-vpn'>any issue or feature request</a>."},
+          { "lang": "es",
+            "str": "¡Gracias por usar RiseupVPN! Por favor reportanos <a href='https://0xacab.org/leap/bitmask-vpn'>cualquier bug o petición</a>."}
+        ]}
+    ]
+}

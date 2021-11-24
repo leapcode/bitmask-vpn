@@ -15,8 +15,8 @@ The structure of the `motd.json` file is like follows:
 ```
 {
     "motd": [{
-        "begin":    "Jan 1 2021 00:00:00",
-        "end":      "Dec 31 2021 23:59:00",
+        "begin":    "01 Nov 21 00:00 -0700",
+        "end":      "31 Jan 22 00:00 -0700",
         "type":     "daily",
         "platform": "all",
         "urgency":  "normal",
@@ -32,7 +32,7 @@ The structure of the `motd.json` file is like follows:
 
 Valid values are: 
 
-* Begin, End are date strings, like "Jan 1 2021 00:00:00".
+* Begin, End are date strings, in the format: "01 Jan 21 00:00:00 -0700".
 * Type: "once" for a one-shot message, "daily" for a message that is displayed daily during the specified duration.
 * Platform: one of "windows", "osx", "snap", "linux", or "all".
 * Urgency: either "normal" or "critical".

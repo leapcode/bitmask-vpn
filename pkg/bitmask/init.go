@@ -88,6 +88,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
+	b.SetProvider(config.Provider)
 
 	err = setTransport(b, conf)
 	if err != nil {

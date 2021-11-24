@@ -48,9 +48,9 @@ func CanUpgrade() bool {
 	if os.Getenv("DEBUG") == "1" {
 		log.Println(">>> Remote version:  " + r)
 		log.Println(">>> Current version: " + VERSION)
-		if canUpgrade {
-			log.Println("Newer version available")
-		}
+	}
+	if canUpgrade {
+		log.Println("There's a newer version available:", r)
 	}
 	return canUpgrade
 }

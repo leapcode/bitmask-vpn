@@ -32,6 +32,7 @@ type Bitmask interface {
 	GetBestLocation(protocol string) string
 	UseGateway(name string)
 	UseAutomaticGateway()
+	SetProvider(string)
 	GetTransport() string
 	SetTransport(string) error
 	UseUDP(bool) error
@@ -41,4 +42,6 @@ type Bitmask interface {
 	IsManualLocation() bool
 	NeedsCredentials() bool
 	DoLogin(username, password string) (bool, error)
+	CanUpgrade() bool
+	GetMotd() string
 }

@@ -1,11 +1,11 @@
-package main
+package motd
 
 import (
 	"testing"
 )
 
 func TestGoodMotd(t *testing.T) {
-	m, err := parseFile(defaultFile)
+	m, err := ParseFile(ExampleFile)
 	if err != nil {
 		t.Errorf("error parsing default file")
 	}
@@ -14,7 +14,7 @@ func TestGoodMotd(t *testing.T) {
 	}
 	for _, msg := range m.Messages {
 		if !msg.IsValid() {
-			t.Errorf("invalid motd json at %s", defaultFile)
+			t.Errorf("invalid motd json at %s", ExampleFile)
 		}
 	}
 }
@@ -35,7 +35,7 @@ const emptyDate = `
 }`
 
 func TestEmptyDateFails(t *testing.T) {
-	m, err := parseJsonStr([]byte(emptyDate))
+	m, err := getFromJSON([]byte(emptyDate))
 	if err != nil {
 		t.Errorf("error parsing json")
 	}
@@ -60,7 +60,7 @@ const badEnd = `
 }`
 
 func TestBadEnd(t *testing.T) {
-	m, err := parseJsonStr([]byte(badEnd))
+	m, err := getFromJSON([]byte(badEnd))
 	if err != nil {
 		t.Errorf("error parsing json")
 	}

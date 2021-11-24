@@ -54,6 +54,8 @@ type connectionCtx struct {
 	UseUDP          bool                `json:"udp"`
 	ManualLocation  bool                `json:"manualLocation"`
 	IsReady         bool                `json:"isReady"`
+	CanUpgrade      bool                `json:"canUpgrade"`
+	Motd            string              `json:"motd"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
@@ -72,6 +74,8 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.Transport = transport
 		c.UseUDP = c.cfg.UDP // TODO initialize bitmask too
 		c.ManualLocation = c.bm.IsManualLocation()
+		c.CanUpgrade = c.bm.CanUpgrade()
+		c.Motd = c.bm.GetMotd()
 	}
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)
