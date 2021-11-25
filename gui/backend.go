@@ -58,6 +58,11 @@ func SetUDP(udp bool) {
 	backend.SetUDP(udp)
 }
 
+//export SetSnowflake
+func SetSnowflake(snowflake bool) {
+	backend.SetSnowflake(snowflake)
+}
+
 //export Quit
 func Quit() {
 	backend.Quit()

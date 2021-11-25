@@ -42,12 +42,14 @@ type Config struct {
 		UserStoppedVPN   bool
 		DisableAutostart bool
 		UDP              bool
+		Snowflake        bool
 	}
 	SkipLaunch       bool
 	Obfs4            bool
 	DisableAutostart bool
 	StartVPN         bool
 	UDP              bool
+	Snowflake        bool
 }
 
 // ParseConfig reads the configuration from the configuration file
@@ -66,6 +68,8 @@ func ParseConfig() *Config {
 	conf.Obfs4 = conf.file.Obfs4
 	conf.DisableAutostart = conf.file.DisableAutostart
 	conf.StartVPN = !conf.file.UserStoppedVPN
+	conf.UDP = conf.file.UDP
+	conf.Snowflake = conf.file.Snowflake
 	return &conf
 }
 
@@ -101,6 +105,12 @@ func (c *Config) SetUseObfs4(val bool) error {
 func (c *Config) SetUseUDP(val bool) error {
 	c.UDP = val
 	c.file.UDP = val
+	return c.save()
+}
+
+func (c *Config) SetUseSnowflake(val bool) error {
+	c.Snowflake = val
+	c.file.Snowflake = val
 	return c.save()
 }
 

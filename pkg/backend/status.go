@@ -8,6 +8,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 )
 
 const (
@@ -57,6 +58,8 @@ type connectionCtx struct {
 	IsReady         bool                `json:"isReady"`
 	CanUpgrade      bool                `json:"canUpgrade"`
 	Motd            string              `json:"motd"`
+	HasTor          bool                `json:"hasTor"`
+	UseSnowflake    bool                `json:"snowflake"`
 	bm              bitmask.Bitmask
 	autostart       bitmask.Autostart
 	cfg             *config.Config
@@ -73,11 +76,13 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.CurrentCountry = c.bm.GetCurrentCountry()
 		c.BestLocation = c.bm.GetBestLocation(transport)
 		c.Transport = transport
-		c.UseUDP = c.cfg.UDP // TODO initialize bitmask too
+		c.UseUDP = c.cfg.UDP // TODO initialize bitmask param?
 		c.OffersUDP = c.bm.OffersUDP()
+		c.UseSnowflake = c.cfg.Snowflake // TODO initialize bitmask param?
 		c.ManualLocation = c.bm.IsManualLocation()
 		c.CanUpgrade = c.bm.CanUpgrade()
 		c.Motd = c.bm.GetMotd()
+		c.HasTor = snowflake.HasTor()
 	}
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)

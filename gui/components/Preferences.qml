@@ -91,10 +91,23 @@ ThemedPage {
                 }
             }
 
+            Label {
+                text: qsTr("Traffic is obfuscated to bypass blocks.")
+                font.family: "Monospace"
+                color: "gray"
+                visible: true
+                wrapMode: Text.Wrap
+                font.pixelSize: Theme.fontSize - 4
+                Layout.leftMargin: 35
+                Layout.rightMargin: 15
+                Layout.bottomMargin: 5
+                Layout.preferredWidth: 240
+            }
+
             MaterialCheckBox {
                 id: useSnowflake
-                //wrapMode: Label.Wrap
-                text: qsTr("Use Snowflake (experimental)")
+                //wrapMode: Text.Wrap
+                text: qsTr("Use Snowflake bootstrap")
                 enabled: false
                 checked: false
                 HoverHandler {
@@ -102,6 +115,23 @@ ThemedPage {
                 }
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
+                Layout.preferredWidth: 240
+                onClicked: {
+                    doUseSnowflake(checked)
+                }
+            }
+
+            Label {
+                text: qsTr("Snowflake needs Tor installed in your system.")
+                font.family: "Monospace"
+                color: "gray"
+                visible: true
+                wrapMode: Text.Wrap
+                font.pixelSize: Theme.fontSize - 4
+                Layout.leftMargin: 35
+                Layout.rightMargin: 15
+                Layout.bottomMargin: 5
+                Layout.preferredWidth: 240
             }
 
             Label {
@@ -109,10 +139,11 @@ ThemedPage {
                 font.bold: true
                 Layout.leftMargin: 10
                 Layout.rightMargin: 10
+                Layout.topMargin: 8
             }
 
             Label {
-                text: qsTr("UDP can make the VPN faster, but it might be blocked on certain networks")
+                text: qsTr("UDP can make the VPN faster. It might be blocked on certain networks.")
                 width: parent.width
                 color: "gray"
                 visible: true
@@ -200,22 +231,18 @@ ThemedPage {
 
     function useBridges(value) {
         if (value == true) {
-            console.debug("use obfs4")
             backend.setTransport("obfs4")
         } else {
-            console.debug("use regular")
             backend.setTransport("openvpn")
         }
     }
 
     function doUseUDP(value) {
-        if (value == true) {
-            console.debug("use udp")
-            backend.setUDP(true)
-        } else {
-            console.debug("use tcp")
-            backend.setUDP(false)
-        }
+        backend.setUDP(value)
+    }
+
+    function doUseSnowflake(value) {
+        backend.setSnowflake(value)
     }
 
     function getBoxHeight() {
@@ -226,11 +253,17 @@ ThemedPage {
         if (ctx && ctx.transport == "obfs4") {
             useBridgesCheckBox.checked = true
         }
-        if (ctx && ctx.udp == "true") {
-            useUDP.checked = true
-        }
         if (ctx && ctx.offersUdp == "false") {
             useUDP.enabled = false
+        }
+        if (ctx && ctx.offersUdp && ctx.udp == "true") {
+            useUDP.checked = true
+        }
+        if (ctx && ctx.hasTor == "true") {
+            useSnowflake.enabled = true
+        }
+        if (ctx && ctx.hasTor && ctx.snowflake == "true") {
+            useSnowflake.checked = true
         }
     }
 }

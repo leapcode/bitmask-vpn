@@ -94,9 +94,16 @@ func SetTransport(label string) {
 }
 
 func SetUDP(udp bool) {
-	log.Println("DEBUG setting UDP")
+	log.Printf("DEBUG udp:%v\n", udp)
 	ctx.cfg.SetUseUDP(udp)
 	ctx.bm.UseUDP(udp)
+	go trigger(OnStatusChanged)
+}
+
+func SetSnowflake(snowflake bool) {
+	log.Printf("DEBUG snowflake:%v\n", snowflake)
+	ctx.cfg.SetUseSnowflake(snowflake)
+	ctx.bm.UseSnowflake(snowflake)
 	go trigger(OnStatusChanged)
 }
 

@@ -40,6 +40,7 @@ public slots:
     void useAutomaticGateway();
     void setTransport(QString transport);
     void setUDP(bool udp);
+    void setSnowflake(bool snowflake);
     QString getTransport();
     void login(QString username, QString password);
     void resetError(QString errlabel);

@@ -62,6 +62,11 @@ void Backend::setUDP(bool udp)
     SetUDP(udp);
 }
 
+void Backend::setSnowflake(bool snowflake)
+{
+    SetSnowflake(snowflake);
+}
+
 QString Backend::getTransport()
 {
     return QString(GetTransport());
