@@ -60,6 +60,7 @@
         <file>resources/spy.gif</file>
         <file>resources/quit.svg</file>
         <file>resources/alert.svg</file>
+        <file>resources/angle-right.svg</file>
 
         <!-- fonts -->
         <file alias="poppins-light.ttf">resources/fonts/Poppins-Thin.ttf</file>

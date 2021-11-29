@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.14
 import QtQuick.Controls.Material 2.1
+import QtGraphicalEffects 1.0
 
 import "../themes/themes.js" as Theme
 
@@ -52,7 +53,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("These techniques can bypass censorship, but are slower. Please use them only if needed.")
+                text: qsTr("These techniques can bypass censorship, but are slower. Use them only when needed")
                 color: "gray"
                 visible: true
                 wrapMode: Text.Wrap
@@ -92,8 +93,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("Traffic is obfuscated to bypass blocks.")
-                font.family: "Monospace"
+                text: qsTr("Traffic is obfuscated to bypass blocks")
                 color: "gray"
                 visible: true
                 wrapMode: Text.Wrap
@@ -106,8 +106,7 @@ ThemedPage {
 
             MaterialCheckBox {
                 id: useSnowflake
-                //wrapMode: Text.Wrap
-                text: qsTr("Use Snowflake bootstrap")
+                text: qsTr("Use Snowflake")
                 enabled: false
                 checked: false
                 HoverHandler {
@@ -122,8 +121,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("Snowflake needs Tor installed in your system.")
-                font.family: "Monospace"
+                text: qsTr("Snowflake needs Tor installed in your system")
                 color: "gray"
                 visible: true
                 wrapMode: Text.Wrap
@@ -143,7 +141,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("UDP can make the VPN faster. It might be blocked on certain networks.")
+                text: qsTr("UDP can make the VPN faster. It might be blocked on some networks")
                 width: parent.width
                 color: "gray"
                 visible: true
@@ -259,11 +257,14 @@ ThemedPage {
         if (ctx && ctx.offersUdp && ctx.udp == "true") {
             useUDP.checked = true
         }
+        // disabled for now, will be on next release
+        /*
         if (ctx && ctx.hasTor == "true") {
             useSnowflake.enabled = true
         }
         if (ctx && ctx.hasTor && ctx.snowflake == "true") {
             useSnowflake.checked = true
         }
+        */
     }
 }
