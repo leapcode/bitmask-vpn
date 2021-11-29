@@ -17,6 +17,9 @@ const verURI = "https://downloads.leap.se/RiseupVPN/"
 // at the moment, we hardcode RiseupVPN in the path, assuming that all clients
 // stay in sync.
 func CanUpgrade() bool {
+	if os.Getenv("SKIP_VERSION_CHECK") == "1" {
+		return false
+	}
 	log.Println("Checking for updates...")
 	uri := verURI
 	switch runtime.GOOS {

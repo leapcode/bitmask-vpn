@@ -5,7 +5,7 @@ import "../themes/themes.js" as Theme
 
 Page {
     id: splash
-    property int timeoutInterval: qmlDebug ? 200 : 1600
+    property int timeoutInterval: qmlDebug ? 600 : 1600
     property alias errors: splashErrorBox
 
     ToolButton {
@@ -93,22 +93,11 @@ Page {
     }
 
     function hasMotd() {
-        if (ctx) {
-            if (isTrue(ctx.canUpgrade)) {
-              return true
-            }
-            return !isEmpty(ctx.motd)
-        }
-        return false
+        return needsUpgrade() || (ctx && !isEmpty(ctx.motd))
     }
 
     function getUpgradeText() {
-        let t = ""
-        let platform = Qt.platform.os
-        if (platform == "windows" || platform == "osx" || platform == "linux") {
-            t = qsTr("There is a newer version available.")
-        }
-        return t
+        return qsTr("There is a newer version available. ") + qsTr("Make sure to uninstall the previous one before running the new installer.")
     }
 
     function getUpgradeLink() {
@@ -117,6 +106,21 @@ Page {
 
      function getLinkURL() {
         return "https://downloads.leap.se/RiseupVPN/" + Qt.platform.os + "/"
+     }
+
+     function needsUpgrade() {
+        if (ctx && isTrue(ctx.canUpgrade)) {
+            if (qmlDebug) {
+                return true
+            }
+            let platform = Qt.platform.os
+            //DEBUG --
+            //if (platform == "windows" || platform == "osx" || platform == "linux" ) {
+            if (platform == "windows" || platform == "osx") {
+                    return true
+            }
+        }
+        return false
      }
 
     function showMotd() {
@@ -129,7 +133,7 @@ Page {
         let textLocale = ""
         let link = ""
 
-        if (ctx && isTrue(ctx.canUpgrade)) {
+        if (needsUpgrade()) {
             isUpgrade = true;
             textLocale = getUpgradeText();
             link = getUpgradeLink();
@@ -186,6 +190,7 @@ Page {
         if (ctx && isTrue(ctx.isReady) || qmlDebug) {
             splashTimer.stop()
             if (hasMotd()) {
+                console.debug("show motd");
                 showMotd();
             } else {
                 loader.source = "MainView.qml"
