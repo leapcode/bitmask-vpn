@@ -53,7 +53,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("These techniques can bypass censorship, but are slower. Use them only when needed")
+                text: qsTr("These techniques can bypass censorship, but are slower. Use them only when needed.")
                 color: "gray"
                 visible: true
                 wrapMode: Text.Wrap
@@ -154,7 +154,7 @@ ThemedPage {
 
             MaterialCheckBox {
                 id: useUDP
-                text: qsTr("UDP")
+                text: qsTr("Use UDP if available")
                 enabled: false
                 checked: false
                 Layout.leftMargin: 10

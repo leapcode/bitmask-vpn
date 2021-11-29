@@ -56,12 +56,37 @@ ThemedPage {
                 fill: parent
                 margins: 10
             }
-            Label {
-                id: recommendedLabel
-                //: Location Selection: label for radio button that selects automatically
-                text: qsTr("Recommended")
-                font.weight: Font.Bold
-                font.bold: true
+            Rectangle {
+                id: recommendedHeader
+                height: 20
+                Label {
+                    id: recommendedLabel
+                    //: Location Selection: label for radio button that selects automatically
+                    text: qsTr("Recommended")
+                    font.weight: Font.Bold
+                    font.bold: true
+                }
+                Image {
+                    id: lightning 
+                    smooth: true
+                    width: 16
+                    source: "../resources/lightning.svg"
+                    fillMode: Image.PreserveAspectFit
+                    verticalAlignment: Image.AlignVCenter
+                    anchors {
+                        left: recommendedLabel.right
+                        top: parent.top
+                        leftMargin: 5
+                        topMargin: 2
+                        //verticalCenterOffset: 3
+                    }
+                    ColorOverlay{
+                        anchors.fill: lightning
+                        source: lightning
+                        color: "black"
+                        antialiasing: true
+                    }
+                }
             }
             WrappedRadioButton {
                 id: autoRadioButton
@@ -69,7 +94,7 @@ ThemedPage {
                 ButtonGroup.group: locsel
                 checked: false
                 anchors {
-                    top: recommendedLabel.bottom
+                    top: recommendedHeader.bottom
                     leftMargin: -5
                 }
                 HoverHandler {
@@ -226,11 +251,20 @@ ThemedPage {
 
     function getAutoLabel() {
         let l = autoSelectionLabel
+        /* There's been some discussion about whether to include this.
+         An argument is that it is not 100% sure that we're going to connect
+         to this "recommended" gateway. However, it's fair to tell the user what's likely
+         to be the recomended location, to make a better choice. ALso, we can
+         implement a warning if finally connecting to a different location.
+         That said, all is made worse by the fact that menshen will not return
+         the "right" location if we're connecting  from the vpn, a proxy etc... For that we need to modify menshen to accept a location parameter.
+         Disabling the hint for now, but some agreement needs to be done on android + desktop about this behavior.
         if (ctx && ctx.locations && ctx.bestLocation) {
             let best = ctx.locationLabels[ctx.bestLocation]
             let label = best[0] + ", " + best[1]
             l += " (" + label + ")"
         }
+        */
         return l
     }
 
@@ -264,6 +298,15 @@ ThemedPage {
             return "medium"
         default:
             return "low"
+        }
+    }
+
+    function getLocationColor() {
+        if (ctx && ctx.status == "on") {
+            return "black"
+        } else {
+            // TODO darker gray
+            return "gray"
         }
     }
 

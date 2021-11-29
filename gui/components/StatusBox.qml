@@ -36,7 +36,7 @@ Item {
         }
         border {
             color: Theme.accentOff
-            width: 2
+            width: 4
         }
     }
 

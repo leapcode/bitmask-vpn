@@ -53,7 +53,7 @@ Page {
                     text: qsTr("Donate")
                     icon: "../resources/donate.svg"
                     triggered: function () {
-                        donateDialog.open()
+                        Qt.openUrlExternally(ctx.donateURL)
                     }
                 }
                 ListElement {

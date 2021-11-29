@@ -40,8 +40,7 @@ T.Button {
         text: control.text
         font: control.font
 
-        color: !control.enabled ? control.Material.hintTextColor : control.flat
-                                  && control.highlighted ? control.Material.accentColor : control.highlighted ? control.Material.primaryHighlightedTextColor : control.Material.foreground
+        color: !control.enabled ? control.Material.hintTextColor : control.flat && control.highlighted ? control.Material.accentColor : control.highlighted ? control.Material.primaryHighlightedTextColor : "black"
     }
 
     background: Rectangle {
