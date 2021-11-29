@@ -93,18 +93,23 @@ Chcesz teraz przekazać darowiznę?</translation>
 <context>
     <name>Help</name>
     <message>
-        <location filename="../components/Help.qml" line="5"/>
+        <location filename="../components/Help.qml" line="7"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Help.qml" line="15"/>
+        <location filename="../components/Help.qml" line="20"/>
         <source>Troubleshooting and support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Help.qml" line="21"/>
+        <location filename="../components/Help.qml" line="31"/>
         <source>Report a bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Help.qml" line="42"/>
+        <source>How to uninstall</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -321,12 +326,17 @@ Chcesz teraz przekazać darowiznę?</translation>
 <context>
     <name>Splash</name>
     <message>
-        <location filename="../components/Splash.qml" line="109"/>
-        <source>There is a newer version available.</source>
+        <location filename="../components/Splash.qml" line="100"/>
+        <source>There is a newer version available. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Splash.qml" line="115"/>
+        <location filename="../components/Splash.qml" line="100"/>
+        <source>Make sure to uninstall the previous one before running the new installer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
         <translation type="unfinished"></translation>
     </message>
