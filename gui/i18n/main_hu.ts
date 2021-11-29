@@ -332,7 +332,7 @@ Szeretne támogatni most?</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="100"/>
-        <source>Make sure to uninstall the previous one before running the new installer.</source>
+        <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
