@@ -306,7 +306,14 @@ func (p *gatewayPool) getBestLocation(transport string, tz int) string {
 }
 
 func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
-	if len(p.recommended) != 0 {
+	/*
+		if (&gatewayPool{} == p) {
+			log.Println("getAll tried to access uninitialized struct")
+			return []Gateway{}, nil
+		}
+	*/
+
+	if p.recommended == nil || len(p.recommended) == 0 {
 		return p.getGatewaysFromMenshen(transport, 999)
 	}
 	return p.getGatewaysByTimezone(transport, tz, 999)

@@ -25,10 +25,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 )
 
 const (
@@ -234,18 +236,22 @@ func (b *Bonafide) getURLNoDNS(object string) string {
 }
 
 func (b *Bonafide) maybeInitializeEIP() error {
-	if b.eip == nil {
-		err := b.fetchEipJSON()
-		if err != nil {
-			return err
+	if os.Getenv("SNOWFLAKE") == "1" {
+		snowflake.BootstrapWithSnowflakeProxies()
+	} else {
+		if b.eip == nil {
+			err := b.fetchEipJSON()
+			if err != nil {
+				return err
+			}
+			b.gateways = newGatewayPool(b.eip)
 		}
-		b.gateways = newGatewayPool(b.eip)
-	}
 
-	// FIXME: let's update the menshen gateways every time we 'maybe initilize EIP'
-	//        in a future we might want to be more clever on when to do that
-	//        (when opening the locations tab in the UI, only on reconnects, ...)
-	b.fetchGatewaysFromMenshen()
+		// FIXME: let's update the menshen gateways every time we 'maybe initilize EIP'
+		//        in a future we might want to be more clever on when to do that
+		//        (when opening the locations tab in the UI, only on reconnects, ...)
+		b.fetchGatewaysFromMenshen()
+	}
 	return nil
 }
 
