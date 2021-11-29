@@ -47,6 +47,11 @@ type Message struct {
 	Text     []LocalizedText `json:"text"`
 }
 
+type LocalizedText struct {
+	Lang string `json:"lang"`
+	Str  string `json:"str"`
+}
+
 func (m *Message) IsValid() bool {
 	valid := (m.IsValidBegin() && m.IsValidEnd() &&
 		m.IsValidType() && m.IsValidPlatform() && m.IsValidUrgency() &&
@@ -110,9 +115,4 @@ func (m *Message) IsValidUrgency() bool {
 
 func (m *Message) HasLocalizedText() bool {
 	return len(m.Text) > 0
-}
-
-type LocalizedText struct {
-	Lang string `json:"lang"`
-	Str  string `json:"str"`
 }

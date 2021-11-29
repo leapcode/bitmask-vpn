@@ -301,7 +301,8 @@ clean:
 #########################################################################
 
 qmllint:
-	@qmllint gui/qml/*.qml
+	@qmllint gui/*.qml
+	@qmllint gui/components/*.qml
 
 qmlfmt:
 	# needs https://github.com/jesperhh/qmlfmt in your path

@@ -47,6 +47,9 @@ func main() {
 		fmt.Printf("Platform: %s %v\n", msg.Platform, mark(msg.IsValidPlatform()))
 		fmt.Printf("Urgency: %s %v\n", msg.Urgency, mark(msg.IsValidUrgency()))
 		fmt.Printf("Languages: %d %v\n", len(msg.Text), mark(msg.HasLocalizedText()))
+		for _, t := range msg.Text {
+			fmt.Printf(t.Str)
+		}
 		if !msg.IsValid() {
 			os.Exit(1)
 		}
