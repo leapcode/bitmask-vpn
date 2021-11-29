@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "../themes/themes.js" as Theme
@@ -27,6 +27,10 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap
             font.pixelSize: Theme.fontSizeSmall - 2
+            onLinkActivated: Qt.openUrlExternally(link)
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
          }
 
         Label {
@@ -40,6 +44,9 @@ Item {
             wrapMode: Label.Wrap
             font.pixelSize: Theme.fontSizeSmall
             onLinkActivated: Qt.openUrlExternally(link)
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
          }
     }
 }
