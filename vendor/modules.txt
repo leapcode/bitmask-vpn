@@ -1,6 +1,16 @@
 # 0xacab.org/leap/shapeshifter v0.0.0-20191029173606-85d3e8ac43e2
 ## explicit
 0xacab.org/leap/shapeshifter
+# git.torproject.org/pluggable-transports/goptlib.git v1.1.0
+## explicit
+git.torproject.org/pluggable-transports/goptlib.git
+# git.torproject.org/pluggable-transports/snowflake.git v1.1.0
+## explicit
+git.torproject.org/pluggable-transports/snowflake.git/common/encapsulation
+git.torproject.org/pluggable-transports/snowflake.git/common/nat
+git.torproject.org/pluggable-transports/snowflake.git/common/safelog
+git.torproject.org/pluggable-transports/snowflake.git/common/turbotunnel
+git.torproject.org/pluggable-transports/snowflake.git/common/util
 # github.com/OperatorFoundation/obfs4 v0.0.0-20161108041644-17f2cb99c264
 ## explicit
 github.com/OperatorFoundation/obfs4/common/csrand
@@ -26,9 +36,23 @@ github.com/agl/ed25519/extra25519
 ## explicit
 github.com/apparentlymart/go-openvpn-mgmt/demux
 github.com/apparentlymart/go-openvpn-mgmt/openvpn
+# github.com/cretz/bine v0.2.0
+## explicit
+github.com/cretz/bine/control
+github.com/cretz/bine/process
+github.com/cretz/bine/tor
+github.com/cretz/bine/torutil
+github.com/cretz/bine/torutil/ed25519
+github.com/cretz/bine/torutil/ed25519/internal/edwards25519
 # github.com/dchest/siphash v1.2.1
 ## explicit
 github.com/dchest/siphash
+# github.com/google/uuid v1.2.0
+github.com/google/uuid
+# github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1
+github.com/gopherjs/gopherjs/js
+# github.com/jtolds/gls v4.20.0+incompatible
+github.com/jtolds/gls
 # github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 ## explicit
 github.com/kardianos/osext
@@ -36,29 +60,157 @@ github.com/kardianos/osext
 ## explicit
 github.com/keybase/go-ps
 github.com/keybase/go-ps/darwincgo
+# github.com/klauspost/cpuid v1.3.1
+github.com/klauspost/cpuid
+# github.com/klauspost/reedsolomon v1.9.9
+github.com/klauspost/reedsolomon
+# github.com/mmcloughlin/avo v0.0.0-20200803215136-443f81d77104
+github.com/mmcloughlin/avo/attr
+github.com/mmcloughlin/avo/build
+github.com/mmcloughlin/avo/buildtags
+github.com/mmcloughlin/avo/gotypes
+github.com/mmcloughlin/avo/internal/prnt
+github.com/mmcloughlin/avo/internal/stack
+github.com/mmcloughlin/avo/ir
+github.com/mmcloughlin/avo/operand
+github.com/mmcloughlin/avo/pass
+github.com/mmcloughlin/avo/printer
+github.com/mmcloughlin/avo/reg
+github.com/mmcloughlin/avo/src
+github.com/mmcloughlin/avo/x86
+# github.com/pion/datachannel v1.4.21
+github.com/pion/datachannel
+# github.com/pion/dtls/v2 v2.0.8
+github.com/pion/dtls/v2
+github.com/pion/dtls/v2/internal/ciphersuite
+github.com/pion/dtls/v2/internal/closer
+github.com/pion/dtls/v2/internal/util
+github.com/pion/dtls/v2/pkg/crypto/ccm
+github.com/pion/dtls/v2/pkg/crypto/ciphersuite
+github.com/pion/dtls/v2/pkg/crypto/clientcertificate
+github.com/pion/dtls/v2/pkg/crypto/elliptic
+github.com/pion/dtls/v2/pkg/crypto/fingerprint
+github.com/pion/dtls/v2/pkg/crypto/hash
+github.com/pion/dtls/v2/pkg/crypto/prf
+github.com/pion/dtls/v2/pkg/crypto/signature
+github.com/pion/dtls/v2/pkg/crypto/signaturehash
+github.com/pion/dtls/v2/pkg/protocol
+github.com/pion/dtls/v2/pkg/protocol/alert
+github.com/pion/dtls/v2/pkg/protocol/extension
+github.com/pion/dtls/v2/pkg/protocol/handshake
+github.com/pion/dtls/v2/pkg/protocol/recordlayer
+# github.com/pion/ice/v2 v2.0.15
+github.com/pion/ice/v2
+# github.com/pion/interceptor v0.0.10
+github.com/pion/interceptor
+github.com/pion/interceptor/pkg/nack
+github.com/pion/interceptor/pkg/report
+# github.com/pion/logging v0.2.2
+github.com/pion/logging
+# github.com/pion/mdns v0.0.4
+github.com/pion/mdns
+# github.com/pion/randutil v0.1.0
+github.com/pion/randutil
+# github.com/pion/rtcp v1.2.6
+github.com/pion/rtcp
+# github.com/pion/rtp v1.6.2
+github.com/pion/rtp
+github.com/pion/rtp/codecs
+# github.com/pion/sctp v1.7.11
+github.com/pion/sctp
+# github.com/pion/sdp/v3 v3.0.4
+github.com/pion/sdp/v3
+# github.com/pion/srtp/v2 v2.0.2
+github.com/pion/srtp/v2
+# github.com/pion/stun v0.3.5
+github.com/pion/stun
+github.com/pion/stun/internal/hmac
+# github.com/pion/transport v0.12.3
+github.com/pion/transport/connctx
+github.com/pion/transport/deadline
+github.com/pion/transport/packetio
+github.com/pion/transport/replaydetector
+github.com/pion/transport/vnet
+# github.com/pion/turn/v2 v2.0.5
+github.com/pion/turn/v2
+github.com/pion/turn/v2/internal/allocation
+github.com/pion/turn/v2/internal/client
+github.com/pion/turn/v2/internal/ipnet
+github.com/pion/turn/v2/internal/proto
+github.com/pion/turn/v2/internal/server
+# github.com/pion/udp v0.1.0
+github.com/pion/udp
+# github.com/pion/webrtc/v3 v3.0.15
+## explicit
+github.com/pion/webrtc/v3
+github.com/pion/webrtc/v3/internal/mux
+github.com/pion/webrtc/v3/internal/util
+github.com/pion/webrtc/v3/pkg/media
+github.com/pion/webrtc/v3/pkg/rtcerr
+# github.com/pkg/errors v0.9.1
+github.com/pkg/errors
 # github.com/rakyll/statik v0.1.7
 ## explicit
 github.com/rakyll/statik/fs
 # github.com/sevlyar/go-daemon v0.1.5
 ## explicit
 github.com/sevlyar/go-daemon
-# github.com/stretchr/testify v1.3.0
+# github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d
+github.com/smartystreets/assertions
+github.com/smartystreets/assertions/internal/go-render/render
+github.com/smartystreets/assertions/internal/oglematchers
+# github.com/smartystreets/goconvey v1.6.4
 ## explicit
-# golang.org/x/crypto v0.0.0-20191105034135-c7e5f84aec59
+github.com/smartystreets/goconvey/convey
+github.com/smartystreets/goconvey/convey/gotest
+github.com/smartystreets/goconvey/convey/reporting
+# github.com/templexxx/cpu v0.0.7
+github.com/templexxx/cpu
+# github.com/templexxx/xorsimd v0.4.1
+github.com/templexxx/xorsimd
+# github.com/tjfoc/gmsm v1.3.2
+github.com/tjfoc/gmsm/sm4
+# github.com/xtaci/kcp-go/v5 v5.6.1
 ## explicit
+github.com/xtaci/kcp-go/v5
+# github.com/xtaci/smux v1.5.15
+## explicit
+github.com/xtaci/smux
+# golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/cast5
+golang.org/x/crypto/cryptobyte
+golang.org/x/crypto/cryptobyte/asn1
 golang.org/x/crypto/curve25519
+golang.org/x/crypto/curve25519/internal/field
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
 golang.org/x/crypto/hkdf
 golang.org/x/crypto/internal/subtle
 golang.org/x/crypto/nacl/secretbox
+golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/poly1305
+golang.org/x/crypto/salsa20
 golang.org/x/crypto/salsa20/salsa
-# golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
-## explicit
+golang.org/x/crypto/sha3
+golang.org/x/crypto/tea
+golang.org/x/crypto/twofish
+golang.org/x/crypto/xtea
+# golang.org/x/mod v0.3.0
+golang.org/x/mod/semver
+# golang.org/x/net v0.0.0-20210525063256-abc453219eb5
+golang.org/x/net/bpf
+golang.org/x/net/dns/dnsmessage
+golang.org/x/net/internal/iana
+golang.org/x/net/internal/socket
 golang.org/x/net/internal/socks
+golang.org/x/net/ipv4
+golang.org/x/net/ipv6
 golang.org/x/net/proxy
-# golang.org/x/sys v0.0.0-20200212091648-12a6c2dcc1e4
+# golang.org/x/sys v0.0.0-20210423082822-04245dca01da
 ## explicit
 golang.org/x/sys/cpu
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
@@ -66,3 +218,18 @@ golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/debug
 golang.org/x/sys/windows/svc/eventlog
 golang.org/x/sys/windows/svc/mgr
+# golang.org/x/tools v0.0.0-20200808161706-5bf02b21f123
+golang.org/x/tools/go/gcexportdata
+golang.org/x/tools/go/internal/gcimporter
+golang.org/x/tools/go/internal/packagesdriver
+golang.org/x/tools/go/packages
+golang.org/x/tools/internal/event
+golang.org/x/tools/internal/event/core
+golang.org/x/tools/internal/event/keys
+golang.org/x/tools/internal/event/label
+golang.org/x/tools/internal/gocommand
+golang.org/x/tools/internal/packagesinternal
+golang.org/x/tools/internal/typesinternal
+# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+golang.org/x/xerrors
+golang.org/x/xerrors/internal
