@@ -24,6 +24,7 @@ package helper
 import (
 	"encoding/json"
 	"log"
+	"net"
 	"net/http"
 	"os/exec"
 )
@@ -128,6 +129,12 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	for _, gw := range gateways {
+		if !validAddress(gw) {
+			w.Write([]byte("bad argument"))
+		}
+	}
+
 	err = firewallStart(gateways)
 	if err != nil {
 		log.Printf("Error starting firewall: %v", err)
@@ -166,4 +173,12 @@ func getArgs(r *http.Request) ([]string, error) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&args)
 	return args, err
+}
+
+func validAddress(ip string) bool {
+	if net.ParseIP(ip) == nil {
+		return false
+	} else {
+		return true
+	}
 }
