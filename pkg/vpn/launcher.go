@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -115,7 +116,11 @@ func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
 	if err != nil {
 		return err
 	}
-	return l.send("/firewall/start", byteIPs)
+	uri := "/firewall/start"
+	if os.Getenv("UDP") == "1" {
+		uri = uri + "?udp=1"
+	}
+	return l.send(uri, byteIPs)
 }
 
 func (l *launcher) firewallStop() error {

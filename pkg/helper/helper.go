@@ -122,6 +122,12 @@ func (openvpn *openvpnT) kill() error {
 }
 
 func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
+	mode := "tcp"
+	query := r.URL.Query()
+	udp, udpParam := query["udp"]
+	if udpParam && len(udp) == 1 && udp[0] == "1" {
+		mode = "udp"
+	}
 	gateways, err := getArgs(r)
 	if err != nil {
 		log.Printf("An error has occurred processing gateways: %v", err)
@@ -135,7 +141,7 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = firewallStart(gateways)
+	err = firewallStart(gateways, mode)
 	if err != nil {
 		log.Printf("Error starting firewall: %v", err)
 		w.Write([]byte(err.Error()))

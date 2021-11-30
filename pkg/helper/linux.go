@@ -33,7 +33,7 @@ const (
 )
 
 var (
-	snapOpenvpnPath      = "/snap/bin/" + config.BinaryName + ".openvpn"
+	snapOpenvpnPath = "/snap/bin/" + config.BinaryName + ".openvpn"
 )
 
 func getPlatformOpenvpnFlags() []string {
@@ -68,7 +68,7 @@ func kill(cmd *exec.Cmd) error {
 	return cmd.Process.Signal(os.Interrupt)
 }
 
-func firewallStart(gateways []string) error {
+func firewallStart(gateways []string, mode string) error {
 	log.Println("Start firewall: do nothing, not implemented")
 	return nil
 }

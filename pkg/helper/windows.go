@@ -21,25 +21,23 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"strconv"
 	"strings"
-	"path"
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
 )
 
-
-
 var (
-	svcName          = BinaryName + `-helper-v2`
+	svcName = BinaryName + `-helper-v2`
 
 	// XXX this is set to c:\WINDOWS\system32 on initialization. Do not use it, use a function call instead.
 	appPath          = getExecDir()
 	LogFolder        = getExecDir()
 	openvpnPath      = path.Join(appPath, "openvpn.exe")
 	chocoOpenvpnPath = `C:\Program Files\OpenVPN\bin\openvpn.exe`
-	httpServerConf = &httpConf{}
+	httpServerConf   = &httpConf{}
 )
 
 func getPlatformOpenvpnFlags() []string {
@@ -62,7 +60,6 @@ func getExecDir() string {
 type httpConf struct {
 	BindAddr string
 }
-
 
 // parseCliArgs allows the helper binary to install/uninstall itself. It requires admin privileges.
 // However, be warned: if you intend to use it from the command line, you will have to compile it with the Go compiler yourself.
@@ -154,7 +151,7 @@ func kill(cmd *exec.Cmd) error {
 	return cmd.Process.Kill()
 }
 
-func firewallStart(gateways []string) error {
+func firewallStart(gateways []string, mode string) error {
 	log.Println("Start firewall: do nothing, not implemented")
 	return nil
 }

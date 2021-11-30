@@ -155,6 +155,11 @@ func (b *Bitmask) startOpenVPN() error {
 		if err != nil {
 			return err
 		}
+		if b.udp {
+			os.Setenv("UDP", "1")
+		} else {
+			os.Setenv("UDP", "0")
+		}
 		err = b.launch.firewallStart(gateways)
 		if err != nil {
 			return err
@@ -164,10 +169,8 @@ func (b *Bitmask) startOpenVPN() error {
 			for _, port := range gw.Ports {
 				if port != "53" {
 					if b.udp {
-						os.Setenv("UDP", "1")
 						arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
 					} else {
-						os.Setenv("UDP", "0")
 						arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
 					}
 				}

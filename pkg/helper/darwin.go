@@ -29,11 +29,11 @@ package helper
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"log"
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -43,8 +43,8 @@ import (
 const (
 	bitmask_anchor = "com.apple/250.BitmaskFirewall"
 	gateways_table = "bitmask_gateways"
-	pfctl = "/sbin/pfctl"
-	LogFolder = "/var/log/"
+	pfctl          = "/sbin/pfctl"
+	LogFolder      = "/var/log/"
 )
 
 func _getExecPath() string {
@@ -119,9 +119,9 @@ func kill(cmd *exec.Cmd) error {
 	return nil
 }
 
-func firewallStart(gateways []string) error {
+func firewallStart(gateways []string, mode string) error {
 	enablePf()
-	err := resetGatewaysTable(gateways)
+	err := resetGatewaysTable(gateways, mode)
 	if err != nil {
 		return err
 	}
@@ -155,7 +155,7 @@ func enablePf() {
 	cmd.Run()
 }
 
-func resetGatewaysTable(gateways []string) error {
+func resetGatewaysTable(gateways []string, mode string) error {
 	log.Println("Resetting gateways")
 	cmd := exec.Command(pfctl, "-a", bitmask_anchor, "-t", gateways_table, "-T", "delete")
 	err := cmd.Run()
@@ -170,6 +170,11 @@ func resetGatewaysTable(gateways []string) error {
 		if err != nil {
 			log.Printf("Error adding gateway to table: %v", err)
 		}
+	}
+
+	nameserver := nameserverTCP
+	if mode == "udp" {
+		nameserver = nameserverUDP
 	}
 
 	cmd = exec.Command(pfctl, "-a", bitmask_anchor, "-t", gateways_table, "-T", "add", nameserver)
