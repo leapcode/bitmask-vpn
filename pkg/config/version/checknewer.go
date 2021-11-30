@@ -25,10 +25,12 @@ func CanUpgrade() bool {
 	switch runtime.GOOS {
 	case "windows":
 		uri += "windows"
-	case "linux":
-		uri += "linux"
-	case "osx":
+	case "darwin":
 		uri += "osx"
+	case "linux":
+		fallthrough
+	default:
+		uri += "linux"
 	}
 	uri += "/lastver"
 	resp, err := http.Get(uri)
