@@ -8,7 +8,7 @@ import time
 
 from string import Template
 
-from provider import getDefaultProvider
+from provider import getDefaultProviders
 from provider import getProviderData
 
 OS_CONFIG = {
@@ -46,7 +46,7 @@ def getData():
 
     provider = os.environ.get('PROVIDER')
     if not provider:
-        provider = getDefaultProvider(config)
+        provider = getDefaultProviders(config)[0]
     return getProviderData(provider, config)
 
 def generateQtInstallerBoilerplate(data, platform, outDir):

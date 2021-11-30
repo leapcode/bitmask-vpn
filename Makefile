@@ -206,10 +206,10 @@ ifeq (${PLATFORM}, darwin)
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
 ifeq (${RELEASE}, yes)
 	@echo "[+] Running macdeployqt (release mode)"
-	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/qml ${MACDEPLOYQT_OPTS}
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/components ${MACDEPLOYQT_OPTS}
 else
 	@echo "[+] Running macdeployqt (debug mode)"
-	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/qml
+	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/components
 endif
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
