@@ -63,12 +63,13 @@
         <file>resources/angle-right.svg</file>
 
         <!-- fonts -->
-        <file alias="poppins-light.ttf">resources/fonts/Poppins-Thin.ttf</file>
-        <file alias="poppins-bold.ttf">resources/fonts/Poppins-Light.ttf</file>
+        <file alias="poppins-regular.ttf">resources/fonts/Poppins-Regular.ttf</file>
+        <file alias="poppins-bold.ttf">resources/fonts/Poppins-Bold.ttf</file>
         <file alias="monserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
         <file alias="roboto.ttf">resources/fonts/Roboto-Regular.ttf</file>
         <file alias="roboto-bold.ttf">resources/fonts/Roboto-Bold.ttf</file>
 
+        <!-- systray icons -->
         <file>assets/icon/png/black/vpn_off.png</file>
         <file>assets/icon/png/black/vpn_on.png</file>
         <file>assets/icon/png/black/vpn_wait_0.png</file>

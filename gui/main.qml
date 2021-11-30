@@ -55,7 +55,7 @@ ApplicationWindow {
 
     FontLoader {
         id: lightFont
-        source: "qrc:/poppins-light.ttf"
+        source: "qrc:/poppins-regular.ttf"
     }
 
     FontLoader {
