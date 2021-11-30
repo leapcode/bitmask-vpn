@@ -1,6 +1,10 @@
 # How to uninstall Desktop LEAP VPN
 
-*applies to RiseupVPN, CalyxVPN, CodigoSurVPN etc...*
+*Applies to RiseupVPN, CalyxVPN, CodigoSurVPN etc...*
+
+**For the time being, it's important that you follow this instructions and uninstall manually: if
+you remove the app by some other means, it's likely that you will end up with a broken network**.
+
 
 ## Windows
 
