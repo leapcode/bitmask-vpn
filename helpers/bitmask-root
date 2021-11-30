@@ -167,6 +167,7 @@ ALLOWED_FLAGS = {
     "--verb": ["NUMBER"],
     "--management-client": [],
     "--tun-ipv6": [],
+    "--float: [],
 }
 
 PARAM_FORMATS = {

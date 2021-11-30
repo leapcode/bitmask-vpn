@@ -181,7 +181,8 @@ func (b *Bitmask) startOpenVPN() error {
 		"--ca", b.getTempCaCertPath(),
 		"--cert", b.certPemPath,
 		"--key", b.certPemPath,
-		"--persist-tun")
+		"--persist-tun",
+		"--float")
 	/* persist-tun is needed for reconnects */
 	return b.launch.openvpnStart(arg...)
 }
