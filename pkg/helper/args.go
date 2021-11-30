@@ -4,15 +4,14 @@ import (
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
-	"path/filepath"
 )
 
 const (
-	// TODO: this is the nameserver for tcp, but for udp is 10.42.0.1
-	//       the nameserver pick up should be dependent on the proto being used
-	nameserver = "10.41.0.1"
+	nameserverTCP = "10.41.0.1"
+	nameserverUDP = "10.42.0.1"
 )
 
 var (
@@ -22,8 +21,10 @@ var (
 		"--dev", "tun",
 		"--tls-client",
 		"--remote-cert-tls", "server",
-		"--dhcp-option", "DNS", nameserver,
-		"--tls-version-min", "1.0",
+		"--dhcp-option", "DNS", nameserverTCP,
+		"--dhcp-option", "DNS", nameserverUDP,
+		"--tls-version-min", "1.2",
+		"--float",
 		"--log", filepath.Join(LogFolder, "openvpn-leap.log"),
 	}
 
@@ -34,6 +35,7 @@ var (
 		"--auth":              []string{"CIPHER"},
 		"--management-client": []string{},
 		"--management":        []string{"IP", "NUMBER"},
+		"--route":             []string{"IP", "IP", "NETGW"},
 		"--cert":              []string{"FILE"},
 		"--key":               []string{"FILE"},
 		"--ca":                []string{"FILE"},
@@ -45,11 +47,12 @@ var (
 
 	cipher  = regexp.MustCompile("^[A-Z0-9-]+$")
 	formats = map[string]func(s string) bool{
-			"NUMBER": isNumber,
+		"NUMBER": isNumber,
 		"PROTO":  isProto,
 		"IP":     isIP,
 		"CIPHER": cipher.MatchString,
 		"FILE":   isFile,
+		"NETGW":  isNetGw,
 	}
 )
 
@@ -102,4 +105,8 @@ func isFile(s string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func isNetGw(s string) bool {
+	return s == "net_gateway"
 }
