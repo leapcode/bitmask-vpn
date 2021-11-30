@@ -168,10 +168,12 @@ ApplicationWindow {
 
     Component.onCompleted: {
         loader.source = "components/Splash.qml"
+        // XXX workaround for custom font not working in osx
+        /*
         if (Qt.platform.os === "osx") {
-            // XXX workaround for custom font not working in osx
             root.font.family = robotoFont.name
             root.font.weight = Font.Light
         }
+        */
     }
 }

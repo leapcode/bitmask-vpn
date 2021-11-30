@@ -56,12 +56,6 @@ int main(int argc, char **argv) {
 
     Backend backend;
 
-    const int fontId = QFontDatabase::addApplicationFont(":/resources/fonts/Roboto-Regular.ttf");
-    if (fontId == -1)
-        qWarning() << "Failed to add Roboto as app font";
-    else
-        qDebug() << QFontDatabase::applicationFontFamilies(fontId);
-
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setApplicationVersion(backend.getVersion());
     QApplication app(argc, argv);
