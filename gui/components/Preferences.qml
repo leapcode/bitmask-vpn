@@ -248,14 +248,15 @@ ThemedPage {
     }
 
     Component.onCompleted: {
-        if (ctx && ctx.transport == "obfs4") {
-            useBridgesCheckBox.checked = true
-        }
         if (ctx && ctx.offersUdp == "false") {
             useUDP.enabled = false
         }
         if (ctx && ctx.offersUdp && ctx.udp == "true") {
             useUDP.checked = true
+        }
+        if (ctx && ctx.transport == "obfs4") {
+            useBridgesCheckBox.checked = true
+            useUDP.enabled = false
         }
         // disabled for now, will be on next release
         /*

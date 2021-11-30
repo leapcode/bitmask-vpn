@@ -111,6 +111,9 @@ ApplicationWindow {
             if (ctx.donateDialog == 'true') {
                 showDonationReminder = true
             }
+            if (isAutoLocation()) {
+                root.selectedGateway = "auto"
+            }
 
             // TODO check donation
             //if (needsDonate && !shownDonate) {
@@ -147,6 +150,16 @@ ApplicationWindow {
             return a.value - b.value
         }).reverse()
         return Array.from(arr, (k,_) => k.key);
+    }
+
+    function isAutoLocation() {
+        // FIXME there's something weird going on with newyork location...
+        // it gets marked as auto, which from europe is a bug.
+        let best = ctx.locationLabels[ctx.bestLocation]
+        if (best == undefined) {
+            return false
+        }
+        return (best[0] == ctx.currentLocation)
     }
 
     function bringToFront() {
