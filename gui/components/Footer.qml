@@ -96,12 +96,17 @@ ToolBar {
             }
         }
 
+        // TODO refactor with SignalIcon
+        // This signal image renders particularly bad at this size.
+        // https://stackoverflow.com/a/23449205/1157664
         Image {
             id: gwQuality
-            height: 24
-            width: 24
-            smooth: true
             source: "../resources/reception-0@24.svg"
+            width: 24
+            sourceSize.width: 24
+            smooth: false
+            mipmap: true
+            antialiasing: false
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
@@ -109,12 +114,11 @@ ToolBar {
                 topMargin: 5
                 rightMargin: 20
             }
-            // TODO refactor with SignalIcon
             ColorOverlay{
                 anchors.fill: gwQuality
                 source: gwQuality
                 color: getSignalColor()
-                antialiasing: true
+                antialiasing: false
             }
         }
     }
