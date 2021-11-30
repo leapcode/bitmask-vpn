@@ -34,7 +34,7 @@ Labs.SystemTrayIcon {
 
         Labs.MenuItem {
             text: qsTr("Donate")
-            onTriggered: root.openDonateDialog()
+            onTriggered: Qt.openUrlExternally(ctx.donateURL)
         }
 
         Labs.MenuSeparator {}
