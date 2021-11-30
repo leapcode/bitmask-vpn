@@ -100,12 +100,14 @@ ToolBar {
             id: gwQuality
             height: 24
             width: 24
-            source: "../resources/reception-0.svg"
+            smooth: true
+            source: "../resources/reception-0@24.svg"
             anchors {
                 right: parent.right
-                rightMargin: 20
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: 2
+                verticalCenterOffset: 0
+                topMargin: 5
+                rightMargin: 20
             }
             // TODO refactor with SignalIcon
             ColorOverlay{
@@ -132,14 +134,14 @@ ToolBar {
                 name: "on"
                 PropertyChanges {
                     target: gwQuality
-                    source: "../resources/reception-4.svg"
+                    source: "../resources/reception-4@24.svg"
                 }
             },
             State {
                 name: "off"
                 PropertyChanges {
                     target: gwQuality
-                    source: "../resources/reception-0.svg"
+                    source: "../resources/reception-0@24.svg"
                 }
             }
         ]

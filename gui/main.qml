@@ -30,7 +30,7 @@ ApplicationWindow {
     minimumHeight: appHeight
     maximumHeight: appHeight
 
-    title: ctx ? ctx.appName : "VPN"
+    title: ctx ? ctx.appName : ""
     Material.accent: Material.Green
 
     property var ctx
@@ -98,7 +98,6 @@ ApplicationWindow {
             ctx = JSON.parse(j)
             if (ctx != undefined) {
                 locationsModel = getSortedLocations()
-                //console.debug("Got sorted locations: " + locationsModel)
             }
             if (ctx.errors) {
                 console.debug("errors, setting root.error")
@@ -168,12 +167,5 @@ ApplicationWindow {
 
     Component.onCompleted: {
         loader.source = "components/Splash.qml"
-        // XXX workaround for custom font not working in osx
-        /*
-        if (Qt.platform.os === "osx") {
-            root.font.family = robotoFont.name
-            root.font.weight = Font.Light
-        }
-        */
     }
 }

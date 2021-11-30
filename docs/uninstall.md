@@ -9,7 +9,7 @@ you remove the app by some other means, it's likely that you will end up with a 
 ## Windows
 
 1. Close the app.
-2. Open the folder where the application is installed (Usually `C:\Program Files\RiseupVPN\`).
+2. Open the folder where the application is installed (Usually `C:\Program Files (x64)\RiseupVPN\`).
 3. Click on `uninstall.exe`
 
 ## OSX
