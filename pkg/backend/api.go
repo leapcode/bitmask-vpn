@@ -148,6 +148,7 @@ type InitOpts struct {
 	ProviderOptions  *bitmask.ProviderOpts
 	SkipLaunch       bool
 	Obfs4            bool
+	UDP              bool
 	DisableAutostart bool
 	StartVPN         string
 }

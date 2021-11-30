@@ -58,6 +58,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	bitmask.InitializeLogger()
 	ctx.cfg = config.ParseConfig()
 	setConfigOpts(opts, ctx.cfg)
+	ctx.UseUDP = ctx.cfg.UDP
 
 	err := pid.AcquirePID()
 	if err != nil {
@@ -92,6 +93,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	ctx.IsReady = true
 }
 
+// transfer initialization options from the config json to the config object
 func setConfigOpts(opts *InitOpts, conf *config.Config) {
 	conf.SkipLaunch = opts.SkipLaunch
 	if opts.StartVPN != "" {
@@ -103,6 +105,9 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 	}
 	if opts.Obfs4 {
 		conf.Obfs4 = opts.Obfs4
+	}
+	if opts.UDP {
+		conf.UDP = opts.UDP
 	}
 	if opts.DisableAutostart {
 		conf.DisableAutostart = opts.DisableAutostart

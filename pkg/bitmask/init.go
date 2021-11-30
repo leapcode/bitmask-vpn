@@ -95,6 +95,11 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 		return nil, err
 	}
 
+	err = setUDP(b, conf)
+	if err != nil {
+		return nil, err
+	}
+
 	if !conf.SkipLaunch {
 		err := maybeStartVPN(b, conf)
 		if err != nil {
@@ -113,6 +118,18 @@ func setTransport(b Bitmask, conf *config.Config) error {
 		err := b.SetTransport("obfs4")
 		if err != nil {
 			log.Printf("Error setting transport: %v", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func setUDP(b Bitmask, conf *config.Config) error {
+	if conf.UDP {
+		log.Printf("Use UDP")
+		err := b.UseUDP(true)
+		if err != nil {
+			log.Printf("Error setting UDP: %v", err)
 			return err
 		}
 	}
