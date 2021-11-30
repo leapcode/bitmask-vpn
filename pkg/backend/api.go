@@ -86,6 +86,13 @@ func SetTransport(label string) {
 		log.Println(err)
 	}
 	if label == "obfs4" {
+		// XXX this is an expedite way of avoiding the corner case
+		// in which user has selected a manual location that does not offer bridges.
+		// In the future, we can be more delicate and 1. do the switch only if the manual location
+		// is incompatible with obfs4; 2. notify the user of the change.
+		// But tonight we're in problem-solving mode, and we can assume that user wants to use bridges,
+		// no matter what. So let's assume that "use obfs4" supersedes everything else and be done.
+		UseAutomaticGateway()
 		ctx.cfg.SetUseObfs4(true)
 	} else {
 		ctx.cfg.SetUseObfs4(false)
