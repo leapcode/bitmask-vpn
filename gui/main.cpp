@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
     QApplication::setApplicationVersion(backend.getVersion());
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     /* load providers json */
     QFile providerJson (":/providers.json");
