@@ -84,7 +84,7 @@ ThemedPage {
             // XXX this is a quick workaround. About-us should be parametrized too.
             _provider = "<a href=\"https://riseup.net/about-us\">" + ctx.provider + "</a>"
         }
-        //: about dialog
+        //: about dialog, screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png
         //: %1 -> application name
         //: %2 -> provider name
         //: %3 -> donation text if activated
@@ -97,6 +97,7 @@ ThemedPage {
     function getVersion() {
         var _name = ctx ? ctx.appName : "vpn"
         var _ver = ctx ? ctx.version : "unknown"
+        //: screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png
         //: %1 -> application name
         //: %2 -> version string
         var _txt = qsTr("%1 version: \n%2").arg(_name).arg(_ver)
