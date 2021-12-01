@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fr">
 <context>
     <name>About</name>
     <message>
@@ -17,14 +19,14 @@
         <source>%1 version: 
 %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>%1 version : 
+        <translation>%1 version&#xa0;: 
 %2</translation>
     </message>
 </context>
 <context>
     <name>Footer</name>
     <message>
-        <location filename="../components/Footer.qml" line="165"/>
+        <location filename="../components/Footer.qml" line="171"/>
         <source>Recommended</source>
         <translation>Recommandé</translation>
     </message>
@@ -86,9 +88,14 @@
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
+        <source>Switching gateway…</source>
+        <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Switching gateways...</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation>Changement de passerelle…</translation>
+        <translation type="vanished">Changement de passerelle…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -139,7 +146,7 @@
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5 $ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant ?</translation>
+        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5&#xa0;$ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant&#x2009;?</translation>
     </message>
 </context>
 <context>
@@ -167,7 +174,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
         <source>Use obfs4 bridges</source>
-        <translation>Utiliser des ponts obfs4</translation>
+        <translation>Utiliser des ponts&#xa0;obfs4</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="96"/>
@@ -191,8 +198,12 @@
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
+        <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>UDP can make the VPN faster. It might be blocked on some networks</source>
-        <translation>UDP peut accélérer le RPV. UDP pourrait être bloqué sur certains réseaux</translation>
+        <translation type="vanished">UDP peut accélérer le RPV. UDP pourrait être bloqué sur certains réseaux</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
@@ -340,49 +351,49 @@ sécurisée</translation>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="85"/>
+        <location filename="../main.cpp" line="80"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation> : un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
+        <translation>&#xa0;: un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="87"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome Shell ou pour contrôler le RPV par d’autres moyens).</translation>
+        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome&#xa0;Shell ou pour contrôler le RPV par d’autres moyens).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="99"/>
+        <location filename="../main.cpp" line="94"/>
         <source>Enable Web API.</source>
         <translation>Activer l’API Web.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="105"/>
+        <location filename="../main.cpp" line="100"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Installer les aides (Linux seulement, « sudo » est requis). </translation>
+        <translation>Installer les aides (Linux seulement, «&#xa0;sudo&#xa0;» est requis). </translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="106"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Utiliser obfs4 pour brouiller le trafic, si proposé par le fournisseur.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="117"/>
+        <location filename="../main.cpp" line="112"/>
         <source>Disable autostart for the next run.</source>
         <translation>Désactiver le démarrage automatique pour la prochaine exécution.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="122"/>
+        <location filename="../main.cpp" line="117"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Port de l’API Web (par défaut : 8080)</translation>
+        <translation>Port de l’API Web (par défaut&#xa0;: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="124"/>
+        <location filename="../main.cpp" line="119"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Démarrer le RPV, soit Activer soit Désactiver</translation>
     </message>

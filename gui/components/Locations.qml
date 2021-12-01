@@ -28,7 +28,7 @@ ThemedPage {
     //: Location Selection: label for radio buttons that selects manually
     property var manualSelectionLabel: qsTr("Manually select")
     //: A little display to signal that the clicked gateway is being switched to
-    property var switchingLocationLabel: qsTr("Switching gateways...")
+    property var switchingLocationLabel: qsTr("Switching gateway…")
     //: Subtitle to explain that only bridge locations are shown in the selector
     property var onlyBridgesWarning: qsTr("Only locations with bridges")
 

@@ -25,7 +25,7 @@
 <context>
     <name>Footer</name>
     <message>
-        <location filename="../components/Footer.qml" line="165"/>
+        <location filename="../components/Footer.qml" line="171"/>
         <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
@@ -87,7 +87,7 @@
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
-        <source>Switching gateways...</source>
+        <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
         <translation type="unfinished"></translation>
     </message>
@@ -192,7 +192,7 @@
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
-        <source>UDP can make the VPN faster. It might be blocked on some networks</source>
+        <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -346,42 +346,42 @@ Connection</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="85"/>
+        <location filename="../main.cpp" line="80"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="87"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="99"/>
+        <location filename="../main.cpp" line="94"/>
         <source>Enable Web API.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="105"/>
+        <location filename="../main.cpp" line="100"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="106"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="117"/>
+        <location filename="../main.cpp" line="112"/>
         <source>Disable autostart for the next run.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="122"/>
+        <location filename="../main.cpp" line="117"/>
         <source>Web API port (default: 8080)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="124"/>
+        <location filename="../main.cpp" line="119"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -141,7 +141,7 @@ ThemedPage {
             }
 
             Label {
-                text: qsTr("UDP can make the VPN faster. It might be blocked on some networks")
+                text: qsTr("UDP can make the VPN faster. It might be blocked on some networks.")
                 width: parent.width
                 color: "gray"
                 visible: true

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>About</name>
     <message>
@@ -24,7 +26,7 @@
 <context>
     <name>Footer</name>
     <message>
-        <location filename="../components/Footer.qml" line="165"/>
+        <location filename="../components/Footer.qml" line="171"/>
         <source>Recommended</source>
         <translation>Önerilen</translation>
     </message>
@@ -86,9 +88,14 @@
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
+        <source>Switching gateway…</source>
+        <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Switching gateways...</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation>Ağ geçitleri değiştiriliyor...</translation>
+        <translation type="vanished">Ağ geçitleri değiştiriliyor...</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -191,8 +198,12 @@
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
+        <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>UDP can make the VPN faster. It might be blocked on some networks</source>
-        <translation>UDP, VPN&apos;i daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
+        <translation type="vanished">UDP, VPN&apos;i daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
@@ -340,49 +351,49 @@ Bağlantı</translation>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="85"/>
+        <location filename="../main.cpp" line="80"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: hızlı ve güvenli bir VPN. Bitmask tarafından sunuluyor.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="87"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Sistem çubuğu simgesini gösterme (Gnome Kabuk eklentisiyle birlikte veya VPN&apos;i başka şekillerde denetlemek için kullanışlıdır)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="99"/>
+        <location filename="../main.cpp" line="94"/>
         <source>Enable Web API.</source>
         <translation>Web API&apos;yi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="105"/>
+        <location filename="../main.cpp" line="100"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Yardımcıları kur (sadece Linux, sudo gerekiyor)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="106"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Trafiği gizlemek için obfs4 kullan, sadece sağlayıcıda kullanılabiliyorsa</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="117"/>
+        <location filename="../main.cpp" line="112"/>
         <source>Disable autostart for the next run.</source>
         <translation>Sonraki çalıştırma için otomatik başlatmayı devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="122"/>
+        <location filename="../main.cpp" line="117"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API portu (varsayılan: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="124"/>
+        <location filename="../main.cpp" line="119"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>VPN&apos;i başlat, &apos;açık&apos; veya &apos;kapalı&apos;.</translation>
     </message>
