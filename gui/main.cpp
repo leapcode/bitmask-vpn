@@ -116,6 +116,7 @@ int main(int argc, char **argv) {
     });
     QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web API port (default: 8080)"), "port", "8080");
     parser.addOption(webPortOption);
+    // FIXME need to add note for the translation, on/off shouldn't be translated.
     QCommandLineOption startVPNOption("start-vpn", QApplication::translate("main", "Start the VPN, either 'on' or 'off'."), "status", "");
     parser.addOption(startVPNOption);
     parser.process(app);

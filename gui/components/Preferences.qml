@@ -54,7 +54,7 @@ ThemedPage {
 
             Label {
                 text: qsTr("These techniques can bypass censorship, but are slower. Use them only when needed.")
-                color: "gray"
+                color: Material.foreground
                 visible: true
                 wrapMode: Text.Wrap
                 font.pixelSize: Theme.fontSize - 3
@@ -94,14 +94,15 @@ ThemedPage {
 
             Label {
                 text: qsTr("Traffic is obfuscated to bypass blocks")
-                color: "gray"
+                color: useBridgesCheckBox.enabled ? Material.foreground : Material.hintTextColor
                 visible: true
                 wrapMode: Text.Wrap
-                font.pixelSize: Theme.fontSize - 4
-                Layout.leftMargin: 35
+                font.pixelSize: Theme.fontSize - 5
+                Layout.leftMargin: 36
                 Layout.rightMargin: 15
                 Layout.bottomMargin: 5
-                Layout.preferredWidth: 240
+                Layout.topMargin: -5
+                Layout.preferredWidth: 220
             }
 
             MaterialCheckBox {
@@ -122,14 +123,15 @@ ThemedPage {
 
             Label {
                 text: qsTr("Snowflake needs Tor installed in your system")
-                color: "gray"
+                color: useSnowflake.enabled ? Material.foreground : Material.hintTextColor
                 visible: true
                 wrapMode: Text.Wrap
-                font.pixelSize: Theme.fontSize - 4
-                Layout.leftMargin: 35
+                font.pixelSize: Theme.fontSize - 5
+                Layout.leftMargin: 36
                 Layout.rightMargin: 15
                 Layout.bottomMargin: 5
-                Layout.preferredWidth: 240
+                Layout.topMargin: -5
+                Layout.preferredWidth: 220
             }
 
             Label {
@@ -143,7 +145,7 @@ ThemedPage {
             Label {
                 text: qsTr("UDP can make the VPN faster. It might be blocked on some networks.")
                 width: parent.width
-                color: "gray"
+                color: Material.foreground
                 visible: true
                 wrapMode: Text.Wrap
                 font.pixelSize: Theme.fontSize - 3
