@@ -17,7 +17,8 @@
         <source>%1 version: 
 %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 versija: 
+%2</translation>
     </message>
 </context>
 <context>
