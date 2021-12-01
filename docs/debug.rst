@@ -58,6 +58,18 @@ Make sure that "pgrep bitmask-helper" does not return any pid.
 Now you can move /Applications/RiseupVPN.app to the Trash, and launch a
 recent installer to get a clean install.
 
+Firewall
+~~~~~~~~
+
+In the unfortunate event that a crash lets you with a non-usable connection, you can restore the firewall by hand:
+
+.. code:: bash
+
+  # if you see drop ... <bitmask_gateways>, the fw is on
+  sudo pfctl -a com.apple/250.BitmaskFirewall -sr
+  # clean it up!
+  sudo pfctl -a com.apple/250.BitmaskFirewall -F all
+
 Windows
 -------
 In Windows you can use PowerShell to see if there's an old service Running (it
