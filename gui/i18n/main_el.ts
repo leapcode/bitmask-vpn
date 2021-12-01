@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="el">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -90,12 +88,7 @@
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switching gateways...</source>
-        <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="vanished">Η πύλη αλλάζει...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -199,11 +192,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UDP can make the VPN faster. It might be blocked on some networks</source>
-        <translation type="vanished">Το UDP μπορεί να κάνει το VPN γρηγορότερο. Ίσως να μπλοκάρεται σε κάποια δίκτυα</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
@@ -351,8 +340,8 @@ Connection</source>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

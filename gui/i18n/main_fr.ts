@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>About</name>
     <message>
@@ -19,7 +17,7 @@
         <source>%1 version: 
 %2</source>
         <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>%1 version&#xa0;: 
+        <translation>%1 version : 
 %2</translation>
     </message>
 </context>
@@ -90,12 +88,7 @@
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switching gateways...</source>
-        <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="vanished">Changement de passerelle…</translation>
+        <translation>Changement de passerelle…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -146,7 +139,7 @@
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5&#xa0;$ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant&#x2009;?</translation>
+        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5 $ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant ?</translation>
     </message>
 </context>
 <context>
@@ -174,7 +167,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
         <source>Use obfs4 bridges</source>
-        <translation>Utiliser des ponts&#xa0;obfs4</translation>
+        <translation>Utiliser des ponts obfs4</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="96"/>
@@ -199,16 +192,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UDP can make the VPN faster. It might be blocked on some networks</source>
-        <translation type="vanished">UDP peut accélérer le RPV. UDP pourrait être bloqué sur certains réseaux</translation>
+        <translation>L’UDP peut accélérer le RPV. Il pourrait être bloqué sur certains réseaux.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
         <source>Use UDP if available</source>
-        <translation>Utiliser UDP si disponible</translation>
+        <translation>Utiliser l’UDP si disponible</translation>
     </message>
 </context>
 <context>
@@ -351,8 +340,8 @@ sécurisée</translation>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -360,12 +349,12 @@ sécurisée</translation>
     <message>
         <location filename="../main.cpp" line="80"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation>&#xa0;: un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
+        <translation> : un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="87"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome&#xa0;Shell ou pour contrôler le RPV par d’autres moyens).</translation>
+        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome Shell ou pour contrôler le RPV par d’autres moyens).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="94"/>
@@ -375,7 +364,7 @@ sécurisée</translation>
     <message>
         <location filename="../main.cpp" line="100"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Installer les aides (Linux seulement, «&#xa0;sudo&#xa0;» est requis). </translation>
+        <translation>Installer les aides (Linux seulement, « sudo » est requis). </translation>
     </message>
     <message>
         <location filename="../main.cpp" line="106"/>
@@ -390,7 +379,7 @@ sécurisée</translation>
     <message>
         <location filename="../main.cpp" line="117"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Port de l’API Web (par défaut&#xa0;: 8080)</translation>
+        <translation>Port de l’API Web (par défaut : 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="119"/>
