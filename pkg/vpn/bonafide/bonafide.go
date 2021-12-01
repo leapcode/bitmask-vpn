@@ -247,10 +247,15 @@ func (b *Bonafide) maybeInitializeEIP() error {
 			b.gateways = newGatewayPool(b.eip)
 		}
 
-		// FIXME: let's update the menshen gateways every time we 'maybe initilize EIP'
-		//        in a future we might want to be more clever on when to do that
-		//        (when opening the locations tab in the UI, only on reconnects, ...)
-		b.fetchGatewaysFromMenshen()
+		// XXX For now, we just initialize once per session.
+		// We might update the menshen gateways every time we 'maybe initilize EIP'
+		// We might also want to be more clever on when to do that
+		// (when opening the locations tab in the UI, only on reconnects, ...)
+		// or just periodically - but we need to modify menshen api to
+		// pass a location parameter.
+		if len(b.gateways.recommended) == 0 {
+			b.fetchGatewaysFromMenshen()
+		}
 	}
 	return nil
 }

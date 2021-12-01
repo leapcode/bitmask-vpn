@@ -36,11 +36,6 @@ std::string getEnv(std::string const& key)
     return val == NULL ? std::string() : std::string(val);
 }
 
-void signalHandler(int) {
-    Quit();
-    exit(0);
-}
-
 QString getAppName(QJsonValue info, QString provider) {
     for (auto p: info.toArray()) {
         QJsonObject item = p.toObject();
@@ -51,16 +46,37 @@ QString getAppName(QJsonValue info, QString provider) {
     return "BitmaskVPN";
 }
 
-int main(int argc, char **argv) {
-    signal(SIGINT, signalHandler);
+void catchUnixSignals(std::initializer_list<int> quitSignals) {
+    auto handler = [](int sig) -> void {
+        printf("\nCatched signal(%d): quitting\n", sig);
+        Quit();
+        QGuiApplication::quit();
+    };
 
+    sigset_t blocking_mask;
+    sigemptyset(&blocking_mask);
+    for (auto sig : quitSignals)
+        sigaddset(&blocking_mask, sig);
+
+    struct sigaction sa;
+    sa.sa_handler = handler;
+    sa.sa_mask    = blocking_mask;
+    sa.sa_flags   = 0;
+
+    for (auto sig : quitSignals)
+        sigaction(sig, &sa, nullptr);
+}
+
+int main(int argc, char **argv) {
     Backend backend;
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setApplicationVersion(backend.getVersion());
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    catchUnixSignals({SIGINT, SIGTERM});
 
     /* load providers json */
     QFile providerJson (":/providers.json");

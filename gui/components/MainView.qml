@@ -76,7 +76,7 @@ Page {
                     text: qsTr("Quit")
                     icon: "../resources/quit.svg"
                     triggered: function () {
-                        Qt.callLater(backend.quit)
+                        backend.quit()
                     }
                 }
             }

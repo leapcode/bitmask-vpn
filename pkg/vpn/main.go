@@ -20,6 +20,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
@@ -124,6 +125,7 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 func (b *Bitmask) Close() {
 	log.Printf("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
+	time.Sleep(500 * time.Millisecond)
 	err := b.launch.close()
 	if err != nil {
 		log.Printf("There was an error closing the launcher: %v", err)
