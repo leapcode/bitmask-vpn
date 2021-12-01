@@ -72,6 +72,9 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		errCh <- err.Error()
 		return
 	}
+	// right now we just get autostart from an init flag,
+	// but we want to be able to persist that option from the preferences
+	// pane
 	ctx.autostart = initializeAutostart(ctx.cfg)
 
 	helpers, privilege, err := b.VPNCheck()
@@ -119,11 +122,11 @@ func initializeAutostart(conf *config.Config) bitmask.Autostart {
 	if conf.SkipLaunch || conf.DisableAutostart {
 		autostart.Disable()
 		autostart = &bitmask.DummyAutostart{}
-	}
-
-	err := autostart.Enable()
-	if err != nil {
-		log.Printf("Error enabling autostart: %v", err)
+	} else {
+		err := autostart.Enable()
+		if err != nil {
+			log.Printf("Error enabling autostart: %v", err)
+		}
 	}
 	return autostart
 }

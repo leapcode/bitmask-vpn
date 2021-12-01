@@ -1,6 +1,12 @@
-0.21.8
-======
+0.21.11
+=======
 - Do not fail if ipv6 is disabled (GNU/Linux)
+- Complete UI revamp
+- UDP support
+- Obfs4 support
+- Experimental snowflake support for bootstrap
+- Disable autostart
+
 
 0.21.6
 ======

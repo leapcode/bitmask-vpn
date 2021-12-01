@@ -87,7 +87,6 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 func InitializeBitmaskContext(provider string,
 	jsonPtr unsafe.Pointer, jsonLen C.int,
 	obfs4 bool, disableAutostart bool, startVPN string) {
-
 	json := C.GoBytes(jsonPtr, jsonLen)
 	opts := backend.InitOptsFromJSON(provider, string(json))
 	opts.Obfs4 = obfs4
@@ -98,6 +97,7 @@ func InitializeBitmaskContext(provider string,
 
 //export InitializeTestBitmaskContext
 func InitializeTestBitmaskContext(provider string,
+
 	jsonPtr unsafe.Pointer, jsonLen C.int) {
 	json := C.GoBytes(jsonPtr, jsonLen)
 	opts := backend.InitOptsFromJSON(provider, string(json))

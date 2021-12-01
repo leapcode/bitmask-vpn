@@ -124,10 +124,10 @@ int main(int argc, char **argv) {
                 "Use obfs4 to obfuscate the traffic, if available in the provider."),
         },
         {
-            {"a", "disable-autostart"},
+            {"a", "enable-autostart"},
             QApplication::translate(
                 "main",
-                "Disable autostart for the next run."),
+                "Enable autostart."),
         },
     });
     QCommandLineOption webPortOption("web-port", QApplication::translate("main", "Web API port (default: 8080)"), "port", "8080");
@@ -137,14 +137,14 @@ int main(int argc, char **argv) {
     parser.addOption(startVPNOption);
     parser.process(app);
 
-    bool hideSystray    = parser.isSet("no-systray");
+    bool hideSystray     = parser.isSet("no-systray");
     bool availableSystray = true;
-    bool installHelpers = parser.isSet("install-helpers");
-    bool webAPI         = parser.isSet("web-api");
-    QString webPort     = parser.value("web-port");
-    bool version        = parser.isSet("version");
-    bool obfs4          = parser.isSet("obfs4");
-    bool disAutostart   = parser.isSet("disable-autostart");
+    bool installHelpers  = parser.isSet("install-helpers");
+    bool webAPI          = parser.isSet("web-api");
+    QString webPort      = parser.value("web-port");
+    bool version         = parser.isSet("version");
+    bool obfs4           = parser.isSet("obfs4");
+    bool enableAutostart = parser.isSet("enable-autostart");
     QString startVPN    = parser.value("start-vpn");
 
     if (version) {
@@ -240,7 +240,7 @@ int main(int argc, char **argv) {
     InitializeBitmaskContext(
             toGoStr(defaultProvider.toString()),
             (char*)providerJsonBytes.data(), providerJsonBytes.length(),
-            obfs4, disAutostart, toGoStr(startVPN));
+            obfs4, !enableAutostart, toGoStr(startVPN));
 
     /* if requested, enable web api for controlling the VPN */
     if (webAPI)
