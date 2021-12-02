@@ -177,8 +177,13 @@ func (b *Bitmask) startOpenVPN() error {
 			}
 		}
 	}
+	openvpnVerb := os.Getenv("OPENVPN_VERBOSITY")
+	verb, err := strconv.Atoi(openvpnVerb)
+	if err != nil || verb > 6 || verb < 3 {
+		openvpnVerb = "3"
+	}
 	arg = append(arg,
-		"--verb", "3",
+		"--verb", openvpnVerb,
 		"--management-client",
 		"--management", openvpnManagementAddr, openvpnManagementPort,
 		"--ca", b.getTempCaCertPath(),
@@ -186,6 +191,9 @@ func (b *Bitmask) startOpenVPN() error {
 		"--key", b.certPemPath,
 		"--persist-tun",
 		"--float")
+	if verb > 3 {
+		arg = append(arg, "--log", "/tmp/leap-vpn.log")
+	}
 	/* persist-tun is needed for reconnects */
 	return b.launch.openvpnStart(arg...)
 }
