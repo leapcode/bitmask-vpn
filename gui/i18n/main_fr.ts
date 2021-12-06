@@ -167,7 +167,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
         <source>Use obfs4 bridges</source>
-        <translation>Utiliser des ponts obfs4</translation>
+        <translation>Utiliser des ponts obfs4</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="96"/>

@@ -88,7 +88,7 @@
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ağ geçitleri değiştiriliyor…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -192,7 +192,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"/>
+        <translation>UDP, VPN&apos;i daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>

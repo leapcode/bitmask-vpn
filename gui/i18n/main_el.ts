@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="el">
 <context>
     <name>About</name>
     <message>
@@ -88,7 +88,7 @@
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"/>
+        <translation>Η πύλη αλλάζει…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
@@ -192,7 +192,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"/>
+        <translation>Το UDP μπορεί να κάνει το VPN γρηγορότερο. Ίσως να μπλοκάρεται σε κάποια δίκτυα.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>

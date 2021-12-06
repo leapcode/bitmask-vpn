@@ -88,13 +88,13 @@
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gateway wisselen…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alleen locaties met bridges</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
@@ -134,12 +134,12 @@
     <message>
         <location filename="../components/MainView.qml" line="107"/>
         <source>Please donate!</source>
-        <translation type="unfinished"/>
+        <translation>Doneer alsjeblieft!</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation type="unfinished"/>
+        <translation>Deze dienst wordt volledig gefinancierd met donaties van gebruikers zoals jij. Het kost ongeveer 5$ per persoon per maand, maar ieder beetje helpt. Wil je nu doneren?</translation>
     </message>
 </context>
 <context>
@@ -152,17 +152,17 @@
     <message>
         <location filename="../components/Preferences.qml" line="38"/>
         <source>Turn off the VPN to make changes</source>
-        <translation type="unfinished"/>
+        <translation>Schakel de VPN uit om te wijzigen</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="48"/>
         <source>Censorship circumvention</source>
-        <translation type="unfinished"/>
+        <translation>Censuur omzeilen</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="56"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation type="unfinished"/>
+        <translation>Deze techniek kan censuur omzeilen, maar is ook trager. Gebruik het alleen wanneer noodzakelijk.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
@@ -172,32 +172,32 @@
     <message>
         <location filename="../components/Preferences.qml" line="96"/>
         <source>Traffic is obfuscated to bypass blocks</source>
-        <translation type="unfinished"/>
+        <translation>Verkeer is versluierd om blokkades te omzeilen</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="109"/>
         <source>Use Snowflake</source>
-        <translation type="unfinished"/>
+        <translation>Gebruik Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="124"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation type="unfinished"/>
+        <translation>Tor moet op je systeem geïnstalleerd zijn voor Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="136"/>
         <source>Transport</source>
-        <translation type="unfinished"/>
+        <translation>Transport</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"/>
+        <translation>UDP kan een VPN sneller maken. Het kan geblokkeerd zijn op sommige netwerken.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
         <source>Use UDP if available</source>
-        <translation type="unfinished"/>
+        <translation>Gebruik UDP wanneer beschikbaar</translation>
     </message>
 </context>
 <context>
@@ -205,17 +205,17 @@
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>There is a newer version available. </source>
-        <translation type="unfinished"/>
+        <translation>Er is een nieuwe versie beschikbaar.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation type="unfinished"/>
+        <translation>Zorg ervoor dat je de vorige versie &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;deïnstalleert&lt;/a&gt; voor je de nieuwe versie start.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
-        <translation type="unfinished"/>
+        <translation>UPGRADE NU</translation>
     </message>
 </context>
 <context>
@@ -234,12 +234,12 @@
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation type="unfinished"/>
+        <translation>Verbergen</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Tonen</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../components/Systray.qml" line="72"/>
         <source>Connect to</source>
-        <translation type="unfinished"/>
+        <translation>Verbinden met</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
@@ -260,7 +260,7 @@
     <message>
         <location filename="../components/Systray.qml" line="77"/>
         <source>Disconnect</source>
-        <translation type="unfinished"/>
+        <translation>Verbinding verbreken</translation>
     </message>
 </context>
 <context>
@@ -269,13 +269,14 @@
         <location filename="../components/VPNState.qml" line="26"/>
         <location filename="../components/VPNState.qml" line="125"/>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="58"/>
         <source>Unsecured
 Connection</source>
-        <translation type="unfinished"/>
+        <translation>Onbeveiligde
+Verbinding</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="71"/>
@@ -286,7 +287,8 @@ Connection</source>
         <location filename="../components/VPNState.qml" line="91"/>
         <source>Secured
 Connection</source>
-        <translation type="unfinished"/>
+        <translation>Beveiligde
+Verbinding</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="104"/>
@@ -307,7 +309,7 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="223"/>
         <source>off</source>
-        <translation type="unfinished"/>
+        <translation>uit</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="226"/>

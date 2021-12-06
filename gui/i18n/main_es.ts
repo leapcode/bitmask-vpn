@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>About</name>
     <message>
@@ -10,7 +10,7 @@
         <location filename="../components/About.qml" line="80"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
         <extracomment>donation text of the about dialog</extracomment>
-        <translation>&lt;p&gt;El costo de este servicio está cubierto por completo por donaciones de usuarios como tú. &lt;a href=&quot;%1&quot;&gt;Por favor, dona&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;El costo de este servicio se paga con donaciones de usuarios como tú. &lt;a href=&quot;%1&quot;&gt;Por favor, dona&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="102"/>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../components/Help.qml" line="42"/>
         <source>How to uninstall</source>
-        <translation>Cómo desinstalar la aplicación</translation>
+        <translation>Cómo desinstalar</translation>
     </message>
 </context>
 <context>
@@ -70,13 +70,13 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation>Cambiar de salida</translation>
+        <translation>Elige ubicación</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation>Usar la mejor conexión</translation>
+        <translation>Usar la mejor conexión automáticamente</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
@@ -94,7 +94,7 @@
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation>Nomás localizaciones con puentes</translation>
+        <translation>Sólo ubicaciones con puentes</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Este servicio se costea a puro donaciones de usuarias como tú. Mantener la VPN prendida cuesta unos 5 USD por persona y mes, pero cada contribución es valiosa. ¿Querés hacer una donación?</translation>
+        <translation>Este servicio se costea a puro donaciones de usuarias como tú. Mantener la VPN funcionando cuesta unos 5 USD por persona y mes, pero cada contribución es valiosa. ¿Quieres hacer una donación?</translation>
     </message>
 </context>
 <context>
@@ -152,7 +152,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="38"/>
         <source>Turn off the VPN to make changes</source>
-        <translation>Apagá la VPN para hacer cambios</translation>
+        <translation>Apaga la VPN para hacer cambios</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="48"/>
@@ -215,7 +215,7 @@
     <message>
         <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
-        <translation>ACTUALIZAR AHORITA</translation>
+        <translation>ACTUALIZAR AHORA</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@ Segura</translation>
     <message>
         <location filename="../main.cpp" line="106"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Usar obfs4 para ofuscar el tráfico, si está disponible con el proveedor.</translation>
+        <translation>Usar obfs4 para ofuscar el tráfico, si está disponible en el proveedor.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="112"/>
