@@ -14,12 +14,12 @@ const ExampleFile = "motd-example.json"
 func ParseFile(f string) (Messages, error) {
 	jsonFile, err := os.Open(f)
 	if err != nil {
-		panic(err)
+		return Messages{}, err
 	}
 	defer jsonFile.Close()
 	byteVal, err := ioutil.ReadAll(jsonFile)
 	if err != nil {
-		panic(err)
+		return Messages{}, err
 	}
 	return getFromJSON(byteVal)
 }

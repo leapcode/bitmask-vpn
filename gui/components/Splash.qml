@@ -223,7 +223,7 @@ Page {
     }
 
     function isEmpty(val) {
-        return val.length == 0;
+         return val==undefined ? true : val.length == 0;
     }
 
     function isEmptyMotd(motd) {

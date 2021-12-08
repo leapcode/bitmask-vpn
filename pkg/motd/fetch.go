@@ -56,7 +56,7 @@ func FetchLatest() []Message {
 func fetchURL(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		return []byte(""), err
 	}
 	defer resp.Body.Close()
 	return ioutil.ReadAll(resp.Body)
