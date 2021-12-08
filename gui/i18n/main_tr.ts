@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>About</name>
     <message>
@@ -57,12 +57,12 @@
     <message>
         <location filename="../components/InitErrors.qml" line="31"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation>Yardımcılar bulunamıyor, lütfen kurulumunuzu kontrol edin.</translation>
+        <translation>Yardımcılar bulunamadı, lütfen kurulumunuzu denetleyin.</translation>
     </message>
     <message>
         <location filename="../components/InitErrors.qml" line="44"/>
         <source>Could not find polkit agent.</source>
-        <translation>polkit vekili bulunamıyor.</translation>
+        <translation>polkit uygulaması bulunamadı.</translation>
     </message>
 </context>
 <context>
@@ -70,31 +70,31 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation>Konum Seçin</translation>
+        <translation>Konum seçin</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation>Otomatik olarak en iyi bağlantıyı kullan</translation>
+        <translation>Otomatik olarak en iyi bağlantı kullanılsın</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation>Elle seçin</translation>
+        <translation>El ile seçin</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation>Ağ geçitleri değiştiriliyor…</translation>
+        <translation>Ağ geçidi değiştiriliyor…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation>Salt köprü içeren konumlar</translation>
+        <translation>Yalnız köprü ile ulaşılan konumlar</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../components/MainView.qml" line="46"/>
         <source>Preferences</source>
-        <translation>Tercihler</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="60"/>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../components/MainView.qml" line="76"/>
         <source>Quit</source>
-        <translation>Çıkış</translation>
+        <translation>Çık</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="107"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Bu hizmet tamamen sizin gibi kullanıcıların bağışlarıyla yapılıyor. Bir VPN&apos;i çalıştırma maliyeti, kişi başına aylık olarak 5 dolar civarıdır, ancak her katkı değerlidir. Şimdi siz de bağış yapmak ister misiniz?</translation>
+        <translation>Bu hizmet tamamen sizin gibi kullanıcıların bağışları sayesinde sunulabiliyor. Bir VPN ağını işletme maliyeti, kişi başına aylık 5 dolar civarındadır, ancak her katkı değerlidir. Siz de bağış yapmak ister misiniz?</translation>
     </message>
 </context>
 <context>
@@ -147,27 +147,27 @@
     <message>
         <location filename="../components/Preferences.qml" line="10"/>
         <source>Preferences</source>
-        <translation>Tercihler</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="38"/>
         <source>Turn off the VPN to make changes</source>
-        <translation>Değişiklik yapmak için VPN&apos;i kapatın</translation>
+        <translation>Değişiklik yapmak için VPN bağlantısını kapatın</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="48"/>
         <source>Censorship circumvention</source>
-        <translation>Sansür önleme</translation>
+        <translation>Sansürü aşma</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="56"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation>Bu yöntemler sansürü aşabilir, ancak yavaştır. Sadece gerektiğinde kullanın.</translation>
+        <translation>Bu yöntemler sansürü aşabilir, ancak yavaştır. Yalnız gerek duyduğunuz zaman kullanın.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
         <source>Use obfs4 bridges</source>
-        <translation>obfs4 köprülerini kullan</translation>
+        <translation>obfs4 köprüleri kullanılsın</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="96"/>
@@ -177,27 +177,27 @@
     <message>
         <location filename="../components/Preferences.qml" line="109"/>
         <source>Use Snowflake</source>
-        <translation>Snowflake Kullan</translation>
+        <translation>Snowflake kullanılsın</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="124"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation>Snowflake sisteminizde Tor kurulumu gerektirir</translation>
+        <translation>Snowflake için sisteminizde Tor kurulu olması gerekir</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="136"/>
         <source>Transport</source>
-        <translation>Aktarım</translation>
+        <translation>Taşıyıcı</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation>UDP, VPN&apos;i daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
+        <translation>UDP, VPN bağlantısını daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
         <source>Use UDP if available</source>
-        <translation>Mevcutsa UDP kullan</translation>
+        <translation>Olabiliyorsa UDP kullanılsın</translation>
     </message>
 </context>
 <context>
@@ -205,12 +205,12 @@
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>There is a newer version available. </source>
-        <translation>Yeni bir sürüm mevcut.</translation>
+        <translation>Yeni bir sürüm yayınlanmış.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation>Yeni kurulumu başlatmadan önce lütfen öncekini &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;kaldırdığınızdan&lt;/a&gt; emin olun.</translation>
+        <translation>Yeni kurulumu başlatmadan önce lütfen önceki kurulumu &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;kaldırdığınızdan&lt;/a&gt; emin olun.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="104"/>
@@ -239,23 +239,23 @@
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation>Göster</translation>
+        <translation>Görüntüle</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits que application</extracomment>
-        <translation>Çıkış</translation>
+        <translation>Çık</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="72"/>
         <source>Connect to</source>
-        <translation>Bağlan</translation>
+        <translation>Şuraya bağlan</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation>Bağlantı kur</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="77"/>
@@ -269,14 +269,14 @@
         <location filename="../components/VPNState.qml" line="26"/>
         <location filename="../components/VPNState.qml" line="125"/>
         <source>Connecting</source>
-        <translation>Bağlanıyor</translation>
+        <translation>Bağlantı kuruluyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="58"/>
         <source>Unsecured
 Connection</source>
-        <translation>Güvensiz
-Bağlantı</translation>
+        <translation>Güvenilmez
+bağlantı</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="71"/>
@@ -287,8 +287,8 @@ Bağlantı</translation>
         <location filename="../components/VPNState.qml" line="91"/>
         <source>Secured
 Connection</source>
-        <translation>Güvenli
-Bağlantı</translation>
+        <translation>Güvenilir
+bağlantı</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="104"/>
@@ -321,7 +321,7 @@ Bağlantı</translation>
         <location filename="../components/VPNState.qml" line="229"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 uygulamasına bağlanılıyor</translation>
+        <translation>%1 ile bağlantı kuruluyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="232"/>
@@ -349,42 +349,42 @@ Bağlantı</translation>
     <message>
         <location filename="../main.cpp" line="80"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation>: hızlı ve güvenli bir VPN. Bitmask tarafından sunuluyor.</translation>
+        <translation>: hızlı ve güvenilir bir VPN. Bitmask tarafından sunuluyor.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="87"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Sistem çubuğu simgesini gösterme (Gnome Kabuk eklentisiyle birlikte veya VPN&apos;i başka şekillerde denetlemek için kullanışlıdır)</translation>
+        <translation>Sistem çubuğu simgesi görüntülenmesin (Gnome kabuk eklentisiyle birlikte ya da VPN bağlantısını başka şekillerde denetlemek için kullanışlıdır)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="94"/>
         <source>Enable Web API.</source>
-        <translation>Web API&apos;yi etkinleştir</translation>
+        <translation>Web API kullanılsın</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="100"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Yardımcıları kur (sadece Linux, sudo gerekiyor)</translation>
+        <translation>Yardımcıları kur (yalnız Linux üzerinde ve sudo gereklidir)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="106"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Trafiği gizlemek için obfs4 kullan, sadece sağlayıcıda kullanılabiliyorsa</translation>
+        <translation>Trafiği gizlemek için obfs4 kullanılsın. Yalnız hizmet sağlayıcıda kullanılabiliyorsa</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="112"/>
         <source>Disable autostart for the next run.</source>
-        <translation>Sonraki çalıştırma için otomatik başlatmayı devre dışı bırak</translation>
+        <translation>Sonraki çalıştırmada otomatik başlatma devre dışı bırakılsın</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="117"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Web API portu (varsayılan: 8080)</translation>
+        <translation>Web API kapı numarası (varsayılan: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="119"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation>VPN&apos;i başlat, &apos;açık&apos; veya &apos;kapalı&apos;.</translation>
+        <translation>VPN bağlantısını başlat, &apos;açık&apos; veya &apos;kapalı&apos;.</translation>
     </message>
 </context>
 </TS>
