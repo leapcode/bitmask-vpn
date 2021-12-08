@@ -55,7 +55,7 @@ Page {
             id: connectionImage
             height: 180
             anchors.horizontalCenter: parent.horizontalCenter
-            source: "../resources/icon-noshield.svg"
+            source: customTheme.iconSplash
             fillMode: Image.PreserveAspectFit
         }
 
@@ -93,7 +93,7 @@ Page {
     }
 
     function hasMotd() {
-        return needsUpgrade() || (ctx && !isEmpty(ctx.motd))
+        return needsUpgrade() || (ctx && !isEmptyMotd(ctx.motd))
     }
 
     function getUpgradeText() {
@@ -126,6 +126,8 @@ Page {
 
     function showMotd() {
         // XXX this is not picking locales configured by LANG or LC_ALL
+        // Need to fix this; probably also with allowing to select translation
+        // manually on runtime.
         let isUpgrade = false
         let lang = Qt.locale().name.substring(0,2)
         let messages = JSON.parse(ctx.motd)
@@ -221,7 +223,16 @@ Page {
     }
 
     function isEmpty(val) {
-        return val == "";
+        return val.length == 0;
+    }
+
+    function isEmptyMotd(motd) {
+        let m = JSON.parse(motd)
+        let first = m[0]
+        if (first == undefined) {
+            return true
+        }
+        return isEmpty(first.txt)
     }
 
 }
