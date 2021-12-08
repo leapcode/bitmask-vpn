@@ -49,7 +49,7 @@ T.Button {
 
         radius: 4
         border.color: "black"
-        border.width: 1
+        border.width: 2
         color: !control.enabled ? control.Material.buttonDisabledColor : control.highlighted ? control.Material.highlightedButtonColor : Theme.buttonColor
 
         PaddedRectangle {
@@ -67,10 +67,13 @@ T.Button {
         // The layer is disabled when the button color is transparent so you can do
         // Material.background: "transparent" and get a proper flat button without needing
         // to set Material.elevation as well
-        layer.enabled: control.enabled && control.Material.buttonColor.a > 0
+        layer.enabled: true // control.enabled && control.Material.buttonColor.a > 0
+
+        /*
         layer.effect: ElevationEffect {
             elevation: control.Material.elevation
         }
+        */
 
         Ripple {
             clipRadius: 2
