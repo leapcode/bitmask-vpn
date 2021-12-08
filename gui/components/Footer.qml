@@ -8,8 +8,8 @@ import "../themes/themes.js" as Theme
 
 ToolBar {
 
-    Material.background: Theme.bgColor
-    Material.foreground: "black"
+    Material.background: customTheme.bgColor
+    Material.foreground: "black" // TODO customize too
     Material.elevation: 0
     visible: isFooterVisible()
 
@@ -20,7 +20,7 @@ ToolBar {
 
         ToolButton {
             id: gwButton
-            visible: hasMultipleGateways()
+            visible: true
 
             anchors {
                 verticalCenter: parent.verticalCenter

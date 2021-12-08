@@ -6,6 +6,12 @@
 
         <!-- gui components -->
         <file>themes/themes.js</file>
+        <file>themes/theme-riseup.js</file>
+        <file>themes/Riseup.qml</file>
+        <file>themes/theme-calyx.js</file>
+        <file>themes/Calyx.qml</file>
+        <file>themes/ThemeObject.qml</file>
+
         <file>components/MainView.qml</file>
         <file>components/ThemedPage.qml</file>
         <file>components/Splash.qml</file>
@@ -56,13 +62,21 @@
         <file>resources/reception-4@24.svg</file>
         <file>resources/arrow-left.svg</file>
         <file>resources/globe.svg</file>
-        <file>resources/ravens.svg</file>
-        <file>resources/ravens.gif</file>
-        <file>resources/riseup-icon.svg</file>
         <file>resources/spy.gif</file>
         <file>resources/quit.svg</file>
         <file>resources/alert.svg</file>
         <file>resources/angle-right.svg</file>
+
+        <!-- riseup assets -->
+        <file>resources/ravens.svg</file>
+        <file>resources/ravens.gif</file>
+        <file>resources/riseup-icon.svg</file>
+
+        <!-- calyx assets -->
+        <file>resources/calyx/calyx-shield-green.png</file>
+        <file>resources/calyx/calyx-hand.png</file>
+        <file>resources/calyx/calyx-red-shield.png</file>
+        <file>resources/calyx/calyx-yellow-shield.png</file>
 
         <!-- fonts -->
         <file alias="poppins-regular.ttf">resources/fonts/Poppins-Regular.ttf</file>

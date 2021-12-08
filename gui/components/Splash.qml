@@ -84,7 +84,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 50
-        source: "../resources/icon-noshield.svg"
+        source: customTheme.iconSplash
         fillMode: Image.PreserveAspectFit
     }
 

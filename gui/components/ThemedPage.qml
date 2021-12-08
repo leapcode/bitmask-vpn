@@ -5,7 +5,7 @@ import "../themes/themes.js" as Theme
 
 Page {
     Rectangle {
-        color: Theme.bgColor
+        color: customTheme.bgColor
         anchors.fill: parent
     }
 }

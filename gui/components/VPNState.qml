@@ -31,7 +31,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/ravens.gif"
+                source: customTheme.iconConnecting
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {
@@ -63,7 +63,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/icon-noshield.svg"
+                source: customTheme.iconOff
             }
             PropertyChanges {
                 target: toggleVPN
@@ -96,7 +96,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/riseup-icon.svg"
+                source: customTheme.iconOn
             }
             PropertyChanges {
                 target: toggleVPN
@@ -130,7 +130,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: connectionImage
-                source: "../resources/ravens.gif"
+                source: customTheme.iconConnecting
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PropertyChanges {

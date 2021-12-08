@@ -19,13 +19,13 @@ Item {
     }
 
     Rectangle {
-        color: Theme.bgColor
+        color: customTheme.bgColor
         anchors.fill: parent
     }
 
     Rectangle {
         id: statusBoxBackground
-        color: Theme.fgColor
+        color: customTheme.fgColor
         height: 300
         radius: 10
         antialiasing: true
@@ -110,7 +110,7 @@ Item {
             id: connectionImage
             height: 160
             speed: 0.8
-            source: "../resources/icon-noshield.svg"
+            source: customTheme.iconOff
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             OpacityAnimator on opacity{

@@ -1,11 +1,3 @@
-
-
-/*
- TODO (ui rewrite)
- See https://0xacab.org/leap/bitmask-vpn/-/issues/523
- - [ ] control actions from systray
- - [ ] add gateway to systray
-*/
 import QtQuick 2.0
 import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
@@ -21,6 +13,7 @@ ApplicationWindow {
 
     property int appHeight: 460
     property int appWidth: 280
+    property alias customTheme: themeLoader.item
 
     width: appWidth
     minimumWidth: appWidth
@@ -84,6 +77,12 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    Loader {
+        id: themeLoader
+        source: loadTheme()
+    }
+
+
     Systray {
         id: systray
     }
@@ -114,24 +113,6 @@ ApplicationWindow {
             if (isAutoLocation()) {
                 root.selectedGateway = "auto"
             }
-
-            // TODO check donation
-            //if (needsDonate && !shownDonate) {
-            //    donate.visible = true;
-            //    shownDonate = true;
-            //    // move this to onClick of "close" for widget
-            //    backend.donateSeen();
-            //}
-
-            /*
-            TODO libraries need login
-            if (ctx.loginDialog == 'true') {
-                login.visible = true
-            }
-            if (ctx.loginOk == 'true') {
-                loginOk.visible = true
-            }
-            */
         }
     }
 
@@ -171,6 +152,21 @@ ApplicationWindow {
         }
         raise()
         requestActivate()
+    }
+
+    function loadTheme() {
+        let arr = flavor.split("/")
+        var providerFlavor = arr[arr.length-1]
+        console.debug("flavor: " + providerFlavor)
+        if (providerFlavor == "riseup-vpn") {
+            return "themes/Riseup.qml"
+        } else if (providerFlavor== "calyx-vpn") {
+            return "themes/Calyx.qml"
+        } else {
+            // we should do a Default theme, with a fallback
+            // mechanism
+            return "Riseup.qml"
+        }
     }
 
     onSceneGraphError: function (error, msg) {
