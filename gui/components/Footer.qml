@@ -221,6 +221,9 @@ ToolBar {
     }
 
     function isFooterVisible() {
+        if (drawerOn) {
+            return false
+        }
         if (stackView.depth > 1) {
             return false
         }

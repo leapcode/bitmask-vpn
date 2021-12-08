@@ -55,11 +55,14 @@ Item {
             cursorShape: Qt.PointingHandCursor
         }
         onClicked: {
+            settingsDrawer.toggle()
+            /*
             if (stackView.depth > 1) {
                 stackView.pop()
             } else {
-                settingsDrawer.open()
+                settingsDrawer.toggle()
             }
+            */
         }
 
         Icon {
@@ -67,8 +70,11 @@ Item {
             width: 16
             height: 16
             anchors.centerIn: settingsButton
+            source: "../resources/gear-fill.svg"
+            /*
             source: stackView.depth
                     > 1 ? "../resources/arrow-left.svg" : "../resources/gear-fill.svg"
+            */
         }
     }
 

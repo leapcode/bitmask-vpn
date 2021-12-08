@@ -7,83 +7,80 @@ import QtQuick.Layouts 1.14
 import "../themes/themes.js" as Theme
 
 Page {
-
     StackView {
         id: stackView
         anchors.fill: parent
         initialItem: Home {}
     }
 
-    Drawer {
+    NavigationDrawer {
         id: settingsDrawer
-
-        width: Math.min(root.width, root.height) / 3 * 2
-        height: root.height
-
-        ListView {
-            focus: true
-            currentIndex: -1
+        Rectangle {
             anchors.fill: parent
+            color: "white"
+            ListView {
+                focus: true
+                currentIndex: -1
+                anchors.fill: parent
 
-            delegate: ItemDelegate {
-                width: parent.width
-                text: model.text
-                visible: {
-                    if (isDonationService) {return true}
-                    return model.text != qsTr("Donate")
-                }
-                highlighted: ListView.isCurrentItem
-                icon.color: "transparent"
-                icon.source: model.icon
-                onClicked: {
-                    settingsDrawer.close()
-                    model.triggered()
-                }
-            }
-
-            model: ListModel {
-                ListElement {
-                    text: qsTr("Preferences")
-                    icon: "../resources/tools.svg"
-                    triggered: function () {
-                        stackView.push("Preferences.qml")
+                model: navModel
+                delegate: ItemDelegate {
+                    width: parent.width
+                    text: model.text
+                    visible: {
+                        if (isDonationService) {return true}
+                        return model.text != qsTr("Donate")
                     }
-                }
-                ListElement {
-                    text: qsTr("Donate")
-                    icon: "../resources/donate.svg"
-                    triggered: function () {
-                        Qt.openUrlExternally(ctx.donateURL)
-                    }
-                }
-                ListElement {
-                    text: qsTr("Help")
-                    icon: "../resources/help.svg"
-                    triggered: function () {
-                        stackView.push("Help.qml")
-                        settingsDrawer.close()
-                    }
-                } // -> can link to another dialog with report bug / support / contribute / FAQ
-                ListElement {
-                    text: qsTr("About")
-                    icon: "../resources/about.svg"
-                    triggered: function () {
-                        stackView.push("About.qml")
-                        settingsDrawer.close()
-                    }
-                }
-                ListElement {
-                    text: qsTr("Quit")
-                    icon: "../resources/quit.svg"
-                    triggered: function () {
-                        backend.quit()
+                    highlighted: ListView.isCurrentItem
+                    icon.color: "transparent"
+                    icon.source: model.icon
+                    onClicked: {
+                        settingsDrawer.toggle()
+                        model.triggered()
                     }
                 }
             }
-
-            ScrollIndicator.vertical: ScrollIndicator {}
         }
-    }
+     }
+
+     ListModel {
+        id: navModel
+        ListElement {
+            text: qsTr("Preferences")
+            icon: "../resources/tools.svg"
+            triggered: function () {
+                stackView.push("Preferences.qml")
+            }
+        }
+        ListElement {
+            text: qsTr("Donate")
+            icon: "../resources/donate.svg"
+            triggered: function () {
+                Qt.openUrlExternally(ctx.donateURL)
+            }
+        }
+        ListElement {
+            text: qsTr("Help")
+            icon: "../resources/help.svg"
+            triggered: function () {
+                stackView.push("Help.qml")
+            }
+        } // -> can link to another dialog with report bug / support / contribute / FAQ
+        ListElement {
+            text: qsTr("About")
+            icon: "../resources/about.svg"
+            triggered: function () {
+                stackView.push("About.qml")
+            }
+        }
+        ListElement {
+            text: qsTr("Quit")
+            icon: "../resources/quit.svg"
+            triggered: function () {
+                backend.quit()
+            }
+        }
+    } // end listmodel
 
     header: Header {
         id: header
@@ -146,7 +143,6 @@ Page {
                 horizontalCenter: parent.horizontalCenter
             }
         }
-
         onYes: Qt.openUrlExternally(ctx.donateURL)
     }
 

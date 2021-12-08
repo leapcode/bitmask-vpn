@@ -41,6 +41,7 @@
         <file>components/InitErrors.qml</file>
         <file>components/ErrorBox.qml</file>
         <file>components/MotdBox.qml</file>
+        <file>components/NavigationDrawer.qml</file>
 
         <!-- resources, assets -->
         <file>resources/icon-noshield.svg</file>

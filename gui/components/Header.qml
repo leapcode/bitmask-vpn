@@ -29,7 +29,7 @@ ToolBar {
             if (stackView.depth > 1) {
                 stackView.pop()
             } else {
-                settingsDrawer.open()
+                settingsDrawer.toggle()
             }
         }
     }
