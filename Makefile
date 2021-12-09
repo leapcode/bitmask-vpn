@@ -326,6 +326,10 @@ endif
 # packaging templates
 #########################################################################
 
+bump_snap:
+	@sed -i 's/^version:.*$$/version: ${VERSION}/' snap/snapcraft.yaml
+	@sed -i 's/^.*echo .*version.txt$$/        echo ${VERSION} > $$SNAPCRAFT_PRIME\/snap\/version.txt/' snap/snapcraft.yaml
+
 vendor_init:
 	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/init
 
