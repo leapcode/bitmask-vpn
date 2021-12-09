@@ -330,6 +330,11 @@ bump_snap:
 	@sed -i 's/^version:.*$$/version: ${VERSION}/' snap/snapcraft.yaml
 	@sed -i 's/^.*echo .*version.txt$$/        echo ${VERSION} > $$SNAPCRAFT_PRIME\/snap\/version.txt/' snap/snapcraft.yaml
 
+local_snap:
+	# just to be able to debug stuff locally in the same way as it's really built @canonical
+	# but multipass is the way to go, nowadays
+	@snapcraft --debug --use-lxd
+
 vendor_init:
 	@VENDOR_PATH=${VENDOR_PATH} ./branding/scripts/init
 
