@@ -47,8 +47,8 @@ parts:
         mkdir -p $SNAPCRAFT_PRIME/snap/
         echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
         make build_golib
-        ln -fs /usr/lib/qt5/bin/lrelease /root/parts/qt5/install/usr/lib/qt5/bin/lrelease
-        QMAKE=/root/parts/qt5/install/usr/lib/qt5/bin/qmake LRELEASE=/usr/lib/qt5/bin/lrelease QT_SELECT=5 XBUILD=no TARGET=${binaryName} make build_gui
+        # XXX missing lrelease step
+        QMAKE=$SNAPCRAFT_STAGE/usr/lib/qt5/bin/qmake QT_SELECT=5 LRELEASE=no XBUILD=no TARGET=${binaryName} make build_gui
         mkdir -p $SNAPCRAFT_PART_INSTALL/bin
         mv build/qt/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
     override-prime: |
@@ -63,6 +63,8 @@ parts:
       - qttools5-dev-tools
     stage-packages:
       - qml-module-qt-labs-platform
+      - qttools5-dev-tools
+      - qt5-qmake
     after: [desktop-qt5]
 
   desktop-integration:
@@ -238,7 +240,7 @@ parts:
       - -./usr/include
       - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
       - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/bin
+      #- -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/bin
       - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/mkspecs
       - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/examples
       - -./usr/lib/qt5
