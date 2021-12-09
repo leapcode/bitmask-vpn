@@ -7,8 +7,14 @@ import QtQuick.Window 2.0
 Rectangle {
     id: panel
 
-    function show() { open = true; }
-    function hide() { open = false; }
+    function show() {
+        open = true;
+        drawerOn = true;
+    }
+    function hide() {
+        open = false; 
+        drawerOn = false;
+    }
     function toggle() {
         open = open ? false : true;
         drawerOn = open;
@@ -93,6 +99,7 @@ Rectangle {
     function handleClick(mouse) {
         if ((_rightEdge && mouse.x < panel.x ) || mouse.x > panel.width) {
             open = false;
+            drawerOn = false;
         }
     }
 
