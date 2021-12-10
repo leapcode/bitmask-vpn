@@ -50,7 +50,7 @@ void catchUnixSignals(std::initializer_list<int> quitSignals) {
     auto handler = [](int sig) -> void {
         printf("\nCatched signal(%d): quitting\n", sig);
         Quit();
-        QGuiApplication::quit();
+        QApplication::quit();
     };
 
     sigset_t blocking_mask;
@@ -72,7 +72,11 @@ int main(int argc, char **argv) {
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setApplicationVersion(backend.getVersion());
-    QGuiApplication app(argc, argv);
+    // There's a legend about brave coders than, from time to time, have the urge to change
+    // the app object to a QGuiApplication. Resist the temptation, oh coder
+    // from the future, or otherwise ye shall be punished for long hours wondering
+    // why yer little systray resists to be displayed.
+    QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
@@ -179,7 +183,14 @@ int main(int argc, char **argv) {
     }
 
     /* set window icon */
-    app.setWindowIcon(QIcon(":/vendor/icon.svg"));
+    /* this one is set in the vendor.qrc resources, that needs to be passed to the project */
+    /* there's something weird with icons being cached, need to investigate */
+    if (appName == "CalyxVPN") {
+        qDebug() << "setting calyx logo";
+        app.setWindowIcon(QIcon(":/vendor/calyx.svg"));
+    } else if (appName == "RiseupVPN") {
+        app.setWindowIcon(QIcon(":/vendor/riseup.svg"));
+    }
 
     /* load translations */
     QTranslator translator;
@@ -227,7 +238,7 @@ int main(int argc, char **argv) {
 
     /* connect quitDone signal, exit app */
     QObject::connect(&backend, &Backend::quitDone, []() {
-            QGuiApplication::quit();
+            QApplication::quit();
     });
 
     /* register statusChanged callback with CGO */

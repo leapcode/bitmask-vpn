@@ -49,7 +49,7 @@ T.Button {
 
         radius: 4
         border.color: "black"
-        border.width: 2
+        border.width: 1
         color: !control.enabled ? control.Material.buttonDisabledColor : control.highlighted ? control.Material.highlightedButtonColor : Theme.buttonColor
 
         PaddedRectangle {
@@ -69,7 +69,7 @@ T.Button {
         // to set Material.elevation as well
         layer.enabled: true // control.enabled && control.Material.buttonColor.a > 0
 
-        /*
+        /* this is trouble in the canned Qt version for snaps, so let's pass for now
         layer.effect: ElevationEffect {
             elevation: control.Material.elevation
         }

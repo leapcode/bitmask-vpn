@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/vendor/">
-        <file alias="icon.svg">assets/icon.svg</file>
+        <file alias="provider.svg">assets/icon.svg</file>
+        <file alias="riseup.svg">riseup/assets/icon.svg</file>
+        <file alias="calyx.svg">calyx/assets/icon.svg</file>
     </qresource>
 </RCC>
