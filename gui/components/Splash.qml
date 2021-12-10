@@ -232,7 +232,7 @@ Page {
         if (first == undefined) {
             return true
         }
-        return isEmpty(first.txt)
+        return isEmpty(first.text)
     }
 
 }
