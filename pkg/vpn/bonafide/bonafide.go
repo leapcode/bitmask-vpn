@@ -26,6 +26,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -36,6 +37,7 @@ import (
 const (
 	secondsPerHour        = 60 * 60
 	retryFetchJSONSeconds = 15
+	winUserAgent          = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36 Edg/95.0.1020.53"
 )
 
 const (
@@ -174,6 +176,9 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	}
 	if b.token != nil {
 		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", b.token))
+	}
+	if runtime.GOOS == "windows" {
+		req.Header.Add("User-Agent", winUserAgent)
 	}
 	resp, err := b.client.Do(req)
 	if err != nil {
