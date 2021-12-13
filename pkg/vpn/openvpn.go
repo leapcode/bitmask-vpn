@@ -120,7 +120,7 @@ func (b *Bitmask) listenShapeErr() {
 }
 
 func (b *Bitmask) startOpenVPN() error {
-	arg := []string{}
+	arg := b.openvpnArgs
 	b.statusCh <- Starting
 	if b.GetTransport() == "obfs4" {
 		gateways, err := b.bonafide.GetGateways("obfs4")
@@ -145,11 +145,9 @@ func (b *Bitmask) startOpenVPN() error {
 		}
 
 		proxyArgs := strings.Split(proxy, ":")
-		// TODO pass UDP flag
 		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
-		arg = b.openvpnArgs
 		log.Println("args passed to bitmask-root:", arg)
 		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
