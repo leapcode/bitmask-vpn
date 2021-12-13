@@ -42,6 +42,7 @@ adding metadata to binaries
 
 the steps to do release signatures are::
 
+  export WINCERTPASS=certificatepass
   make build
   make dosign
   make installer

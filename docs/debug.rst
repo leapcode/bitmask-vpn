@@ -85,3 +85,8 @@ You can also stop it (needs admin)
 
   PS C:\Users\admin> Stop-Service bitmask-helper-v2
 
+To force logging:
+
+.. code:: bash
+
+  QT_FORCE_STDERR_LOGGING=1 ./riseup-vpn.exe
