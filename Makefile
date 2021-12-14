@@ -110,6 +110,16 @@ endif
 lib/%.a: $(PKGFILES)
 	@XBUILD=no CC=${CC} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} ./gui/build.sh --just-golib
 
+# FIXME move platform detection above! no place to uname here, just use $PLATFORM
+#
+MINGGW = 
+ifeq ($(UNAME), MINGW64_NT-10.0)
+MINGW = yes
+endif
+ifeq ($(UNAME), MINGW64_NT-10.0-19042)
+MINGW = yes
+endif
+
 relink_vendor:
 	@echo "============RELINK VENDOR============="
 	@echo "PLATFORM: ${PLATFORM} (${UNAME})"
@@ -117,7 +127,7 @@ relink_vendor:
 	@echo "PROVIDER: ${PROVIDER}"
 ifeq ($(PLATFORM), windows)
 	@rm -rf providers/assets || true
-ifeq ($(UNAME), MINGW64_NT-10.0)
+ifeq ($(MINGW), yes)
 ifeq ($(VENDOR_PATH), providers)
 	@cp -r providers/${PROVIDER}/assets providers/assets || true
 endif
@@ -131,7 +141,6 @@ ifeq ($(VENDOR_PATH), providers)
 	@ln -s ${PROVIDER}/assets providers/assets || true
 endif
 endif
-
 	@echo "============RELINK VENDOR============="
 
 build_golib: lib/libgoshim.a
@@ -226,11 +235,11 @@ endif
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
 ifeq (${RELEASE}, yes)
-	#@windeployqt --release --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	#@windeployqt --release --qmldir gui/components ${INST_DATA}${TARGET}.exe
 	#FIXME -- cannot find platform plugin
-	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 else
-	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
 	# TODO stage it to shave some time
 	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe

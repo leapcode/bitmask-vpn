@@ -156,17 +156,22 @@ ApplicationWindow {
     }
 
     function loadTheme() {
-        let arr = flavor.split("/")
+    	var arr
+    	if (Qt.platform.os == "windows") {
+	    arr = flavor.split("\\")
+	} else {
+	    arr = flavor.split("/")
+        }
         var providerFlavor = arr[arr.length-1]
         console.debug("flavor: " + providerFlavor)
-        if (providerFlavor == "riseup-vpn") {
+        if (providerFlavor.startsWith("riseup-vpn")) {
             return "themes/Riseup.qml"
-        } else if (providerFlavor== "calyx-vpn") {
+        } else if (providerFlavor.startsWith("calyx-vpn")) {
             return "themes/Calyx.qml"
         } else {
             // we should do a Default theme, with a fallback
             // mechanism
-            return "Riseup.qml"
+            return "themes/Riseup.qml"
         }
     }
 

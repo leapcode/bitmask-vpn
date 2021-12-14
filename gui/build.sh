@@ -39,6 +39,11 @@ then
     MAKEFLAGS=
 fi
 
+if [ "$CC" == "cc" ]
+then
+    CC="gcc"
+fi
+
 if [ "$XBUILD" == "$WIN64" ]
 then
     # TODO allow to override vars
@@ -60,7 +65,7 @@ function init {
 
 function buildGoLib {
     echo "[+] Using go in" $GO "[`go version`]"
-    $GO generate -mod=vendor ./pkg/config/version/genver/gen.go || echo "[!] Error on go generate"
+    "$GO" generate -mod=vendor ./pkg/config/version/genver/gen.go || echo "[!] Error on go generate"
 
     if [ "$PLATFORM" == "Darwin" ]
     then

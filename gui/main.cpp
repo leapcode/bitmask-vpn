@@ -46,13 +46,14 @@ QString getAppName(QJsonValue info, QString provider) {
     return "BitmaskVPN";
 }
 
-void catchUnixSignals(std::initializer_list<int> quitSignals) {
-    auto handler = [](int sig) -> void {
-        printf("\nCatched signal(%d): quitting\n", sig);
-        Quit();
-        QApplication::quit();
-    };
+auto handler = [](int sig) -> void {
+    printf("\nCatched signal(%d): quitting\n", sig);
+    Quit();
+    QApplication::quit();
+};
 
+#ifndef OS_WIN
+void catchUnixSignals(std::initializer_list<int> quitSignals) {
     sigset_t blocking_mask;
     sigemptyset(&blocking_mask);
     for (auto sig : quitSignals)
@@ -66,6 +67,7 @@ void catchUnixSignals(std::initializer_list<int> quitSignals) {
     for (auto sig : quitSignals)
         sigaction(sig, &sa, nullptr);
 }
+#endif
 
 int main(int argc, char **argv) {
     Backend backend;
@@ -80,7 +82,12 @@ int main(int argc, char **argv) {
     app.setQuitOnLastWindowClosed(false);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+#ifdef OS_WIN
+    signal(SIGINT, handler);
+    signal(SIGTERM, handler);
+#else
     catchUnixSignals({SIGINT, SIGTERM});
+#endif
 
     /* load providers json */
     QFile providerJson (":/providers.json");

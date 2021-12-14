@@ -6,6 +6,10 @@
 #include "qjsonmodel.h"
 #include "lib/libgoshim.h"
 
+#if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN) || defined(__MINGW32__)
+#define OS_WIN
+#endif
+
 GoString toGoStr(QString s);
 
 class QJsonWatch : public QObject {
