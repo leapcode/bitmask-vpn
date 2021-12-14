@@ -1,11 +1,18 @@
+development
+===========
+- ...
+
+
 0.21.11
 =======
-- Do not fail if ipv6 is disabled (GNU/Linux)
 - Complete UI revamp
+- Do not fail if ipv6 is disabled (GNU/Linux)
 - UDP support
 - Obfs4 support
-- Experimental snowflake support for bootstrap
-- Disable autostart
+- Experimental snowflake support for bootstrap (not exposed in UI yet)
+- Disable autostart on first run
+- Provider "message of the day"
+- primitive version check for windows, osx.
 
 
 0.21.6
