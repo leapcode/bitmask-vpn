@@ -164,9 +164,9 @@ ApplicationWindow {
         }
         var providerFlavor = arr[arr.length-1]
         console.debug("flavor: " + providerFlavor)
-        if (providerFlavor.startsWith("riseup-vpn")) {
+        if (providerFlavor.startsWith("riseup-vpn") || providerFlavor == "RiseupVPN") {
             return "themes/Riseup.qml"
-        } else if (providerFlavor.startsWith("calyx-vpn")) {
+        } else if (providerFlavor.startsWith("calyx-vpn") || providerFlavor == "CalyxVPN") {
             return "themes/Calyx.qml"
         } else {
             // we should do a Default theme, with a fallback

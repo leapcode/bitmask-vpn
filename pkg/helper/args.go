@@ -23,7 +23,7 @@ var (
 		"--remote-cert-tls", "server",
 		"--dhcp-option", "DNS", nameserverTCP,
 		"--dhcp-option", "DNS", nameserverUDP,
-		"--tls-version-min", "1.2",
+		"--tls-version-min", "1.0",
 		"--float",
 		"--log", filepath.Join(LogFolder, "openvpn-leap.log"),
 	}
