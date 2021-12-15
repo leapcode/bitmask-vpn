@@ -178,6 +178,7 @@ ifeq (${PLATFORM}, windows)
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string CompanyName "LEAP Encryption Access Project"
 	"c:\windows\system32\rcedit.exe" ${QTBUILD}/release/${TARGET}.exe --set-version-string FileDescription "${APPNAME}"
 	"c:\windows\system32\signtool.exe" sign -debug -f "z:\leap\LEAP.pfx" -p ${WINCERTPASS} ${QTBUILD}/release/${TARGET}.exe
+	# XXX need to deprecate helper and embrace interactive service
 	cp build/bin/${PLATFORM}/bitmask-helper build/bin/${PLATFORM}/bitmask-helper.exe
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-file-version ${VERSION}
 	"c:\windows\system32\rcedit.exe" build/bin/${PLATFORM}/bitmask-helper.exe --set-product-version ${VERSION}
@@ -231,7 +232,6 @@ else
 	@cp ${VENDOR_PATH}/assets/icon.ico ${INST_DATA}/icon.ico
 endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
-	# FIXME get the signed binaries with curl from openvpn downloads page.
 	@cp "/c/Program Files/OpenVPN/bin/openvpn.exe" ${INST_DATA}
 	@cp "/c/Program Files/OpenVPN/bin/"*.dll ${INST_DATA}
 ifeq (${RELEASE}, yes)
@@ -243,6 +243,11 @@ else
 endif
 	# TODO stage it to shave some time
 	@wget ${TAP_WINDOWS} -O ${INST_DATA}/tap-windows.exe
+	# XXX this is a workaround for missing libs after windeployqt ---
+	@cp /c/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll ${INST_DATA}
+	@cp /c/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll ${INST_DATA}
+	@cp /c/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll ${INST_DATA}
+	@cp -r /c/Qt/5.15.2/mingw81_64/qml ${INST_DATA}
 endif
 ifeq (${PLATFORM}, linux)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}

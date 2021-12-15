@@ -29,6 +29,7 @@ function Component() {
 
     console.log("OS: " + systemInfo.productType);
     console.log("Kernel: " + systemInfo.kernelType + "/" + systemInfo.kernelVersion);
+    installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
 
     var validOs = false;
 

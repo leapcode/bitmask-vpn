@@ -13,6 +13,7 @@ development
 - Disable autostart on first run
 - Provider "message of the day"
 - primitive version check for windows, osx.
+- #569 avoid installing in custom paths to mitigate security issue in windows
 
 
 0.21.6

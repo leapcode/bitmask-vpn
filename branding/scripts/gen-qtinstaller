@@ -27,7 +27,7 @@ OS_CONFIG = {
 """,
     'windows': """
     <!-- windows -->
-    <TargetDir>@ApplicationsDir@/$APPNAME</TargetDir>
+    <TargetDir>c:/Program Files (x86)/$APPNAME</TargetDir>
     <StartMenuDir>$APPNAME</StartMenuDir>
 
     <RunProgram>@TargetDir@/$BINNAME.exe</RunProgram>
