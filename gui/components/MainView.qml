@@ -48,36 +48,36 @@ Page {
         ListElement {
             text: qsTr("Preferences")
             icon: "../resources/tools.svg"
-            triggered: function () {
+            triggered: function() {
                 stackView.push("Preferences.qml")
             }
         }
         ListElement {
             text: qsTr("Donate")
             icon: "../resources/donate.svg"
-            triggered: function () {
+            triggered: function() {
                 Qt.openUrlExternally(ctx.donateURL)
             }
         }
         ListElement {
             text: qsTr("Help")
             icon: "../resources/help.svg"
-            triggered: function () {
+            triggered: function() {
                 stackView.push("Help.qml")
             }
         } // -> can link to another dialog with report bug / support / contribute / FAQ
         ListElement {
             text: qsTr("About")
             icon: "../resources/about.svg"
-            triggered: function () {
+            triggered: function() {
                 stackView.push("About.qml")
             }
         }
         ListElement {
             text: qsTr("Quit")
             icon: "../resources/quit.svg"
-            triggered: function () {
-                backend.quit()
+            triggered: function() {
+                Qt.callLater(backend.quit)
             }
         }
     } // end listmodel
