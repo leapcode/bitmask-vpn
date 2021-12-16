@@ -54,8 +54,8 @@ or all together as::
 
   make package_win_release
 
-make sure to cleanup the build dir if you're buildingb for more than one
-vendor.
+make sure to cleanup the build/ and lib/ dirs if you're buildingb for more than
+one vendor.
 
 Uploading installer
 -------------------
