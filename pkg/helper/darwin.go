@@ -36,6 +36,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/sevlyar/go-daemon"
 )
@@ -135,9 +136,16 @@ func firewallStop() error {
 		log.Printf("An error ocurred stopping the firewall: %v", out)
 		/* TODO return error if different from anchor not exists */
 		/*return errors.New("Error while stopping firewall")*/
-		return nil
 	}
-	return nil
+	for _ = range [50]int{} {
+		if firewallIsUp() {
+			log.Printf("Firewall still up, waiting...")
+			time.Sleep(200 * time.Millisecond)
+		} else {
+			return nil
+		}
+	}
+	return errors.New("Could not stop firewall")
 }
 
 func firewallIsUp() bool {

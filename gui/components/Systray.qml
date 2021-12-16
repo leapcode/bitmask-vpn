@@ -53,9 +53,11 @@ Labs.SystemTrayIcon {
         }
 
         Labs.MenuItem {
-            //: Part of the systray menu; quits que application
+            //: Part of the systray menu; quits the application
             text: qsTr("Quit")
-            onTriggered: backend.quit()
+            onTriggered: {
+                backend.quit()
+            }
         }
     }
 
