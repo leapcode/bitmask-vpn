@@ -13,14 +13,15 @@ For the installer, install QtIFW for windows (tested with version 3.2.2).
 Assuming you have the vendor path in place and correctly configured, all you need to do is `make installer`::
 
   export PATH="/c/Qt/Qt5/bin/":"/c/Qt/QtIFW-3.2.2/bin":$PATH
+  export WINCERTPASS=certificatepass
   export VENDOR_PATH=providers
   export PROVIDER=riseup
-  make generate # FIXME this is not called in win
-  make vendor && make installer
 
-If you're doing a final release::
+  make generate # not called by makefile in win, needs fix!!
 
-  export RELEASE=yes
+  make vendor
+  make build
+  make installer
 
 
 checking signatures
@@ -40,9 +41,10 @@ ask again.
 adding metadata to binaries
 ---------------------------
 
-the steps to do release signatures are::
+If you're doing a final release::
 
-  export WINCERTPASS=certificatepass
+  export RELEASE=yes
+
   make build
   make dosign
   make installer
@@ -51,6 +53,9 @@ the steps to do release signatures are::
 or all together as::
 
   make package_win_release
+
+make sure to cleanup the build dir if you're buildingb for more than one
+vendor.
 
 Uploading installer
 -------------------
