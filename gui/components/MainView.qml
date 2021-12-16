@@ -77,9 +77,6 @@ Page {
             text: qsTr("Quit")
             icon: "../resources/quit.svg"
             triggered: function() {
-                if (ctx.status == "on") {
-                    backend.switchOff()
-                }
                 Qt.callLater(backend.quit)
             }
         }

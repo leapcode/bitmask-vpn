@@ -48,7 +48,6 @@ QString getAppName(QJsonValue info, QString provider) {
 
 auto handler = [](int sig) -> void {
     printf("\nCatched signal(%d): quitting\n", sig);
-    Quit();
     QApplication::quit();
 };
 
@@ -81,6 +80,11 @@ int main(int argc, char **argv) {
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    QObject::connect(&app, &QApplication::aboutToQuit, []() {
+            qDebug() << ">>> Quitting, bye!";
+            Quit();
+    });
 
 #ifdef OS_WIN
     signal(SIGINT, handler);
