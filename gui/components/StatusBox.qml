@@ -56,13 +56,6 @@ Item {
         }
         onClicked: {
             settingsDrawer.toggle()
-            /*
-            if (stackView.depth > 1) {
-                stackView.pop()
-            } else {
-                settingsDrawer.toggle()
-            }
-            */
         }
 
         Icon {
@@ -71,10 +64,6 @@ Item {
             height: 16
             anchors.centerIn: settingsButton
             source: "../resources/gear-fill.svg"
-            /*
-            source: stackView.depth
-                    > 1 ? "../resources/arrow-left.svg" : "../resources/gear-fill.svg"
-            */
         }
     }
 

@@ -55,7 +55,12 @@ Labs.SystemTrayIcon {
         Labs.MenuItem {
             //: Part of the systray menu; quits the application
             text: qsTr("Quit")
-            onTriggered: backend.quit()
+            onTriggered: {
+                if (ctx.status == "on") {
+                    backend.switchOff()
+                }
+                backend.quit()
+            }
         }
     }
 
