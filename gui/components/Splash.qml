@@ -152,7 +152,7 @@ Page {
                             textLocale = m.text[k].str
                             break
                         } else if (m.text[k].lang == "en") {
-                            testEn = m.text[k].str
+                            textEn = m.text[k].str
                         }
                     }
                     break
