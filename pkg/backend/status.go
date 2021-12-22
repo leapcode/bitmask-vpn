@@ -33,36 +33,38 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName         string              `json:"appName"`
-	Provider        string              `json:"provider"`
-	TosURL          string              `json:"tosURL"`
-	HelpURL         string              `json:"helpURL"`
-	AskForDonations bool                `json:"askForDonations"`
-	DonateDialog    bool                `json:"donateDialog"`
-	DonateURL       string              `json:"donateURL"`
-	LoginDialog     bool                `json:"loginDialog"`
-	LoginOk         bool                `json:"loginOk"`
-	Version         string              `json:"version"`
-	Errors          string              `json:"errors"`
-	Status          status              `json:"status"`
-	Locations       map[string]float64  `json:"locations"`
-	LocationLabels  map[string][]string `json:"locationLabels"`
-	CurrentGateway  string              `json:"currentGateway"`
-	CurrentLocation string              `json:"currentLocation"`
-	CurrentCountry  string              `json:"currentCountry"`
-	BestLocation    string              `json:"bestLocation"`
-	Transport       string              `json:"transport"`
-	UseUDP          bool                `json:"udp"`
-	OffersUDP       bool                `json:"offersUdp"`
-	ManualLocation  bool                `json:"manualLocation"`
-	IsReady         bool                `json:"isReady"`
-	CanUpgrade      bool                `json:"canUpgrade"`
-	Motd            string              `json:"motd"`
-	HasTor          bool                `json:"hasTor"`
-	UseSnowflake    bool                `json:"snowflake"`
-	bm              bitmask.Bitmask
-	autostart       bitmask.Autostart
-	cfg             *config.Config
+	AppName           string              `json:"appName"`
+	Provider          string              `json:"provider"`
+	TosURL            string              `json:"tosURL"`
+	HelpURL           string              `json:"helpURL"`
+	AskForDonations   bool                `json:"askForDonations"`
+	DonateDialog      bool                `json:"donateDialog"`
+	DonateURL         string              `json:"donateURL"`
+	LoginDialog       bool                `json:"loginDialog"`
+	LoginOk           bool                `json:"loginOk"`
+	Version           string              `json:"version"`
+	Errors            string              `json:"errors"`
+	Status            status              `json:"status"`
+	Locations         map[string]float64  `json:"locations"`
+	LocationLabels    map[string][]string `json:"locationLabels"`
+	CurrentGateway    string              `json:"currentGateway"`
+	CurrentLocation   string              `json:"currentLocation"`
+	CurrentCountry    string              `json:"currentCountry"`
+	BestLocation      string              `json:"bestLocation"`
+	Transport         string              `json:"transport"`
+	UseUDP            bool                `json:"udp"`
+	OffersUDP         bool                `json:"offersUdp"`
+	ManualLocation    bool                `json:"manualLocation"`
+	IsReady           bool                `json:"isReady"`
+	CanUpgrade        bool                `json:"canUpgrade"`
+	Motd              string              `json:"motd"`
+	HasTor            bool                `json:"hasTor"`
+	UseSnowflake      bool                `json:"snowflake"`
+	SnowflakeProgress int                 `json:"snowflakeProgress"`
+	SnowflakeTag      string              `json:"snowflakeTag"`
+	bm                bitmask.Bitmask
+	autostart         bitmask.Autostart
+	cfg               *config.Config
 }
 
 func (c *connectionCtx) toJson() ([]byte, error) {
@@ -78,7 +80,7 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.Transport = transport
 		c.UseUDP = c.cfg.UDP // TODO initialize bitmask param?
 		c.OffersUDP = c.bm.OffersUDP()
-		c.UseSnowflake = c.cfg.Snowflake // TODO initialize bitmask param?
+		c.UseSnowflake = c.cfg.Snowflake // TODO initialize bitmask
 		c.ManualLocation = c.bm.IsManualLocation()
 		c.CanUpgrade = c.bm.CanUpgrade()
 		c.Motd = c.bm.GetMotd()
@@ -102,6 +104,16 @@ func (c connectionCtx) updateStatus() {
 		setStatusFromStr(stStr)
 	}
 
+	go func() {
+		snowflakeCh := c.bm.GetSnowflakeCh()
+		for {
+			select {
+			case event := <-snowflakeCh:
+				setSnowflakeStatus(event)
+			}
+		}
+	}()
+
 	statusCh := c.bm.GetStatusCh()
 	for {
 		select {
@@ -109,6 +121,14 @@ func (c connectionCtx) updateStatus() {
 			setStatusFromStr(stStr)
 		}
 	}
+}
+
+func setSnowflakeStatus(event *snowflake.StatusEvent) {
+	statusMutex.Lock()
+	defer statusMutex.Unlock()
+	ctx.SnowflakeProgress = event.Progress
+	ctx.SnowflakeTag = event.Tag
+	go trigger(OnStatusChanged)
 }
 
 func setStatus(st status) {

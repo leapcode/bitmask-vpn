@@ -15,8 +15,16 @@
 
 package bitmask
 
+import (
+	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
+)
+
+// XXX this interface is a relic of a time in which we had a dual implementation.
+// Nowadays it could be deprecated.
+
 type Bitmask interface {
 	GetStatusCh() <-chan string
+	GetSnowflakeCh() <-chan *snowflake.StatusEvent
 	Close()
 	Version() (string, error)
 	StartVPN(provider string) error

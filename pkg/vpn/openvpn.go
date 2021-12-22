@@ -201,6 +201,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 	failed := false
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
+		// TODO snowflake might have written a cert here
 		// reuse cert. for the moment we're not writing one there, this is
 		// only to allow users to get certs off-band and place them there
 		// as a last-resort fallback for circumvention.

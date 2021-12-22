@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -146,6 +147,17 @@ func (b *Bonafide) fetchEipJSON() error {
 
 	b.setupAuthentication(b.eip)
 	return nil
+}
+
+func (b *Bonafide) parseEipJSONFromFile() error {
+	provider := strings.ToLower(config.Provider)
+	eipFile := filepath.Join(config.Path, provider+"-eip.json")
+	f, err := os.Open(eipFile)
+	if err != nil {
+		return err
+	}
+	b.eip, err = decodeEIP3(f)
+	return err
 }
 
 func decodeEIP3(body io.Reader) (*eipService, error) {

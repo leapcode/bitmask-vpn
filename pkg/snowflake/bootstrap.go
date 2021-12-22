@@ -9,21 +9,57 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/cretz/bine/tor"
 )
 
+// TODO
+// [ ] fix snowflake-client binary
+// [ ] find tor path
+
 const torrc = `UseBridges 1
 DataDirectory datadir
 
-ClientTransportPlugin snowflake exec /usr/local/bin/snowflake-client \
--url https://snowflake-broker.torproject.net.global.prod.fastly.net/ -front cdn.sstatic.net \
--ice stun:stun.voip.blackberry.com:3478,stun:stun.altar.com.pl:3478,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478,stun:stun.sonetel.com:3478,stun:stun.sonetel.net:3478,stun:stun.stunprotocol.org:3478,stun:stun.uls.co.za:3478,stun:stun.voipgate.com:3478,stun:stun.voys.nl:3478 \
--max 3
+ClientTransportPlugin snowflake exec /usr/local/bin/snowflake-client -log /tmp/snowflake.log -url https://snowflake-broker.torproject.net.global.prod.fastly.net/ \
+-front cdn.sstatic.net -ice stun:stun.voip.blackberry.com:3478,stun:stun.altar.com.pl:3478,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478,stun:stun.sonetel.com:3478,stun:stun.sonetel.net:3478,stun:stun.stunprotocol.org:3478,stun:stun.uls.co.za:3478,stun:stun.voipgate.com:3478,stun:stun.voys.nl:3478 \
+-max 5
 
-Bridge snowflake 0.0.3.0:1`
+Bridge snowflake 192.0.2.3:1
+
+SocksPort auto`
+
+type StatusEvent struct {
+	Progress int
+	Tag      string
+}
+
+type StatusLogger struct {
+	ch chan *StatusEvent
+}
+
+func (e *StatusLogger) Write(p []byte) (n int, err error) {
+	raw := strings.Split(string(p), ":")
+	if len(raw) > 1 {
+		l := raw[1]
+		parts := strings.Split(string(l), " ")
+		if len(parts) > 2 && parts[2] == "STATUS_CLIENT" {
+			if parts[4] == "BOOTSTRAP" {
+				if len(parts) > 6 {
+					pr, _ := strconv.Atoi(parts[5][9:])
+					event := &StatusEvent{Progress: pr, Tag: parts[6][4:]}
+					go func() { e.ch <- event }()
+				}
+				fmt.Println()
+			}
+		}
+	}
+	return len(p), nil
+}
 
 func writeTorrc() string {
 	f, err := ioutil.TempFile("", "torrc-snowflake-")
@@ -34,9 +70,14 @@ func writeTorrc() string {
 	return f.Name()
 }
 
-func BootstrapWithSnowflakeProxies() error {
+// TODO pass provider api
+func BootstrapWithSnowflakeProxies(provider string, api string, ch chan *StatusEvent) error {
 	rcfile := writeTorrc()
-	conf := &tor.StartConf{DebugWriter: os.Stdout, TorrcFile: rcfile}
+	logger := &StatusLogger{ch}
+	conf := &tor.StartConf{
+		DebugWriter: logger,
+		TorrcFile:   rcfile,
+	}
 
 	fmt.Println("Starting Tor and fetching files to bootstrap VPN tunnel...")
 	fmt.Println("")
@@ -78,14 +119,18 @@ func BootstrapWithSnowflakeProxies() error {
 		Timeout: time.Minute * 5,
 	}
 
-	// XXX parametrize these urls
-	fetchFile(apiClient, "https://api.black.riseup.net/3/config/eip-service.json")
-	fetchFile(apiClient, "https://api.black.riseup.net/3/cert")
+	eipUri := "https://" + api + "/3/config/eip-service.json"
+	eipFile := filepath.Join(config.Path, provider+"-eip.json")
+	fetchFile(apiClient, eipUri, eipFile)
+
+	certUri := "https://" + api + "/3/cert"
+	certFile := filepath.Join(config.Path, provider+".pem")
+	fetchFile(apiClient, certUri, certFile)
 
 	return nil
 }
 
-func fetchFile(client *http.Client, uri string) error {
+func fetchFile(client *http.Client, uri string, file string) error {
 	resp, err := client.Get(uri)
 	if err != nil {
 		return err
@@ -96,6 +141,8 @@ func fetchFile(client *http.Client, uri string) error {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(string(c))
-	return nil
+	if os.Getenv("DEBUG") == "1" {
+		fmt.Println(string(c))
+	}
+	return ioutil.WriteFile(file, c, 0600)
 }

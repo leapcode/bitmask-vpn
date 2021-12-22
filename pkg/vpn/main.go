@@ -25,6 +25,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
+	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/shapeshifter"
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
@@ -59,7 +60,9 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
+	snowCh := make(chan *snowflake.StatusEvent, 20)
 	bf := bonafide.New()
+	bf.SnowflakeCh = snowCh
 	launch, err := newLauncher()
 	if err != nil {
 		return nil, err
@@ -119,6 +122,10 @@ func (b *Bitmask) checkForMOTD() {
 // GetStatusCh returns a channel that will recieve VPN status changes
 func (b *Bitmask) GetStatusCh() <-chan string {
 	return b.statusCh
+}
+
+func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
+	return b.bonafide.SnowflakeCh
 }
 
 // Close the connection to bitmask, and does cleanup of temporal files

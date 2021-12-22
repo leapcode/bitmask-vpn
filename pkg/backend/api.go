@@ -37,6 +37,7 @@ func Login(username, password string) {
 		ctx.LoginDialog = true
 		ctx.Errors = "bad_auth"
 	}
+	// XXX shouldn't this be statusChanged?
 	go ctx.updateStatus()
 }
 

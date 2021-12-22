@@ -54,6 +54,8 @@ type Bonafide struct {
 	maxGateways   int
 	auth          authentication
 	token         []byte
+	SnowflakeCh   chan *snowflake.StatusEvent
+	snowflake     bool
 }
 
 type openvpnConfig map[string]interface{}
@@ -206,7 +208,6 @@ func (b *Bonafide) GetPemCertificateNoDNS() ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
 	return ioutil.ReadAll(resp.Body)
 }
 
@@ -241,8 +242,18 @@ func (b *Bonafide) getURLNoDNS(object string) string {
 }
 
 func (b *Bonafide) maybeInitializeEIP() error {
+	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
-		snowflake.BootstrapWithSnowflakeProxies()
+		p := strings.ToLower(config.Provider)
+		// FIXME only if progress != 100 %, then just pick files.
+		// we probably need another status watcher internally, to keep track
+		// of whether we need to cancel, or just wait.
+		snowflake.BootstrapWithSnowflakeProxies(p, getAPIAddr(p), b.SnowflakeCh)
+		err := b.parseEipJSONFromFile()
+		if err != nil {
+			return err
+		}
+		b.gateways = newGatewayPool(b.eip)
 	} else {
 		if b.eip == nil {
 			err := b.fetchEipJSON()
@@ -272,11 +283,11 @@ func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	max := maxGateways
 	if b.maxGateways != 0 {
 		max = b.maxGateways
 	}
-
 	gws, err := b.gateways.getBest(transport, b.tzOffsetHours, max)
 	return gws, err
 }
@@ -285,6 +296,7 @@ func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
 // if "any" is provided it will return all gateways for all transports
 func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	err := b.maybeInitializeEIP()
+	// XXX needs to wait for bonafide too
 	if err != nil {
 		return nil, err
 	}
@@ -327,8 +339,10 @@ func (b *Bonafide) GetGatewayByIP(ip string) (Gateway, error) {
 }
 
 func (b *Bonafide) fetchGatewaysFromMenshen() error {
-	/* FIXME in float deployments, geolocation is served on gemyip.domain/json, with a LE certificate, but in riseup is served behind the api certificate.
-	So this is a workaround until we streamline that behavior */
+	/* FIXME in float deployments, geolocation is served on
+	* gemyip.domain/json, with a LE certificate, but in riseup is served
+	* behind the api certificate.  So this is a workaround until we
+	* streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
 	if err != nil {
 		client := &http.Client{}
