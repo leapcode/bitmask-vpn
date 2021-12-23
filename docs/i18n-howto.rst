@@ -17,3 +17,10 @@ To fetch the translations from transifex (API\_TOKEN is the transifex API token)
 ```
 
 If you want to add a new language create an empty file `gui/i18n/main_$lang.ts` before running `make locales`.
+
+Testing the translations
+------------------------
+
+Pass the language env vars:
+
+LANG=es_ES LANGUAGE=es_ES make run
