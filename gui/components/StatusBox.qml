@@ -80,8 +80,31 @@ Item {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
-            text: ""
             FadeBehavior on text { }
+        }
+        Label {
+            id: snowflakeTip
+            anchors.top: connectionState.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 20
+            horizontalAlignment: Text.AlignHCenter
+            text: qsTr("This can take several minutes")
+            font.pixelSize: Theme.fontSize * 0.8
+            visible: isSnowflakeOn()
+        }
+        ProgressBar {
+            id: snowflakeProgressBar
+            anchors.top: snowflakeTip.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: isSnowflakeOn()
+            value: 0
+        }
+        Label {
+            id: snowflakeTag
+            anchors.top: snowflakeProgressBar.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            visible: isSnowflakeOn()
         }
     }
 
@@ -155,5 +178,9 @@ Item {
                 }
             }
         }
+    }
+
+    function isSnowflakeOn() {
+        return ctx != undefined && ctx.snowflakeProgress != "" && ctx.snowflakeProgress != "100"
     }
 }

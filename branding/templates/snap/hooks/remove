@@ -1,6 +1,6 @@
 #!/bin/sh
 
 echo "Executing remove hook for RiseupVPN"
-rm "/usr/share/polkit-1/actions/se.leap.bitmask.riseupvpn.policy"
+rm "/usr/share/polkit-1/actions/se.leap.bitmask.riseup-vpn.policy"
 unlink "/usr/share/applications/riseup-vpn.desktop" || echo "did not remove workaround for global desktop entry"
 echo "done"

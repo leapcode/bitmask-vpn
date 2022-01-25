@@ -47,15 +47,16 @@ const (
 )
 
 type Bonafide struct {
-	client        httpClient
-	eip           *eipService
-	tzOffsetHours int
-	gateways      *gatewayPool
-	maxGateways   int
-	auth          authentication
-	token         []byte
-	SnowflakeCh   chan *snowflake.StatusEvent
-	snowflake     bool
+	client            httpClient
+	eip               *eipService
+	tzOffsetHours     int
+	gateways          *gatewayPool
+	maxGateways       int
+	auth              authentication
+	token             []byte
+	SnowflakeCh       chan *snowflake.StatusEvent
+	snowflakeProgress int
+	snowflake         bool
 }
 
 type openvpnConfig map[string]interface{}
@@ -241,14 +242,32 @@ func (b *Bonafide) getURLNoDNS(object string) string {
 	return ""
 }
 
+func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
+	// We need to keep track of the bootstrap process here, and then we
+	// pass to the channel that is observed by the backend
+	log.Println(">>> WATCH SNOWFLAKE")
+	go func() {
+		for {
+			select {
+			case evt := <-ch:
+				b.snowflakeProgress = evt.Progress
+				b.SnowflakeCh <- evt
+			}
+		}
+
+	}()
+}
+
 func (b *Bonafide) maybeInitializeEIP() error {
 	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
 		p := strings.ToLower(config.Provider)
-		// FIXME only if progress != 100 %, then just pick files.
-		// we probably need another status watcher internally, to keep track
-		// of whether we need to cancel, or just wait.
-		snowflake.BootstrapWithSnowflakeProxies(p, getAPIAddr(p), b.SnowflakeCh)
+		log.Println(b.snowflakeProgress)
+		if b.snowflakeProgress != 100 {
+			ch := make(chan *snowflake.StatusEvent, 20)
+			b.watchSnowflakeProgress(ch)
+			snowflake.BootstrapWithSnowflakeProxies(p, getAPIAddr(p), ch)
+		}
 		err := b.parseEipJSONFromFile()
 		if err != nil {
 			return err

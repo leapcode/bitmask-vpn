@@ -67,6 +67,7 @@
         <file>resources/quit.svg</file>
         <file>resources/alert.svg</file>
         <file>resources/angle-right.svg</file>
+        <file>resources/snowflake.svg</file>
 
         <!-- riseup assets -->
         <file>resources/ravens.svg</file>

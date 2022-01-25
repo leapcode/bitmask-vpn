@@ -20,10 +20,37 @@ StateGroup {
             name: initializing
         },
         State {
+            when: ctx != undefined && ctx.snowflakeProgress != "" && ctx.snowflakeProgress != "100"
+            // TODO animate image
+            PropertyChanges {
+                target: connectionState
+                text: qsTr("Setting up")
+                font.pixelSize: Theme.fontSize * 1
+            }
+            PropertyChanges {
+                target: snowflakeProgressBar
+                value: parseInt(ctx.snowflakeProgress)/100
+            }
+            PropertyChanges {
+                target: snowflakeTag
+                text: getSnowflakeTag()
+            }
+            PropertyChanges {
+                target: statusBoxBackground
+                border.color: Theme.accentConnecting
+            }
+            PropertyChanges {
+                target: connectionImage
+                source: Theme.iconSnowflake
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        },
+        State {
             when: ctx != undefined && ctx.status == "off" && startingUI == true
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Connecting")
+                font.pixelSize: Theme.fontSize * 1.5
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -56,6 +83,8 @@ StateGroup {
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Unsecured\nConnection")
+                font.pixelSize: Theme.fontSize * 1.5
+                visible: true
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -89,6 +118,8 @@ StateGroup {
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Secured\nConnection")
+                font.pixelSize: Theme.fontSize * 1.5
+                visible: true
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -123,6 +154,8 @@ StateGroup {
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Connecting")
+                font.pixelSize: Theme.fontSize * 1.5
+                visible: true
             }
             PropertyChanges {
                 target: statusBoxBackground
@@ -234,6 +267,37 @@ StateGroup {
             //: %1 -> application name
             return qsTr("%1 blocking internet").arg(
                         ctx.appName) // TODO failed is not handled yet
+        }
+    }
+
+    function getSnowflakeTag() {
+        switch (ctx.snowflakeTag) {
+            case 'conn_pt':
+              return qsTr("pluggable transport connection")
+            case 'conn_done':
+              return qsTr("connection done")
+            case 'handshake':
+              return qsTr("doing handshake")
+            case 'handshake_done':
+              return qsTr("handshake done")
+            case 'onehop_create':
+              return qsTr("creating one-hop connection")
+            case 'requesting_status':
+              return qsTr("requesting status")
+            case 'loading_status':
+              return qsTr("loading status")
+            case 'loading_keys':
+              return qsTr("loading keys")
+            case 'requesting_descriptors':
+              return qsTr("requesting descriptors")
+            case 'loading_descriptors':
+              return qsTr("loading descriptors")
+            case 'circuit_create':
+              return qsTr("creating circuit")
+            case 'done':
+              return qsTr("done")
+            default:
+              return ctx.snowflakeTag
         }
     }
 }

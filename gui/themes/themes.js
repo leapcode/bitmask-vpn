@@ -24,6 +24,8 @@ const maxTextWidth = 296;
 const windowMargin = 16;
 const popupMargin = 24;
 
+const iconSnowflake = "../resources/snowflake.svg";
+
 // XXX unused? move definitions here
 const desktopAppHeight = 520;
 const desktopAppWidth = 360;
