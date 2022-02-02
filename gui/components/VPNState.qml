@@ -20,7 +20,7 @@ StateGroup {
             name: initializing
         },
         State {
-            when: ctx != undefined && ctx.snowflakeProgress != "" && ctx.snowflakeProgress != "100"
+            when: ctx != undefined && ctx.snowflakeProgress != "0" && ctx.snowflakeProgress != "100"
             // TODO animate image
             PropertyChanges {
                 target: connectionState

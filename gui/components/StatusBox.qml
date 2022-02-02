@@ -181,6 +181,6 @@ Item {
     }
 
     function isSnowflakeOn() {
-        return ctx != undefined && ctx.snowflakeProgress != "" && ctx.snowflakeProgress != "100"
+        return ctx != undefined && ctx.snowflake == "true" && ctx.snowflakeProgress != "100"
     }
 }
