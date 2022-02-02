@@ -20,3 +20,16 @@
   or otherwise (separate users in linux etc). This has the additional advantage
   of allowing us to do a very early startup, and not to depend so much on
   pkexec + ubuntu's quirks (portability!).
+
+# Other discrete projects
+
+* Secure, automated upgrade mechanism (look at TUF and the Qt Updater Framework).
+* Log viewer / log sender
+* VPN Traffic panel (statistics, ip, gw health, graph for upload/download speeds)
+* Migrate codebase to Qt6
+* Reduce the size of custom static builds
+* Apple + Windows stores
+* Convert snap to use a qt5 base (so that updates are kept small).
+* Provider-agnostic bitmask.
+* Private bridges mechanism.
+* QR-bootstrap
