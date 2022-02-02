@@ -39,17 +39,17 @@
     <message>
         <location filename="../components/Help.qml" line="20"/>
         <source>Troubleshooting and support</source>
-        <translation type="unfinished"/>
+        <translation>Nesklandumų šalinimas ir palaikymas</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="31"/>
         <source>Report a bug</source>
-        <translation type="unfinished"/>
+        <translation>Pranešti apie klaidą</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="42"/>
         <source>How to uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Kaip pašalinti programą</translation>
     </message>
 </context>
 <context>
@@ -70,31 +70,31 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti vietą</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation type="unfinished"/>
+        <translation>Automatiškai naudoti geriausią ryšį</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti rankiniu būdu</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perjungiamas tinklų sietuvas…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tik vietos su tinklų tiltais</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
@@ -134,12 +134,12 @@
     <message>
         <location filename="../components/MainView.qml" line="107"/>
         <source>Please donate!</source>
-        <translation type="unfinished"/>
+        <translation>Prašome paaukoti!</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="121"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation type="unfinished"/>
+        <translation>Ši paslauga yra pilnai apmokama iš lėšų, kurias paaukoja tokie naudotojai, kaip jūs. VPN aptarnavimo kaina vienam žmogui siekia maždaug 5 JAV dolerius per mėnesį, bet yra vertinamas kiekvienas centas. Ar norite paaukoti dabar?</translation>
     </message>
 </context>
 <context>
@@ -152,17 +152,17 @@
     <message>
         <location filename="../components/Preferences.qml" line="38"/>
         <source>Turn off the VPN to make changes</source>
-        <translation type="unfinished"/>
+        <translation>Norėdami atlikti pakeitimus, išjunkite VPN</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="48"/>
         <source>Censorship circumvention</source>
-        <translation type="unfinished"/>
+        <translation>Cenzūros apėjimas</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="56"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation type="unfinished"/>
+        <translation>Šios technikos gali apeiti cenzūrą, bet yra lėtesnės. Naudokite jas tik tada, kai prireikia.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="70"/>
@@ -172,32 +172,32 @@
     <message>
         <location filename="../components/Preferences.qml" line="96"/>
         <source>Traffic is obfuscated to bypass blocks</source>
-        <translation type="unfinished"/>
+        <translation>Duomenų srautas yra maskuojamas, kad būtų apeiti blokavimai</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="109"/>
         <source>Use Snowflake</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti „Snowflake“</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="124"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation type="unfinished"/>
+        <translation>„Snowflake“ reikalauja, kad jūsų sistemoje būtų įdiegtas „Tor“</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="136"/>
         <source>Transport</source>
-        <translation type="unfinished"/>
+        <translation>Perdavimas</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="144"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"/>
+        <translation>UDP gali padaryti VPN greitesnį. UDP kai kuriuose tinkluose gali būti blokuojamas.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="157"/>
         <source>Use UDP if available</source>
-        <translation type="unfinished"/>
+        <translation>Jei prieinama, naudoti UDP</translation>
     </message>
 </context>
 <context>
@@ -205,17 +205,17 @@
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>There is a newer version available. </source>
-        <translation type="unfinished"/>
+        <translation>Yra prieinama naujesnė versija.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation type="unfinished"/>
+        <translation>Prieš paleisdami diegimo programą, įsitikinkite, kad &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;pašalinote&lt;/a&gt; ankstesnę versiją.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
-        <translation type="unfinished"/>
+        <translation>NAUJINTI DABAR</translation>
     </message>
 </context>
 <context>
@@ -234,12 +234,12 @@
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation type="unfinished"/>
+        <translation>Slėpti</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
@@ -250,17 +250,17 @@
     <message>
         <location filename="../components/Systray.qml" line="72"/>
         <source>Connect to</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungti prie</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
         <source>Connect</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungti</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="77"/>
         <source>Disconnect</source>
-        <translation type="unfinished"/>
+        <translation>Atsijungti</translation>
     </message>
 </context>
 <context>
@@ -269,13 +269,14 @@
         <location filename="../components/VPNState.qml" line="26"/>
         <location filename="../components/VPNState.qml" line="125"/>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation>Jungiamasi</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="58"/>
         <source>Unsecured
 Connection</source>
-        <translation type="unfinished"/>
+        <translation>Neapsaugotas
+ryšys</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="71"/>
@@ -286,7 +287,8 @@ Connection</source>
         <location filename="../components/VPNState.qml" line="91"/>
         <source>Secured
 Connection</source>
-        <translation type="unfinished"/>
+        <translation>Apsaugotas
+ryšys</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="104"/>
@@ -307,7 +309,7 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="223"/>
         <source>off</source>
-        <translation type="unfinished"/>
+        <translation>išjungta</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="226"/>
