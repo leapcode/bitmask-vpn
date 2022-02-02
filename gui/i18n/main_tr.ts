@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>About</name>
     <message>
@@ -13,10 +15,10 @@
         <translation>&lt;p&gt;Bu hizmetin bedeli, sizin gibi kullanıcıların bağışlarıyla sağlanıyor. &lt;a href=&quot;%1&quot;&gt;Lütfen bağış yapın&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../components/About.qml" line="102"/>
+        <location filename="../components/About.qml" line="103"/>
         <source>%1 version: 
 %2</source>
-        <extracomment>%1 -&gt; application name %2 -&gt; version string</extracomment>
+        <extracomment>screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png %1 -&gt; application name %2 -&gt; version string</extracomment>
         <translation>%1 sürüm: 
 %2</translation>
     </message>
@@ -106,38 +108,38 @@
 <context>
     <name>MainView</name>
     <message>
-        <location filename="../components/MainView.qml" line="33"/>
-        <location filename="../components/MainView.qml" line="53"/>
+        <location filename="../components/MainView.qml" line="32"/>
+        <location filename="../components/MainView.qml" line="56"/>
         <source>Donate</source>
         <translation>Bağış yapın</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="46"/>
+        <location filename="../components/MainView.qml" line="49"/>
         <source>Preferences</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="60"/>
+        <location filename="../components/MainView.qml" line="63"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="68"/>
+        <location filename="../components/MainView.qml" line="70"/>
         <source>About</source>
         <translation>Hakkında</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="76"/>
+        <location filename="../components/MainView.qml" line="77"/>
         <source>Quit</source>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="107"/>
+        <location filename="../components/MainView.qml" line="104"/>
         <source>Please donate!</source>
         <translation>Lütfen bağış yapın!</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="121"/>
+        <location filename="../components/MainView.qml" line="118"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
         <translation>Bu hizmet tamamen sizin gibi kullanıcıların bağışları sayesinde sunulabiliyor. Bir VPN ağını işletme maliyeti, kişi başına aylık 5 dolar civarındadır, ancak her katkı değerlidir. Siz de bağış yapmak ister misiniz?</translation>
     </message>
@@ -175,27 +177,27 @@
         <translation>Engelleri aşmak için trafik gizlenir</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="109"/>
+        <location filename="../components/Preferences.qml" line="110"/>
         <source>Use Snowflake</source>
         <translation>Snowflake kullanılsın</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="124"/>
+        <location filename="../components/Preferences.qml" line="125"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Snowflake için sisteminizde Tor kurulu olması gerekir</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="136"/>
+        <location filename="../components/Preferences.qml" line="138"/>
         <source>Transport</source>
         <translation>Taşıyıcı</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="144"/>
+        <location filename="../components/Preferences.qml" line="146"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP, VPN bağlantısını daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="157"/>
+        <location filename="../components/Preferences.qml" line="159"/>
         <source>Use UDP if available</source>
         <translation>Olabiliyorsa UDP kullanılsın</translation>
     </message>
@@ -216,6 +218,14 @@
         <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
         <translation>ŞİMDİ YÜKSELT</translation>
+    </message>
+</context>
+<context>
+    <name>StatusBox</name>
+    <message>
+        <location filename="../components/StatusBox.qml" line="91"/>
+        <source>This can take several minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -244,21 +254,21 @@
     <message>
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
-        <extracomment>Part of the systray menu; quits que application</extracomment>
+        <extracomment>Part of the systray menu; quits the application</extracomment>
         <translation>Çık</translation>
     </message>
     <message>
-        <location filename="../components/Systray.qml" line="72"/>
+        <location filename="../components/Systray.qml" line="74"/>
         <source>Connect to</source>
         <translation>Şuraya bağlan</translation>
     </message>
     <message>
-        <location filename="../components/Systray.qml" line="74"/>
+        <location filename="../components/Systray.qml" line="76"/>
         <source>Connect</source>
         <translation>Bağlantı kur</translation>
     </message>
     <message>
-        <location filename="../components/Systray.qml" line="77"/>
+        <location filename="../components/Systray.qml" line="79"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı kes</translation>
     </message>
@@ -266,123 +276,192 @@
 <context>
     <name>VPNState</name>
     <message>
-        <location filename="../components/VPNState.qml" line="26"/>
-        <location filename="../components/VPNState.qml" line="125"/>
+        <location filename="../components/VPNState.qml" line="27"/>
+        <source>Setting up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="52"/>
+        <location filename="../components/VPNState.qml" line="156"/>
         <source>Connecting</source>
         <translation>Bağlantı kuruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="58"/>
+        <location filename="../components/VPNState.qml" line="85"/>
         <source>Unsecured
 Connection</source>
         <translation>Güvenilmez
 bağlantı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="71"/>
+        <location filename="../components/VPNState.qml" line="100"/>
         <source>Turn on</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="91"/>
+        <location filename="../components/VPNState.qml" line="120"/>
         <source>Secured
 Connection</source>
         <translation>Güvenilir
 bağlantı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="104"/>
+        <location filename="../components/VPNState.qml" line="135"/>
         <source>Turn off</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="139"/>
+        <location filename="../components/VPNState.qml" line="172"/>
         <source>Cancel</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="223"/>
+        <location filename="../components/VPNState.qml" line="256"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 kapalı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="223"/>
+        <location filename="../components/VPNState.qml" line="256"/>
         <source>off</source>
         <translation>kapalı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="226"/>
+        <location filename="../components/VPNState.qml" line="259"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 açık</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="229"/>
+        <location filename="../components/VPNState.qml" line="262"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 ile bağlantı kuruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="232"/>
+        <location filename="../components/VPNState.qml" line="265"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 durduruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="235"/>
+        <location filename="../components/VPNState.qml" line="268"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 interneti engelliyor</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="276"/>
+        <source>pluggable transport connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="278"/>
+        <source>connection done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="280"/>
+        <source>doing handshake</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="282"/>
+        <source>handshake done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="284"/>
+        <source>creating one-hop connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="286"/>
+        <source>requesting status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="288"/>
+        <source>loading status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="290"/>
+        <source>loading keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="292"/>
+        <source>requesting descriptors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="294"/>
+        <source>loading descriptors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="296"/>
+        <source>creating circuit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="298"/>
+        <source>done</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="80"/>
+        <location filename="../main.cpp" line="111"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: hızlı ve güvenilir bir VPN. Bitmask tarafından sunuluyor.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="87"/>
+        <location filename="../main.cpp" line="118"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Sistem çubuğu simgesi görüntülenmesin (Gnome kabuk eklentisiyle birlikte ya da VPN bağlantısını başka şekillerde denetlemek için kullanışlıdır)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="94"/>
+        <location filename="../main.cpp" line="125"/>
         <source>Enable Web API.</source>
         <translation>Web API kullanılsın</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="100"/>
+        <location filename="../main.cpp" line="131"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Yardımcıları kur (yalnız Linux üzerinde ve sudo gereklidir)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="106"/>
+        <location filename="../main.cpp" line="137"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Trafiği gizlemek için obfs4 kullanılsın. Yalnız hizmet sağlayıcıda kullanılabiliyorsa</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="112"/>
-        <source>Disable autostart for the next run.</source>
-        <translation>Sonraki çalıştırmada otomatik başlatma devre dışı bırakılsın</translation>
+        <location filename="../main.cpp" line="143"/>
+        <source>Enable autostart.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="117"/>
+        <source>Disable autostart for the next run.</source>
+        <translation type="vanished">Sonraki çalıştırmada otomatik başlatma devre dışı bırakılsın</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="148"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API kapı numarası (varsayılan: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="119"/>
+        <location filename="../main.cpp" line="151"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>VPN bağlantısını başlat, &apos;açık&apos; veya &apos;kapalı&apos;.</translation>
     </message>
