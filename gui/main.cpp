@@ -43,7 +43,38 @@ QString getProviderConfig(QJsonValue info, QString provider, QString key, QStrin
             return item[key].toString();
         }
     }
-    return "BitmaskVPN";
+    return defaultValue;
+}
+
+QList<QVariant> getAvailableLocales() {
+    QString localePath = ":/i18n";
+    QDir dir(localePath);
+    QStringList fileNames = dir.entryList(QStringList("*.qm"));
+
+    QList<QVariant> locales;
+    for (int i = 0; i < fileNames.size(); ++i) {
+        // get locale extracted by filename
+        QString localeName;
+        localeName = fileNames[i]; // "de.qm"
+        localeName.truncate(localeName.lastIndexOf('.')); // "de"
+
+        if (localeName == "base") {
+            localeName = "en";
+        } else {
+            // remove main_ prefix
+            localeName = localeName.mid(5);
+        }
+
+
+        QLocale locale = QLocale(localeName);
+        QString name = QLocale::languageToString(locale.language());
+        QVariantMap localeObject;
+        localeObject.insert("locale", localeName);
+        localeObject.insert("name", name);
+        locales.push_back(localeObject);
+    }
+
+    return locales;
 }
 
 auto handler = [](int sig) -> void {
@@ -238,6 +269,7 @@ int main(int argc, char **argv) {
     ctx->setContextProperty("systrayVisible", !hideSystray);
     ctx->setContextProperty("systrayAvailable", availableSystray);
     ctx->setContextProperty("qmlDebug", debug == "1");
+    ctx->setContextProperty("locales", getAvailableLocales());
 
     //XXX we're doing configuration via config file, but this is a mechanism
     //to change to Dark Theme if desktop has it.
