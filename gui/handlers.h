@@ -33,6 +33,7 @@ public:
 
 signals:
     void quitDone();
+    void localeChanged(QString locale);
 
 public slots:
     QString getVersion();
@@ -50,6 +51,7 @@ public slots:
     void resetError(QString errlabel);
     void resetNotification(QString label);
     void quit();
+    void setLocale(QString locale);
 };
 
 #endif  // HANDLERS_H

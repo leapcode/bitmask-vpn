@@ -17,6 +17,10 @@ Backend::Backend(QObject *parent) : QObject(parent)
 {
 }
 
+void Backend::setLocale(QString locale) {
+    emit this->localeChanged(locale);
+}
+
 QString Backend::getVersion()
 {
     return QString(GetBitmaskVersion());
