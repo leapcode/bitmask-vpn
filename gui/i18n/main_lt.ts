@@ -147,57 +147,62 @@
 <context>
     <name>Preferences</name>
     <message>
-        <location filename="../components/Preferences.qml" line="10"/>
+        <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
         <translation>Nuostatos</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="38"/>
+        <location filename="../components/Preferences.qml" line="54"/>
         <source>Turn off the VPN to make changes</source>
         <translation>Norėdami atlikti pakeitimus, išjunkite VPN</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="48"/>
+        <location filename="../components/Preferences.qml" line="64"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="90"/>
         <source>Censorship circumvention</source>
         <translation>Cenzūros apėjimas</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="56"/>
+        <location filename="../components/Preferences.qml" line="98"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Šios technikos gali apeiti cenzūrą, bet yra lėtesnės. Naudokite jas tik tada, kai prireikia.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="70"/>
+        <location filename="../components/Preferences.qml" line="112"/>
         <source>Use obfs4 bridges</source>
         <translation>Naudoti obfs4 tinklų tiltus</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="96"/>
+        <location filename="../components/Preferences.qml" line="138"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Duomenų srautas yra maskuojamas, kad būtų apeiti blokavimai</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="110"/>
+        <location filename="../components/Preferences.qml" line="152"/>
         <source>Use Snowflake</source>
         <translation>Naudoti „Snowflake“</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="125"/>
+        <location filename="../components/Preferences.qml" line="167"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>„Snowflake“ reikalauja, kad jūsų sistemoje būtų įdiegtas „Tor“</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="180"/>
         <source>Transport</source>
         <translation>Perdavimas</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="146"/>
+        <location filename="../components/Preferences.qml" line="188"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP gali padaryti VPN greitesnį. UDP kai kuriuose tinkluose gali būti blokuojamas.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="159"/>
+        <location filename="../components/Preferences.qml" line="201"/>
         <source>Use UDP if available</source>
         <translation>Jei prieinama, naudoti UDP</translation>
     </message>
@@ -422,32 +427,32 @@ ryšys</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="144"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: greitas ir saugus VPN. Veikia su Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="118"/>
+        <location filename="../main.cpp" line="151"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Nerodyti sistemos dėklo piktogramos (praverčia su Gnome apvalkalo plėtiniu arba siekiant kitokiu būdu valdyti VPN).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="125"/>
+        <location filename="../main.cpp" line="158"/>
         <source>Enable Web API.</source>
         <translation>Įjungti saityno API.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="131"/>
+        <location filename="../main.cpp" line="164"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Įdiegti pagelbiklius (tik Linux, reikalauja sudo).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="137"/>
+        <location filename="../main.cpp" line="170"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Naudoti obfs4, siekiant maskuoti duomenų srautą, jei prieinama iš teikėjo.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="143"/>
+        <location filename="../main.cpp" line="176"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -456,12 +461,12 @@ ryšys</translation>
         <translation type="vanished">Išjungti automatinį paleidimą kitam paleidimui.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="148"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Web API port (default: 8080)</source>
         <translation>Saityno API prievadas (numatytasis: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="151"/>
+        <location filename="../main.cpp" line="184"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Paleisti VPN, arba „on“, arba „off“.</translation>
     </message>

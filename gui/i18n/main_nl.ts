@@ -147,57 +147,62 @@
 <context>
     <name>Preferences</name>
     <message>
-        <location filename="../components/Preferences.qml" line="10"/>
+        <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="38"/>
+        <location filename="../components/Preferences.qml" line="54"/>
         <source>Turn off the VPN to make changes</source>
         <translation>Schakel de VPN uit om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="48"/>
+        <location filename="../components/Preferences.qml" line="64"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="90"/>
         <source>Censorship circumvention</source>
         <translation>Censuur omzeilen</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="56"/>
+        <location filename="../components/Preferences.qml" line="98"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Deze techniek kan censuur omzeilen, maar is ook trager. Gebruik het alleen wanneer noodzakelijk.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="70"/>
+        <location filename="../components/Preferences.qml" line="112"/>
         <source>Use obfs4 bridges</source>
         <translation>Gebruik een obfs4 bridge</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="96"/>
+        <location filename="../components/Preferences.qml" line="138"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Verkeer is versluierd om blokkades te omzeilen</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="110"/>
+        <location filename="../components/Preferences.qml" line="152"/>
         <source>Use Snowflake</source>
         <translation>Gebruik Snowflake</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="125"/>
+        <location filename="../components/Preferences.qml" line="167"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Tor moet op je systeem geïnstalleerd zijn voor Snowflake</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="180"/>
         <source>Transport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="146"/>
+        <location filename="../components/Preferences.qml" line="188"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP kan een VPN sneller maken. Het kan geblokkeerd zijn op sommige netwerken.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="159"/>
+        <location filename="../components/Preferences.qml" line="201"/>
         <source>Use UDP if available</source>
         <translation>Gebruik UDP wanneer beschikbaar</translation>
     </message>
@@ -422,32 +427,32 @@ Verbinding</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="144"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: een snelle en veilige VPN. Powered by Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="118"/>
+        <location filename="../main.cpp" line="151"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Toon het systray icoontje niet (handig in combinatie met Gnome Shell extensie, of om VPN op een andere manier te bedienen).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="125"/>
+        <location filename="../main.cpp" line="158"/>
         <source>Enable Web API.</source>
         <translation>Web API activeren.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="131"/>
+        <location filename="../main.cpp" line="164"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Helpertoepassing installeren (enkel voor Linux, vereist sudo).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="137"/>
+        <location filename="../main.cpp" line="170"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Gebruik obfs4 om je verkeer te versluieren, als het beschikbaar is biji de provider.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="143"/>
+        <location filename="../main.cpp" line="176"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -456,12 +461,12 @@ Verbinding</translation>
         <translation type="vanished">Autostart uitschakelen voor de volgende keer.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="148"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API poort (standard: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="151"/>
+        <location filename="../main.cpp" line="184"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Start VPN, &apos;aan&apos; of &apos;uit&apos;.</translation>
     </message>

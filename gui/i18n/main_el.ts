@@ -147,57 +147,62 @@
 <context>
     <name>Preferences</name>
     <message>
-        <location filename="../components/Preferences.qml" line="10"/>
+        <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
         <translation>Προτιμήσεις</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="38"/>
+        <location filename="../components/Preferences.qml" line="54"/>
         <source>Turn off the VPN to make changes</source>
         <translation>Απενεργοποίησε το VPN για να κάνεις αλλαγές</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="48"/>
+        <location filename="../components/Preferences.qml" line="64"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="90"/>
         <source>Censorship circumvention</source>
         <translation>Παράκαμψη λογοκρισίας</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="56"/>
+        <location filename="../components/Preferences.qml" line="98"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Αυτές οι τεχνικές μπορούν να παρακάμψουν τεχνικές λογοκρισίας, αλλά είναι πιο αργές. Χρησιμοποιήστε τις μόνο όποτε χρειάζεται.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="70"/>
+        <location filename="../components/Preferences.qml" line="112"/>
         <source>Use obfs4 bridges</source>
         <translation>Χρήση γεφυρών obfs4</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="96"/>
+        <location filename="../components/Preferences.qml" line="138"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Η κίνηση δεδομένων αποκρύπτεται για τη παράκαμψη μπλοκαρισμάτων</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="110"/>
+        <location filename="../components/Preferences.qml" line="152"/>
         <source>Use Snowflake</source>
         <translation>Χρήση Snowflake</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="125"/>
+        <location filename="../components/Preferences.qml" line="167"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Για το Snowflake χρειάζεται να έχεις εγκατεστημένο το Tor</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="180"/>
         <source>Transport</source>
         <translation>Μεταφορά</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="146"/>
+        <location filename="../components/Preferences.qml" line="188"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>Το UDP μπορεί να κάνει το VPN γρηγορότερο. Ίσως να μπλοκάρεται σε κάποια δίκτυα.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="159"/>
+        <location filename="../components/Preferences.qml" line="201"/>
         <source>Use UDP if available</source>
         <translation>Χρήση UDP αν είναι διαθέσιμο</translation>
     </message>
@@ -422,32 +427,32 @@ Connection</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="111"/>
+        <location filename="../main.cpp" line="144"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: ένα γρήγορο και ασφαλές VPN. Με την υποστήριξη του Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="118"/>
+        <location filename="../main.cpp" line="151"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Να μην εμφανίζεται το εικονίδιο στη μπάρα κατάστασης (χρήσιμο σε συνδυασμό με την επέκταση Gnome Shell ή για τον έλεγχο του VPN με άλλα μέσα).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="125"/>
+        <location filename="../main.cpp" line="158"/>
         <source>Enable Web API.</source>
         <translation>Ενεργοποίηση Web API.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="131"/>
+        <location filename="../main.cpp" line="164"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Εγκατάσταση βοηθών (μόνο για Linux, απαιτείται sudo). </translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="137"/>
+        <location filename="../main.cpp" line="170"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Χρήση obfs4 για την απόκρυψη και συσκότιση της κίνησης, αν είναι διαθέσιμο από τον πάροχο.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="143"/>
+        <location filename="../main.cpp" line="176"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -456,12 +461,12 @@ Connection</source>
         <translation type="vanished">Απενεργοποίηση αυτόματης εκκίνησης στην επόμενη εκτέλεση.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="148"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Web API port (default: 8080)</source>
         <translation>Θύρα Web API (προκαθορισμένη: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="151"/>
+        <location filename="../main.cpp" line="184"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Εκκίνηση του VPN, είτε &quot;ενεργό&quot; είτε &quot;ανενεργό&quot;.</translation>
     </message>
