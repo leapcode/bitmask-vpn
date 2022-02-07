@@ -36,11 +36,11 @@ std::string getEnv(std::string const& key)
     return val == NULL ? std::string() : std::string(val);
 }
 
-QString getAppName(QJsonValue info, QString provider) {
+QString getProviderConfig(QJsonValue info, QString provider, QString key, QString defaultValue) {
     for (auto p: info.toArray()) {
         QJsonObject item = p.toObject();
-        if (item["name"].toString().toLower() == provider.toLower()) {
-            return item["applicationName"].toString();
+        if (item["name"].toString().toLower() == provider.toLower() && item[key].toString() != "") {
+            return item[key].toString();
         }
     }
     return "BitmaskVPN";
@@ -101,9 +101,11 @@ int main(int argc, char **argv) {
     providers->loadJson(providerJsonBytes);
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
-    QString appName = getAppName(providersInfo, defaultProvider.toString());
+    QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "BitmaskVPN");
+    QString organizationDomain = getProviderConfig(providersInfo, defaultProvider.toString(), "providerURL", "riseup.net");
 
     QApplication::setApplicationName(appName);
+    QApplication::setOrganizationDomain(organizationDomain);
 
     QCommandLineParser parser;
     parser.setApplicationDescription(
@@ -203,11 +205,14 @@ int main(int argc, char **argv) {
         app.setWindowIcon(QIcon(":/vendor/riseup.svg"));
     }
 
+    QSettings settings;
+    QString locale = settings.value("locale", QLocale().name()).toString();
+    settings.setValue("locale", locale);
+
     /* load translations */
     QTranslator translator;
-    translator.load(QLocale(), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
+    translator.load(QLocale(locale), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
     app.installTranslator(&translator);
-
 
     QQmlApplicationEngine engine;
     QQmlContext *ctx = engine.rootContext();
@@ -245,6 +250,15 @@ int main(int argc, char **argv) {
         update from Go */
     QObject::connect(qw, &QJsonWatch::jsonChanged, [model](QString js) {
         model->loadJson(js.toUtf8());
+    });
+
+    QObject::connect(&backend, &Backend::localeChanged, [&app, &translator, &engine, &settings](QString locale) {
+        settings.setValue("locale", locale);
+
+        app.removeTranslator(&translator);
+        translator.load(QLocale(locale), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));
+        app.installTranslator(&translator);
+        engine.retranslate();
     });
 
     /* connect quitDone signal, exit app */
