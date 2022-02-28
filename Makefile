@@ -11,29 +11,22 @@ QMAKE ?= qmake
 LRELEASE ?= lrelease
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
-APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
-TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
-PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | cut -d ',' -f 1 | tr -d "[:space:]")
-VERSION ?= $(shell git describe 2> /dev/null)
-ifeq ($(VERSION),)
-    VERSION := "unknown"
-endif
+APPNAME != VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1
+TARGET != VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1
+PROVIDER != grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | cut -d ',' -f 1 | tr -d "[:space:]"
+VERSION != git describe 2>/dev/null || echo -n "unknown"
 WINCERTPASS ?= pass
 OSXAPPPASS  ?= pass
 OSXMORDORUID ?= uid
 
 # go paths
-GOPATH = $(shell go env GOPATH)
+GOPATH != go env GOPATH
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
 
 # detect OS
-UNAME = $(shell uname -s)
-ifeq ($(OS), Windows_NT)
-PLATFORM = windows
-else
-PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
-endif
+UNAME != uname -s
+PLATFORM != [ '$(UNAME)' = 'Windows_NT' ] && echo -n 'windows' || (echo ${UNAME} | awk "{print tolower(\$$0)}")
 
 QTBUILD = build/qt
 INSTALLER = build/installer
@@ -50,14 +43,10 @@ endif
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
-TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe 
+TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe
 
-ifeq ($(PLATFORM), windows)
-HAS_QTIFW := $(shell which binarycreator.exe)
-else
-HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
-endif
-OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
+HAS_QTIFW != which binarycreator.exe 2>/dev/null || PATH=$(PATH) which binarycreator
+OPENVPN_BIN != echo -n "$(HOME)/openvpn_build/sbin/$$(grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 
 
 #########################################################################
@@ -91,20 +80,13 @@ dependsCYGWIN_NT-10.0:
 	@echo "==================================WARNING=================================="
 	@echo
 
-ifeq ($(PLATFORM), darwin)
-EXTRA_FLAGS = MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
-else
-EXTRA_FLAGS =
-endif
-
-ifeq ($(PLATFORM), windows)
-EXTRA_GO_LDFLAGS = "-H=windowsgui"
-endif
+EXTRA_FLAGS != [ $(PLATFORM) = 'darwin' ] && echo -n MACOSX_DEPLOYMENT_TARGET=10.10 GOOS=darwin CC=clang
+EXTRA_GO_LDFLAGS != [ $(PLATFORM) = 'windows' ] && echo -n '-H=windowsgui'
 
 ifeq ($(PLATFORM), windows)
 PKGFILES = $(wildcard "pkg/*") # syntax err in windows with find 
 else
-PKGFILES = $(shell find pkg -type f -name '*.go')
+PKGFILES != find pkg -type f -name '*.go'
 endif
 
 lib/%.a: $(PKGFILES)
