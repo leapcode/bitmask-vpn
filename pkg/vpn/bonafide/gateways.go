@@ -313,7 +313,7 @@ func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
 
 	log.Println(">>> in getAll")
 	log.Println("seems to be initialized...")
-	if p.recommended == nil || len(p.recommended) == 0 {
+	if len(p.recommended) == 0 {
 		return p.getGatewaysFromMenshen(transport, 999)
 	}
 	log.Println(">>> by timezone")
