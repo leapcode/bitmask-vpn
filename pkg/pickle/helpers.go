@@ -1,5 +1,3 @@
-//go:generate statik -src=../../helpers -include=*
-
 // Copyright (C) 2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,16 +16,18 @@
 package pickle
 
 import (
+	"embed"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"runtime"
-
-	_ "0xacab.org/leap/bitmask-vpn/pkg/pickle/statik"
-	"github.com/rakyll/statik/fs"
 )
+
+//go:embed helpers
+var helpers embed.FS
 
 const (
 	bitmaskRoot = "/usr/sbin/bitmask-root"
@@ -96,27 +96,17 @@ func dumpHelper(fname, dest string, isExec bool) {
 		fmt.Println("Only linux supported for now")
 		return
 	}
-	stFS, err := fs.New()
+
+	fd, err := helpers.Open(path.Join("helpers", fname))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r, err := stFS.Open("/" + fname)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer r.Close()
-
-	c, err := ioutil.ReadAll(r)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tmpfile, err := ioutil.TempFile("/dev/shm", "*")
+	tmpfile, err := os.CreateTemp("/dev/shm", "*")
 	check(err)
 	defer os.Remove(tmpfile.Name())
 
-	_, err = tmpfile.Write(c)
+	_, err = io.Copy(tmpfile, fd)
 	check(err)
 	copyAsRoot(tmpfile.Name(), dest, isExec)
 }
