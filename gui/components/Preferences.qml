@@ -59,13 +59,23 @@ ThemedPage {
                     Layout.rightMargin: 10
                 }
 
-                Label {
-                    id: languageLabel
-                    text: qsTr("Language")
-                    font.bold: true
+                RowLayout {
                     Layout.topMargin: 10
                     Layout.leftMargin: 10
                     Layout.rightMargin: 10
+
+                    Label {
+                        id: languageLabel
+                        text: qsTr("Language")
+                        font.bold: true
+                    }
+
+                    Icon {
+                        id: languageIcon
+                        sourceSize.height: 20
+                        sourceSize.width: 20
+                        source: "../resources/language.svg"
+                    }
                 }
 
                 ComboBox {
@@ -76,6 +86,8 @@ ThemedPage {
                     model: locales
                     textRole: 'name'
                     valueRole: 'locale'
+
+                    Material.elevation: 0
 
                     Component.onCompleted: {
                         currentIndex = indexOfValue(settings.locale)
