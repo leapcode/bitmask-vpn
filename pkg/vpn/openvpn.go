@@ -16,10 +16,13 @@
 package vpn
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"net"
 	"os"
 	"path"
 	"path/filepath"
@@ -27,7 +30,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/shapeshifter"
+	"0xacab.org/leap/obfsvpn"
 )
 
 const (
@@ -64,7 +67,7 @@ func (b *Bitmask) CanStartVPN() bool {
 func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 	// TODO configure port if not available
 	proxy = "127.0.0.1:4430"
-	if b.shapes != nil {
+	if b.listener != nil {
 		return proxy, nil
 	}
 
@@ -81,41 +84,61 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 		if gw.Host != host {
 			continue
 		}
-		if _, ok := gw.Options["cert"]; !ok {
+		cert, ok := gw.Options["cert"]
+		if !ok {
 			continue
 		}
 		log.Println("Selected Gateway:", gw.Host, gw.IPAddress)
-		b.shapes = &shapeshifter.ShapeShifter{
-			Cert:      gw.Options["cert"],
-			Target:    gw.IPAddress + ":" + gw.Ports[0],
-			SocksAddr: proxy,
+
+		var iatMode int
+		if iatModeOpt, ok := gw.Options["iat-mode"]; ok {
+			iatMode, _ = strconv.Atoi(iatModeOpt)
 		}
-		go b.listenShapeErr()
-		if iatMode, ok := gw.Options["iat-mode"]; ok {
-			b.shapes.IatMode, err = strconv.Atoi(iatMode)
-			if err != nil {
-				b.shapes.IatMode = 0
-			}
-		}
-		err = b.shapes.Open()
+		b.listener, err = net.Listen("tcp", proxy)
 		if err != nil {
-			log.Printf("Can't connect to transport %s: %v", b.transport, err)
+			return "", err
+		}
+		target := net.JoinHostPort(gw.IPAddress, gw.Ports[0])
+		dialer, err := obfsvpn.NewDialerCert(cert)
+		if err != nil {
 			continue
 		}
+		dialer.IATMode = obfsvpn.IATMode(iatMode)
+		go clientHandler(b.listener, dialer, target)
 		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
 		return proxy, nil
 	}
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
 }
 
-func (b *Bitmask) listenShapeErr() {
-	ch := b.shapes.GetErrorChannel()
+func clientHandler(ln net.Listener, dialer *obfsvpn.Dialer, target string) {
 	for {
-		err, more := <-ch
-		if !more {
+		localConn, err := ln.Accept()
+		if err != nil {
+			log.Printf("error accepting connection: %v", err)
 			return
 		}
-		log.Printf("Error from shappeshifter: %v", err)
+		remoteConn, err := dialer.Dial(context.TODO(), "tcp", target)
+		if err != nil {
+			log.Printf("error dialing gateway: %v", err)
+			return
+		}
+		go func() {
+			defer localConn.Close()
+			defer remoteConn.Close()
+			_, err := io.Copy(localConn, remoteConn)
+			if err != nil {
+				log.Printf("Failed to copy to local conn: %v", err)
+			}
+		}()
+		go func() {
+			defer localConn.Close()
+			defer remoteConn.Close()
+			_, err := io.Copy(remoteConn, localConn)
+			if err != nil {
+				log.Printf("Failed to copy to local conn: %v", err)
+			}
+		}()
 	}
 }
 
@@ -257,9 +280,9 @@ func (b *Bitmask) StopVPN() error {
 	if err != nil {
 		return err
 	}
-	if b.shapes != nil {
-		b.shapes.Close()
-		b.shapes = nil
+	if b.listener != nil {
+		b.listener.Close()
+		b.listener = nil
 	}
 	return b.launch.openvpnStop()
 }
@@ -277,9 +300,9 @@ func (b *Bitmask) Reconnect() error {
 	log.Println("DEBUG Reconnecting")
 	if status != Off {
 		b.statusCh <- Stopping
-		if b.shapes != nil {
-			b.shapes.Close()
-			b.shapes = nil
+		if b.listener != nil {
+			b.listener.Close()
+			b.listener = nil
 		}
 		err = b.launch.openvpnStop()
 		if err != nil {
