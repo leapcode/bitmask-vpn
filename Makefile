@@ -380,8 +380,8 @@ gen_pkg_snap:
 ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
-	@cp helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
-	@cp helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
+	@cp pkg/pickle/helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
+	@cp pkg/pickle/helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py
 	@rm build/${PROVIDER}/snap/data.json build/${PROVIDER}/snap/snapcraft-template.yaml
 	@mkdir -p build/${PROVIDER}/snap/gui
