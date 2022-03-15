@@ -4,9 +4,10 @@
 FROM ubuntu:20.04 as builder
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
+ARG GO_VERSION=1.16
 LABEL Description="An image to build Bitmask Lite" Vendor="LEAP" Version="1.2"
 ENV OSXSDK_SHA256="631b4144c6bf75bf7a4d480d685a9b5bda10ee8d03dbf0db829391e2ef858789" \
-    PATH="$PATH:/osxcross/target/bin:/usr/lib/go-1.14/bin"
+    PATH="$PATH:/osxcross/target/bin:/usr/lib/go-${GO_VERSION}/bin"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade --yes && \
@@ -26,7 +27,7 @@ RUN apt-get update && apt-get upgrade --yes && \
             jq \
             squashfs-tools \
             qtbase5-dev qttools5-dev-tools qt5-qmake g++ qtdeclarative5-dev qt5-default \
-            golang-1.14-go golang-go golang-golang-x-tools-dev && \
+            golang-${GO_VERSION}-go golang-go golang-golang-x-tools-dev && \
     rm -r /var/lib/apt/lists/*
 
 # osx cross compiling
