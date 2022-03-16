@@ -88,7 +88,6 @@ ThemedPage {
                     // we need to fallback to "auto" selection if such location does not
                     // offer bridges
                     useBridges(checked)
-                    useUDP.enabled = !checked
                 }
             }
 
@@ -166,7 +165,6 @@ ThemedPage {
                 }
                 onClicked: {
                     doUseUDP(checked)
-                    useBridgesCheckBox.enabled = areBridgesAvailable()
                 }
             }
         }
@@ -225,8 +223,7 @@ ThemedPage {
 
     function areBridgesAvailable() {
         // FIXME check if provider offers it
-        let providerSupport = true
-        return providerSupport && !useUDP.checked
+        return true
     }
 
     function useBridges(value) {

@@ -31,6 +31,8 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/obfsvpn"
+
+	"github.com/xtaci/kcp-go/v5"
 )
 
 const (
@@ -64,7 +66,7 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.bonafide.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransport(host string) (proxy string, err error) {
+func (b *Bitmask) startTransport(host string, udp bool) (proxy string, err error) {
 	// TODO configure port if not available
 	proxy = "127.0.0.1:4430"
 	if b.listener != nil {
@@ -104,21 +106,31 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 			continue
 		}
 		dialer.IATMode = obfsvpn.IATMode(iatMode)
-		go clientHandler(b.listener, dialer, target)
+		go clientHandler(b.listener, dialer, target, udp)
 		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
 		return proxy, nil
 	}
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
 }
 
-func clientHandler(ln net.Listener, dialer *obfsvpn.Dialer, target string) {
+func clientHandler(ln net.Listener, dialer *obfsvpn.Dialer, target string, udp bool) {
 	for {
 		localConn, err := ln.Accept()
 		if err != nil {
 			log.Printf("error accepting connection: %v", err)
 			return
 		}
-		remoteConn, err := dialer.Dial(context.TODO(), "tcp", target)
+		var remoteConn net.Conn
+		if udp {
+			innerConn, err := kcp.Dial(target)
+			if err != nil {
+				log.Printf("error dialing gateway via kcp: %v", err)
+				return
+			}
+			remoteConn, err = dialer.Wrap(context.TODO(), innerConn)
+		} else {
+			remoteConn, err = dialer.Dial(context.TODO(), "tcp", target)
+		}
 		if err != nil {
 			log.Printf("error dialing gateway: %v", err)
 			return
@@ -156,7 +168,7 @@ func (b *Bitmask) startOpenVPN() error {
 		}
 
 		gw := gateways[0]
-		proxy, err := b.startTransport(gw.Host)
+		proxy, err := b.startTransport(gw.Host, b.udp)
 		if err != nil {
 			return err
 		}
