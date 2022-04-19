@@ -53,7 +53,7 @@ then
 else
     if [ "$QMAKE" == "" ]
     then
-        QMAKE=`which qmake`
+        QMAKE="$(command -v qmake5 || command -v qmake)"
     fi
 fi
 
