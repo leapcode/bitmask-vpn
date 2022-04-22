@@ -448,4 +448,4 @@ generate_locales:
 	@lupdate bitmask.pro
 
 get_%:
-	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/bitmask-vpn/translation/${subst -,_,$*}/?file" > gui/i18n/main_$*.ts
+	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/bitmask-desktop/translation/${subst -,_,$*}/?file" > gui/i18n/main_$*.ts
