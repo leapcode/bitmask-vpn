@@ -117,7 +117,7 @@ To run tests:
 Translations
 ------------
 
-We use [transifex](https://www.transifex.com/otf/bitmask/RiseupVPN/) to coordinate translations. Any help is welcome!
+We use [transifex](https://www.transifex.com/otf/bitmask/bitmask-desktop/) to coordinate translations. Any help is welcome!
 
 
 Bugs? Crashes? UI feedback? Any other suggestions or complains?
