@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"math/rand"
+	"os"
 	"sort"
 	"strconv"
 	"time"
@@ -279,6 +280,10 @@ func (p *gatewayPool) setRecommendedGateways(geo *geoLocation) {
 /* get at most max gateways. the method of picking depends on whether we're
 * doing manual override, and if we got useful info from menshen */
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
+	if hostname := os.Getenv("LEAP_GW"); hostname != "" {
+		log.Printf("Gateway selection manually overriden: %v\n", hostname)
+		return p.getGatewaysByHostname(hostname)
+	}
 	if p.isManualLocation() {
 		if len(p.recommended) != 0 {
 			return p.getGatewaysFromMenshenByLocation(p.userChoice, transport)
@@ -364,6 +369,20 @@ func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max
 		gws = append(gws, gw.gateway)
 		if len(gws) == max {
 			break
+		}
+	}
+	return gws, nil
+}
+
+// getGatewaysByHostname filters the gateway pool by hostname. If it finds a
+// gateway matching the passed hostname, it will return a Gateway array with
+// exactly one gateway. It will also return an error (which is always nil at
+// the moment, but for coherence with similar methods).
+func (p *gatewayPool) getGatewaysByHostname(hostname string) ([]Gateway, error) {
+	gws := make([]Gateway, 0)
+	for _, gw := range p.available {
+		if gw.Host == hostname {
+			gws = append(gws, gw)
 		}
 	}
 	return gws, nil

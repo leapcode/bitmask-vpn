@@ -90,3 +90,26 @@ To force logging:
 .. code:: bash
 
   QT_FORCE_STDERR_LOGGING=1 ./riseup-vpn.exe
+
+
+Ciphersuites and other openvpn params
+-------------------------------------
+You can specify a custom `openvpn_configuration` block from a local file
+(instead of fetching it from `eip-service.json`) via an environment variable:
+
+.. code:: bash
+
+  LEAP_OPENVPN_EXTRA_CONFIG=../extra-config.json ./riseup-vpn
+
+Manual Gateway Selection
+------------------------
+In the same spirit, you can manually override the gateway selection via an
+environment variable that contains the hostname of the gateway:
+
+
+.. code:: bash
+
+  LEAP_GW=hostname.riseup.net ./riseup.vpn
+
+
+
