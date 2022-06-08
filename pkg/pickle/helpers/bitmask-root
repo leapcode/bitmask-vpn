@@ -89,7 +89,7 @@ def is_ipv6_disabled():
 def tostr(s):
     return s.decode('utf-8')
 
-VERSION = "16"
+VERSION = "17"
 SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
@@ -174,7 +174,7 @@ PARAM_FORMATS = {
     "NUMBER": lambda s: re.match("^\d+$", s),
     "PROTO": lambda s: re.match("^(tcp|udp|tcp4|udp4)$", s),
     "IP": lambda s: is_valid_address(s),
-    "CIPHER": lambda s: re.match("^[A-Z0-9-]+$", s),
+    "CIPHER": lambda s: re.match("^[A-Z0-9-\:]+$", s),
     "USER": lambda s: re.match(
         "^[a-zA-Z0-9_\.\@][a-zA-Z0-9_\-\.\@]*\$?$", s),  # IEEE Std 1003.1-2001
     "FILE": lambda s: os.path.isfile(s),
