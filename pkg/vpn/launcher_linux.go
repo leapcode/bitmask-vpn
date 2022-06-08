@@ -167,11 +167,16 @@ func (l *launcher) openvpnStop() error {
 }
 
 func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
+	if os.Getenv("LEAP_DRYRUN") == "1" {
+		log.Println("dry-run: skip firewall start")
+		return nil
+	}
 	log.Println("firewall start")
 	arg := []string{"firewall", "start"}
 	for _, gw := range gateways {
 		arg = append(arg, gw.IPAddress)
 	}
+
 	return runBitmaskRoot(arg...)
 }
 
@@ -214,8 +219,8 @@ func runBitmaskRoot(arg ...string) error {
 		return err
 	}
 	arg = append([]string{bitmaskRoot}, arg...)
-
 	cmd := exec.Command("pkexec", arg...)
+
 	out, err := cmd.Output()
 	if err != nil && arg[2] != "isup" {
 		log.Println("Error while running bitmask-root:")

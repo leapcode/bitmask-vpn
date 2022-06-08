@@ -111,5 +111,13 @@ environment variable that contains the hostname of the gateway:
 
   LEAP_GW=hostname.riseup.net ./riseup.vpn
 
+Dry run
+-------
 
+To avoid setting up the routes, you can pass the LEAP_DRYRUN variable:
 
+.. code:: bash
+
+  LEAP_DRYRUN=1 ./riseup.vpn
+
+We should probably restrict this to non-release versions only.

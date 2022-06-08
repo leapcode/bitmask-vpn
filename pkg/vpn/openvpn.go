@@ -180,6 +180,10 @@ func (b *Bitmask) startOpenVPN() error {
 	if err != nil || verb > 6 || verb < 3 {
 		openvpnVerb = "3"
 	}
+	// TODO we need to check if the openvpn options pushed by server are
+	// not overriding (or duplicating) some of the options we're adding here.
+	log.Println("VERB", verb)
+
 	arg = append(arg,
 		"--verb", openvpnVerb,
 		"--management-client",
@@ -190,7 +194,14 @@ func (b *Bitmask) startOpenVPN() error {
 		"--persist-tun",
 		"--float")
 	if verb > 3 {
-		arg = append(arg, "--log", "/tmp/leap-vpn.log")
+		arg = append(
+			arg,
+			"--log", "/tmp/leap-vpn.log")
+	}
+	if os.Getenv("LEAP_DRYRUN") == "1" {
+		arg = append(
+			arg,
+			"--pull-filter", "ignore", "route")
 	}
 	/* persist-tun is needed for reconnects */
 	return b.launch.openvpnStart(arg...)

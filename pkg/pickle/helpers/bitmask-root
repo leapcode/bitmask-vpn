@@ -89,7 +89,7 @@ def is_ipv6_disabled():
 def tostr(s):
     return s.decode('utf-8')
 
-VERSION = "17"
+VERSION = "18"
 SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
@@ -151,6 +151,7 @@ if is_ipv6_disabled():
         "--pull-filter", "ignore", "ifconfig-ipv6",
         "--pull-filter", "ignore", "route-ipv6"])
 
+
 ALLOWED_FLAGS = {
     "--remote": ["IP", "NUMBER", "PROTO"],
     "--tls-cipher": ["CIPHER"],
@@ -168,6 +169,7 @@ ALLOWED_FLAGS = {
     "--management-client": [],
     "--tun-ipv6": [],
     "--log": ["LOGFILE"],
+    "--pull-filter": ["ignore", "route"],
 }
 
 PARAM_FORMATS = {
@@ -183,6 +185,8 @@ PARAM_FORMATS = {
     "NETGW": lambda s: s == "net_gateway",
     "UID": lambda s: re.match("^[a-zA-Z0-9]+$", s),
     "LOGFILE": lambda s: s == "/tmp/leap-vpn.log",
+    "ignore": lambda s: s == "ignore",
+    "route": lambda s: s == "route",
 }
 
 # Determine Qubes OS version, if any
