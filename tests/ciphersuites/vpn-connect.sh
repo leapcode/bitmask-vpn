@@ -9,4 +9,4 @@ sudo openvpn \
     --pull-filter ignore ifconfig-ipv6 \
     --pull-filter ignore route-ipv6 \
     --pull-filter ignore route \
-    --remote $GW $PORT tcp4 
+    --remote $GW $PORT $PROTO
