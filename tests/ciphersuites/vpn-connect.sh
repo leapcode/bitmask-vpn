@@ -5,7 +5,7 @@ sudo openvpn \
     --dev tun --client --tls-client \
     --cipher $CIPHER \
     --remote-cert-tls server --tls-version-min 1.2 \
-    --ca /tmp/concat.crt --cert /tmp/cert.pem --key /tmp/cert.pem \
+    --ca /tmp/ca.crt --cert /tmp/cert.pem --key /tmp/cert.pem \
     --pull-filter ignore ifconfig-ipv6 \
     --pull-filter ignore route-ipv6 \
     --pull-filter ignore route \
