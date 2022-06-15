@@ -140,7 +140,7 @@ FIXED_FLAGS = [
     "--user", "nobody",
     "--persist-key",
     "--persist-local-ip",
-    "--tls-version-min", "1.0",
+    "--tls-version-min", "1.2",
 ]
 
 if OPENVPN_GROUP is not None:
