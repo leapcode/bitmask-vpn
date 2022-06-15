@@ -241,9 +241,9 @@ func (eip eipService) getOpenvpnArgs() []string {
 			// this is a transitioning hack for the transition to float deployment,
 			// assuming we're using openvpn 2.5. We're treating the "cipher"
 			// string that the platform sends us as the newer data-cipher
-			// which includes colon separate ciphers.
+			// which includes colon-separated ciphers.
 			if arg == "cipher" {
-				arg = "data-cipher"
+				arg = "data-ciphers"
 			}
 			args = append(args, "--"+arg)
 			args = append(args, strings.Split(v, " ")...)
