@@ -1,0 +1,5 @@
+client/client
+server/server
+obfsvpn-client
+*.swp
+*.swo
