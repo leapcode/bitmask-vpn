@@ -27,7 +27,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/shapeshifter"
+	obfsvpn "0xacab.org/leap/obfsvpn/client"
 )
 
 const (
@@ -62,10 +62,12 @@ func (b *Bitmask) CanStartVPN() bool {
 }
 
 func (b *Bitmask) startTransport(host string) (proxy string, err error) {
-	// TODO configure port if not available
-	proxy = "127.0.0.1:4430"
-	if b.shapes != nil {
-		return proxy, nil
+	// TODO configure socks port if not available
+	// TODO get port from UI/config file
+	proxyAddr := "127.0.0.1:8080"
+
+	if b.obfsvpnProxy != nil {
+		return proxyAddr, nil
 	}
 
 	gateways, err := b.bonafide.GetGateways(b.transport)
@@ -85,38 +87,26 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 			continue
 		}
 		log.Println("Selected Gateway:", gw.Host, gw.IPAddress)
-		b.shapes = &shapeshifter.ShapeShifter{
-			Cert:      gw.Options["cert"],
-			Target:    gw.IPAddress + ":" + gw.Ports[0],
-			SocksAddr: proxy,
+
+		kcpMode := false
+		if os.Getenv("LEAP_KCP") == "1" {
+			kcpMode = true
 		}
-		go b.listenShapeErr()
-		if iatMode, ok := gw.Options["iat-mode"]; ok {
-			b.shapes.IatMode, err = strconv.Atoi(iatMode)
+
+		log.Println("connecting with cert:", gw.Options["cert"])
+
+		b.obfsvpnProxy = obfsvpn.NewClient(kcpMode, proxyAddr, gw.Options["cert"])
+		go func() {
+			_, err = b.obfsvpnProxy.Start()
 			if err != nil {
-				b.shapes.IatMode = 0
+				log.Printf("Can't connect to transport %s: %v", b.transport, err)
 			}
-		}
-		err = b.shapes.Open()
-		if err != nil {
-			log.Printf("Can't connect to transport %s: %v", b.transport, err)
-			continue
-		}
-		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
-		return proxy, nil
+			log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
+		}()
+
+		return proxyAddr, nil
 	}
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
-}
-
-func (b *Bitmask) listenShapeErr() {
-	ch := b.shapes.GetErrorChannel()
-	for {
-		err, more := <-ch
-		if !more {
-			return
-		}
-		log.Printf("Error from shappeshifter: %v", err)
-	}
 }
 
 func (b *Bitmask) startOpenVPN() error {
@@ -133,11 +123,14 @@ func (b *Bitmask) startOpenVPN() error {
 		}
 
 		gw := gateways[0]
+		b.ptGateway = gw
+
 		proxy, err := b.startTransport(gw.Host)
 		if err != nil {
+			// TODO this is not going to return the error since it blocks
+			// we need to get an error channel from obfsvpn.
 			return err
 		}
-		b.ptGateway = gw
 
 		err = b.launch.firewallStart(gateways)
 		if err != nil {
@@ -145,7 +138,8 @@ func (b *Bitmask) startOpenVPN() error {
 		}
 
 		proxyArgs := strings.Split(proxy, ":")
-		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "tcp4")
+		arg = append(arg, "--socks-proxy", proxyArgs[0], proxyArgs[1])
+		arg = append(arg, "--remote", gw.IPAddress, gw.Ports[0], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
 		log.Println("args passed to bitmask-root:", arg)
@@ -191,8 +185,8 @@ func (b *Bitmask) startOpenVPN() error {
 		"--ca", b.getTempCaCertPath(),
 		"--cert", b.certPemPath,
 		"--key", b.certPemPath,
-		"--persist-tun",
-		"--float")
+		"--persist-tun") // needed for reconnects
+	//		"--float")
 	if verb > 3 {
 		arg = append(
 			arg,
@@ -203,7 +197,6 @@ func (b *Bitmask) startOpenVPN() error {
 			arg,
 			"--pull-filter", "ignore", "route")
 	}
-	/* persist-tun is needed for reconnects */
 	return b.launch.openvpnStart(arg...)
 }
 
@@ -268,9 +261,9 @@ func (b *Bitmask) StopVPN() error {
 	if err != nil {
 		return err
 	}
-	if b.shapes != nil {
-		b.shapes.Close()
-		b.shapes = nil
+	if b.obfsvpnProxy != nil {
+		b.obfsvpnProxy.Stop()
+		b.obfsvpnProxy = nil
 	}
 	return b.launch.openvpnStop()
 }
@@ -288,9 +281,9 @@ func (b *Bitmask) Reconnect() error {
 	log.Println("DEBUG Reconnecting")
 	if status != Off {
 		b.statusCh <- Stopping
-		if b.shapes != nil {
-			b.shapes.Close()
-			b.shapes = nil
+		if b.obfsvpnProxy != nil {
+			b.obfsvpnProxy.Stop()
+			b.obfsvpnProxy = nil
 		}
 		err = b.launch.openvpnStop()
 		if err != nil {

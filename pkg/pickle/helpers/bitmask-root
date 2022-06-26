@@ -138,8 +138,7 @@ FIXED_FLAGS = [
     "--management-signal",
     "--script-security", "1",
     "--user", "nobody",
-    "--persist-key",
-    "--persist-local-ip",
+    "--auth-nocache",
     "--tls-version-min", "1.2",
 ]
 
@@ -170,6 +169,7 @@ ALLOWED_FLAGS = {
     "--tun-ipv6": [],
     "--log": ["LOGFILE"],
     "--pull-filter": ["ignore", "route"],
+    "--socks-proxy": ["IP", "NUMBER"],
 }
 
 PARAM_FORMATS = {

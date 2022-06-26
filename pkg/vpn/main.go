@@ -27,7 +27,8 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
-	"0xacab.org/leap/shapeshifter"
+	obfsvpn "0xacab.org/leap/obfsvpn/client"
+
 	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
@@ -41,7 +42,7 @@ type Bitmask struct {
 	bonafide         *bonafide.Bonafide
 	launch           *launcher
 	transport        string
-	shapes           *shapeshifter.ShapeShifter
+	obfsvpnProxy     *obfsvpn.Client
 	certPemPath      string
 	openvpnArgs      []string
 	udp              bool
