@@ -55,6 +55,9 @@ github.com/klauspost/cpuid/v2
 # github.com/klauspost/reedsolomon v1.10.0
 ## explicit; go 1.15
 github.com/klauspost/reedsolomon
+# github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
+## explicit
+github.com/natefinch/npipe
 # github.com/pion/datachannel v1.5.2
 ## explicit; go 1.13
 github.com/pion/datachannel
@@ -237,4 +240,6 @@ golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/debug
 golang.org/x/sys/windows/svc/eventlog
 golang.org/x/sys/windows/svc/mgr
+# gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce
+## explicit
 # 0xacab.org/leap/obfsvpn => ../obfsvpn

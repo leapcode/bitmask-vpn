@@ -44,7 +44,7 @@ type launcher struct {
 }
 
 func newLauncher() (*launcher, error) {
-	l := launcher{make(chan []string, 1), false}
+	l := launcher{make(chan []string, 1), false, ""}
 	go l.openvpnRunner()
 	return &l, nil
 }

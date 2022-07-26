@@ -29,7 +29,6 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/management"
 	obfsvpn "0xacab.org/leap/obfsvpn/client"
-	"github.com/apparentlymart/go-openvpn-mgmt/openvpn"
 )
 
 // Bitmask holds the bitmask client data

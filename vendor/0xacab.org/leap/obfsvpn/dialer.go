@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"log"
 	"net"
 	"strconv"
 
@@ -64,10 +63,8 @@ func packCert(node *ntor.NodeID, public *ntor.PublicKey) string {
 }
 
 func unpackCert(cert string) (*ntor.NodeID, *ntor.PublicKey, error) {
-	log.Println("DEBUG unpack:", cert, len(cert))
-
 	if l := base64.RawStdEncoding.DecodedLen(len(cert)); l != certLength {
-		return nil, nil, fmt.Errorf("invalid cert len: got %d, expected %d", l, certLength)
+		return nil, nil, fmt.Errorf("cert length %d is invalid", l)
 	}
 	decoded, err := base64.RawStdEncoding.DecodeString(cert)
 	if err != nil {

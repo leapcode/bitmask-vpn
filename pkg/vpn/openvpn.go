@@ -30,6 +30,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	obfsvpn "0xacab.org/leap/obfsvpn/client"
 )
 
@@ -63,6 +64,24 @@ func (b *Bitmask) CanStartVPN() bool {
 	* credentials, if we have a valid token, otherwise remove it and
 	make sure that we're asking for the credentials input */
 	return !b.bonafide.NeedsCredentials()
+}
+
+func (b *Bitmask) startTransportForPrivateBridge(gw bonafide.Gateway) (proxy string, err error) {
+	proxyAddr := "127.0.0.1:8080"
+	kcpMode := false
+	if os.Getenv("LEAP_KCP") == "1" {
+		kcpMode = true
+	}
+	b.obfsvpnProxy = obfsvpn.NewClient(kcpMode, proxyAddr, gw.Options["cert"])
+	go func() {
+		_, err = b.obfsvpnProxy.Start()
+		if err != nil {
+			log.Printf("Can't connect to transport %s: %v", b.transport, err)
+		}
+		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
+	}()
+
+	return proxyAddr, nil
 }
 
 func (b *Bitmask) startTransport(host string) (proxy string, err error) {
@@ -113,6 +132,25 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
 }
 
+func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
+	gw := bonafide.Gateway{}
+	privateBridge := os.Getenv("LEAP_PRIVATE_BRIDGE")
+	if privateBridge == "" {
+		return gw, false
+	}
+	obfs4Cert := os.Getenv("LEAP_PRIVATE_BRIDGE_CERT")
+	if privateBridge == "" {
+		return gw, false
+	}
+	bridgeArgs := strings.Split(privateBridge, ":")
+	gw.Host = bridgeArgs[0]
+	gw.Ports = []string{bridgeArgs[1]}
+	opt := make(map[string]string)
+	opt["cert"] = obfs4Cert
+	gw.Options = opt
+	return gw, true
+}
+
 // generates a password and returns the path for a temporary file where this password is written
 func (b *Bitmask) generateManagementPassword() string {
 	pass := getRandomPass(12)
@@ -143,26 +181,47 @@ func (b *Bitmask) startOpenVPN() error {
 	*/
 	b.statusCh <- Starting
 	if b.GetTransport() == "obfs4" {
-		gateways, err := b.bonafide.GetGateways("obfs4")
-		if err != nil {
-			return err
-		}
-		if len(gateways) == 0 {
-			log.Printf("ERROR No gateway for transport %s in provider", b.transport)
-			return errors.New("ERROR: cannot find any gateway for selected transport")
+		var gw bonafide.Gateway
+		var gateways []bonafide.Gateway
+		var proxy string
+
+		gw, gotPrivate := maybeGetPrivateGateway()
+		if gotPrivate {
+			var err error
+			log.Println("Got a private bridge:", gw.Host, gw.Options)
+			gateways = []bonafide.Gateway{gw}
+			proxy, err = b.startTransportForPrivateBridge(gw)
+			if err != nil {
+				// TODO this is not going to return the error since it blocks
+				// we need to get an error channel from obfsvpn.
+				return err
+			}
+		} else {
+			// get a gateway from bonafide looking at the services announced in eip-service
+
+			log.Println("Getting a gateway with obfs4 transport...")
+
+			gateways, err := b.bonafide.GetGateways("obfs4")
+			if err != nil {
+				return err
+			}
+			if len(gateways) == 0 {
+				log.Printf("ERROR No gateway for transport %s in provider", b.transport)
+				return errors.New("ERROR: cannot find any gateway for selected transport")
+			}
+
+			gw = gateways[0]
+			b.ptGateway = gw
+
+			proxy, err = b.startTransport(gw.Host)
+			if err != nil {
+				// TODO this is not going to return the error since it blocks
+				// we need to get an error channel from obfsvpn.
+				return err
+			}
 		}
 
-		gw := gateways[0]
-		b.ptGateway = gw
-
-		proxy, err := b.startTransport(gw.Host)
-		if err != nil {
-			// TODO this is not going to return the error since it blocks
-			// we need to get an error channel from obfsvpn.
-			return err
-		}
-
-		err = b.launch.firewallStart(gateways)
+		err := b.launch.firewallStart(gateways)
 		if err != nil {
 			return err
 		}

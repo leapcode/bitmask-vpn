@@ -18,7 +18,6 @@ import (
 
 const (
 	netKCP = "kcp"
-	netUDP = "udp"
 )
 
 // ListenConfig contains options for listening to an address.
@@ -126,7 +125,6 @@ func (lc *ListenConfig) Listen(ctx context.Context, network, address string) (*L
 	default:
 		ln, err = lc.ListenConfig.Listen(ctx, network, address)
 		if err != nil {
-			log.Println("Error on listen:", err)
 			return nil, err
 		}
 	}
