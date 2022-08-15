@@ -89,7 +89,7 @@ def is_ipv6_disabled():
 def tostr(s):
     return s.decode('utf-8')
 
-VERSION = "18"
+VERSION = "19"
 SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
@@ -156,7 +156,7 @@ ALLOWED_FLAGS = {
     "--tls-cipher": ["CIPHER"],
     "--cipher": ["CIPHER"],
     "--auth": ["CIPHER"],
-    "--management": ["DIR||IP", "UNIXSOCKET||NUMBER"],
+    "--management": ["DIR||IP", "UNIXSOCKET||NUMBER", "FILE"],
     "--management-client-user": ["USER"],
     "--route": ["IP", "IP", "NETGW"],
     "--cert": ["FILE"],
