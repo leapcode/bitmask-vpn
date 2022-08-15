@@ -1,4 +1,4 @@
-# 0xacab.org/leap/obfsvpn v0.0.0-20220626143947-feff527c00e5 => ../obfsvpn
+# 0xacab.org/leap/obfsvpn v0.0.0-20220626143947-feff527c00e5
 ## explicit; go 1.17
 0xacab.org/leap/obfsvpn
 0xacab.org/leap/obfsvpn/client
@@ -17,8 +17,6 @@ git.torproject.org/pluggable-transports/snowflake.git/common/util
 github.com/ProtonMail/go-autostart
 # github.com/apparentlymart/go-openvpn-mgmt v0.0.0-20200929191752-4d2ce95ae600
 ## explicit
-github.com/apparentlymart/go-openvpn-mgmt/demux
-github.com/apparentlymart/go-openvpn-mgmt/openvpn
 # github.com/cretz/bine v0.2.0
 ## explicit; go 1.15
 github.com/cretz/bine/control
@@ -242,4 +240,3 @@ golang.org/x/sys/windows/svc/eventlog
 golang.org/x/sys/windows/svc/mgr
 # gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce
 ## explicit
-# 0xacab.org/leap/obfsvpn => ../obfsvpn

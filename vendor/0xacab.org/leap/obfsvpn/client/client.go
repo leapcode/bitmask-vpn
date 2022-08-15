@@ -21,7 +21,7 @@ var (
 
 type Client struct {
 	kcp         bool
-	SocksAddr   string
+	socksAddr   string
 	obfs4Cert   string
 	server      *socks5.Server
 	EventLogger EventLogger
@@ -35,14 +35,14 @@ type EventLogger interface {
 func NewClient(kcp bool, socksAddr, obfs4Cert string) *Client {
 	return &Client{
 		kcp:       kcp,
-		SocksAddr: socksAddr,
+		socksAddr: socksAddr,
 		obfs4Cert: obfs4Cert,
 	}
 }
 
 func (c *Client) Start() (bool, error) {
 	defer func() {
-		c.log("STOPPED", "")
+		c.log("STOPPED", "", nil)
 	}()
 
 	if c.IsStarted() {
@@ -51,7 +51,7 @@ func (c *Client) Start() (bool, error) {
 	}
 
 	c.server = &socks5.Server{
-		Addr:   c.SocksAddr,
+		Addr:   c.socksAddr,
 		BindIP: "127.0.0.1",
 	}
 
@@ -70,7 +70,7 @@ func (c *Client) Start() (bool, error) {
 
 	c.server.Dial = dialer.Dial
 
-	c.log("RUNNING", "[+] Starting socks5 proxy at %s\n", c.SocksAddr)
+	c.log("RUNNING", "[+] Starting socks5 proxy at %s\n", c.socksAddr)
 	if err := c.server.ListenAndServe(); err != nil {
 		c.error("error while listening: %v\n", err)
 		c.server = nil
@@ -98,20 +98,13 @@ func (c *Client) log(state string, format string, a ...interface{}) {
 		c.EventLogger.Log(state, fmt.Sprintf(format, a...))
 		return
 	}
-	if format == "" {
-		log.Print(a...)
-		return
-	}
 	log.Printf(format, a...)
+
 }
 
 func (c *Client) error(format string, a ...interface{}) {
 	if c.EventLogger != nil {
 		c.EventLogger.Error(fmt.Sprintf(format, a...))
-		return
-	}
-	if format == "" {
-		log.Print(a...)
 		return
 	}
 	log.Printf(format, a...)

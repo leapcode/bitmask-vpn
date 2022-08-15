@@ -3,7 +3,6 @@
 stages:
   - test
   - validate
-  - integration-test
 
 test:
   image: golang:alpine
@@ -19,7 +18,7 @@ validate:
   image: golang:alpine
   stage: test
   script: |
-      apk add build-base git jq curl
+      apk add build-base git
       go version
       go env
 
@@ -32,20 +31,10 @@ validate:
       gofmt -s -l . && [ -z "$(gofmt -s -l .)" ]
 
       # See: https://staticcheck.io/docs/checks
-      staticcheck -checks inherit,ST1016,ST1020,ST1021,ST1022,ST1023 ./...
+      staticcheck -checks inherit,ST1000,ST1016,ST1020,ST1021,ST1022,ST1023 ./...
       # gosec does not handle modules correctly.
       # See: https://github.com/securego/gosec/issues/622
       gosec ./...
-      make check-yawning-obfs4
 
       go mod tidy
       git diff --exit-code -- go.mod go.sum
-
-integration-test:
-  image: debian
-  stage: test
-  script:
-    - apt-get -q update && env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends docker docker.io make
-    - make integration
-  tags:
-    - linux
