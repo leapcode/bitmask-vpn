@@ -1,4 +1,3 @@
-// +build osx
 // Copyright (C) 2018-2021 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
