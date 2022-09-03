@@ -84,7 +84,7 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 func newLauncher() (*launcher, error) {
 	helperPort := probeHelperPort(initialHelperPort)
 	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
-	return &launcher{helperAddr, false}, nil
+	return &launcher{helperAddr: helperAddr, failed: false}, nil
 }
 
 func (l *launcher) close() error {
