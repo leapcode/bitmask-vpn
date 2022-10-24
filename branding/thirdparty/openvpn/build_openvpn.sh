@@ -15,7 +15,7 @@ OPENVPN="openvpn-2.5.1"
 OPENSSL="1.1.1j"
 MBEDTLS="2.25.0"
 LZO="lzo-2.10"
-ZLIB="zlib-1.2.11"
+ZLIB="zlib-1.2.13"
 LZO_SHA1="4924676a9bae5db58ef129dc1cebce3baa3c4b5d"
 OPENSSL_SHA256="aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf"
 MBEDTLS_SHA256="f838f670f51070bc6b4ebf0c084affd9574652ded435b064969f36ce4e8b586d"
@@ -38,7 +38,7 @@ mkdir -p $SRC
 
 SHASUM="/usr/bin/shasum"
 
-ZLIB_KEYS="https://keys.gnupg.net/pks/lookup?op=get&search=0x783FCD8E58BCAFBA"
+ZLIB_KEYS="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x5ed46a6721d365587791e2aa783fcd8e58bcafba"
 OPENVPN_KEYS="https://swupdate.openvpn.net/community/keys/security.key.asc"
 
 WGET="wget --prefer-family=IPv4"
