@@ -202,6 +202,7 @@ ifeq (${PLATFORM}, darwin)
 	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_ROOT}/
 	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_ROOT}/
 	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}
+	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 	@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
 ifeq (${RELEASE}, yes)
