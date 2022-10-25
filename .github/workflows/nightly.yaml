@@ -6,6 +6,12 @@ name: 'mac and windows nightly build'
 
 on:
   workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
   push:
     branches:
       - main
@@ -23,8 +29,35 @@ jobs:
     runs-on:
       - windows-2019
     steps:
+      - name: Setup Golang 1.17
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.17'
+      - name: Install build dependencies from chocolatey
+        run: choco install qt5-default mingw sigcheck qt-installer-framework
+      - run: git config --global core.autocrlf input
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Set up Cygwin
+        uses: cygwin/cygwin-install-action@master
+        with:
+          packages: make curl
+      - name: Build app
+        run: |
+          $env:PATH="$env:SystemDrive\Qt\5.15.2\mingw81_64\bin;$env:SystemDrive\Qt\QtIFW-4.4.2\bin;$env:PATH"
+          echo $env:PATH
+          make build
+          make installer
+      - name: Upload build/qt/release/riseup-vpn.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: riseup-vpn-exe-${{ github.sha }}
+          path: build/qt/release/riseup-vpn.exe
+      - name: Upload build/installer/RiseupVPN-installer-*.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: riseup-vpn-installer-${{ github.sha }}
+          path: build/installer/*.exe
 
   build-mac:
     runs-on:
@@ -64,5 +97,3 @@ jobs:
         with:
           name: riseup-vpn-dmg-${{ github.sha }}
           path: deploy/RiseupVPN-unknown.dmg
-
-
