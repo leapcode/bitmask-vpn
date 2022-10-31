@@ -133,7 +133,7 @@ ifeq ($(VENDOR_PATH), providers)
 endif
 endif # end mingw
 ifeq ($(UNAME), CYGWIN_NT-10.0)
-	@[ -L providers/assets ] || (CYGWIN=winsymlinks:nativestrict ln -s ${PROVIDER}/assets providers/assets)
+	@[ -L providers/assets ] || cp -r providers/${PROVIDER}/assets providers/assets
 endif # end cygwin
 else # not windows: linux/osx
 ifeq ($(VENDOR_PATH), providers)
