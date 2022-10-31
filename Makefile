@@ -50,7 +50,7 @@ endif
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
-TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe 
+TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe
 
 ifeq ($(PLATFORM), windows)
 HAS_QTIFW := $(shell which binarycreator.exe)
@@ -102,7 +102,7 @@ EXTRA_GO_LDFLAGS = "-H=windowsgui"
 endif
 
 ifeq ($(PLATFORM), windows)
-PKGFILES = $(wildcard "pkg/*") # syntax err in windows with find 
+PKGFILES = $(wildcard "pkg/*") # syntax err in windows with find
 else
 PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
@@ -112,7 +112,7 @@ lib/%.a: $(PKGFILES)
 
 # FIXME move platform detection above! no place to uname here, just use $PLATFORM
 #
-MINGGW = 
+MINGGW =
 ifeq ($(UNAME), MINGW64_NT-10.0)
 MINGW = yes
 endif
@@ -233,7 +233,7 @@ endif
 	@cp /c/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll ${INST_DATA}
 	@cp -r /c/Qt/5.15.2/mingw81_64/qml ${INST_DATA}
 	# TODO stage it
- 	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}openvpn-installer.msi
+	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}openvpn-installer.msi
 endif
 ifeq (${PLATFORM}, linux)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
