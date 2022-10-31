@@ -1,4 +1,6 @@
+//go:build windows
 // +build windows
+
 // Copyright (C) 2018-2021 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -36,6 +38,7 @@ const pipeName = `\\.\pipe\openvpn\service`
 
 type launcher struct {
 	mngPass string
+	failed  bool
 }
 
 func newLauncher() (*launcher, error) {
