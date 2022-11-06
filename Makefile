@@ -225,9 +225,9 @@ else
 endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
 ifeq (${RELEASE}, yes)
-	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe # FIXME --release flag cannot find platform plugin
+	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe # FIXME --release flag cannot find platform plugin
 else
-	@windeployqt --qmldir gui/qml ${INST_DATA}${TARGET}.exe
+	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
 	# XXX this is a workaround for missing libs after windeployqt ---
 	@cp /c/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll ${INST_DATA}
