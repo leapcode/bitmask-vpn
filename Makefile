@@ -230,8 +230,6 @@ else
 	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
 	# XXX this is a workaround for missing libs after windeployqt ---
-	# TODO stage it
-	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}openvpn-installer.msi
 	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll ${INST_DATA}
 	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll ${INST_DATA}
 	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll ${INST_DATA}
