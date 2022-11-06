@@ -182,7 +182,9 @@ endif
 
 checksign:
 ifeq (${PLATFORM}, windows)
+ifeq (${RELEASE}, yes)
 	@sigcheck.exe ${QTBUILD}/release/${TARGET}.exe
+endif
 endif
 
 installer: check_qtifw checksign
