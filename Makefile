@@ -126,15 +126,10 @@ relink_vendor:
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
 	@echo "PROVIDER: ${PROVIDER}"
 ifeq ($(PLATFORM), windows)
-	@rm -rf providers/assets || true
-ifeq ($(MINGW), yes)
+	@rm -rf providers/assets
 ifeq ($(VENDOR_PATH), providers)
 	@cp -r providers/${PROVIDER}/assets providers/assets || true
-endif
-endif # end mingw
-ifeq ($(UNAME), CYGWIN_NT-10.0)
-	@[ -L providers/assets ] || cp -r providers/${PROVIDER}/assets providers/assets
-endif # end cygwin
+endif # end windows
 else # not windows: linux/osx
 ifeq ($(VENDOR_PATH), providers)
 	@unlink providers/assets || true
