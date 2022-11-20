@@ -1,0 +1,51 @@
+# vi: ft=yaml.ansible
+---
+- name: Setup go and Qt development environment in windows
+  hosts:
+    - all
+  tasks:
+    - name: Ensure Chocolatey itself is installed, using community repo for the
+      chocolatey.chocolatey.win_chocolatey:
+        name: chocolatey
+        state: present
+
+    - name: Install Golang 1.17
+      chocolatey.chocolatey.win_chocolatey:
+        name: golang
+        version: '1.17'
+        state: present
+
+    - name: Install Cygwin
+      chocolatey.chocolatey.win_chocolatey:
+        name: cygwin
+        state: present
+
+    - name: Install build dependencies and other tools
+      chocolatey.chocolatey.win_chocolatey:
+        name:
+          - qt5-default
+          - mingw
+          - sigcheck
+          - wget
+          - qt-installer-framework
+          - make
+          - git
+          - curl
+          - python3
+          - cyg-get
+        state: present
+
+    - name: Add cygwin, Qt and QtIFW binaries directories to PATH
+      ansible.windows.win_path:
+        state: present
+        elements:
+          - '%SystemDrive%\Qt\5.15.2\mingw81_64\bin'
+          - '%SystemDrive%\Qt\QtIFW-4.4.2\bin'
+          - '%SystemDrive%\tools\cygwin\bin'
+
+    - name: Install python3 for cygwin environment
+      ansible.windows.win_powershell:
+        creates: C:\tools\cygwin\bin\python3
+        script: |
+          cyg-get python3
+          ln -s $env:SystemDrive\tools\cygwin\bin\python $env:SystemDrive\tools\cygwin\bin\python3

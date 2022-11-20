@@ -1,0 +1,9 @@
+all:
+  hosts:
+    localhost:
+      ansible_host: 127.0.0.1
+      ansible_port: 22220
+      ansible_user: quickemu
+      ansible_connection: ssh
+      ansible_shell_type: powershell
+
