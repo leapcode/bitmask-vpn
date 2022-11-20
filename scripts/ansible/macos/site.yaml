@@ -1,0 +1,57 @@
+# vi: ft=yaml.ansible
+---
+- name: Setup go and Qt development environment in macOS
+  hosts:
+    - all
+  vars:
+    qtifw_path: "/Volumes/{{qtifw_exec_name}}"
+    qtifw_installer_exec_path: "{{ qtifw_path }}/{{ qtifw_exec_name }}.app/Contents/MacOS/{{ qtifw_exec_name }}"
+    qtifw_installer_name: "QtInstallerFramework-macOS-x64-{{ qtifw_version }}.dmg"
+    qtifw_exec_name: "{{ qtifw_installer_name | splitext | first }}"
+    qtifw_version: "4.4.2"
+    xcode_source_path: ~/Downloads/Xcode_11.7.xip
+    xcode_dest_path: ~/Downloads/Xcode_11.7.xip
+    homebrew_installed_packages:
+      - go@1.17
+      - make
+      - gpg
+      - qt5
+      - wget
+      - create-dmg
+
+  roles:
+    - geerlingguy.mac.homebrew
+
+  tasks:
+    - name: Download Qt installer framework
+      get_url:
+        url: "https://download.qt.io/official_releases/qt-installer-framework/{{ qtifw_version }}/{{ qtifw_installer_name }}"
+        checksum: sha256:a635013bcaa7e518400ea1acfc07f7467f60a6e3bb3e3774c9889ccc73a28c13
+        dest: "/tmp/{{ qtifw_installer_name }}"
+        mode: 0644
+
+    - name: Mount the Qt installer dmg image
+      command:
+        argv:
+          - hdiutil
+          - attach
+          - "/tmp/{{ qtifw_installer_name }}"
+        creates: "{{ qtifw_path }}"
+
+    - name: Install Qt installer framework
+      command:
+        argv:
+          - "{{ qtifw_installer_exec_path }}"
+          - "in"
+          - "--da"
+          - "-c"
+          - "--al"
+        creates: "{{ ansible_user_dir }}/Qt/QtIFW-{{ qtifw_version }}"
+
+    - name: Unmount the Qt installer dmg image
+      command:
+        argv:
+          - hdiutil
+          - detach
+          - "{{ qtifw_path }}"
+      ignore_errors: true

@@ -1,0 +1,5 @@
+all:
+  hosts:
+    localhost:
+      ansible_user: testmac
+      ansible_port: 22220
