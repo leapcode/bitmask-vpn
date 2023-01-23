@@ -12,6 +12,17 @@ on:
         description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
         required: false
         default: false
+      provider_name:
+        description: 'The name of the providers branding that needs to be applied to the GUI app'
+        required: true
+        default: 'riseup'
+        type: choice
+        options:
+          - riseup
+          - calyx
+          - floatdemo
+          - demolib
+
   push:
     branches:
       - main
@@ -41,7 +52,9 @@ jobs:
       - name: Set up Cygwin
         uses: cygwin/cygwin-install-action@master
         with:
-          packages: make curl
+          packages: make curl sed
+      - name: Set requested provider name
+        run: sed -i.bak 's/provider = riseup/provider = ${{ inputs.provider_name }}/1' providers/vendor.conf
       - name: Build app
         run: |
           $env:PATH="$env:SystemDrive\Qt\5.15.2\mingw81_64\bin;$env:SystemDrive\Qt\QtIFW-4.4.2\bin;$env:PATH"
@@ -79,6 +92,8 @@ jobs:
           ./QtInstallerFramework-mac-x64 in --da -c --al
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Set requested provider name
+        run: sed -i.bak 's/provider = riseup/provider = ${{ inputs.provider_name }}/1' providers/vendor.conf
       - name: Build .app
         run: >
           export PATH=~/Qt/QtIFW-4.0.1/bin:$PATH &&
