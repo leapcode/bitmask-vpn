@@ -13,6 +13,7 @@ func (c connectionCtx) delayCheckForGateways() {
 			if cnt > 60*2 {
 				break
 			}
+			cnt += 1
 			time.Sleep(time.Second * 5)
 			transport := c.bm.GetTransport()
 			locs := c.bm.ListLocationFullness(transport)
