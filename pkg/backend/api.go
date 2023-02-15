@@ -231,7 +231,7 @@ func EnableMockBackend() {
 func EnableWebAPI(port string) {
 	intPort, err := strconv.Atoi(port)
 	if err != nil {
-		log.Fatal("Cannot parse port", port)
+		log.Fatal("Cannot parse port:", port)
 	}
 	go enableWebAPI(intPort)
 }

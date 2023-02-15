@@ -101,7 +101,7 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 	conf.SkipLaunch = opts.SkipLaunch
 	if opts.StartVPN != "" {
 		if opts.StartVPN != "on" && opts.StartVPN != "off" {
-			log.Println("-start-vpn should be 'on' or 'off'")
+			log.Println("-start-vpn should be 'on' or 'off', not ", opts.StartVPN)
 		} else {
 			conf.StartVPN = opts.StartVPN == "on"
 		}
