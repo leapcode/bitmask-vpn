@@ -104,6 +104,7 @@ func isPolkitRunning() (bool, error) {
 		"polkit-gnome-authentication-agent-1",
 		"polkit-kde-auth",
 		"polkit-mate-authentication-agent-1",
+		"polkit-ukui-authentication-agent-1",
 		"lxpolkit",
 		"lxqt-policykit-agent",
 		"lxsession",
@@ -111,6 +112,7 @@ func isPolkitRunning() (bool, error) {
 		"gnome-flashback",
 		"fingerprint-polkit-agent",
 		"xfce-polkit",
+		"phosh",
 	}
 
 	processes, err := ps.Processes()
