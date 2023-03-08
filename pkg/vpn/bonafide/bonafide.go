@@ -97,7 +97,11 @@ func getAPIAddr(provider string) string {
 
 // New Bonafide: Initializes a Bonafide object. By default, no Credentials are passed.
 func New() *Bonafide {
-	certs := x509.NewCertPool()
+	certs, err := x509.SystemCertPool()
+	if err != nil {
+		log.Println("Error loading SystemCertPool, falling back to empty pool")
+		certs = x509.NewCertPool()
+	}
 	certs.AppendCertsFromPEM(config.CaCert)
 	client := &http.Client{
 		Transport: &http.Transport{
