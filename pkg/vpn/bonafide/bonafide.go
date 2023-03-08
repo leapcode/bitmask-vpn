@@ -268,6 +268,9 @@ func (b *Bonafide) maybeInitializeEIP() error {
 			b.watchSnowflakeProgress(ch)
 			snowflake.BootstrapWithSnowflakeProxies(p, getAPIAddr(p), ch)
 		}
+		if b.gateways == nil {
+			return errors.New("no gateways")
+		}
 		err := b.parseEipJSONFromFile()
 		if err != nil {
 			return err
@@ -280,6 +283,9 @@ func (b *Bonafide) maybeInitializeEIP() error {
 				return err
 			}
 			b.gateways = newGatewayPool(b.eip)
+		}
+		if b.gateways == nil {
+			return errors.New("no gateways")
 		}
 
 		// XXX For now, we just initialize once per session.
@@ -317,6 +323,7 @@ func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
 	err := b.maybeInitializeEIP()
 	// XXX needs to wait for bonafide too
 	if err != nil {
+		log.Printf("%v\n", err)
 		return nil, err
 	}
 	gws, err := b.gateways.getAll(transport, b.tzOffsetHours)

@@ -11,8 +11,6 @@ import (
 
 const verURI = "https://downloads.leap.se/RiseupVPN/"
 
-var VERSION string
-
 // returns true if there's a newer version string published on the server
 // this needs to manually bump latest version for every platform in the
 // downloads server.

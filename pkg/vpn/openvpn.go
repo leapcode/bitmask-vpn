@@ -339,7 +339,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
 func (b *Bitmask) fetchGateways() {
-	log.Println("Fetching gateways...")
+	log.Printf("Fetching gateways (%s)...", b.transport)
 	_, err := b.bonafide.GetAllGateways(b.transport)
 	if err != nil {
 		log.Println("ERROR Cannot fetch gateways")

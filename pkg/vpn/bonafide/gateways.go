@@ -317,7 +317,7 @@ func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
 	}
 
 	log.Println("seems to be initialized...")
-	if len(p.recommended) == 0 {
+	if len(p.recommended) != 0 {
 		return p.getGatewaysFromMenshen(transport, 999)
 	}
 	return p.getGatewaysByTimezone(transport, tz, 999)
@@ -340,6 +340,7 @@ func (p *gatewayPool) getGatewaysFromMenshen(transport string, max int) ([]Gatew
 
 /* the old timezone based heuristic, when everything goes wrong */
 func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max int) ([]Gateway, error) {
+	log.Println("Sorting gateways by timezone")
 	gws := make([]Gateway, 0)
 	gwVector := []gatewayDistance{}
 
@@ -348,9 +349,10 @@ func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max
 			continue
 		}
 		distance := 13
-		gwOffset, err := strconv.Atoi(p.locations[gw.Location].Timezone)
+		tz := p.locations[gw.Location].Timezone
+		gwOffset, err := strconv.Atoi(tz)
 		if err != nil {
-			log.Printf("Error sorting gateways: %v", err)
+			log.Printf("Error sorting gateways: loc=%s, tz=%s; %v", gw.Location, tz, err)
 			return gws, err
 		}
 		distance = tzDistance(tzOffsetHours, gwOffset)
