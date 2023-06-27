@@ -1,0 +1,11 @@
+[main]
+host = https://rest.api.transifex.com
+
+lang_map = es_AR:es-rAR, fa_IR:fa-rIR, kn_IN:kn-rIN, pt_BR:pt-rBR, pt_PT:pt-rPT, zh_CN:zh-rCN, zh_TW:zh-rTW, nb:no
+
+[o:otf:p:bitmask:r:bitmask-desktop]
+source_file = gui/i18n/base.ts
+type = QT
+resource_name = LEAP Desktop VPN
+file_filter = gui/i18n/main_<lang>.ts
+minimum_perc = 80
