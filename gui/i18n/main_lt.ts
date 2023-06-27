@@ -157,52 +157,52 @@
         <translation>Norėdami atlikti pakeitimus, išjunkite VPN</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="64"/>
+        <location filename="../components/Preferences.qml" line="69"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="90"/>
+        <location filename="../components/Preferences.qml" line="102"/>
         <source>Censorship circumvention</source>
         <translation>Cenzūros apėjimas</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="98"/>
+        <location filename="../components/Preferences.qml" line="110"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Šios technikos gali apeiti cenzūrą, bet yra lėtesnės. Naudokite jas tik tada, kai prireikia.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="112"/>
+        <location filename="../components/Preferences.qml" line="124"/>
         <source>Use obfs4 bridges</source>
         <translation>Naudoti obfs4 tinklų tiltus</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="150"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Duomenų srautas yra maskuojamas, kad būtų apeiti blokavimai</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="152"/>
+        <location filename="../components/Preferences.qml" line="164"/>
         <source>Use Snowflake</source>
         <translation>Naudoti „Snowflake“</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="167"/>
+        <location filename="../components/Preferences.qml" line="179"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>„Snowflake“ reikalauja, kad jūsų sistemoje būtų įdiegtas „Tor“</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="180"/>
+        <location filename="../components/Preferences.qml" line="192"/>
         <source>Transport</source>
         <translation>Perdavimas</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="188"/>
+        <location filename="../components/Preferences.qml" line="200"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP gali padaryti VPN greitesnį. UDP kai kuriuose tinkluose gali būti blokuojamas.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="201"/>
+        <location filename="../components/Preferences.qml" line="213"/>
         <source>Use UDP if available</source>
         <translation>Jei prieinama, naudoti UDP</translation>
     </message>

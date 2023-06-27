@@ -157,52 +157,52 @@
         <translation>Değişiklik yapmak için VPN bağlantısını kapatın</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="64"/>
+        <location filename="../components/Preferences.qml" line="69"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="90"/>
+        <location filename="../components/Preferences.qml" line="102"/>
         <source>Censorship circumvention</source>
         <translation>Sansürü aşma</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="98"/>
+        <location filename="../components/Preferences.qml" line="110"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Bu yöntemler sansürü aşabilir, ancak yavaştır. Yalnız gerek duyduğunuz zaman kullanın.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="112"/>
+        <location filename="../components/Preferences.qml" line="124"/>
         <source>Use obfs4 bridges</source>
         <translation>obfs4 köprüleri kullanılsın</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="150"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Engelleri aşmak için trafik gizlenir</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="152"/>
+        <location filename="../components/Preferences.qml" line="164"/>
         <source>Use Snowflake</source>
         <translation>Snowflake kullanılsın</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="167"/>
+        <location filename="../components/Preferences.qml" line="179"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Snowflake için sisteminizde Tor kurulu olması gerekir</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="180"/>
+        <location filename="../components/Preferences.qml" line="192"/>
         <source>Transport</source>
         <translation>Taşıyıcı</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="188"/>
+        <location filename="../components/Preferences.qml" line="200"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP, VPN bağlantısını daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="201"/>
+        <location filename="../components/Preferences.qml" line="213"/>
         <source>Use UDP if available</source>
         <translation>Olabiliyorsa UDP kullanılsın</translation>
     </message>

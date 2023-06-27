@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="el">
+<TS version="2.1" language="zh">
 <context>
     <name>About</name>
     <message>
         <location filename="../components/About.qml" line="9"/>
         <source>About</source>
-        <translation>Σχετικά</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="80"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
         <extracomment>donation text of the about dialog</extracomment>
-        <translation>&lt;p&gt;Αυτή η υπηρεσία πληρώνεται εξ&apos; ολοκλήρου από τις δωρεές που κάνουν χρήστες σαν κι εσένα.. &lt;a href=&quot;%1&quot;&gt;Παρακαλούμε κάνε μια δωρεά&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;此服务的费用完全由像您一样的用户捐助支付。&lt;a href=&quot;%1&quot;&gt;请捐助此服务&lt;/a&gt;。&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="103"/>
         <source>%1 version: 
 %2</source>
         <extracomment>screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png %1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>Έκδοση %1: 
+        <translation>%1 版本： 
 %2</translation>
     </message>
 </context>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../components/Footer.qml" line="171"/>
         <source>Recommended</source>
-        <translation>Προτεινόμενη</translation>
+        <translation>推荐</translation>
     </message>
 </context>
 <context>
@@ -36,22 +36,22 @@
     <message>
         <location filename="../components/Help.qml" line="7"/>
         <source>Help</source>
-        <translation>Βοήθεια</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="20"/>
         <source>Troubleshooting and support</source>
-        <translation>Αντιμετώπιση προβλημάτων και υποστήριξη</translation>
+        <translation>疑难解答和支持</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="31"/>
         <source>Report a bug</source>
-        <translation>Αναφορά σφάλματος</translation>
+        <translation>报告漏洞</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="42"/>
         <source>How to uninstall</source>
-        <translation>Πως να απεγκαταστήσεις</translation>
+        <translation>如何卸载</translation>
     </message>
 </context>
 <context>
@@ -59,12 +59,12 @@
     <message>
         <location filename="../components/InitErrors.qml" line="31"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation>Δεν μπόρεσαν να βρεθούν βοηθοί. Παρακαλώ έλεγξε την εγκατάστασή σου</translation>
+        <translation>无法找到帮助程序。请检查您的安装</translation>
     </message>
     <message>
         <location filename="../components/InitErrors.qml" line="44"/>
         <source>Could not find polkit agent.</source>
-        <translation>Δεν μπόρεσε να βρεθεί polkit agent.</translation>
+        <translation>无法找到 Polkit 代理。</translation>
     </message>
 </context>
 <context>
@@ -72,37 +72,37 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation>Επιλογή τοποθεσίας</translation>
+        <translation>选择位置</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation>Να χρησιμοποιείται αυτόματα η καλύτερη σύνδεση</translation>
+        <translation>自动使用最佳连接</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation>Χειροκίνητη επιλογή</translation>
+        <translation>手动选择</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation>Η πύλη αλλάζει…</translation>
+        <translation>切换网关中…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation>Μόνο τοποθεσίες με γέφυρες</translation>
+        <translation>仅使用网桥的位置</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
         <source>Recommended</source>
         <extracomment>Location Selection: label for radio button that selects automatically</extracomment>
-        <translation>Προτεινόμενη</translation>
+        <translation>推荐</translation>
     </message>
 </context>
 <context>
@@ -111,37 +111,37 @@
         <location filename="../components/MainView.qml" line="32"/>
         <location filename="../components/MainView.qml" line="56"/>
         <source>Donate</source>
-        <translation>Δωρεά</translation>
+        <translation>捐助</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="49"/>
         <source>Preferences</source>
-        <translation>Προτιμήσεις</translation>
+        <translation>首选项</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="63"/>
         <source>Help</source>
-        <translation>Βοήθεια</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="70"/>
         <source>About</source>
-        <translation>Σχετικά</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="77"/>
         <source>Quit</source>
-        <translation>Έξοδος</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="104"/>
         <source>Please donate!</source>
-        <translation>Παρακαλώ κάνε μια δωρεά!</translation>
+        <translation>请捐助！</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="118"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Τα έξοδα αυτής της υπηρεσίας καλύπτονται εξ&apos; ολοκλήρου από δωρεές χρηστών σαν κι εσένα. Το λειτουργικό κόστος του VPN είναι περίπου 5 δολάρια (ΗΠΑ) ανά άτομο ανά μήνα, αλλά ακόμα και μικρότερα ποσά μας βοηθούν. Θα ήθελες να κάνεις μια δωρεά τώρα;</translation>
+        <translation>此服务的费用完全由像您一样的用户捐助支付。VPN 的运营成本大约为每人每月 5 美元，开销须精打细算。您是否立刻捐助此服务？</translation>
     </message>
 </context>
 <context>
@@ -149,62 +149,62 @@
     <message>
         <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
-        <translation>Προτιμήσεις</translation>
+        <translation>首选项</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="54"/>
         <source>Turn off the VPN to make changes</source>
-        <translation>Απενεργοποίησε το VPN για να κάνεις αλλαγές</translation>
+        <translation>关闭 VPN 进行更改</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="69"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>语言</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="102"/>
         <source>Censorship circumvention</source>
-        <translation>Παράκαμψη λογοκρισίας</translation>
+        <translation>审查规避</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="110"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation>Αυτές οι τεχνικές μπορούν να παρακάμψουν τεχνικές λογοκρισίας, αλλά είναι πιο αργές. Χρησιμοποιήστε τις μόνο όποτε χρειάζεται.</translation>
+        <translation>该技术可规避审查，但速度较慢，请仅在需要时使用。</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="124"/>
         <source>Use obfs4 bridges</source>
-        <translation>Χρήση γεφυρών obfs4</translation>
+        <translation>使用 Obfs4 网桥</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="150"/>
         <source>Traffic is obfuscated to bypass blocks</source>
-        <translation>Η κίνηση δεδομένων αποκρύπτεται για τη παράκαμψη μπλοκαρισμάτων</translation>
+        <translation>对通信进行混淆以规避屏蔽</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="164"/>
         <source>Use Snowflake</source>
-        <translation>Χρήση Snowflake</translation>
+        <translation>使用 Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="179"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation>Για το Snowflake χρειάζεται να έχεις εγκατεστημένο το Tor</translation>
+        <translation>Snowflake 需要在系统上安装 Tor</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="192"/>
         <source>Transport</source>
-        <translation>Μεταφορά</translation>
+        <translation>传输</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="200"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation>Το UDP μπορεί να κάνει το VPN γρηγορότερο. Ίσως να μπλοκάρεται σε κάποια δίκτυα.</translation>
+        <translation>UDP 可令 VPN 更快，但是可能在某些网络上被屏蔽。</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="213"/>
         <source>Use UDP if available</source>
-        <translation>Χρήση UDP αν είναι διαθέσιμο</translation>
+        <translation>可用时使用 UDP</translation>
     </message>
 </context>
 <context>
@@ -212,17 +212,17 @@
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>There is a newer version available. </source>
-        <translation>Υπάρχει μια νεότερη διαθέσιμη έκδοση.</translation>
+        <translation>有较新版本可用。</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="100"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation>Θα χρειαστεί να &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;απεγκαταστήσεις&lt;/a&gt; τη προηγούμενη έκδοση πριν εκτελέσεις το καινούριο πρόγραμμα εγκατάστασης.</translation>
+        <translation>在运行新的安装程序之前，请确保&lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;卸载&lt;/a&gt;之前的版本。</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="104"/>
         <source>UPGRADE NOW</source>
-        <translation>ΑΝΑΒΑΘΜΙΣΗ ΤΩΡΑ</translation>
+        <translation>立刻升级</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="91"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>这可能会花几分钟</translation>
     </message>
 </context>
 <context>
@@ -238,44 +238,44 @@
     <message>
         <location filename="../components/Systray.qml" line="16"/>
         <source>Checking status…</source>
-        <translation>Έλεγχος κατάστασης...</translation>
+        <translation>正在检查状态…</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="36"/>
         <source>Donate</source>
-        <translation>Δωρεά</translation>
+        <translation>捐助</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation>Απόκρυψη</translation>
+        <translation>隐藏</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation>Εμφάνιση</translation>
+        <translation>显示</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits the application</extracomment>
-        <translation>Έξοδος</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
         <source>Connect to</source>
-        <translation>Σύνδεση σε</translation>
+        <translation>连接至</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="76"/>
         <source>Connect</source>
-        <translation>Σύνδεση</translation>
+        <translation>连接</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="79"/>
         <source>Disconnect</source>
-        <translation>Αποσύνδεση</translation>
+        <translation>中断连接</translation>
     </message>
 </context>
 <context>
@@ -283,137 +283,137 @@
     <message>
         <location filename="../components/VPNState.qml" line="27"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>准备中</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="52"/>
         <location filename="../components/VPNState.qml" line="156"/>
         <source>Connecting</source>
-        <translation>Συνδέεται</translation>
+        <translation>正在连接</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="85"/>
         <source>Unsecured
 Connection</source>
-        <translation>Μη ασφαλής
-σύνδεση</translation>
+        <translation>不安全
+连接</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="100"/>
         <source>Turn on</source>
-        <translation>Ενεργοποίηση</translation>
+        <translation>开启</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="120"/>
         <source>Secured
 Connection</source>
-        <translation>Ασφαλής
-σύνδεση</translation>
+        <translation>安全
+连接</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="135"/>
         <source>Turn off</source>
-        <translation>Απενεργοποίηση</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="172"/>
         <source>Cancel</source>
-        <translation>Ακύρωση</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="256"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 ανενεργό</translation>
+        <translation>%1 关闭</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="256"/>
         <source>off</source>
-        <translation>ανενεργό</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="259"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 ενεργό</translation>
+        <translation>%1 开启</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="262"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Συνδέεται στο %1</translation>
+        <translation>正在连接至 %1</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Το %1 σταματάει</translation>
+        <translation>正在停止 %1</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="268"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 μπλοκάρει το διαδίκτυο</translation>
+        <translation>%1 正在屏蔽互联网</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="276"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>可插拔传输连接</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="278"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>连接完成</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="280"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>正在握手</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="282"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>握手完成</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>正在建立单跳连接</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>正在请求状态</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载状态</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载密钥</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>正在请求描述符</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载描述符</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>正在建立链路</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>完成</translation>
     </message>
 </context>
 <context>
@@ -429,46 +429,42 @@ Connection</source>
     <message>
         <location filename="../main.cpp" line="144"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation>: ένα γρήγορο και ασφαλές VPN. Με την υποστήριξη του Bitmask.</translation>
+        <translation>：快速安全的 VPN。由 Bitmask 提供技术支持。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="151"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Να μην εμφανίζεται το εικονίδιο στη μπάρα κατάστασης (χρήσιμο σε συνδυασμό με την επέκταση Gnome Shell ή για τον έλεγχο του VPN με άλλα μέσα).</translation>
+        <translation>不显示系统托盘图标（与 Gnome Shell 扩展一起使用时很有用，或用于通过其他方式控制 VPN）。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="158"/>
         <source>Enable Web API.</source>
-        <translation>Ενεργοποίηση Web API.</translation>
+        <translation>启用 Web API。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="164"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Εγκατάσταση βοηθών (μόνο για Linux, απαιτείται sudo). </translation>
+        <translation>安装帮助程序（仅限 Linux，需使用 sudo）。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="170"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Χρήση obfs4 για την απόκρυψη και συσκότιση της κίνησης, αν είναι διαθέσιμο από τον πάροχο.</translation>
+        <translation>使用 obfs4 混淆通信（如果提供商提供）。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="176"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Απενεργοποίηση αυτόματης εκκίνησης στην επόμενη εκτέλεση.</translation>
+        <translation>启用自启动。</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="181"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Θύρα Web API (προκαθορισμένη: 8080)</translation>
+        <translation>Web API 端口（默认：8080）</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="184"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation>Εκκίνηση του VPN, είτε &quot;ενεργό&quot; είτε &quot;ανενεργό&quot;.</translation>
+        <translation>启动 VPN，“开启”或“关闭”。</translation>
     </message>
 </context>
 </TS>
