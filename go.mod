@@ -7,7 +7,6 @@ require (
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0
 	git.torproject.org/pluggable-transports/snowflake.git v1.1.0
 	github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
-	github.com/apparentlymart/go-openvpn-mgmt v0.0.0-20200929191752-4d2ce95ae600
 	github.com/cretz/bine v0.2.0
 	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
@@ -20,7 +19,7 @@ require (
 	// Do not update obfs4 past e330d1b7024b, a backwards incompatible change was
 	// made that will break negotiation!! riseup should move to the newest asap.
 	gitlab.com/yawning/obfs4.git v0.0.0-20210511220700-e330d1b7024b // indirect
-	golang.org/x/sys v0.0.0-20220624220833-87e55d714810
+	golang.org/x/sys v0.13.0
 )
 
 require github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
@@ -56,7 +55,7 @@ require (
 	github.com/templexxx/xorsimd v0.4.1 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/xtaci/kcp-go v5.4.20+incompatible // indirect
-	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
-	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
