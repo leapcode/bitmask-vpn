@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.14
+import Qt5Compat.GraphicalEffects
 import QtQuick.Layouts 1.14
 
 import QtQuick.Templates 2.12 as T

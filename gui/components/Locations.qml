@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.14
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 
 import "../themes/themes.js" as Theme
 
