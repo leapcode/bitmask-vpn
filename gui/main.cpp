@@ -263,7 +263,7 @@ int main(int argc, char **argv) {
     ctx->setContextProperty("providers", providers);
     ctx->setContextProperty("desktop", desktop);
     // we're relying on the binary name, for now, to switch themes
-    ctx->setContextProperty("flavor", argv[0]);
+    ctx->setContextProperty("flavor", QString::fromStdString(argv[0]));
 
     /* set some useful flags */
     ctx->setContextProperty("systrayVisible", !hideSystray);
