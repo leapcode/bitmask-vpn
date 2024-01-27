@@ -225,10 +225,10 @@ else
 	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
 	# XXX this is a workaround for missing libs after windeployqt ---
-	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libgcc_s_seh-1.dll ${INST_DATA}
-	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libstdc++-6.dll ${INST_DATA}
-	@cp /cygdrive/c/Qt/5.15.2/mingw81_64/bin/libwinpthread-1.dll ${INST_DATA}
-	@cp -r /cygdrive/c/Qt/5.15.2/mingw81_64/qml ${INST_DATA}
+	@cp $(shell cygpath $(shell ${QMAKE} -query 'QT_INSTALL_BINS'))/libgcc_s_seh-1.dll ${INST_DATA}
+	@cp $(shell cygpath $(shell ${QMAKE} -query 'QT_INSTALL_BINS'))/libstdc++-6.dll ${INST_DATA}
+	@cp $(shell cygpath $(shell ${QMAKE} -query 'QT_INSTALL_BINS'))/libwinpthread-1.dll ${INST_DATA}
+	@cp -r $(shell cygpath $(shell ${QMAKE} -query 'QT_INSTALL_QML')) ${INST_DATA}
 endif
 ifeq (${PLATFORM}, linux)
 	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
