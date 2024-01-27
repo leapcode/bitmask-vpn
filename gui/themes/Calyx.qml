@@ -1,6 +1,5 @@
-import QtQuick 2.3
-
 import './theme-calyx.js' as Theme
+import QtQuick
 
 ThemeObject{
         theme: Theme

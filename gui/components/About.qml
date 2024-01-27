@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.1
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
 
 import "../themes/themes.js" as Theme
 

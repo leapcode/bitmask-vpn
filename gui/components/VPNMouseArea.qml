@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick
 import "../themes/themes.js" as Theme
 
 MouseArea {

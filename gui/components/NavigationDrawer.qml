@@ -1,8 +1,8 @@
 // (c) Evgenij Legotskoj https://evileg.com/en/post/192/
 // a reimplementation of Drawer to workaround a problem with overlays
 // in the Qt version packaged with the snaps.
-import QtQuick 2.5
-import QtQuick.Window 2.0
+import QtQuick
+import QtQuick.Window
 
 Rectangle {
     id: panel
@@ -12,7 +12,7 @@ Rectangle {
         drawerOn = true;
     }
     function hide() {
-        open = false; 
+        open = false;
         drawerOn = false;
     }
     function toggle() {

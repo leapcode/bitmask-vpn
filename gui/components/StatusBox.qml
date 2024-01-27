@@ -1,12 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.12
-import Qt5Compat.GraphicalEffects
-import QtQuick.Layouts 1.14
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import QtQuick.Layouts
 
-import QtQuick.Templates 2.12 as T
-import QtQuick.Controls.impl 2.12
-import QtQuick.Controls.Material 2.12
-import QtQuick.Controls.Material.impl 2.12
+import QtQuick.Templates as T
+import QtQuick.Controls.impl
+import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 
 import "../themes/themes.js" as Theme
 

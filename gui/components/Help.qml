@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 import "../themes/themes.js" as Theme
 
