@@ -5,45 +5,48 @@ import Qt5Compat.GraphicalEffects
 
 import "../themes/themes.js" as Theme
 
-Image {
-    id: icon
-    height: 16
-    width: 16
-    // one of: good, medium, low
+Item {
+    id: signalIcons
     property var quality: "good"
+    Image {
+        id: icon
+        height: 16
+        width: 16
+        // one of: good, medium, low
 
-    ColorOverlay{
+        StateGroup {
+            state: quality
+            states: [
+                State {
+                    name: "good"
+                    PropertyChanges {
+                        target: icon
+                        source: "../resources/reception-4.svg"
+                    }
+                },
+                State {
+                    name: "medium"
+                    PropertyChanges {
+                        target: icon
+                        source: "../resources/reception-2.svg"
+                    }
+                },
+                State {
+                    name: "low"
+                    PropertyChanges {
+                        target: icon
+                        source: "../resources/reception-0.svg"
+                    }
+                }
+            ]
+        }
+    }
+    MultiEffect {
         anchors.fill: icon
         source: icon
-        color: getQualityColor()
+        colorizationColor: getQualityColor()
+        colorization: 1.0
         antialiasing: true
-    }
-
-    StateGroup {
-        state: quality
-        states: [
-            State {
-                name: "good"
-                PropertyChanges {
-                    target: icon
-                    source: "../resources/reception-4.svg"
-                }
-            },
-            State {
-                name: "medium"
-                PropertyChanges {
-                    target: icon
-                    source: "../resources/reception-2.svg"
-                }
-            },
-            State {
-                name: "low"
-                PropertyChanges {
-                    target: icon
-                    source: "../resources/reception-0.svg"
-                }
-            }
-        ]
     }
 
     function getQualityColor() {
@@ -60,3 +63,5 @@ Image {
         }
     }
 }
+
+

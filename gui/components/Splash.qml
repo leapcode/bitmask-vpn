@@ -20,7 +20,7 @@ Page {
             cursorShape: Qt.PointingHandCursor
         }
         onClicked: {
-            loader.source = "MainView.qml"
+            loader.source = "components/MainView.qml"
         }
     }
 
@@ -102,13 +102,13 @@ Page {
 
     function getUpgradeLink() {
         return "<a href='" + getLinkURL() + "'>" + qsTr("UPGRADE NOW") + "</a>";
-     }
+    }
 
-     function getLinkURL() {
+    function getLinkURL() {
         return "https://downloads.leap.se/RiseupVPN/" + Qt.platform.os + "/"
-     }
+    }
 
-     function needsUpgrade() {
+    function needsUpgrade() {
         if (ctx && isTrue(ctx.canUpgrade)) {
             if (qmlDebug) {
                 return true
@@ -121,8 +121,8 @@ Page {
                     return true
             }
         }
-        return false
-     }
+        return false 
+    }
 
     function showMotd() {
         // XXX this is not picking locales configured by LANG or LC_ALL
@@ -196,7 +196,7 @@ Page {
                 console.debug("show motd");
                 showMotd();
             } else {
-                loader.source = "MainView.qml"
+                loader.source = "components/MainView.qml"
             }
         } else {
             if (!splashTimer.running) {
@@ -236,5 +236,3 @@ Page {
     }
 
 }
-
-

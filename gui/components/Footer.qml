@@ -40,7 +40,7 @@ ToolBar {
         }
 
         Image {
-            id: lightning 
+            id: lightning
             smooth: true
             visible: ctx != undefined & root.selectedGateway == "auto"
             width: 16
@@ -51,12 +51,13 @@ ToolBar {
                 leftMargin: -10
                 verticalCenterOffset: -6
             }
-            ColorOverlay{
-                anchors.fill: lightning
-                source: lightning
-                color: getLocationColor()
-                antialiasing: true
-            }
+        }
+        MultiEffect {
+            anchors.fill: lightning
+            source: lightning
+            colorizationColor: getLocationColor()
+            colorization: 1.0
+            antialiasing: true
         }
 
         Label {
@@ -114,12 +115,13 @@ ToolBar {
                 topMargin: 5
                 rightMargin: 20
             }
-            ColorOverlay{
-                anchors.fill: gwQuality
-                source: gwQuality
-                color: getSignalColor()
-                antialiasing: false
-            }
+        }
+        MultiEffect {
+            anchors.fill: gwQuality
+            source: gwQuality
+            colorizationColor: getSignalColor()
+            colorization: 1.0
+            antialiasing: false
         }
     }
 

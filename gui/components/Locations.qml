@@ -80,12 +80,13 @@ ThemedPage {
                         topMargin: 2
                         //verticalCenterOffset: 3
                     }
-                    ColorOverlay{
-                        anchors.fill: lightning
-                        source: lightning
-                        color: "black"
-                        antialiasing: true
-                    }
+                }
+                MultiEffect {
+                    anchors.fill: lightning
+                    source: lightning
+                    colorizationColor: "black"
+                    colorization: 1.0
+                    antialiasing: true
                 }
             }
             WrappedRadioButton {

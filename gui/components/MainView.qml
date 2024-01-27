@@ -143,7 +143,7 @@ Page {
                 horizontalCenter: parent.horizontalCenter
             }
         }
-        onYes: Qt.openUrlExternally(ctx.donateURL)
+        onAccepted: Qt.openUrlExternally(ctx.donateURL)
     }
 
     function getLink(ctx) {
