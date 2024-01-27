@@ -52,10 +52,10 @@ TEMPLATES = branding/templates
 
 TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe
 
-ifeq ($(PLATFORM), windows)
-HAS_QTIFW := $(shell which binarycreator.exe)
+ifeq ($(PLATFORM), linux)
+HAS_QTIFW :=
 else
-HAS_QTIFW := $(shell PATH=$(PATH) which binarycreator)
+HAS_QTIFW := $(shell which binarycreator)
 endif
 OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 
