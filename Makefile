@@ -354,11 +354,11 @@ generate:
 	@go generate pkg/config/version/genver/gen.go
 
 TGZ_NAME = bitmask-vpn_${VERSION}-src
-TGZ_PATH = $(shell pwd)/build/${TGZ_NAME}
+TGZ_PATH = ./build/${TGZ_NAME}
 tgz:
 	@mkdir -p $(TGZ_PATH)
 	git archive HEAD | tar -x -C $(TGZ_PATH)
-	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME}
+	@cd build/ && tar czf bitmask-vpn_$(VERSION).tgz ${TGZ_NAME} && cd ..
 	@rm -rf $(TGZ_PATH)
 
 
