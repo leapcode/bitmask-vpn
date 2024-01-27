@@ -1,7 +1,7 @@
 import QtQuick
 
 QtObject {
-    property var theme;
+    // property var theme;
     // here we expose any var contained in 
     // the js file. This object can be accessed as the global 
     // customTheme, since it's loaded in main.qml
