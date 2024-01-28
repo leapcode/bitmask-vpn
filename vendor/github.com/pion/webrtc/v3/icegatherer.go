@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 //go:build !js
 // +build !js
 
@@ -10,6 +13,7 @@ import (
 
 	"github.com/pion/ice/v2"
 	"github.com/pion/logging"
+	"github.com/pion/stun"
 )
 
 // ICEGatherer gathers local host, server reflexive and relay
@@ -21,7 +25,7 @@ type ICEGatherer struct {
 	log   logging.LeveledLogger
 	state ICEGathererState
 
-	validatedServers []*ice.URL
+	validatedServers []*stun.URI
 	gatherPolicy     ICETransportPolicy
 
 	agent *ice.Agent
@@ -39,7 +43,7 @@ type ICEGatherer struct {
 // This constructor is part of the ORTC API. It is not
 // meant to be used together with the basic WebRTC API.
 func (api *API) NewICEGatherer(opts ICEGatherOptions) (*ICEGatherer, error) {
-	var validatedServers []*ice.URL
+	var validatedServers []*stun.URI
 	if len(opts.ICEServers) > 0 {
 		for _, server := range opts.ICEServers {
 			url, err := server.urls()
@@ -105,9 +109,11 @@ func (g *ICEGatherer) createAgent() error {
 		PrflxAcceptanceMinWait: g.api.settingEngine.timeout.ICEPrflxAcceptanceMinWait,
 		RelayAcceptanceMinWait: g.api.settingEngine.timeout.ICERelayAcceptanceMinWait,
 		InterfaceFilter:        g.api.settingEngine.candidates.InterfaceFilter,
+		IPFilter:               g.api.settingEngine.candidates.IPFilter,
 		NAT1To1IPs:             g.api.settingEngine.candidates.NAT1To1IPs,
 		NAT1To1IPCandidateType: nat1To1CandiTyp,
-		Net:                    g.api.settingEngine.vnet,
+		IncludeLoopback:        g.api.settingEngine.candidates.IncludeLoopbackCandidate,
+		Net:                    g.api.settingEngine.net,
 		MulticastDNSMode:       mDNSMode,
 		MulticastDNSHostName:   g.api.settingEngine.candidates.MulticastDNSHostName,
 		LocalUfrag:             g.api.settingEngine.candidates.UsernameFragment,
@@ -115,6 +121,7 @@ func (g *ICEGatherer) createAgent() error {
 		TCPMux:                 g.api.settingEngine.iceTCPMux,
 		UDPMux:                 g.api.settingEngine.iceUDPMux,
 		ProxyDialer:            g.api.settingEngine.iceProxyDialer,
+		DisableActiveTCP:       g.api.settingEngine.iceDisableActiveTCP,
 	}
 
 	requestedNetworkTypes := g.api.settingEngine.candidates.ICENetworkTypes
@@ -141,10 +148,7 @@ func (g *ICEGatherer) Gather() error {
 		return err
 	}
 
-	g.lock.Lock()
-	agent := g.agent
-	g.lock.Unlock()
-
+	agent := g.getAgent()
 	// it is possible agent had just been closed
 	if agent == nil {
 		return fmt.Errorf("%w: unable to gather", errICEAgentNotExist)
@@ -204,7 +208,13 @@ func (g *ICEGatherer) GetLocalParameters() (ICEParameters, error) {
 		return ICEParameters{}, err
 	}
 
-	frag, pwd, err := g.agent.GetLocalUserCredentials()
+	agent := g.getAgent()
+	// it is possible agent had just been closed
+	if agent == nil {
+		return ICEParameters{}, fmt.Errorf("%w: unable to get local parameters", errICEAgentNotExist)
+	}
+
+	frag, pwd, err := agent.GetLocalUserCredentials()
 	if err != nil {
 		return ICEParameters{}, err
 	}
@@ -221,7 +231,14 @@ func (g *ICEGatherer) GetLocalCandidates() ([]ICECandidate, error) {
 	if err := g.createAgent(); err != nil {
 		return nil, err
 	}
-	iceCandidates, err := g.agent.GetLocalCandidates()
+
+	agent := g.getAgent()
+	// it is possible agent had just been closed
+	if agent == nil {
+		return nil, fmt.Errorf("%w: unable to get local candidates", errICEAgentNotExist)
+	}
+
+	iceCandidates, err := agent.GetLocalCandidates()
 	if err != nil {
 		return nil, err
 	}
@@ -330,7 +347,6 @@ func (g *ICEGatherer) collectStats(collector *statsReportCollector) {
 				Timestamp:     statsTimestampFrom(candidateStats.Timestamp),
 				ID:            candidateStats.ID,
 				Type:          StatsTypeLocalCandidate,
-				NetworkType:   networkType,
 				IP:            candidateStats.IP,
 				Port:          int32(candidateStats.Port),
 				Protocol:      networkType.Protocol(),
@@ -359,7 +375,6 @@ func (g *ICEGatherer) collectStats(collector *statsReportCollector) {
 				Timestamp:     statsTimestampFrom(candidateStats.Timestamp),
 				ID:            candidateStats.ID,
 				Type:          StatsTypeRemoteCandidate,
-				NetworkType:   networkType,
 				IP:            candidateStats.IP,
 				Port:          int32(candidateStats.Port),
 				Protocol:      networkType.Protocol(),

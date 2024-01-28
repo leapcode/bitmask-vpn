@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package webrtc
 
 import "github.com/pion/dtls/v2"
@@ -24,6 +27,8 @@ const (
 
 	sdpAttributeRid = "rid"
 
+	sdpAttributeSimulcast = "simulcast"
+
 	rtpOutboundMTU = 1200
 
 	rtpPayloadTypeBitmask = 0x7F
@@ -36,5 +41,5 @@ const (
 )
 
 func defaultSrtpProtectionProfiles() []dtls.SRTPProtectionProfile {
-	return []dtls.SRTPProtectionProfile{dtls.SRTP_AEAD_AES_128_GCM, dtls.SRTP_AES128_CM_HMAC_SHA1_80}
+	return []dtls.SRTPProtectionProfile{dtls.SRTP_AEAD_AES_256_GCM, dtls.SRTP_AEAD_AES_128_GCM, dtls.SRTP_AES128_CM_HMAC_SHA1_80}
 }

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package webrtc
 
 import (
@@ -21,7 +24,7 @@ const (
 func (t RTPCodecType) String() string {
 	switch t {
 	case RTPCodecTypeAudio:
-		return "audio"
+		return "audio" //nolint: goconst
 	case RTPCodecTypeVideo:
 		return "video" //nolint: goconst
 	default:

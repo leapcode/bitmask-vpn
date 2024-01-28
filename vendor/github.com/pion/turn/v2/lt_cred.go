@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package turn
 
 import ( //nolint:gci
@@ -30,13 +33,13 @@ func longTermCredentials(username string, sharedSecret string) (string, error) {
 }
 
 // NewLongTermAuthHandler returns a turn.AuthAuthHandler used with Long Term (or Time Windowed) Credentials.
-// https://tools.ietf.org/search/rfc5389#section-10.2
+// See: https://tools.ietf.org/search/rfc5389#section-10.2
 func NewLongTermAuthHandler(sharedSecret string, l logging.LeveledLogger) AuthHandler {
 	if l == nil {
 		l = logging.NewDefaultLoggerFactory().NewLogger("turn")
 	}
 	return func(username, realm string, srcAddr net.Addr) (key []byte, ok bool) {
-		l.Tracef("Authentication username=%q realm=%q srcAddr=%v\n", username, realm, srcAddr)
+		l.Tracef("Authentication username=%q realm=%q srcAddr=%v", username, realm, srcAddr)
 		t, err := strconv.Atoi(username)
 		if err != nil {
 			l.Errorf("Invalid time-windowed username %q", username)

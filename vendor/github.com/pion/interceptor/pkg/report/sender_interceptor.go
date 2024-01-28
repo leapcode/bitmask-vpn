@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package report
 
 import (
@@ -10,18 +13,24 @@ import (
 	"github.com/pion/rtp"
 )
 
+// TickerFactory is a factory to create new tickers
+type TickerFactory func(d time.Duration) Ticker
+
 // SenderInterceptorFactory is a interceptor.Factory for a SenderInterceptor
 type SenderInterceptorFactory struct {
 	opts []SenderOption
 }
 
 // NewInterceptor constructs a new SenderInterceptor
-func (s *SenderInterceptorFactory) NewInterceptor(id string) (interceptor.Interceptor, error) {
+func (s *SenderInterceptorFactory) NewInterceptor(_ string) (interceptor.Interceptor, error) {
 	i := &SenderInterceptor{
 		interval: 1 * time.Second,
 		now:      time.Now,
-		log:      logging.NewDefaultLoggerFactory().NewLogger("sender_interceptor"),
-		close:    make(chan struct{}),
+		newTicker: func(d time.Duration) Ticker {
+			return &timeTicker{time.NewTicker(d)}
+		},
+		log:   logging.NewDefaultLoggerFactory().NewLogger("sender_interceptor"),
+		close: make(chan struct{}),
 	}
 
 	for _, opt := range s.opts {
@@ -41,13 +50,17 @@ func NewSenderInterceptor(opts ...SenderOption) (*SenderInterceptorFactory, erro
 // SenderInterceptor interceptor generates sender reports.
 type SenderInterceptor struct {
 	interceptor.NoOp
-	interval time.Duration
-	now      func() time.Time
-	streams  sync.Map
-	log      logging.LeveledLogger
-	m        sync.Mutex
-	wg       sync.WaitGroup
-	close    chan struct{}
+	interval  time.Duration
+	now       func() time.Time
+	newTicker TickerFactory
+	streams   sync.Map
+	log       logging.LeveledLogger
+	m         sync.Mutex
+	wg        sync.WaitGroup
+	close     chan struct{}
+	started   chan struct{}
+
+	useLatestPacket bool
 }
 
 func (s *SenderInterceptor) isClosed() bool {
@@ -92,11 +105,16 @@ func (s *SenderInterceptor) BindRTCPWriter(writer interceptor.RTCPWriter) interc
 func (s *SenderInterceptor) loop(rtcpWriter interceptor.RTCPWriter) {
 	defer s.wg.Done()
 
-	ticker := time.NewTicker(s.interval)
+	ticker := s.newTicker(s.interval)
 	defer ticker.Stop()
+	if s.started != nil {
+		// This lets us synchronize in tests to know whether the loop has begun or not.
+		// It only happens if started was initialized, which should not occur in non-tests.
+		close(s.started)
+	}
 	for {
 		select {
-		case <-ticker.C:
+		case <-ticker.Ch():
 			now := s.now()
 			s.streams.Range(func(key, value interface{}) bool {
 				if stream, ok := value.(*senderStream); !ok {
@@ -117,7 +135,7 @@ func (s *SenderInterceptor) loop(rtcpWriter interceptor.RTCPWriter) {
 // BindLocalStream lets you modify any outgoing RTP packets. It is called once for per LocalStream. The returned method
 // will be called once per rtp packet.
 func (s *SenderInterceptor) BindLocalStream(info *interceptor.StreamInfo, writer interceptor.RTPWriter) interceptor.RTPWriter {
-	stream := newSenderStream(info.SSRC, info.ClockRate)
+	stream := newSenderStream(info.SSRC, info.ClockRate, s.useLatestPacket)
 	s.streams.Store(info.SSRC, stream)
 
 	return interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, a interceptor.Attributes) (int, error) {
@@ -125,14 +143,4 @@ func (s *SenderInterceptor) BindLocalStream(info *interceptor.StreamInfo, writer
 
 		return writer.Write(header, payload, a)
 	})
-}
-
-func ntpTime(t time.Time) uint64 {
-	// seconds since 1st January 1900
-	s := (float64(t.UnixNano()) / 1000000000) + 2208988800
-
-	// higher 32 bits are the integer part, lower 32 bits are the fractional part
-	integerPart := uint32(s)
-	fractionalPart := uint32((s - float64(integerPart)) * 0xFFFFFFFF)
-	return uint64(integerPart)<<32 | uint64(fractionalPart)
 }

@@ -1,3 +1,8 @@
+== v1.3.0
+
+Added a DialOrWithDialer function that allows you to, for example, use a
+specific source address when dialing the ORPort.
+
 == v1.2.0
 
 The default and development branch is now "main" rather than "master".

@@ -3,13 +3,14 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net"
+	"sync"
 
-	"0xacab.org/leap/obfsvpn"
-
+	"0xacab.org/leap/obfsvpn/obfsvpn"
 	"github.com/kalikaneko/socks5"
 	"github.com/xtaci/kcp-go"
 )
@@ -17,14 +18,17 @@ import (
 var (
 	ErrAlreadyRunning = errors.New("already initialized")
 	ErrNotRunning     = errors.New("server not running")
+	ErrBadConfig      = errors.New("configuration error")
 )
 
 type Client struct {
+	ctx         context.Context
 	kcp         bool
-	socksAddr   string
+	SocksAddr   string
 	obfs4Cert   string
 	server      *socks5.Server
 	EventLogger EventLogger
+	mux         sync.Mutex
 }
 
 type EventLogger interface {
@@ -32,17 +36,21 @@ type EventLogger interface {
 	Error(message string)
 }
 
-func NewClient(kcp bool, socksAddr, obfs4Cert string) *Client {
+func NewClient(ctx context.Context, kcp bool, socksAddr, obfs4Cert string) ObfsClient {
 	return &Client{
+		ctx:       ctx,
 		kcp:       kcp,
-		socksAddr: socksAddr,
 		obfs4Cert: obfs4Cert,
+		SocksAddr: socksAddr,
 	}
 }
 
 func (c *Client) Start() (bool, error) {
+	c.mux.Lock()
+
 	defer func() {
-		c.log("STOPPED", "", nil)
+		c.mux.Unlock()
+		c.log("STOPPED", "")
 	}()
 
 	if c.IsStarted() {
@@ -51,7 +59,7 @@ func (c *Client) Start() (bool, error) {
 	}
 
 	c.server = &socks5.Server{
-		Addr:   c.socksAddr,
+		Addr:   c.SocksAddr,
 		BindIP: "127.0.0.1",
 	}
 
@@ -61,28 +69,44 @@ func (c *Client) Start() (bool, error) {
 		return false, err
 	}
 
-	if c.kcp {
+	switch {
+	case c.kcp:
 		dialer.DialFunc = func(network, address string) (net.Conn, error) {
-			c.log("RUNNING", "Dialing kcp://%s\n", address)
+			c.log("RUNNING", "client.Start(): dialing kcp://%s\n", address)
 			return kcp.Dial(address)
 		}
 	}
 
 	c.server.Dial = dialer.Dial
 
-	c.log("RUNNING", "[+] Starting socks5 proxy at %s\n", c.socksAddr)
-	if err := c.server.ListenAndServe(); err != nil {
-		c.error("error while listening: %v\n", err)
+	c.log("RUNNING", "[+] Starting socks5 proxy at %s\n", c.SocksAddr)
+
+	errCh := make(chan error)
+	go c.startSocksServer(errCh)
+
+	select {
+	case <-c.ctx.Done():
+		return true, nil
+	case err := <-errCh:
 		c.server = nil
 		return false, err
 	}
-	return true, nil
+}
+
+func (c *Client) startSocksServer(ch chan error) {
+	if err := c.server.ListenAndServe(); err != nil {
+		c.error("error while listening: %v\n", err)
+		ch <- err
+	}
 }
 
 func (c *Client) Stop() (bool, error) {
 	if !c.IsStarted() {
 		return false, ErrNotRunning
 	}
+
+	c.mux.Lock()
+	defer c.mux.Unlock()
 
 	if err := c.server.Close(); err != nil {
 		c.error("error while stopping: %v\n", err)
@@ -98,13 +122,20 @@ func (c *Client) log(state string, format string, a ...interface{}) {
 		c.EventLogger.Log(state, fmt.Sprintf(format, a...))
 		return
 	}
+	if format == "" {
+		log.Print(a...)
+		return
+	}
 	log.Printf(format, a...)
-
 }
 
 func (c *Client) error(format string, a ...interface{}) {
 	if c.EventLogger != nil {
 		c.EventLogger.Error(fmt.Sprintf(format, a...))
+		return
+	}
+	if format == "" {
+		log.Print(a...)
 		return
 	}
 	log.Printf(format, a...)

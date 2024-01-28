@@ -16,6 +16,7 @@
 package vpn
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
@@ -56,7 +57,8 @@ func (b *Bitmask) StartVPN(provider string) error {
 		return err
 	}
 
-	return b.startOpenVPN()
+	ctx := context.Background()
+	return b.startOpenVPN(ctx)
 }
 
 func (b *Bitmask) CanStartVPN() bool {
@@ -66,13 +68,13 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.bonafide.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransportForPrivateBridge(gw bonafide.Gateway) (proxy string, err error) {
+func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
 	kcpMode := false
 	if os.Getenv("LEAP_KCP") == "1" {
 		kcpMode = true
 	}
-	b.obfsvpnProxy = obfsvpn.NewClient(kcpMode, proxyAddr, gw.Options["cert"])
+	b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
 	go func() {
 		_, err = b.obfsvpnProxy.Start()
 		if err != nil {
@@ -84,7 +86,7 @@ func (b *Bitmask) startTransportForPrivateBridge(gw bonafide.Gateway) (proxy str
 	return proxyAddr, nil
 }
 
-func (b *Bitmask) startTransport(host string) (proxy string, err error) {
+func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string, err error) {
 	// TODO configure socks port if not available
 	// TODO get port from UI/config file
 	proxyAddr := "127.0.0.1:8080"
@@ -118,7 +120,7 @@ func (b *Bitmask) startTransport(host string) (proxy string, err error) {
 
 		log.Println("connecting with cert:", gw.Options["cert"])
 
-		b.obfsvpnProxy = obfsvpn.NewClient(kcpMode, proxyAddr, gw.Options["cert"])
+		b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
 		go func() {
 			_, err = b.obfsvpnProxy.Start()
 			if err != nil {
@@ -163,7 +165,7 @@ func (b *Bitmask) generateManagementPassword() string {
 	return tmpFile.Name()
 }
 
-func (b *Bitmask) startOpenVPN() error {
+func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	arg := b.openvpnArgs
 	/*
 		XXX has this changed??
@@ -190,7 +192,7 @@ func (b *Bitmask) startOpenVPN() error {
 			var err error
 			log.Println("Got a private bridge:", gw.Host, gw.Options)
 			gateways = []bonafide.Gateway{gw}
-			proxy, err = b.startTransportForPrivateBridge(gw)
+			proxy, err = b.startTransportForPrivateBridge(ctx, gw)
 			if err != nil {
 				// TODO this is not going to return the error since it blocks
 				// we need to get an error channel from obfsvpn.
@@ -213,7 +215,7 @@ func (b *Bitmask) startOpenVPN() error {
 			gw = gateways[0]
 			b.ptGateway = gw
 
-			proxy, err = b.startTransport(gw.Host)
+			proxy, err = b.startTransport(ctx, gw.Host)
 			if err != nil {
 				// TODO this is not going to return the error since it blocks
 				// we need to get an error channel from obfsvpn.
@@ -395,7 +397,8 @@ func (b *Bitmask) Reconnect() error {
 	if err != nil {
 		return err
 	}
-	return b.startOpenVPN()
+	ctx := context.Background()
+	return b.startOpenVPN(ctx)
 }
 
 // ReloadFirewall restarts the firewall

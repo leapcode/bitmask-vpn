@@ -122,13 +122,7 @@
 // https://spec.torproject.org/pt-spec
 //
 // Extended ORPort:
-// https://gitweb.torproject.org/torspec.git/tree/proposals/196-transport-control-ports.txt
-//
-// Extended ORPort Authentication:
-// https://gitweb.torproject.org/torspec.git/tree/proposals/217-ext-orport-auth.txt
-//
-// Pluggable Transport through SOCKS proxy:
-// https://gitweb.torproject.org/torspec.git/tree/proposals/232-pluggable-transports-through-proxy.txt
+// https://gitweb.torproject.org/torspec.git/tree/ext-orport-spec.txt
 //
 // The package implements a SOCKS5 server sufficient for a Tor client transport
 // plugin.
@@ -987,7 +981,7 @@ func extOrPortSetMetadata(s io.ReadWriter, addr, methodName string) error {
 
 func extOrPortSetup(s net.Conn, timeout time.Duration,
 	info *ServerInfo, addr, methodName string) error {
-	err := s.SetDeadline(time.Now().Add(5 * time.Second))
+	err := s.SetDeadline(time.Now().Add(timeout))
 	if err != nil {
 		return err
 	}
@@ -1006,20 +1000,20 @@ func extOrPortSetup(s net.Conn, timeout time.Duration,
 	return nil
 }
 
-// Dial info.ExtendedOrAddr if defined, or else info.OrAddr, and return an open
-// *net.TCPConn. If connecting to the extended OR port, extended OR port
-// authentication à la 217-ext-orport-auth.txt is done before returning; an
-// error is returned if authentication fails.
+// Dial (using the given net.Dialer) info.ExtendedOrAddr if defined, or else
+// info.OrAddr, and return an open net.Conn. If connecting to the extended
+// OR port, extended OR port authentication à la 217-ext-orport-auth.txt is done
+// before returning; an error is returned if authentication fails.
 //
 // The addr and methodName arguments are put in USERADDR and TRANSPORT ExtOrPort
 // commands, respectively. If either is "", the corresponding command is not
 // sent.
-func DialOr(info *ServerInfo, addr, methodName string) (*net.TCPConn, error) {
+func DialOrWithDialer(dialer *net.Dialer, info *ServerInfo, addr, methodName string) (net.Conn, error) {
 	if info.ExtendedOrAddr == nil || info.AuthCookiePath == "" {
-		return net.DialTCP("tcp", nil, info.OrAddr)
+		return dialer.Dial("tcp", info.OrAddr.String())
 	}
 
-	s, err := net.DialTCP("tcp", nil, info.ExtendedOrAddr)
+	s, err := dialer.Dial("tcp", info.ExtendedOrAddr.String())
 	if err != nil {
 		return nil, err
 	}
@@ -1030,4 +1024,17 @@ func DialOr(info *ServerInfo, addr, methodName string) (*net.TCPConn, error) {
 	}
 
 	return s, nil
+}
+
+// Dial info.ExtendedOrAddr if defined, or else info.OrAddr, and return an open
+// *net.TCPConn. If connecting to the extended OR port, extended OR port
+// authentication à la 217-ext-orport-auth.txt is done before returning; an
+// error is returned if authentication fails.
+//
+// The addr and methodName arguments are put in USERADDR and TRANSPORT ExtOrPort
+// commands, respectively. If either is "", the corresponding command is not
+// sent.
+func DialOr(info *ServerInfo, addr, methodName string) (*net.TCPConn, error) {
+	c, err := DialOrWithDialer(&net.Dialer{}, info, addr, methodName)
+	return c.(*net.TCPConn), err
 }

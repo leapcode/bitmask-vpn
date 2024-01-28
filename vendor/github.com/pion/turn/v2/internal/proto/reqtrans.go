@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package proto
 
 import (
@@ -10,12 +13,16 @@ import (
 type Protocol byte
 
 const (
+	// ProtoTCP is IANA assigned protocol number for TCP.
+	ProtoTCP Protocol = 6
 	// ProtoUDP is IANA assigned protocol number for UDP.
 	ProtoUDP Protocol = 17
 )
 
 func (p Protocol) String() string {
 	switch p {
+	case ProtoTCP:
+		return "TCP"
 	case ProtoUDP:
 		return "UDP"
 	default:
@@ -27,7 +34,7 @@ func (p Protocol) String() string {
 //
 // This attribute is used by the client to request a specific transport
 // protocol for the allocated transport address. RFC 5766 only allows the use of
-// codepoint 17 (User Datagram Protocol).
+// code point 17 (User Datagram Protocol).
 //
 // RFC 5766 Section 14.7
 type RequestedTransport struct {

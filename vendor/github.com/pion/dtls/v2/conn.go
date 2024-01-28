@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package dtls
 
 import (
@@ -18,9 +21,9 @@ import (
 	"github.com/pion/dtls/v2/pkg/protocol/handshake"
 	"github.com/pion/dtls/v2/pkg/protocol/recordlayer"
 	"github.com/pion/logging"
-	"github.com/pion/transport/connctx"
-	"github.com/pion/transport/deadline"
-	"github.com/pion/transport/replaydetector"
+	"github.com/pion/transport/v2/connctx"
+	"github.com/pion/transport/v2/deadline"
+	"github.com/pion/transport/v2/replaydetector"
 )
 
 const (
@@ -88,7 +91,7 @@ func createConn(ctx context.Context, nextConn net.Conn, config *Config, isClient
 		return nil, errNilNextConn
 	}
 
-	cipherSuites, err := parseCipherSuites(config.CipherSuites, config.CustomCipherSuites, config.PSK == nil || len(config.Certificates) > 0, config.PSK != nil)
+	cipherSuites, err := parseCipherSuites(config.CipherSuites, config.CustomCipherSuites, config.includeCertificateSuites(), config.PSK != nil)
 	if err != nil {
 		return nil, err
 	}
@@ -154,6 +157,11 @@ func createConn(ctx context.Context, nextConn net.Conn, config *Config, isClient
 		serverName = ""
 	}
 
+	curves := config.EllipticCurves
+	if len(curves) == 0 {
+		curves = defaultCurves
+	}
+
 	hsCfg := &handshakeConfig{
 		localPSKCallback:            config.PSK,
 		localPSKIdentityHint:        config.PSKIdentityHint,
@@ -167,6 +175,7 @@ func createConn(ctx context.Context, nextConn net.Conn, config *Config, isClient
 		localCertificates:           config.Certificates,
 		insecureSkipVerify:          config.InsecureSkipVerify,
 		verifyPeerCertificate:       config.VerifyPeerCertificate,
+		verifyConnection:            config.VerifyConnection,
 		rootCAs:                     config.RootCAs,
 		clientCAs:                   config.ClientCAs,
 		customCipherSuites:          config.CustomCipherSuites,
@@ -175,13 +184,17 @@ func createConn(ctx context.Context, nextConn net.Conn, config *Config, isClient
 		initialEpoch:                0,
 		keyLogWriter:                config.KeyLogWriter,
 		sessionStore:                config.SessionStore,
+		ellipticCurves:              curves,
+		localGetCertificate:         config.GetCertificate,
+		localGetClientCertificate:   config.GetClientCertificate,
+		insecureSkipHelloVerify:     config.InsecureSkipVerifyHello,
 	}
 
 	// rfc5246#section-7.4.3
 	// In addition, the hash and signature algorithms MUST be compatible
 	// with the key in the server's end-entity certificate.
 	if !isClient {
-		cert, err := hsCfg.getCertificate("")
+		cert, err := hsCfg.getCertificate(&ClientHelloInfo{})
 		if err != nil && !errors.Is(err, errNoCertificates) {
 			return nil, err
 		}
@@ -361,14 +374,12 @@ func (c *Conn) ConnectionState() State {
 
 // SelectedSRTPProtectionProfile returns the selected SRTPProtectionProfile
 func (c *Conn) SelectedSRTPProtectionProfile() (SRTPProtectionProfile, bool) {
-	c.lock.RLock()
-	defer c.lock.RUnlock()
-
-	if c.state.srtpProtectionProfile == 0 {
+	profile := c.state.getSRTPProtectionProfile()
+	if profile == 0 {
 		return 0, false
 	}
 
-	return c.state.srtpProtectionProfile, true
+	return profile, true
 }
 
 func (c *Conn) writePackets(ctx context.Context, pkts []*packet) error {
@@ -417,6 +428,11 @@ func (c *Conn) writePackets(ctx context.Context, pkts []*packet) error {
 }
 
 func (c *Conn) compactRawPackets(rawPackets [][]byte) [][]byte {
+	// avoid a useless copy in the common case
+	if len(rawPackets) == 1 {
+		return rawPackets
+	}
+
 	combinedRawPackets := make([][]byte, 0)
 	currentCombinedRawPacket := make([]byte, 0)
 
@@ -865,7 +881,11 @@ func (c *Conn) handshake(ctx context.Context, cfg *handshakeConfig, initialFligh
 					}
 				} else {
 					switch {
-					case errors.Is(err, context.DeadlineExceeded), errors.Is(err, context.Canceled), errors.Is(err, io.EOF):
+					case errors.Is(err, context.DeadlineExceeded), errors.Is(err, context.Canceled), errors.Is(err, io.EOF), errors.Is(err, net.ErrClosed):
+					case errors.Is(err, recordlayer.ErrInvalidPacketLength):
+						// Decode error must be silently discarded
+						// [RFC6347 Section-4.1.2.7]
+						continue
 					default:
 						if c.isHandshakeCompletedSuccessfully() {
 							// Keep read loop and pass the read error to Read()
@@ -889,6 +909,10 @@ func (c *Conn) handshake(ctx context.Context, cfg *handshakeConfig, initialFligh
 						_ = c.close(false) //nolint:contextcheck
 					}
 				}
+				if !c.isConnectionClosed() && errors.Is(err, context.Canceled) {
+					c.log.Trace("handshake timeouts - closing underline connection")
+					_ = c.close(false) //nolint:contextcheck
+				}
 				return
 			}
 		}
@@ -898,10 +922,12 @@ func (c *Conn) handshake(ctx context.Context, cfg *handshakeConfig, initialFligh
 	case err := <-firstErr:
 		cancelRead()
 		cancel()
+		c.handshakeLoopsFinished.Wait()
 		return c.translateHandshakeCtxError(err)
 	case <-ctx.Done():
 		cancelRead()
 		cancel()
+		c.handshakeLoopsFinished.Wait()
 		return c.translateHandshakeCtxError(ctx.Err())
 	case <-done:
 		return nil
@@ -934,11 +960,16 @@ func (c *Conn) close(byUser bool) error {
 	if byUser {
 		c.connectionClosedByUser = true
 	}
+	isClosed := c.isConnectionClosed()
 	c.closed.Close()
 	c.closeLock.Unlock()
 
 	if closedByUser {
 		return ErrConnClosed
+	}
+
+	if isClosed {
+		return nil
 	}
 
 	return c.nextConn.Close()

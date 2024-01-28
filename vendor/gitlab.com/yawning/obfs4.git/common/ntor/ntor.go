@@ -38,6 +38,7 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
+	"crypto/sha512"
 	"crypto/subtle"
 	"encoding/hex"
 	"fmt"
@@ -47,7 +48,7 @@ import (
 	"golang.org/x/crypto/hkdf"
 
 	"gitlab.com/yawning/obfs4.git/common/csrand"
-	"gitlab.com/yawning/obfs4.git/internal/extra25519"
+	"gitlab.com/yawning/obfs4.git/internal/x25519ell2"
 )
 
 const (
@@ -69,15 +70,17 @@ const (
 	// KeySeedLength is the length of the derived KEY_SEED.
 	KeySeedLength = sha256.Size
 
-	// AuthLength is the lenght of the derived AUTH.
+	// AuthLength is the length of the derived AUTH.
 	AuthLength = sha256.Size
 )
 
-var protoID = []byte("ntor-curve25519-sha256-1")
-var tMac = append(protoID, []byte(":mac")...)
-var tKey = append(protoID, []byte(":key_extract")...)
-var tVerify = append(protoID, []byte(":key_verify")...)
-var mExpand = append(protoID, []byte(":key_expand")...)
+var (
+	protoID = []byte("ntor-curve25519-sha256-1")
+	tMac    = append(protoID, []byte(":mac")...)
+	tKey    = append(protoID, []byte(":key_extract")...)
+	tVerify = append(protoID, []byte(":key_verify")...)
+	mExpand = append(protoID, []byte(":key_expand")...)
+)
 
 // PublicKeyLengthError is the error returned when the public key being
 // imported is an invalid length.
@@ -204,7 +207,7 @@ func (repr *Representative) Bytes() *[RepresentativeLength]byte {
 func (repr *Representative) ToPublic() *PublicKey {
 	pub := new(PublicKey)
 
-	extra25519.UnsafeBrokenRepresentativeToPublicKey(pub.Bytes(), repr.Bytes())
+	x25519ell2.RepresentativeToPublicKey(pub.Bytes(), repr.Bytes())
 	return pub
 }
 
@@ -263,22 +266,25 @@ func NewKeypair(elligator bool) (*Keypair, error) {
 
 	for {
 		// Generate a Curve25519 private key.  Like everyone who does this,
-		// run the CSPRNG output through SHA256 for extra tinfoil hattery.
+		// run the CSPRNG output through SHA512 for extra tinfoil hattery.
+		//
+		// Also use part of the digest that gets truncated off for the
+		// obfuscation tweak.
 		priv := keypair.private.Bytes()[:]
 		if err := csrand.Bytes(priv); err != nil {
 			return nil, err
 		}
-		digest := sha256.Sum256(priv)
-		digest[0] &= 248
-		digest[31] &= 127
-		digest[31] |= 64
+		digest := sha512.Sum512(priv)
 		copy(priv, digest[:])
 
 		if elligator {
+			tweak := digest[63]
+
 			// Apply the Elligator transform.  This fails ~50% of the time.
-			if !extra25519.UnsafeBrokenScalarBaseMult(keypair.public.Bytes(),
+			if !x25519ell2.ScalarBaseMult(keypair.public.Bytes(),
 				keypair.representative.Bytes(),
-				keypair.private.Bytes()) {
+				keypair.private.Bytes(),
+				tweak) {
 				continue
 			}
 		} else {
@@ -316,48 +322,43 @@ func KeypairFromHex(encoded string) (*Keypair, error) {
 
 // ServerHandshake does the server side of a ntor handshake and returns status,
 // KEY_SEED, and AUTH.  If status is not true, the handshake MUST be aborted.
-func ServerHandshake(clientPublic *PublicKey, serverKeypair *Keypair, idKeypair *Keypair, id *NodeID) (ok bool, keySeed *KeySeed, auth *Auth) {
+func ServerHandshake(clientPublic *PublicKey, serverKeypair *Keypair, idKeypair *Keypair, id *NodeID) (bool, *KeySeed, *Auth) {
 	var notOk int
 	var secretInput bytes.Buffer
 
 	// Server side uses EXP(X,y) | EXP(X,b)
 	var exp [SharedSecretLength]byte
-	curve25519.ScalarMult(&exp, serverKeypair.private.Bytes(),
-		clientPublic.Bytes())
+	curve25519.ScalarMult(&exp, serverKeypair.private.Bytes(), clientPublic.Bytes()) //nolint:staticcheck
 	notOk |= constantTimeIsZero(exp[:])
 	secretInput.Write(exp[:])
 
-	curve25519.ScalarMult(&exp, idKeypair.private.Bytes(),
-		clientPublic.Bytes())
+	curve25519.ScalarMult(&exp, idKeypair.private.Bytes(), clientPublic.Bytes()) //nolint:staticcheck
 	notOk |= constantTimeIsZero(exp[:])
 	secretInput.Write(exp[:])
 
-	keySeed, auth = ntorCommon(secretInput, id, idKeypair.public,
+	keySeed, auth := ntorCommon(secretInput, id, idKeypair.public,
 		clientPublic, serverKeypair.public)
 	return notOk == 0, keySeed, auth
 }
 
 // ClientHandshake does the client side of a ntor handshake and returnes
 // status, KEY_SEED, and AUTH.  If status is not true or AUTH does not match
-// the value recieved from the server, the handshake MUST be aborted.
-func ClientHandshake(clientKeypair *Keypair, serverPublic *PublicKey, idPublic *PublicKey, id *NodeID) (ok bool, keySeed *KeySeed, auth *Auth) {
+// the value received from the server, the handshake MUST be aborted.
+func ClientHandshake(clientKeypair *Keypair, serverPublic *PublicKey, idPublic *PublicKey, id *NodeID) (bool, *KeySeed, *Auth) {
 	var notOk int
 	var secretInput bytes.Buffer
 
 	// Client side uses EXP(Y,x) | EXP(B,x)
 	var exp [SharedSecretLength]byte
-	curve25519.ScalarMult(&exp, clientKeypair.private.Bytes(),
-		serverPublic.Bytes())
+	curve25519.ScalarMult(&exp, clientKeypair.private.Bytes(), serverPublic.Bytes()) //nolint:staticcheck
 	notOk |= constantTimeIsZero(exp[:])
 	secretInput.Write(exp[:])
 
-	curve25519.ScalarMult(&exp, clientKeypair.private.Bytes(),
-		idPublic.Bytes())
+	curve25519.ScalarMult(&exp, clientKeypair.private.Bytes(), idPublic.Bytes()) //nolint:staticcheck
 	notOk |= constantTimeIsZero(exp[:])
 	secretInput.Write(exp[:])
 
-	keySeed, auth = ntorCommon(secretInput, id, idPublic,
-		clientKeypair.public, serverPublic)
+	keySeed, auth := ntorCommon(secretInput, id, idPublic, clientKeypair.public, serverPublic)
 	return notOk == 0, keySeed, auth
 }
 
@@ -398,7 +399,7 @@ func ntorCommon(secretInput bytes.Buffer, id *NodeID, b *PublicKey, x *PublicKey
 	// auth_input = verify | ID | B | Y | X | PROTOID | "Server"
 	authInput := bytes.NewBuffer(verify)
 	_, _ = authInput.Write(suffix.Bytes())
-	_, _ = authInput.Write([]byte("Server"))
+	_, _ = authInput.WriteString("Server")
 	h = hmac.New(sha256.New, tMac)
 	_, _ = h.Write(authInput.Bytes())
 	tmp = h.Sum(nil)

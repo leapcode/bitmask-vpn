@@ -1,5 +1,4 @@
 //go:build !amd64 || noasm || appengine || gccgo || nogen
-// +build !amd64 noasm appengine gccgo nogen
 
 package reedsolomon
 
@@ -10,9 +9,25 @@ const avxSizeMask = 0
 const avx2CodeGen = false
 
 func galMulSlicesAvx2(matrix []byte, in, out [][]byte, start, stop int) int {
-	panic("avx2 codegen not available")
+	panic("codegen not available")
 }
 
 func galMulSlicesAvx2Xor(matrix []byte, in, out [][]byte, start, stop int) int {
-	panic("avx2 codegen not available")
+	panic("codegen not available")
+}
+
+func galMulSlicesGFNI(matrix []uint64, in, out [][]byte, start, stop int) int {
+	panic("codegen not available")
+}
+
+func galMulSlicesGFNIXor(matrix []uint64, in, out [][]byte, start, stop int) int {
+	panic("codegen not available")
+}
+
+func galMulSlicesAvxGFNI(matrix []uint64, in, out [][]byte, start, stop int) int {
+	panic("codegen not available")
+}
+
+func galMulSlicesAvxGFNIXor(matrix []uint64, in, out [][]byte, start, stop int) int {
+	panic("codegen not available")
 }

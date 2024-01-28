@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package nack
 
 import (
@@ -23,6 +26,15 @@ func GeneratorSize(size uint16) GeneratorOption {
 func GeneratorSkipLastN(skipLastN uint16) GeneratorOption {
 	return func(r *GeneratorInterceptor) error {
 		r.skipLastN = skipLastN
+		return nil
+	}
+}
+
+// GeneratorMaxNacksPerPacket sets the maximum number of NACKs sent per missing packet, e.g. if set to 2, a missing
+// packet will only be NACKed at most twice. If set to 0 (default), max number of NACKs is unlimited
+func GeneratorMaxNacksPerPacket(maxNacks uint16) GeneratorOption {
+	return func(r *GeneratorInterceptor) error {
+		r.maxNacksPerPacket = maxNacks
 		return nil
 	}
 }

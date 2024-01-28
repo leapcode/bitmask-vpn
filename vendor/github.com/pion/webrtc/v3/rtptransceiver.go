@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 //go:build !js
 // +build !js
 
@@ -13,10 +16,11 @@ import (
 
 // RTPTransceiver represents a combination of an RTPSender and an RTPReceiver that share a common mid.
 type RTPTransceiver struct {
-	mid       atomic.Value // string
-	sender    atomic.Value // *RTPSender
-	receiver  atomic.Value // *RTPReceiver
-	direction atomic.Value // RTPTransceiverDirection
+	mid              atomic.Value // string
+	sender           atomic.Value // *RTPSender
+	receiver         atomic.Value // *RTPReceiver
+	direction        atomic.Value // RTPTransceiverDirection
+	currentDirection atomic.Value // RTPTransceiverDirection
 
 	codecs []RTPCodecParameters // User provided codecs via SetCodecPreferences
 
@@ -38,6 +42,7 @@ func newRTPTransceiver(
 	t.setReceiver(receiver)
 	t.setSender(sender)
 	t.setDirection(direction)
+	t.setCurrentDirection(RTPTransceiverDirection(Unknown))
 	return t
 }
 
@@ -160,6 +165,7 @@ func (t *RTPTransceiver) Stop() error {
 	}
 
 	t.setDirection(RTPTransceiverDirectionInactive)
+	t.setCurrentDirection(RTPTransceiverDirectionInactive)
 	return nil
 }
 
@@ -177,6 +183,17 @@ func (t *RTPTransceiver) setReceiver(r *RTPReceiver) {
 
 func (t *RTPTransceiver) setDirection(d RTPTransceiverDirection) {
 	t.direction.Store(d)
+}
+
+func (t *RTPTransceiver) setCurrentDirection(d RTPTransceiverDirection) {
+	t.currentDirection.Store(d)
+}
+
+func (t *RTPTransceiver) getCurrentDirection() RTPTransceiverDirection {
+	if v, ok := t.currentDirection.Load().(RTPTransceiverDirection); ok {
+		return v
+	}
+	return RTPTransceiverDirection(Unknown)
 }
 
 func (t *RTPTransceiver) setSendingTrack(track TrackLocal) error {
@@ -225,9 +242,9 @@ func satisfyTypeAndDirection(remoteKind RTPCodecType, remoteDirection RTPTransce
 	getPreferredDirections := func() []RTPTransceiverDirection {
 		switch remoteDirection {
 		case RTPTransceiverDirectionSendrecv:
-			return []RTPTransceiverDirection{RTPTransceiverDirectionRecvonly, RTPTransceiverDirectionSendrecv}
+			return []RTPTransceiverDirection{RTPTransceiverDirectionRecvonly, RTPTransceiverDirectionSendrecv, RTPTransceiverDirectionSendonly}
 		case RTPTransceiverDirectionSendonly:
-			return []RTPTransceiverDirection{RTPTransceiverDirectionRecvonly}
+			return []RTPTransceiverDirection{RTPTransceiverDirectionRecvonly, RTPTransceiverDirectionSendrecv}
 		case RTPTransceiverDirectionRecvonly:
 			return []RTPTransceiverDirection{RTPTransceiverDirectionSendonly, RTPTransceiverDirectionSendrecv}
 		default:

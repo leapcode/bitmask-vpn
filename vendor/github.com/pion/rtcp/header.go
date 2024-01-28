@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+// SPDX-License-Identifier: MIT
+
 package rtcp
 
 import (
@@ -27,6 +30,7 @@ const (
 	FormatFIR  uint8 = 4
 	FormatTLN  uint8 = 1
 	FormatRRR  uint8 = 5
+	FormatCCFB uint8 = 11
 	FormatREMB uint8 = 15
 
 	// https://tools.ietf.org/html/draft-holmer-rmcat-transport-wide-cc-extensions-01#page-5
