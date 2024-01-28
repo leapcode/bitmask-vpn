@@ -132,7 +132,7 @@ ifeq ($(VENDOR_PATH), providers)
 endif # end windows
 else # not windows: linux/osx
 ifeq ($(VENDOR_PATH), providers)
-	@unlink providers/assets || true
+	@-unlink providers/assets
 	@ln -s ${PROVIDER}/assets providers/assets || true
 endif
 endif
@@ -288,7 +288,7 @@ endif
 clean:
 	@rm -rf lib/*
 	@rm -rf build/
-	@unlink branding/assets/default || true
+	@-unlink branding/assets/default
 
 
 ########################################################################
@@ -414,7 +414,7 @@ package_snap_in_docker:
 	@${MAKE} -C docker package_snap
 
 package_snap:
-	@unlink snap || true
+	@-unlink snap
 	@cp build/${PROVIDER}/snap/local/${TARGET}.desktop build/${PROVIDER}/snap/gui/
 	@ln -s build/${PROVIDER}/snap snap
 	@${MAKE} -C build/${PROVIDER} pkg_snap
