@@ -1,8 +1,8 @@
 #TARGET = $$BINARY_NAME
 
 QT += quickcontrols2 svg
-CONFIG += c++11
 CONFIG += qt staticlib
+CONFIG += c++17 strict_c++
 CONFIG += qtquickcompiler
 CONFIG+=force_debug_info
 CONFIG+=debug_and_release
