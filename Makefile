@@ -448,3 +448,9 @@ generate_locales:
 
 get_%:
 	@curl -L -X GET --user "api:${API_TOKEN}" "https://www.transifex.com/api/2/project/bitmask/resource/bitmask-desktop/translation/${subst -,_,$*}/?file" > gui/i18n/main_$*.ts
+
+install_dev_linux:
+	@sudo install -m 0755 pkg/pickle/helpers/bitmask-root /usr/bin/bitmask-root
+
+uninstall_dev_linux:
+	@sudo rm -rf /usr/bin/bitmask-root
