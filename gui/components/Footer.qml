@@ -68,7 +68,6 @@ ToolBar {
                 left: lightning.right
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: 7
-                leftMargin: (ctx != undefined & root.selectedGateway == "auto") ? 0 : -12
             }
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
