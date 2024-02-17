@@ -50,7 +50,7 @@ endif
 SCRIPTS = branding/scripts
 TEMPLATES = branding/templates
 
-TAP_WINDOWS = https://build.openvpn.net/downloads/releases/tap-windows-9.24.2-I601-Win10.exe
+OPENVPN_WINDOWS_INSTALLER = https://build.openvpn.net/downloads/releases/OpenVPN-2.6.6-I001-amd64.msi
 
 ifeq ($(PLATFORM), linux)
 HAS_QTIFW :=
@@ -150,9 +150,9 @@ build_gui: build_golib relink_vendor
 build: build_helper build_gui
 
 build_helper:
-ifeq ($(PLATFORM), linux)
-# no helper needed for linux, we use polkit/bitmask-root
-else
+ifeq ($(PLATFORM), darwin)
+	# no helper needed for linux, we use polkit/bitmask-root
+	# no helper needed for windows, use openvpn interective service
 	@echo "=============BUILDER HELPER==========="
 	@echo "PLATFORM: ${PLATFORM}"
 	@echo "APPNAME: ${APPNAME}"
@@ -212,6 +212,7 @@ endif
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
 ifeq (${PLATFORM}, windows)
+	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}/openvpn-installer.msi
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
 ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
@@ -220,7 +221,7 @@ else
 endif
 	@cp ${QTBUILD}/release/${TARGET}.exe ${INST_DATA}${TARGET}.exe
 ifeq (${RELEASE}, yes)
-	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe # FIXME --release flag cannot find platform plugin
+	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 else
 	@windeployqt --qmldir gui/components ${INST_DATA}${TARGET}.exe
 endif
