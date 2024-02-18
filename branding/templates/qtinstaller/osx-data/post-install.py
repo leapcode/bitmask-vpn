@@ -94,7 +94,7 @@ def _getProcessList():
     _out = []
     output = subprocess.Popen(["ps", "-ceA"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = output.communicate()
-    for line  in stdout.split('\n'):
+    for line in stdout.decode('utf-8').split('\n'):
         cmd = line.split(' ')[-1]
         _out.append(cmd.strip())
     return _out
