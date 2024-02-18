@@ -10,7 +10,7 @@ CONFIG+=debug_and_release
 windows:CONFIG -= console
 unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
-QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 12
 QMAKE_TARGET_BUNDLE_PREFIX = se.leap
 QMAKE_BUNDLE = $$TARGET
 
