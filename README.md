@@ -78,8 +78,8 @@ As for now app can be build on Win OS using `Cygwin` terminal.
 
 #### Precondition
 You need to have installed and added to your user PATH (mentioned version tested in Win10):
-1) Go (>= go1.15.4)
-2) QT (>= Qt5.12.9)
+1) Go (>= go1.20)
+2) QT (>= Qt6.6)
 3) QtIFW (>= QtIFW-4.0.0)
 4) Cygwin64 (>= 2.905 64 bit)
 5) Using Cygwin `Package Select` window install `python3` and `make` packages. 

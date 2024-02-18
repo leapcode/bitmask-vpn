@@ -5,7 +5,9 @@ The build currently expects MINGW64 environment, on a native windows host.
 
 A cross-compiling procedure (at least for the application binaries) should be possible in the near future, using mxe. (There's already some support for it in `gui/build.sh`).
 
-You should instal: make, wget, as well as a recent Qt5 version (for instance, with chocolatey: choco install make && choco install wget).
+You should instal: make, wget, as well as a recent Qt6 version (for instance, with chocolatey: choco install make && choco install wget).
+
+For installing Qt6 use the [`aqt`](https://github.com/miurahr/aqtinstall) tool to install a portable version of Qt.
 
 It's recommended to use bash for windows for compatibility (the version that is distributed with git works well so far). In order to avoid makefiles, you are welcome to submit a port of the build scripts using powershell or cscript - see the build.wsf script in openvpn-build for inspiration.
 
@@ -24,12 +26,9 @@ It is useful to source a file with all the needed environment variables::
 Assuming you have the vendor path in place and correctly configured, all you need to do is `make installer`::
 
   source ../build-env
-  make generate # not called by makefile in win, needs fix!!
-
   make vendor
   make build
   make installer
-
 
 
 checking signatures
