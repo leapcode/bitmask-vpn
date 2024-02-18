@@ -9,6 +9,15 @@ function majorVersion(str)
     return parseInt(str.split(".", 1));
 }
 
+// from: https://forum.qt.io/topic/114975/qt-installerframework-is-altering-my-string-slashes
+var Dir = new function () {
+    this.toNativeSeparator = function (path) {
+        if (installer.value("os") == "win")
+            return path.replace(/\//g, '\\');
+        return path;
+    }
+};
+
 function cancelInstaller(message)
 {
     installer.setDefaultPageVisible(QInstaller.Introduction, false);
@@ -100,8 +109,9 @@ function preInstallWindows() {
 
 function postInstallWindows() {
     // TODO - we probably need to package different flavors of the installer for windows 8, arm, i386 etc, and change the installer we ship too.
+    var openVpnMsi = Dir.toNativeSeparator(installer.value("TargetDir") + "/openvpn-installer.msi")
     console.log("Installing OpenVPN binaries and service");
-    component.addElevatedOperation("Execute", "{0}", "msiexec", "/i", "@TargetDir@\\openvpn-installer.msi", "ADDLOCAL=OpenVPN.Service,OpenVPN,Drivers,Drivers.TAPWindows6,Drivers.Wintun", "/passive")
+    component.addElevatedOperation("Execute", "{0}", "msiexec", "/i", openVpnMsi, "ADDLOCAL=OpenVPN.Service,OpenVPN,Drivers,Drivers.TAPWindows6,Drivers.Wintun", "/passive")
     console.log("Adding shortcut entries...");
     component.addElevatedOperation("Mkdir", "@StartMenuDir@");
     component.addElevatedOperation("CreateShortcut", "@TargetDir@\\$BINNAME.exe", "@StartMenuDir@\\$APPNAME.lnk", "workingDirectory=@TargetDir@", "iconPath=@TargetDir@\\icon.ico", "description=Start $APPNAME");
