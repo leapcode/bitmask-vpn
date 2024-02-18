@@ -11,13 +11,13 @@ set -e
 #set -x
 
 # [!] This needs to be updated for every release --------------------------
-OPENVPN="openvpn-2.5.1"
-OPENSSL="1.1.1j"
+OPENVPN="openvpn-2.6.6"
+OPENSSL="3.2.1"
 MBEDTLS="2.25.0"
 LZO="lzo-2.10"
-ZLIB="zlib-1.2.13"
+ZLIB="zlib-1.3.1"
 LZO_SHA1="4924676a9bae5db58ef129dc1cebce3baa3c4b5d"
-OPENSSL_SHA256="aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf"
+OPENSSL_SHA256="83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39"
 MBEDTLS_SHA256="f838f670f51070bc6b4ebf0c084affd9574652ded435b064969f36ce4e8b586d"
 # -------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ MAKE="make -j4"
 
 function build_zlib()
 {
-        gpg --fetch-keys $ZLIB_KEYS
+	gpg --fetch-keys $ZLIB_KEYS
 	mkdir -p $SRC/zlib && cd $SRC/zlib
 
 	if [ ! -f $ZLIB.tar.gz ]; then
@@ -86,7 +86,7 @@ function build_lzo2()
 {
 	mkdir -p $SRC/lzo2 && cd $SRC/lzo2
 	if [ ! -f $LZO.tar.gz ]; then
-	    $WGET http://www.oberhumer.com/opensource/lzo/download/$LZO.tar.gz
+	    $WGET https://www.oberhumer.com/opensource/lzo/download/$LZO.tar.gz
 	fi
 	sha1=`$SHASUM $LZO.tar.gz | cut -d' ' -f 1`
 	if [ "${LZO_SHA1}" = "${sha1}" ]; then
