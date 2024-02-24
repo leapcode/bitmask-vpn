@@ -1,0 +1,227 @@
+From 92e399ec1e7d40fcdfd2fb7957b989972b86f6ee Mon Sep 17 00:00:00 2001
+From: jkito <belter@riseup.net>
+Date: Tue, 20 Feb 2024 22:42:00 +0530
+Subject: [PATCH] [build] fix build on ubuntu 23.04 with qt6.4
+
+---
+ bitmask.pro                    |  2 +-
+ gui/components/ErrorBox.qml    |  2 +-
+ gui/components/Footer.qml      | 14 ++++++--------
+ gui/components/Home.qml        |  2 +-
+ gui/components/InitErrors.qml  |  2 +-
+ gui/components/Locations.qml   |  7 +++----
+ gui/components/MotdBox.qml     |  2 +-
+ gui/components/Preferences.qml |  4 ++--
+ gui/components/SignalIcon.qml  |  7 +++----
+ gui/components/Splash.qml      |  2 +-
+ gui/components/StatusBox.qml   |  2 +-
+ 11 files changed, 21 insertions(+), 25 deletions(-)
+
+diff --git a/bitmask.pro b/bitmask.pro
+index f377bb4..4aa4956 100644
+--- a/bitmask.pro
++++ b/bitmask.pro
+@@ -1,8 +1,8 @@
+ #TARGET = $$BINARY_NAME
+ 
+ QT += quickcontrols2 svg
+-CONFIG += qt staticlib
+ CONFIG += c++17 strict_c++
++CONFIG += qt staticlib core5compat
+ CONFIG += qtquickcompiler
+ CONFIG+=force_debug_info
+ CONFIG+=debug_and_release
+diff --git a/gui/components/ErrorBox.qml b/gui/components/ErrorBox.qml
+index 5667ed9..ef8f58f 100644
+--- a/gui/components/ErrorBox.qml
++++ b/gui/components/ErrorBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Item {
+diff --git a/gui/components/Footer.qml b/gui/components/Footer.qml
+index 3c3664b..0e95083 100644
+--- a/gui/components/Footer.qml
++++ b/gui/components/Footer.qml
+@@ -2,7 +2,7 @@ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Controls.Material
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -40,7 +40,7 @@ ToolBar {
+         }
+ 
+         Image {
+-            id: lightning
++            id: lightning 
+             smooth: true
+             visible: ctx != undefined & root.selectedGateway == "auto"
+             width: 16
+@@ -52,11 +52,10 @@ ToolBar {
+                 verticalCenterOffset: -6
+             }
+         }
+-        MultiEffect {
++        ColorOverlay{
+             anchors.fill: lightning
+             source: lightning
+-            colorizationColor: getLocationColor()
+-            colorization: 1.0
++            color: getLocationColor()
+             antialiasing: true
+         }
+ 
+@@ -115,11 +114,10 @@ ToolBar {
+                 rightMargin: 20
+             }
+         }
+-        MultiEffect {
++        ColorOverlay{
+             anchors.fill: gwQuality
+             source: gwQuality
+-            colorizationColor: getSignalColor()
+-            colorization: 1.0
++            color: getSignalColor()
+             antialiasing: false
+         }
+     }
+diff --git a/gui/components/Home.qml b/gui/components/Home.qml
+index f3bea85..7830f46 100644
+--- a/gui/components/Home.qml
++++ b/gui/components/Home.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ Page {
+     StatusBox {
+diff --git a/gui/components/InitErrors.qml b/gui/components/InitErrors.qml
+index aaf9897..10b4755 100644
+--- a/gui/components/InitErrors.qml
++++ b/gui/components/InitErrors.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ ErrorBox {
+ 
+diff --git a/gui/components/Locations.qml b/gui/components/Locations.qml
+index 1c887d5..7914010 100644
+--- a/gui/components/Locations.qml
++++ b/gui/components/Locations.qml
+@@ -1,7 +1,7 @@
+ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -81,11 +81,10 @@ ThemedPage {
+                         //verticalCenterOffset: 3
+                     }
+                 }
+-                MultiEffect {
++                ColorOverlay{
+                     anchors.fill: lightning
+                     source: lightning
+-                    colorizationColor: "black"
+-                    colorization: 1.0
++                    color: "black"
+                     antialiasing: true
+                 }
+             }
+diff --git a/gui/components/MotdBox.qml b/gui/components/MotdBox.qml
+index 2c8cdb8..7b851c0 100644
+--- a/gui/components/MotdBox.qml
++++ b/gui/components/MotdBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Item {
+diff --git a/gui/components/Preferences.qml b/gui/components/Preferences.qml
+index 7b6a519..9c594c5 100644
+--- a/gui/components/Preferences.qml
++++ b/gui/components/Preferences.qml
+@@ -2,8 +2,8 @@ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+ import QtQuick.Controls.Material
+-import QtQuick.Effects
+-import QtCore
++import Qt5Compat.GraphicalEffects
++import Qt.labs.settings
+ 
+ import "../themes/themes.js" as Theme
+ 
+diff --git a/gui/components/SignalIcon.qml b/gui/components/SignalIcon.qml
+index 8747f05..38a2371 100644
+--- a/gui/components/SignalIcon.qml
++++ b/gui/components/SignalIcon.qml
+@@ -1,7 +1,7 @@
+ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -41,11 +41,10 @@ Item {
+             ]
+         }
+     }
+-    MultiEffect {
++    ColorOverlay{
+         anchors.fill: icon
+         source: icon
+-        colorizationColor: getQualityColor()
+-        colorization: 1.0
++        color: getQualityColor()
+         antialiasing: true
+     }
+ 
+diff --git a/gui/components/Splash.qml b/gui/components/Splash.qml
+index 41adadb..aea00d3 100644
+--- a/gui/components/Splash.qml
++++ b/gui/components/Splash.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Page {
+diff --git a/gui/components/StatusBox.qml b/gui/components/StatusBox.qml
+index ec9d4e5..ae8c41b 100644
+--- a/gui/components/StatusBox.qml
++++ b/gui/components/StatusBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import QtQuick.Layouts
+ 
+ import QtQuick.Templates as T
+-- 
+2.40.1
+
