@@ -6,7 +6,7 @@ export DESTDIR="${HOSTDIR}"/deploy/
 rm -rf "${GUESTDIR}"
 cp -r "${HOSTDIR}" "${GUESTDIR}"
 cd "${GUESTDIR}"
-make prepare
+make vendor
 case $TYPE in
     snap)
         echo "[+] Building SNAP"

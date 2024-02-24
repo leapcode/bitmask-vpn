@@ -1,16 +1,14 @@
 ---
 stages:
   - build
-  - push
-  - debian
-  - vendor
 
 build_test:
-  image: registry.0xacab.org/leap/bitmask-vpn:latest
+  image: registry.0xacab.org/jkito/bitmask-vpn:latest
   stage: build
   script:
     - make generate
     - make test
+    - patch -p1 < docker/*.patch
     # TODO missing xcb package in the docker image. investigate what to install to run minimal tests.
     # - make test_ui
     - make build
@@ -18,7 +16,7 @@ build_test:
     - linux
   artifacts:
     paths:
-      - 'qtbuild/release/riseup-vpn'
+      - 'build/qt/release/riseup-vpn'
     expire_in: 1 month
 
 # branded_push:
@@ -53,32 +51,32 @@ build_test:
 #     - echo "Triggering CI pipeline on https://0xacab.org/leap/riseup-vpn_package/pipelines"
 #     - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
 
-debian:
-  # TODO use a buster builder image, but upgrade golang version for compatibility
-  image: registry.0xacab.org/leap/bitmask-vpn:latest
-  stage: debian
-  script:
-    - 'PROVIDER="riseup" make vendor && rm -rf .build && mkdir -p .build && rm -f *.deb && cp -dR * .build/. && cd .build && debuild -us -uc'
-  artifacts:
-    paths:
-      - '*.deb'
+# debian:
+#   # TODO use a buster builder image, but upgrade golang version for compatibility
+#   image: registry.0xacab.org/leap/bitmask-vpn:latest
+#   stage: debian
+#   script:
+#     - 'PROVIDER="riseup" make vendor && rm -rf .build && mkdir -p .build && rm -f *.deb && cp -dR * .build/. && cd .build && debuild -us -uc'
+#   artifacts:
+#     paths:
+#       - '*.deb'
 
-vendorize:
-  image: registry.0xacab.org/leap/bitmask-vpn:latest
-  stage: vendor
-  script:
-    #- TODO build_all_providers script can be rescued when we achieve to bring back xbuild for win/osx.
-    # For now it only makes sense to build the snap.
-    #- 'PROVIDERS="riseup calyx" make build_all_providers'
-    - 'PROVIDER="riseup" make vendor && make package_snap'
-  artifacts:
-    name: installers-$CI_COMMIT_REF_NAME
-    paths:
-      - 'deploy/*.snap'
-#       - 'deploy/RiseupVPN-*.exe'
-#       - 'deploy/RiseupVPN-*.pkg'
-#       - 'deploy/riseup-vpn_*.deb'
-#       - 'deploy/CalyxVPN-*.exe'
-#       - 'deploy/CalyxVPN-*.pkg'
-#       - 'deploy/calyx-vpn_*.deb'
-    expire_in: 1 month
+# vendorize:
+#   image: registry.0xacab.org/leap/bitmask-vpn:latest
+#   stage: vendor
+#   script:
+#     #- TODO build_all_providers script can be rescued when we achieve to bring back xbuild for win/osx.
+#     # For now it only makes sense to build the snap.
+#     #- 'PROVIDERS="riseup calyx" make build_all_providers'
+#     - 'PROVIDER="riseup" make vendor && make package_snap'
+#   artifacts:
+#     name: installers-$CI_COMMIT_REF_NAME
+#     paths:
+#       - 'deploy/*.snap'
+# #       - 'deploy/RiseupVPN-*.exe'
+# #       - 'deploy/RiseupVPN-*.pkg'
+# #       - 'deploy/riseup-vpn_*.deb'
+# #       - 'deploy/CalyxVPN-*.exe'
+# #       - 'deploy/CalyxVPN-*.pkg'
+# #       - 'deploy/calyx-vpn_*.deb'
+#     expire_in: 1 month
