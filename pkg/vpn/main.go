@@ -24,6 +24,7 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
+	"0xacab.org/leap/bitmask-vpn/pkg/launcher"
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -39,7 +40,7 @@ type Bitmask struct {
 	statusCh         chan string
 	managementClient *management.MgmtClient
 	bonafide         *bonafide.Bonafide
-	launch           *launcher
+	launch           *launcher.Launcher
 	transport        string
 	obfsvpnProxy     *obfsvpn.Client
 	certPemPath      string
@@ -63,7 +64,7 @@ func Init() (*Bitmask, error) {
 	snowCh := make(chan *snowflake.StatusEvent, 20)
 	bf := bonafide.New()
 	bf.SnowflakeCh = snowCh
-	launch, err := newLauncher()
+	launch, err := launcher.NewLauncher()
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +80,7 @@ func Init() (*Bitmask, error) {
 	// XXX we want to block on these, but they can timeout if we're blocked.
 	b.checkForUpgrades()
 	b.checkForMOTD()
-	b.launch.firewallStop()
+	b.launch.FirewallStop()
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running
 		from a previous one, but first we need to complete all the
@@ -133,7 +134,7 @@ func (b *Bitmask) Close() {
 	log.Printf("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
 	time.Sleep(500 * time.Millisecond)
-	err := b.launch.close()
+	err := b.launch.Close()
 	if err != nil {
 		log.Printf("There was an error closing the launcher: %v", err)
 	}

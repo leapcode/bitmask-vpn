@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package vpn
+package launcher
 
 import (
 	"bytes"
@@ -32,10 +32,10 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 )
 
-type launcher struct {
+type Launcher struct {
 	helperAddr string
-	failed     bool
-	mngPass    string
+	Failed     bool
+	MngPass    string
 }
 
 const initialHelperPort = 7171
@@ -81,21 +81,21 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 	return false
 }
 
-func newLauncher() (*launcher, error) {
+func NewLauncher() (*Launcher, error) {
 	helperPort := probeHelperPort(initialHelperPort)
 	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
-	return &launcher{helperAddr: helperAddr, failed: false}, nil
+	return &Launcher{helperAddr: helperAddr, Failed: false}, nil
 }
 
-func (l *launcher) close() error {
+func (l *Launcher) Close() error {
 	return nil
 }
 
-func (l *launcher) check() (helpers bool, priviledge bool, err error) {
+func (l *Launcher) Check() (helpers bool, priviledge bool, err error) {
 	return true, true, nil
 }
 
-func (l *launcher) openvpnStart(flags ...string) error {
+func (l *Launcher) OpenvpnStart(flags ...string) error {
 	byteFlags, err := json.Marshal(flags)
 	if err != nil {
 		return err
@@ -103,11 +103,11 @@ func (l *launcher) openvpnStart(flags ...string) error {
 	return l.send("/openvpn/start", byteFlags)
 }
 
-func (l *launcher) openvpnStop() error {
+func (l *Launcher) OpenvpnStop() error {
 	return l.send("/openvpn/stop", nil)
 }
 
-func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	ipList := make([]string, len(gateways))
 	for i, gw := range gateways {
 		ipList[i] = gw.IPAddress
@@ -123,11 +123,11 @@ func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
 	return l.send(uri, byteIPs)
 }
 
-func (l *launcher) firewallStop() error {
+func (l *Launcher) FirewallStop() error {
 	return l.send("/firewall/stop", nil)
 }
 
-func (l *launcher) firewallIsUp() bool {
+func (l *Launcher) FirewallIsUp() bool {
 	var isup bool = false
 	res, err := http.Post(l.helperAddr+"/firewall/isup", "", nil)
 	if err != nil {
@@ -153,7 +153,7 @@ func (l *launcher) firewallIsUp() bool {
 	return isup
 }
 
-func (l *launcher) send(path string, body []byte) error {
+func (l *Launcher) send(path string, body []byte) error {
 	var reader io.Reader
 	if body != nil {
 		reader = bytes.NewReader(body)

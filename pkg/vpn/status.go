@@ -51,7 +51,7 @@ func (b *Bitmask) openvpnManagement() {
 		eventCh := make(chan management.Event, 10)
 		log.Println("New connection into the management")
 		b.managementClient = conn.Open(eventCh)
-		b.managementClient.SendPassword(b.launch.mngPass)
+		b.managementClient.SendPassword(b.launch.MngPass)
 		b.managementClient.SetStateEvents(true)
 		b.eventHandler(eventCh)
 	}
@@ -128,5 +128,5 @@ func (b *Bitmask) getOpenvpnState() (string, error) {
 }
 
 func (b *Bitmask) isFailed() bool {
-	return b.launch.failed
+	return b.launch.Failed
 }

@@ -161,7 +161,7 @@ func (b *Bitmask) generateManagementPassword() string {
 		log.Fatal("Cannot create temporary file", err)
 	}
 	tmpFile.Write([]byte(pass))
-	b.launch.mngPass = pass
+	b.launch.MngPass = pass
 	return tmpFile.Name()
 }
 
@@ -223,7 +223,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			}
 		}
 
-		err := b.launch.firewallStart(gateways)
+		err := b.launch.FirewallStart(gateways)
 		if err != nil {
 			return err
 		}
@@ -243,7 +243,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		} else {
 			os.Setenv("UDP", "0")
 		}
-		err = b.launch.firewallStart(gateways)
+		err = b.launch.FirewallStart(gateways)
 		if err != nil {
 			return err
 		}
@@ -290,7 +290,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			arg,
 			"--pull-filter", "ignore", "route")
 	}
-	return b.launch.openvpnStart(arg...)
+	return b.launch.OpenvpnStart(arg...)
 }
 
 func (b *Bitmask) getCert() (certPath string, err error) {
@@ -350,7 +350,7 @@ func (b *Bitmask) fetchGateways() {
 
 // StopVPN or cancel
 func (b *Bitmask) StopVPN() error {
-	err := b.launch.firewallStop()
+	err := b.launch.FirewallStop()
 	if err != nil {
 		return err
 	}
@@ -359,7 +359,7 @@ func (b *Bitmask) StopVPN() error {
 		b.obfsvpnProxy = nil
 	}
 	b.tryStopFromManagement()
-	b.launch.openvpnStop()
+	b.launch.OpenvpnStop()
 	return nil
 }
 
@@ -386,13 +386,13 @@ func (b *Bitmask) Reconnect() error {
 			b.obfsvpnProxy.Stop()
 			b.obfsvpnProxy = nil
 		}
-		err = b.launch.openvpnStop()
+		err = b.launch.OpenvpnStop()
 		if err != nil {
 			return err
 		}
 	}
 
-	err = b.launch.firewallStop()
+	err = b.launch.FirewallStop()
 	// FIXME - there's a window in which we might leak traffic here!
 	if err != nil {
 		return err
@@ -403,7 +403,7 @@ func (b *Bitmask) Reconnect() error {
 
 // ReloadFirewall restarts the firewall
 func (b *Bitmask) ReloadFirewall() error {
-	err := b.launch.firewallStop()
+	err := b.launch.FirewallStop()
 	if err != nil {
 		return err
 	}
@@ -418,7 +418,7 @@ func (b *Bitmask) ReloadFirewall() error {
 		if err != nil {
 			return err
 		}
-		return b.launch.firewallStart(gateways)
+		return b.launch.FirewallStart(gateways)
 	}
 	return nil
 }
@@ -433,7 +433,7 @@ func (b *Bitmask) GetStatus() (string, error) {
 		if err != nil {
 			status = Off
 		}
-		if status == Off && b.launch.firewallIsUp() {
+		if status == Off && b.launch.FirewallIsUp() {
 			return Failed, nil
 		}
 	}
@@ -447,7 +447,7 @@ func (b *Bitmask) InstallHelpers() error {
 
 // VPNCheck returns if the helpers are installed and up to date and if polkit is running
 func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
-	return b.launch.check()
+	return b.launch.Check()
 }
 
 func (b *Bitmask) ListLocationFullness(transport string) map[string]float64 {

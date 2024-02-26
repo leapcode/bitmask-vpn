@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package vpn
+package launcher
 
 import (
 	"bufio"
@@ -36,27 +36,27 @@ import (
 
 const pipeName = `\\.\pipe\openvpn\service`
 
-type launcher struct {
-	mngPass string
-	failed  bool
+type Launcher struct {
+	MngPass string
+	Failed  bool
 }
 
-func newLauncher() (*launcher, error) {
-	l := launcher{}
+func NewLauncher() (*Launcher, error) {
+	l := Launcher{}
 	return &l, nil
 }
 
-func (l *launcher) close() error {
+func (l *Launcher) Close() error {
 	return nil
 }
 
-func (l *launcher) check() (helpers bool, privilege bool, err error) {
+func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 	// TODO check if the named pipe exists
 	log.Println("bogus check on windows")
 	return true, true, nil
 }
 
-func (l *launcher) openvpnStart(flags ...string) error {
+func (l *Launcher) OpenvpnStart(flags ...string) error {
 	var b bytes.Buffer
 	/* DELETE-ME
 	var filtered []string
@@ -101,23 +101,23 @@ func (l *launcher) openvpnStart(flags ...string) error {
 	return nil
 }
 
-func (l *launcher) openvpnStop() error {
+func (l *Launcher) OpenvpnStop() error {
 	return nil
 }
 
 // TODO we will have to bring our helper back to do firewall
 
-func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	log.Println("start: no firewall in windows")
 	return nil
 }
 
-func (l *launcher) firewallStop() error {
+func (l *Launcher) FirewallStop() error {
 	log.Println("stop: no firewall in windows")
 	return nil
 }
 
-func (l *launcher) firewallIsUp() bool {
+func (l *Launcher) FirewallIsUp() bool {
 	log.Println("up: no firewall in windows")
 	return false
 }

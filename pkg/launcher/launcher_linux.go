@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package vpn
+package launcher
 
 import (
 	"errors"
@@ -39,23 +39,23 @@ var bitmaskRootPaths = []string{
 	"/usr/local/sbin/bitmask-root",
 }
 
-type launcher struct {
-	openvpnCh chan []string
-	failed    bool
-	mngPass   string
+type Launcher struct {
+	OpenvpnCh chan []string
+	Failed    bool
+	MngPass   string
 }
 
-func newLauncher() (*launcher, error) {
-	l := launcher{make(chan []string, 1), false, ""}
+func NewLauncher() (*Launcher, error) {
+	l := Launcher{make(chan []string, 1), false, ""}
 	go l.openvpnRunner()
 	return &l, nil
 }
 
-func (l *launcher) close() error {
+func (l *Launcher) Close() error {
 	return nil
 }
 
-func (l *launcher) check() (helpers bool, privilege bool, err error) {
+func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 	hasHelpers, err := hasHelpers()
 	if err != nil {
 		log.Println("Error checking helpers")
@@ -157,21 +157,21 @@ func getPolkitPath() string {
 	return ""
 }
 
-func (l *launcher) openvpnStart(flags ...string) error {
+func (l *Launcher) OpenvpnStart(flags ...string) error {
 	log.Println("openvpn start: ", flags)
 	arg := []string{"openvpn", "start", getOpenvpnPath()}
 	arg = append(arg, flags...)
-	l.openvpnCh <- arg
+	l.OpenvpnCh <- arg
 	return nil
 }
 
-func (l *launcher) openvpnStop() error {
-	l.openvpnCh <- nil
+func (l *Launcher) OpenvpnStop() error {
+	l.OpenvpnCh <- nil
 	log.Println("openvpn stop")
 	return runBitmaskRoot("openvpn", "stop")
 }
 
-func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	if os.Getenv("LEAP_DRYRUN") == "1" {
 		log.Println("dry-run: skip firewall start")
 		return nil
@@ -185,30 +185,30 @@ func (l *launcher) firewallStart(gateways []bonafide.Gateway) error {
 	return runBitmaskRoot(arg...)
 }
 
-func (l *launcher) firewallStop() error {
+func (l *Launcher) FirewallStop() error {
 	log.Println("firewall stop")
 	return runBitmaskRoot("firewall", "stop")
 }
 
-func (l *launcher) firewallIsUp() bool {
+func (l *Launcher) FirewallIsUp() bool {
 	err := runBitmaskRoot("firewall", "isup")
 	return err == nil
 }
 
-func (l *launcher) openvpnRunner(arg ...string) {
+func (l *Launcher) openvpnRunner(arg ...string) {
 	running := false
 	runOpenvpn := func(arg []string) {
 		for running {
 			err := runBitmaskRoot(arg...)
 			if err != nil {
 				log.Printf("An error ocurred running openvpn: %v", err)
-				l.openvpnCh <- nil
-				l.failed = true
+				l.OpenvpnCh <- nil
+				l.Failed = true
 			}
 		}
 	}
 
-	for arg := range l.openvpnCh {
+	for arg := range l.OpenvpnCh {
 		if arg == nil {
 			running = false
 		} else {
