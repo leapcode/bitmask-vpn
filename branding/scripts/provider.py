@@ -19,18 +19,23 @@ def getProviderData(provider, config):
         c = config[provider]
     except Exception:
         raise ValueError('Cannot find provider')
-        
+
     d = dict()
     keys = ('name', 'applicationName', 'binaryName', 'auth', 'authEmptyPass',
             'providerURL', 'tosURL', 'helpURL',
             'askForDonations', 'donateURL', 'apiURL',
-            'geolocationAPI', 'caCertString')
+            'apiVersion', 'geolocationAPI', 'caCertString')
     boolValues = ['askForDonations', 'authEmptyPass']
+    intValues = ['apiVersion', ]
 
     for value in keys:
+        if value not in c:
+            continue
         d[value] = c.get(value)
         if value in boolValues:
-            d[value] = c.getboolean(value)
+            d[value] = bool(d[value])
+        elif value in intValues:
+            d[value] = int(d[value])
 
     d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
         datetime.datetime.now())

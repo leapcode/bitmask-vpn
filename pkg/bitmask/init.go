@@ -16,12 +16,13 @@
 package bitmask
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
 type ProviderInfo struct {
@@ -43,6 +44,7 @@ type ProviderOpts struct {
 	GeolocationURL  string `json:"geolocationAPI"`
 	AskForDonations bool   `json:"askForDonations"`
 	CaCert          string `json:"caCertString"`
+	ApiVersion      int    `json:"apiVersion"`
 }
 
 func GetConfiguredProvider() *ProviderInfo {
@@ -59,6 +61,7 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.GeolocationAPI = opts.GeolocationURL
 	config.APIURL = opts.ApiURL
 	config.CaCert = []byte(opts.CaCert)
+	config.ApiVersion = opts.ApiVersion
 }
 
 func InitializeLogger() {
@@ -66,12 +69,17 @@ func InitializeLogger() {
 	if err != nil {
 		log.Println("Can't configure logger: ", err)
 	}
+
 }
 
-func initBitmaskVPN() (Bitmask, error) {
-	b, err := vpn.Init()
-	if err != nil {
-		log.Printf("An error ocurred starting bitmask vpn: %v", err)
+func initBitmaskVPN() (b Bitmask, err error) {
+	if config.ApiVersion == 5 {
+		return nil, fmt.Errorf("API v5 is not implemented. Please use apiVersion=3 in config file")
+	} else {
+		b, err = vpn.Init()
+		if err != nil {
+			log.Printf("An error ocurred starting bitmask vpn: %v", err)
+		}
 	}
 	return b, err
 }

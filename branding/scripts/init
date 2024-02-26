@@ -114,6 +114,7 @@ binaryName          = {provider}-vpn
 providerURL         = https://{providerURL}
 auth                = anon
 apiURL              = https://api.{providerURL}/
+apiVersion          = 3
 caURL               = https://{providerURL}/ca.crt
 
 infoURL             = https://{providerURL}/vpn
