@@ -1,7 +1,7 @@
 //go:build windows
 // +build windows
 
-package bitmask
+package autostart
 
 // Workaround for broken autostart package on windows.
 

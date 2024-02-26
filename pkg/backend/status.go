@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	bitmaskAutostart "0xacab.org/leap/bitmask-vpn/pkg/bitmask/autostart"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 )
@@ -63,7 +64,7 @@ type connectionCtx struct {
 	SnowflakeProgress int                 `json:"snowflakeProgress"`
 	SnowflakeTag      string              `json:"snowflakeTag"`
 	bm                bitmask.Bitmask
-	autostart         bitmask.Autostart
+	autostart         bitmaskAutostart.Autostart
 	cfg               *config.Config
 }
 

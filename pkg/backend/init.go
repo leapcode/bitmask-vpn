@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
+	bitmaskAutostart "0xacab.org/leap/bitmask-vpn/pkg/bitmask/autostart"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/pid"
@@ -117,11 +118,11 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 	}
 }
 
-func initializeAutostart(conf *config.Config) bitmask.Autostart {
-	autostart := bitmask.NewAutostart(config.ApplicationName, "")
+func initializeAutostart(conf *config.Config) bitmaskAutostart.Autostart {
+	autostart := bitmaskAutostart.NewAutostart(config.ApplicationName, "")
 	if conf.SkipLaunch || conf.DisableAutostart {
 		autostart.Disable()
-		autostart = &bitmask.DummyAutostart{}
+		autostart = &bitmaskAutostart.DummyAutostart{}
 	} else {
 		err := autostart.Enable()
 		if err != nil {
