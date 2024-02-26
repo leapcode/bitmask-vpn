@@ -21,7 +21,7 @@ import (
 	"os"
 	"path"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
+	"0xacab.org/leap/bitmask-vpn/pkg/bitmask/legacy"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
 
@@ -72,14 +72,13 @@ func InitializeLogger() {
 
 }
 
-func initBitmaskVPN() (b Bitmask, err error) {
+func initBitmaskVPN() (Bitmask, error) {
 	if config.ApiVersion == 5 {
 		return nil, fmt.Errorf("API v5 is not implemented. Please use apiVersion=3 in config file")
-	} else {
-		b, err = vpn.Init()
-		if err != nil {
-			log.Printf("An error ocurred starting bitmask vpn: %v", err)
-		}
+	}
+	b, err := legacy.Init()
+	if err != nil {
+		log.Printf("An error ocurred starting bitmask vpn: %v", err)
 	}
 	return b, err
 }

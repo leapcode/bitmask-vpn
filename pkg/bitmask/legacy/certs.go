@@ -1,4 +1,4 @@
-package vpn
+package legacy
 
 import (
 	"crypto/x509"
