@@ -15,12 +15,9 @@
 
 package bitmask
 
-import (
-	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
-)
+import "0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 
-// XXX this interface is a relic of a time in which we had a dual implementation.
-// Nowadays it could be deprecated.
+// This interface is used to implement different versions (v3 + v5)
 
 type Bitmask interface {
 	GetStatusCh() <-chan string
