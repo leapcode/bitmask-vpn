@@ -1,4 +1,4 @@
-package bitmask
+package backend
 
 import (
 	"io/ioutil"
@@ -15,7 +15,7 @@ import (
 
 const bitmaskToken = "bitmask-token"
 
-func GenerateAuthToken() {
+func generateAuthToken() {
 	if runtime.GOOS != "linux" {
 		log.Println("Authentication token only implemented in linux at the moment.")
 		return
@@ -28,7 +28,7 @@ func GenerateAuthToken() {
 	}
 }
 
-func ReadAuthToken() string {
+func readAuthToken() string {
 	if runtime.GOOS != "linux" {
 		log.Println("Authentication token only implemented in linux at the moment.")
 		return ""

@@ -8,8 +8,6 @@ import (
 	"os"
 	"strconv"
 	"time"
-
-	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 )
 
 func CheckAuth(handler http.HandlerFunc, token string) http.HandlerFunc {
@@ -115,8 +113,8 @@ func webQuit(w http.ResponseWriter, r *http.Request) {
 
 func enableWebAPI(port int) {
 	log.Println("Starting WebAPI in port", port)
-	bitmask.GenerateAuthToken()
-	token := bitmask.ReadAuthToken()
+	generateAuthToken()
+	token := readAuthToken()
 	http.Handle("/vpn/start", CheckAuth(http.HandlerFunc(webOn), token))
 	http.Handle("/vpn/stop", CheckAuth(http.HandlerFunc(webOff), token))
 	http.Handle("/vpn/gw/get", CheckAuth(http.HandlerFunc(webGatewayGet), token))
