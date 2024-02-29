@@ -1,0 +1,185 @@
+Description: Patch to build on ubuntu 22.04 where only Qt6.2 is available and need to use the Qt5Compat library for some features
+Author: LEAP
+--- a/bitmask.pro
++++ b/bitmask.pro
+@@ -1,8 +1,8 @@
+ #TARGET = $$BINARY_NAME
+ 
+ QT += quickcontrols2 svg
+-CONFIG += qt staticlib
+ CONFIG += c++17 strict_c++
++CONFIG += qt staticlib core5compat
+ CONFIG += qtquickcompiler
+ CONFIG+=force_debug_info
+ CONFIG+=debug_and_release
+--- a/gui/components/ErrorBox.qml
++++ b/gui/components/ErrorBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Item {
+--- a/gui/components/Footer.qml
++++ b/gui/components/Footer.qml
+@@ -2,7 +2,7 @@
+ import QtQuick.Controls
+ import QtQuick.Controls.Material
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -40,7 +40,7 @@
+         }
+ 
+         Image {
+-            id: lightning
++            id: lightning 
+             smooth: true
+             visible: ctx != undefined & root.selectedGateway == "auto"
+             width: 16
+@@ -52,11 +52,10 @@
+                 verticalCenterOffset: -6
+             }
+         }
+-        MultiEffect {
++        ColorOverlay{
+             anchors.fill: lightning
+             source: lightning
+-            colorizationColor: getLocationColor()
+-            colorization: 1.0
++            color: getLocationColor()
+             antialiasing: true
+         }
+ 
+@@ -115,11 +114,10 @@
+                 rightMargin: 20
+             }
+         }
+-        MultiEffect {
++        ColorOverlay{
+             anchors.fill: gwQuality
+             source: gwQuality
+-            colorizationColor: getSignalColor()
+-            colorization: 1.0
++            color: getSignalColor()
+             antialiasing: false
+         }
+     }
+--- a/gui/components/Home.qml
++++ b/gui/components/Home.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ Page {
+     StatusBox {
+--- a/gui/components/InitErrors.qml
++++ b/gui/components/InitErrors.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ ErrorBox {
+ 
+--- a/gui/components/Locations.qml
++++ b/gui/components/Locations.qml
+@@ -1,7 +1,7 @@
+ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -81,11 +81,10 @@
+                         //verticalCenterOffset: 3
+                     }
+                 }
+-                MultiEffect {
++                ColorOverlay{
+                     anchors.fill: lightning
+                     source: lightning
+-                    colorizationColor: "black"
+-                    colorization: 1.0
++                    color: "black"
+                     antialiasing: true
+                 }
+             }
+--- a/gui/components/MotdBox.qml
++++ b/gui/components/MotdBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Item {
+--- a/gui/components/Preferences.qml
++++ b/gui/components/Preferences.qml
+@@ -2,8 +2,8 @@
+ import QtQuick.Controls
+ import QtQuick.Layouts
+ import QtQuick.Controls.Material
+-import QtQuick.Effects
+-import QtCore
++import Qt5Compat.GraphicalEffects
++import Qt.labs.settings
+ 
+ import "../themes/themes.js" as Theme
+ 
+--- a/gui/components/SignalIcon.qml
++++ b/gui/components/SignalIcon.qml
+@@ -1,7 +1,7 @@
+ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ 
+ import "../themes/themes.js" as Theme
+ 
+@@ -41,11 +41,10 @@
+             ]
+         }
+     }
+-    MultiEffect {
++    ColorOverlay{
+         anchors.fill: icon
+         source: icon
+-        colorizationColor: getQualityColor()
+-        colorization: 1.0
++        color: getQualityColor()
+         antialiasing: true
+     }
+ 
+--- a/gui/components/Splash.qml
++++ b/gui/components/Splash.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import "../themes/themes.js" as Theme
+ 
+ Page {
+--- a/gui/components/StatusBox.qml
++++ b/gui/components/StatusBox.qml
+@@ -1,6 +1,6 @@
+ import QtQuick
+ import QtQuick.Controls
+-import QtQuick.Effects
++import Qt5Compat.GraphicalEffects
+ import QtQuick.Layouts
+ 
+ import QtQuick.Templates as T
