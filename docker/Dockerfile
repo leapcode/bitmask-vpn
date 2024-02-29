@@ -31,7 +31,7 @@ RUN apt-get update && apt-get upgrade --yes && \
             qt6-tools-dev qt6-tools-dev-tools qt6-base-dev qt6-base-dev-tools \
             qt6-declarative-dev qt6-declarative-dev-tools \
             qml6-module-qt5compat-graphicaleffects libqt6core5compat6 libqt6core5compat6-dev \
-            golang-${GO_VERSION}-go golang-golang-x-tools-dev && \
+            golang golang-${GO_VERSION}-go golang-golang-x-tools-dev && \
     rm -r /var/lib/apt/lists/*
 
 RUN ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease
