@@ -10,7 +10,7 @@ import os
 from string import Template
 
 
-TEMPLATES = ('app.desktop', 'changelog', 'control', 'rules')
+TEMPLATES = ('app.install', 'app.desktop', 'changelog', 'control', 'rules', 'source/include-binaries')
 
 
 here = os.path.split(os.path.realpath(__file__))[0]

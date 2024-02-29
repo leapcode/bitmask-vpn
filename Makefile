@@ -368,12 +368,14 @@ ifeq (${PLATFORM}, linux)
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
 ifeq (${VENDOR_PATH}, providers)
-	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/debian/icons/scalable/${TARGET}.png
 else
-	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/assets/icon.svg build/${PROVIDER}/debian/icons/scalable/icon.svg
+	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/assets/icon.png build/${PROVIDER}/debian/icons/scalable/${TARGET}.png
 endif
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
+	@cd build/${PROVIDER}/debian && mv app.desktop ${TARGET}.desktop && mv app.install ${TARGET}.install && rm -f app.install-template && \
+		rm -rf source/include-binaries-template
 endif
 
 gen_pkg_snap:
