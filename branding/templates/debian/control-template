@@ -2,8 +2,9 @@ Source: ${binaryName}
 Section: net
 Priority: extra
 Maintainer: LEAP Encryption Access Project <debian@leap.se>
-Build-Depends: debhelper-compat (= 12), golang-go (>= 2:1.9), make (>=3.80), pkg-config, g++ (>= 4:4.6.3), git,
-        qt5-qmake, qttools5-dev-tools, qtbase5-dev, libqt5qml5, libqt5quick5, qtdeclarative5-dev
+Build-Depends: debhelper-compat (= 12), golang (>= 1.19), make (>=3.80), pkg-config, g++ (>= 4:4.6.3), git,
+        libqt6svg6-dev, qt6-tools-dev, qt6-tools-dev-tools, qt6-base-dev, libqt6qml6, qt6-declarative-dev,
+        dh-golang, libgl-dev, qt6-5compat-dev, qt6-declarative-dev-tools, qt6-l10n-tools
 Standards-Version: 4.4.1
 Homepage: https://0xacab.org/leap/bitmask-vpn
 
@@ -11,10 +12,10 @@ Package: ${binaryName}
 Architecture: any
 Multi-Arch: foreign
 Enhances: openvpn
-Depends: ${misc:Depends}, libqt5core5a, libqt5gui5 | libqt5gui5-gles,
-        libqt5qml5, libqt5widgets5, libstdc++6,
-        qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-dialogs,
-        qml-module-qtquick-extras, qml-module-qt-labs-platform,
+Depends: ${misc:Depends}, ${shlibs:Depends}, libqt6core6, libqt6gui6, libqt6qml6, libqt6widgets6, libstdc++6,
+        libqt6svg6, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs,
+        qml6-module-qtquick-layouts, qml6-module-qtqml-workerscript, qml6-module-qtquick-templates,
+        qml6-module-qtquick-window, qml6-module-qt-labs-platform, qml6-module-qtcore, qml6-module-qt5compat-graphicaleffects,
         openvpn, policykit-1-gnome | polkit-1-auth-agent, python3
 Description: Easy, fast, and secure VPN service from ${name}.
  This package is a custom build of the new Bitmask VPN client, preconfigured
@@ -22,3 +23,4 @@ Description: Easy, fast, and secure VPN service from ${name}.
  .
  The service does not require a user account, keep logs, or track you in any
  way. The service is paid for entirely by donations from users.
+
