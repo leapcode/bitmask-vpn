@@ -8,7 +8,7 @@ description: |
 grade: stable
 confinement: classic
 icon: snap/gui/icon.svg 
-base: core20
+base: core22
 compression: lzo
 
 architectures:
@@ -18,11 +18,11 @@ architectures:
 parts:
   bitmask-root:
     plugin: dump
-    source: helpers
+    source: pkg
     source-type: local
     override-prime: |
       mkdir -p bin
-      cp $SNAPCRAFT_PART_SRC/bitmask-root bin/
+      cp $SNAPCRAFT_PART_SRC/pickle/helpers/bitmask-root bin/
       chmod +x bin/bitmask-root
 
   openvpn:
@@ -34,8 +34,12 @@ parts:
 
   bitmask-vpn:
     plugin: nil
+    build-attributes:
+      - enable-patchelf
     source: .
     source-type: local
+    build-environment:
+      - QMAKE: qmake6
     stage:
         - bin/${binaryName}
     override-build: |
@@ -43,208 +47,121 @@ parts:
         # Maybe we just need to put the providers.json in the VENDOR_PATH
         # and pass it to gui/providers from some path that snap can access.
         # Same for the vendor.qrc
+        update-alternatives --install /usr/bin/gofmt gofmt /usr/lib/go-1.21/bin/gofmt 0
+        update-alternatives --install /usr/bin/go go /usr/lib/go-1.21/bin/go 0
+        ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease
         mkdir -p $SNAPCRAFT_PART_INSTALL/snap/
         mkdir -p $SNAPCRAFT_PRIME/snap/
-        echo ${version} > $SNAPCRAFT_PRIME/snap/version.txt
-        make build_golib
-        # XXX missing lrelease step
-        QMAKE=$SNAPCRAFT_STAGE/usr/lib/qt5/bin/qmake QT_SELECT=5 LRELEASE=no XBUILD=no TARGET=${binaryName} make build_gui
+        make vendor
+        make build
         mkdir -p $SNAPCRAFT_PART_INSTALL/bin
         mv build/qt/release/${binaryName} $SNAPCRAFT_PART_INSTALL/bin/
-    override-prime: |
-      rm -rf $SNAPCRAFT_PROJECT_DIR/snap/hooks/.mypy_cache
-      snapcraftctl prime
     build-packages:
       - pkg-config
       - g++
-      - golang
+      - golang-1.21-go
       - git
       - make
-      - qttools5-dev-tools
+      - qt6-tools-dev-tools
+      - qt6-tools-dev
+      - qml-module-qtquick-controls2
+      - libqt6qml6
+      - libqt6svg6-dev
+      - qt6-l10n-tools
+      - qt6-base-dev
+      - qt6-base-dev-tools
+      - qt6-declarative-dev
+      - qt6-declarative-dev-tools
+      - libgl1-mesa-dev
+      - libqt6core5compat6-dev
+      - libglu1-mesa-dev
+      - libqt6opengl6-dev
     stage-packages:
-      - qml-module-qt-labs-platform
-      - qttools5-dev-tools
-      - qt5-qmake
-    after: [desktop-qt5]
-
-  desktop-integration:
-   plugin: nil
-   stage-packages:
-     - libx11-data
-     - libx11-xcb1
-     - xkb-data
-
-  desktop-qt5:
-    source: https://github.com/desktop-app/snapcraft-desktop-helpers.git
-    source-subdir: qt
-    plugin: make
-    make-parameters: ["FLAVOR=qt5"]
-    build-packages:
-      - build-essential
-      - dpkg-dev
-    stage-packages:
-      - libjpeg-turbo8
+      - qml6-module-qtquick
+      - qml6-module-qt5compat-graphicaleffects
+      - qml6-module-qtquick-controls
+      - qml6-module-qtquick-dialogs
+      - qml6-module-qtquick-layouts
+      - qml6-module-qtqml-workerscript
+      - qml6-module-qtquick-templates
+      - qml6-module-qtquick-window
+      - qml6-module-qt-labs-platform
+      - qml6-module-qtcore
+      - qt6-wayland
+      - libopengl0
+      - libqt6core6
+      - libqt6dbus6
+      - libqt6gui6
+      - libqt6network6
+      - libqt6qml6
+      - libqt6widgets6
+      - libb2-1
+      - libdouble-conversion3
+      - libgomp1
+      - libmd4c0
+      - libpcre2-16-0
+      - libproxy1v5
       - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libgdk-pixbuf2.0-0
-      - locales-all
-      - xdg-user-dirs
-      - fcitx-frontend-qt5
-      - libglib2.0-bin
-    stage:
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libjpeg.so.8.2.2
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5Core.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5DBus.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5EglFSDeviceIntegration.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5Gui.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5Network.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libQt5XcbQpa.so.5
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/bearer/libqconnmanbearer.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/bearer/libqgenericbearer.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/bearer/libqnmbearer.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/egldeviceintegrations/libqeglfs-emu-integration.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/generic/libqevdevkeyboardplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/generic/libqevdevmouseplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/generic/libqevdevtabletplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/generic/libqevdevtouchplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/generic/libqtuiotouchplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/imageformats/libqgif.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/imageformats/libqico.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/imageformats/libqjpeg.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqeglfs.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqlinuxfb.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqminimal.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqminimalegl.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqoffscreen.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqvnc.so
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms/libqxcb.so
-    after:
-      - qt5
-
-  qt5:
+  # gsettings, pixbuf and immodules are not needed by all snaps,
+  # but they are so common a requirement include them here
+  gsettings+pixbuf+immodules:
     plugin: nil
     build-packages:
-      - libdbus-1-dev
-      - libegl-dev
-      - libfontconfig1-dev
-      - libfreetype-dev
-      - libgl-dev
-      - libglib2.0-dev
-      - libharfbuzz-dev
-      - libicu-dev
-      - libpcre2-dev
-      - libpng-dev
-      - libwayland-dev
-      - libx11-dev
-      - libx11-xcb-dev
-      - libxcb1-dev
-      - libxcb-glx0-dev
-      - libxcb-icccm4-dev
-      - libxcb-image0-dev
-      - libxcb-keysyms1-dev
-      - libxcb-randr0-dev
-      - libxcb-render0-dev
-      - libxcb-render-util0-dev
-      - libxcb-shape0-dev
-      - libxcb-shm0-dev
-      - libxcb-sync-dev
-      - libxcb-util-dev
-      - libxcb-xfixes0-dev
-      - libxcb-xinerama0-dev
-      - libxcb-xinput-dev
-      - libxcb-xkb-dev
-      - libxcursor-dev
-      - libxkbcommon-dev
-      - libxkbcommon-x11-dev
-      - zlib1g-dev
-    stage-packages:
-      - libdbus-1-3
-      - libegl1
-      - libfontconfig1
-      - libfreetype6
-      - libgl1
-      - libglib2.0-0
-      - libharfbuzz0b
-      - libicu66
-      - libpcre2-16-0
-      - libpng16-16
-      #- libwayland-client0
-      #- libwayland-cursor0
-      #- libwayland-egl1
-      - libx11-6
-      - libx11-xcb1
-      - libxcb1
-      - libxcb-glx0
-      - libxcb-icccm4
-      - libxcb-image0
-      - libxcb-keysyms1
-      - libxcb-randr0
-      - libxcb-render0
-      - libxcb-render-util0
-      - libxcb-shape0
-      - libxcb-shm0
-      - libxcb-sync1
-      - libxcb-util1
-      - libxcb-xfixes0
-      - libxcb-xinerama0
-      - libxcb-xinput0
-      - libxcb-xkb1
-      - libxcursor1
-      - libxkbcommon0
-      - libxkbcommon-x11-0
-      - zlib1g
-      - try: [appmenu-qt5] # not available on core18
-    override-pull: |
-      QT=5_15_2
-      git clone -b v5.15.2 --depth=1 git://code.qt.io/qt/qt5.git .
-      perl init-repository --module-subset=qtbase,qtimageformats,qtsvg,qtdeclarative,qtgraphicaleffects,qtquickcontrols,qtquickcontrols2,qtscript
-      git submodule update qtbase qtimageformats qtsvg qtdeclarative qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript
+      - libgdk-pixbuf2.0-0
+      - librsvg2-common
+      - shared-mime-info
+      - libgtk-3-0
     override-build: |
-      ./configure \
-        -prefix /usr \
-        -bindir /usr/lib/qt5/bin \
-        -libdir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET \
-        -docdir /usr/share/qt5/doc \
-        -headerdir /usr/include/$SNAPCRAFT_ARCH_TRIPLET/qt5 \
-        -datadir /usr/share/qt5 \
-        -archdatadir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5 \
-        -plugindir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins \
-        -importdir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/imports \
-        -translationdir /usr/share/qt5/translations \
-        -hostdatadir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5 \
-        -sysconfdir /etc/xdg \
-        -examplesdir /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/examples \
-        -release \
-        -opensource \
-        -confirm-license \
-        -no-gtk \
-        -no-feature-xcb-sm \
-        -no-openssl \
-        -nomake examples \
-        -nomake tests \
-        -opengl desktop \
-        -I $SNAPCRAFT_STAGE/usr/include \
-        -L $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
-      make -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
-      make INSTALL_ROOT="$SNAPCRAFT_PART_INSTALL" install
-    stage:
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libjpeg.so.8.2.2
+      craftctl default
+      # Update mime database
+      update-mime-database ${CRAFT_PART_INSTALL}/usr/share/mime
+      # build immodules cache
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/lib/${CRAFT_ARCH_TRIPLET}/gtk-3.0/3.0.0/
+      /usr/lib/${CRAFT_ARCH_TRIPLET}/libgtk-3-0/gtk-query-immodules-3.0 > ${CRAFT_PART_INSTALL}/usr/lib/${CRAFT_ARCH_TRIPLET}/gtk-3.0/3.0.0/immodules.cache
+    stage-packages:
+      - librsvg2-common
+      - gsettings-desktop-schemas
+      - libglib2.0-bin
+    override-prime: |
+      craftctl default
+      # Compile the gsettings schemas
+      /usr/lib/${CRAFT_ARCH_TRIPLET}/glib-2.0/glib-compile-schemas "$CRAFT_PRIME/usr/share/glib-2.0/schemas"
+      # Index the pixbuf loaders
+      LOADERS_PATH=$(echo ${CRAFT_PRIME}/usr/lib/${CRAFT_ARCH_TRIPLET}/gdk-pixbuf-2.0/*/loaders)
+      QUERY_LOADERS=/usr/lib/${CRAFT_ARCH_TRIPLET}/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders
+      GDK_PIXBUF_MODULEDIR=${LOADERS_PATH} ${QUERY_LOADERS} > ${LOADERS_PATH}/../loaders.cache
+      sed s!$CRAFT_PRIME!!g --in-place ${LOADERS_PATH}/../loaders.cache
+  setup:
+    plugin: dump
+    source: https://github.com/canonical/iot-example-graphical-snap.git 
+    source-subdir: wayland-launch
+    override-build: |
+      # The plugs needed to run Wayland. (wayland-launch checks them, setup.sh connects them)
+      # You may add further plugs here if you want these options
+      PLUGS="opengl wayland graphics-core22"
+      sed --in-place "s/%PLUGS%/$PLUGS/g" $CRAFT_PART_BUILD/wayland-launch/bin/wayland-launch
+      sed --in-place "s/%PLUGS%/$PLUGS/g" $CRAFT_PART_BUILD/wayland-launch/bin/setup.sh
+      craftctl default
+    stage-packages:
+      - inotify-tools
+
+  graphics-core22:
+    after:
+      # Your application packaging
+      - gsettings+pixbuf+immodules
+      - setup
+      - bitmask-vpn
+    source: https://github.com/MirServer/graphics-core22.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22 nvidia-core22
+      cd "$CRAFT_PRIME/usr/share/"
+      rm -rf bug drirc.d glvnd libdrm lintian man
+      rm -rf applications apport bash-completion dbus-1 doc-base doc gtk-doc\
+             help pkgconfig libthai metainfo themes thumbnailers xml
     prime:
-      - -./usr/include
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/cmake
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig
-      #- -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/bin
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/mkspecs
-      - -./usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/examples
-      - -./usr/lib/qt5
-      - -./usr/share
+      - bin/graphics-core22-wrapper
 
 apps:
   bitmask-root:
@@ -254,17 +171,69 @@ apps:
     command: usr/sbin/openvpn
 
   launcher:
-    command: bin/${binaryName} -platform xcb
+    command-chain: &_command-chain
+      - bin/graphics-core22-wrapper
+      - bin/wayland-launch
+    command: &_command bin/${binaryName}
+    plugs: &_plugs
+      - opengl
+      - wayland
+    environment: &_environment
+      # These environment variables are typically needed by Qt applications to ensue the snapped version of
+      # Qt components are found and used
+      QT_QPA_PLATFORM: wayland
+      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt6/plugins/
+      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt6/plugins/platforms/
+      QML2_IMPORT_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt6/qml
+  daemon:
+    daemon: simple
+    restart-delay: 3s
+    restart-condition: always
+    command-chain: *_command-chain
+    command: *_command
+    plugs: *_plugs
+    environment: *_environment
+# This is one of four snippets that relate to providing the userspace graphics needed by your application.
+# You can treat this as "magic" so long as you don't need to make changes.
+# On the Mir website there's a lot more detail on [the graphics-core22 Snap interface](https://mir-server.io/docs/the-graphics-core22-snap-interface) and it's use.
+plugs:
+  graphics-core22:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core22
 
 environment:
-  QT_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml/QtQuick/Controls.2/:$SNAP/usr/lib/x86_64-linux-gnu/qt5/plugins:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/xcbglintegrations
-  QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins:$SNAP/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms
-  # QT_STYLE_OVERRIDE: Fusion
-  QML2_IMPORT_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/qml
-  DISABLE_WAYLAND: 1
-  LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
-  # debug -------------
-  # QT_OPENGL: software
-  # QT_DEBUG_PLUGINS: 1
-  SNAP_DESKTOP_DEBUG: 1
-  # debug -------------
+  # Other, generally useful environment settings...
+  # XDG config
+  XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
+  XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
+  XDG_CONFIG_DIRS: $SNAP/etc/xdg
+  XDG_DATA_DIRS:   $SNAP/usr/local/share:$SNAP/usr/share
+  # XKB config
+  XKB_CONFIG_ROOT: $SNAP/usr/share/X11/xkb
+
+# The `layout` ensures that files can be found by applications where they are expected by the toolkit or application.
+layout:
+  /usr/share/libdrm:
+    bind: $SNAP/graphics/libdrm
+  /usr/share/drirc.d:
+    symlink: $SNAP/graphics/drirc.d
+  # Other, generally useful paths
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
+  /usr/share/sounds:
+    bind: $SNAP/usr/share/sounds
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  # GTK
+  /usr/lib/$CRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0
+  /usr/lib/${CRAFT_ARCH_TRIPLET}/gtk-3.0:
+    bind: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/gtk-3.0
+  /usr/share/mime:
+    bind: $SNAP/usr/share/mime
+  /etc/gtk-3.0:
+    bind: $SNAP/etc/gtk-3.0
+
