@@ -157,52 +157,52 @@
         <translation>Désactiver le RPV pour effectuer des changements</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="64"/>
+        <location filename="../components/Preferences.qml" line="69"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="90"/>
+        <location filename="../components/Preferences.qml" line="102"/>
         <source>Censorship circumvention</source>
         <translation>Contournement de la censure</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="98"/>
+        <location filename="../components/Preferences.qml" line="110"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Ces techniques peuvent contourner la censure, mais sont plus lentes. Ne les utiliser qu’au besoin.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="112"/>
+        <location filename="../components/Preferences.qml" line="124"/>
         <source>Use obfs4 bridges</source>
         <translation>Utiliser des ponts obfs4</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="138"/>
+        <location filename="../components/Preferences.qml" line="150"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Le trafic est brouillé pour contourner les blocages</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="152"/>
+        <location filename="../components/Preferences.qml" line="164"/>
         <source>Use Snowflake</source>
         <translation>Utiliser Snowflake</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="167"/>
+        <location filename="../components/Preferences.qml" line="179"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Snowflake a besoin que Tor soit installé sur votre système</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="180"/>
+        <location filename="../components/Preferences.qml" line="192"/>
         <source>Transport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="188"/>
+        <location filename="../components/Preferences.qml" line="200"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>L’UDP peut accélérer le RPV. Il pourrait être bloqué sur certains réseaux.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="201"/>
+        <location filename="../components/Preferences.qml" line="213"/>
         <source>Use UDP if available</source>
         <translation>Utiliser l’UDP si disponible</translation>
     </message>
