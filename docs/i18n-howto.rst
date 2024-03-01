@@ -11,12 +11,17 @@ When a string has being modified you need to regenerate the locales:
 ```
 
 
-To fetch the translations from transifex (API\_TOKEN is the transifex API token):
+To fetch the translations from transifex you need to use the Transifex cli:
+https://developers.transifex.com/docs/cli and an api (API\_TOKEN is the transifex API
+token)
 ```
-  API_TOKEN='xxxxxxxxxxx' make locales
+  API_TOKEN='xxxxxxxxxxx' tx pull
 ```
 
-If you want to add a new language create an empty file `gui/i18n/main_$lang.ts` before running `make locales`.
+If you want to add a new language you can:
+```
+  API_TOKEN='xxxxxxxxxxx' tx pull -a
+```
 
 Testing the translations
 ------------------------
