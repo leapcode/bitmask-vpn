@@ -156,11 +156,11 @@ ApplicationWindow {
     }
 
     function loadTheme() {
-    	var arr
-    	if (Qt.platform.os == "windows") {
-	    arr = flavor.split("\\")
-	} else {
-	    arr = flavor.split("/")
+        var arr
+        if (Qt.platform.os == "windows") {
+            arr = flavor.split("\\")
+        } else {
+            arr = flavor.split("/")
         }
         var providerFlavor = arr[arr.length-1]
         console.debug("flavor: " + providerFlavor)
