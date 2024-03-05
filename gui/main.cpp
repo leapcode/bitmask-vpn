@@ -234,6 +234,8 @@ int main(int argc, char **argv) {
         app.setWindowIcon(QIcon(":/vendor/calyx.svg"));
     } else if (appName == "RiseupVPN") {
         app.setWindowIcon(QIcon(":/vendor/riseup.svg"));
+    } else if (appName == "BitmaskVPN") {
+        app.setWindowIcon(QIcon(":/vendor/bitmask.svg"));
     }
 
     QSettings settings;
