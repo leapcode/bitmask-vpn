@@ -30,7 +30,7 @@ def getProviderData(provider, config):
     for value in keys:
         d[value] = c.get(value)
         if value in boolValues:
-            d[value] = bool(d[value])
+            d[value] = c.getboolean(value)
 
     d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
         datetime.datetime.now())
