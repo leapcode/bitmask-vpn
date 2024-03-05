@@ -54,6 +54,7 @@ Page {
         Image {
             id: connectionImage
             height: 180
+            width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             source: customTheme.iconSplash
             fillMode: Image.PreserveAspectFit

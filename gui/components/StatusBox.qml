@@ -127,6 +127,7 @@ Item {
         AnimatedImage {
             id: connectionImage
             height: 160
+            width: parent.width
             speed: 0.8
             source: customTheme.iconOff
             anchors.horizontalCenter: parent.horizontalCenter
