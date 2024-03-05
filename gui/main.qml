@@ -168,6 +168,8 @@ ApplicationWindow {
             return "qrc:/themes/Riseup.qml"
         } else if (providerFlavor.startsWith("calyx-vpn") || providerFlavor == "CalyxVPN") {
             return "qrc:/themes/Calyx.qml"
+        } else if (providerFlavor.startsWith("bitmask-vpn") || providerFlavor == "BitmaskVPN") {
+            return "qrc:/themes/Bitmask.qml"
         } else {
             // we should do a Default theme, with a fallback
             // mechanism

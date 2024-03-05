@@ -10,6 +10,7 @@
         <file>themes/Riseup.qml</file>
         <file>themes/theme-calyx.js</file>
         <file>themes/Calyx.qml</file>
+        <file>themes/Bitmask.qml</file>
         <file>themes/ThemeObject.qml</file>
 
         <file>components/MainView.qml</file>
@@ -81,7 +82,13 @@
         <file>resources/calyx/calyx-red-shield.png</file>
         <file>resources/calyx/calyx-yellow-shield.png</file>
 
-        <!-- fonts -->
+        <!-- bitmask assets -->
+        <file>resources/bitmask/splash_logo.png</file>
+        <file>resources/bitmask/state_connected.png</file>
+        <file>resources/bitmask/state_connecting.png</file>
+        <file>resources/bitmask/state_disconnected.png</file>
+
+       <!-- fonts -->
         <file alias="poppins-regular.ttf">resources/fonts/Poppins-Regular.ttf</file>
         <file alias="poppins-bold.ttf">resources/fonts/Poppins-Bold.ttf</file>
         <file alias="monserrat-bold.ttf">resources/fonts/Montserrat-SemiBold.ttf</file>
