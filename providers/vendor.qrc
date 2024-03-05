@@ -3,5 +3,6 @@
         <file alias="provider.svg">assets/icon.svg</file>
         <file alias="riseup.svg">riseup/assets/icon.svg</file>
         <file alias="calyx.svg">calyx/assets/icon.svg</file>
+        <file alias="bitmask.svg">bitmask/assets/icon.svg</file>
     </qresource>
 </RCC>
