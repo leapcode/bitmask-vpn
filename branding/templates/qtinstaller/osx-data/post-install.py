@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Post installation script for BitmaskVPN.
 # Please note that this installation will install ONE single helper with administrative privileges.
