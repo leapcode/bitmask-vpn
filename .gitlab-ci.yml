@@ -56,7 +56,7 @@ debian:
   image: registry.0xacab.org/jkito/bitmask-vpn:latest
   stage: debian
   script:
-    - 'PROVIDER="riseup" make vendor && make package_deb'
+    - 'PROVIDER="bitmask" make vendor && make package_deb'
   artifacts:
     paths:
       - 'deploy/*.deb'
