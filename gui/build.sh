@@ -10,7 +10,7 @@ LRELEASE=${LRELEASE-lrelease}
 VENDOR_PATH=${VENDOR_PATH-providers/riseup}
 APPNAME=${APPNAME-BitmaskVPN}
 
-OSX_TARGET=10.11
+OSX_TARGET=12
 WIN64="win64"
 GO=`which go`
 
