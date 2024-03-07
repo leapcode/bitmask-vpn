@@ -108,7 +108,7 @@ PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
 
 lib/%.a: $(PKGFILES)
-	@XBUILD=no CC=${CC} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} ./gui/build.sh --just-golib
+	@XBUILD=no CC=${CC} VENDOR_PATH=${VENDOR_PATH} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} ./gui/build.sh --just-golib
 
 # FIXME move platform detection above! no place to uname here, just use $PLATFORM
 #
@@ -375,7 +375,7 @@ endif
 	@cd build/${PROVIDER}/debian && python3 generate.py
 	@cd build/${PROVIDER}/debian && rm app.desktop-template changelog-template rules-template control-template generate.py data.json && chmod +x rules
 	@cd build/${PROVIDER}/debian && mv app.desktop ${TARGET}.desktop && mv app.install ${TARGET}.install && rm -f app.install-template && \
-		rm -rf source/include-binaries-template
+	rm -rf source/include-binaries-template
 endif
 
 gen_pkg_snap:

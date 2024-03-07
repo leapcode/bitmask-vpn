@@ -5,10 +5,10 @@ set -e
 # set -x
 # --------------------
 
-XBUILD=${XBUILD-no}
-LRELEASE=${LRELEASE-lrelease}
-VENDOR_PATH=${VENDOR_PATH-providers/riseup}
-APPNAME=${APPNAME-BitmaskVPN}
+XBUILD="${XBUILD:-no}"
+LRELEASE="${LRELEASE:-lrelease}"
+VENDOR_PATH="${VENDOR_PATH:-providers/riseup}"
+APPNAME="${APPNAME:-BitmaskVPN}"
 
 OSX_TARGET=12
 WIN64="win64"

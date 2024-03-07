@@ -10,6 +10,10 @@ export DH_GOPKG = 0xacab.org/leap/bitmask-vpn
 export DH_GOLANG_EXCLUDES := vendor packages tools cmd/bitmask-helper cmd/bitmask-connect
 
 export PATH := $(shell qmake6 -query "QT_INSTALL_BINS"):$(PATH)
+
+export PROVIDER=${name}
+export VENDOR_PATH=providers
+
 #dh_golang doesn't do this for you
 
 ifeq ($(DEB_HOST_ARCH), i386)
@@ -33,6 +37,7 @@ APPNAME = ${binaryName}
 override_dh_auto_test:
 
 override_dh_auto_build:
+	make gen_providers_json
 	make build
 
 override_dh_install:
