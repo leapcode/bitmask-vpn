@@ -15,7 +15,7 @@ BUILD_RELEASE?=no
 WIN_CERT_PATH?=z:\leap\LEAP.pfx
 WIN_CERT_PASS?=
 OSX_CERT = "Developer ID Installer: LEAP Encryption Access Project"
-DEB_VERSION = $(shell echo ${VERSION} | cut -d '-' -f 1,2)
+DEB_VERSION = $(shell echo ${VERSION} | rev | cut -d '-' -f2- | rev)
 
 ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
 SYSTEM = Windows
