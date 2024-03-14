@@ -295,7 +295,8 @@
         <location filename="../components/VPNState.qml" line="85"/>
         <source>Unsecured
 Connection</source>
-        <translation>Соединение не защищено</translation>
+        <translation>Соединение не
+защищено</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="100"/>

@@ -45,14 +45,16 @@ ThemedPage {
                 Rectangle {
                     id: turnOffWarning
                     visible: false
-                    height: 20
+                    height: turnOffWarningMsg.height
                     width: parent.width
                     color: "white"
 
                     Label {
+                        id: turnOffWarningMsg
                         color: "red"
                         text: qsTr("Turn off the VPN to make changes")
                         width: prefCol.width
+                        wrapMode: Text.WordWrap
                     }
                     Layout.topMargin: 10
                     Layout.leftMargin: 10
@@ -94,6 +96,7 @@ ThemedPage {
                     }
                     onActivated: {
                         backend.setLocale(currentValue)
+                        stackView.pop("Preferences.qml")
                     }
                 }
 
