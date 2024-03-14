@@ -44,7 +44,7 @@ ThemedPage {
             Image {
                 id: aboutIcon
                 height: 60
-                source: "../resources/icon-noshield.svg"
+                source: customTheme.iconSplash
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
             }
