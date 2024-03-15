@@ -196,9 +196,7 @@ ifeq (${PLATFORM}, darwin)
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}/
 	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/post-install.py" ${INST_ROOT}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/uninstall.py" ${INST_ROOT}/
-	@cp "${TEMPLATES}/qtinstaller/osx-data/se.leap.bitmask-helper.plist" ${INST_DATA}
+	@go build -ldflags='-w -s' -o "${INST_ROOT}/post-install" "${TEMPLATES}/qtinstaller/osx-data/post-install.go"
 	@[ -f $(OPENVPN_BIN) ] && echo "OpenVPN already built at" $(OPENVPN_BIN) || ./branding/thirdparty/openvpn/build_openvpn.sh
 	@cp $(OPENVPN_BIN) ${INST_DATA}/openvpn.leap
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
