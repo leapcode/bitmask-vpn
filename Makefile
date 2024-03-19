@@ -3,7 +3,7 @@
 # (c) LEAP Encryption Access Project, 2019-2021
 #########################################################################
 
-.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor
+.PHONY: all get build icon locales generate_locales clean check_qtifw HAS-qtifw relink_vendor fmt
 
 XBUILD ?= no
 RELEASE ?= no
@@ -26,6 +26,7 @@ OSXMORDORUID ?= uid
 GOPATH = $(shell go env GOPATH)
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
+SOURCE_DIRS_GO = pkg cmd tests gui
 
 # detect OS
 UNAME = $(shell uname -s)
@@ -304,6 +305,9 @@ qmlfmt:
 
 test:
 	@go test -tags "integration $(TAGS)" ./pkg/...
+
+fmt:
+	@gofmt -s -w $(SOURCE_DIRS_GO)
 
 test_ui: build_golib
 	@${QMAKE} -o tests/Makefile test.pro
