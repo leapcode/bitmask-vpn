@@ -22,7 +22,7 @@ import (
 	"path"
 )
 
-//ConfigureLogger to write logs into a file as well as the stderr
+// ConfigureLogger to write logs into a file as well as the stderr
 func ConfigureLogger(logPath string) (io.Closer, error) {
 	dir := path.Dir(logPath)
 	if _, err := os.Stat(dir); err != nil {

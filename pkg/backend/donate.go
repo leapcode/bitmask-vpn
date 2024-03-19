@@ -23,8 +23,11 @@ func needsDonationReminder() bool {
 	return ctx.cfg.NeedsDonationReminder()
 }
 
-/* to be called from the gui, the visibility toggle will be updated on the next
-   status change */
+/*
+to be called from the gui, the visibility toggle will be updated on the next
+
+	status change
+*/
 func donateSeen() {
 	statusMutex.Lock()
 	defer statusMutex.Unlock()

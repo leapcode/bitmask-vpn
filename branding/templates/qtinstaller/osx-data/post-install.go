@@ -49,8 +49,8 @@ const (
 </dict>
 </plist>`
 
-	plistPath  = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
-	helperName = "bitmask-helper"
+	plistPath          = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
+	helperName         = "bitmask-helper"
 	launchdDaemonLabel = "se.leap.BitmaskHelper"
 
 	// -action flag values
@@ -99,7 +99,7 @@ func init() {
 
 	flag.StringVar(&installerAction, action, "", usageAction)
 	flag.StringVar(&installerStage, stage, stageUninstall, usageStage)
-	
+
 	flag.Parse()
 }
 
@@ -144,7 +144,7 @@ func postInstall() error {
 			log.Println(err)
 		}
 	}
-	
+
 	log.Println("Changing ownership of 'bitmask-helper'")
 	// change ownership of bitmask-helper to root
 	if err := os.Chown(filepath.Join(appBundlePath, helperName), 0, 0); err != nil {
@@ -165,13 +165,13 @@ func postInstall() error {
 	if n, err := io.WriteString(fout, plist); n < len(plist) || err != nil {
 		return fmt.Errorf("failed writing the plist file: %s: %v", fout.Name(), err)
 	}
-	
+
 	// load the plist file onto launchd
 	log.Println("Loading plist file")
 	if err := loadHelperPlist(plistPath); err != nil {
 		log.Printf("error while loading launchd daemon: %s: %v\n", plistPath, err)
 	}
-	
+
 	// change ownership of 'helper' dir
 	log.Println("Changing ownership of 'helper' dir")
 	if err := os.Chown(filepath.Join(appBundlePath, "helper"), 0, 0); err != nil {
@@ -193,11 +193,11 @@ func uninstall(stage string) {
 		log.Fatal("unknow stage for uninstall: ", stage)
 	}
 
-    if isHelperRunning() {
-        if err := unloadHelperPlist(); err != nil {
+	if isHelperRunning() {
+		if err := unloadHelperPlist(); err != nil {
 			log.Println("error while unloading launchd daemon: ", err)
-        }
-    }
+		}
+	}
 
 	if err := os.Remove(plistPath); err != nil {
 		log.Println("error while removing helper plist: ", err)

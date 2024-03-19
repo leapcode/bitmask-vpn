@@ -189,7 +189,7 @@ func decodeEIP1(body io.Reader) (*eipService, error) {
 			Location:  g.Location,
 		}
 		gateway.Capabilities.Transport = []transportV3{
-			transportV3{
+			{
 				Type:      "openvpn",
 				Ports:     g.Capabilities.Ports,
 				Protocols: g.Capabilities.Protocols,

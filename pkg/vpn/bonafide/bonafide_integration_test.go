@@ -1,4 +1,6 @@
+//go:build integration
 // +build integration
+
 // Copyright (C) 2018 LEAP
 //
 // This program is free software: you can redistribute it and/or modify

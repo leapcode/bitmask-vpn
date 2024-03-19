@@ -29,20 +29,20 @@ var (
 	}
 
 	allowedArgs = map[string][]string{
-		"--remote":            []string{"IP", "NUMBER", "PROTO"},
-		"--tls-cipher":        []string{"CIPHER"},
-		"--cipher":            []string{"CIPHER"},
-		"--auth":              []string{"CIPHER"},
-		"--management-client": []string{},
-		"--management":        []string{"IP", "NUMBER"},
-		"--route":             []string{"IP", "IP", "NETGW"},
-		"--cert":              []string{"FILE"},
-		"--key":               []string{"FILE"},
-		"--ca":                []string{"FILE"},
-		"--fragment":          []string{"NUMBER"},
-		"--keepalive":         []string{"NUMBER", "NUMBER"},
-		"--verb":              []string{"NUMBER"},
-		"--tun-ipv6":          []string{},
+		"--remote":            {"IP", "NUMBER", "PROTO"},
+		"--tls-cipher":        {"CIPHER"},
+		"--cipher":            {"CIPHER"},
+		"--auth":              {"CIPHER"},
+		"--management-client": {},
+		"--management":        {"IP", "NUMBER"},
+		"--route":             {"IP", "IP", "NETGW"},
+		"--cert":              {"FILE"},
+		"--key":               {"FILE"},
+		"--ca":                {"FILE"},
+		"--fragment":          {"NUMBER"},
+		"--keepalive":         {"NUMBER", "NUMBER"},
+		"--verb":              {"NUMBER"},
+		"--tun-ipv6":          {},
 	}
 
 	cipher  = regexp.MustCompile("^[A-Z0-9-]+$")

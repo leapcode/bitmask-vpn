@@ -1,4 +1,6 @@
+//go:build windows
 // +build windows
+
 // Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify

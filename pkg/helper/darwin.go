@@ -1,4 +1,6 @@
+//go:build darwin
 // +build darwin
+
 // Copyright (C) 2018-2020 LEAP
 //
 // This program is free software: you can redistribute it and/or modify
@@ -137,7 +139,7 @@ func firewallStop() error {
 		/* TODO return error if different from anchor not exists */
 		/*return errors.New("Error while stopping firewall")*/
 	}
-	for _ = range [50]int{} {
+	for range [50]int{} {
 		if firewallIsUp() {
 			log.Printf("Firewall still up, waiting...")
 			time.Sleep(200 * time.Millisecond)

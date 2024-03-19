@@ -46,7 +46,7 @@ func NewMgmtListener(l net.Listener) *MgmtListener {
 //
 // OpenVPN will behave in this manner when launched with the following options:
 //
-//    --management ipaddr port --management-client
+//	--management ipaddr port --management-client
 //
 // Note that in this case the terminology is slightly confusing, since from
 // the standpoint of TCP/IP it is OpenVPN that is the client and our program
@@ -59,8 +59,7 @@ func NewMgmtListener(l net.Listener) *MgmtListener {
 // domain socket. To do this, pass an absolute path to the socket as
 // the listen address, and then run OpenVPN with the following options:
 //
-//    --management /path/to/socket unix --management-client
-//
+//	--management /path/to/socket unix --management-client
 func Listen(laddr string) (*MgmtListener, error) {
 	proto := "tcp"
 	if len(laddr) > 0 && laddr[0] == '/' {
