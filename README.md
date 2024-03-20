@@ -1,21 +1,22 @@
-## Install 
+## Supported operating systems
 
-# snap
+**BitmaskVPN** needs the following minimum versions of supported operating systems:
 
-```
-sudo snap install riseup-vpn --classic
-```
+### On Windows
 
-You can track beta channel, where we push versions to test:
+**BitmaskVPN** has been tested to work on windows 10 and 11 it might not work on earlier version of windows.
 
-```
-sudo snap install riseup-vpn --classic --beta
-```
+### On MacOS
 
-<iframe
-src="https://snapcraft.io/riseup-vpn/embedded?button=white&channels=true"
-frameborder="0" width="100%" height="380px" style="border: 1px solid #CCC;
-border-radius: 2px;"></iframe>
+- **BitmaskVPN** has been tested to work on last three releases of MacOS (Monteray, Ventura and Sonoma)
+- **BitmaskVPN** currently needs rossetta to be enable to work on Apple hardware (M1, M2)
+
+### On Linux
+
+- **BitmaskVPN** has been tested to work on the latest version of Debian, Ubuntu, Fedora and Arch Linux
+- Packages are only available for Ubuntu, Debian and Arch Linux
+
+## Install
 
 # arch
 
@@ -23,14 +24,6 @@ border-radius: 2px;"></iframe>
 
 ```
 yaourt -Sy riseup-vpn-git
-```
-
-# gentoo
-
-An ebuild is available in Gentoo's [main repository](https://packages.gentoo.org/packages/net-vpn/riseup-vpn).
-
-```
-emerge riseup-vpn
 ```
 
 # deb
@@ -57,11 +50,7 @@ manually, or send us a patch.
   make build
 ```
 
-You need at least go 1.11. 
-
-If you have Ubuntu Bionic/18.04, the package in the repositories is too old. To resolve this, you can do `make install_go`. Do not do this if you have a later version.
-
-For other situations, have a look at https://github.com/golang/go/wiki#working-with-go
+You need at least go 1.20.
 
 ## Test
 
