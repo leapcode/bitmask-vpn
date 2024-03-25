@@ -27,8 +27,10 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
   schedule:
-    - cron: '* 0 * * 0'
+    - cron: '0 1 * * *'
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
@@ -37,78 +39,92 @@ concurrency:
 
 jobs:
   build-win:
+    defaults:
+      run:
+        shell: C:\msys64\usr\bin\bash.exe -e -o pipefail {0}
     runs-on:
       - windows-2019
     steps:
-      - name: Setup Golang 1.17
-        uses: actions/setup-go@v3
+      - name: Setup Golang 1.22
+        uses: actions/setup-go@v5
         with:
-          go-version: '1.17'
+          go-version: '1.22'
       - name: Install build dependencies from chocolatey
-        run: choco install qt5-default mingw sigcheck qt-installer-framework
+        run: choco install sigcheck aqt wget curl
+      - run: choco install qt-installer-framework --version 4.7.0
       - run: git config --global core.autocrlf input
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Cygwin
-        uses: cygwin/cygwin-install-action@master
-        with:
-          packages: make curl sed
-      - name: Set requested provider name
-        run: sed -i.bak 's/provider = riseup/provider = ${{ inputs.provider_name }}/1' providers/vendor.conf
+        uses: actions/checkout@v4
+      - name: Install Qt6 SDK using aqt
+        run: cd $USERPROFILE && aqt install-qt windows desktop 6.6.2 win64_mingw
       - name: Build app
+        env:
+          PROVIDER: riseup
         run: |
-          $env:PATH="$env:SystemDrive\Qt\5.15.2\mingw81_64\bin;$env:SystemDrive\Qt\QtIFW-4.4.2\bin;$env:PATH"
-          echo $env:PATH
+          export PATH=$(cygpath $USERPROFILE/6.6.2/mingw_64/bin):$(cygpath $SYSTEMDRIVE/Qt/QtIFW-4.7.0/bin):$PATH
+          export PATH=$(cygpath $SYSTEMDRIVE/msys64/mingw64/bin):$(cygpath $SYSTEMDRIVE/msys64/usr/bin):$PATH
+          make vendor
           make build
           make installer
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
       - name: Upload build/qt/release/riseup-vpn.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: riseup-vpn-exe-${{ github.sha }}
           path: build/qt/release/riseup-vpn.exe
       - name: Upload build/installer/RiseupVPN-installer-*.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: riseup-vpn-installer-${{ github.sha }}
           path: build/installer/*.exe
 
   build-mac:
+    strategy:
+      matrix:
+        os:
+          - macOS-13
+          - macOS-12
+          # - macOS-14 is broken becuase of missing openvpn build
     runs-on:
-    - macos-11
+    - ${{ matrix.os }}
     steps:
-      - name: Setup Golang 1.17
-        uses: actions/setup-go@v3
+      - name: Setup Golang 1.22
+        uses: actions/setup-go@v5
         with:
-          go-version: '1.17'
+          go-version: '1.22'
       - run: go version
       - name: Install build dependencies from brew
-        run: brew install qt5 make create-dmg && brew link qt5
+        run: brew install make create-dmg
+      - name: Install aqt installer
+        run: pipx install aqtinstall
+      - name: Setup Qt6 using aqt
+        run: aqt install-qt mac desktop 6.6.2 clang_64 -O ~/Qt6
       - name: Install Qt installer framework
         run: >
           cd /tmp &&
-          curl -LO https://download.qt.io/official_releases/qt-installer-framework/4.0.1/QtInstallerFramework-mac-x64.dmg &&
-          hdiutil attach QtInstallerFramework-mac-x64.dmg &&
-          cd /Volumes/QtInstallerFramework-mac-x64/QtInstallerFramework-mac-x64.app/Contents/MacOS &&
-          ./QtInstallerFramework-mac-x64 in --da -c --al
+          curl -LO https://download.qt.io/official_releases/qt-installer-framework/4.7.0/QtInstallerFramework-macOS-x64-4.7.0.dmg &&
+          hdiutil attach QtInstallerFramework-macOS-x64-4.7.0.dmg &&
+          cd /Volumes/QtInstallerFramework-macOS-x64-4.7.0/QtInstallerFramework-macOS-x64-4.7.0.app/Contents/MacOS &&
+          ./QtInstallerFramework-macOS-x64-4.7.0 in --da -c --al
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set requested provider name
-        run: sed -i.bak 's/provider = riseup/provider = ${{ inputs.provider_name }}/1' providers/vendor.conf
-      - name: Build .app
-        run: >
-          export PATH=~/Qt/QtIFW-4.0.1/bin:$PATH &&
-          make clean && make vendor && make build
-      - name: Build installer
-        run: export PATH=~/Qt/QtIFW-4.0.1/bin:$PATH && make installer
-      - name: Build dmg
-        run: export PATH=~/Qt/QtIFW-4.0.1/bin:$PATH && make create_dmg
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+      - name: Build macOS installer
+        run: |
+          export PATH=~/Qt6/6.6.2/macos/bin:~/Qt/QtIFW-4.7.0/bin:$PATH
+          export PROVIDER=riseup
+          make vendor
+          make build
+          make installer
+          chmod +x ./build/installer/RiseupVPN-installer-unknown.app/Contents/MacOS/RiseupVPN-installer-unknown
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
       - name: Upload build/qt/release/riseup-vpn.app
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: riseup-vpn-app-${{ github.sha }}
-          path: build/qt/release/riseup-vpn.app
-      - name: Upload deploy/RiseupVPN-unknown.dmg
-        uses: actions/upload-artifact@v3
-        with:
-          name: riseup-vpn-dmg-${{ github.sha }}
-          path: deploy/RiseupVPN-unknown.dmg
+          name: riseup-vpn-app-${{ github.sha }}-${{ matrix.os }}
+          path: build/installer/*.app
