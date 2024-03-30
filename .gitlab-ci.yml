@@ -55,6 +55,8 @@ build_test:
 debian:
   image: registry.0xacab.org/jkito/bitmask-vpn:latest
   stage: debian
+  tags:
+    - linux
   script:
     - 'PROVIDER="bitmask" make vendor && make package_deb'
   artifacts:
