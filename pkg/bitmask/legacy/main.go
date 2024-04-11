@@ -32,8 +32,9 @@ import (
 	obfsvpn "0xacab.org/leap/obfsvpn/client"
 )
 
-// Bitmask holds the bitmask client data
-type Bitmask struct {
+// Bitmask3 holds the bitmask client data
+// Bitmask3 implements Bitmask interface (api version v3)
+type Bitmask3 struct {
 	tempdir          string
 	onGateway        bonafide.Gateway
 	ptGateway        bonafide.Gateway
@@ -55,7 +56,7 @@ type Bitmask struct {
 }
 
 // Init the connection to bitmask
-func Init() (*Bitmask, error) {
+func Init() (*Bitmask3, error) {
 	statusCh := make(chan string, 10)
 	tempdir, err := ioutil.TempDir("", "leap-")
 	if err != nil {
@@ -69,7 +70,7 @@ func Init() (*Bitmask, error) {
 		return nil, err
 	}
 
-	b := Bitmask{
+	b := Bitmask3{
 		tempdir,
 		bonafide.Gateway{},
 		bonafide.Gateway{}, statusCh, nil, bf, launch,
@@ -100,11 +101,11 @@ func Init() (*Bitmask, error) {
 	return &b, err
 }
 
-func (b *Bitmask) SetProvider(p string) {
+func (b *Bitmask3) SetProvider(p string) {
 	b.provider = p
 }
 
-func (b *Bitmask) checkForUpgrades() {
+func (b *Bitmask3) checkForUpgrades() {
 
 	// SNAPS have their own way of upgrading. We probably should also try to detect
 	// if we've been installed via another package manager.
@@ -116,21 +117,21 @@ func (b *Bitmask) checkForUpgrades() {
 	b.canUpgrade = version.CanUpgrade()
 }
 
-func (b *Bitmask) checkForMOTD() {
+func (b *Bitmask3) checkForMOTD() {
 	b.motd = motd.FetchLatest()
 }
 
 // GetStatusCh returns a channel that will recieve VPN status changes
-func (b *Bitmask) GetStatusCh() <-chan string {
+func (b *Bitmask3) GetStatusCh() <-chan string {
 	return b.statusCh
 }
 
-func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
+func (b *Bitmask3) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
 	return b.bonafide.SnowflakeCh
 }
 
 // Close the connection to bitmask, and does cleanup of temporal files
-func (b *Bitmask) Close() {
+func (b *Bitmask3) Close() {
 	log.Printf("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
 	time.Sleep(500 * time.Millisecond)
@@ -146,33 +147,33 @@ func (b *Bitmask) Close() {
 }
 
 // Version gets the bitmask version string
-func (b *Bitmask) Version() (string, error) {
+func (b *Bitmask3) Version() (string, error) {
 	return "", nil
 }
 
-func (b *Bitmask) NeedsCredentials() bool {
+func (b *Bitmask3) NeedsCredentials() bool {
 	return b.bonafide.NeedsCredentials()
 }
 
-func (b *Bitmask) DoLogin(username, password string) (bool, error) {
+func (b *Bitmask3) DoLogin(username, password string) (bool, error) {
 	return b.bonafide.DoLogin(username, password)
 }
 
-func (b *Bitmask) UseUDP(udp bool) error {
+func (b *Bitmask3) UseUDP(udp bool) error {
 	b.udp = udp
 	return nil
 }
 
-func (b *Bitmask) UseSnowflake(s bool) error {
+func (b *Bitmask3) UseSnowflake(s bool) error {
 	b.snowflake = s
 	return nil
 }
 
-func (b *Bitmask) OffersUDP() bool {
+func (b *Bitmask3) OffersUDP() bool {
 	return b.bonafide.IsUDPAvailable()
 }
 
-func (b *Bitmask) GetMotd() string {
+func (b *Bitmask3) GetMotd() string {
 	bytes, err := json.Marshal(b.motd)
 	if err != nil {
 		log.Println("WARN error marshalling motd")
@@ -180,6 +181,6 @@ func (b *Bitmask) GetMotd() string {
 	return string(bytes)
 }
 
-func (b *Bitmask) CanUpgrade() bool {
+func (b *Bitmask3) CanUpgrade() bool {
 	return b.canUpgrade
 }

@@ -41,7 +41,7 @@ const (
 )
 
 // StartVPN for provider
-func (b *Bitmask) StartVPN(provider string) error {
+func (b *Bitmask3) StartVPN(provider string) error {
 	if !b.CanStartVPN() {
 		log.Println("BUG cannot start")
 		return errors.New("BUG: cannot start vpn")
@@ -61,14 +61,14 @@ func (b *Bitmask) StartVPN(provider string) error {
 	return b.startOpenVPN(ctx)
 }
 
-func (b *Bitmask) CanStartVPN() bool {
+func (b *Bitmask3) CanStartVPN() bool {
 	/* FIXME this is not enough. We should check, if provider needs
 	* credentials, if we have a valid token, otherwise remove it and
 	make sure that we're asking for the credentials input */
 	return !b.bonafide.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
+func (b *Bitmask3) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
 	kcpMode := false
 	if os.Getenv("LEAP_KCP") == "1" {
@@ -86,7 +86,7 @@ func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafid
 	return proxyAddr, nil
 }
 
-func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string, err error) {
+func (b *Bitmask3) startTransport(ctx context.Context, host string) (proxy string, err error) {
 	// TODO configure socks port if not available
 	// TODO get port from UI/config file
 	proxyAddr := "127.0.0.1:8080"
@@ -154,7 +154,7 @@ func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
 }
 
 // generates a password and returns the path for a temporary file where this password is written
-func (b *Bitmask) generateManagementPassword() string {
+func (b *Bitmask3) generateManagementPassword() string {
 	pass := getRandomPass(12)
 	tmpFile, err := ioutil.TempFile(b.tempdir, "leap-vpn-")
 	if err != nil {
@@ -165,7 +165,7 @@ func (b *Bitmask) generateManagementPassword() string {
 	return tmpFile.Name()
 }
 
-func (b *Bitmask) startOpenVPN(ctx context.Context) error {
+func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 	arg := b.openvpnArgs
 	/*
 		XXX has this changed??
@@ -293,7 +293,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	return b.launch.OpenvpnStart(arg...)
 }
 
-func (b *Bitmask) getCert() (certPath string, err error) {
+func (b *Bitmask3) getCert() (certPath string, err error) {
 	log.Println("Getting certificate...")
 	failed := false
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
@@ -340,7 +340,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 }
 
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
-func (b *Bitmask) fetchGateways() {
+func (b *Bitmask3) fetchGateways() {
 	log.Println("Fetching gateways...")
 	_, err := b.bonafide.GetAllGateways(b.transport)
 	if err != nil {
@@ -349,7 +349,7 @@ func (b *Bitmask) fetchGateways() {
 }
 
 // StopVPN or cancel
-func (b *Bitmask) StopVPN() error {
+func (b *Bitmask3) StopVPN() error {
 	err := b.launch.FirewallStop()
 	if err != nil {
 		return err
@@ -363,14 +363,14 @@ func (b *Bitmask) StopVPN() error {
 	return nil
 }
 
-func (b *Bitmask) tryStopFromManagement() {
+func (b *Bitmask3) tryStopFromManagement() {
 	if b.managementClient != nil {
 		b.managementClient.SendSignal("SIGTERM")
 	}
 }
 
 // Reconnect to the VPN
-func (b *Bitmask) Reconnect() error {
+func (b *Bitmask3) Reconnect() error {
 	if !b.CanStartVPN() {
 		return errors.New("BUG: cannot start vpn")
 	}
@@ -402,7 +402,7 @@ func (b *Bitmask) Reconnect() error {
 }
 
 // ReloadFirewall restarts the firewall
-func (b *Bitmask) ReloadFirewall() error {
+func (b *Bitmask3) ReloadFirewall() error {
 	err := b.launch.FirewallStop()
 	if err != nil {
 		return err
@@ -424,7 +424,7 @@ func (b *Bitmask) ReloadFirewall() error {
 }
 
 // GetStatus returns the VPN status
-func (b *Bitmask) GetStatus() (string, error) {
+func (b *Bitmask3) GetStatus() (string, error) {
 	status := Off
 	if b.isFailed() {
 		status = Failed
@@ -440,37 +440,37 @@ func (b *Bitmask) GetStatus() (string, error) {
 	return status, nil
 }
 
-func (b *Bitmask) InstallHelpers() error {
+func (b *Bitmask3) InstallHelpers() error {
 	// TODO use pickle module from here
 	return nil
 }
 
 // VPNCheck returns if the helpers are installed and up to date and if polkit is running
-func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
+func (b *Bitmask3) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.Check()
 }
 
-func (b *Bitmask) ListLocationFullness(transport string) map[string]float64 {
+func (b *Bitmask3) ListLocationFullness(transport string) map[string]float64 {
 	return b.bonafide.ListLocationFullness(transport)
 }
 
-func (b *Bitmask) ListLocationLabels(transport string) map[string][]string {
+func (b *Bitmask3) ListLocationLabels(transport string) map[string][]string {
 	return b.bonafide.ListLocationLabels(transport)
 }
 
 // UseGateway selects a gateway, by label, as the default gateway
-func (b *Bitmask) UseGateway(label string) {
+func (b *Bitmask3) UseGateway(label string) {
 	b.bonafide.SetManualGateway(label)
 }
 
 // UseAutomaticGateway sets the gateway to be selected automatically
 // best gateway will be used
-func (b *Bitmask) UseAutomaticGateway() {
+func (b *Bitmask3) UseAutomaticGateway() {
 	b.bonafide.SetAutomaticGateway()
 }
 
 // SetTransport selects an obfuscation transport to use
-func (b *Bitmask) SetTransport(t string) error {
+func (b *Bitmask3) SetTransport(t string) error {
 	if t != "openvpn" && t != "obfs4" {
 		return fmt.Errorf("Transport %s not implemented", t)
 	}
@@ -488,7 +488,7 @@ func (b *Bitmask) SetTransport(t string) error {
 }
 
 // GetTransport gets the obfuscation transport to use. Only obfs4 available for now.
-func (b *Bitmask) GetTransport() string {
+func (b *Bitmask3) GetTransport() string {
 	if b.transport == "obfs4" {
 		return "obfs4"
 	} else {
@@ -496,11 +496,11 @@ func (b *Bitmask) GetTransport() string {
 	}
 }
 
-func (b *Bitmask) getTempCertPemPath() string {
+func (b *Bitmask3) getTempCertPemPath() string {
 	return path.Join(b.tempdir, "openvpn.pem")
 }
 
-func (b *Bitmask) getTempCaCertPath() string {
+func (b *Bitmask3) getTempCaCertPath() string {
 	return path.Join(b.tempdir, "cacert.pem")
 }
 
