@@ -19,10 +19,11 @@
 package helper
 
 import (
-	"log"
 	"os"
 	"os/exec"
 	"strconv"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
@@ -71,16 +72,16 @@ func kill(cmd *exec.Cmd) error {
 }
 
 func firewallStart(gateways []string, mode string) error {
-	log.Println("Start firewall: do nothing, not implemented")
+	log.Warn().Msg("Start firewall: do nothing, not implemented")
 	return nil
 }
 
 func firewallStop() error {
-	log.Println("Stop firewall: do nothing, not implemented")
+	log.Warn().Msg("Stop firewall: do nothing, not implemented")
 	return nil
 }
 
 func firewallIsUp() bool {
-	log.Println("IsUp firewall: do nothing, not implemented")
+	log.Warn().Msg("IsUp firewall: do nothing, not implemented")
 	return false
 }

@@ -24,13 +24,14 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"time"
 	"unicode/utf16"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
+	"github.com/rs/zerolog/log"
+
 	"github.com/natefinch/npipe"
 )
 
@@ -52,7 +53,7 @@ func (l *Launcher) Close() error {
 
 func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 	// TODO check if the named pipe exists
-	log.Println("bogus check on windows")
+	log.Warn().Msg("bogus check on windows")
 	return true, true, nil
 }
 
@@ -69,13 +70,14 @@ func (l *Launcher) OpenvpnStart(flags ...string) error {
 
 	cwd, _ := os.Getwd()
 	opts := `--client --dev tun --block-outside-dns --redirect-gateway --script-security 0 ` + strings.Join(flags, " ")
-	log.Println("openvpn start: ", opts)
+	log.Info().
+		Str("args", args).
+		Msg("Starting OpenVPN")
 
 	timeout := 3 * time.Second
 	conn, err := npipe.DialTimeout(pipeName, timeout)
 	if err != nil {
-		fmt.Println("ERROR opening pipe")
-		return errors.New("cannot open openvpn pipe")
+		return fmt.Errorf("Could not open OpenVPN pipe. %v", err)
 
 	}
 	defer conn.Close()
@@ -89,15 +91,18 @@ func (l *Launcher) OpenvpnStart(flags ...string) error {
 
 	_, err = rw.Write(encoded)
 	if err != nil {
-		log.Println("ERROR writing to pipe")
-		return errors.New("cannot write to openvpn pipe")
+		return fmt.Errorf("Could not write to OpenVPN pipe. %v", err)
 	}
 	rw.Flush()
 	pid, err := getCommandResponse(rw)
 	if err != nil {
-		log.Println("ERROR getting pid")
+		log.Warn().
+			Err(err).
+			Msg("Could not get pid")
 	}
-	log.Println("OpenVPN PID:", pid)
+	log.Debug().
+		Int("pid", pid).
+		Msg("OpenVPN is running")
 	return nil
 }
 
@@ -108,17 +113,17 @@ func (l *Launcher) OpenvpnStop() error {
 // TODO we will have to bring our helper back to do firewall
 
 func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
-	log.Println("start: no firewall in windows")
+	log.Warn().Msg("start: no firewall in windows")
 	return nil
 }
 
 func (l *Launcher) FirewallStop() error {
-	log.Println("stop: no firewall in windows")
+	log.Debug().Msg("stop: no firewall in windows")
 	return nil
 }
 
 func (l *Launcher) FirewallIsUp() bool {
-	log.Println("up: no firewall in windows")
+	log.Debug().Msg("up: no firewall in windows")
 	return false
 }
 

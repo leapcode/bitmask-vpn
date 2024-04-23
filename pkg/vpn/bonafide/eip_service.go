@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
@@ -71,7 +72,9 @@ func (b *Bonafide) setupAuthentication(i interface{}) {
 		case "sip":
 			b.auth = &sipAuthentication{b.client, b.getURL("auth")}
 		default:
-			log.Printf("BUG: unknown authentication method %s", auth)
+			log.Warn().
+				Str("auth", auth).
+				Msg("Unknown authentication method")
 		}
 	case eipServiceV1:
 		// Do nothing, no auth on v1.
@@ -105,7 +108,9 @@ func (b *Bonafide) fetchEipJSON() error {
 	for err != nil {
 		resp, err = b.client.Post(eip3API, "", nil)
 		if err != nil {
-			log.Printf("Error fetching eip v3 json: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not fetch eip v3 json")
 			time.Sleep(retryFetchJSONSeconds * time.Second)
 		}
 	}
@@ -117,7 +122,7 @@ func (b *Bonafide) fetchEipJSON() error {
 	case 404:
 		buf := make([]byte, 128)
 		resp.Body.Read(buf)
-		log.Printf("Error fetching eip v3 json")
+		log.Warn().Msg("Error fetching eip v3 json (status code 404)")
 		eip1API := config.APIURL + "1/config/eip-service.json"
 		resp, err = b.client.Post(eip1API, "", nil)
 		if err != nil {
@@ -163,7 +168,9 @@ func decodeEIP1(body io.Reader) (*eipService, error) {
 	decoder := json.NewDecoder(body)
 	err := decoder.Decode(&eip1)
 	if err != nil {
-		log.Printf("Error fetching eip v1 json: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not fetching eip v1 json")
 		return nil, err
 	}
 
@@ -219,7 +226,9 @@ func (eip eipService) getOpenvpnArgs() []string {
 	if openvpnExtra := os.Getenv("LEAP_OPENVPN_EXTRA_CONFIG"); openvpnExtra != "" {
 		extraConfig, err := parseOpenvpnArgsFromFile(openvpnExtra)
 		if err != nil {
-			log.Println("Error parsing extra config:", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not parse extra config:")
 		} else {
 			cfg = *extraConfig
 		}
@@ -242,7 +251,9 @@ func (eip eipService) getOpenvpnArgs() []string {
 				args = append(args, "--"+arg)
 			}
 		default:
-			log.Printf("Unknown openvpn argument type: %s - %v", arg, value)
+			log.Warn().
+				Str("arg", arg).
+				Msgf("Unknown openvpn argument type (value=%v)", value)
 		}
 	}
 	return args

@@ -23,10 +23,12 @@ package helper
 
 import (
 	"encoding/json"
-	"log"
 	"net"
 	"net/http"
 	"os/exec"
+	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -51,7 +53,9 @@ func StartHelper(port int) {
 // serveHTTP will start the HTTP server that exposes the firewall and openvpn api.
 // this can be called at different times by the different implementations of the helper.
 func serveHTTP(bindAddr string) {
-	log.Println("Starting HTTP server at", bindAddr)
+	log.Info().
+		Str("bindAddr", bindAddr).
+		Msg("Starting HTTP server")
 	openvpn := openvpnT{nil}
 	http.HandleFunc("/openvpn/start", openvpn.start)
 	http.HandleFunc("/openvpn/stop", openvpn.stop)
@@ -60,35 +64,46 @@ func serveHTTP(bindAddr string) {
 	http.HandleFunc("/firewall/isup", firewallIsUpHandler)
 	http.HandleFunc("/version", versionHandler)
 
-	log.Fatal(http.ListenAndServe(bindAddr, nil))
+	err := http.ListenAndServe(bindAddr, nil)
+	log.Fatal().
+		Err(err).
+		Msg("Could not start HTTP Server")
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {
 	args, err := getArgs(r)
 	if err != nil {
-		log.Printf("An error has occurred processing flags: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not process OpenVPN arguments")
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	args = parseOpenvpnArgs(args)
-	log.Printf("start openvpn: %v", args)
+	log.Info().
+		Str("args", strings.Join(args, " ")).
+		Msg("Starting OpenVPN")
 	err = openvpn.run(args)
 	if err != nil {
-		log.Printf("Error starting openvpn: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not start OpenVPN")
 		w.Write([]byte(err.Error()))
 	}
 }
 
 func (openvpn *openvpnT) run(args []string) error {
 	if openvpn.cmd != nil {
-		log.Printf("openvpn was running, stop it first")
+		log.Info().Msg("OpenVPN is running, stopping it")
 		err := openvpn.kill()
 		if err != nil {
 			return err
 		}
 	}
-	log.Println("OPENVPN PATH:", getOpenvpnPath())
+	log.Debug().
+		Str("path", getOpenvpnPath()).
+		Msg("OpenVPN path")
 
 	// TODO: if it dies we should restart it
 	openvpn.cmd = exec.Command(getOpenvpnPath(), args...)
@@ -96,7 +111,7 @@ func (openvpn *openvpnT) run(args []string) error {
 }
 
 func (openvpn *openvpnT) stop(w http.ResponseWriter, r *http.Request) {
-	log.Println("stop openvpn")
+	log.Info().Msg("Stopping OpenVPN")
 	if openvpn.cmd == nil || openvpn.cmd.ProcessState != nil {
 		openvpn.cmd = nil
 		return
@@ -104,7 +119,9 @@ func (openvpn *openvpnT) stop(w http.ResponseWriter, r *http.Request) {
 
 	err := openvpn.kill()
 	if err != nil {
-		log.Printf("Error stoping openvpn: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not stop OpenVPN process")
 		w.Write([]byte(err.Error()))
 	}
 }
@@ -114,7 +131,9 @@ func (openvpn *openvpnT) kill() error {
 	if err == nil {
 		openvpn.cmd.Wait()
 	} else {
-		log.Printf("Error killing the process: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not kill process")
 	}
 
 	openvpn.cmd = nil
@@ -130,7 +149,9 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	gateways, err := getArgs(r)
 	if err != nil {
-		log.Printf("An error has occurred processing gateways: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not process gateways")
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -143,20 +164,24 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = firewallStart(gateways, mode)
 	if err != nil {
-		log.Printf("Error starting firewall: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not start firewall")
 		w.Write([]byte(err.Error()))
 		return
 	}
-	log.Println("Start firewall: firewall started")
+	log.Info().Msg("Successfully started firewall")
 }
 
 func firewallStopHandler(w http.ResponseWriter, r *http.Request) {
 	err := firewallStop()
 	if err != nil {
-		log.Printf("Error stoping firewall: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not stop firewall")
 		w.Write([]byte(err.Error()))
 	}
-	log.Println("Stop firewall: firewall stopped")
+	log.Info().Msg("Successfully stopped firewalll")
 }
 
 func firewallIsUpHandler(w http.ResponseWriter, r *http.Request) {

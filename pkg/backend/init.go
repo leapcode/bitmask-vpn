@@ -1,8 +1,7 @@
 package backend
 
 import (
-	"log"
-	"os"
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	bitmaskAutostart "0xacab.org/leap/bitmask-vpn/pkg/bitmask/autostart"
@@ -53,8 +52,8 @@ func checkErrors(errCh chan string) {
 
 func initializeBitmask(errCh chan string, opts *InitOpts) {
 	if ctx == nil {
-		log.Println("BUG: cannot initialize bitmask, ctx is nil!")
-		os.Exit(1)
+		log.Fatal().
+			Msg("Could not initialize bitmask, ctx is nil!")
 	}
 	bitmask.InitializeLogger()
 	ctx.cfg = config.ParseConfig()
@@ -63,13 +62,16 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 
 	err := pid.AcquirePID()
 	if err != nil {
-		log.Println("Error acquiring PID:", err)
-		log.Fatal(err.Error())
+		log.Fatal().
+			Err(err).
+			Msg("Could not acquire PID")
 	}
 
 	b, err := bitmask.InitializeBitmask(ctx.cfg)
 	if err != nil {
-		log.Println("ERROR: cannot initialize bitmask")
+		log.Error().
+			Err(err).
+			Msg("Could not initialize bitmask")
 		errCh <- err.Error()
 		return
 	}
@@ -81,16 +83,18 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	helpers, privilege, err := b.VPNCheck()
 
 	if err != nil {
-		log.Println("ERROR: vpn check")
+		log.Error().
+			Err(err).
+			Msg("Could not check VPN (b.VPNCheck)")
 		errCh <- err.Error()
 	}
 
 	if helpers == false {
-		log.Println("ERROR: no helpers")
+		log.Error().Msg("Could not find helpers")
 		errCh <- "nohelpers"
 	}
 	if privilege == false {
-		log.Println("ERROR: no polkit")
+		log.Error().Msg("Could not find polkit")
 		errCh <- "nopolkit"
 	}
 	ctx.bm = b
@@ -102,7 +106,9 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 	conf.SkipLaunch = opts.SkipLaunch
 	if opts.StartVPN != "" {
 		if opts.StartVPN != "on" && opts.StartVPN != "off" {
-			log.Println("-start-vpn should be 'on' or 'off', not ", opts.StartVPN)
+			log.Warn().
+				Str("startVPN", opts.StartVPN).
+				Msg("setConfigOpts: -start-vpn should be 'on' or 'off'")
 		} else {
 			conf.StartVPN = opts.StartVPN == "on"
 		}
@@ -126,7 +132,9 @@ func initializeAutostart(conf *config.Config) bitmaskAutostart.Autostart {
 	} else {
 		err := autostart.Enable()
 		if err != nil {
-			log.Printf("Error enabling autostart: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not enable autostart")
 		}
 	}
 	return autostart

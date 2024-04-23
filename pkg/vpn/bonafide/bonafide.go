@@ -23,12 +23,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
@@ -86,7 +87,9 @@ type geoLocation struct {
 func New() *Bonafide {
 	certs, err := x509.SystemCertPool()
 	if err != nil {
-		log.Println("Error loading SystemCertPool, falling back to empty pool")
+		log.Warn().
+			Err(err).
+			Msg("Error loading SystemCertPool, falling back to empty pool")
 		certs = x509.NewCertPool()
 	}
 	certs.AppendCertsFromPEM(config.CaCert)
@@ -108,13 +111,15 @@ func New() *Bonafide {
 	}
 	switch auth := config.Auth; auth {
 	case "sip":
-		log.Println("Client expects sip auth")
+		log.Debug().Msg("Client expects sip auth")
 		b.auth = &sipAuthentication{client, b.getURL("auth")}
 	case "anon":
-		log.Println("Client expects anon auth")
+		log.Debug().Msg("Client expects anon auth")
 		b.auth = &anonymousAuthentication{}
 	default:
-		log.Println("Client expects invalid auth", auth)
+		log.Debug().
+			Str("auth", auth).
+			Msg("Client expects invalid auth")
 		b.auth = &anonymousAuthentication{}
 	}
 
@@ -142,7 +147,7 @@ func (b *Bonafide) DoLogin(username, password string) (bool, error) {
 
 	var err error
 
-	log.Println("Bonafide: getting token...")
+	log.Debug().Msg("Bonafide: getting token...")
 	b.token, err = b.auth.getToken(username, password)
 	if err != nil {
 		return false, err
@@ -153,7 +158,7 @@ func (b *Bonafide) DoLogin(username, password string) (bool, error) {
 
 func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	if b.auth == nil {
-		log.Fatal("ERROR: bonafide did not initialize auth")
+		log.Fatal().Msg("ERROR: bonafide did not initialize auth")
 	}
 	if b.auth.needsCredentials() {
 		/* try cached token */
@@ -202,14 +207,14 @@ func (b *Bonafide) getURL(object string) string {
 	case "auth":
 		return config.APIURL + authPathv3
 	}
-	log.Println("BUG: unknown url object")
+	log.Warn().Msg("BUG: unknown url object")
 	return ""
 }
 
 func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 	// We need to keep track of the bootstrap process here, and then we
 	// pass to the channel that is observed by the backend
-	log.Println(">>> WATCH SNOWFLAKE")
+	log.Debug().Msg(">>> WATCH SNOWFLAKE")
 	go func() {
 		for {
 			select {
@@ -226,7 +231,7 @@ func (b *Bonafide) maybeInitializeEIP() error {
 	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
 		p := strings.ToLower(config.Provider)
-		log.Println(b.snowflakeProgress)
+		log.Debug().Msgf("%d", b.snowflakeProgress)
 		if b.snowflakeProgress != 100 {
 			ch := make(chan *snowflake.StatusEvent, 20)
 			b.watchSnowflakeProgress(ch)
@@ -334,7 +339,9 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 		client := &http.Client{}
 		_resp, err := client.Post(config.GeolocationAPI, "", nil)
 		if err != nil {
-			log.Printf("ERROR: could not fetch geolocation: %s\n", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not fetch geolocation")
 			return err
 		}
 		resp = _resp
@@ -342,7 +349,10 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		log.Println("ERROR: bad status code while fetching geolocation:", resp.StatusCode)
+		log.Warn().
+			Err(err).
+			Int("statusCode", resp.StatusCode).
+			Msg("Bad status code while fetching geolocation")
 		return fmt.Errorf("Get geolocation failed with status: %d", resp.StatusCode)
 	}
 
@@ -350,13 +360,15 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	dataJSON, err := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(dataJSON, &geo)
 	if err != nil {
-		log.Printf("ERROR: cannot parse geolocation json: %s\n", err)
-		log.Println(string(dataJSON))
+		log.Warn().
+			Err(err).
+			Msg("Could not parse geolocation json")
+		log.Warn().Msgf("%s", string(dataJSON))
 		_ = fmt.Errorf("bad json")
 		return err
 	}
 
-	log.Println("Got sorted gateways:", geo.Gateways)
+	log.Info().Msgf("Got sorted gateways: %v", geo.Gateways)
 	b.gateways.setRecommendedGateways(geo)
 	return nil
 }

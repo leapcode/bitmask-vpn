@@ -3,8 +3,9 @@ package backend
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"sync"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	bitmaskAutostart "0xacab.org/leap/bitmask-vpn/pkg/bitmask/autostart"
@@ -90,7 +91,6 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 	return b, nil
@@ -100,7 +100,9 @@ func (c connectionCtx) updateStatus() {
 	updateMutex.Lock()
 	defer updateMutex.Unlock()
 	if stStr, err := c.bm.GetStatus(); err != nil {
-		log.Printf("Error getting status: %v", err)
+		log.Error().
+			Err(err).
+			Msg("Could not get OpenVPN status")
 	} else {
 		setStatusFromStr(stStr)
 	}

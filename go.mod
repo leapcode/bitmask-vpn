@@ -22,7 +22,10 @@ require (
 	golang.org/x/sys v0.16.0
 )
 
-require github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
+require (
+	github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
+	github.com/rs/zerolog v1.32.0
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
@@ -33,6 +36,8 @@ require (
 	github.com/kalikaneko/socks5 v1.0.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/klauspost/reedsolomon v1.12.1 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pion/datachannel v1.5.5 // indirect
 	github.com/pion/dtls/v2 v2.2.9 // indirect
 	github.com/pion/ice/v2 v2.3.12 // indirect

@@ -21,12 +21,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -54,7 +55,6 @@ func probeHelperPort(port int) int {
 			break
 		}
 	}
-	log.Println("WARN: Cannot find any working helper")
 	return 0
 }
 
@@ -62,20 +62,31 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 	uri := "http://localhost:" + strconv.Itoa(port) + "/version"
 	resp, err := c.Get(uri)
 	if err != nil {
+		log.Warn().
+			Err(err).
+			Str("url", uri).
+			Msg("Could not get")
 		return false
 	}
 	if resp.StatusCode == 200 {
 		ver, err := ioutil.ReadAll(resp.Body)
 		defer resp.Body.Close()
 		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not read web response")
 			return false
 		}
 		if strings.Contains(string(ver), config.ApplicationName) {
-			log.Println("DEBUG: Successfully probed for matching helper at", uri)
+			log.Debug().
+				Str("url", uri).
+				Msg("Successfully probed for matching helper")
 			return true
 		} else {
-			log.Println("DEBUG: Another helper seems to be running:", string(ver))
-			log.Println("DEBUG: But we were hoping to find:", config.ApplicationName)
+			log.Debug().
+				Str("anotherHelper", string(ver)).
+				Str("expectedHelper", config.ApplicationName).
+				Msg("Found invalid helper already running")
 		}
 	}
 	return false
@@ -136,17 +147,23 @@ func (l *Launcher) FirewallIsUp() bool {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		fmt.Printf("Got an error status code for firewall/isup: %v\n", res.StatusCode)
+		log.Warn().
+			Int("statusCode", res.StatusCode).
+			Msg("Got an error status code for firewall/isup")
 		isup = false
 	} else {
 		upStr, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			fmt.Errorf("Error getting body for firewall/isup: %q", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not read body for firewall/isup")
 			return false
 		}
 		isup, err = strconv.ParseBool(string(upStr))
 		if err != nil {
-			fmt.Errorf("Error parsing body for firewall/isup: %q", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not parse body for firewall/isup")
 			return false
 		}
 	}

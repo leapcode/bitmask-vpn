@@ -1,8 +1,9 @@
 package lib
 
 import (
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -44,7 +45,7 @@ func (b *BytesSyncLogger) log() {
 		select {
 		case <-ticker.C:
 			if outEvents > 0 || inEvents > 0 {
-				log.Printf("Traffic Bytes (in|out): %d | %d -- (%d OnMessages, %d Sends)",
+				log.Trace().Msgf("Traffic Bytes (in|out): %d | %d -- (%d OnMessages, %d Sends)",
 					inbound, outbound, inEvents, outEvents)
 			}
 			outbound = 0

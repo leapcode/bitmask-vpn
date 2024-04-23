@@ -16,7 +16,6 @@
 package main
 
 import (
-	"log"
 	"path"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -34,12 +33,8 @@ var (
 )
 
 func main() {
-	logger, err := config.ConfigureLogger(path.Join(helper.LogFolder, logFile))
-	if err != nil {
-		log.Println("Can't configure logger: ", err)
-	} else {
-		defer logger.Close()
-	}
+	config.LogPath = path.Join(config.Path, logFile)
+	config.ConfigureLogger()
 	helper.Version = Version
 	helper.AppName = AppName
 

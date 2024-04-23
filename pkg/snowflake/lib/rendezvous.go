@@ -13,11 +13,12 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"sync"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"git.torproject.org/pluggable-transports/snowflake.git/common/nat"
 	"git.torproject.org/pluggable-transports/snowflake.git/common/util"
@@ -61,11 +62,15 @@ func NewBrokerChannel(broker string, front string, transport http.RoundTripper, 
 	if err != nil {
 		return nil, err
 	}
-	log.Println("Rendezvous using Broker at:", broker)
+	log.Info().
+		Str("broker", broker).
+		Msg("Rendezvous using Broker")
 	bc := new(BrokerChannel)
 	bc.url = targetURL
 	if front != "" { // Optional front domain.
-		log.Println("Domain fronting using:", front)
+		log.Info().
+			Str("front", front).
+			Msg("Using domain fronting")
 		bc.Host = bc.url.Host
 		bc.url.Host = front
 	}
@@ -92,8 +97,10 @@ func limitedRead(r io.Reader, limit int64) ([]byte, error) {
 // with an SDP answer from a designated remote WebRTC peer.
 func (bc *BrokerChannel) Negotiate(offer *webrtc.SessionDescription) (
 	*webrtc.SessionDescription, error) {
-	log.Println("Negotiating via BrokerChannel...\nTarget URL: ",
-		bc.Host, "\nFront URL:  ", bc.url.Host)
+	log.Debug().
+		Str("targetUrl", bc.Host).
+		Str("DomanFrontUrl", bc.url.Host).
+		Msg("Negotiating via BrokerChannel...")
 	// Ideally, we could specify an `RTCIceTransportPolicy` that would handle
 	// this for us.  However, "public" was removed from the draft spec.
 	// See https://developer.mozilla.org/en-US/docs/Web/API/RTCConfiguration#RTCIceTransportPolicy_enum
@@ -126,7 +133,7 @@ func (bc *BrokerChannel) Negotiate(offer *webrtc.SessionDescription) (
 		return nil, err
 	}
 	defer resp.Body.Close()
-	log.Printf("BrokerChannel Response:\n%s\n\n", resp.Status)
+	log.Debug().Msgf("BrokerChannel Response:\n%s\n\n", resp.Status)
 
 	switch resp.StatusCode {
 	case http.StatusOK:
@@ -134,7 +141,7 @@ func (bc *BrokerChannel) Negotiate(offer *webrtc.SessionDescription) (
 		if nil != err {
 			return nil, err
 		}
-		log.Printf("Received answer: %s", string(body))
+		log.Debug().Msgf("Received answer: %s", string(body))
 		return util.DeserializeSessionDescription(string(body))
 	case http.StatusServiceUnavailable:
 		return nil, errors.New(BrokerError503)
@@ -149,7 +156,7 @@ func (bc *BrokerChannel) SetNATType(NATType string) {
 	bc.lock.Lock()
 	bc.NATType = NATType
 	bc.lock.Unlock()
-	log.Printf("NAT Type: %s", NATType)
+	log.Debug().Msgf("NAT Type: %s", NATType)
 }
 
 // Implements the |Tongue| interface to catch snowflakes, using BrokerChannel.

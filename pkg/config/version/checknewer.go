@@ -2,11 +2,12 @@ package version
 
 import (
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 const verURI = "https://downloads.leap.se/RiseupVPN/"
@@ -18,9 +19,9 @@ const verURI = "https://downloads.leap.se/RiseupVPN/"
 // stay in sync.
 func CanUpgrade() bool {
 	if os.Getenv("SKIP_VERSION_CHECK") == "1" {
+		log.Info().Msg("Not checking for upgrades")
 		return false
 	}
-	log.Println("Checking for updates...")
 	uri := verURI
 	switch runtime.GOOS {
 	case "windows":
@@ -34,29 +35,42 @@ func CanUpgrade() bool {
 	}
 	uri += "/lastver"
 	resp, err := http.Get(uri)
+	log.Info().
+		Str("url", uri).
+		Msg("Checking for updates")
+
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("url", uri).
+			Msg("Could not check if there are updates available")
 		return false
 	}
 	defer resp.Body.Close()
 	verStr, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Msg("Could not read http response")
 		return false
 	}
 	r := strings.TrimSpace(string(verStr))
 	if strings.Count(r, "\n") > 1 {
-		log.Println("No remote version found at " + uri)
+		log.Warn().
+			Str("versionString", string(verStr)).
+			Msg("Could not parse version string")
 		return false
 	}
 	canUpgrade := versionOrdinal(r) > versionOrdinal(VERSION)
-	if os.Getenv("DEBUG") == "1" {
-		log.Println(">>> Remote version:  " + r)
-		log.Println(">>> Current version: " + VERSION)
-	}
-	if canUpgrade {
-		log.Println("There's a newer version available:", r)
-	}
+	log.Debug().
+		Str("version", r).
+		Msg("Remote version")
+	log.Debug().
+		Str("version", VERSION).
+		Msg("Installed version")
+	log.Info().
+		Bool("updateAvailable", canUpgrade).
+		Msg("Sucessfully checked if there is an update")
 	return canUpgrade
 }
 
@@ -81,7 +95,7 @@ func versionOrdinal(version string) string {
 			continue
 		}
 		if vo[j]+1 > maxByte {
-			log.Println("VersionOrdinal: invalid version")
+			log.Warn().Msg("VersionOrdinal: invalid version")
 			return string(vo)
 		}
 		vo = append(vo, b)

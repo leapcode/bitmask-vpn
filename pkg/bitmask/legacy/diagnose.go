@@ -1,19 +1,27 @@
 package legacy
 
 import (
-	"log"
 	"net"
+
+	"github.com/rs/zerolog/log"
 )
 
 func logDnsLookup(domain string) {
 	addrs, err := net.LookupHost(domain)
 	if err != nil {
-		log.Println("ERROR cannot resolve address:", domain)
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("domain", domain).
+			Msg("Could not resolve address")
 	}
 
-	log.Println("From here,", domain, "resolves to:")
+	log.Debug().
+		Str("domain", domain).
+		Msg("Resolving domain ...")
 	for _, addr := range addrs {
-		log.Println(addr)
+		log.Debug().
+			Str("domain", domain).
+			Str("addr", addr).
+			Msg("Resolved to ip")
 	}
 }

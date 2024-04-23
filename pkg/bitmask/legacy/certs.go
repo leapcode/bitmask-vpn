@@ -4,8 +4,9 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"io/ioutil"
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 func isValidCert(path string) bool {
@@ -17,7 +18,7 @@ func isValidCert(path string) bool {
 	_, rest := pem.Decode(data)
 	certBlock, rest := pem.Decode(rest)
 	if len(rest) != 0 {
-		log.Println("ERROR bad cert data")
+		log.Warn().Msg("ERROR bad cert data")
 		return false
 	}
 	cert, err := x509.ParseCertificate(certBlock.Bytes)
@@ -28,7 +29,9 @@ func isValidCert(path string) bool {
 	if !expires.After(tomorrow) {
 		return false
 	} else {
-		log.Println("DEBUG We have a valid cert:", path)
+		log.Debug().
+			Str("path", path).
+			Msg("We have a valid cert")
 		return true
 	}
 }

@@ -2,13 +2,14 @@ package backend
 
 import (
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 /* functions for local authentication of control endpoints */
@@ -17,26 +18,32 @@ const bitmaskToken = "bitmask-token"
 
 func generateAuthToken() {
 	if runtime.GOOS != "linux" {
-		log.Println("Authentication token only implemented in linux at the moment.")
+		log.Warn().Msg("Authentication token only implemented in linux at the moment.")
 		return
 	}
 	t := getRandomString()
 	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
 	err := ioutil.WriteFile(tokenPath, []byte(t), os.FileMode(int(0600)))
 	if err != nil {
-		log.Println("Could not write authentication token.")
+		log.Fatal().
+			Err(err).
+			Str("file", tokenPath).
+			Msg("Could not write authentication token")
 	}
 }
 
 func readAuthToken() string {
 	if runtime.GOOS != "linux" {
-		log.Println("Authentication token only implemented in linux at the moment.")
+		log.Warn().Msg("Authentication token only implemented in linux at the moment.")
 		return ""
 	}
 	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
 	token, err := ioutil.ReadFile(tokenPath)
 	if err != nil {
-		log.Println("Error reading token:", err)
+		log.Fatal().
+			Err(err).
+			Str("file", tokenPath).
+			Msg("Could not read auth token from disk")
 	}
 	return string(token)
 }

@@ -17,8 +17,9 @@ package legacy
 
 import (
 	"fmt"
-	"log"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/management"
 )
@@ -49,21 +50,29 @@ func (b *Bitmask3) openvpnManagement() {
 	// TODO: we should warn the user on ListenAndServe errors
 	newConnection := func(conn management.IncomingConn) {
 		eventCh := make(chan management.Event, 10)
-		log.Println("New connection into the management")
+		log.Info().Msg("New connection into the management")
 		b.managementClient = conn.Open(eventCh)
 		b.managementClient.SendPassword(b.launch.MngPass)
 		b.managementClient.SetStateEvents(true)
 		b.eventHandler(eventCh)
 	}
-	log.Fatal(management.ListenAndServe(
+	err := management.ListenAndServe(
 		fmt.Sprintf("%s:%s", openvpnManagementAddr, openvpnManagementPort),
 		management.IncomingConnHandlerFunc(newConnection),
-	))
+	)
+	if err != nil {
+		log.Fatal().
+			Err(err).
+			Msg("Could not run management backend")
+
+	}
 }
 
 func (b *Bitmask3) eventHandler(eventCh <-chan management.Event) {
 	for event := range eventCh {
-		log.Printf("Event: %v", event)
+		log.Debug().
+			Str("event", event.String()).
+			Msg("Got event from OpenVPN process")
 		stateEvent, ok := event.(*management.StateEvent)
 		if !ok {
 			continue
@@ -82,9 +91,13 @@ func (b *Bitmask3) eventHandler(eventCh <-chan management.Event) {
 				gw, err := b.bonafide.GetGatewayByIP(ip)
 				if err == nil {
 					b.onGateway = gw
-					log.Println("Connected to gateway:", b.onGateway.Host)
+					log.Info().
+						Str("host", b.onGateway.Host).
+						Msg("Connected to gateway")
 				} else {
-					log.Println("ERROR: connected to unknown gateway", ip)
+					log.Warn().
+						Str("ip", ip).
+						Msg("Connected to unknown gateway")
 				}
 			}
 		}

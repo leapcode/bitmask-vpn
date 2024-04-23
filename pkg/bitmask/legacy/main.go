@@ -18,9 +18,10 @@ package legacy
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
@@ -132,17 +133,21 @@ func (b *Bitmask3) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
 
 // Close the connection to bitmask, and does cleanup of temporal files
 func (b *Bitmask3) Close() {
-	log.Printf("Close: cleanup and vpn shutdown...")
+	log.Info().Msg("Close: cleanup and vpn shutdown...")
 	b.StopVPN()
 	time.Sleep(500 * time.Millisecond)
 	err := b.launch.Close()
 	if err != nil {
-		log.Printf("There was an error closing the launcher: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("There was an error closing the launcher")
 	}
 	time.Sleep(1 * time.Second)
 	err = os.RemoveAll(b.tempdir)
 	if err != nil {
-		log.Printf("There was an error removing temp dir: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("There was an error removing temp dir")
 	}
 }
 
@@ -176,7 +181,9 @@ func (b *Bitmask3) OffersUDP() bool {
 func (b *Bitmask3) GetMotd() string {
 	bytes, err := json.Marshal(b.motd)
 	if err != nil {
-		log.Println("WARN error marshalling motd")
+		log.Warn().
+			Err(err).
+			Msg("error marshalling motd")
 	}
 	return string(bytes)
 }

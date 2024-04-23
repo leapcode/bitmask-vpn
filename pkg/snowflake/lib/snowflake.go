@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"io"
-	"log"
 	"net"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"git.torproject.org/pluggable-transports/snowflake.git/common/turbotunnel"
 	"github.com/xtaci/kcp-go/v5"
@@ -37,13 +38,13 @@ func newSession(snowflakes SnowflakeCollector) (net.PacketConn, *smux.Session, e
 	// connection, we use EncapsulationPacketConn to encode packets into a
 	// stream.
 	dialContext := func(ctx context.Context) (net.PacketConn, error) {
-		log.Printf("redialing on same connection")
+		log.Debug().Msg("Redialing on same connection")
 		// Obtain an available WebRTC remote. May block.
 		conn := snowflakes.Pop()
 		if conn == nil {
 			return nil, errors.New("handler: Received invalid Snowflake")
 		}
-		log.Println("---- Handler: snowflake assigned ----")
+		log.Debug().Msg("---- Handler: snowflake assigned ----")
 		// Send the magic Turbo Tunnel token.
 		_, err := conn.Write(turbotunnel.Token[:])
 		if err != nil {
@@ -106,11 +107,11 @@ func Handler(socks net.Conn, tongue Tongue) error {
 	// Use a real logger to periodically output how much traffic is happening.
 	snowflakes.BytesLogger = NewBytesSyncLogger()
 
-	log.Printf("---- Handler: begin collecting snowflakes ---")
+	log.Debug().Msg("---- Handler: begin collecting snowflakes ---")
 	go connectLoop(snowflakes)
 
 	// Create a new smux session
-	log.Printf("---- Handler: starting a new session ---")
+	log.Debug().Msg("---- Handler: starting a new session ---")
 	pconn, sess, err := newSession(snowflakes)
 	if err != nil {
 		return err
@@ -124,14 +125,14 @@ func Handler(socks net.Conn, tongue Tongue) error {
 	defer stream.Close()
 
 	// Begin exchanging data.
-	log.Printf("---- Handler: begin stream %v ---", stream.ID())
+	log.Debug().Msgf("---- Handler: begin stream %v ---", stream.ID())
 	copyLoop(socks, stream)
-	log.Printf("---- Handler: closed stream %v ---", stream.ID())
+	log.Debug().Msgf("---- Handler: closed stream %v ---", stream.ID())
 	snowflakes.End()
-	log.Printf("---- Handler: end collecting snowflakes ---")
+	log.Debug().Msg("---- Handler: end collecting snowflakes ---")
 	pconn.Close()
 	sess.Close()
-	log.Printf("---- Handler: discarding finished session ---")
+	log.Debug().Msg("---- Handler: discarding finished session ---")
 	return nil
 }
 
@@ -142,13 +143,15 @@ func connectLoop(snowflakes SnowflakeCollector) {
 		timer := time.After(ReconnectTimeout)
 		_, err := snowflakes.Collect()
 		if err != nil {
-			log.Printf("WebRTC: %v  Retrying...", err)
+			log.Warn().
+				Err(err).
+				Msg("WebRTC error. Retrying...")
 		}
 		select {
 		case <-timer:
 			continue
 		case <-snowflakes.Melted():
-			log.Println("ConnectLoop: stopped.")
+			log.Debug().Msg("ConnectLoop: stopped.")
 			return
 		}
 	}
@@ -160,16 +163,20 @@ func copyLoop(socks, stream io.ReadWriter) {
 	done := make(chan struct{}, 2)
 	go func() {
 		if _, err := io.Copy(socks, stream); err != nil {
-			log.Printf("copying WebRTC to SOCKS resulted in error: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Copying WebRTC to SOCKS resulted in error")
 		}
 		done <- struct{}{}
 	}()
 	go func() {
 		if _, err := io.Copy(stream, socks); err != nil {
-			log.Printf("copying SOCKS to stream resulted in error: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Copying SOCKS to stream resulted in error")
 		}
 		done <- struct{}{}
 	}()
 	<-done
-	log.Println("copy loop ended")
+	log.Debug().Msg("copy loop ended")
 }

@@ -20,7 +20,6 @@ package launcher
 
 import (
 	"errors"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -28,6 +27,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"github.com/keybase/go-ps"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -58,37 +58,59 @@ func (l *Launcher) Close() error {
 func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 	hasHelpers, err := hasHelpers()
 	if err != nil {
-		log.Println("Error checking helpers")
+		log.Warn().
+			Err(err).
+			Msg("Could not check if helpers exist")
 		return
 	}
+
 	if !hasHelpers {
-		log.Println("Could not find helpers")
+		log.Warn().
+			Err(err).
+			Msg("Could not find helpers")
 		return false, true, nil
 	}
 
 	isRunning, err := isPolkitRunning()
 	if err != nil {
-		log.Println("Error checking if polkit is running")
+		log.Warn().Msg("Could not check if polkit is running")
 		return
 	}
 
 	if !isRunning {
+		log.Debug().Msg("A polkit daemon is not running. Trying to start")
+
 		polkitPath := getPolkitPath()
 		if polkitPath == "" {
-			log.Println("Cannot find any usable polkit")
+			log.Warn().Msg("Could not find any usable polkit")
 			return true, false, nil
 		}
+
+		log.Debug().
+			Str("polkitPath", polkitPath).
+			Msg("Starting polkit daemon")
 		cmd := exec.Command("setsid", polkitPath)
 		err = cmd.Start()
 		if err != nil {
-			log.Println("Cannot launch polkit")
+			log.Warn().
+				Err(err).
+				Str("polkitPath", polkitPath).
+				Msg("Could not run setsid")
 			return
 		}
-		log.Println("Checking if polkit is running after attempted launch")
+
+		log.Debug().Msg("Checking if polkit is running after attempted launch")
 		isRunning, err = isPolkitRunning()
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Bool("isRunning", isRunning).
+				Msgf("Could not check if polkit is running")
+		}
 		return true, isRunning, err
 	}
 
+	log.Debug().Msg("A polkit daemon is running")
 	return true, true, nil
 }
 
@@ -149,8 +171,10 @@ func getPolkitPath() string {
 	}
 
 	for _, polkit := range polkitPaths {
+		log.Trace().Str("polkitBinary", polkit).Msg("Checking if polkit binary exists")
 		_, err := os.Stat(polkit)
 		if err == nil {
+			log.Debug().Str("polkitBinary", polkit).Msg("Found a polkit binary")
 			return polkit
 		}
 	}
@@ -158,7 +182,7 @@ func getPolkitPath() string {
 }
 
 func (l *Launcher) OpenvpnStart(flags ...string) error {
-	log.Println("openvpn start: ", flags)
+	log.Info().Msg("Starting OpenVPN")
 	arg := []string{"openvpn", "start", getOpenvpnPath()}
 	arg = append(arg, flags...)
 	l.OpenvpnCh <- arg
@@ -167,26 +191,27 @@ func (l *Launcher) OpenvpnStart(flags ...string) error {
 
 func (l *Launcher) OpenvpnStop() error {
 	l.OpenvpnCh <- nil
-	log.Println("openvpn stop")
+	log.Info().Msg("Stopping OpenVPN")
 	return runBitmaskRoot("openvpn", "stop")
 }
 
 func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
+	log.Info().Msg("Starting firewall")
+
 	if os.Getenv("LEAP_DRYRUN") == "1" {
-		log.Println("dry-run: skip firewall start")
+		log.Debug().Msg("Not changing firewall rules (LEAP_DRYRUN=1)")
 		return nil
 	}
-	log.Println("firewall start")
+
 	arg := []string{"firewall", "start"}
 	for _, gw := range gateways {
 		arg = append(arg, gw.IPAddress)
 	}
-
 	return runBitmaskRoot(arg...)
 }
 
 func (l *Launcher) FirewallStop() error {
-	log.Println("firewall stop")
+	log.Info().Msg("Stopping firewall")
 	return runBitmaskRoot("firewall", "stop")
 }
 
@@ -201,7 +226,9 @@ func (l *Launcher) openvpnRunner(arg ...string) {
 		for running {
 			err := runBitmaskRoot(arg...)
 			if err != nil {
-				log.Printf("An error ocurred running openvpn: %v", err)
+				log.Warn().
+					Err(err).
+					Msg("An error ocurred running OpenVPN")
 				l.OpenvpnCh <- nil
 				l.Failed = true
 			}
@@ -225,12 +252,18 @@ func runBitmaskRoot(arg ...string) error {
 	}
 	arg = append([]string{bitmaskRoot}, arg...)
 	cmd := exec.Command("pkexec", arg...)
+	log.Debug().
+		Str("cmd", strings.Join(arg, " ")).
+		Msg("Executing bitmask-root")
 
 	out, err := cmd.Output()
+	// 'firewall isup' is called often and "fails" often, as the firewall is not yet up, so don't log
 	if err != nil && arg[2] != "isup" {
-		log.Println("Error while running bitmask-root:")
-		log.Println("args: ", arg)
-		log.Println("output: ", string(out))
+		log.Warn().
+			Err(err).
+			Str("cmd", strings.Join(arg, " ")).
+			Str("output", string(out)).
+			Msgf("Error running bitmask-root:%v", string(out))
 	}
 	return err
 }
@@ -247,7 +280,9 @@ func bitmaskRootPath() (string, error) {
 			return path, nil
 		}
 	}
-	log.Println("Can't find bitmask-root")
+
+	log.Warn().Msg("Could not find bitmask-root helper")
+	// nohelpers is a static string used by the frontend/GUI
 	return "", errors.New("nohelpers")
 }
 

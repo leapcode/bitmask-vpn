@@ -31,7 +31,6 @@ package helper
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -39,6 +38,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/sevlyar/go-daemon"
 )
@@ -53,7 +54,7 @@ const (
 func _getExecPath() string {
 	ex, err := os.Executable()
 	if err != nil {
-		log.Print("ERROR: cannot find executable path")
+		log.Warn().Msg("Could not get executable path")
 	}
 	return filepath.Dir(ex)
 }
@@ -91,13 +92,15 @@ func daemonize() {
 
 	d, err := cntxt.Reborn()
 	if err != nil {
-		log.Fatal("Unable to run: ", err)
+		log.Fatal().
+			Err(err).
+			Msg("Unable to run bitmask helper")
 	}
 	if d != nil {
 		return
 	}
 	defer cntxt.Release()
-	log.Print("bitmask-helper daemon started")
+	log.Info().Msg("Successfully started bitmask-helper daemon")
 }
 
 func runServer(preferredPort int) {
@@ -109,12 +112,16 @@ func runServer(preferredPort int) {
 
 func getOpenvpnPath() string {
 	openvpnPath := filepath.Join(getHelperDir(), "openvpn.leap")
-	log.Println("openvpn path:", openvpnPath)
+	log.Debug().
+		Str("path", openvpnPath).
+		Msg("Got OpenVPN path")
 	return openvpnPath
 }
 
 func kill(cmd *exec.Cmd) error {
-	log.Printf("Sending kill signal to pid: %v", cmd.Process.Pid)
+	log.Info().
+		Int("pid", cmd.Process.Pid).
+		Msg("Sending kill signal to pid")
 	err := cmd.Process.Signal(os.Interrupt)
 	if err != nil {
 		return err
@@ -135,26 +142,31 @@ func firewallStart(gateways []string, mode string) error {
 func firewallStop() error {
 	out, err := exec.Command(pfctl, "-a", bitmask_anchor, "-F", "all").Output()
 	if err != nil {
-		log.Printf("An error ocurred stopping the firewall: %v", out)
+		log.Warn().
+			Err(err).
+			Str("cmdOut", string(out)).
+			Msg("Could not stop firewall")
 		/* TODO return error if different from anchor not exists */
 		/*return errors.New("Error while stopping firewall")*/
 	}
 	for range [50]int{} {
 		if firewallIsUp() {
-			log.Printf("Firewall still up, waiting...")
+			log.Debug().Msg("Firewall still up, waiting...")
 			time.Sleep(200 * time.Millisecond)
 		} else {
 			return nil
 		}
 	}
-	return errors.New("Could not stop firewall")
+	return errors.New("Could not stop the firewall")
 }
 
 func firewallIsUp() bool {
 	out, err := exec.Command(pfctl, "-a", bitmask_anchor, "-sr").Output()
 	if err != nil {
-		log.Printf("An error ocurred getting the status of the firewall: %v", err)
-		log.Printf(string(out))
+		log.Warn().
+			Err(err).
+			Str("cmdOut", string(out)).
+			Msg("Could not get status the firewall")
 		return false
 	}
 	return strings.Contains(string(out), "block drop out proto udp from any to any port = 53")
@@ -166,19 +178,25 @@ func enablePf() {
 }
 
 func resetGatewaysTable(gateways []string, mode string) error {
-	log.Println("Resetting gateways")
+	log.Debug().Msg("Resetting gateways")
 	cmd := exec.Command(pfctl, "-a", bitmask_anchor, "-t", gateways_table, "-T", "delete")
 	err := cmd.Run()
 	if err != nil {
-		log.Printf("Can't delete table: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not delete table in firewall")
 	}
 
 	for _, gateway := range gateways {
-		log.Println("Adding Gateway:", gateway)
+		log.Debug().
+			Str("gateway", gateway).
+			Msg("Adding gateway to table")
 		cmd = exec.Command(pfctl, "-a", bitmask_anchor, "-t", gateways_table, "-T", "add", gateway)
 		err = cmd.Run()
 		if err != nil {
-			log.Printf("Error adding gateway to table: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not add gateway to table")
 		}
 	}
 
@@ -195,7 +213,9 @@ func resetGatewaysTable(gateways []string, mode string) error {
 func getDefaultDevice() string {
 	out, err := exec.Command("/bin/sh", "-c", "/sbin/route -n get -net default | /usr/bin/grep interface | /usr/bin/awk '{print $2}'").Output()
 	if err != nil {
-		log.Printf("Error getting default device")
+		log.Warn().
+			Err(err).
+			Msg("Could not get default service")
 	}
 	return strings.TrimSpace(bytesToString(out))
 }
@@ -208,7 +228,9 @@ func loadBitmaskAnchor() error {
 	}
 	cmdline := fmt.Sprintf("%s -D default_device=%s -a %s -f %s", pfctl, dev, bitmask_anchor, rulePath)
 
-	log.Println("Loading Bitmask Anchor:", cmdline)
+	log.Debug().
+		Str("cmd", cmdline).
+		Msg("Loading Bitmask Anchor")
 
 	_, err = exec.Command("/bin/sh", "-c", cmdline).Output()
 	return err
@@ -216,7 +238,9 @@ func loadBitmaskAnchor() error {
 
 func getRulefilePath() (string, error) {
 	rulefilePath := filepath.Join(getHelperDir(), "helper", "bitmask.pf.conf")
-	log.Println("DEBUG: rule file path", rulefilePath)
+	log.Debug().
+		Str("ruleFilePath", rulefilePath).
+		Msg("Got rule file path")
 
 	if _, err := os.Stat(rulefilePath); !os.IsNotExist(err) {
 		return rulefilePath, nil

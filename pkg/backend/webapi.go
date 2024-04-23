@@ -3,7 +3,9 @@ package backend
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+
+	"github.com/rs/zerolog/log"
+
 	"net/http"
 	"os"
 	"strconv"
@@ -23,12 +25,12 @@ func CheckAuth(handler http.HandlerFunc, token string) http.HandlerFunc {
 }
 
 func webOn(w http.ResponseWriter, r *http.Request) {
-	log.Println("Web UI: on")
+	log.Info().Msg("Web UI: on")
 	SwitchOn()
 }
 
 func webOff(w http.ResponseWriter, r *http.Request) {
-	log.Println("Web UI: off")
+	log.Info().Msg("Web UI: off")
 	SwitchOff()
 }
 
@@ -106,13 +108,15 @@ func webTransportList(w http.ResponseWriter, r *http.Request) {
 }
 
 func webQuit(w http.ResponseWriter, r *http.Request) {
-	log.Println("Web UI: quit")
+	log.Info().Msg("Web UI: quit")
 	Quit()
 	os.Exit(0)
 }
 
 func enableWebAPI(port int) {
-	log.Println("Starting WebAPI in port", port)
+	log.Debug().
+		Int("port", port).
+		Msg("Starting WebAPI")
 	generateAuthToken()
 	token := readAuthToken()
 	http.Handle("/vpn/start", CheckAuth(http.HandlerFunc(webOn), token))

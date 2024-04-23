@@ -20,12 +20,13 @@ package helper
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/svc"
@@ -53,7 +54,9 @@ func getPlatformOpenvpnFlags() []string {
 func getExecDir() string {
 	ex, err := os.Executable()
 	if err != nil {
-		log.Println("Cannot find executable path")
+		log.Warn().
+			Err(err).
+			Msg("Could not get executable path")
 		return ""
 	}
 	/* XXX filepath.Abs is buggy, maybe because of spaces in the path. fuck it, this is good enough for now */
@@ -70,27 +73,33 @@ type httpConf struct {
 // To compile a usable version, from the top of the repo you can do:
 // "cd cmd/bitmask-helper && GOOS=windows GOARCH=i386 go build"
 func parseCliArgs() {
-	log.Println("Parsing CLI args...")
+	log.Debug().Msg("Parsing CLI args...")
 	isIntSess, err := svc.IsAnInteractiveSession()
 	if err != nil {
-		log.Fatalf("Failed to determine if we are running in an interactive session: %v", err)
+		log.Fatal().
+			Err(err).
+			Msg("Could not determine if we are running in an interactive session")
 	}
 	if !isIntSess {
 		runService(svcName, false)
 		return
 	}
-	log.Println("Checking for admin")
+	log.Debug().Msg("Checking for admin")
 	admin := isAdmin()
-	fmt.Printf("Running as admin: %v\n", admin)
+	log.Info().
+		Bool("isAdmin", admin).
+		Msg("Checking if we are running as admin")
 	if !admin {
-		fmt.Println("Needs to be run as administrator")
+		log.Error().Msg("Needs to be run as administrator")
 		os.Exit(2)
 	}
 	if len(os.Args) < 2 {
 		usage("ERROR: no command specified")
 	}
 	cmd := strings.ToLower(os.Args[1])
-	log.Println("cmd:", cmd)
+	log.Debug().
+		Str("cmd", cmd).
+		Msg("Helper command")
 	switch cmd {
 	case "debug":
 		// run the service on the foreground, for debugging
@@ -108,7 +117,11 @@ func parseCliArgs() {
 		usage(fmt.Sprintf("ERROR: Invalid command %s", cmd))
 	}
 	if err != nil {
-		log.Fatalf("Failed to %s %s: %v", cmd, svcName, err)
+		log.Fatal().
+			Err(err).
+			Str("cmd", cmd).
+			Str("svcName", svcName).
+			Msg("Could not run helper")
 	}
 	return
 }
@@ -129,7 +142,9 @@ func initializeService(preferredPort int) {
 	port := getFirstAvailablePortFrom(preferredPort)
 	writePortToFile(port)
 	httpServerConf.BindAddr = "localhost:" + strconv.Itoa(port)
-	log.Println("Command server initialized to listen on", httpServerConf.BindAddr)
+	log.Info().
+		Str("bindAddr", httpServerConf.BindAddr).
+		Msg("Successfully initialized command server")
 }
 
 func daemonize() {}
@@ -140,13 +155,18 @@ func runServer(port int) {}
 func getOpenvpnPath() string {
 	openvpn := path.Join(getExecDir(), "openvpn.exe")
 	if _, err := os.Stat(openvpn); !os.IsNotExist(err) {
-		log.Println("DEBUG: openvpnpath found,", openvpnPath)
+		log.Debug().
+			Str("openvpnPath", openvpnPath).
+			Msg("Found OpenVPN path")
 		return openvpn
 	} else if _, err := os.Stat(chocoOpenvpnPath); !os.IsNotExist(err) {
-		log.Println("DEBUG: choco openvpn found,", chocoOpenvpnPath)
+		log.Debug().
+			Str("openvpnPath", chocoOpenvpnPath).
+			Msg("Found choco OpenVPN path")
+
 		return chocoOpenvpnPath
 	}
-	log.Println("DEBUG: did not find system-wide openvpn...")
+	log.Debug().Msg("Could not find system-wide openvpn...")
 	return "openvpn.exe"
 }
 
@@ -155,17 +175,17 @@ func kill(cmd *exec.Cmd) error {
 }
 
 func firewallStart(gateways []string, mode string) error {
-	log.Println("Start firewall: do nothing, not implemented")
+	log.Warn().Msg("Start firewall: do nothing, not implemented")
 	return nil
 }
 
 func firewallStop() error {
-	log.Println("Stop firewall: do nothing, not implemented")
+	log.Warn().Msg("Stop firewall: do nothing, not implemented")
 	return nil
 }
 
 func firewallIsUp() bool {
-	log.Println("IsUp firewall: do nothing, not implemented")
+	log.Warn().Msg("IsUp firewall: do nothing, not implemented")
 	return false
 }
 
@@ -184,7 +204,9 @@ func isAdmin() bool {
 		0, 0, 0, 0, 0, 0,
 		&sid)
 	if err != nil {
-		log.Fatalf("SID Error: %s", err)
+		log.Fatal().
+			Err(err).
+			Msg("SID Error")
 		return false
 	}
 
@@ -196,7 +218,9 @@ func isAdmin() bool {
 	member, err := token.IsMember(sid)
 	//fmt.Println("Admin?", member)
 	if err != nil {
-		log.Fatalf("Token Membership Error: %s", err)
+		log.Fatal().
+			Err(err).
+			Msg("Token Membership Error")
 		return false
 	}
 	return member

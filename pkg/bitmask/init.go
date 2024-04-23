@@ -17,12 +17,11 @@ package bitmask
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"path"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask/legacy"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"github.com/rs/zerolog/log"
 )
 
 type ProviderInfo struct {
@@ -65,11 +64,7 @@ func ConfigureProvider(opts *ProviderOpts) {
 }
 
 func InitializeLogger() {
-	_, err := config.ConfigureLogger(path.Join(config.LogPath))
-	if err != nil {
-		log.Println("Can't configure logger: ", err)
-	}
-
+	config.ConfigureLogger()
 }
 
 func initBitmaskVPN() (Bitmask, error) {
@@ -77,15 +72,13 @@ func initBitmaskVPN() (Bitmask, error) {
 		return nil, fmt.Errorf("API v5 is not implemented. Please use apiVersion=3 in config file")
 	}
 	b, err := legacy.Init()
-	if err != nil {
-		log.Printf("An error ocurred starting bitmask vpn: %v", err)
-	}
 	return b, err
 }
 
 func InitializeBitmask(conf *config.Config) (Bitmask, error) {
+	log.Trace().Msg("Initializing bitmask")
 	if conf.SkipLaunch {
-		log.Println("Initializing bitmask, but not launching it...")
+		log.Info().Msg("Not autostarting OpenVPN")
 	}
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
 		os.MkdirAll(config.Path, os.ModePerm)
@@ -102,10 +95,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 		return nil, err
 	}
 
-	err = setUDP(b, conf)
-	if err != nil {
-		return nil, err
-	}
+	setUDP(b, conf)
 
 	if !conf.SkipLaunch {
 		err := maybeStartVPN(b, conf)
@@ -113,7 +103,8 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 			// we don't want this error to avoid initialization of
 			// the bitmask object. If we cannot autostart it's not
 			// so terrible.
-			log.Println("Error starting VPN: ", err)
+			log.Warn().Err(err).
+				Msg("Could not start OpenVPN (maybeStartVPN)")
 		}
 	}
 	return b, nil
@@ -121,26 +112,22 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 
 func setTransport(b Bitmask, conf *config.Config) error {
 	if conf.Obfs4 {
-		log.Printf("Use transport Obfs4")
+		log.Info().Msg("Using transport obfs4")
 		err := b.SetTransport("obfs4")
 		if err != nil {
-			log.Printf("Error setting transport: %v", err)
 			return err
 		}
 	}
 	return nil
 }
 
-func setUDP(b Bitmask, conf *config.Config) error {
+func setUDP(b Bitmask, conf *config.Config) {
 	if conf.UDP {
-		log.Printf("Use UDP")
-		err := b.UseUDP(true)
-		if err != nil {
-			log.Printf("Error setting UDP: %v", err)
-			return err
-		}
+		log.Info().Msg("Enabled UDP")
+		b.UseUDP(true)
+	} else {
+		log.Warn().Msg("UDP not enabled in config")
 	}
-	return nil
 }
 
 func maybeStartVPN(b Bitmask, conf *config.Config) error {
@@ -149,7 +136,7 @@ func maybeStartVPN(b Bitmask, conf *config.Config) error {
 	}
 
 	if b.CanStartVPN() {
-		log.Println("DEBUG starting")
+		log.Info().Msg("Starting OpenVPN")
 		err := b.StartVPN(config.Provider)
 		conf.SetUserStoppedVPN(false)
 		return err

@@ -1,9 +1,10 @@
 package backend
 
 import (
-	"fmt"
 	"sync"
 	"unsafe"
+
+	"github.com/rs/zerolog/log"
 )
 
 /* ATCHUNG! what follow are not silly comments. Well, *this one* is, but
@@ -61,6 +62,8 @@ func trigger(event string) {
 	if cb != nil {
 		C._do_callback(cb)
 	} else {
-		fmt.Println("ERROR: this event does not have subscribers:", event)
+		log.Warn().
+			Str("event", event).
+			Msg("This event does not have subscribers")
 	}
 }

@@ -20,10 +20,11 @@ package autostart
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
+
+	"github.com/rs/zerolog/log"
 
 	pmautostart "github.com/ProtonMail/go-autostart"
 )
@@ -48,7 +49,9 @@ func NewAutostart(appName string, iconPath string) Autostart {
 			snapName := match[1]
 			exec = []string{fmt.Sprintf("/snap/bin/%s.launcher", snapName)}
 		} else {
-			log.Printf("Snap binary has unknown path: %v", os.Args[0])
+			log.Warn().
+				Str("path", os.Args[0]).
+				Msg("Snap binary has unkown path")
 		}
 	}
 
@@ -56,7 +59,9 @@ func NewAutostart(appName string, iconPath string) Autostart {
 		var err error
 		exec[0], err = filepath.Abs(exec[0])
 		if err != nil {
-			log.Printf("Error making the path absolute directory: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not make the path absolute directory")
 		}
 	}
 

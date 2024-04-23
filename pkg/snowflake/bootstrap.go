@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/cretz/bine/tor"
@@ -73,7 +73,9 @@ func (e *StatusLogger) Write(p []byte) (n int, err error) {
 func writeTorrc() string {
 	f, err := ioutil.TempFile("", "torrc-snowflake-")
 	if err != nil {
-		log.Println(err)
+		log.Fatal().
+			Err(err).
+			Msg("Could not write tor config file")
 	}
 	f.Write([]byte(torrc))
 	return f.Name()
@@ -139,7 +141,10 @@ func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error 
 }
 
 func fetchFile(client *http.Client, uri string, file string) error {
-	fmt.Printf("Fetching %s over snowflake", uri)
+	log.Debug().
+		Str("uri", uri).
+		Str("outFile", file).
+		Msg("Fetching file over snowflake and saving to disk")
 	resp, err := client.Get(uri)
 	if err != nil {
 		return err
@@ -148,10 +153,9 @@ func fetchFile(client *http.Client, uri string, file string) error {
 
 	c, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
-	if os.Getenv("DEBUG") == "1" {
-		fmt.Println(string(c))
-	}
+
+	log.Debug().Msgf("Data received: %s", c)
 	return ioutil.WriteFile(file, c, 0600)
 }

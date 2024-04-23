@@ -4,8 +4,9 @@ import (
 	"container/list"
 	"errors"
 	"fmt"
-	"log"
 	"sync"
+
+	"github.com/rs/zerolog/log"
 )
 
 // Container which keeps track of multiple WebRTC remote peers.
@@ -63,7 +64,7 @@ func (p *Peers) Collect() (*WebRTCPeer, error) {
 	if cnt >= capacity {
 		return nil, fmt.Errorf("At capacity [%d/%d]", cnt, capacity)
 	}
-	log.Println("WebRTC: Collecting a new Snowflake.", s)
+	log.Info().Msgf("WebRTC: Collecting a new Snowflake. %s", s)
 	// BUG: some broker conflict here.
 	connection, err := p.Tongue.Catch()
 	if nil != err {
@@ -131,5 +132,5 @@ func (p *Peers) End() {
 		p.activePeers.Remove(e)
 		e = next
 	}
-	log.Printf("WebRTC: melted all %d snowflakes.", cnt)
+	log.Info().Msgf("WebRTC: melted all %d snowflakes.", cnt)
 }

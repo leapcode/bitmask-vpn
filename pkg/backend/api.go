@@ -5,7 +5,6 @@ package backend
 import (
 	"C"
 	"encoding/json"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -15,25 +14,33 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/pickle"
 	"0xacab.org/leap/bitmask-vpn/pkg/pid"
+	"github.com/rs/zerolog/log"
 )
 
 func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
 	if err != nil {
+		log.Warn().
+			Err(err).
+			Str("username", username).
+			Msg("Could not log in")
 		if err.Error() == "TokenErrTimeout" {
 			ctx.Errors = "bad_auth_timeout"
 		} else if err.Error() == "TokenErrBadStatus 502" {
 			ctx.Errors = "bad_auth_502"
 		} else {
-			log.Println("ERROR: bad login", err)
 			ctx.Errors = "bad_auth"
 		}
 	} else if success {
-		log.Printf("Logged in as %s", username)
+		log.Info().
+			Str("username", username).
+			Msg("Sucessfully logged in")
 		ctx.LoginOk = true
 		ctx.LoginDialog = false
 	} else {
-		log.Printf("Failed to login as %s", username)
+		log.Warn().
+			Str("username", username).
+			Msg("Could not log in (else)")
 		ctx.LoginDialog = true
 		ctx.Errors = "bad_auth"
 	}
@@ -84,7 +91,10 @@ func UseAutomaticGateway() {
 func SetTransport(label string) {
 	err := ctx.bm.SetTransport(label)
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("transport", label).
+			Msg("Could not set transport")
 	}
 	if label == "obfs4" {
 		// XXX this is an expedite way of avoiding the corner case
@@ -102,14 +112,18 @@ func SetTransport(label string) {
 }
 
 func SetUDP(udp bool) {
-	log.Printf("DEBUG udp:%v\n", udp)
+	log.Info().
+		Bool("useUDP", udp).
+		Msg("Configuring UDP")
 	ctx.cfg.SetUseUDP(udp)
 	ctx.bm.UseUDP(udp)
 	go trigger(OnStatusChanged)
 }
 
 func SetSnowflake(snowflake bool) {
-	log.Printf("DEBUG snowflake:%v\n", snowflake)
+	log.Info().
+		Bool("useSnowflake", snowflake).
+		Msg("Configuring Snowflake")
 	ctx.cfg.SetUseSnowflake(snowflake)
 	ctx.bm.UseSnowflake(snowflake)
 	go trigger(OnStatusChanged)
@@ -165,7 +179,10 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 	providers := Providers{}
 	err := json.Unmarshal([]byte(providersJSON), &providers)
 	if err != nil {
-		log.Println("ERROR while parsing json:", err)
+		log.Fatal().
+			Err(err).
+			Str("providersJson", providersJSON).
+			Msg("Could not parse provider json")
 	}
 	var providerOpts *bitmask.ProviderOpts
 	providerOpts = &providers.Data[0]
@@ -174,7 +191,9 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 		if chosenProvider != "" {
 			for _, p := range providers.Data {
 				if p.Provider == chosenProvider {
-					log.Println("Selecting provider: " + chosenProvider)
+					log.Info().
+						Str("provider", chosenProvider).
+						Msg("Selecting provider")
 					return &InitOpts{ProviderOptions: &p}
 				}
 			}
@@ -198,7 +217,12 @@ func InitializeBitmaskContext(opts *InitOpts) {
 }
 
 func RefreshContext() *C.char {
-	c, _ := ctx.toJson()
+	c, err := ctx.toJson()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not refresh context")
+	}
 	return C.CString(string(c))
 }
 
@@ -224,14 +248,17 @@ func InstallHelpers() {
 }
 
 func EnableMockBackend() {
-	log.Println("[+] Mocking ui interaction on port 8080. \nTry 'curl localhost:8080/{on|off|failed}' to toggle status.")
+	log.Info().Msg("[+] Mocking ui interaction on port 8080. \nTry 'curl localhost:8080/{on|off|failed}' to toggle status.")
 	go enableMockBackend()
 }
 
 func EnableWebAPI(port string) {
 	intPort, err := strconv.Atoi(port)
 	if err != nil {
-		log.Fatal("Cannot parse port:", port)
+		log.Fatal().
+			Err(err).
+			Str("port", port).
+			Msg("Could not parse WebAPI port")
 	}
 	go enableWebAPI(intPort)
 }

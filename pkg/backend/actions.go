@@ -1,14 +1,16 @@
 package backend
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 )
 
 func startVPN() {
 	setError("")
 	err := ctx.bm.StartVPN(ctx.Provider)
 	if err != nil {
-		log.Println("ERROR: ", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not start VPN")
 		setError(err.Error())
 	}
 }
@@ -16,7 +18,9 @@ func startVPN() {
 func stopVPN() {
 	err := ctx.bm.StopVPN()
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Msg("Could not stop VPN")
 	}
 }
 

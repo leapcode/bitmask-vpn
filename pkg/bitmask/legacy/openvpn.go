@@ -22,12 +22,13 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -42,7 +43,7 @@ const (
 // StartVPN for provider
 func (b *Bitmask3) StartVPN(provider string) error {
 	if !b.CanStartVPN() {
-		log.Println("BUG cannot start")
+		log.Warn().Msg("BUG cannot start")
 		return errors.New("BUG: cannot start vpn")
 	}
 
@@ -77,9 +78,15 @@ func (b *Bitmask3) startTransportForPrivateBridge(ctx context.Context, gw bonafi
 	go func() {
 		_, err = b.obfsvpnProxy.Start()
 		if err != nil {
-			log.Printf("Can't connect to transport %s: %v", b.transport, err)
+			log.Warn().
+				Err(err).
+				Str("transport", b.transport).
+				Msg("Could not connect to transport")
 		}
-		log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
+		log.Info().
+			Str("ip", gw.IPAddress).
+			Str("host", gw.Host).
+			Msg("Connected via obfs4")
 	}()
 
 	return proxyAddr, nil
@@ -99,7 +106,9 @@ func (b *Bitmask3) startTransport(ctx context.Context, host string) (proxy strin
 		return "", err
 	}
 	if len(gateways) == 0 {
-		log.Printf("No gateway for transport %s in provider", b.transport)
+		log.Warn().
+			Str("transport", b.transport).
+			Msg("No gateway for transport in provider")
 		return "", nil
 	}
 
@@ -110,22 +119,33 @@ func (b *Bitmask3) startTransport(ctx context.Context, host string) (proxy strin
 		if _, ok := gw.Options["cert"]; !ok {
 			continue
 		}
-		log.Println("Selected Gateway:", gw.Host, gw.IPAddress)
+		log.Info().
+			Str("host", gw.Host).
+			Str("ip", gw.IPAddress).
+			Msg("Selected Gateway")
 
 		kcpMode := false
 		if os.Getenv("LEAP_KCP") == "1" {
 			kcpMode = true
 		}
 
-		log.Println("connecting with cert:", gw.Options["cert"])
+		log.Debug().
+			Str("cert", gw.Options["cert"]).
+			Msg("Connecting with cert")
 
 		b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
 		go func() {
 			_, err = b.obfsvpnProxy.Start()
 			if err != nil {
-				log.Printf("Can't connect to transport %s: %v", b.transport, err)
+				log.Warn().
+					Err(err).
+					Str("transport", b.transport).
+					Msg("Could not connect to transport")
 			}
-			log.Println("Connected via obfs4 to", gw.IPAddress, "(", gw.Host, ")")
+			log.Info().
+				Str("ip", gw.IPAddress).
+				Str("host", gw.Host).
+				Msg("Connected via obfs4")
 		}()
 
 		return proxyAddr, nil
@@ -157,7 +177,9 @@ func (b *Bitmask3) generateManagementPassword() string {
 	pass := getRandomPass(12)
 	tmpFile, err := ioutil.TempFile(b.tempdir, "leap-vpn-")
 	if err != nil {
-		log.Fatal("Cannot create temporary file", err)
+		log.Fatal().
+			Err(err).
+			Msg("Could not create temporary file")
 	}
 	tmpFile.Write([]byte(pass))
 	b.launch.MngPass = pass
@@ -189,7 +211,9 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 		gw, gotPrivate := maybeGetPrivateGateway()
 		if gotPrivate {
 			var err error
-			log.Println("Got a private bridge:", gw.Host, gw.Options)
+			log.Info().
+				Str("host", gw.Host).
+				Msgf("Got a private bridge with options: %v", gw.Options)
 			gateways = []bonafide.Gateway{gw}
 			proxy, err = b.startTransportForPrivateBridge(ctx, gw)
 			if err != nil {
@@ -200,14 +224,16 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 		} else {
 			// get a gateway from bonafide looking at the services announced in eip-service
 
-			log.Println("Getting a gateway with obfs4 transport...")
+			log.Debug().Msg("Getting a gateway with obfs4 transport...")
 
 			gateways, err := b.bonafide.GetGateways("obfs4")
 			if err != nil {
 				return err
 			}
 			if len(gateways) == 0 {
-				log.Printf("ERROR No gateway for transport %s in provider", b.transport)
+				log.Warn().
+					Str("transport", b.transport).
+					Msg("No gateway for transport in provider")
 				return errors.New("ERROR: cannot find any gateway for selected transport")
 			}
 
@@ -232,7 +258,9 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 		arg = append(arg, "--remote", gw.IPAddress, gw.Ports[0], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
-		log.Println("args passed to bitmask-root:", arg)
+		log.Info().
+			Str("args", strings.Join(arg, " ")).
+			Msg("args passed to bitmask-root")
 		gateways, err := b.bonafide.GetGateways("openvpn")
 		if err != nil {
 			return err
@@ -266,7 +294,9 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 	}
 	// TODO we need to check if the openvpn options pushed by server are
 	// not overriding (or duplicating) some of the options we're adding here.
-	log.Println("VERB", verb)
+	log.Debug().
+		Int("verb", verb).
+		Msg("Setting OpenVPN verbosity")
 
 	passFile := b.generateManagementPassword()
 
@@ -295,7 +325,7 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 }
 
 func (b *Bitmask3) getCert() (certPath string, err error) {
-	log.Println("Getting certificate...")
+	log.Info().Msg("Getting certificate...")
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
 		// TODO snowflake might have written a cert here
@@ -308,14 +338,21 @@ func (b *Bitmask3) getCert() (certPath string, err error) {
 		// download one fresh
 		certPath = b.getTempCertPemPath()
 		if _, err := os.Stat(certPath); os.IsNotExist(err) {
-			log.Println("Fetching certificate to", certPath)
+			log.Info().
+				Str("certPath", certPath).
+				Msg("Fetching certificate")
 			cert, err := b.bonafide.GetPemCertificate()
 			if err != nil {
-				log.Println(err)
+				log.Warn().
+					Err(err).
+					Msg("Could not get OpenVPN certificate")
 			}
 			err = ioutil.WriteFile(certPath, cert, 0600)
 			if err != nil {
-				log.Println(err)
+				log.Warn().
+					Err(err).
+					Str("certPath", certPath).
+					Msg("Could not write cert to disk")
 			}
 		}
 	}
@@ -327,10 +364,12 @@ func (b *Bitmask3) getCert() (certPath string, err error) {
 
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
 func (b *Bitmask3) fetchGateways() {
-	log.Println("Fetching gateways...")
+	log.Info().Msg("Fetching gateways...")
 	_, err := b.bonafide.GetAllGateways(b.transport)
 	if err != nil {
-		log.Printf("ERROR Cannot fetch gateways: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not fetch gateways")
 	}
 }
 
@@ -365,7 +404,7 @@ func (b *Bitmask3) Reconnect() error {
 	if err != nil {
 		return err
 	}
-	log.Println("DEBUG Reconnecting")
+	log.Debug().Msg("Reconnecting...")
 	if status != Off {
 		b.statusCh <- Stopping
 		if b.obfsvpnProxy != nil {
@@ -460,7 +499,9 @@ func (b *Bitmask3) SetTransport(t string) error {
 	if t != "openvpn" && t != "obfs4" {
 		return fmt.Errorf("Transport %s not implemented", t)
 	}
-	log.Println("Setting transport to", t)
+	log.Info().
+		Str("transport", t).
+		Msg("Setting transport")
 	// compare and set string looks strange, but if assigning directly
 	// we're getting some kind of corruption with the transport string.
 	// I suspect something's

@@ -19,11 +19,13 @@ import (
 	"embed"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"path"
 	"runtime"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/config"
+	"github.com/rs/zerolog/log"
 )
 
 //go:embed helpers
@@ -35,9 +37,11 @@ const (
 	policyFile = "/usr/share/polkit-1/actions/se.leap.bitmask.riseupvpn.policy"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
+func check(err error) {
+	if err != nil {
+		log.Fatal().
+			Err(err).
+			Msg("Could not dump helper")
 	}
 }
 
@@ -55,7 +59,9 @@ func isRoot() bool {
 
 func copyAsRoot(orig, dest string, isExec bool) {
 	if alreadyThere(dest) {
-		fmt.Println("> File exists: ", dest)
+		log.Info().
+			Str("outFile", dest).
+			Msg("Helper file already exists")
 		return
 	}
 
@@ -64,11 +70,12 @@ func copyAsRoot(orig, dest string, isExec bool) {
 		cmd = exec.Command("cp", orig, dest)
 	} else {
 		var confirm string
-		fmt.Println("> About to write (with sudo):", dest)
-		fmt.Printf("> ok? [y/N] ")
+		log.Info().
+			Str("dest", dest).
+			Msg("> About to write (with sudo):\n>ok? [y/N]")
 		fmt.Scanln(&confirm)
 		if confirm != "y" {
-			fmt.Println("aborting")
+			log.Warn().Msg("Aborting")
 			os.Exit(1)
 		}
 		cmd = exec.Command("sudo", "cp", orig, dest)
@@ -101,14 +108,17 @@ func copyAsRoot(orig, dest string, isExec bool) {
 func dumpHelper(fname, dest string, isExec bool) {
 	// TODO win/mac implementation
 	if runtime.GOOS != "linux" {
-		fmt.Println("Only linux supported for now")
+		log.Debug().
+			Str("os", runtime.GOOS).
+			Msg("Skipping OS. bitmask-root is only supported on Linux")
 		return
 	}
 
 	fd, err := helpers.Open(path.Join("helpers", fname))
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
+	log.Debug().
+		Str("helper", fname).
+		Msg("Checking helper file")
 
 	tmpfile, err := os.CreateTemp("/dev/shm", "*")
 	check(err)
@@ -120,6 +130,12 @@ func dumpHelper(fname, dest string, isExec bool) {
 }
 
 func InstallHelpers() {
+	// logger is not configured at this point
+	config.ConfigureLogger()
+
+	// this  function can be called by command line argument: riseup-vpn --install-helpers
+	log.Info().Msg("Installing helpers")
 	dumpHelper("bitmask-root", bitmaskRoot, true)
 	dumpHelper("se.leap.bitmask.policy", policyFile, false)
+	log.Info().Msg("All helpers are installed")
 }

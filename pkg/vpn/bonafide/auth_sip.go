@@ -19,11 +19,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 )
@@ -44,12 +45,16 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	}
 	credJSON, err := formatCredentials(user, password)
 	if err != nil {
-		log.Println("ERROR: cannot encode credentials.", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not encode credentials")
 		return nil, fmt.Errorf("TokenErrBadCred")
 	}
 	resp, err := a.client.Post(a.authURI, "text/json", strings.NewReader(credJSON))
 	if err != nil {
-		log.Println("ERROR: failed auth request", err)
+		log.Warn().
+			Err(err).
+			Msg("Failed auth request")
 		if os.IsTimeout(err) {
 			return nil, fmt.Errorf("TokenErrTimeout")
 		}
@@ -75,19 +80,27 @@ func writeToken(token []byte) {
 	tp := getTokenPath()
 	err := ioutil.WriteFile(tp, token, 0600)
 	if err != nil {
-		log.Println("BUG: cannot write token to", tp, err)
+		log.Warn().
+			Err(err).
+			Str("tokenPath", tp).
+			Msg("Could not write token")
 	}
 }
 
 func readToken() ([]byte, error) {
 	f, err := os.Open(getTokenPath())
 	if err != nil {
-		log.Println("Error: cannot open token file", err)
+		log.Warn().
+			Err(err).
+			Str("tokenPath", getTokenPath()).
+			Msg("Could not open token file")
 		return nil, err
 	}
 	token, err := ioutil.ReadAll(f)
 	if err != nil {
-		log.Println("Error: cannot read token", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not read token")
 		return nil, err
 	}
 	return token, nil

@@ -3,9 +3,10 @@ package motd
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 const TimeString = "02 Jan 06 15:04 -0700" // RFC822 with numeric zone
@@ -62,7 +63,10 @@ func (m *Message) IsValid() bool {
 func (m *Message) IsValidBegin() bool {
 	_, err := time.Parse(TimeString, m.Begin)
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("begin", m.Begin).
+			Msg("Could not parse begin time in IsValidBegin")
 		return false
 	}
 	return true
@@ -71,16 +75,22 @@ func (m *Message) IsValidBegin() bool {
 func (m *Message) IsValidEnd() bool {
 	endTime, err := time.Parse(TimeString, m.End)
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("end", m.End).
+			Msg("Could not parse end time")
 		return false
 	}
 	beginTime, err := time.Parse(TimeString, m.Begin)
 	if err != nil {
-		log.Println(err)
+		log.Warn().
+			Err(err).
+			Str("begin", m.Begin).
+			Msg("Could not parse begin time")
 		return false
 	}
 	if !beginTime.Before(endTime) {
-		log.Println("begin ts should be before end")
+		log.Warn().Msg("begin ts should be before end")
 		return false
 	}
 	return true

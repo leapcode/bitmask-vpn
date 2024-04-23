@@ -103,6 +103,15 @@ To run tests:
     make test_ui
 ```
 
+## Logging
+
+Log files:
+Linux: `~/.config/leap/systray.log`
+Windows: `%LocalAppData%\leap\systray.log  `
+Mac: `~/Library/Preferences/leap/systray.log`
+
+Log levels can be set via environment variable (`LOG_LEVEL=TRACE`, `LOG_LEVEL=DEBUG`, default log level is `INFO`). The cpp/qml part logs to stderr if env `DEBUG=1` is set.
+
 Translations
 ------------
 

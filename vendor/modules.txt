@@ -58,6 +58,12 @@ github.com/klauspost/cpuid/v2
 # github.com/klauspost/reedsolomon v1.12.1
 ## explicit; go 1.18
 github.com/klauspost/reedsolomon
+# github.com/mattn/go-colorable v0.1.13
+## explicit; go 1.15
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.19
+## explicit; go 1.15
+github.com/mattn/go-isatty
 # github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
 ## explicit
 github.com/natefinch/npipe
@@ -162,6 +168,12 @@ github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
+# github.com/rs/zerolog v1.32.0
+## explicit; go 1.15
+github.com/rs/zerolog
+github.com/rs/zerolog/internal/cbor
+github.com/rs/zerolog/internal/json
+github.com/rs/zerolog/log
 # github.com/sevlyar/go-daemon v0.1.6
 ## explicit
 github.com/sevlyar/go-daemon

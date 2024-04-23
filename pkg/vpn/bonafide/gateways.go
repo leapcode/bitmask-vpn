@@ -2,12 +2,13 @@ package bonafide
 
 import (
 	"errors"
-	"log"
 	"math/rand"
 	"os"
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -248,7 +249,9 @@ func (p *gatewayPool) setRecommendedGateways(geo *geoLocation) {
 				}
 			}
 			if !found {
-				log.Println("ERROR: invalid host in recommended list of hostnames", gw.Host)
+				log.Warn().
+					Str("host", gw.Host).
+					Msg("Invalid host in recommended list of hostnames")
 				return
 			}
 		}
@@ -268,7 +271,9 @@ func (p *gatewayPool) setRecommendedGateways(geo *geoLocation) {
 				}
 			}
 			if !found {
-				log.Println("ERROR: invalid host in recommended list of hostnames", host)
+				log.Warn().
+					Str("host", host).
+					Msg("Invalid host in recommended list of hostnames")
 				return
 			}
 		}
@@ -281,7 +286,9 @@ func (p *gatewayPool) setRecommendedGateways(geo *geoLocation) {
 * doing manual override, and if we got useful info from menshen */
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
 	if hostname := os.Getenv("LEAP_GW"); hostname != "" {
-		log.Printf("Gateway selection manually overriden: %v\n", hostname)
+		log.Debug().
+			Str("hostname", hostname).
+			Msg("Gateway selection manually overriden")
 		return p.getGatewaysByHostname(hostname)
 	}
 	if p.isManualLocation() {
@@ -312,11 +319,11 @@ func (p *gatewayPool) getBestLocation(transport string, tz int) string {
 
 func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
 	if (&gatewayPool{} == p) {
-		log.Println("getAll tried to access uninitialized struct")
+		log.Warn().Msg("getAll tried to access uninitialized struct")
 		return []Gateway{}, nil
 	}
 
-	log.Println("seems to be initialized...")
+	log.Debug().Msg("seems to be initialized...")
 	if len(p.recommended) == 0 {
 		return p.getGatewaysFromMenshen(transport, 999)
 	}
@@ -350,7 +357,9 @@ func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max
 		distance := 13
 		gwOffset, err := strconv.Atoi(p.locations[gw.Location].Timezone)
 		if err != nil {
-			log.Printf("Error sorting gateways: %v", err)
+			log.Warn().
+				Err(err).
+				Msg("Could not sort gateways")
 			return gws, err
 		}
 		distance = tzDistance(tzOffsetHours, gwOffset)

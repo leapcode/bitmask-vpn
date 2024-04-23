@@ -1,12 +1,14 @@
 package helper
 
 import (
-	"log"
 	"net"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -62,7 +64,9 @@ func parseOpenvpnArgs(args []string) []string {
 	for i := 0; i < len(args); i++ {
 		params, ok := allowedArgs[args[i]]
 		if !ok {
-			log.Printf("Invalid openvpn arg: %s", args[i])
+			log.Warn().
+				Str("arg", args[i]).
+				Msg("Invalid openvpn arg")
 			continue
 		}
 		for j, arg := range args[i+1 : i+len(params)+1] {
@@ -75,7 +79,9 @@ func parseOpenvpnArgs(args []string) []string {
 			newArgs = append(newArgs, args[i:i+len(params)+1]...)
 			i = i + len(params)
 		} else {
-			log.Printf("Invalid openvpn arg params: %v", args[i:i+len(params)+1])
+			log.Warn().
+				Str("params", strings.Join(args[i:i+len(params)+1], " ")).
+				Msg("Invalid openvpn arg params")
 		}
 	}
 	return newArgs

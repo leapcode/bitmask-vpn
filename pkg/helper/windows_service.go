@@ -9,7 +9,8 @@ package helper
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/rs/zerolog/log"
 
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
@@ -49,7 +50,7 @@ loop:
 
 func runService(name string, isDebug bool) {
 
-	log.Println("Running service...")
+	log.Info().Msg("Running service...")
 
 	var err error
 	if isDebug {

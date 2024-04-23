@@ -1,8 +1,9 @@
 package backend
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/rs/zerolog/log"
 )
 
 /* mock http server: easy way to mocking vpn behavior on ui interaction. This
@@ -10,7 +11,7 @@ import (
 * layer */
 
 func enableMockBackend() {
-	log.Println("[+] You should not use this in production!")
+	log.Warn().Msg("[+] You should not use this in production!")
 	http.HandleFunc("/on", mockUIOn)
 	http.HandleFunc("/off", mockUIOff)
 	http.HandleFunc("/failed", mockUIFailed)
@@ -18,16 +19,16 @@ func enableMockBackend() {
 }
 
 func mockUIOn(w http.ResponseWriter, r *http.Request) {
-	log.Println("changing status: on")
+	log.Info().Msg("changing status: on")
 	setStatus(on)
 }
 
 func mockUIOff(w http.ResponseWriter, r *http.Request) {
-	log.Println("changing status: off")
+	log.Info().Msg("changing status: off")
 	setStatus(off)
 }
 
 func mockUIFailed(w http.ResponseWriter, r *http.Request) {
-	log.Println("changing status: failed")
+	log.Info().Msg("changing status: failed")
 	setStatus(failed)
 }

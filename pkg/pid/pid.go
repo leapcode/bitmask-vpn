@@ -18,12 +18,13 @@ package pid
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/keybase/go-ps"
@@ -103,12 +104,18 @@ func pidRunning(pid int) bool {
 	}
 	proc, err := ps.FindProcess(pid)
 	if err != nil {
-		log.Printf("An error ocurred finding process: %v", err)
+		log.Warn().
+			Err(err).
+			Int("pid", pid).
+			Msg("Could not find running process")
 		return false
 	}
 	if proc == nil {
 		return false
 	}
-	log.Printf("There is a running process with the pid %d and executable: %s", pid, proc.Executable())
+	log.Debug().
+		Int("pid", pid).
+		Str("executable", proc.Executable()).
+		Msg("Found a running process with")
 	return strings.Contains(os.Args[0], proc.Executable())
 }
