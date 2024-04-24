@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/rs/zerolog/log"
 )
@@ -34,7 +35,8 @@ func CanUpgrade() bool {
 		uri += "linux"
 	}
 	uri += "/lastver"
-	resp, err := http.Get(uri)
+	c := http.Client{Timeout: 30 * time.Second}
+	resp, err := c.Get(uri)
 	log.Info().
 		Str("url", uri).
 		Msg("Checking for updates")
