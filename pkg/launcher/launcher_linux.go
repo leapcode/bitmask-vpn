@@ -20,6 +20,7 @@ package launcher
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -55,34 +56,28 @@ func (l *Launcher) Close() error {
 	return nil
 }
 
-func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
-	hasHelpers, err := hasHelpers()
-	if err != nil {
-		log.Warn().
-			Err(err).
-			Msg("Could not check if helpers exist")
-		return
-	}
-
-	if !hasHelpers {
-		log.Warn().
-			Err(err).
-			Msg("Could not find helpers")
+// Check returns: hasHelper, hashPolkitRoot, error
+func (l *Launcher) Check() (bool, bool, error) {
+	if hasHelpers := hasHelpers(); !hasHelpers {
 		return false, true, nil
 	}
 
 	isRunning, err := isPolkitRunning()
 	if err != nil {
-		log.Warn().Msg("Could not check if polkit is running")
-		return
+		log.Warn().
+			Err(err).
+			Msg("Could not check if polkit is running")
+		return true, false, err
 	}
 
 	if !isRunning {
 		log.Debug().Msg("A polkit daemon is not running. Trying to start")
 
-		polkitPath := getPolkitPath()
-		if polkitPath == "" {
-			log.Warn().Msg("Could not find any usable polkit")
+		polkitPath, err := getPolkitPath()
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not find any usable polkit")
 			return true, false, nil
 		}
 
@@ -96,7 +91,7 @@ func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 				Err(err).
 				Str("polkitPath", polkitPath).
 				Msg("Could not run setsid")
-			return
+			return true, false, err
 		}
 
 		log.Debug().Msg("Checking if polkit is running after attempted launch")
@@ -114,12 +109,16 @@ func (l *Launcher) Check() (helpers bool, privilege bool, err error) {
 	return true, true, nil
 }
 
-func hasHelpers() (bool, error) {
+func hasHelpers() bool {
 	/* TODO add polkit file too */
-	if _, err := bitmaskRootPath(); err == nil {
-		return true, nil
+	_, err := bitmaskRootPath()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not find bitmask-root helper")
+		return false
 	}
-	return false, nil
+	return true
 }
 
 func isPolkitRunning() (bool, error) {
@@ -155,7 +154,7 @@ func isPolkitRunning() (bool, error) {
 	return false, nil
 }
 
-func getPolkitPath() string {
+func getPolkitPath() (string, error) {
 	var polkitPaths = [...]string{
 		"/usr/bin/lxpolkit",
 		"/usr/bin/lxqt-policykit-agent",
@@ -175,10 +174,10 @@ func getPolkitPath() string {
 		_, err := os.Stat(polkit)
 		if err == nil {
 			log.Debug().Str("polkitBinary", polkit).Msg("Found a polkit binary")
-			return polkit
+			return polkit, nil
 		}
 	}
-	return ""
+	return "", errors.New("Could not find any usable polkit binary")
 }
 
 func (l *Launcher) OpenvpnStart(flags ...string) error {
@@ -280,10 +279,7 @@ func bitmaskRootPath() (string, error) {
 			return path, nil
 		}
 	}
-
-	log.Warn().Msg("Could not find bitmask-root helper")
-	// nohelpers is a static string used by the frontend/GUI
-	return "", errors.New("nohelpers")
+	return "", fmt.Errorf("bitmask-root not found in %q", strings.Join(bitmaskRootPaths, ", "))
 }
 
 func getOpenvpnPath() string {
