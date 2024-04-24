@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"github.com/rs/zerolog/log"
@@ -61,7 +62,8 @@ func FetchLatest() []Message {
 }
 
 func fetchURL(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+	c := http.Client{Timeout: 30 * time.Second}
+	resp, err := c.Get(url)
 	if err != nil {
 		return []byte(""), err
 	}
