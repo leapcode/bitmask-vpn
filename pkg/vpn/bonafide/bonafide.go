@@ -82,19 +82,6 @@ type geoLocation struct {
 	SortedGateways []geoGateway `json:"sortedGateways"`
 }
 
-func getAPIAddr(provider string) string {
-	switch provider {
-	case "riseup.net":
-		return "198.252.153.107"
-	case "float.hexacab.org":
-		return "198.252.153.106"
-	case "calyx.net":
-		return "162.247.73.194"
-	default:
-		return ""
-	}
-}
-
 // New Bonafide: Initializes a Bonafide object. By default, no Credentials are passed.
 func New() *Bonafide {
 	certs, err := x509.SystemCertPool()
@@ -206,16 +193,6 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (b *Bonafide) GetPemCertificateNoDNS() ([]byte, error) {
-	req, err := http.NewRequest("POST", b.getURLNoDNS("certv3"), strings.NewReader(""))
-	resp, err := b.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
-}
-
 func (b *Bonafide) getURL(object string) string {
 	switch object {
 	case "cert":
@@ -224,23 +201,6 @@ func (b *Bonafide) getURL(object string) string {
 		return config.APIURL + certPathv3
 	case "auth":
 		return config.APIURL + authPathv3
-	}
-	log.Println("BUG: unknown url object")
-	return ""
-}
-
-func (b *Bonafide) getURLNoDNS(object string) string {
-	p := strings.ToLower(config.Provider)
-	base := "https://" + getAPIAddr(p) + "/"
-	switch object {
-	case "cert":
-		return base + certPathv1
-	case "certv3":
-		return base + certPathv3
-	case "auth":
-		return base + authPathv3
-	case "eip":
-		return base + "3/config/eip-service.json"
 	}
 	log.Println("BUG: unknown url object")
 	return ""
@@ -270,7 +230,10 @@ func (b *Bonafide) maybeInitializeEIP() error {
 		if b.snowflakeProgress != 100 {
 			ch := make(chan *snowflake.StatusEvent, 20)
 			b.watchSnowflakeProgress(ch)
-			snowflake.BootstrapWithSnowflakeProxies(p, getAPIAddr(p), ch)
+			err := snowflake.BootstrapWithSnowflakeProxies(p, ch)
+			if err != nil {
+				return fmt.Errorf("Could not initialize snowflake: %s", err.Error())
+			}
 		}
 		err := b.parseEipJSONFromFile()
 		if err != nil {

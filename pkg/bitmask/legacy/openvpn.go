@@ -295,7 +295,6 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 
 func (b *Bitmask3) getCert() (certPath string, err error) {
 	log.Println("Getting certificate...")
-	failed := false
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
 		// TODO snowflake might have written a cert here
@@ -312,29 +311,15 @@ func (b *Bitmask3) getCert() (certPath string, err error) {
 			cert, err := b.bonafide.GetPemCertificate()
 			if err != nil {
 				log.Println(err)
-				failed = true
 			}
 			err = ioutil.WriteFile(certPath, cert, 0600)
 			if err != nil {
-				failed = true
+				log.Println(err)
 			}
 		}
 	}
-	if failed || !isValidCert(certPath) {
-		d := config.APIURL[8 : len(config.APIURL)-1]
-		logDnsLookup(d)
-		cert, err := b.bonafide.GetPemCertificateNoDNS()
-		if cert != nil {
-			log.Println("Successfully did certificate bypass")
-			err = nil
-		} else {
-			err = errors.New("Cannot get vpn certificate")
-		}
-		err = ioutil.WriteFile(certPath, cert, 0600)
-		if err != nil {
-			failed = true
-		}
-	}
+	d := config.APIURL[8 : len(config.APIURL)-1]
+	logDnsLookup(d)
 
 	return certPath, err
 }
@@ -344,7 +329,7 @@ func (b *Bitmask3) fetchGateways() {
 	log.Println("Fetching gateways...")
 	_, err := b.bonafide.GetAllGateways(b.transport)
 	if err != nil {
-		log.Println("ERROR Cannot fetch gateways")
+		log.Printf("ERROR Cannot fetch gateways: %v", err)
 	}
 }
 

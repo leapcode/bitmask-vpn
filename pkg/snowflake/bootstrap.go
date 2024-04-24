@@ -2,8 +2,6 @@ package snowflake
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -82,7 +80,7 @@ func writeTorrc() string {
 }
 
 // TODO pass provider api
-func BootstrapWithSnowflakeProxies(provider string, api string, ch chan *StatusEvent) error {
+func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error {
 	rcfile := writeTorrc()
 	logger := &StatusLogger{ch}
 	conf := &tor.StartConf{
@@ -117,31 +115,31 @@ func BootstrapWithSnowflakeProxies(provider string, api string, ch chan *StatusE
 	*/
 	//fetchFile(regClient, "https://wtfismyip.com/json")
 
-	certs := x509.NewCertPool()
-	certs.AppendCertsFromPEM(config.CaCert)
-
 	apiClient := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				RootCAs: certs,
-			},
 			DialContext: dialer.DialContext,
 		},
 		Timeout: time.Minute * 5,
 	}
 
-	eipUri := "https://" + api + "/3/config/eip-service.json"
+	eipUri := config.APIURL + "/3/config/eip-service.json"
 	eipFile := filepath.Join(config.Path, provider+"-eip.json")
-	fetchFile(apiClient, eipUri, eipFile)
+	err = fetchFile(apiClient, eipUri, eipFile)
+	if err != nil {
+		return err
+	}
 
-	certUri := "https://" + api + "/3/cert"
+	certUri := config.APIURL + "/3/cert"
 	certFile := filepath.Join(config.Path, provider+".pem")
-	fetchFile(apiClient, certUri, certFile)
-
+	err = fetchFile(apiClient, certUri, certFile)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func fetchFile(client *http.Client, uri string, file string) error {
+	fmt.Printf("Fetching %s over snowflake", uri)
 	resp, err := client.Get(uri)
 	if err != nil {
 		return err
