@@ -173,7 +173,9 @@ func getPolkitPath() (string, error) {
 		log.Trace().Str("polkitBinary", polkit).Msg("Checking if polkit binary exists")
 		_, err := os.Stat(polkit)
 		if err == nil {
-			log.Debug().Str("polkitBinary", polkit).Msg("Found a polkit binary")
+			log.Debug().
+				Str("polkitBinary", polkit).
+				Msg("Found a polkit binary")
 			return polkit, nil
 		}
 	}
@@ -255,14 +257,18 @@ func runBitmaskRoot(arg ...string) error {
 		Str("cmd", strings.Join(arg, " ")).
 		Msg("Executing bitmask-root")
 
-	out, err := cmd.Output()
+	out, err := cmd.CombinedOutput()
 	// 'firewall isup' is called often and "fails" often, as the firewall is not yet up, so don't log
+	outTrimed := strings.TrimRight(strings.TrimRight(string(out), "\n"), "\r")
 	if err != nil && arg[2] != "isup" {
 		log.Warn().
 			Err(err).
 			Str("cmd", strings.Join(arg, " ")).
-			Str("output", string(out)).
-			Msgf("Error running bitmask-root:%v", string(out))
+			Msgf("Error running bitmask-root: \"%s\"", outTrimed)
+	} else {
+		log.Trace().
+			Str("cmd", strings.Join(arg, " ")).
+			Msgf("Command exited gracefully: \"%s\"", outTrimed)
 	}
 	return err
 }
