@@ -27,8 +27,8 @@ func ParseFile(f string) (Messages, error) {
 
 func getFromJSON(b []byte) (Messages, error) {
 	var m Messages
-	json.Unmarshal(b, &m)
-	return m, nil
+	err := json.Unmarshal(b, &m)
+	return m, err
 }
 
 type Messages struct {
