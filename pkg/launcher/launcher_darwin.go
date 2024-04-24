@@ -18,6 +18,7 @@ package launcher
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -41,13 +42,13 @@ type Launcher struct {
 
 const initialHelperPort = 7171
 
-func probeHelperPort(port int) int {
+func probeHelperPort(port int) (int, error) {
 	// this should be enough for a local reply
 	timeout := time.Duration(500 * time.Millisecond)
 	c := http.Client{Timeout: timeout}
 	for {
 		if smellsLikeOurHelperSpirit(port, &c) {
-			return port
+			return port, nil
 		}
 		port++
 		/* we could go until 65k, but there's really no need */
@@ -55,7 +56,7 @@ func probeHelperPort(port int) int {
 			break
 		}
 	}
-	return 0
+	return -1, errors.New("Could not find port of helper backend")
 }
 
 func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
@@ -93,7 +94,10 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 }
 
 func NewLauncher() (*Launcher, error) {
-	helperPort := probeHelperPort(initialHelperPort)
+	helperPort, err := probeHelperPort(initialHelperPort)
+	if err != nil {
+		return nil, err
+	}
 	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
 	return &Launcher{helperAddr: helperAddr, Failed: false}, nil
 }
