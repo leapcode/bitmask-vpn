@@ -1,7 +1,7 @@
 package motd
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"time"
@@ -68,5 +68,5 @@ func fetchURL(url string) ([]byte, error) {
 		return []byte(""), err
 	}
 	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }

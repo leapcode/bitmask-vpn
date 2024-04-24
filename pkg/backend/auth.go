@@ -38,7 +38,7 @@ func readAuthToken() string {
 		return ""
 	}
 	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
-	token, err := ioutil.ReadFile(tokenPath)
+	token, err := os.ReadFile(tokenPath)
 	if err != nil {
 		log.Fatal().
 			Err(err).

@@ -3,6 +3,7 @@ package snowflake
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -151,7 +152,7 @@ func fetchFile(client *http.Client, uri string, file string) error {
 	}
 	defer resp.Body.Close()
 
-	c, err := ioutil.ReadAll(resp.Body)
+	c, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}

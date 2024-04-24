@@ -2,7 +2,7 @@ package motd
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
 	"time"
 
@@ -18,7 +18,7 @@ func ParseFile(f string) (Messages, error) {
 		return Messages{}, err
 	}
 	defer jsonFile.Close()
-	byteVal, err := ioutil.ReadAll(jsonFile)
+	byteVal, err := io.ReadAll(jsonFile)
 	if err != nil {
 		return Messages{}, err
 	}

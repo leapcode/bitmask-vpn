@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -97,7 +96,7 @@ func GitDescribe(path string) (string, error) {
 
 func ReadVersionFile(path string) string {
 	versionFile := filepath.Join(path, "../../../version")
-	content, err := ioutil.ReadFile(versionFile)
+	content, err := os.ReadFile(versionFile)
 	if err != nil {
 		return "unknown"
 	}

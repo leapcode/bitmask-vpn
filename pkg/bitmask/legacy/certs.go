@@ -3,14 +3,13 @@ package legacy
 import (
 	"crypto/x509"
 	"encoding/pem"
-	"io/ioutil"
+	"log"
+	"os"
 	"time"
-
-	"github.com/rs/zerolog/log"
 )
 
 func isValidCert(path string) bool {
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return false
 	}
@@ -18,7 +17,7 @@ func isValidCert(path string) bool {
 	_, rest := pem.Decode(data)
 	certBlock, rest := pem.Decode(rest)
 	if len(rest) != 0 {
-		log.Warn().Msg("ERROR bad cert data")
+		log.Println("ERROR bad cert data")
 		return false
 	}
 	cert, err := x509.ParseCertificate(certBlock.Bytes)
@@ -29,9 +28,7 @@ func isValidCert(path string) bool {
 	if !expires.After(tomorrow) {
 		return false
 	} else {
-		log.Debug().
-			Str("path", path).
-			Msg("We have a valid cert")
+		log.Println("DEBUG We have a valid cert:", path)
 		return true
 	}
 }

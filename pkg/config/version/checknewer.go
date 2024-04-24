@@ -1,7 +1,7 @@
 package version
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"runtime"
@@ -49,7 +49,7 @@ func CanUpgrade() bool {
 		return false
 	}
 	defer resp.Body.Close()
-	verStr, err := ioutil.ReadAll(resp.Body)
+	verStr, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Warn().
 			Err(err).
