@@ -89,11 +89,11 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		errCh <- err.Error()
 	}
 
-	if helpers == false {
+	if !helpers {
 		log.Error().Msg("Could not find helpers")
 		errCh <- "nohelpers"
 	}
-	if privilege == false {
+	if !privilege {
 		log.Error().Msg("Could not find polkit")
 		errCh <- "nopolkit"
 	}
@@ -127,14 +127,16 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 func initializeAutostart(conf *config.Config) bitmaskAutostart.Autostart {
 	autostart := bitmaskAutostart.NewAutostart(config.ApplicationName, "")
 	if conf.SkipLaunch || conf.DisableAutostart {
-		autostart.Disable()
+		// Disable removes ~.config/autostart/RiseupVPN.desktop: (on Linux)
+		// it's possible that the file does not exist, so no need to check err
+		_ = autostart.Disable()
 		autostart = &bitmaskAutostart.DummyAutostart{}
 	} else {
 		err := autostart.Enable()
 		if err != nil {
 			log.Warn().
 				Err(err).
-				Msg("Could not enable autostart")
+				Msg("Could not enable autostart during initialization")
 		}
 	}
 	return autostart

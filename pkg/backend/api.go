@@ -258,7 +258,6 @@ func ResetNotification(label string) {
 	switch label {
 	case "login_ok":
 		ctx.LoginOk = false
-		break
 	default:
 		break
 	}
