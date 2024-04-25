@@ -81,7 +81,10 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 		log.Info().Msg("Not autostarting OpenVPN")
 	}
 	if _, err := os.Stat(config.Path); os.IsNotExist(err) {
-		os.MkdirAll(config.Path, os.ModePerm)
+		err = os.MkdirAll(config.Path, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	b, err := initBitmaskVPN()
@@ -138,7 +141,10 @@ func maybeStartVPN(b Bitmask, conf *config.Config) error {
 	if b.CanStartVPN() {
 		log.Info().Msg("Starting OpenVPN")
 		err := b.StartVPN(config.Provider)
-		conf.SetUserStoppedVPN(false)
+		if err != nil {
+			return err
+		}
+		err = conf.SetUserStoppedVPN(false)
 		return err
 	}
 	return nil

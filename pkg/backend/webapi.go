@@ -129,7 +129,14 @@ func enableWebAPI(port int) {
 	http.Handle("/vpn/transport/list", CheckAuth(http.HandlerFunc(webTransportList), token))
 	http.Handle("/vpn/status", CheckAuth(http.HandlerFunc(webStatus), token))
 	http.Handle("/vpn/quit", CheckAuth(http.HandlerFunc(webQuit), token))
-	http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	err := http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Str("bindAddr", ":"+strconv.Itoa(port)).
+			Msg("Could not listen on port for WebAPI")
+
+	}
 }
 
 func isValidTransport(t string) bool {

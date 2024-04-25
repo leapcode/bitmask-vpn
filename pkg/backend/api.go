@@ -135,18 +135,40 @@ func GetTransport() *C.char {
 
 func Quit() {
 	if ctx.autostart != nil {
-		ctx.autostart.Disable()
+		err := ctx.autostart.Disable()
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not disable autostart")
+		}
 	}
 	if ctx.Status != off {
 		go setStatus(stopping)
-		ctx.cfg.SetUserStoppedVPN(false)
+		err := ctx.cfg.SetUserStoppedVPN(false)
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Bool("userStopped", false).
+				Msg("Could not set UserStoppedVPN")
+		}
 	} else {
-		ctx.cfg.SetUserStoppedVPN(true)
+		err := ctx.cfg.SetUserStoppedVPN(true)
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Bool("userStopped", false).
+				Msg("Could not set UserStoppedVPN")
+		}
 	}
 	if ctx.bm != nil {
 		ctx.bm.Close()
 	}
-	pid.ReleasePID()
+	err := pid.ReleasePID()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not release PID")
+	}
 }
 
 func DonateAccepted() {

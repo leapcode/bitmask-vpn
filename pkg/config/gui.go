@@ -20,6 +20,8 @@ import (
 	"os"
 	"path"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -63,6 +65,12 @@ func ParseConfig() *Config {
 		defer f.Close()
 		dec := json.NewDecoder(f)
 		err = dec.Decode(&conf.file)
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Str("configPath", configPath).
+				Msg("Could not json decode config")
+		}
 	}
 
 	conf.Obfs4 = conf.file.Obfs4

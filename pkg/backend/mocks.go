@@ -15,7 +15,12 @@ func enableMockBackend() {
 	http.HandleFunc("/on", mockUIOn)
 	http.HandleFunc("/off", mockUIOff)
 	http.HandleFunc("/failed", mockUIFailed)
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not run mock backend")
+	}
 }
 
 func mockUIOn(w http.ResponseWriter, r *http.Request) {

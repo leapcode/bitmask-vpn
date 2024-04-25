@@ -82,7 +82,10 @@ func Init() (*Bitmask3, error) {
 	// XXX we want to block on these, but they can timeout if we're blocked.
 	b.checkForUpgrades()
 	b.checkForMOTD()
-	b.launch.FirewallStop()
+	err = b.launch.FirewallStop()
+	if err != nil {
+		log.Printf("Could not stop firewall: %v", err)
+	}
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running
 		from a previous one, but first we need to complete all the
@@ -134,9 +137,14 @@ func (b *Bitmask3) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
 // Close the connection to bitmask, and does cleanup of temporal files
 func (b *Bitmask3) Close() {
 	log.Info().Msg("Close: cleanup and vpn shutdown...")
-	b.StopVPN()
+	err := b.StopVPN()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("There was an error stopping the vpn")
+	}
 	time.Sleep(500 * time.Millisecond)
-	err := b.launch.Close()
+	err = b.launch.Close()
 	if err != nil {
 		log.Warn().
 			Err(err).

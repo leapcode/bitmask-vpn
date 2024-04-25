@@ -2,6 +2,8 @@ package backend
 
 import (
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 // runDonationReminder checks every six hours if we need to show the reminder,
@@ -38,7 +40,12 @@ func donateAccepted() {
 	statusMutex.Lock()
 	defer statusMutex.Unlock()
 	ctx.DonateDialog = false
-	ctx.cfg.SetDonated()
+	err := ctx.cfg.SetDonated()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not set donated state")
+	}
 	go trigger(OnStatusChanged)
 }
 
@@ -46,6 +53,11 @@ func showDonate() {
 	statusMutex.Lock()
 	defer statusMutex.Unlock()
 	ctx.DonateDialog = true
-	ctx.cfg.SetLastReminded()
+	err := ctx.cfg.SetLastReminded()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not set donation lastReminded state")
+	}
 	go trigger(OnStatusChanged)
 }

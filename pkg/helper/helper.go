@@ -76,7 +76,15 @@ func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not process OpenVPN arguments")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			_, err = w.Write([]byte(err.Error()))
+			if err != nil {
+				log.Warn().
+					Err(err).
+					Msg("Could not write http reponse")
+			}
+		}
 		return
 	}
 
@@ -89,7 +97,12 @@ func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not start OpenVPN")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 	}
 }
 
@@ -122,14 +135,24 @@ func (openvpn *openvpnT) stop(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not stop OpenVPN process")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 	}
 }
 
 func (openvpn *openvpnT) kill() error {
 	err := kill(openvpn.cmd)
 	if err == nil {
-		openvpn.cmd.Wait()
+		err = openvpn.cmd.Wait()
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not wait for process")
+		}
 	} else {
 		log.Warn().
 			Err(err).
@@ -152,13 +175,23 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not process gateways")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 		return
 	}
 
 	for _, gw := range gateways {
 		if !validAddress(gw) {
-			w.Write([]byte("bad argument"))
+			_, err = w.Write([]byte("bad argument"))
+			if err != nil {
+				log.Warn().
+					Err(err).
+					Msg("Could not write http reponse")
+			}
 		}
 	}
 
@@ -167,7 +200,12 @@ func firewallStartHandler(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not start firewall")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 		return
 	}
 	log.Info().Msg("Successfully started firewall")
@@ -179,7 +217,12 @@ func firewallStopHandler(w http.ResponseWriter, r *http.Request) {
 		log.Warn().
 			Err(err).
 			Msg("Could not stop firewall")
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 	}
 	log.Info().Msg("Successfully stopped firewalll")
 }
@@ -187,16 +230,31 @@ func firewallStopHandler(w http.ResponseWriter, r *http.Request) {
 func firewallIsUpHandler(w http.ResponseWriter, r *http.Request) {
 	if firewallIsUp() {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("true"))
+		_, err := w.Write([]byte("true"))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 	} else {
 		w.WriteHeader(http.StatusNoContent)
-		w.Write([]byte("false"))
+		_, err := w.Write([]byte("false"))
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not write http reponse")
+		}
 	}
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(AppName + "/" + Version + "\n"))
+	_, err := w.Write([]byte(AppName + "/" + Version + "\n"))
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not write http reponse")
+	}
 }
 
 func getArgs(r *http.Request) ([]string, error) {
