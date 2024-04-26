@@ -38,7 +38,10 @@ endif
 
 QTBUILD = build/qt
 INSTALLER = build/installer
-OSX_CERT="Developer ID Application: LEAP Encryption Access Project"
+
+# See https://stackoverflow.com/a/65120256 if you have problems validating the cert.
+OSX_CERT="Apple Distribution: LEAP Encryption Access Project"
+
 MACDEPLOYQT_OPTS = -appstore-compliant -always-overwrite -codesign="${OSX_CERT}"
 
 ifeq ($(PLATFORM), darwin)
