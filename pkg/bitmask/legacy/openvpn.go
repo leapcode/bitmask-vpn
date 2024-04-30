@@ -280,11 +280,13 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 		"--key", b.certPemPath,
 		"--persist-tun") // needed for reconnects
 	//		"--float")
-	if verb > 3 {
-		arg = append(
-			arg,
-			"--log", "/tmp/leap-vpn.log")
+
+	if os.Getenv("OPENVPN_LOG_TO_FILE") != "" {
+		openVpnLogFile := path.Join(os.TempDir(), "leap-vpn.log")
+		log.Printf("DEBUG: Logging OpenVPN output to %s\n", openVpnLogFile)
+		arg = append(arg, "--log", openVpnLogFile)
 	}
+
 	if os.Getenv("LEAP_DRYRUN") == "1" {
 		arg = append(
 			arg,

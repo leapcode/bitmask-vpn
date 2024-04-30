@@ -53,6 +53,7 @@ import subprocess
 import sys
 import stat
 import traceback
+import tempfile
 
 cmdcheck = subprocess.check_output
 
@@ -184,7 +185,7 @@ PARAM_FORMATS = {
     "UNIXSOCKET": lambda s: s == "unix",
     "NETGW": lambda s: s == "net_gateway",
     "UID": lambda s: re.match("^[a-zA-Z0-9]+$", s),
-    "LOGFILE": lambda s: s == "/tmp/leap-vpn.log",
+    "LOGFILE": lambda s: s == f"{tempfile.gettempdir()}/leap-vpn.log",
     "ignore": lambda s: s == "ignore",
     "route": lambda s: s == "route",
 }
