@@ -25,7 +25,6 @@ import (
 	"log"
 	"math"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -282,7 +281,7 @@ func (b *Bitmask3) startOpenVPN(ctx context.Context) error {
 	//		"--float")
 
 	if os.Getenv("OPENVPN_LOG_TO_FILE") != "" {
-		openVpnLogFile := path.Join(os.TempDir(), "leap-vpn.log")
+		openVpnLogFile := filepath.Join(os.TempDir(), "leap-vpn.log")
 		log.Printf("DEBUG: Logging OpenVPN output to %s\n", openVpnLogFile)
 		arg = append(arg, "--log", openVpnLogFile)
 	}
@@ -484,11 +483,11 @@ func (b *Bitmask3) GetTransport() string {
 }
 
 func (b *Bitmask3) getTempCertPemPath() string {
-	return path.Join(b.tempdir, "openvpn.pem")
+	return filepath.Join(b.tempdir, "openvpn.pem")
 }
 
 func (b *Bitmask3) getTempCaCertPath() string {
-	return path.Join(b.tempdir, "cacert.pem")
+	return filepath.Join(b.tempdir, "cacert.pem")
 }
 
 func getRandomPass(l int) string {
