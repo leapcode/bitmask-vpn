@@ -162,10 +162,6 @@ func (c *HopClient) Start() (bool, error) {
 
 	c.obfs4Conns = []net.Conn{obfs4Conn}
 
-	// We want a non-crypto RNG so that we can share a seed
-	// #nosec G404
-	rand.Seed(time.Now().UnixNano())
-
 	c.state = running
 
 	proxyAddr, err := net.ResolveUDPAddr("udp", c.ProxyAddr)

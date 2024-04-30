@@ -49,7 +49,6 @@ func (c *Client) Start() (bool, error) {
 	c.mux.Lock()
 
 	defer func() {
-		c.mux.Unlock()
 		c.log("STOPPED", "")
 	}()
 
@@ -83,6 +82,8 @@ func (c *Client) Start() (bool, error) {
 
 	errCh := make(chan error)
 	go c.startSocksServer(errCh)
+
+	c.mux.Unlock()
 
 	select {
 	case <-c.ctx.Done():

@@ -1,5 +1,7 @@
 0xacab.org/leap/obfsvpn v0.0.0-20230809183729-89f8aac8201e h1:q+637mlcDzjDskxHrUbFQ6jqxuqz27Ws9lpwnM6tueU=
 0xacab.org/leap/obfsvpn v0.0.0-20230809183729-89f8aac8201e/go.mod h1:cOGeSmVkgxW5qYIOSvkBeFxwBnoOYsjuQWFYB5YYlm4=
+0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc h1:QyADySTHZtWA81k58D/eD5aLFG2n8QaeKjIB/aMI3OU=
+0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc/go.mod h1:cOGeSmVkgxW5qYIOSvkBeFxwBnoOYsjuQWFYB5YYlm4=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 filippo.io/edwards25519 v1.0.0/go.mod h1:N1IkdkCkiLB6tki+MYJoSx2JTY9NUlxZE7eHn5EwJns=

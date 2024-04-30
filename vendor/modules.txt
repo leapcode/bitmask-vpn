@@ -1,4 +1,4 @@
-# 0xacab.org/leap/obfsvpn v0.0.0-20230809183729-89f8aac8201e
+# 0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc
 ## explicit; go 1.20
 0xacab.org/leap/obfsvpn/client
 0xacab.org/leap/obfsvpn/obfsvpn

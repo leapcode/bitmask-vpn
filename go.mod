@@ -3,7 +3,7 @@ module 0xacab.org/leap/bitmask-vpn
 go 1.19
 
 require (
-	0xacab.org/leap/obfsvpn v0.0.0-20230809183729-89f8aac8201e
+	0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc
 	git.torproject.org/pluggable-transports/goptlib.git v1.3.0
 	git.torproject.org/pluggable-transports/snowflake.git v1.1.0
 	github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
