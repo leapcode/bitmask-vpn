@@ -2,6 +2,18 @@ development
 ===========
 - ...
 
+0.24.5
+======
+- fix missing dependencies on .deb package
+- Shorten too long strings in translations
+- Fix bitmask branded windows UI and remove riseup crow from about
+- Connection status text width trimmed to be inside parent container
+- Bitmask branded desktop build pointing to demo instance of lillypad
+- Add Supported OS's to the readme
+- Update the debian package to build using Qt6
+- Update GUI to Qt6
+- Fix bitmask-helper install script for macOS and windows
+
 
 0.21.11
 =======
