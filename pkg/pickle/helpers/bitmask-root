@@ -174,12 +174,12 @@ ALLOWED_FLAGS = {
 }
 
 PARAM_FORMATS = {
-    "NUMBER": lambda s: re.match("^\d+$", s),
+    "NUMBER": lambda s: re.match(r"^\d+$", s),
     "PROTO": lambda s: re.match("^(tcp|udp|tcp4|udp4)$", s),
     "IP": lambda s: is_valid_address(s),
-    "CIPHER": lambda s: re.match("^[A-Z0-9-\:]+$", s),
+    "CIPHER": lambda s: re.match(r"^[A-Z0-9-\:]+$", s),
     "USER": lambda s: re.match(
-        "^[a-zA-Z0-9_\.\@][a-zA-Z0-9_\-\.\@]*\$?$", s),  # IEEE Std 1003.1-2001
+        r"^[a-zA-Z0-9_\.\@][a-zA-Z0-9_\-\.\@]*\$?$", s),  # IEEE Std 1003.1-2001
     "FILE": lambda s: os.path.isfile(s),
     "DIR": lambda s: os.path.isdir(os.path.split(s)[0]),
     "UNIXSOCKET": lambda s: s == "unix",
@@ -847,7 +847,7 @@ def firewall_start(args):
 
     # On Qubes OS, add anti-leak rules for proxyVM qubes-firewall.service
     # Must stay on 'top' of chain!
-    if QUBES_PROXY and QUBES_VER >= 3 and run("grep", "installed\ by\ " +
+    if QUBES_PROXY and QUBES_VER >= 3 and run("grep", r"installed\ by\ " +
                                               SCRIPT, QUBES_FW_SCRIPT,
                                               exitcode=True) != 0:
         with open(QUBES_FW_SCRIPT, mode="w") as qfile:
