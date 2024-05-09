@@ -164,9 +164,8 @@ func (b *Bitmask3) DoLogin(username, password string) (bool, error) {
 	return b.bonafide.DoLogin(username, password)
 }
 
-func (b *Bitmask3) UseUDP(udp bool) error {
+func (b *Bitmask3) UseUDP(udp bool) {
 	b.udp = udp
-	return nil
 }
 
 func (b *Bitmask3) UseSnowflake(s bool) error {

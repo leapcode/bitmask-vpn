@@ -40,7 +40,7 @@ type Bitmask interface {
 	SetProvider(string)
 	GetTransport() string
 	SetTransport(string) error
-	UseUDP(bool) error
+	UseUDP(bool)
 	UseSnowflake(bool) error
 	OffersUDP() bool
 	GetCurrentGateway() string
