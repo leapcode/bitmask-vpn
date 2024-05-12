@@ -1,10 +1,10 @@
 # An image to build and package the BitmaskVPN (RiseupVPN and other branded builds)
 # (c) LEAP Encryption Access Project 2018-2021
 
-FROM ubuntu:23.04 as builder
+FROM ubuntu:24.04 as builder
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
-ARG GO_VERSION=1.21
+ARG GO_VERSION=1.22
 LABEL Description="An image to build Bitmask Lite" Vendor="LEAP" Version="1.2"
 ENV OSXSDK_SHA256="631b4144c6bf75bf7a4d480d685a9b5bda10ee8d03dbf0db829391e2ef858789" \
     PATH="$PATH:/osxcross/target/bin:/usr/lib/go-${GO_VERSION}/bin" \
