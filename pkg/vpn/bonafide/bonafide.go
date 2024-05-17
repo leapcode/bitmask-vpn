@@ -336,7 +336,7 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	* streamline that behavior */
 	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
 	if err != nil {
-		client := &http.Client{}
+		client := &http.Client{Timeout: time.Second * 30}
 		_resp, err := client.Post(config.GeolocationAPI, "", nil)
 		if err != nil {
 			log.Warn().
