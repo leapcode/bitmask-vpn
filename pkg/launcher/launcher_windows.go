@@ -71,7 +71,7 @@ func (l *Launcher) OpenvpnStart(flags ...string) error {
 	cwd, _ := os.Getwd()
 	opts := `--client --dev tun --block-outside-dns --redirect-gateway --script-security 0 ` + strings.Join(flags, " ")
 	log.Info().
-		Str("args", args).
+		Str("args", opts).
 		Msg("Starting OpenVPN")
 
 	timeout := 3 * time.Second
