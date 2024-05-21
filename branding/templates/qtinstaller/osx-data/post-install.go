@@ -124,7 +124,7 @@ func main() {
 		log.Println("running action: uninstall")
 		uninstall(installerStage)
 	default:
-		log.Fatal("unknown command supplied: %s", installerAction)
+		log.Fatalf("unknown command supplied: %s", installerAction)
 	}
 }
 
