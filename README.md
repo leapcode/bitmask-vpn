@@ -36,7 +36,15 @@ debuild -us -uc
 sudo dpkg -i ../riseup-vpn*.deb
 ```
 
-If you're using ubuntu, you can use [kali's ppa](https://launchpad.net/~kalikaneko/+archive/ubuntu/ppa).
+# ubuntu
+
+If you're using ubuntu, you can use [leapcodes ppa](https://launchpad.net/~leapcodes/+archive/ubuntu/riseup-vpn).
+
+```
+sudo add-apt-repository ppa:leapcodes/riseup-vpn
+sudo apt update
+sudo apt install riseup-vpn
+```
 
 ## Build
 
