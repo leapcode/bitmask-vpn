@@ -23,3 +23,7 @@ func stopVPN() {
 			Msg("Could not stop VPN")
 	}
 }
+
+func getGateway() string {
+	return ctx.bm.GetCurrentGateway()
+}
