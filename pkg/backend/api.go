@@ -219,7 +219,9 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 					return &InitOpts{ProviderOptions: &p}
 				}
 			}
-			panic("BUG: unknown provider")
+			log.Fatal().
+				Str("provider", chosenProvider).
+				Msg("Provider not found in providers.json")
 		}
 	}
 	return &InitOpts{ProviderOptions: providerOpts}
