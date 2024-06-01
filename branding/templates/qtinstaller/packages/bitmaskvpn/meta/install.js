@@ -68,7 +68,7 @@ function Component() {
 
 Component.prototype.createOperations = function ()
 {
-    if (systemInfo.productType === "osx") {
+    if (systemInfo.productType === "macos") {
         preInstallOSX();
     }
     if (systemInfo.productType === "windows") {
@@ -85,7 +85,7 @@ Component.prototype.createOperations = function ()
 
     if (systemInfo.productType === "windows") {
         postInstallWindows();
-    } else if (systemInfo.productType === "osx") {
+    } else if (systemInfo.productType === "macos") {
         uninstallOSX();
         postInstallOSX();
     } else {
