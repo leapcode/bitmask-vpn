@@ -1,3 +1,5 @@
+# BitmaskVPN - Desktop client
+
 ## Supported operating systems
 
 **BitmaskVPN** needs the following minimum versions of supported operating systems:
@@ -18,15 +20,15 @@
 
 ## Install
 
-# arch
+# Arch Linux
 
-[There's a package in AUR](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that)
+There are two AUR packages for Arch Linux. There is [riseup-vpn-git](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that). There is also [riseup-vpn](https://aur.archlinux.org/packages/riseup-vpn) with the latest stable release.
 
 ```
-yaourt -Sy riseup-vpn-git
+yay riseup-vpn
 ```
 
-# deb
+# Debian
 
 We haven't updated deb.leap.se repo yet 😞 (see #466), but if you *really* desire a debian
 package you can build your own for the time being:
@@ -36,9 +38,11 @@ debuild -us -uc
 sudo dpkg -i ../riseup-vpn*.deb
 ```
 
-# ubuntu
+You can also run `make package_deb`. You can install the built package with `apt install -f ./deploy/*.deb`.
 
-If you're using ubuntu, you can use [leapcodes ppa](https://launchpad.net/~leapcodes/+archive/ubuntu/riseup-vpn).
+# Ubuntu
+
+If you're using Ubuntu, you can use [leapcodes ppa](https://launchpad.net/~leapcodes/+archive/ubuntu/riseup-vpn).
 
 ```
 sudo add-apt-repository ppa:leapcodes/riseup-vpn
@@ -46,16 +50,23 @@ sudo apt update
 sudo apt install riseup-vpn
 ```
 
-## Build
+## Snap
 
-Clone this repo, install dependencies and build the application. Dependencies
-assume debian packages, or homebrew for osx. For Windows OS see corresponding section below. For other systems try
-manually, or send us a patch.
+There is also a package in the [Snap store](https://snapcraft.io/riseup-vpn).
 
 ```
-  git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
-  sudo make depends  # do not use sudo in osx 
-  make build
+sudo snap install riseup-vpn
+```
+
+## Build
+
+Clone this repo, install dependencies and build the application. Dependencies assume debian packages, or homebrew for osx. For Windows OS see corresponding section below. For other systems try manually, or send us a patch. bitmask-vpn can be branded for a specific provider by specifying the env variable PROVIDER during the build process; we currently support three providers: riseup, calyx, and bitmask. To create a client branded for 'riseup', run:
+
+```
+git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
+sudo make depends  # do not use sudo in osx 
+PROVIDER=riseup make vendor
+make build
 ```
 
 You need at least go 1.20.
@@ -65,9 +76,9 @@ You need at least go 1.20.
 You can run some tests too.
 
 ```
-  sudo apt install qml-module-qttest
-  make test
-  make test_ui
+sudo apt install qml-module-qttest
+make test
+make test_ui
 ```
 
 ## Windows
@@ -85,7 +96,7 @@ You need to have installed and added to your user PATH (mentioned version tested
 
 #### Get Source
 ```
-    git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
+git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
 ```
 
 #### Build
@@ -93,12 +104,12 @@ Build script uses a symbolic link in one of the stages. Unfortunately Cygwin can
 admin user due to windows security restriction. To avoid this issue we need to call next target from cygwin terminal as   
 Administrator. This need to be done only once. 
 ```bash
-    make relink_vendor
+make relink_vendor
 ```
 
 After `relink_vendor` use this to build the app:
 ```bash
-    make build
+make build
 ```
 After successful build application will be available at: `build/qt/release/riseup-vpn.exe`
 
@@ -107,8 +118,8 @@ After successful build application will be available at: `build/qt/release/riseu
 To run tests:
 
 ```bash
-    make test
-    make test_ui
+make test
+make test_ui
 ```
 
 ## Logging
@@ -118,7 +129,7 @@ Linux: `~/.config/leap/systray.log`
 Windows: `%LocalAppData%\leap\systray.log  `
 Mac: `~/Library/Preferences/leap/systray.log`
 
-Log levels can be set via environment variable (`LOG_LEVEL=TRACE`, `LOG_LEVEL=DEBUG`, default log level is `INFO`). The cpp/qml part logs to stderr if env `DEBUG=1` is set.
+Log levels can be set via environment variable (`LOG_LEVEL=TRACE`, `LOG_LEVEL=DEBUG`, default log level is `INFO`). The cpp/qml part logs to stderr if env `DEBUG=1` is set. If `OPENVPN_LOG_TO_FILE=1` is set, the OpenVPN process writes its logs to [os.TempDir()](https://pkg.go.dev/os#TempDir)/leap-vpn.log. The verbosity of OpenVPN can be specified with env `OPENVPN_VERBOSITY` (sets `--verb`).
 
 Translations
 ------------
