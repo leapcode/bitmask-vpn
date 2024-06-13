@@ -106,7 +106,8 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 			// we don't want this error to avoid initialization of
 			// the bitmask object. If we cannot autostart it's not
 			// so terrible.
-			log.Warn().Err(err).
+			log.Warn().
+				Err(err).
 				Msg("Could not start OpenVPN (maybeStartVPN)")
 		}
 	}

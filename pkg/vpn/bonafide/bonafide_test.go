@@ -18,14 +18,20 @@ package bonafide
 import (
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
+
+func init() {
+	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
+}
 
 const (
 	certPath   = "testdata/cert"
@@ -162,7 +168,7 @@ func TestOpenvpnGateways(t *testing.T) {
 			}
 		default:
 			if !p {
-				log.Println(">> present", present)
+				log.Info().Msgf(">> present %v", present)
 				t.Errorf("Host %d should have openvpn transport", i)
 			}
 		}

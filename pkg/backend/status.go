@@ -185,5 +185,8 @@ func (s status) fromString(st string) status {
 }
 
 func setStatusFromStr(stStr string) {
+	log.Trace().
+		Str("status", stStr).
+		Msg("Setting GUI status")
 	setStatus(unknown.fromString(stStr))
 }
