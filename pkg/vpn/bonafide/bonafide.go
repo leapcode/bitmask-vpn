@@ -55,7 +55,7 @@ type Bonafide struct {
 	maxGateways       int
 	auth              authentication
 	token             []byte
-	SnowflakeCh       chan *snowflake.StatusEvent
+	SnowflakeCh       chan *snowflake.StatusEvent // only used by the GUI to show the progress (but does not work?)
 	snowflakeProgress int
 	snowflake         bool
 }
@@ -108,6 +108,7 @@ func New() *Bonafide {
 		client:        client,
 		eip:           nil,
 		tzOffsetHours: tzOffsetHours,
+		SnowflakeCh:   make(chan *snowflake.StatusEvent, 20),
 	}
 	switch auth := config.Auth; auth {
 	case "sip":
@@ -214,11 +215,15 @@ func (b *Bonafide) getURL(object string) string {
 func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 	// We need to keep track of the bootstrap process here, and then we
 	// pass to the channel that is observed by the backend
-	log.Debug().Msg(">>> WATCH SNOWFLAKE")
+	log.Debug().Msg("Waiting for snowflake events")
 	go func() {
 		for {
 			select {
 			case evt := <-ch:
+				log.Debug().
+					Str("tag", evt.Tag).
+					Str("progress", fmt.Sprintf("%02d%%", evt.Progress)).
+					Msg("Snowflake progress")
 				b.snowflakeProgress = evt.Progress
 				b.SnowflakeCh <- evt
 			}
@@ -230,8 +235,8 @@ func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 func (b *Bonafide) maybeInitializeEIP() error {
 	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
+		log.Info().Msg("Snowflake is enabled. Fetching eip json and certificate via snowflake (SNOWFLAKE=1)")
 		p := strings.ToLower(config.Provider)
-		log.Debug().Msgf("%d", b.snowflakeProgress)
 		if b.snowflakeProgress != 100 {
 			ch := make(chan *snowflake.StatusEvent, 20)
 			b.watchSnowflakeProgress(ch)

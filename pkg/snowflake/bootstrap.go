@@ -2,7 +2,6 @@ package snowflake
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -64,7 +63,6 @@ func (e *StatusLogger) Write(p []byte) (n int, err error) {
 					event := &StatusEvent{Progress: pr, Tag: parts[6][4:]}
 					go func() { e.ch <- event }()
 				}
-				fmt.Println()
 			}
 		}
 	}
@@ -91,8 +89,7 @@ func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error 
 		TorrcFile:   rcfile,
 	}
 
-	fmt.Println("Starting Tor and fetching files to bootstrap VPN tunnel...")
-	fmt.Println("")
+	log.Info().Msg("Starting Tor and fetching files to bootstrap VPN tunnel...")
 
 	t, err := tor.Start(nil, conf)
 	if err != nil {

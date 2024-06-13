@@ -61,9 +61,7 @@ func Init() (*Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	snowCh := make(chan *snowflake.StatusEvent, 20)
 	bf := bonafide.New()
-	bf.SnowflakeCh = snowCh
 	launch, err := launcher.NewLauncher()
 	if err != nil {
 		return nil, err
