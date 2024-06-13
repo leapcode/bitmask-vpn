@@ -30,7 +30,6 @@ type Bitmask interface {
 	Reconnect() error
 	ReloadFirewall() error
 	GetStatus() (string, error)
-	InstallHelpers() error
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	ListLocationFullness(protocol string) map[string]float64
 	ListLocationLabels(protocol string) map[string][]string

@@ -465,11 +465,6 @@ func (b *Bitmask) GetStatus() (string, error) {
 	return status, nil
 }
 
-func (b *Bitmask) InstallHelpers() error {
-	// TODO use pickle module from here
-	return nil
-}
-
 // VPNCheck returns if the helpers are installed and up to date and if polkit is running
 func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.Check()
