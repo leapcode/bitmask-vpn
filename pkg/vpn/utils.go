@@ -1,9 +1,12 @@
 package vpn
 
 import (
+	"crypto/rand"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"io/ioutil"
+	"math"
 	"strings"
 	"time"
 
@@ -71,4 +74,12 @@ func isValidCert(path string) bool {
 		Str("path", path).
 		Msg("Successfully verified certificate")
 	return true
+}
+
+// Generate a random password with len l
+func getRandomPass(l int) string {
+	buff := make([]byte, int(math.Round(float64(l)/float64(1.33333333333))))
+	rand.Read(buff)
+	str := base64.RawURLEncoding.EncodeToString(buff)
+	return str[:l] // strip 1 extra character we get from odd length results
 }
