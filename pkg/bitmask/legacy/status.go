@@ -46,7 +46,7 @@ var statusNames = map[string]string{
 	"FAILED":       Off,
 }
 
-func (b *Bitmask3) openvpnManagement() {
+func (b *Bitmask) openvpnManagement() {
 	// TODO: we should warn the user on ListenAndServe errors
 	newConnection := func(conn management.IncomingConn) {
 		eventCh := make(chan management.Event, 10)
@@ -68,7 +68,7 @@ func (b *Bitmask3) openvpnManagement() {
 	}
 }
 
-func (b *Bitmask3) eventHandler(eventCh <-chan management.Event) {
+func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 	for event := range eventCh {
 		log.Debug().
 			Str("event", event.String()).
@@ -105,27 +105,27 @@ func (b *Bitmask3) eventHandler(eventCh <-chan management.Event) {
 	b.statusCh <- Off
 }
 
-func (b *Bitmask3) GetCurrentGateway() string {
+func (b *Bitmask) GetCurrentGateway() string {
 	return b.onGateway.Host
 }
 
-func (b *Bitmask3) GetCurrentLocation() string {
+func (b *Bitmask) GetCurrentLocation() string {
 	return b.onGateway.LocationName
 }
 
-func (b *Bitmask3) GetCurrentCountry() string {
+func (b *Bitmask) GetCurrentCountry() string {
 	return b.onGateway.CountryCode
 }
 
-func (b *Bitmask3) GetBestLocation(transport string) string {
+func (b *Bitmask) GetBestLocation(transport string) string {
 	return b.bonafide.GetBestLocation(transport)
 }
 
-func (b *Bitmask3) IsManualLocation() bool {
+func (b *Bitmask) IsManualLocation() bool {
 	return b.bonafide.IsManualLocation()
 }
 
-func (b *Bitmask3) getOpenvpnState() (string, error) {
+func (b *Bitmask) getOpenvpnState() (string, error) {
 	if b.managementClient == nil {
 		return "", fmt.Errorf("No management connected")
 	}
@@ -140,6 +140,6 @@ func (b *Bitmask3) getOpenvpnState() (string, error) {
 	return status, nil
 }
 
-func (b *Bitmask3) isFailed() bool {
+func (b *Bitmask) isFailed() bool {
 	return b.launch.Failed
 }
