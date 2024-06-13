@@ -316,11 +316,13 @@ func (b *Bonafide) SetAutomaticGateway() {
 	b.gateways.setAutomaticChoice()
 }
 
-func (b *Bonafide) GetBestLocation(transport string) string {
+func (b *Bonafide) GetBestLocation(transport string) (string, error) {
 	if b.gateways == nil {
-		return ""
+		return "", nil
 	}
-	return b.gateways.getBestLocation(transport, b.tzOffsetHours)
+	// in the v5/menshen implementation, some errors can happen, this
+	// function will be part of an interface
+	return b.gateways.getBestLocation(transport, b.tzOffsetHours), nil
 }
 
 func (b *Bonafide) IsManualLocation() bool {

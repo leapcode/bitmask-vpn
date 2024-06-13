@@ -118,7 +118,14 @@ func (b *Bitmask) GetCurrentCountry() string {
 }
 
 func (b *Bitmask) GetBestLocation(transport string) string {
-	return b.bonafide.GetBestLocation(transport)
+	location, err := b.bonafide.GetBestLocation(transport)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Str("transport", transport).
+			Msg("Could not get best location")
+	}
+	return location
 }
 
 func (b *Bitmask) IsManualLocation() bool {
