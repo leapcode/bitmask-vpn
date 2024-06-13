@@ -272,9 +272,9 @@ func (b *Bonafide) maybeInitializeEIP() error {
 	return nil
 }
 
-// GetGateways filters by transport, and will return the maximum number defined
+// GetBestGateways filters by transport, and will return the maximum number defined
 // in bonafide.maxGateways, or the maximum by default (3).
-func (b *Bonafide) GetGateways(transport string) ([]Gateway, error) {
+func (b *Bonafide) GetBestGateways(transport string) ([]Gateway, error) {
 	err := b.maybeInitializeEIP()
 	if err != nil {
 		return nil, err

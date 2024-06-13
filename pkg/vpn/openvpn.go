@@ -101,7 +101,7 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 		return proxyAddr, nil
 	}
 
-	gateways, err := b.bonafide.GetGateways(b.transport)
+	gateways, err := b.bonafide.GetBestGateways(b.transport)
 	if err != nil {
 		return "", err
 	}
@@ -226,7 +226,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 			log.Debug().Msg("Getting a gateway with obfs4 transport...")
 
-			gateways, err := b.bonafide.GetGateways("obfs4")
+			gateways, err := b.bonafide.GetBestGateways("obfs4")
 			if err != nil {
 				return err
 			}
@@ -261,7 +261,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		log.Info().
 			Str("args", strings.Join(arg, " ")).
 			Msg("args passed to bitmask-root")
-		gateways, err := b.bonafide.GetGateways("openvpn")
+		gateways, err := b.bonafide.GetBestGateways("openvpn")
 		if err != nil {
 			return err
 		}

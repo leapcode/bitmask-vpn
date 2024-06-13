@@ -49,11 +49,11 @@ func TestIntegrationGetCert(t *testing.T) {
 	}
 }
 
-func _TestGetGateways(t *testing.T) {
+func _TestGetBestGateways(t *testing.T) {
 	// FIXME: we return only 3 gateways now
 	initTestConfig()
 	b := New()
-	gateways, err := b.GetGateways("openvpn")
+	gateways, err := b.GetBestGateways("openvpn")
 	if err != nil {
 		t.Fatal("getGateways returned an error: ", err)
 	}

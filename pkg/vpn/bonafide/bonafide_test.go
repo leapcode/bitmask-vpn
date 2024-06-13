@@ -115,7 +115,7 @@ func TestGatewayTzLocation(t *testing.T) {
 			tzOffsetHours: tzOffset,
 		}
 		b.maxGateways = 99
-		gateways, err := b.GetGateways("openvpn")
+		gateways, err := b.GetBestGateways("openvpn")
 
 		if err != nil {
 			t.Errorf("getGateways returned an error: %v", err)
@@ -136,7 +136,7 @@ func TestOpenvpnGateways(t *testing.T) {
 		client: mockClient{eipPath, geoPath},
 	}
 	b.maxGateways = 10
-	gateways, err := b.GetGateways("openvpn")
+	gateways, err := b.GetBestGateways("openvpn")
 	if err != nil {
 		t.Fatalf("getGateways returned an error: %v", err)
 	}
@@ -174,7 +174,7 @@ func TestObfs4Gateways(t *testing.T) {
 		client: mockClient{eipPath, geoPath},
 	}
 	b.maxGateways = 10
-	gateways, err := b.GetGateways("obfs4")
+	gateways, err := b.GetBestGateways("obfs4")
 	if err != nil {
 		t.Fatalf("getGateways returned an error: %v", err)
 	}
@@ -243,7 +243,7 @@ func TestEipServiceV1Fallback(t *testing.T) {
 		client: failingClient{eip1Path},
 	}
 	b.maxGateways = 10
-	gateways, err := b.GetGateways("obfs4")
+	gateways, err := b.GetBestGateways("obfs4")
 	if err != nil {
 		t.Fatalf("getGateways obfs4 returned an error: %v", err)
 	}
@@ -251,7 +251,7 @@ func TestEipServiceV1Fallback(t *testing.T) {
 		t.Fatalf("It found some obfs4 gateways: %v", gateways)
 	}
 
-	gateways, err = b.GetGateways("openvpn")
+	gateways, err = b.GetBestGateways("openvpn")
 	if err != nil {
 		t.Fatalf("getGateways openvpn returned an error: %v", err)
 	}
