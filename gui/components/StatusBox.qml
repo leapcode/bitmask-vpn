@@ -12,30 +12,18 @@ Item {
     id: statusbox
     anchors.fill: parent
 
-    VPNState {
-        id: vpn
-    }
-
-    Rectangle {
-        color: customTheme.bgColor
-        anchors.fill: parent
-    }
-
     Rectangle {
         id: statusBoxBackground
-        color: customTheme.fgColor
-        height: 300
-        radius: 10
-        antialiasing: true
-        anchors {
-            fill: parent
-            margins: 20
-            bottomMargin: 30
+        anchors.fill: parent
+        Image {
+            id: backgroundImage
+            anchors.fill: parent
+            source: customTheme.bgDisconnected
         }
-        border {
-            color: Theme.accentOff
-            width: 4
-        }
+    }
+
+    VPNState {
+        id: vpn
     }
 
     ToolButton {
@@ -131,10 +119,10 @@ Item {
             source: customTheme.iconOff
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
-            OpacityAnimator on opacity{
+            OpacityAnimator on opacity {
                 id: fadeIn
-                from: 0.5;
-                to: 1;
+                from: 0.5
+                to: 1
                 duration: 1000
             }
             onStatusChanged: {

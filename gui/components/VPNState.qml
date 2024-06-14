@@ -35,8 +35,8 @@ StateGroup {
                 text: getSnowflakeTag()
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentConnecting
+                target: backgroundImage
+                source: customTheme.bgConnecting
             }
             PropertyChanges {
                 target: connectionImage
@@ -52,8 +52,8 @@ StateGroup {
                 font.pixelSize: Theme.fontSize * 1.5
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentConnecting
+                target: backgroundImage
+                source: customTheme.bgConnecting
             }
             PropertyChanges {
                 target: connectionImage
@@ -86,8 +86,8 @@ StateGroup {
                 visible: true
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentOff
+                target: backgroundImage
+                source: customTheme.bgDisconnected
             }
             PropertyChanges {
                 target: connectionImage
@@ -121,8 +121,8 @@ StateGroup {
                 visible: true
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentOn
+                target: backgroundImage
+                source: customTheme.bgConnected
             }
             PropertyChanges {
                 target: connectionImage
@@ -157,8 +157,8 @@ StateGroup {
                 visible: true
             }
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentConnecting
+                target: backgroundImage
+                source: customTheme.bgConnecting
             }
             PropertyChanges {
                 target: connectionImage
@@ -201,8 +201,8 @@ StateGroup {
             }
             */
             PropertyChanges {
-                target: statusBoxBackground
-                border.color: Theme.accentConnecting
+                target: backgroundImage
+                source: customTheme.bgConnecting
             }
             PropertyChanges {
                 target: systray
@@ -221,30 +221,38 @@ StateGroup {
     transitions: [
         Transition {
             to: on
-            ColorAnimation {
-                target: statusBoxBackground
-                duration: 500
+            OpacityAnimator {
+                target: backgroundImage
+                from: 0.8;
+                to: 1;
+                duration: 500;
             }
         },
         Transition {
             to: off
-            ColorAnimation {
-                target: statusBoxBackground
-                duration: 500
+            OpacityAnimator {
+                target: backgroundImage
+                from: 0.8;
+                to: 1;
+                duration: 500;
             }
         },
         Transition {
             to: starting
-            ColorAnimation {
-                target: statusBoxBackground
-                duration: 500
+            OpacityAnimator {
+                target: backgroundImage
+                from: 0.8;
+                to: 1;
+                duration: 500;
             }
         },
         Transition {
             to: stopping
-            ColorAnimation {
-                target: statusBoxBackground
-                duration: 500
+            OpacityAnimator {
+                target: backgroundImage
+                from: 0.8;
+                to: 1;
+                duration: 500;
             }
         }
     ]
