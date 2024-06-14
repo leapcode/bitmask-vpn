@@ -3,20 +3,31 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Effects
-
 import "../themes/themes.js" as Theme
 
 ToolBar {
-
-    Material.background: customTheme.bgColor
-    Material.foreground: "black" // TODO customize too
-    Material.elevation: 0
+    Material.foreground: "black"
+    Material.elevation: 10
     visible: isFooterVisible()
+    background: Rectangle {
+        implicitHeight: 48
+        color: "transparent"
 
-    Item {
+        Rectangle {
+            width: parent.width
+            height: 1
+            anchors.bottom: parent.bottom
+            color: "transparent"
+        }
+    }
 
+    Rectangle {
         id: footerRow
-        width: root.width
+        width: root.width - 18
+        height: 48
+        radius: 8
+        color: "white"
+        opacity: 0.9
 
         ToolButton {
             id: gwButton
@@ -26,7 +37,6 @@ ToolBar {
                 verticalCenter: parent.verticalCenter
                 leftMargin: 10
                 left: parent.left
-                verticalCenterOffset: 5
             }
             icon {
                 width: 20
@@ -49,7 +59,7 @@ ToolBar {
             anchors {
                 left: gwButton.right
                 leftMargin: -10
-                verticalCenterOffset: -6
+                verticalCenter: gwButton.verticalCenter
             }
         }
         MultiEffect {
@@ -66,8 +76,7 @@ ToolBar {
             color: getLocationColor()
             anchors {
                 left: lightning.right
-                verticalCenter: parent.verticalCenter
-                verticalCenterOffset: 7
+                verticalCenter: gwButton.verticalCenter
             }
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
@@ -90,7 +99,7 @@ ToolBar {
             fillMode: Image.PreserveAspectFit
             anchors {
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: 5
+                verticalCenterOffset: -2
                 right: gwQuality.left
                 rightMargin: 10
             }
@@ -110,7 +119,7 @@ ToolBar {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: 0
+                verticalCenterOffset: -5
                 topMargin: 5
                 rightMargin: 20
             }

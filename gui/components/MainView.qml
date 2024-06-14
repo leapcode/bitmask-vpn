@@ -87,9 +87,6 @@ Page {
     header: Header {
         id: header
     }
-    footer: Footer {
-        id: footer
-    }
 
     Keys.onPressed: {
         // shortcuts for avid users :)

@@ -168,6 +168,18 @@ Item {
         }
     }
 
+    Footer {
+        id: footer
+        anchors {
+            bottom: parent.bottom
+            bottomMargin: 10
+            left: parent.left
+            leftMargin: 9
+            right: parent.right
+            rightMargin: 8
+        }
+    }
+
     function isSnowflakeOn() {
         return ctx != undefined && ctx.snowflake == "true" && ctx.snowflakeProgress != "100";
     }
