@@ -48,7 +48,6 @@ type Bitmask struct {
 	udp              bool
 	snowflake        bool
 	offersUdp        bool
-	failed           bool
 	canUpgrade       bool
 	motd             []motd.Message
 	provider         string
@@ -72,7 +71,7 @@ func Init() (*Bitmask, error) {
 		bonafide.Gateway{},
 		bonafide.Gateway{}, statusCh, nil, bf, launch,
 		"", nil, "", []string{},
-		false, false, false, false, false,
+		false, false, false, false,
 		[]motd.Message{}, ""}
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
