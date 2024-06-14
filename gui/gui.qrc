@@ -91,6 +91,9 @@
         <file>resources/bitmask/state_connected.png</file>
         <file>resources/bitmask/state_connecting.png</file>
         <file>resources/bitmask/state_disconnected.png</file>
+        <file>resources/bitmask/bitmask_connected_bg.png</file>
+        <file>resources/bitmask/bitmask_connecting_bg.png</file>
+        <file>resources/bitmask/bitmask_disconnected_bg.png</file>
 
        <!-- fonts -->
         <file alias="poppins-regular.ttf">resources/fonts/Poppins-Regular.ttf</file>
