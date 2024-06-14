@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-
 import "../themes/themes.js" as Theme
 
 StateGroup {
@@ -29,7 +28,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: snowflakeProgressBar
-                value: parseInt(ctx.snowflakeProgress)/100
+                value: parseInt(ctx.snowflakeProgress) / 100
             }
             PropertyChanges {
                 target: snowflakeTag
@@ -109,7 +108,7 @@ StateGroup {
             }
             StateChangeScript {
                 script: {
-                    console.debug("status off")
+                    console.debug("status off");
                 }
             }
         },
@@ -145,7 +144,7 @@ StateGroup {
             }
             StateChangeScript {
                 script: {
-                    vpn.startingUI = false
+                    vpn.startingUI = false;
                 }
             }
         },
@@ -182,7 +181,7 @@ StateGroup {
             }
             StateChangeScript {
                 script: {
-                    vpn.startingUI = false
+                    vpn.startingUI = false;
                 }
             }
         },
@@ -253,51 +252,50 @@ StateGroup {
         switch (st) {
         case "off":
             //: %1 -> application name
-            return ctx ? qsTr("%1 off").arg(ctx.appName) : qsTr("off")
+            return ctx ? qsTr("%1 off").arg(ctx.appName) : qsTr("off");
         case "on":
             //: %1 -> application name
-            return qsTr("%1 on").arg(ctx.appName)
+            return qsTr("%1 on").arg(ctx.appName);
         case "connecting":
             //: %1 -> application name
-            return qsTr("Connecting to %1").arg(ctx.appName)
+            return qsTr("Connecting to %1").arg(ctx.appName);
         case "stopping":
             //: %1 -> application name
-            return qsTr("Stopping %1").arg(ctx.appName)
+            return qsTr("Stopping %1").arg(ctx.appName);
         case "failed":
             //: %1 -> application name
-            return qsTr("%1 blocking internet").arg(
-                        ctx.appName) // TODO failed is not handled yet
+            return qsTr("%1 blocking internet").arg(ctx.appName); // TODO failed is not handled yet
         }
     }
 
     function getSnowflakeTag() {
         switch (ctx.snowflakeTag) {
-            case 'conn_pt':
-              return qsTr("pluggable transport connection")
-            case 'conn_done':
-              return qsTr("connection done")
-            case 'handshake':
-              return qsTr("doing handshake")
-            case 'handshake_done':
-              return qsTr("handshake done")
-            case 'onehop_create':
-              return qsTr("creating one-hop connection")
-            case 'requesting_status':
-              return qsTr("requesting status")
-            case 'loading_status':
-              return qsTr("loading status")
-            case 'loading_keys':
-              return qsTr("loading keys")
-            case 'requesting_descriptors':
-              return qsTr("requesting descriptors")
-            case 'loading_descriptors':
-              return qsTr("loading descriptors")
-            case 'circuit_create':
-              return qsTr("creating circuit")
-            case 'done':
-              return qsTr("done")
-            default:
-              return ctx.snowflakeTag
+        case 'conn_pt':
+            return qsTr("pluggable transport connection");
+        case 'conn_done':
+            return qsTr("connection done");
+        case 'handshake':
+            return qsTr("doing handshake");
+        case 'handshake_done':
+            return qsTr("handshake done");
+        case 'onehop_create':
+            return qsTr("creating one-hop connection");
+        case 'requesting_status':
+            return qsTr("requesting status");
+        case 'loading_status':
+            return qsTr("loading status");
+        case 'loading_keys':
+            return qsTr("loading keys");
+        case 'requesting_descriptors':
+            return qsTr("requesting descriptors");
+        case 'loading_descriptors':
+            return qsTr("loading descriptors");
+        case 'circuit_create':
+            return qsTr("creating circuit");
+        case 'done':
+            return qsTr("done");
+        default:
+            return ctx.snowflakeTag;
         }
     }
 }

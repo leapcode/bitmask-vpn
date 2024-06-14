@@ -126,9 +126,9 @@ ToolBar {
 
     function getSignalColor() {
         if (ctx && ctx.status == "on") {
-            return "green"
+            return "green";
         } else {
-            return "black"
+            return "black";
         }
     }
 
@@ -155,79 +155,79 @@ ToolBar {
     function locationStr() {
         if (ctx && ctx.status == "on") {
             if (ctx.currentLocation && ctx.currentCountry) {
-                let s = ctx.currentLocation + ", " + ctx.currentCountry
+                let s = ctx.currentLocation + ", " + ctx.currentCountry;
                 /*
                 if (root.selectedGateway == "auto") {
                     s = "🗲 " + s
                 }
                 */
-                return s
+                return s;
             }
         }
         if (root.selectedGateway == "auto") {
             if (ctx && ctx.locations && ctx.bestLocation) {
                 //return "🗲 " + getCanonicalLocation(ctx.bestLocation)
-                return getCanonicalLocation(ctx.bestLocation)
+                return getCanonicalLocation(ctx.bestLocation);
             } else {
-                return qsTr("Recommended")
+                return qsTr("Recommended");
             }
         }
         if (ctx && ctx.locations && ctx.locationLabels) {
-            return getCanonicalLocation(root.selectedGateway)
+            return getCanonicalLocation(root.selectedGateway);
         }
     }
 
     // returns the composite of Location, CC
     function getCanonicalLocation(label) {
         try {
-            let loc = ctx.locationLabels[label]
-            return loc[0] + ", " + loc[1]
-        } catch(e) {
-            return "unknown"
+            let loc = ctx.locationLabels[label];
+            return loc[0] + ", " + loc[1];
+        } catch (e) {
+            return "unknown";
         }
     }
 
     function getLocationColor() {
         if (ctx && ctx.status == "on") {
-            return "black"
+            return "black";
         } else {
             // TODO darker gray
-            return "gray"
+            return "gray";
         }
     }
 
     function hasMultipleGateways() {
-        let provider = getSelectedProvider(providers)
+        let provider = getSelectedProvider(providers);
         if (provider == "riseup") {
-            return true
+            return true;
         } else {
             if (!ctx) {
-                return false
+                return false;
             }
-            return ctx.locations.length > 0
+            return ctx.locations.length > 0;
         }
     }
 
     function getSelectedProvider(providers) {
-        let obj = JSON.parse(providers.getJson())
-        return obj['default']
+        let obj = JSON.parse(providers.getJson());
+        return obj['default'];
     }
 
     function isBridgeSelected() {
         if (ctx && ctx.transport == "obfs4") {
-            return true
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 
     function isFooterVisible() {
         if (drawerOn) {
-            return false
+            return false;
         }
         if (stackView.depth > 1) {
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 }

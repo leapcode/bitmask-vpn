@@ -2,12 +2,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
-
 import QtQuick.Templates as T
 import QtQuick.Controls.impl
 import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
-
 import "../themes/themes.js" as Theme
 
 Item {
@@ -80,7 +78,8 @@ Item {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
-            FadeBehavior on text { }
+            FadeBehavior on text {
+            }
         }
         Label {
             id: snowflakeTip
@@ -139,8 +138,8 @@ Item {
                 duration: 1000
             }
             onStatusChanged: {
-                playing = (status == AnimatedImage.Ready)
-                fadeIn.start()
+                playing = (status == AnimatedImage.Ready);
+                fadeIn.start();
             }
         }
 
@@ -170,18 +169,18 @@ Item {
 
             onClicked: {
                 if (vpn.state === "on" | vpn.state === "starting") {
-                    backend.switchOff()
+                    backend.switchOff();
                 } else if (vpn.state === "off") {
-                    vpn.startingUI = true
-                    backend.switchOn()
+                    vpn.startingUI = true;
+                    backend.switchOn();
                 } else {
-                    console.debug("unknown state")
+                    console.debug("unknown state");
                 }
             }
         }
     }
 
     function isSnowflakeOn() {
-        return ctx != undefined && ctx.snowflake == "true" && ctx.snowflakeProgress != "100"
+        return ctx != undefined && ctx.snowflake == "true" && ctx.snowflakeProgress != "100";
     }
 }

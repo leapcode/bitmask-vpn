@@ -3,14 +3,14 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Controls.Material
 import QtQuick.Layouts
-
 import "../themes/themes.js" as Theme
 
 Page {
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: Home {}
+        initialItem: Home {
+        }
     }
 
     NavigationDrawer {
@@ -28,56 +28,58 @@ Page {
                     width: parent.width
                     text: model.text
                     visible: {
-                        if (isDonationService) {return true}
-                        return model.text != qsTr("Donate")
+                        if (isDonationService) {
+                            return true;
+                        }
+                        return model.text != qsTr("Donate");
                     }
                     highlighted: ListView.isCurrentItem
                     icon.color: "transparent"
                     icon.source: model.icon
                     onClicked: {
-                        settingsDrawer.toggle()
-                        model.triggered()
+                        settingsDrawer.toggle();
+                        model.triggered();
                     }
                 }
             }
         }
-     }
+    }
 
-     ListModel {
+    ListModel {
         id: navModel
         ListElement {
             text: qsTr("Preferences")
             icon: "../resources/tools.svg"
-            triggered: function() {
-                stackView.push("Preferences.qml")
+            triggered: function () {
+                stackView.push("Preferences.qml");
             }
         }
         ListElement {
             text: qsTr("Donate")
             icon: "../resources/donate.svg"
-            triggered: function() {
-                Qt.openUrlExternally(ctx.donateURL)
+            triggered: function () {
+                Qt.openUrlExternally(ctx.donateURL);
             }
         }
         ListElement {
             text: qsTr("Help")
             icon: "../resources/help.svg"
-            triggered: function() {
-                stackView.push("Help.qml")
+            triggered: function () {
+                stackView.push("Help.qml");
             }
         } // -> can link to another dialog with report bug / support / contribute / FAQ
         ListElement {
             text: qsTr("About")
             icon: "../resources/about.svg"
-            triggered: function() {
-                stackView.push("About.qml")
+            triggered: function () {
+                stackView.push("About.qml");
             }
         }
         ListElement {
             text: qsTr("Quit")
             icon: "../resources/quit.svg"
-            triggered: function() {
-                Qt.callLater(backend.quit)
+            triggered: function () {
+                Qt.callLater(backend.quit);
             }
         }
     } // end listmodel
@@ -93,13 +95,13 @@ Page {
         // shortcuts for avid users :)
         // bug: doesnt work until the stack is pushed once
         if (event.key == Qt.Key_G && stackView.depth == 1) {
-            console.debug("Open Locations")
-            stackView.push("Locations.qml")
+            console.debug("Open Locations");
+            stackView.push("Locations.qml");
         }
     }
 
     Dialog {
-        id: donateDialog 
+        id: donateDialog
         width: root.appWidth
         title: qsTr("Please donate!")
         standardButtons: Dialog.Yes | Dialog.No
@@ -131,7 +133,6 @@ Page {
             onLinkActivated: Qt.openUrlExternally(ctx.donateURL)
         }
 
-
         Image {
             height: 40
             source: "../resources/donate.svg"
@@ -147,14 +148,14 @@ Page {
     }
 
     function getLink(ctx) {
-	if (!ctx) {
-		return ""
-	}
-	let url = ctx.donateURL
-        return "<style>a:link {color:'" + Theme.blue + "'; }</style><a href='#'>" + url + "</a>"
+        if (!ctx) {
+            return "";
+        }
+        let url = ctx.donateURL;
+        return "<style>a:link {color:'" + Theme.blue + "'; }</style><a href='#'>" + url + "</a>";
     }
 
     Component.onCompleted: {
-        root.openDonateDialog.connect(donateDialog.open)
+        root.openDonateDialog.connect(donateDialog.open);
     }
 }
