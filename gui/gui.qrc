@@ -69,6 +69,9 @@
         <file>resources/alert.svg</file>
         <file>resources/angle-right.svg</file>
         <file>resources/snowflake.svg</file>
+        <file>resources/button_green.png</file>
+        <file>resources/button_yellow.png</file>
+        <file>resources/button_red.png</file>
 
         <!-- riseup assets -->
         <file>resources/ravens.svg</file>

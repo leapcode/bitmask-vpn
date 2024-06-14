@@ -134,25 +134,26 @@ Item {
         VerticalSpacer {
             id: spacerPostImg
             visible: true
-            height: 20
+            height: 50
             Layout.alignment: Qt.AlignBottom
         }
 
-        MaterialButton {
+        RoundButton {
             id: toggleVPN
-            // FIXME - this is a workaround. It will BREAK with i18n
-            width: 100
-            spacing: 8
+            width: 48
+            height: 48
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.alignment: Qt.AlignBottom
-            font {
-                pixelSize: Theme.buttonFontSize
-                capitalization: Font.Capitalize
-                family: lightFont.name
-                bold: false
-            }
+            padding: 0
+            display: AbstractButton.IconOnly
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor
+            }
+            icon {
+                source: Theme.buttonDisconnected
+                height: 48
+                width: 48
+                color: "transparent"
             }
 
             onClicked: {

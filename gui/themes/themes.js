@@ -64,5 +64,9 @@ const blueButton = {
 const buttonFontSize = 18;
 const buttonColor = "#eeeeee";
 
+const buttonDisconnected = "../resources/button_red.png";
+const buttonConnecting = "../resources/button_yellow.png";
+const buttonConnected = "../resources/button_green.png";
+
 const bgColor = "#f3f3f3";
 const fgColor = "#ffffff";

@@ -63,9 +63,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: false
-                // XXX this is a fake cancel, won't do anything at this point. We need
-                // to queue this action for when the openvpn process becomes available.
-                text: ("Cancel")
+                icon.source: Theme.buttonConnecting
             }
             PropertyChanges {
                 target: systray
@@ -96,7 +94,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                text: qsTr("Turn on")
+                icon.source: Theme.buttonDisconnected
             }
             PropertyChanges {
                 target: systray
@@ -131,7 +129,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                text: qsTr("Turn off")
+                icon.source: Theme.buttonConnected
             }
             PropertyChanges {
                 target: systray
@@ -168,7 +166,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                text: qsTr("Cancel")
+                icon.source: Theme.buttonConnecting
             }
             PropertyChanges {
                 target: systray
@@ -203,6 +201,10 @@ StateGroup {
             PropertyChanges {
                 target: backgroundImage
                 source: customTheme.bgConnecting
+            }
+            PropertyChanges {
+                target: toggleVPN
+                icon.source: Theme.buttonConnecting
             }
             PropertyChanges {
                 target: systray
