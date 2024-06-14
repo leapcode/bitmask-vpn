@@ -46,7 +46,7 @@ type Bitmask struct {
 	certPemPath      string
 	openvpnArgs      []string
 	useUDP           bool
-	snowflake        bool
+	useSnowflake     bool
 	canUpgrade       bool
 	motd             []motd.Message
 	provider         string
@@ -171,7 +171,7 @@ func (b *Bitmask) UseUDP(udp bool) {
 }
 
 func (b *Bitmask) UseSnowflake(s bool) error {
-	b.snowflake = s
+	b.useSnowflake = s
 	return nil
 }
 
