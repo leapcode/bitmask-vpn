@@ -14,7 +14,6 @@ ApplicationWindow {
     property int appHeight: 460
     property int appWidth: 280
     property alias customTheme: themeLoader.item
-    property bool drawerOn: false
 
     width: appWidth
     minimumWidth: appWidth

@@ -8,7 +8,6 @@ import "../themes/themes.js" as Theme
 ToolBar {
     Material.foreground: "black"
     Material.elevation: 10
-    visible: isFooterVisible()
     background: Rectangle {
         implicitHeight: 48
         color: "transparent"
@@ -228,15 +227,5 @@ ToolBar {
         } else {
             return false;
         }
-    }
-
-    function isFooterVisible() {
-        if (drawerOn) {
-            return false;
-        }
-        if (stackView.depth > 1) {
-            return false;
-        }
-        return true;
     }
 }
