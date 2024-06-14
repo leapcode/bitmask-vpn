@@ -41,6 +41,7 @@ var statusNames = map[string]string{
 	"ADD_ROUTES":   Starting,
 	"CONNECTED":    On,
 	"RECONNECTING": Starting,
+	"TCP_CONNECT":  Starting,
 	"EXITING":      Stopping,
 	"OFF":          Off,
 	"FAILED":       Off,
