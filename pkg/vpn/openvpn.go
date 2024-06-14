@@ -434,15 +434,17 @@ func (b *Bitmask) tryStopFromManagement() {
 
 // Reconnect to the VPN
 func (b *Bitmask) Reconnect() error {
+	log.Info().Msgf("Restarting OpenVPN")
+
 	if !b.CanStartVPN() {
-		return errors.New("BUG: cannot start vpn")
+		return errors.New("BUG: cannot start vpn (CanStartVPN)")
 	}
 
 	status, err := b.GetStatus()
 	if err != nil {
 		return err
 	}
-	log.Debug().Msg("Reconnecting...")
+
 	if status != Off {
 		b.statusCh <- Stopping
 		if b.obfsvpnProxy != nil {
