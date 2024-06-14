@@ -91,7 +91,7 @@ func (p *gatewayPool) isValidLocation(location string) bool {
 }
 
 /* returns a map of location: fullness for the ui to use */
-func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 {
+func (p *gatewayPool) getLocationQualityMap(transport string) map[string]float64 {
 	locations := p.getLocations()
 	cm := make(map[string]float64)
 	if len(locations) == 0 {
@@ -120,7 +120,7 @@ func (p *gatewayPool) listLocationFullness(transport string) map[string]float64 
 }
 
 /* returns a map of location: labels for the ui to use */
-func (p *gatewayPool) listLocationLabels(transport string) map[string][]string {
+func (p *gatewayPool) getLocationLabels(transport string) map[string][]string {
 	cm := make(map[string][]string)
 	locations := p.getLocations()
 	if len(locations) == 0 {

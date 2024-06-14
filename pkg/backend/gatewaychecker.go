@@ -16,7 +16,7 @@ func (c connectionCtx) delayCheckForGateways() {
 			cnt += 1
 			time.Sleep(time.Second * 5)
 			transport := c.bm.GetTransport()
-			locs := c.bm.ListLocationFullness(transport)
+			locs := c.bm.GetLocationQualityMap(transport)
 			if len(locs) != 0 {
 				c.Locations = locs
 				updateStatusForGateways()

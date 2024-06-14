@@ -470,12 +470,12 @@ func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 	return b.launch.Check()
 }
 
-func (b *Bitmask) ListLocationFullness(transport string) map[string]float64 {
-	return b.bonafide.ListLocationFullness(transport)
+func (b *Bitmask) GetLocationQualityMap(transport string) map[string]float64 {
+	return b.bonafide.GetLocationQualityMap(transport)
 }
 
-func (b *Bitmask) ListLocationLabels(transport string) map[string][]string {
-	return b.bonafide.ListLocationLabels(transport)
+func (b *Bitmask) GetLocationLabels(transport string) map[string][]string {
+	return b.bonafide.GetLocationLabels(transport)
 }
 
 // UseGateway selects a gateway, by label, as the default gateway

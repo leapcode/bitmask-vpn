@@ -64,7 +64,7 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 
 func webGatewayList(w http.ResponseWriter, r *http.Request) {
 	transport := ctx.bm.GetTransport()
-	locationJson, err := json.Marshal(ctx.bm.ListLocationFullness(transport))
+	locationJson, err := json.Marshal(ctx.bm.GetLocationQualityMap(transport))
 	if err != nil {
 		fmt.Fprintf(w, "Error converting json: %v", err)
 	}

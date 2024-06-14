@@ -31,8 +31,8 @@ type Bitmask interface {
 	ReloadFirewall() error
 	GetStatus() (string, error)
 	VPNCheck() (helpers bool, priviledge bool, err error)
-	ListLocationFullness(protocol string) map[string]float64
-	ListLocationLabels(protocol string) map[string][]string
+	GetLocationQualityMap(protocol string) map[string]float64
+	GetLocationLabels(protocol string) map[string][]string
 	GetBestLocation(protocol string) string
 	UseGateway(name string)
 	UseAutomaticGateway()

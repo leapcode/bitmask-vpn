@@ -73,8 +73,8 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
 		transport := c.bm.GetTransport()
-		c.Locations = c.bm.ListLocationFullness(transport)
-		c.LocationLabels = c.bm.ListLocationLabels(transport)
+		c.Locations = c.bm.GetLocationQualityMap(transport)
+		c.LocationLabels = c.bm.GetLocationLabels(transport)
 		c.CurrentGateway = c.bm.GetCurrentGateway()
 		c.CurrentLocation = c.bm.GetCurrentLocation()
 		c.CurrentCountry = c.bm.GetCurrentCountry()
