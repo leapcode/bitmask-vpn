@@ -7,6 +7,7 @@ import (
 	"encoding/pem"
 	"io/ioutil"
 	"math"
+	"net"
 	"strings"
 	"time"
 
@@ -82,4 +83,25 @@ func getRandomPass(l int) string {
 	rand.Read(buff)
 	str := base64.RawURLEncoding.EncodeToString(buff)
 	return str[:l] // strip 1 extra character we get from odd length results
+}
+
+// Resolve host and log - used for analyzing blocked clients
+func logDnsLookup(domain string) {
+	addrs, err := net.LookupHost(domain)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Str("domain", domain).
+			Msg("Could not resolve address")
+	}
+
+	log.Debug().
+		Str("domain", domain).
+		Msg("Resolving domain ...")
+	for _, addr := range addrs {
+		log.Debug().
+			Str("domain", domain).
+			Str("addr", addr).
+			Msg("Resolved to ip")
+	}
 }
