@@ -109,6 +109,15 @@ func Init() (*Bitmask, error) {
 		provider:         "",
 	}
 
+	err = ioutil.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug().
+		Str("caCertPath", b.getTempCaCertPath()).
+		Msg("Sucessfully wrote OpenVPN CA certificate (hardcoded in the binary, not coming from API)")
+
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
 	b.checkForMOTD()
@@ -128,7 +137,6 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
-	err = ioutil.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
 	go b.fetchGateways()
 	go b.openvpnManagement()
 
