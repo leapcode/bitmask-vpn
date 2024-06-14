@@ -106,6 +106,12 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 	b.statusCh <- Off
 }
 
+// About the Getter functions here:
+// In pkg/backend/status.go there is a function toJson which is called regularly by the cpp
+// part (toJson is called in RefreshContext which is defined in pkg/backend/api.go and exported
+// in libgoshim). It is used get the current state of the application. In toJson, all the Getter
+// functions like GetCurrentGateway and IsManualLocation are called
+
 func (b *Bitmask) GetCurrentGateway() string {
 	return b.onGateway.Host
 }
@@ -126,6 +132,7 @@ func (b *Bitmask) GetBestLocation(transport string) string {
 			Str("transport", transport).
 			Msg("Could not get best location")
 	}
+	// TODO: we return here an empty string in case of an error
 	return location
 }
 
