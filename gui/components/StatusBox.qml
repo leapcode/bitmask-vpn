@@ -41,7 +41,7 @@ Item {
             cursorShape: Qt.PointingHandCursor
         }
         onClicked: {
-            settingsDrawer.toggle()
+            settingsDrawer.open();
         }
 
         Icon {

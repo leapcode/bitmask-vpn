@@ -13,33 +13,41 @@ Page {
         }
     }
 
-    NavigationDrawer {
+    Drawer {
         id: settingsDrawer
-        Rectangle {
-            anchors.fill: parent
-            color: "white"
-            ListView {
-                focus: true
-                currentIndex: -1
-                anchors.fill: parent
+        width: parent.width * 0.65
+        height: parent.height
+        background: Rectangle {
+            Rectangle {
+                x: parent.width
+                width: 1
+                height: parent.height
+                color: "papayawhip"
+                radius: 0
+            }
+        }
 
-                model: navModel
-                delegate: ItemDelegate {
-                    width: parent.width
-                    text: model.text
-                    visible: {
-                        if (isDonationService) {
-                            return true;
-                        }
-                        return model.text != qsTr("Donate");
+        ListView {
+            focus: true
+            currentIndex: -1
+            anchors.fill: parent
+
+            model: navModel
+            delegate: ItemDelegate {
+                width: parent.width
+                text: model.text
+                visible: {
+                    if (isDonationService) {
+                        return true;
                     }
-                    highlighted: ListView.isCurrentItem
-                    icon.color: "transparent"
-                    icon.source: model.icon
-                    onClicked: {
-                        settingsDrawer.toggle();
-                        model.triggered();
-                    }
+                    return model.text != qsTr("Donate");
+                }
+                highlighted: ListView.isCurrentItem
+                icon.color: "transparent"
+                icon.source: model.icon
+                onClicked: {
+                    settingsDrawer.close();
+                    model.triggered();
                 }
             }
         }
