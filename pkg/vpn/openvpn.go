@@ -262,7 +262,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		if b.udp {
+		if b.useUDP {
 			os.Setenv("UDP", "1")
 		} else {
 			os.Setenv("UDP", "0")
@@ -275,7 +275,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
 				if port != "53" {
-					if b.udp {
+					if b.useUDP {
 						arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
 					} else {
 						arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")

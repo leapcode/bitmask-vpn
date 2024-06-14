@@ -45,7 +45,7 @@ type Bitmask struct {
 	obfsvpnProxy     *obfsvpn.Client
 	certPemPath      string
 	openvpnArgs      []string
-	udp              bool
+	useUDP           bool
 	snowflake        bool
 	canUpgrade       bool
 	motd             []motd.Message
@@ -167,7 +167,7 @@ func (b *Bitmask) DoLogin(username, password string) (bool, error) {
 }
 
 func (b *Bitmask) UseUDP(udp bool) {
-	b.udp = udp
+	b.useUDP = udp
 }
 
 func (b *Bitmask) UseSnowflake(s bool) error {
