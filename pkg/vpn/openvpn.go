@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -45,7 +46,7 @@ func (b *Bitmask) StartVPN(provider string) error {
 	}
 
 	var err error
-	b.certPemPath, err = b.getCert()
+	err = b.getCert()
 	if err != nil {
 		return err
 	}
@@ -343,42 +344,52 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	return b.launch.OpenvpnStart(arg...)
 }
 
-func (b *Bitmask) getCert() (certPath string, err error) {
-	log.Info().Msg("Getting certificate...")
+// Get valid client credentials (key + cert) from menshen. Currently, there is no caching implemented
+func (b *Bitmask) getCert() error {
+	log.Info().Msg("Getting OpenVPN client certificate")
+
 	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
+	// snowflake might have written a cert here
+	// reuse cert. for the moment we're not writing one there, this is
+	// only to allow users to get certs off-band and place them there
+	// as a last-resort fallback for circumvention.
 	if _, err := os.Stat(persistentCertFile); !os.IsNotExist(err) && isValidCert(persistentCertFile) {
-		// TODO snowflake might have written a cert here
-		// reuse cert. for the moment we're not writing one there, this is
-		// only to allow users to get certs off-band and place them there
-		// as a last-resort fallback for circumvention.
-		certPath = persistentCertFile
-		err = nil
-	} else {
-		// download one fresh
-		certPath = b.getTempCertPemPath()
-		if _, err := os.Stat(certPath); os.IsNotExist(err) {
-			log.Info().
-				Str("certPath", certPath).
-				Msg("Fetching certificate")
-			cert, err := b.api.GetPemCertificate()
+		log.Trace().
+			Str("persistentCertFile", persistentCertFile).
+			Msg("Found local client credentials")
+		b.certPemPath = persistentCertFile
+		return nil
+	}
+
+	b.certPemPath = b.getTempCertPemPath()
+	// If we start OpenVPN, openvpn.pem does not exist and isValidCert returns false
+	// If we start OpenVPN later again (not restarting the  client), there
+	// should be a valid openvpn.pem
+	// If there is no valid openvpn.pem, fetch a new one from menshen
+	// Note: b.tempdir is unique for every run of the desktop client
+	if !isValidCert(b.certPemPath) {
+		cert, err := b.api.GetPemCertificate()
+		if err != nil {
+			// if we can't speak with API => resolve DNS and log
+			url, err := url.Parse(config.APIURL)
 			if err != nil {
 				log.Warn().
 					Err(err).
-					Msg("Could not get OpenVPN certificate")
+					Str("apiUrl", config.APIURL).
+					Msg("Could not parse domain out of API URL")
 			}
-			err = ioutil.WriteFile(certPath, cert, 0600)
-			if err != nil {
-				log.Warn().
-					Err(err).
-					Str("certPath", certPath).
-					Msg("Could not write cert to disk")
-			}
+			logDnsLookup(url.Host)
+			return err
+		}
+		err = ioutil.WriteFile(b.certPemPath, cert, 0600)
+		if err != nil {
+			return err
+		}
+		if !isValidCert(b.certPemPath) {
+			return fmt.Errorf("The certificate given by API is invalid")
 		}
 	}
-	d := config.APIURL[8 : len(config.APIURL)-1]
-	logDnsLookup(d)
-
-	return certPath, err
+	return nil
 }
 
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
