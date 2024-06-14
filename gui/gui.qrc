@@ -75,6 +75,10 @@
         <file>resources/ravens.svg</file>
         <file>resources/ravens.gif</file>
         <file>resources/riseup-icon.svg</file>
+        <file>resources/riseup_connected_bg.png</file>
+        <file>resources/riseup_connecting_bg.png</file>
+        <file>resources/riseup_disconnected_bg.png</file>
+        <file>resources/riseup_green_shield.svg</file>
 
         <!-- calyx assets -->
         <file>resources/calyx/calyx-shield-green.png</file>

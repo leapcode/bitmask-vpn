@@ -12,4 +12,7 @@ QtObject {
     property string iconOff: theme.iconOff
     property string iconConnecting: theme.iconConnecting
     property string iconSplash: theme.iconSplash
+    property string bgConnecting: ""
+    property string bgConnected: ""
+    property string bgDisconnected: ""
 }
