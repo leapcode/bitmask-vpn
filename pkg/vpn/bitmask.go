@@ -125,7 +125,7 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 }
 
 func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
-	return b.bonafide.SnowflakeCh
+	return b.bonafide.GetSnowflakeCh()
 }
 
 // Close the connection to bitmask, and does cleanup of temporal files

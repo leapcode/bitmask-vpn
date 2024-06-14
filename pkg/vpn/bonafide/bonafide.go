@@ -55,7 +55,7 @@ type Bonafide struct {
 	maxGateways       int
 	auth              authentication
 	token             []byte
-	SnowflakeCh       chan *snowflake.StatusEvent // only used by the GUI to show the progress (but does not work?)
+	snowflakeCh       chan *snowflake.StatusEvent // only used by the GUI to show the progress (but does not work?)
 	snowflakeProgress int
 	snowflake         bool
 }
@@ -108,7 +108,7 @@ func New() *Bonafide {
 		client:        client,
 		eip:           nil,
 		tzOffsetHours: tzOffsetHours,
-		SnowflakeCh:   make(chan *snowflake.StatusEvent, 20),
+		snowflakeCh:   make(chan *snowflake.StatusEvent, 20),
 	}
 	switch auth := config.Auth; auth {
 	case "sip":
@@ -225,7 +225,7 @@ func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 					Str("progress", fmt.Sprintf("%02d%%", evt.Progress)).
 					Msg("Snowflake progress")
 				b.snowflakeProgress = evt.Progress
-				b.SnowflakeCh <- evt
+				b.snowflakeCh <- evt
 			}
 		}
 
@@ -386,4 +386,8 @@ func (b *Bonafide) GetOpenvpnArgs() ([]string, error) {
 		return nil, err
 	}
 	return b.eip.getOpenvpnArgs(), nil
+}
+
+func (b *Bonafide) GetSnowflakeCh() chan *snowflake.StatusEvent {
+	return b.snowflakeCh
 }
