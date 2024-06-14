@@ -179,16 +179,24 @@ func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
 	return gw, true
 }
 
-// generates a password and returns the path for a temporary file where this password is written
+// Generates a password and returns the path for a temporary file where the password is written
 func (b *Bitmask) generateManagementPassword() string {
 	pass := getRandomPass(12)
+
 	tmpFile, err := ioutil.TempFile(b.tempdir, "leap-vpn-")
 	if err != nil {
 		log.Fatal().
 			Err(err).
-			Msg("Could not create temporary file")
+			Msg("Could not create temporary file to save management password")
 	}
-	tmpFile.Write([]byte(pass))
+	_, err = tmpFile.Write([]byte(pass))
+	if err != nil {
+		log.Fatal().
+			Str("tmpFile", tmpFile.Name()).
+			Err(err).
+			Msg("Could not write management password to file")
+	}
+
 	b.launch.MngPass = pass
 	return tmpFile.Name()
 }
