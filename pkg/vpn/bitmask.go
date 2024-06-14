@@ -24,7 +24,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/launcher"
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
@@ -70,11 +69,10 @@ func Init() (*Bitmask, error) {
 		bonafide.Gateway{},
 		bonafide.Gateway{}, statusCh, nil, bf, launch,
 		"", nil, "", []string{},
-		false, false, false,
+		false, false, isUpgradeAvailable(),
 		[]motd.Message{}, ""}
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
-	b.checkForUpgrades()
 	b.checkForMOTD()
 	err = b.launch.FirewallStop()
 	if err != nil {
@@ -101,18 +99,6 @@ func Init() (*Bitmask, error) {
 
 func (b *Bitmask) SetProvider(p string) {
 	b.provider = p
-}
-
-func (b *Bitmask) checkForUpgrades() {
-
-	// SNAPS have their own way of upgrading. We probably should also try to detect
-	// if we've been installed via another package manager.
-	// For now, it's maybe a good idea to disable the UI check in linux, and be
-	// way more strict in windows/osx.
-	if os.Getenv("SNAP") != "" {
-		return
-	}
-	b.canUpgrade = version.CanUpgrade()
 }
 
 func (b *Bitmask) checkForMOTD() {

@@ -8,11 +8,25 @@ import (
 	"io/ioutil"
 	"math"
 	"net"
+	"os"
 	"strings"
 	"time"
 
+	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"github.com/rs/zerolog/log"
 )
+
+func isUpgradeAvailable() bool {
+
+	// SNAPS have their own way of upgrading. We probably should also try to detect
+	// if we've been installed via another package manager.
+	// For now, it's maybe a good idea to disable the UI check in linux, and be
+	// way more strict in windows/osx.
+	if os.Getenv("SNAP") != "" {
+		return false
+	}
+	return version.CanUpgrade()
+}
 
 // Validate the correctness of a client credential pem file. The file should contain a private
 // key (-----BEGIN RSA PRIVATE KEY-----) and a certificate (-----BEGIN CERTIFICATE-----)
