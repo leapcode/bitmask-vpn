@@ -120,7 +120,6 @@ func Init() (*Bitmask, error) {
 
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
-	b.checkForMOTD()
 	err = b.launch.FirewallStop()
 	if err != nil {
 		log.Printf("Could not stop firewall: %v", err)
@@ -145,10 +144,6 @@ func Init() (*Bitmask, error) {
 
 func (b *Bitmask) SetProvider(p string) {
 	b.provider = p
-}
-
-func (b *Bitmask) checkForMOTD() {
-	b.motd = motd.FetchLatest()
 }
 
 // GetStatusCh returns a channel that will recieve VPN status changes
