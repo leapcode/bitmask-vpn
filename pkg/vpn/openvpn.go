@@ -91,6 +91,10 @@ func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafid
 }
 
 func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string, err error) {
+	log.Debug().
+		Str("host", host).
+		Msg("Starting transport")
+
 	// TODO configure socks port if not available
 	// TODO get port from UI/config file
 	proxyAddr := "127.0.0.1:8080"
@@ -132,7 +136,9 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 			Str("ip", gw.IPAddress).
 			Bool("kcp", kcpMode).
 			Str("cert", gw.Options["cert"]).
-			Msg("Connecting with cert")
+			Str("proxyAddr", proxyAddr).
+			Str("transport", b.transport).
+			Msg("Using gateway")
 
 		b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
 		go func() {
