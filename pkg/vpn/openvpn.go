@@ -274,13 +274,14 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		arg = append(arg, "--remote", gw.IPAddress, gw.Ports[0], "tcp4")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
-		log.Info().
-			Str("args", strings.Join(arg, " ")).
-			Msg("args passed to bitmask-root")
+
 		gateways, err := b.api.GetBestGateways("openvpn")
 		if err != nil {
 			return err
 		}
+		log.Info().Msgf("Got best gateway %v", gateways)
+
+		// env UDP is used by bitmask-root helper
 		if b.useUDP {
 			os.Setenv("UDP", "1")
 		} else {
@@ -294,6 +295,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		var proto string
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
+				// issue about udp/53: https://0xacab.org/leap/bitmask-vpn/-/issues/796
 				if port != "53" {
 					if b.useUDP {
 						proto = "udp4"
@@ -308,6 +310,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 						Str("proto", proto).
 						Msg("Adding gateway to command line via --remote")
 				}
+
 			}
 		}
 	}
@@ -319,7 +322,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	// TODO we need to check if the openvpn options pushed by server are
 	// not overriding (or duplicating) some of the options we're adding here.
 	log.Debug().
-		Int("verb", verb).
+		Str("verb", openvpnVerb).
 		Msg("Setting OpenVPN verbosity")
 
 	passFile := b.generateManagementPassword()
@@ -343,9 +346,8 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	}
 
 	if os.Getenv("LEAP_DRYRUN") == "1" {
-		arg = append(
-			arg,
-			"--pull-filter", "ignore", "route")
+		log.Debug().Msg("Not routing traffic over OpenVPN (LEAP_DRYRUN=1)")
+		arg = append(arg, "--pull-filter", "ignore", "route")
 	}
 	return b.launch.OpenvpnStart(arg...)
 }
