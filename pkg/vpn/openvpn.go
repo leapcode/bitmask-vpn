@@ -329,7 +329,9 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 	if os.Getenv("OPENVPN_LOG_TO_FILE") != "" {
 		openVpnLogFile := filepath.Join(os.TempDir(), "leap-vpn.log")
-		log.Printf("DEBUG: Logging OpenVPN output to %s\n", openVpnLogFile)
+		log.Debug().
+			Str("logFile", openVpnLogFile).
+			Msg("Telling OpenVPN to log to a file")
 		arg = append(arg, "--log", openVpnLogFile)
 	}
 

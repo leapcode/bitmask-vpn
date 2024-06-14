@@ -118,11 +118,11 @@ func Init() (*Bitmask, error) {
 		Str("caCertPath", b.getTempCaCertPath()).
 		Msg("Sucessfully wrote OpenVPN CA certificate (hardcoded in the binary, not coming from API)")
 
-	// FIXME multiprovider: need to pass provider name early on
-	// XXX we want to block on these, but they can timeout if we're blocked.
 	err = b.launch.FirewallStop()
 	if err != nil {
-		log.Printf("Could not stop firewall: %v", err)
+		log.Warn().
+			Err(err).
+			Msg("Could not stop firewall")
 	}
 	/*
 		TODO -- we still want to do this, since it resets the fw/vpn if running
