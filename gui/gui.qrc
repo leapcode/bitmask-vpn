@@ -37,7 +37,6 @@
         <file>components/VPNMouseArea.qml</file>
         <file>components/VerticalSpacer.qml</file>
         <file>components/Icon.qml</file>
-        <file>components/MaterialButton.qml</file>
         <file>components/VPNState.qml</file>
         <file>components/InitErrors.qml</file>
         <file>components/ErrorBox.qml</file>
