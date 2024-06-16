@@ -1,5 +1,24 @@
-Description: Patch to build on ubuntu 22.04 where only Qt6.2 is available and need to use the Qt5Compat library for some features
-Author: LEAP
+From 021a767c62b2ffddb63b0a2bcfad512e4f893558 Mon Sep 17 00:00:00 2001
+From: jkito <belter@riseup.net>
+Date: Sun, 16 Jun 2024 23:47:18 +0530
+Subject: [PATCH] [build] fix build on ubuntu 23.04 with qt6.4
+
+---
+ bitmask.pro                    |  2 +-
+ gui/components/ErrorBox.qml    |  2 +-
+ gui/components/Footer.qml      | 14 ++++++--------
+ gui/components/Home.qml        |  2 +-
+ gui/components/InitErrors.qml  |  2 +-
+ gui/components/Locations.qml   |  7 +++----
+ gui/components/MotdBox.qml     |  2 +-
+ gui/components/Preferences.qml |  4 ++--
+ gui/components/SignalIcon.qml  |  7 +++----
+ gui/components/Splash.qml      |  2 +-
+ gui/components/StatusBox.qml   |  2 +-
+ 11 files changed, 21 insertions(+), 25 deletions(-)
+
+diff --git a/bitmask.pro b/bitmask.pro
+index f377bb4..4aa4956 100644
 --- a/bitmask.pro
 +++ b/bitmask.pro
 @@ -1,8 +1,8 @@
@@ -12,6 +31,8 @@ Author: LEAP
  CONFIG += qtquickcompiler
  CONFIG+=force_debug_info
  CONFIG+=debug_and_release
+diff --git a/gui/components/ErrorBox.qml b/gui/components/ErrorBox.qml
+index 5667ed9..ef8f58f 100644
 --- a/gui/components/ErrorBox.qml
 +++ b/gui/components/ErrorBox.qml
 @@ -1,6 +1,6 @@
@@ -22,18 +43,20 @@ Author: LEAP
  import "../themes/themes.js" as Theme
  
  Item {
+diff --git a/gui/components/Footer.qml b/gui/components/Footer.qml
+index a72953e..c4801c9 100644
 --- a/gui/components/Footer.qml
 +++ b/gui/components/Footer.qml
-@@ -2,7 +2,7 @@
+@@ -2,7 +2,7 @@ import QtQuick
  import QtQuick.Controls
  import QtQuick.Controls.Material
  import QtQuick.Layouts
 -import QtQuick.Effects
 +import Qt5Compat.GraphicalEffects
- 
  import "../themes/themes.js" as Theme
  
-@@ -40,7 +40,7 @@
+ ToolBar {
+@@ -49,7 +49,7 @@ ToolBar {
          }
  
          Image {
@@ -42,8 +65,8 @@ Author: LEAP
              smooth: true
              visible: ctx != undefined & root.selectedGateway == "auto"
              width: 16
-@@ -52,11 +52,10 @@
-                 verticalCenterOffset: -6
+@@ -61,11 +61,10 @@ ToolBar {
+                 verticalCenter: gwButton.verticalCenter
              }
          }
 -        MultiEffect {
@@ -56,7 +79,7 @@ Author: LEAP
              antialiasing: true
          }
  
-@@ -115,11 +114,10 @@
+@@ -123,11 +122,10 @@ ToolBar {
                  rightMargin: 20
              }
          }
@@ -70,6 +93,8 @@ Author: LEAP
              antialiasing: false
          }
      }
+diff --git a/gui/components/Home.qml b/gui/components/Home.qml
+index f3bea85..7830f46 100644
 --- a/gui/components/Home.qml
 +++ b/gui/components/Home.qml
 @@ -1,6 +1,6 @@
@@ -80,6 +105,8 @@ Author: LEAP
  
  Page {
      StatusBox {
+diff --git a/gui/components/InitErrors.qml b/gui/components/InitErrors.qml
+index aaf9897..10b4755 100644
 --- a/gui/components/InitErrors.qml
 +++ b/gui/components/InitErrors.qml
 @@ -1,6 +1,6 @@
@@ -90,6 +117,8 @@ Author: LEAP
  
  ErrorBox {
  
+diff --git a/gui/components/Locations.qml b/gui/components/Locations.qml
+index 1c887d5..7914010 100644
 --- a/gui/components/Locations.qml
 +++ b/gui/components/Locations.qml
 @@ -1,7 +1,7 @@
@@ -101,7 +130,7 @@ Author: LEAP
  
  import "../themes/themes.js" as Theme
  
-@@ -81,11 +81,10 @@
+@@ -81,11 +81,10 @@ ThemedPage {
                          //verticalCenterOffset: 3
                      }
                  }
@@ -115,6 +144,8 @@ Author: LEAP
                      antialiasing: true
                  }
              }
+diff --git a/gui/components/MotdBox.qml b/gui/components/MotdBox.qml
+index 2c8cdb8..7b851c0 100644
 --- a/gui/components/MotdBox.qml
 +++ b/gui/components/MotdBox.qml
 @@ -1,6 +1,6 @@
@@ -125,9 +156,11 @@ Author: LEAP
  import "../themes/themes.js" as Theme
  
  Item {
+diff --git a/gui/components/Preferences.qml b/gui/components/Preferences.qml
+index 50d0733..bc63ecd 100644
 --- a/gui/components/Preferences.qml
 +++ b/gui/components/Preferences.qml
-@@ -2,8 +2,8 @@
+@@ -2,8 +2,8 @@ import QtQuick
  import QtQuick.Controls
  import QtQuick.Layouts
  import QtQuick.Controls.Material
@@ -138,6 +171,8 @@ Author: LEAP
  
  import "../themes/themes.js" as Theme
  
+diff --git a/gui/components/SignalIcon.qml b/gui/components/SignalIcon.qml
+index 8747f05..38a2371 100644
 --- a/gui/components/SignalIcon.qml
 +++ b/gui/components/SignalIcon.qml
 @@ -1,7 +1,7 @@
@@ -149,7 +184,7 @@ Author: LEAP
  
  import "../themes/themes.js" as Theme
  
-@@ -41,11 +41,10 @@
+@@ -41,11 +41,10 @@ Item {
              ]
          }
      }
@@ -163,6 +198,8 @@ Author: LEAP
          antialiasing: true
      }
  
+diff --git a/gui/components/Splash.qml b/gui/components/Splash.qml
+index 2b374b9..c69743f 100644
 --- a/gui/components/Splash.qml
 +++ b/gui/components/Splash.qml
 @@ -1,6 +1,6 @@
@@ -173,6 +210,8 @@ Author: LEAP
  import "../themes/themes.js" as Theme
  
  Page {
+diff --git a/gui/components/StatusBox.qml b/gui/components/StatusBox.qml
+index 13709a6..1851688 100644
 --- a/gui/components/StatusBox.qml
 +++ b/gui/components/StatusBox.qml
 @@ -1,6 +1,6 @@
@@ -181,5 +220,8 @@ Author: LEAP
 -import QtQuick.Effects
 +import Qt5Compat.GraphicalEffects
  import QtQuick.Layouts
- 
  import QtQuick.Templates as T
+ import QtQuick.Controls.impl
+-- 
+2.45.1
+
