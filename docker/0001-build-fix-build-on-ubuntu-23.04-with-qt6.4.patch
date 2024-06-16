@@ -1,6 +1,6 @@
-From 92e399ec1e7d40fcdfd2fb7957b989972b86f6ee Mon Sep 17 00:00:00 2001
+From 021a767c62b2ffddb63b0a2bcfad512e4f893558 Mon Sep 17 00:00:00 2001
 From: jkito <belter@riseup.net>
-Date: Tue, 20 Feb 2024 22:42:00 +0530
+Date: Sun, 16 Jun 2024 23:47:18 +0530
 Subject: [PATCH] [build] fix build on ubuntu 23.04 with qt6.4
 
 ---
@@ -44,7 +44,7 @@ index 5667ed9..ef8f58f 100644
  
  Item {
 diff --git a/gui/components/Footer.qml b/gui/components/Footer.qml
-index 3c3664b..0e95083 100644
+index a72953e..c4801c9 100644
 --- a/gui/components/Footer.qml
 +++ b/gui/components/Footer.qml
 @@ -2,7 +2,7 @@ import QtQuick
@@ -53,10 +53,10 @@ index 3c3664b..0e95083 100644
  import QtQuick.Layouts
 -import QtQuick.Effects
 +import Qt5Compat.GraphicalEffects
- 
  import "../themes/themes.js" as Theme
  
-@@ -40,7 +40,7 @@ ToolBar {
+ ToolBar {
+@@ -49,7 +49,7 @@ ToolBar {
          }
  
          Image {
@@ -65,8 +65,8 @@ index 3c3664b..0e95083 100644
              smooth: true
              visible: ctx != undefined & root.selectedGateway == "auto"
              width: 16
-@@ -52,11 +52,10 @@ ToolBar {
-                 verticalCenterOffset: -6
+@@ -61,11 +61,10 @@ ToolBar {
+                 verticalCenter: gwButton.verticalCenter
              }
          }
 -        MultiEffect {
@@ -79,7 +79,7 @@ index 3c3664b..0e95083 100644
              antialiasing: true
          }
  
-@@ -115,11 +114,10 @@ ToolBar {
+@@ -123,11 +122,10 @@ ToolBar {
                  rightMargin: 20
              }
          }
@@ -157,7 +157,7 @@ index 2c8cdb8..7b851c0 100644
  
  Item {
 diff --git a/gui/components/Preferences.qml b/gui/components/Preferences.qml
-index 7b6a519..9c594c5 100644
+index 50d0733..bc63ecd 100644
 --- a/gui/components/Preferences.qml
 +++ b/gui/components/Preferences.qml
 @@ -2,8 +2,8 @@ import QtQuick
@@ -199,7 +199,7 @@ index 8747f05..38a2371 100644
      }
  
 diff --git a/gui/components/Splash.qml b/gui/components/Splash.qml
-index 41adadb..aea00d3 100644
+index 2b374b9..c69743f 100644
 --- a/gui/components/Splash.qml
 +++ b/gui/components/Splash.qml
 @@ -1,6 +1,6 @@
@@ -211,7 +211,7 @@ index 41adadb..aea00d3 100644
  
  Page {
 diff --git a/gui/components/StatusBox.qml b/gui/components/StatusBox.qml
-index ec9d4e5..ae8c41b 100644
+index 13709a6..1851688 100644
 --- a/gui/components/StatusBox.qml
 +++ b/gui/components/StatusBox.qml
 @@ -1,6 +1,6 @@
@@ -220,8 +220,8 @@ index ec9d4e5..ae8c41b 100644
 -import QtQuick.Effects
 +import Qt5Compat.GraphicalEffects
  import QtQuick.Layouts
- 
  import QtQuick.Templates as T
+ import QtQuick.Controls.impl
 -- 
-2.40.1
+2.45.1
 
