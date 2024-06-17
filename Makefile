@@ -112,7 +112,7 @@ PKGFILES = $(shell find pkg -type f -name '*.go')
 endif
 
 lib/%.a: $(PKGFILES)
-	@XBUILD=no CC=${CC} VENDOR_PATH=${VENDOR_PATH} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} ./gui/build.sh --just-golib
+	@XBUILD=no CC=${CC} VENDOR_PATH=${VENDOR_PATH} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} VERSION=${VERSION} ./gui/build.sh --just-golib
 
 # FIXME move platform detection above! no place to uname here, just use $PLATFORM
 #
@@ -350,14 +350,10 @@ vendor: gen_providers_json prepare_templates gen_pkg_snap gen_pkg_deb
 gen_providers_json:
 	@VENDOR_PATH=${VENDOR_PATH} branding/scripts/gen-providers-json gui/providers/providers.json
 
-prepare_templates: generate tgz
+prepare_templates: tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-vendor-make build/${PROVIDER}/vendor.mk
-
-generate:
-	@go generate gui/backend.go
-	@go generate pkg/config/version/genver/gen.go
 
 TGZ_NAME = bitmask-vpn_${VERSION}-src
 TGZ_PATH = ./build/${TGZ_NAME}

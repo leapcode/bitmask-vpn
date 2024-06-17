@@ -7,7 +7,6 @@ build_test:
   image: registry.0xacab.org/jkito/bitmask-vpn:latest
   stage: build
   script:
-    - make generate
     - make test
     - patch -p1 < docker/*.patch
     # TODO missing xcb package in the docker image. investigate what to install to run minimal tests.

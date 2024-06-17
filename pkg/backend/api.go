@@ -287,5 +287,5 @@ func EnableWebAPI(port string) {
 }
 
 func GetVersion() *C.char {
-	return C.CString(version.VERSION)
+	return C.CString(version.Version())
 }

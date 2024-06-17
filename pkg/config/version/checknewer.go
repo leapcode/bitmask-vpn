@@ -63,12 +63,12 @@ func CanUpgrade() bool {
 			Msg("Could not parse version string")
 		return false
 	}
-	canUpgrade := versionOrdinal(r) > versionOrdinal(VERSION)
+	canUpgrade := versionOrdinal(r) > versionOrdinal(Version())
 	log.Debug().
 		Str("version", r).
 		Msg("Remote version")
 	log.Debug().
-		Str("version", VERSION).
+		Str("version", Version()).
 		Msg("Installed version")
 	log.Info().
 		Bool("updateAvailable", canUpgrade).

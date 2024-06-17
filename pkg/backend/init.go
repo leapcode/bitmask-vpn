@@ -29,7 +29,7 @@ func initializeContext(opts *InitOpts) {
 		DonateURL:       opts.ProviderOptions.DonateURL,
 		AskForDonations: opts.ProviderOptions.AskForDonations,
 		DonateDialog:    false,
-		Version:         version.VERSION,
+		Version:         version.Version(),
 		Status:          st,
 		IsReady:         false,
 	}

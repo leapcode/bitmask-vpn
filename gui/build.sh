@@ -9,6 +9,7 @@ XBUILD="${XBUILD:-no}"
 LRELEASE="${LRELEASE:-lrelease}"
 VENDOR_PATH="${VENDOR_PATH:-providers/riseup}"
 APPNAME="${APPNAME:-BitmaskVPN}"
+LDFLAGS_VER="-X 0xacab.org/leap/bitmask-vpn/pkg/config/version.appVersion=${VERSION}"
 
 OSX_TARGET=12
 WIN64="win64"
@@ -64,9 +65,6 @@ function init {
 }
 
 function buildGoLib {
-    echo "[+] Using go in" $GO "[`go version`]"
-    "$GO" generate ./pkg/config/version/genver/gen.go || echo "[!] Error on go generate"
-
     if [ "$PLATFORM" == "Darwin" ]
     then
         GOOS=darwin
@@ -78,13 +76,15 @@ function buildGoLib {
     if [ "$XBUILD" == "no" ]
     then
         echo "[+] Building Go library with standard Go compiler"
-        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -buildmode=c-archive -ldflags="-extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
+        CGO_ENABLED=1 GOOS=$GOOS CC=$CC CGO_CFLAGS=$CGO_CFLAGS CGO_LDFLAGS=$CGO_LDFLAGS go build -buildmode=c-archive \
+            -ldflags="${LDFLAGS_VER} -extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
     if [ "$XBUILD" == "$WIN64" ]
     then
         echo "[+] Building Go library with mxe"
         echo "[+] Using cc:" $CC
-        CC=$CC CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-archive -ldflags="-extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
+        CC=$CC CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-archive -ldflags="${LDFLAGS_VER} \
+            -extar=$AR -extld=$LD -extldflags=$LDFLAGS" -o $TARGET_GOLIB $SOURCE_GOLIB
     fi
 }
 
