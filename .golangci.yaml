@@ -1,0 +1,21 @@
+issues:
+  exclude-use-default: true
+  exclude-dirs-use-default: true
+  exclude-files:
+    - ".*\\.cpp$"
+    - ".*\\.h$"
+    - ".*\\.sh$"
+    - ".*\\.py$"
+    - ".*\\.qml$"
+  exclude-dirs:
+    - "gui"
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - ineffassign
+    - govet
+    - unused
+    - gofmt
+

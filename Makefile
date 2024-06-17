@@ -26,7 +26,7 @@ OSXMORDORUID ?= uid
 GOPATH = $(shell go env GOPATH)
 TARGET_GOLIB=lib/libgoshim.a
 SOURCE_GOLIB=gui/backend.go
-SOURCE_DIRS_GO = pkg cmd tests gui
+SOURCE_DIRS_GO = pkg cmd gui
 
 # detect OS
 UNAME = $(shell uname -s)
@@ -311,6 +311,10 @@ test:
 
 fmt:
 	@gofmt -s -w $(SOURCE_DIRS_GO)
+
+.PHONY: lint
+lint:
+	golangci-lint run  --timeout=5m
 
 test_ui: build_golib
 	@${QMAKE} -o tests/Makefile test.pro
