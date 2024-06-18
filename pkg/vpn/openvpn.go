@@ -49,7 +49,7 @@ func (b *Bitmask) StartVPN(provider string) error {
 	if err != nil {
 		return err
 	}
-	b.openvpnArgs, err = b.bonafide.GetOpenvpnArgs()
+	b.openvpnArgs, err = b.api.GetOpenvpnArgs()
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (b *Bitmask) CanStartVPN() bool {
 	/* FIXME this is not enough. We should check, if provider needs
 	* credentials, if we have a valid token, otherwise remove it and
 	make sure that we're asking for the credentials input */
-	return !b.bonafide.NeedsCredentials()
+	return !b.api.NeedsCredentials()
 }
 
 func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
@@ -98,7 +98,7 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 		return proxyAddr, nil
 	}
 
-	gateways, err := b.bonafide.GetBestGateways(b.transport)
+	gateways, err := b.api.GetBestGateways(b.transport)
 	if err != nil {
 		return "", err
 	}
@@ -226,7 +226,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 			log.Debug().Msg("Getting a gateway with obfs4 transport...")
 
-			gateways, err := b.bonafide.GetBestGateways("obfs4")
+			gateways, err := b.api.GetBestGateways("obfs4")
 			if err != nil {
 				return err
 			}
@@ -261,7 +261,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		log.Info().
 			Str("args", strings.Join(arg, " ")).
 			Msg("args passed to bitmask-root")
-		gateways, err := b.bonafide.GetBestGateways("openvpn")
+		gateways, err := b.api.GetBestGateways("openvpn")
 		if err != nil {
 			return err
 		}
@@ -349,7 +349,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 			log.Info().
 				Str("certPath", certPath).
 				Msg("Fetching certificate")
-			cert, err := b.bonafide.GetPemCertificate()
+			cert, err := b.api.GetPemCertificate()
 			if err != nil {
 				log.Warn().
 					Err(err).
@@ -373,7 +373,7 @@ func (b *Bitmask) getCert() (certPath string, err error) {
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
 func (b *Bitmask) fetchGateways() {
 	log.Info().Msg("Fetching gateways...")
-	_, err := b.bonafide.GetAllGateways(b.transport)
+	_, err := b.api.GetAllGateways(b.transport)
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -447,7 +447,7 @@ func (b *Bitmask) ReloadFirewall() error {
 	}
 
 	if status != Off {
-		gateways, err := b.bonafide.GetAllGateways("any")
+		gateways, err := b.api.GetAllGateways("any")
 		if err != nil {
 			return err
 		}
@@ -479,22 +479,22 @@ func (b *Bitmask) VPNCheck() (helpers bool, privilege bool, err error) {
 }
 
 func (b *Bitmask) GetLocationQualityMap(transport string) map[string]float64 {
-	return b.bonafide.GetLocationQualityMap(transport)
+	return b.api.GetLocationQualityMap(transport)
 }
 
 func (b *Bitmask) GetLocationLabels(transport string) map[string][]string {
-	return b.bonafide.GetLocationLabels(transport)
+	return b.api.GetLocationLabels(transport)
 }
 
 // UseGateway selects a gateway, by label, as the default gateway
 func (b *Bitmask) UseGateway(label string) {
-	b.bonafide.SetManualGateway(label)
+	b.api.SetManualGateway(label)
 }
 
 // UseAutomaticGateway sets the gateway to be selected automatically
 // best gateway will be used
 func (b *Bitmask) UseAutomaticGateway() {
-	b.bonafide.SetAutomaticGateway()
+	b.api.SetAutomaticGateway()
 }
 
 // SetTransport selects an obfuscation transport to use

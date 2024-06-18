@@ -33,44 +33,59 @@ import (
 )
 
 type Bitmask struct {
-	tempdir          string
-	onGateway        bonafide.Gateway
-	ptGateway        bonafide.Gateway
-	statusCh         chan string
-	managementClient *management.MgmtClient
-	bonafide         *bonafide.Bonafide
-	launch           *launcher.Launcher
-	transport        string
-	obfsvpnProxy     *obfsvpn.Client
-	certPemPath      string
-	openvpnArgs      []string
-	useUDP           bool
-	useSnowflake     bool
-	canUpgrade       bool
-	motd             []motd.Message
-	provider         string
+	api              apiInterface           // handles backend API communication, implemented in bonafide (v3) or menshen (v5)
+	onGateway        bonafide.Gateway       // gateway we are connected
+	ptGateway        bonafide.Gateway       // public transport gateway we are connected with
+	launch           *launcher.Launcher     // launcher manages the firewall and starts/stops openvpn
+	canUpgrade       bool                   // is there an update available?
+	motd             []motd.Message         // cached message of the day (ony fetched once during startup)
+	statusCh         chan string            // channel used to get current OpenVPN state (remote ip, connection state, ...)
+	managementClient *management.MgmtClient // used to speak with our own management backend (OpenVPN process connects to it)
+	transport        string                 // used transport, e.g. OpenVPN (plain) or obfuscated protocols (obfs4)
+	openvpnArgs      []string               // arguments used for invoking the OpenVPN process
+	useUDP           bool                   // should we use UDP?
+	obfsvpnProxy     *obfsvpn.Client        // handles OpenVPN obfuscation, e.g. starts/stops obfs4 bridge
+	useSnowflake     bool                   // should we use Snowflake?
+	provider         string                 // currently not used, get fixed if we get to the provider agnostic client
+	tempdir          string                 // random base temp dir. Used for OpenVPN CA (cacert.pem),
+	// client certificate (openvpn.pem, holds key and certificate) and management communication
+	// authentication (key file prefixed with leap-vpn-...). Directory gets deleted during teardown
+	certPemPath string // path of OpenVPN client certificate. Normally this is $tempdir/openvpn.pem,
+	// but it also can be $config/$provider.pem (if snowflake is used or supplied out-of-band in a censored network)
 }
 
 // Init the connection to bitmask
 func Init() (*Bitmask, error) {
-	statusCh := make(chan string, 10)
 	tempdir, err := ioutil.TempDir("", "leap-")
 	if err != nil {
 		return nil, err
 	}
-	bf := bonafide.New()
+
+	api := bonafide.New()
 	launch, err := launcher.NewLauncher()
 	if err != nil {
 		return nil, err
 	}
 
 	b := Bitmask{
-		tempdir,
-		bonafide.Gateway{},
-		bonafide.Gateway{}, statusCh, nil, bf, launch,
-		"", nil, "", []string{},
-		false, false, isUpgradeAvailable(),
-		[]motd.Message{}, ""}
+		tempdir:          tempdir,
+		onGateway:        bonafide.Gateway{},
+		ptGateway:        bonafide.Gateway{},
+		statusCh:         make(chan string, 10),
+		managementClient: nil,
+		api:              api,
+		launch:           launch,
+		transport:        "",
+		obfsvpnProxy:     nil,
+		certPemPath:      "",
+		openvpnArgs:      []string{},
+		useUDP:           false,
+		useSnowflake:     false,
+		canUpgrade:       isUpgradeAvailable(),
+		motd:             motd.FetchLatest(),
+		provider:         "",
+	}
+
 	// FIXME multiprovider: need to pass provider name early on
 	// XXX we want to block on these, but they can timeout if we're blocked.
 	b.checkForMOTD()
@@ -111,7 +126,7 @@ func (b *Bitmask) GetStatusCh() <-chan string {
 }
 
 func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
-	return b.bonafide.GetSnowflakeCh()
+	return b.api.GetSnowflakeCh()
 }
 
 // Close the connection to bitmask, and does cleanup of temporal files
@@ -145,11 +160,11 @@ func (b *Bitmask) Version() (string, error) {
 }
 
 func (b *Bitmask) NeedsCredentials() bool {
-	return b.bonafide.NeedsCredentials()
+	return b.api.NeedsCredentials()
 }
 
 func (b *Bitmask) DoLogin(username, password string) (bool, error) {
-	return b.bonafide.DoLogin(username, password)
+	return b.api.DoLogin(username, password)
 }
 
 func (b *Bitmask) UseUDP(udp bool) {
@@ -162,7 +177,7 @@ func (b *Bitmask) UseSnowflake(s bool) error {
 }
 
 func (b *Bitmask) OffersUDP() bool {
-	return b.bonafide.IsUDPAvailable()
+	return b.api.IsUDPAvailable()
 }
 
 func (b *Bitmask) GetMotd() string {

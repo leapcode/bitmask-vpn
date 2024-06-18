@@ -88,7 +88,7 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 				// we're using pluggable transports
 				b.onGateway = b.ptGateway
 			} else {
-				gw, err := b.bonafide.GetGatewayByIP(ip)
+				gw, err := b.api.GetGatewayByIP(ip)
 				if err == nil {
 					b.onGateway = gw
 					log.Info().
@@ -118,7 +118,7 @@ func (b *Bitmask) GetCurrentCountry() string {
 }
 
 func (b *Bitmask) GetBestLocation(transport string) string {
-	location, err := b.bonafide.GetBestLocation(transport)
+	location, err := b.api.GetBestLocation(transport)
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -129,7 +129,7 @@ func (b *Bitmask) GetBestLocation(transport string) string {
 }
 
 func (b *Bitmask) IsManualLocation() bool {
-	return b.bonafide.IsManualLocation()
+	return b.api.IsManualLocation()
 }
 
 func (b *Bitmask) getOpenvpnState() (string, error) {
