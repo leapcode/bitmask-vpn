@@ -127,6 +127,9 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 		}
 
 		log.Debug().
+			Str("host", gw.Host).
+			Str("ip", gw.IPAddress).
+			Bool("kcp", kcpMode).
 			Str("cert", gw.Options["cert"]).
 			Msg("Connecting with cert")
 
@@ -272,14 +275,22 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			return err
 		}
 
+		var proto string
 		for _, gw := range gateways {
 			for _, port := range gw.Ports {
 				if port != "53" {
 					if b.useUDP {
-						arg = append(arg, "--remote", gw.IPAddress, port, "udp4")
+						proto = "udp4"
 					} else {
-						arg = append(arg, "--remote", gw.IPAddress, port, "tcp4")
+						proto = "tcp4"
 					}
+					arg = append(arg, "--remote", gw.IPAddress, port, proto)
+					log.Debug().
+						Str("gateway", gw.Host).
+						Str("ip4", gw.IPAddress).
+						Str("port", port).
+						Str("proto", proto).
+						Msg("Adding gateway to command line via --remote")
 				}
 			}
 		}
