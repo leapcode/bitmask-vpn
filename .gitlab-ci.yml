@@ -17,9 +17,8 @@ build_test:
     - linux
   artifacts:
     paths:
-      - 'build/qt/release/riseup-vpn'
-    expire_in: 1 month
-
+      - 'build/qt/release'
+    expire_in: 1 week
 
 lint:
   image: golangci/golangci-lint:v1.59-alpine
@@ -71,6 +70,7 @@ debian:
   artifacts:
     paths:
       - 'deploy/*.deb'
+    expire_in: 1 week
 
 # vendorize:
 #   image: registry.0xacab.org/leap/bitmask-vpn:latest
