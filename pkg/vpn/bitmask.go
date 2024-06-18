@@ -29,6 +29,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/management"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn/menshen"
 	obfsvpn "0xacab.org/leap/obfsvpn/client"
 )
 
@@ -61,7 +62,29 @@ func Init() (*Bitmask, error) {
 		return nil, err
 	}
 
-	api := bonafide.New()
+	var api apiInterface
+	if os.Getenv("API_VERSION") == "5" {
+		config.ApiVersion = 5
+		log.Debug().Msg("Enforcing API v5 by env variable")
+	}
+	log.Debug().
+		Int("apiVersion", config.ApiVersion).
+		Msg("Using specific API backend version")
+
+	if config.ApiVersion == 5 {
+		api, err = menshen.New()
+		if err != nil {
+			return nil, err
+		}
+	} else if config.ApiVersion == 3 {
+		api = bonafide.New()
+	} else {
+		log.Warn().
+			Int("apiVersion", config.ApiVersion).
+			Msg("ApiVersion of provider was not set correctly. Version 3 and 5 is supported. Using v3 for backwards compatiblity")
+		api = bonafide.New()
+	}
+
 	launch, err := launcher.NewLauncher()
 	if err != nil {
 		return nil, err
