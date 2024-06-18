@@ -1,3 +1,12 @@
+# 0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e
+## explicit; go 1.20
+0xacab.org/leap/bitmask-core/models
+0xacab.org/leap/bitmask-core/pkg/bootstrap
+0xacab.org/leap/bitmask-core/pkg/client
+0xacab.org/leap/bitmask-core/pkg/client/provisioning
+0xacab.org/leap/bitmask-core/pkg/introducer
+0xacab.org/leap/bitmask-core/pkg/models
+0xacab.org/leap/bitmask-core/pkg/storage
 # 0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc
 ## explicit; go 1.20
 0xacab.org/leap/obfsvpn/client
@@ -19,6 +28,23 @@ git.torproject.org/pluggable-transports/snowflake.git/common/util
 # github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
 ## explicit
 github.com/ProtonMail/go-autostart
+# github.com/andybalholm/brotli v1.0.5
+## explicit; go 1.12
+github.com/andybalholm/brotli
+# github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
+## explicit; go 1.13
+github.com/asaskevich/govalidator
+# github.com/asdine/storm/v3 v3.2.1
+## explicit; go 1.13
+github.com/asdine/storm/v3
+github.com/asdine/storm/v3/codec
+github.com/asdine/storm/v3/codec/json
+github.com/asdine/storm/v3/index
+github.com/asdine/storm/v3/internal
+github.com/asdine/storm/v3/q
+# github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
+## explicit; go 1.15
+github.com/babolivier/go-doh-client
 # github.com/cretz/bine v0.2.0
 ## explicit; go 1.15
 github.com/cretz/bine/control
@@ -33,12 +59,70 @@ github.com/davecgh/go-spew/spew
 # github.com/dchest/siphash v1.2.3
 ## explicit; go 1.16
 github.com/dchest/siphash
+# github.com/gaukas/godicttls v0.0.3
+## explicit; go 1.19
+github.com/gaukas/godicttls
+# github.com/go-logr/logr v1.2.3
+## explicit; go 1.16
+github.com/go-logr/logr
+github.com/go-logr/logr/funcr
+# github.com/go-logr/stdr v1.2.2
+## explicit; go 1.16
+github.com/go-logr/stdr
+# github.com/go-openapi/analysis v0.21.4
+## explicit; go 1.13
+github.com/go-openapi/analysis
+github.com/go-openapi/analysis/internal/debug
+github.com/go-openapi/analysis/internal/flatten/normalize
+github.com/go-openapi/analysis/internal/flatten/operations
+github.com/go-openapi/analysis/internal/flatten/replace
+github.com/go-openapi/analysis/internal/flatten/schutils
+github.com/go-openapi/analysis/internal/flatten/sortref
+# github.com/go-openapi/errors v0.20.4
+## explicit; go 1.14
+github.com/go-openapi/errors
+# github.com/go-openapi/jsonpointer v0.19.5
+## explicit; go 1.13
+github.com/go-openapi/jsonpointer
+# github.com/go-openapi/jsonreference v0.20.0
+## explicit; go 1.13
+github.com/go-openapi/jsonreference
+github.com/go-openapi/jsonreference/internal
+# github.com/go-openapi/loads v0.21.2
+## explicit; go 1.13
+github.com/go-openapi/loads
+# github.com/go-openapi/runtime v0.26.0
+## explicit; go 1.18
+github.com/go-openapi/runtime
+github.com/go-openapi/runtime/client
+github.com/go-openapi/runtime/logger
+github.com/go-openapi/runtime/middleware
+github.com/go-openapi/runtime/middleware/denco
+github.com/go-openapi/runtime/middleware/header
+github.com/go-openapi/runtime/middleware/untyped
+github.com/go-openapi/runtime/security
+github.com/go-openapi/runtime/yamlpc
+# github.com/go-openapi/spec v0.20.8
+## explicit; go 1.13
+github.com/go-openapi/spec
+# github.com/go-openapi/strfmt v0.21.7
+## explicit; go 1.19
+github.com/go-openapi/strfmt
+# github.com/go-openapi/swag v0.22.4
+## explicit; go 1.18
+github.com/go-openapi/swag
+# github.com/go-openapi/validate v0.22.1
+## explicit; go 1.14
+github.com/go-openapi/validate
 # github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
 # github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1
 ## explicit
 github.com/gopherjs/gopherjs/js
+# github.com/josharian/intern v1.0.0
+## explicit; go 1.5
+github.com/josharian/intern
 # github.com/jtolds/gls v4.20.0+incompatible
 ## explicit
 github.com/jtolds/gls
@@ -52,21 +136,49 @@ github.com/kardianos/osext
 ## explicit
 github.com/keybase/go-ps
 github.com/keybase/go-ps/darwincgo
+# github.com/klauspost/compress v1.16.6
+## explicit; go 1.18
+github.com/klauspost/compress
+github.com/klauspost/compress/fse
+github.com/klauspost/compress/huff0
+github.com/klauspost/compress/internal/cpuinfo
+github.com/klauspost/compress/internal/snapref
+github.com/klauspost/compress/zstd
+github.com/klauspost/compress/zstd/internal/xxhash
 # github.com/klauspost/cpuid/v2 v2.2.6
 ## explicit; go 1.15
 github.com/klauspost/cpuid/v2
 # github.com/klauspost/reedsolomon v1.12.1
 ## explicit; go 1.18
 github.com/klauspost/reedsolomon
+# github.com/mailru/easyjson v0.7.7
+## explicit; go 1.12
+github.com/mailru/easyjson/buffer
+github.com/mailru/easyjson/jlexer
+github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-colorable v0.1.13
 ## explicit; go 1.15
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.19
 ## explicit; go 1.15
 github.com/mattn/go-isatty
+# github.com/mitchellh/go-homedir v1.1.0
+## explicit
+github.com/mitchellh/go-homedir
+# github.com/mitchellh/mapstructure v1.5.0
+## explicit; go 1.14
+github.com/mitchellh/mapstructure
 # github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
 ## explicit
 github.com/natefinch/npipe
+# github.com/oklog/ulid v1.3.1
+## explicit
+github.com/oklog/ulid
+# github.com/opentracing/opentracing-go v1.2.0
+## explicit; go 1.14
+github.com/opentracing/opentracing-go
+github.com/opentracing/opentracing-go/ext
+github.com/opentracing/opentracing-go/log
 # github.com/pion/datachannel v1.5.5
 ## explicit; go 1.13
 github.com/pion/datachannel
@@ -168,6 +280,13 @@ github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
+# github.com/prometheus-community/pro-bing v0.4.0
+## explicit; go 1.19
+github.com/prometheus-community/pro-bing
+# github.com/refraction-networking/utls v1.3.3
+## explicit; go 1.19
+github.com/refraction-networking/utls
+github.com/refraction-networking/utls/internal/helper
 # github.com/rs/zerolog v1.32.0
 ## explicit; go 1.15
 github.com/rs/zerolog
@@ -233,10 +352,40 @@ gitlab.com/yawning/obfs4.git/transports/obfs4/framing
 # gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib v1.5.0
 ## explicit; go 1.11
 gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib
-# golang.org/x/crypto v0.18.0
+# go.etcd.io/bbolt v1.3.7
+## explicit; go 1.17
+go.etcd.io/bbolt
+# go.mongodb.org/mongo-driver v1.11.3
+## explicit; go 1.13
+go.mongodb.org/mongo-driver/bson
+go.mongodb.org/mongo-driver/bson/bsoncodec
+go.mongodb.org/mongo-driver/bson/bsonoptions
+go.mongodb.org/mongo-driver/bson/bsonrw
+go.mongodb.org/mongo-driver/bson/bsontype
+go.mongodb.org/mongo-driver/bson/primitive
+go.mongodb.org/mongo-driver/x/bsonx/bsoncore
+# go.opentelemetry.io/otel v1.14.0
+## explicit; go 1.18
+go.opentelemetry.io/otel
+go.opentelemetry.io/otel/attribute
+go.opentelemetry.io/otel/baggage
+go.opentelemetry.io/otel/codes
+go.opentelemetry.io/otel/internal
+go.opentelemetry.io/otel/internal/attribute
+go.opentelemetry.io/otel/internal/baggage
+go.opentelemetry.io/otel/internal/global
+go.opentelemetry.io/otel/propagation
+go.opentelemetry.io/otel/semconv/internal
+go.opentelemetry.io/otel/semconv/v1.12.0
+# go.opentelemetry.io/otel/trace v1.14.0
+## explicit; go 1.18
+go.opentelemetry.io/otel/trace
+# golang.org/x/crypto v0.19.0
 ## explicit; go 1.18
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/cast5
+golang.org/x/crypto/chacha20
+golang.org/x/crypto/chacha20poly1305
 golang.org/x/crypto/cryptobyte
 golang.org/x/crypto/cryptobyte/asn1
 golang.org/x/crypto/curve25519
@@ -253,17 +402,25 @@ golang.org/x/crypto/sha3
 golang.org/x/crypto/tea
 golang.org/x/crypto/twofish
 golang.org/x/crypto/xtea
-# golang.org/x/net v0.20.0
+# golang.org/x/net v0.21.0
 ## explicit; go 1.18
 golang.org/x/net/bpf
 golang.org/x/net/dns/dnsmessage
+golang.org/x/net/http/httpguts
+golang.org/x/net/http2
+golang.org/x/net/http2/hpack
+golang.org/x/net/icmp
+golang.org/x/net/idna
 golang.org/x/net/internal/iana
 golang.org/x/net/internal/socket
 golang.org/x/net/internal/socks
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
 golang.org/x/net/proxy
-# golang.org/x/sys v0.16.0
+# golang.org/x/sync v0.6.0
+## explicit; go 1.18
+golang.org/x/sync/errgroup
+# golang.org/x/sys v0.17.0
 ## explicit; go 1.18
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
@@ -273,8 +430,17 @@ golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/debug
 golang.org/x/sys/windows/svc/eventlog
 golang.org/x/sys/windows/svc/mgr
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
 # gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce
 ## explicit
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
+gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

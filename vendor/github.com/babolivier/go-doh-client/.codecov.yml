@@ -1,0 +1,4 @@
+# Ignore coverage for http.go and resolver.go which don't have tests.
+ignore:
+  - "http.go"
+  - "resolver.go"
