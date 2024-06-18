@@ -28,38 +28,6 @@ lint:
   tags:
     - linux
 
-# branded_push:
-#   image: registry.0xacab.org/leap/bitmask-vpn:latest
-#   stage: push
-#   only:
-#       - master
-#   script:
-#     # install the command-line openssh client to manage private keys
-#     - apt install -y openssh-client
-#     # activate the ssh-agent
-#     - eval $(ssh-agent -s)
-#     # load the private key, which is accessed vi a gitlab CI secret environment variable
-#     # We're using tr to fix line endings which makes ed25519 keys work
-#     # without extra base64 encoding.
-#     - ssh-add <(echo "$RISEUP_VPN_PACKAGE_SSH_KEY")
-#     - mkdir -p ~/.ssh
-#     # ensure that ssh will trust a new host, instead of asking
-#     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-#     # we also need to configure name and email for git user
-#     - git config user.name "Gitlab CI"
-#     - git config user.email "gitlabci@0xacab.org"
-#     # Add the remote repository and push to it - sometimes it already exists, and it causes the pipeline to fail, so we only add if its not already there
-#     - git remote -v |grep -q riseup-vpn || git remote add riseup-vpn git@0xacab.org:leap/riseup-vpn_package.git
-#     - git push --force riseup-vpn HEAD:incoming
-
-
-# trigger_deb:
-#   image: registry.0xacab.org/leap/buster_amd64:latest
-#   stage: trigger
-#   script:
-#     - echo "Triggering CI pipeline on https://0xacab.org/leap/riseup-vpn_package/pipelines"
-#     - "curl -X POST -F token=$RISEUP_VPN_DEB_TRIGGER_TOKEN -F ref=master https://0xacab.org/api/v4/projects/1916/trigger/pipeline"
-
 debian:
   image: registry.0xacab.org/jkito/bitmask-vpn:latest
   stage: debian
@@ -72,22 +40,3 @@ debian:
       - 'deploy/*.deb'
     expire_in: 1 week
 
-# vendorize:
-#   image: registry.0xacab.org/leap/bitmask-vpn:latest
-#   stage: vendor
-#   script:
-#     #- TODO build_all_providers script can be rescued when we achieve to bring back xbuild for win/osx.
-#     # For now it only makes sense to build the snap.
-#     #- 'PROVIDERS="riseup calyx" make build_all_providers'
-#     - 'PROVIDER="riseup" make vendor && make package_snap'
-#   artifacts:
-#     name: installers-$CI_COMMIT_REF_NAME
-#     paths:
-#       - 'deploy/*.snap'
-# #       - 'deploy/RiseupVPN-*.exe'
-# #       - 'deploy/RiseupVPN-*.pkg'
-# #       - 'deploy/riseup-vpn_*.deb'
-# #       - 'deploy/CalyxVPN-*.exe'
-# #       - 'deploy/CalyxVPN-*.pkg'
-# #       - 'deploy/calyx-vpn_*.deb'
-#     expire_in: 1 month
