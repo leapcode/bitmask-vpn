@@ -1,5 +1,6 @@
 ---
 stages:
+  - lint
   - build
   - debian
 
@@ -18,6 +19,15 @@ build_test:
     paths:
       - 'build/qt/release/riseup-vpn'
     expire_in: 1 month
+
+
+lint:
+  image: golangci/golangci-lint:v1.59-alpine
+  stage: build
+  script:
+    - golangci-lint run --timeout=5m
+  tags:
+    - linux
 
 # branded_push:
 #   image: registry.0xacab.org/leap/bitmask-vpn:latest
