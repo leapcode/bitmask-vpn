@@ -316,12 +316,13 @@ func (b *Bonafide) SetAutomaticGateway() {
 	b.gateways.setAutomaticChoice()
 }
 
+// This function is part of the apiInterface
+// In the v5 implementation, some errors can happen
+// In this case we always return nil as error
 func (b *Bonafide) GetBestLocation(transport string) (string, error) {
 	if b.gateways == nil {
 		return "", nil
 	}
-	// in the v5/menshen implementation, some errors can happen, this
-	// function will be part of an interface
 	return b.gateways.getBestLocation(transport, b.tzOffsetHours), nil
 }
 
