@@ -16,6 +16,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const (
+	privateKey = "PRIVATE KEY"
+	cert       = "CERTIFICATE"
+)
+
 func isUpgradeAvailable() bool {
 
 	// SNAPS have their own way of upgrading. We probably should also try to detect
@@ -45,15 +50,7 @@ func isValidCert(path string) bool {
 		return false
 	}
 
-	beginRsaKey := "-----BEGIN RSA PRIVATE KEY-----"
-	if !strings.Contains(string(data), beginRsaKey) {
-		log.Debug().
-			Str("pem", string(data)).
-			Msg("Certificate file does not contain a private key")
-		return false
-	}
-
-	_, rest := pem.Decode(data)
+	pkBlock, rest := pem.Decode(data)
 	if rest == nil {
 		log.Warn().
 			Str("data", string(data)).
@@ -61,8 +58,15 @@ func isValidCert(path string) bool {
 		return false
 	}
 
-	certBlock, rest := pem.Decode(rest)
-	if certBlock == nil || rest == nil {
+	if !strings.Contains(pkBlock.Type, privateKey) {
+		log.Debug().
+			Str("pem", string(data)).
+			Msg("Certificate file does not contain a private key")
+		return false
+	}
+
+	certBlock, _ := pem.Decode(rest)
+	if certBlock == nil || certBlock.Type != cert {
 		log.Warn().Msg("Invalid result after decoding of pem data")
 		return false
 	}
