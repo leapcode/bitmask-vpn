@@ -23,6 +23,8 @@ import (
 )
 
 func ConfigureLogger() {
+	os.MkdirAll(Path, 0750)
+
 	runLogFile, _ := os.OpenFile(
 		LogPath,
 		os.O_RDWR|os.O_CREATE|os.O_APPEND,
