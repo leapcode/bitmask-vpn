@@ -17,6 +17,7 @@ package vpn
 
 import (
 	"fmt"
+	"net"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -30,6 +31,11 @@ const (
 	Starting = "starting"
 	Stopping = "stopping"
 	Failed   = "failed"
+)
+
+const (
+	openvpnManagementAddr = "127.0.0.1"
+	openvpnManagementPort = "6061"
 )
 
 var statusNames = map[string]string{
@@ -47,33 +53,45 @@ var statusNames = map[string]string{
 	"FAILED":       Off,
 }
 
-func (b *Bitmask) openvpnManagement() {
-	// TODO: we should warn the user on ListenAndServe errors
+// Start listener on 127.0.0.1:6061 and run backend handler, the OpenVPN process
+// connects to this port and tells us things like the state or the connected gateway.
+// Our management backend is implemented in the management package (pkg/vpn/management)
+// OpenVPN gets invoked with --management-client and --management 127.0.0.1 6061 <secret>
+// Reference: https://openvpn.net/community-resources/management-interface/
+func (b *Bitmask) initOpenVPNManagementHandler() {
+	listenAddr := net.JoinHostPort(openvpnManagementAddr, openvpnManagementPort)
+
 	newConnection := func(conn management.IncomingConn) {
 		eventCh := make(chan management.Event, 10)
-		log.Info().Msg("New connection into the management")
+		log.Debug().
+			Str("endpoint", listenAddr).
+			Msg("OpenVPN process connected to our management backend")
 		b.managementClient = conn.Open(eventCh)
 		b.managementClient.SendPassword(b.launch.MngPass)
 		b.managementClient.SetStateEvents(true)
 		b.eventHandler(eventCh)
 	}
+
 	err := management.ListenAndServe(
-		fmt.Sprintf("%s:%s", openvpnManagementAddr, openvpnManagementPort),
+		listenAddr,
 		management.IncomingConnHandlerFunc(newConnection),
 	)
-	if err != nil {
-		log.Fatal().
-			Err(err).
-			Msg("Could not run management backend")
 
-	}
+	// This should never be reached, ListenAndServe blocks
+	log.Fatal().
+		Err(err).
+		Str("listen", listenAddr).
+		Msgf("Could not start OpenVPN management backend")
 }
 
+// Handle events sent by OpenVPN management. For more information please read
+// the docstring of the initOpenVPNManagementHandler function
 func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 	for event := range eventCh {
 		log.Debug().
 			Str("event", event.String()).
 			Msg("Got event from OpenVPN process")
+
 		stateEvent, ok := event.(*management.StateEvent)
 		if !ok {
 			continue
@@ -83,6 +101,7 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 		if ok {
 			b.statusCh <- status
 		}
+
 		if statusName == "CONNECTED" {
 			ip := strings.Split(stateEvent.String(), ": ")[1]
 			if ip == "127.0.0.1" {
@@ -93,8 +112,8 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 				if err == nil {
 					b.onGateway = gw
 					log.Info().
-						Str("host", b.onGateway.Host).
-						Msg("Connected to gateway")
+						Str("gateway", b.onGateway.Host).
+						Msg("Sucessfully connected to gateway")
 				} else {
 					log.Warn().
 						Str("ip", ip).
@@ -140,9 +159,18 @@ func (b *Bitmask) IsManualLocation() bool {
 	return b.api.IsManualLocation()
 }
 
+// The OpenVPN process connects to our management backend.
+// If the OpenVPN state changes, it sends a line of text, e.g. "RECONNECTING: connection-reset"
+// We use the map statusNames to set an internal state (e.g RECONNECTING results in state Starting)
+// In getOpenvpnState we only use the last state that was set. It gets updated in eventHandler function
+// The state is used by the GUI to handle the UI parts
 func (b *Bitmask) getOpenvpnState() (string, error) {
 	if b.managementClient == nil {
-		return "", fmt.Errorf("No management connected")
+		log.Trace().
+			Str("state", Off).
+			Str("reason", "OpenVPN process has not (yet) connected to our management backend").
+			Msg("Returning OpenVPN state")
+		return Off, nil
 	}
 	stateEvent, err := b.managementClient.LatestState()
 	if err != nil {
@@ -150,7 +178,7 @@ func (b *Bitmask) getOpenvpnState() (string, error) {
 	}
 	status, ok := statusNames[stateEvent.NewState()]
 	if !ok {
-		return "", fmt.Errorf("Unkonw status")
+		return "", fmt.Errorf("Unknown status: %s", stateEvent.NewState())
 	}
 	return status, nil
 }

@@ -34,11 +34,6 @@ import (
 	"0xacab.org/leap/obfsvpn/obfsvpn"
 )
 
-const (
-	openvpnManagementAddr = "127.0.0.1"
-	openvpnManagementPort = "6061"
-)
-
 // StartVPN for provider
 func (b *Bitmask) StartVPN(provider string) error {
 	if !b.CanStartVPN() {

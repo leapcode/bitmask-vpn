@@ -137,7 +137,7 @@ func Init() (*Bitmask, error) {
 	*/
 
 	go b.fetchGateways()
-	go b.openvpnManagement()
+	go b.initOpenVPNManagementHandler()
 
 	return &b, err
 }
