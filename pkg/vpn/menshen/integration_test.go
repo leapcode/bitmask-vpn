@@ -60,6 +60,9 @@ func TestGetVpnArguments(t *testing.T) {
 }
 
 func TestLatency(t *testing.T) {
+	if os.Getenv("CI") != "" {
+		t.Skip("Not running integration tests right now in the CI")
+	}
 	ip := "1.1.1.1"
 	stats, err := calcLatency(ip)
 	require.NoError(t, err, "Could not calc latency")
