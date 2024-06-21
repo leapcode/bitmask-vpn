@@ -90,7 +90,7 @@ ThemedPage {
         //: %3 -> donation text if activated
         //: %4 -> terms of service
         let _txt = qsTr(
-                    "<style>a:link {color: '" + Theme.green + "';}</style><p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p> %3 <p>By using this application, you agree to the <a href=\"%4\">Terms of Service</a>. This service is provided as-is, without any warranty, and is intended for people who work to make the world a better place.</p>").arg(_name).arg(_provider).arg(_donateTXT).arg(_tosURL)
+                    "<style>a:link {color: '" + Theme.green + "';}</style><p>%1 is an easy, fast, and secure VPN service from %2. %1 does not require a user account, keep logs, or track you in any way.</p> %3 <p>By using this application, you agree to the Terms of Service available at <a href=\"%4\">%4</a>. This service is provided as-is, without any warranty, and is intended for people, who work to make the world a better place.</p>").arg(_name).arg(_provider).arg(_donateTXT).arg(_tosURL)                  
         return _txt
     }
 
