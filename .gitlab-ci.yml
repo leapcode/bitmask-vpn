@@ -12,7 +12,7 @@ build_test:
     - patch -p1 < docker/*.patch
     # TODO missing xcb package in the docker image. investigate what to install to run minimal tests.
     # - make test_ui
-    - make build
+    - PROVIDER=bitmask && make vendor && make build
   tags:
     - linux
   artifacts:
