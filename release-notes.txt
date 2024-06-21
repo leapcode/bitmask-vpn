@@ -1,9 +1,0 @@
-Release notes for riseup-vpn 0.24.5
-===================================
-This is a maintenance release which brings several bug fixes and overall improvements to the stability of the app, some notable changes are:
-- fixes missing dependencies on .deb package
-- Shorten too long strings in translations
-- Connection status text width trimmed to be inside parent container
-- Update GUI to Qt6
-- Fix bitmask-helper install script for macOS and windows
-- Fixes a bug where after using obfs4 it was impossible to gracefully close the app
