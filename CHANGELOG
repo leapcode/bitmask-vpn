@@ -2,6 +2,15 @@ development
 ===========
 - ...
 
+0.24.6-rc.1
+======
+- Adds better debug and informational logs
+- Partially implement menshen V5 API
+- Partially implements the new Bitmask and Riseup designs
+- Addition of PPA for ubuntu numbat
+- Adds timeout for http connections
+- Adds error checking to various places in the code
+
 0.24.5
 ======
 - fix missing dependencies on .deb package
