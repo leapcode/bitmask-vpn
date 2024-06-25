@@ -16,7 +16,7 @@ Depends: ${misc:Depends}, libqt5core5a, libqt5gui5 | libqt5gui5-gles,
         libqt5qml5, libqt5widgets5, libstdc++6,
         qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-dialogs,
         qml-module-qtquick-extras, qml-module-qt-labs-platform,
-        openvpn, policykit-1-gnome | polkit-1-auth-agent, python3
+        openvpn, policykit-1-gnome | polkit-1-auth-agent, python3, iptables
 Description: Easy, fast, and secure VPN service from riseup.net.
  .
  The service does not require a user account, keep logs, or track you in any
