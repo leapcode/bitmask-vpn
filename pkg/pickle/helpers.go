@@ -86,9 +86,9 @@ func copyAsRoot(orig, dest string, isExec bool) {
 
 	if isExec {
 		if isRoot() {
-			cmd = exec.Command("chmod", "776", dest)
+			cmd = exec.Command("chmod", "755", dest)
 		} else {
-			cmd = exec.Command("sudo", "chmod", "776", dest)
+			cmd = exec.Command("sudo", "chmod", "755", dest)
 		}
 		err = cmd.Run()
 		check(err)
