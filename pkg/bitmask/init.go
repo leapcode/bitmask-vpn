@@ -53,7 +53,7 @@ func GetConfiguredProvider() *ProviderInfo {
 }
 
 func ConfigureProvider(opts *ProviderOpts) {
-	config.Provider = opts.ProviderURL
+	config.Provider = opts.Provider
 	config.ApplicationName = opts.AppName
 	config.BinaryName = opts.BinaryName
 	config.Auth = opts.Auth
