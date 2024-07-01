@@ -173,10 +173,10 @@ func (p *gatewayPool) getGatewaysFromMenshenByLocation(location, transport strin
 
 	var gateways []Gateway
 	for _, gw := range p.recommended {
+		if !gw.gateway.isTransport(transport) {
+			continue
+		}
 		for _, locatedGw := range gws {
-			if !locatedGw.isTransport(transport) {
-				continue
-			}
 			if locatedGw.Host == gw.gateway.Host {
 				gateways = append(gateways, *locatedGw)
 				break
