@@ -133,6 +133,8 @@ func (m *Menshen) fetchGateways(transport string) error {
 			Int64("port", gw.Ports[0]).
 			Str("ip", gw.IPAddr).
 			Str("location", strings.Title(gw.Location)).
+			Str("protocol", gw.Transport).
+			Str("transport", gw.Type).
 			Msg("Got gateway from API")
 
 		// TODO: get rid of the strings.Title stuff if menshen supports gateway identifier
