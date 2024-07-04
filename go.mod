@@ -1,6 +1,8 @@
 module 0xacab.org/leap/bitmask-vpn
 
-go 1.19
+go 1.22
+
+toolchain go1.22.2
 
 require (
 	0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc
