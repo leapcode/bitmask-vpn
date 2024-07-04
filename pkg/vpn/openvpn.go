@@ -30,7 +30,8 @@ import (
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
-	obfsvpn "0xacab.org/leap/obfsvpn/client"
+	obfsvpnClient "0xacab.org/leap/obfsvpn/client"
+	"0xacab.org/leap/obfsvpn/obfsvpn"
 )
 
 const (
@@ -68,11 +69,32 @@ func (b *Bitmask) CanStartVPN() bool {
 
 func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
-	kcpMode := false
-	if os.Getenv("LEAP_KCP") == "1" {
-		kcpMode = true
+	kcpConfig := obfsvpn.KCPConfig{
+		Enabled: false,
 	}
-	b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
+	if os.Getenv("LEAP_KCP") == "1" {
+		kcpConfig = *obfsvpn.DefaultKCPConfig()
+	}
+
+	obfsvpnCfg := obfsvpnClient.Config{
+		ProxyAddr: proxyAddr,
+		HoppingConfig: obfsvpnClient.HoppingConfig{
+			Enabled: false,
+		},
+		KCPConfig:  kcpConfig,
+		Obfs4Cert:  gw.Options["cert"],
+		RemoteIP:   gw.IPAddress,
+		RemotePort: gw.Ports[0],
+	}
+	log.Info().Str("OBFS4 local proxy address:", obfsvpnCfg.ProxyAddr).
+		Str("OBFS4 Cert:", obfsvpnCfg.Obfs4Cert).
+		Bool("OBFS4+KCP:", kcpConfig.Enabled).
+		Str("OBFS4 Hostname", gw.Host).
+		Str("OBFS4 IP", gw.IPAddress).
+		Str("OBFS4 Port:", obfsvpnCfg.RemotePort).
+		Msg("OBFS4 bridge connection parameters")
+	ctx, cancelFunc := context.WithCancel(ctx)
+	b.obfsvpnProxy = obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
 	go func() {
 		_, err = b.obfsvpnProxy.Start()
 		if err != nil {
@@ -126,21 +148,25 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 			Str("ip", gw.IPAddress).
 			Msg("Selected Gateway")
 
-		kcpMode := false
+		kcpConfig := obfsvpn.KCPConfig{
+			Enabled: false,
+		}
 		if os.Getenv("LEAP_KCP") == "1" {
-			kcpMode = true
+			kcpConfig = *obfsvpn.DefaultKCPConfig()
 		}
 
-		log.Debug().
-			Str("host", gw.Host).
-			Str("ip", gw.IPAddress).
-			Bool("kcp", kcpMode).
-			Str("cert", gw.Options["cert"]).
-			Str("proxyAddr", proxyAddr).
-			Str("transport", b.transport).
-			Msg("Using gateway")
-
-		b.obfsvpnProxy = obfsvpn.NewClient(ctx, kcpMode, proxyAddr, gw.Options["cert"]).(*obfsvpn.Client)
+		obfsvpnCfg := obfsvpnClient.Config{
+			ProxyAddr: proxyAddr,
+			HoppingConfig: obfsvpnClient.HoppingConfig{
+				Enabled: false,
+			},
+			KCPConfig:  kcpConfig,
+			Obfs4Cert:  gw.Options["cert"],
+			RemoteIP:   gw.IPAddress,
+			RemotePort: gw.Ports[0],
+		}
+		ctx, cancelFunc := context.WithCancel(ctx)
+		b.obfsvpnProxy = obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
 		go func() {
 			_, err = b.obfsvpnProxy.Start()
 			if err != nil {
@@ -154,6 +180,14 @@ func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string
 				Str("host", gw.Host).
 				Msg("Connected via obfs4")
 		}()
+		log.Debug().
+			Str("host", gw.Host).
+			Str("ip", gw.IPAddress).
+			Bool("kcp", kcpConfig.Enabled).
+			Str("cert", gw.Options["cert"]).
+			Str("proxyAddr", proxyAddr).
+			Str("transport", b.transport).
+			Msg("Using gateway")
 
 		return proxyAddr, nil
 	}
@@ -278,8 +312,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		}
 
 		proxyArgs := strings.Split(proxy, ":")
-		arg = append(arg, "--socks-proxy", proxyArgs[0], proxyArgs[1])
-		arg = append(arg, "--remote", gw.IPAddress, gw.Ports[0], "tcp4")
+		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "udp")
 		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
 	} else {
 

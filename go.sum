@@ -1,7 +1,7 @@
 0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e h1:dg8K5g8gpWYh8GfJPJKlSF6twnjFa4Ui9FMEahAf3jw=
 0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e/go.mod h1:kuAy05ISfgrZJIPj2i7lXRxRlFF8gtRy3KvYYOgMYvI=
-0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc h1:QyADySTHZtWA81k58D/eD5aLFG2n8QaeKjIB/aMI3OU=
-0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc/go.mod h1:cOGeSmVkgxW5qYIOSvkBeFxwBnoOYsjuQWFYB5YYlm4=
+0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051 h1:z9sIIud8NbKW5+Qp0k6BnogK3O8CPWCN3Rx5Jbzq7bQ=
+0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051/go.mod h1:uesfK5XkHYSgHRpE9/Bb2yKkKTE6VFViyjbU/z4ST60=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 filippo.io/edwards25519 v1.0.0/go.mod h1:N1IkdkCkiLB6tki+MYJoSx2JTY9NUlxZE7eHn5EwJns=
@@ -262,8 +262,6 @@ github.com/jtolds/gls v4.20.0+incompatible h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7
 github.com/jtolds/gls v4.20.0+incompatible/go.mod h1:QJZ7F/aHp+rZTRtaJ1ow/lLfFfVYBRgL+9YlvaHOwJU=
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
-github.com/kalikaneko/socks5 v1.0.1 h1:j60X3e1sAmy/LK/WtHyU3xH6uMmwlRJyc9TE3AqYDpU=
-github.com/kalikaneko/socks5 v1.0.1/go.mod h1:XAMwFixakJUP0wv6pEVp6v2wx3SwhQEdL8TGDYKFAGU=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 h1:iQTw/8FWTuc7uiaSepXwyf3o52HaUYcV+Tu66S3F5GA=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0/go.mod h1:1NbS8ALrpOvjt0rHPNLyCIeMtbizbir8U//inJ+zuB8=
 github.com/karrick/godirwalk v1.8.0/go.mod h1:H5KPZjojv4lE+QYImBI8xVtrBRgYrIVsaRPx4tDPEn4=
@@ -563,8 +561,9 @@ github.com/xdg-go/stringprep v1.0.3/go.mod h1:W3f5j4i+9rC0kuIEJL0ky1VpHXQU3ocBgk
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xtaci/kcp-go v5.4.20+incompatible h1:TN1uey3Raw0sTz0Fg8GkfM0uH3YwzhnZWQ1bABv5xAg=
 github.com/xtaci/kcp-go v5.4.20+incompatible/go.mod h1:bN6vIwHQbfHaHtFpEssmWsN45a+AZwO7eyRCmEIbtvE=
-github.com/xtaci/kcp-go/v5 v5.6.1 h1:Pwn0aoeNSPF9dTS7IgiPXn0HEtaIlVb6y5UKWPsx8bI=
 github.com/xtaci/kcp-go/v5 v5.6.1/go.mod h1:W3kVPyNYwZ06p79dNwFWQOVFrdcBpDBsdyvK8moQrYo=
+github.com/xtaci/kcp-go/v5 v5.6.3 h1:yd59SKXdJ0PBxeMBy3apalxFCEmBLGgQmL6nP46tU0g=
+github.com/xtaci/kcp-go/v5 v5.6.3/go.mod h1:uIuw2KEg3FcmEdS4PeXHaGty9Ui7NYb1WKIrSDwpMg4=
 github.com/xtaci/lossyconn v0.0.0-20190602105132-8df528c0c9ae/go.mod h1:gXtu8J62kEgmN++bm9BVICuT/e8yiLI2KFobd/TRFsE=
 github.com/xtaci/lossyconn v0.0.0-20200209145036-adba10fffc37 h1:EWU6Pktpas0n8lLQwDsRyZfmkPeRbdgPtW609es+/9E=
 github.com/xtaci/lossyconn v0.0.0-20200209145036-adba10fffc37/go.mod h1:HpMP7DB2CyokmAh4lp0EQnnWhmycP/TvwBGzvuie+H0=

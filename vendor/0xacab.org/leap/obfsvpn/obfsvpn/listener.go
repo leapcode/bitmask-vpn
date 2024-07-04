@@ -8,15 +8,11 @@ import (
 	"log"
 	"net"
 
-	"github.com/xtaci/kcp-go"
+	"github.com/xtaci/kcp-go/v5"
 	"gitlab.com/yawning/obfs4.git/common/ntor"
 	"gitlab.com/yawning/obfs4.git/transports/base"
 	"gitlab.com/yawning/obfs4.git/transports/obfs4"
 	pt "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
-)
-
-const (
-	netKCP = "kcp"
 )
 
 // ListenConfig contains options for listening to an address.
@@ -24,6 +20,7 @@ const (
 // If StateDir is not set the current working directory is used.
 type ListenConfig struct {
 	ListenConfig net.ListenConfig
+	KCPConfig    KCPConfig
 
 	NodeID     *ntor.NodeID
 	PrivateKey *ntor.PrivateKey
@@ -34,7 +31,7 @@ type ListenConfig struct {
 
 // NewListenConfig returns a ListenConfig and any error during the initialization.
 // perhaps this is redundant, but using the same json format than ss for debug.
-func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string) (*ListenConfig, error) {
+func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string, kcpConfig KCPConfig) (*ListenConfig, error) {
 	var err error
 	var seed [ntor.KeySeedLength]byte
 	var nodeID *ntor.NodeID
@@ -62,6 +59,7 @@ func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string)
 		PublicKey:  pubKeyStr,
 		Seed:       seed,
 		StateDir:   stateDir,
+		KCPConfig:  kcpConfig,
 	}
 	return lc, nil
 }
@@ -119,21 +117,26 @@ func NewServerState(stateDir string) error {
 
 // Listen listens on the local network address.
 // See func net.Dial for a description of the network and address parameters.
-func (lc *ListenConfig) Listen(ctx context.Context, network, address string) (*Listener, error) {
-	var ln net.Listener
-	var err error
-	switch network {
-	case netKCP:
+func (lc *ListenConfig) Listen(ctx context.Context, kcpConfig KCPConfig, address string) (*Listener, error) {
+	if kcpConfig.Enabled {
 		log.Println("kcp listen on", address)
-		ln, err = kcp.Listen(address)
+		ln, err := kcp.ListenWithOptions(address, nil, 10, 3)
 		if err != nil {
 			return nil, err
 		}
-	default:
-		ln, err = lc.ListenConfig.Listen(ctx, network, address)
-		if err != nil {
+
+		if err := ln.SetReadBuffer(kcpConfig.ReadBuffer); err != nil {
 			return nil, err
 		}
+		if err := ln.SetWriteBuffer(kcpConfig.WriteBuffer); err != nil {
+			return nil, err
+		}
+
+		return lc.Wrap(ctx, ln)
+	}
+	ln, err := lc.ListenConfig.Listen(ctx, "tcp", address)
+	if err != nil {
+		return nil, err
 	}
 	return lc.Wrap(ctx, ln)
 }
@@ -141,8 +144,9 @@ func (lc *ListenConfig) Listen(ctx context.Context, network, address string) (*L
 // Listener is a network listener that accepts obfuscated connections and
 // performs the ntor handshake on them.
 type Listener struct {
-	sf base.ServerFactory
-	ln net.Listener
+	sf        base.ServerFactory
+	ln        net.Listener
+	kcpConfig KCPConfig
 }
 
 // Accept waits for and returns the next connection to the listener.
@@ -150,6 +154,13 @@ func (l *Listener) Accept() (net.Conn, error) {
 	conn, err := l.ln.Accept()
 	if err != nil {
 		return nil, err
+	}
+	kcpSession, ok := conn.(*kcp.UDPSession)
+	if ok {
+		kcpSession.SetStreamMode(true)
+		kcpSession.SetWindowSize(l.kcpConfig.SendWindowSize, l.kcpConfig.ReceiveWindowSize)
+		// https://github.com/skywind3000/kcp/blob/master/README.en.md#protocol-configuration
+		kcpSession.SetNoDelay(1, 10, 2, 1)
 	}
 	conn, err = l.sf.WrapConn(conn)
 	return conn, err

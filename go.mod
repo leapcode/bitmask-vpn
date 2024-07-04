@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.2
 
 require (
-	0xacab.org/leap/obfsvpn v0.0.0-20240422180703-83037b24d5cc
+	0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051
 	git.torproject.org/pluggable-transports/goptlib.git v1.3.0
 	git.torproject.org/pluggable-transports/snowflake.git v1.1.0
 	github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
@@ -16,7 +16,7 @@ require (
 	github.com/pion/webrtc/v3 v3.2.24
 	github.com/sevlyar/go-daemon v0.1.6
 	github.com/smartystreets/goconvey v1.6.4
-	github.com/xtaci/kcp-go/v5 v5.6.1
+	github.com/xtaci/kcp-go/v5 v5.6.3
 	github.com/xtaci/smux v1.5.24
 	// Do not update obfs4 past e330d1b7024b, a backwards incompatible change was
 	// made that will break negotiation!! riseup should move to the newest asap.
@@ -56,7 +56,6 @@ require (
 	github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
-	github.com/kalikaneko/socks5 v1.0.1 // indirect
 	github.com/klauspost/compress v1.16.6 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/klauspost/reedsolomon v1.12.1 // indirect
