@@ -474,28 +474,6 @@ func (b *Bitmask) Reconnect() error {
 	return b.startOpenVPN(ctx)
 }
 
-// ReloadFirewall restarts the firewall
-func (b *Bitmask) ReloadFirewall() error {
-	err := b.launch.FirewallStop()
-	if err != nil {
-		return err
-	}
-
-	status, err := b.GetStatus()
-	if err != nil {
-		return err
-	}
-
-	if status != Off {
-		gateways, err := b.api.GetAllGateways("any")
-		if err != nil {
-			return err
-		}
-		return b.launch.FirewallStart(gateways)
-	}
-	return nil
-}
-
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
 	status := Off

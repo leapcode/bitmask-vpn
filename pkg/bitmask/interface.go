@@ -28,7 +28,6 @@ type Bitmask interface {
 	CanStartVPN() bool
 	StopVPN() error
 	Reconnect() error
-	ReloadFirewall() error
 	GetStatus() (string, error)
 	VPNCheck() (helpers bool, priviledge bool, err error)
 	GetLocationQualityMap(protocol string) map[string]float64
