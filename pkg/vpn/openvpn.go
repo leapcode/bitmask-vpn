@@ -67,7 +67,7 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.api.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
+func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
 	kcpConfig := obfsvpn.KCPConfig{
 		Enabled: false,
@@ -110,88 +110,6 @@ func (b *Bitmask) startTransportForPrivateBridge(ctx context.Context, gw bonafid
 	}()
 
 	return proxyAddr, nil
-}
-
-func (b *Bitmask) startTransport(ctx context.Context, host string) (proxy string, err error) {
-	log.Debug().
-		Str("host", host).
-		Msg("Starting transport")
-
-	// TODO configure socks port if not available
-	// TODO get port from UI/config file
-	proxyAddr := "127.0.0.1:8080"
-
-	if b.obfsvpnProxy != nil {
-		return proxyAddr, nil
-	}
-
-	gateways, err := b.api.GetBestGateways(b.transport)
-	if err != nil {
-		return "", err
-	}
-	if len(gateways) == 0 {
-		log.Warn().
-			Str("transport", b.transport).
-			Msg("No gateway for transport in provider")
-		return "", nil
-	}
-
-	for _, gw := range gateways {
-		if gw.Host != host {
-			continue
-		}
-		if _, ok := gw.Options["cert"]; !ok {
-			continue
-		}
-		log.Info().
-			Str("host", gw.Host).
-			Str("ip", gw.IPAddress).
-			Msg("Selected Gateway")
-
-		kcpConfig := obfsvpn.KCPConfig{
-			Enabled: false,
-		}
-		if os.Getenv("LEAP_KCP") == "1" {
-			kcpConfig = *obfsvpn.DefaultKCPConfig()
-		}
-
-		obfsvpnCfg := obfsvpnClient.Config{
-			ProxyAddr: proxyAddr,
-			HoppingConfig: obfsvpnClient.HoppingConfig{
-				Enabled: false,
-			},
-			KCPConfig:  kcpConfig,
-			Obfs4Cert:  gw.Options["cert"],
-			RemoteIP:   gw.IPAddress,
-			RemotePort: gw.Ports[0],
-		}
-		ctx, cancelFunc := context.WithCancel(ctx)
-		b.obfsvpnProxy = obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
-		go func() {
-			_, err = b.obfsvpnProxy.Start()
-			if err != nil {
-				log.Warn().
-					Err(err).
-					Str("transport", b.transport).
-					Msg("Could not connect to transport")
-			}
-			log.Info().
-				Str("ip", gw.IPAddress).
-				Str("host", gw.Host).
-				Msg("Connected via obfs4")
-		}()
-		log.Debug().
-			Str("host", gw.Host).
-			Str("ip", gw.IPAddress).
-			Bool("kcp", kcpConfig.Enabled).
-			Str("cert", gw.Options["cert"]).
-			Str("proxyAddr", proxyAddr).
-			Str("transport", b.transport).
-			Msg("Using gateway")
-
-		return proxyAddr, nil
-	}
-	return "", fmt.Errorf("No working gateway for transport %s: %v", b.transport, err)
 }
 
 func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
@@ -273,7 +191,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 				Str("host", gw.Host).
 				Msgf("Got a private bridge with options: %v", gw.Options)
 			gateways = []bonafide.Gateway{gw}
-			proxy, err = b.startTransportForPrivateBridge(ctx, gw)
+			proxy, err = b.startTransport(ctx, gw)
 			if err != nil {
 				// TODO this is not going to return the error since it blocks
 				// we need to get an error channel from obfsvpn.
@@ -298,7 +216,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			gw = gateways[0]
 			b.ptGateway = gw
 
-			proxy, err = b.startTransport(ctx, gw.Host)
+			proxy, err = b.startTransport(ctx, gw)
 			if err != nil {
 				// TODO this is not going to return the error since it blocks
 				// we need to get an error channel from obfsvpn.
