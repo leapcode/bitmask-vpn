@@ -8,6 +8,7 @@ package ice
 import (
 	"context"
 	"fmt"
+	"math"
 	"net"
 	"strconv"
 	"strings"
@@ -125,12 +126,16 @@ type Agent struct {
 	taskLoopDone chan struct{}
 	err          atomicx.Error
 
+	// Callback that allows user to implement custom behavior
+	// for STUN Binding Requests
+	userBindingRequestHandler func(m *stun.Message, local, remote Candidate, pair *CandidatePair) bool
+
 	gatherCandidateCancel func()
 	gatherCandidateDone   chan struct{}
 
-	chanCandidate     chan Candidate
-	chanCandidatePair chan *CandidatePair
-	chanState         chan ConnectionState
+	connectionStateNotifier       *handlerNotifier
+	candidateNotifier             *handlerNotifier
+	selectedCandidatePairNotifier *handlerNotifier
 
 	loggerFactory logging.LoggerFactory
 	log           logging.LeveledLogger
@@ -227,9 +232,6 @@ func (a *Agent) taskLoop() {
 
 		after()
 
-		close(a.chanState)
-		close(a.chanCandidate)
-		close(a.chanCandidatePair)
 		close(a.taskLoopDone)
 	}()
 
@@ -277,33 +279,30 @@ func NewAgent(config *AgentConfig) (*Agent, error) { //nolint:gocognit
 	startedCtx, startedFn := context.WithCancel(context.Background())
 
 	a := &Agent{
-		chanTask:          make(chan task),
-		chanState:         make(chan ConnectionState),
-		chanCandidate:     make(chan Candidate),
-		chanCandidatePair: make(chan *CandidatePair),
-		tieBreaker:        globalMathRandomGenerator.Uint64(),
-		lite:              config.Lite,
-		gatheringState:    GatheringStateNew,
-		connectionState:   ConnectionStateNew,
-		localCandidates:   make(map[NetworkType][]Candidate),
-		remoteCandidates:  make(map[NetworkType][]Candidate),
-		urls:              config.Urls,
-		networkTypes:      config.NetworkTypes,
-		onConnected:       make(chan struct{}),
-		buf:               packetio.NewBuffer(),
-		done:              make(chan struct{}),
-		taskLoopDone:      make(chan struct{}),
-		startedCh:         startedCtx.Done(),
-		startedFn:         startedFn,
-		portMin:           config.PortMin,
-		portMax:           config.PortMax,
-		loggerFactory:     loggerFactory,
-		log:               log,
-		net:               config.Net,
-		proxyDialer:       config.ProxyDialer,
-		tcpMux:            config.TCPMux,
-		udpMux:            config.UDPMux,
-		udpMuxSrflx:       config.UDPMuxSrflx,
+		chanTask:         make(chan task),
+		tieBreaker:       globalMathRandomGenerator.Uint64(),
+		lite:             config.Lite,
+		gatheringState:   GatheringStateNew,
+		connectionState:  ConnectionStateNew,
+		localCandidates:  make(map[NetworkType][]Candidate),
+		remoteCandidates: make(map[NetworkType][]Candidate),
+		urls:             config.Urls,
+		networkTypes:     config.NetworkTypes,
+		onConnected:      make(chan struct{}),
+		buf:              packetio.NewBuffer(),
+		done:             make(chan struct{}),
+		taskLoopDone:     make(chan struct{}),
+		startedCh:        startedCtx.Done(),
+		startedFn:        startedFn,
+		portMin:          config.PortMin,
+		portMax:          config.PortMax,
+		loggerFactory:    loggerFactory,
+		log:              log,
+		net:              config.Net,
+		proxyDialer:      config.ProxyDialer,
+		tcpMux:           config.TCPMux,
+		udpMux:           config.UDPMux,
+		udpMuxSrflx:      config.UDPMuxSrflx,
 
 		mDNSMode: mDNSMode,
 		mDNSName: mDNSName,
@@ -321,7 +320,12 @@ func NewAgent(config *AgentConfig) (*Agent, error) { //nolint:gocognit
 		includeLoopback: config.IncludeLoopback,
 
 		disableActiveTCP: config.DisableActiveTCP,
+
+		userBindingRequestHandler: config.BindingRequestHandler,
 	}
+	a.connectionStateNotifier = &handlerNotifier{connectionStateFunc: a.onConnectionStateChange, done: make(chan struct{})}
+	a.candidateNotifier = &handlerNotifier{candidateFunc: a.onCandidate, done: make(chan struct{})}
+	a.selectedCandidatePairNotifier = &handlerNotifier{candidatePairFunc: a.onSelectedCandidatePairChange, done: make(chan struct{})}
 
 	if a.net == nil {
 		a.net, err = stdnet.NewNet()
@@ -364,13 +368,6 @@ func NewAgent(config *AgentConfig) (*Agent, error) { //nolint:gocognit
 	}
 
 	go a.taskLoop()
-
-	// CandidatePair and ConnectionState are usually changed at once.
-	// Blocking one by the other one causes deadlock.
-	// Hence, we call handlers from independent Goroutines.
-	go a.candidatePairRoutine()
-	go a.connectionStateRoutine()
-	go a.candidateRoutine()
 
 	// Restart is also used to initialize the agent for the first time
 	if err := a.Restart(config.LocalUfrag, config.LocalPwd); err != nil {
@@ -456,6 +453,9 @@ func (a *Agent) connectivityChecks() {
 		}
 	}
 
+	t := time.NewTimer(math.MaxInt64)
+	t.Stop()
+
 	for {
 		interval := defaultKeepaliveInterval
 
@@ -476,10 +476,13 @@ func (a *Agent) connectivityChecks() {
 		updateInterval(a.disconnectedTimeout)
 		updateInterval(a.failedTimeout)
 
-		t := time.NewTimer(interval)
+		t.Reset(interval)
+
 		select {
 		case <-a.forceCandidateContact:
-			t.Stop()
+			if !t.Stop() {
+				<-t.C
+			}
 			contact()
 		case <-t.C:
 			contact()
@@ -503,12 +506,7 @@ func (a *Agent) updateConnectionState(newState ConnectionState) {
 
 		a.log.Infof("Setting new connection state: %s", newState)
 		a.connectionState = newState
-
-		// Call handler after finishing current task since we may be holding the agent lock
-		// and the handler may also require it
-		a.afterRun(func(ctx context.Context) {
-			a.chanState <- newState
-		})
+		a.connectionStateNotifier.EnqueueConnectionState(newState)
 	}
 }
 
@@ -527,12 +525,7 @@ func (a *Agent) setSelectedPair(p *CandidatePair) {
 	a.updateConnectionState(ConnectionStateConnected)
 
 	// Notify when the selected pair changes
-	a.afterRun(func(ctx context.Context) {
-		select {
-		case a.chanCandidatePair <- p:
-		case <-ctx.Done():
-		}
-	})
+	a.selectedCandidatePairNotifier.EnqueueSelectedCandidatePair(p)
 
 	// Signal connected
 	a.onConnectedOnce.Do(func() { close(a.onConnected) })
@@ -768,7 +761,7 @@ func (a *Agent) addRemotePassiveTCPCandidate(remoteCandidate Candidate) {
 
 		localCandidate.start(a, conn, a.startedCh)
 		a.localCandidates[localCandidate.NetworkType()] = append(a.localCandidates[localCandidate.NetworkType()], localCandidate)
-		a.chanCandidate <- localCandidate
+		a.candidateNotifier.EnqueueCandidate(localCandidate)
 
 		a.addPair(localCandidate, remoteCandidate)
 	}
@@ -814,7 +807,7 @@ func (a *Agent) addCandidate(ctx context.Context, c Candidate, candidateConn net
 		set := a.localCandidates[c.NetworkType()]
 		for _, candidate := range set {
 			if candidate.Equal(c) {
-				a.log.Debugf("Ignore duplicate candidate: %s", c.String())
+				a.log.Debugf("Ignore duplicate candidate: %s", c)
 				if err := c.close(); err != nil {
 					a.log.Warnf("Failed to close duplicate candidate: %v", err)
 				}
@@ -838,7 +831,7 @@ func (a *Agent) addCandidate(ctx context.Context, c Candidate, candidateConn net
 
 		a.requestConnectivityCheck()
 
-		a.chanCandidate <- c
+		a.candidateNotifier.EnqueueCandidate(c)
 	})
 }
 
@@ -938,6 +931,9 @@ func (a *Agent) Close() error {
 
 	close(a.done)
 	<-a.taskLoopDone
+	a.connectionStateNotifier.Close()
+	a.candidateNotifier.Close()
+	a.selectedCandidatePairNotifier.Close()
 	return nil
 }
 
@@ -981,7 +977,7 @@ func (a *Agent) findRemoteCandidate(networkType NetworkType, addr net.Addr) Cand
 }
 
 func (a *Agent) sendBindingRequest(m *stun.Message, local, remote Candidate) {
-	a.log.Tracef("Ping STUN from %s to %s", local.String(), remote.String())
+	a.log.Tracef("Ping STUN from %s to %s", local, remote)
 
 	a.invalidatePendingBindingRequests(time.Now())
 	a.pendingBindingRequests = append(a.pendingBindingRequests, bindingRequest{
@@ -1096,7 +1092,7 @@ func (a *Agent) handleInbound(m *stun.Message, local Candidate, remote net.Addr)
 
 		a.selector.HandleSuccessResponse(m, local, remoteCandidate, remote)
 	} else if m.Type.Class == stun.ClassRequest {
-		a.log.Tracef("Inbound STUN (Request) from %s to %s, useCandidate: %v", remote.String(), local.String(), m.Contains(stun.AttrUseCandidate))
+		a.log.Tracef("Inbound STUN (Request) from %s to %s, useCandidate: %v", remote, local, m.Contains(stun.AttrUseCandidate))
 
 		if err = stunx.AssertUsername(m, a.localUfrag+":"+a.remoteUfrag); err != nil {
 			a.log.Warnf("Discard message from (%s), %v", remote, err)
@@ -1274,7 +1270,7 @@ func (a *Agent) setGatheringState(newState GatheringState) error {
 	done := make(chan struct{})
 	if err := a.run(a.context(), func(ctx context.Context, agent *Agent) {
 		if a.gatheringState != newState && newState == GatheringStateComplete {
-			a.chanCandidate <- nil
+			a.candidateNotifier.EnqueueCandidate(nil)
 		}
 
 		a.gatheringState = newState
