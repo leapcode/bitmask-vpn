@@ -26,7 +26,7 @@
 <context>
     <name>Footer</name>
     <message>
-        <location filename="../components/Footer.qml" line="171"/>
+        <location filename="../components/Footer.qml" line="180"/>
         <source>Recommended</source>
         <translation>Προτεινόμενη</translation>
     </message>
@@ -108,38 +108,38 @@
 <context>
     <name>MainView</name>
     <message>
-        <location filename="../components/MainView.qml" line="32"/>
-        <location filename="../components/MainView.qml" line="56"/>
+        <location filename="../components/MainView.qml" line="43"/>
+        <location filename="../components/MainView.qml" line="66"/>
         <source>Donate</source>
         <translation>Δωρεά</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="49"/>
+        <location filename="../components/MainView.qml" line="59"/>
         <source>Preferences</source>
         <translation>Προτιμήσεις</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="63"/>
+        <location filename="../components/MainView.qml" line="73"/>
         <source>Help</source>
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="70"/>
+        <location filename="../components/MainView.qml" line="80"/>
         <source>About</source>
         <translation>Σχετικά</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="77"/>
+        <location filename="../components/MainView.qml" line="87"/>
         <source>Quit</source>
         <translation>Έξοδος</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="104"/>
+        <location filename="../components/MainView.qml" line="111"/>
         <source>Please donate!</source>
         <translation>Παρακαλώ κάνε μια δωρεά!</translation>
     </message>
     <message>
-        <location filename="../components/MainView.qml" line="118"/>
+        <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
         <translation>Τα έξοδα αυτής της υπηρεσίας καλύπτονται εξ&apos; ολοκλήρου από δωρεές χρηστών σαν κι εσένα. Το λειτουργικό κόστος του VPN είναι περίπου 5 δολάρια (ΗΠΑ) ανά άτομο ανά μήνα, αλλά ακόμα και μικρότερα ποσά μας βοηθούν. Θα ήθελες να κάνεις μια δωρεά τώρα;</translation>
     </message>
@@ -152,75 +152,85 @@
         <translation>Προτιμήσεις</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="54"/>
+        <location filename="../components/Preferences.qml" line="55"/>
         <source>Turn off the VPN to make changes</source>
         <translation>Απενεργοποίησε το VPN για να κάνεις αλλαγές</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="69"/>
+        <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="102"/>
+        <location filename="../components/Preferences.qml" line="105"/>
         <source>Censorship circumvention</source>
         <translation>Παράκαμψη λογοκρισίας</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="110"/>
+        <location filename="../components/Preferences.qml" line="113"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
         <translation>Αυτές οι τεχνικές μπορούν να παρακάμψουν τεχνικές λογοκρισίας, αλλά είναι πιο αργές. Χρησιμοποιήστε τις μόνο όποτε χρειάζεται.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="124"/>
+        <location filename="../components/Preferences.qml" line="127"/>
         <source>Use obfs4 bridges</source>
         <translation>Χρήση γεφυρών obfs4</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="150"/>
+        <location filename="../components/Preferences.qml" line="153"/>
         <source>Traffic is obfuscated to bypass blocks</source>
         <translation>Η κίνηση δεδομένων αποκρύπτεται για τη παράκαμψη μπλοκαρισμάτων</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="164"/>
+        <location filename="../components/Preferences.qml" line="167"/>
         <source>Use Snowflake</source>
         <translation>Χρήση Snowflake</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="179"/>
+        <location filename="../components/Preferences.qml" line="182"/>
         <source>Snowflake needs Tor installed in your system</source>
         <translation>Για το Snowflake χρειάζεται να έχεις εγκατεστημένο το Tor</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="192"/>
+        <location filename="../components/Preferences.qml" line="195"/>
         <source>Transport</source>
         <translation>Μεταφορά</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="200"/>
+        <location filename="../components/Preferences.qml" line="203"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>Το UDP μπορεί να κάνει το VPN γρηγορότερο. Ίσως να μπλοκάρεται σε κάποια δίκτυα.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="213"/>
+        <location filename="../components/Preferences.qml" line="216"/>
         <source>Use UDP if available</source>
         <translation>Χρήση UDP αν είναι διαθέσιμο</translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="231"/>
+        <source>KCP might work when UDP is blocked on some networks.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="244"/>
+        <source>Use KCP if available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Splash</name>
     <message>
-        <location filename="../components/Splash.qml" line="100"/>
+        <location filename="../components/Splash.qml" line="101"/>
         <source>There is a newer version available. </source>
         <translation>Υπάρχει μια νεότερη διαθέσιμη έκδοση.</translation>
     </message>
     <message>
-        <location filename="../components/Splash.qml" line="100"/>
+        <location filename="../components/Splash.qml" line="101"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
         <translation>Θα χρειαστεί να &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;απεγκαταστήσεις&lt;/a&gt; τη προηγούμενη έκδοση πριν εκτελέσεις το καινούριο πρόγραμμα εγκατάστασης.</translation>
     </message>
     <message>
-        <location filename="../components/Splash.qml" line="104"/>
+        <location filename="../components/Splash.qml" line="105"/>
         <source>UPGRADE NOW</source>
         <translation>ΑΝΑΒΑΘΜΙΣΗ ΤΩΡΑ</translation>
     </message>
@@ -228,7 +238,7 @@
 <context>
     <name>StatusBox</name>
     <message>
-        <location filename="../components/StatusBox.qml" line="91"/>
+        <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,137 +291,134 @@
 <context>
     <name>VPNState</name>
     <message>
-        <location filename="../components/VPNState.qml" line="27"/>
+        <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="52"/>
-        <location filename="../components/VPNState.qml" line="156"/>
+        <location filename="../components/VPNState.qml" line="51"/>
+        <location filename="../components/VPNState.qml" line="153"/>
         <source>Connecting</source>
         <translation>Συνδέεται</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="85"/>
+        <location filename="../components/VPNState.qml" line="82"/>
         <source>Unsecured
 Connection</source>
         <translation>Μη ασφαλής
 σύνδεση</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="100"/>
         <source>Turn on</source>
-        <translation>Ενεργοποίηση</translation>
+        <translation type="vanished">Ενεργοποίηση</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="120"/>
+        <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>Ασφαλής
 σύνδεση</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="135"/>
         <source>Turn off</source>
-        <translation>Απενεργοποίηση</translation>
+        <translation type="vanished">Απενεργοποίηση</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="172"/>
         <source>Cancel</source>
-        <translation>Ακύρωση</translation>
+        <translation type="vanished">Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="256"/>
+        <location filename="../components/VPNState.qml" line="265"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 ανενεργό</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="256"/>
+        <location filename="../components/VPNState.qml" line="265"/>
         <source>off</source>
         <translation>ανενεργό</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="259"/>
+        <location filename="../components/VPNState.qml" line="268"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 ενεργό</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="262"/>
+        <location filename="../components/VPNState.qml" line="271"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Συνδέεται στο %1</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="274"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Το %1 σταματάει</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="268"/>
+        <location filename="../components/VPNState.qml" line="277"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 μπλοκάρει το διαδίκτυο</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="276"/>
+        <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="278"/>
+        <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="280"/>
+        <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="282"/>
+        <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="284"/>
+        <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="286"/>
+        <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="288"/>
+        <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="290"/>
+        <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="292"/>
+        <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="294"/>
+        <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="296"/>
+        <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="298"/>
+        <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -427,32 +434,32 @@ Connection</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="144"/>
+        <location filename="../main.cpp" line="140"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: ένα γρήγορο και ασφαλές VPN. Με την υποστήριξη του Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="151"/>
+        <location filename="../main.cpp" line="147"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Να μην εμφανίζεται το εικονίδιο στη μπάρα κατάστασης (χρήσιμο σε συνδυασμό με την επέκταση Gnome Shell ή για τον έλεγχο του VPN με άλλα μέσα).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="158"/>
+        <location filename="../main.cpp" line="154"/>
         <source>Enable Web API.</source>
         <translation>Ενεργοποίηση Web API.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="164"/>
+        <location filename="../main.cpp" line="160"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Εγκατάσταση βοηθών (μόνο για Linux, απαιτείται sudo). </translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="170"/>
+        <location filename="../main.cpp" line="166"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Χρήση obfs4 για την απόκρυψη και συσκότιση της κίνησης, αν είναι διαθέσιμο από τον πάροχο.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="176"/>
+        <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -461,12 +468,12 @@ Connection</source>
         <translation type="vanished">Απενεργοποίηση αυτόματης εκκίνησης στην επόμενη εκτέλεση.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="181"/>
+        <location filename="../main.cpp" line="177"/>
         <source>Web API port (default: 8080)</source>
         <translation>Θύρα Web API (προκαθορισμένη: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="184"/>
+        <location filename="../main.cpp" line="180"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Εκκίνηση του VPN, είτε &quot;ενεργό&quot; είτε &quot;ανενεργό&quot;.</translation>
     </message>

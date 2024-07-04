@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<TS version="2.1" language="ar">
 <context>
     <name>About</name>
     <message>
         <location filename="../components/About.qml" line="9"/>
         <source>About</source>
-        <translation>Névjegy</translation>
+        <translation>عن </translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="80"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
         <extracomment>donation text of the about dialog</extracomment>
-        <translation>&lt;p&gt;Ez a szolgáltatás teljesen olyan felhasználók támogatásából fizetett, mint Ön. &lt;a href=&quot;%1&quot;&gt;Kérjük támogasson&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;يتم دفع ثمن هذه الخدمة بالكامل من خلال تبرعات المستخدمين مثلك.&lt;a href=&quot;%1&quot;&gt;&lt;/p&gt;من فضلك تبرع.&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="103"/>
         <source>%1 version: 
 %2</source>
         <extracomment>screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png %1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1نسخة:
+%2</translation>
     </message>
 </context>
 <context>
@@ -27,7 +28,7 @@
     <message>
         <location filename="../components/Footer.qml" line="180"/>
         <source>Recommended</source>
-        <translation>Ajánlott</translation>
+        <translation>مقترح</translation>
     </message>
 </context>
 <context>
@@ -35,22 +36,22 @@
     <message>
         <location filename="../components/Help.qml" line="7"/>
         <source>Help</source>
-        <translation>Súgó</translation>
+        <translation>مساعدة</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="20"/>
         <source>Troubleshooting and support</source>
-        <translation type="unfinished"></translation>
+        <translation>المساعدة واستكشاف الأخطاء وإصلاحها</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="31"/>
         <source>Report a bug</source>
-        <translation type="unfinished"></translation>
+        <translation>بلّغوا عن خلل</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="42"/>
         <source>How to uninstall</source>
-        <translation type="unfinished"></translation>
+        <translation>كيفية إلغاء التثبيت</translation>
     </message>
 </context>
 <context>
@@ -58,12 +59,12 @@
     <message>
         <location filename="../components/InitErrors.qml" line="31"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation>Nem találhatók segítők. Kérjük ellenőrizze a telepítését</translation>
+        <translation>لا يمكن العثور على مساعدين. يرجى التحقق من التثبيت الخاص بك</translation>
     </message>
     <message>
         <location filename="../components/InitErrors.qml" line="44"/>
         <source>Could not find polkit agent.</source>
-        <translation>Nem található a polkit ügynök.</translation>
+        <translation>لم يتم العثور على عميل polkit</translation>
     </message>
 </context>
 <context>
@@ -71,37 +72,37 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation type="unfinished"></translation>
+        <translation>اختر موقعًا جغرافيًا</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>اختار الاتصال الأفضل تلقائياً</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>اختار يدوياً</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>تبديل بوابة الدخول...</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>فقط مواقع جغرافية مع جسور</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
         <source>Recommended</source>
         <extracomment>Location Selection: label for radio button that selects automatically</extracomment>
-        <translation>Ajánlott</translation>
+        <translation>مقترح</translation>
     </message>
 </context>
 <context>
@@ -110,37 +111,37 @@
         <location filename="../components/MainView.qml" line="43"/>
         <location filename="../components/MainView.qml" line="66"/>
         <source>Donate</source>
-        <translation>Támogatás</translation>
+        <translation>تبرَّع</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="59"/>
         <source>Preferences</source>
-        <translation>Beállítások</translation>
+        <translation>التفضيلات</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="73"/>
         <source>Help</source>
-        <translation>Súgó</translation>
+        <translation>مساعدة</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="80"/>
         <source>About</source>
-        <translation>Névjegy</translation>
+        <translation>عن </translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="87"/>
         <source>Quit</source>
-        <translation>Kilépés</translation>
+        <translation>توقّف</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="111"/>
         <source>Please donate!</source>
-        <translation type="unfinished"></translation>
+        <translation>تبرع من فضلك!</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه الخدمة يتم دفع تكلفتها بالكامل عبر تبرعات المستخدمين مثلك. تكلفة تشغيل الخدمة تقريبًا 5 دولار لكل مستخدم شهريًا، لكن كل تبرع مهما كان صغيرًا مهم. هل تريد التبرع الآن؟</translation>
     </message>
 </context>
 <context>
@@ -148,62 +149,62 @@
     <message>
         <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
-        <translation>Beállítások</translation>
+        <translation>التفضيلات</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="55"/>
         <source>Turn off the VPN to make changes</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف تشغيل شبكة الـ VPN للقيام بتعديلات</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>اللغة</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
         <source>Censorship circumvention</source>
-        <translation type="unfinished"></translation>
+        <translation>تجاوز الرقابة</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="113"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه التقنيات يمكنها تجاوز الرقابة، لكنها تجعل الاتصال أكثر بطئًا. استخدمها فقط عند الحاجة.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="127"/>
         <source>Use obfs4 bridges</source>
-        <translation>obfs4 hidak használata</translation>
+        <translation>استخدم جسور obfs4</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="153"/>
         <source>Traffic is obfuscated to bypass blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>تم تعمية حركة المرور لتجاوز تقنيات الحجب</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="167"/>
         <source>Use Snowflake</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدم Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="182"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدام Snowflake يحتاج إلى تثبيت Tor على نظامك</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="195"/>
         <source>Transport</source>
-        <translation type="unfinished"></translation>
+        <translation>نقل</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="203"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدام بروتوكول UDP يمكنه جعل اتصالك بالشبكة الخاصّة الافتراضية أسرع. يمكن أن يكون البروتوكول محظورًا على بعض الشبكات.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="216"/>
         <source>Use UDP if available</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدم UDP إن كان متواجداً</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
@@ -221,17 +222,17 @@
     <message>
         <location filename="../components/Splash.qml" line="101"/>
         <source>There is a newer version available. </source>
-        <translation type="unfinished"></translation>
+        <translation>لا يوجد نسخة أحدث متوفرة.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="101"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation type="unfinished"></translation>
+        <translation>تأكد من &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;إلغاء تثبيت&lt;/a&gt;النسخة السابقة قبل تشغيل المُثبّت الجديد.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="105"/>
         <source>UPGRADE NOW</source>
-        <translation type="unfinished"></translation>
+        <translation>قم بالترقية الآن</translation>
     </message>
 </context>
 <context>
@@ -239,7 +240,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>هذا الأمر قد يستغرق بضع دقائق</translation>
     </message>
 </context>
 <context>
@@ -247,44 +248,44 @@
     <message>
         <location filename="../components/Systray.qml" line="16"/>
         <source>Checking status…</source>
-        <translation>Állapot ellenőrzése...</translation>
+        <translation>جارٍ التحقق من الحالة…</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="36"/>
         <source>Donate</source>
-        <translation>Támogatás</translation>
+        <translation>تبرَّع</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>إخفاء</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits the application</extracomment>
-        <translation>Kilépés</translation>
+        <translation>توقّف</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
         <source>Connect to</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصل بـ</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="76"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصل</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="79"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع الإتصال</translation>
     </message>
 </context>
 <context>
@@ -292,132 +293,134 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>إعداد</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
         <location filename="../components/VPNState.qml" line="153"/>
         <source>Connecting</source>
-        <translation type="unfinished"></translation>
+        <translation>جار الاتصال</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="82"/>
         <source>Unsecured
 Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال
+غير آمن</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="vanished">Bekapcsolás</translation>
+        <translation type="vanished">تشغيل</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال
+آمن</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="vanished">Kikapcsolás</translation>
+        <translation type="vanished">إغلاق</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="vanished">Mégse</translation>
+        <translation type="vanished">ألغِ</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 ki</translation>
+        <translation>%1إيقاف</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>off</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="268"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 be</translation>
+        <translation>%1تشغيل</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="271"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Kapcsolódás ide: %1</translation>
+        <translation>جارِ الاتصال بـ %1</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="274"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 leállítása</translation>
+        <translation>جارٍ إيقاف %1</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="277"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>%1 blokkolja az internetet</translation>
+        <translation>%1 حظر الإنترنت</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال نقل قابل للتوصيل</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>تم الاتصال</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ إجراء المصادقة</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>تمت المصادقة</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>إنشاء اتصال أُحادي القفزة</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>ٍجارِ طلب الحالة</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ تحميل الحالة</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ تحميل المفاتيح</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ طلب الواصفات</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ تحميل الواصفات</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>جارِ إنشاء مسار</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>تم</translation>
     </message>
 </context>
 <context>
@@ -433,46 +436,42 @@ Connection</source>
     <message>
         <location filename="../main.cpp" line="140"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation>: gyors és biztonságos VPN. A Bitmask-kal hajtva.</translation>
+        <translation>: شبكة خاصّة افتراضية سريعة وآمنة. يجري تشغيلها بواسطة Bitmask.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="147"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>A tálca ikon elrejtése (hasznos a Gnome Shell kiterjesztéssel együtt, vagy ha a VPN-t más módon vezérli).</translation>
+        <translation>لا تظهر أيقونة systray (مفيدة مع امتداد صدفة Gnome، أو للتحكم في الشبكة الخاصّة الافتراضية بوسائل أخرى).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="154"/>
         <source>Enable Web API.</source>
-        <translation>Web API engedélyezés.</translation>
+        <translation>تفعيل واجهة برمجة التطبيقات للويب.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="160"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Segítők telepítése (csak Linux, sudo-t igényel).</translation>
+        <translation>تثبيت مساعدين (لنظام لينكس فقط، يتطلب صلاحية المسئول).</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="166"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Az obfs4 használata a forgalom obfuszkálására, ha elérhető a szolgáltatónál.</translation>
+        <translation>استخدم جسور obfs4 لتعمية حركة المرور، إذا كانت متوفرًا لدى المزوّد.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Autostart tiltása a következő futtatásnál.</translation>
+        <translation>تفعيل التشغيل التلقائي.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Web API port alapértelmezett: 8080)</translation>
+        <translation>منفذ واجهة برمجة التطبيقات للويب (الافتراضي: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="180"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation>VPN indítása &apos;be&apos; vagy &apos;ki&apos;.</translation>
+        <translation>بِدأ تشغيل الشبكة الخاصّة الافتراضية، إما &apos;تشغيل&apos; أو &apos;إيقاف&apos;.</translation>
     </message>
 </context>
 </TS>
