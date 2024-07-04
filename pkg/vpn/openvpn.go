@@ -387,7 +387,9 @@ func (b *Bitmask) StopVPN() error {
 
 func (b *Bitmask) tryStopFromManagement() {
 	if b.managementClient != nil {
-		b.managementClient.SendSignal("SIGTERM")
+		if err := b.managementClient.SendSignal("SIGTERM"); err != nil {
+			log.Err(err).Msg("Got error while stopping openvpn from management interface")
+		}
 	}
 }
 
