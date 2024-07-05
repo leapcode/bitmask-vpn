@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// integration tests need to know where to find menshen: set API_URL="http://localhost:8443" via env
+
 func init() {
 	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stdout}).With().Timestamp().Logger()
 }
@@ -26,12 +28,16 @@ func getMenshenInstance(t *testing.T) *Menshen {
 	return m
 }
 
-func TestGetAllGateways(t *testing.T) {
-	// needs API_URL="http://localhost:8443" via env
+func TestFetchAllGateways(t *testing.T) {
 	m := getMenshenInstance(t)
-	gateways, err := m.GetAllGateways("openvpn")
-	require.NoError(t, err, "GetAllGateways returned an error")
+	err := m.FetchAllGateways("openvpn")
+	require.NoError(t, err, "FetchAllGateways returned an error")
+	m.SetAutomaticGateway()
+
+	gateways, err := m.GetBestGateways("openvpn")
+	require.NoError(t, err, "GetBestGateways returned an error")
 	assert.Greater(t, len(gateways), 0, "There should multiple gateways fetched")
+
 	log.Info().
 		Int("gateways", len(gateways)).
 		Msg("Got gateways")
@@ -75,8 +81,8 @@ func TestLatency(t *testing.T) {
 func TestLocationQualityMap(t *testing.T) {
 	m := getMenshenInstance(t)
 
-	_, err := m.GetAllGateways("openvpn")
-	require.NoError(t, err, "GetAllGateways returned an error")
+	err := m.FetchAllGateways("openvpn")
+	require.NoError(t, err, "FetchAllGateways returned an error")
 
 	locationQualtyMap := m.GetLocationQualityMap("openvpn")
 	for _, quality := range locationQualtyMap {
@@ -87,8 +93,8 @@ func TestLocationQualityMap(t *testing.T) {
 
 func TestLocationLabels(t *testing.T) {
 	m := getMenshenInstance(t)
-	_, err := m.GetAllGateways("openvpn")
-	require.NoError(t, err, "GetAllGateways returned an error")
+	err := m.FetchAllGateways("openvpn")
+	require.NoError(t, err, "FetchAllGateways returned an error")
 
 	labelMap := m.GetLocationLabels("transport")
 	for _, city := range labelMap {
@@ -105,8 +111,8 @@ func TestLocationLabels(t *testing.T) {
 func TestGetBestLocation(t *testing.T) {
 	m := getMenshenInstance(t)
 
-	_, err := m.GetAllGateways("openvpn")
-	require.NoError(t, err, "GetAllGateways returned an error")
+	err := m.FetchAllGateways("openvpn")
+	require.NoError(t, err, "FetchAllGateways returned an error")
 
 	locationQualtyMap := m.GetLocationQualityMap("openvpn")
 
@@ -128,8 +134,8 @@ func TestGetBestGatewaysShuffled(t *testing.T) {
 	transport := "openvpn"
 	m := getMenshenInstance(t)
 
-	_, err := m.GetAllGateways(transport)
-	assert.NoError(t, err, "GetAllGateways returned an error")
+	err := m.FetchAllGateways(transport)
+	assert.NoError(t, err, "FetchAllGateways returned an error")
 
 	location, err := m.GetBestLocation(transport)
 	assert.NoError(t, err, "m.GetBestLocation returned an error")

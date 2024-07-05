@@ -411,7 +411,7 @@ func (b *Bitmask) getCert() error {
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
 func (b *Bitmask) fetchGateways() {
 	log.Info().Msg("Fetching gateways...")
-	_, err := b.api.GetAllGateways(b.transport)
+	err := b.api.FetchAllGateways(b.transport)
 	if err != nil {
 		log.Warn().
 			Err(err).

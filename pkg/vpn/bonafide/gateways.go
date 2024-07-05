@@ -317,17 +317,19 @@ func (p *gatewayPool) getBestLocation(transport string, tz int) string {
 
 }
 
-func (p *gatewayPool) getAll(transport string, tz int) ([]Gateway, error) {
+func (p *gatewayPool) getAll(transport string, tz int) error {
 	if (&gatewayPool{} == p) {
 		log.Warn().Msg("getAll tried to access uninitialized struct")
-		return []Gateway{}, nil
+		return nil
 	}
 
 	log.Debug().Msg("seems to be initialized...")
 	if len(p.recommended) == 0 {
-		return p.getGatewaysFromMenshen(transport, 999)
+		_, err := p.getGatewaysFromMenshen(transport, 999)
+		return err
 	}
-	return p.getGatewaysByTimezone(transport, tz, 999)
+	_, err := p.getGatewaysByTimezone(transport, tz, 999)
+	return err
 }
 
 /* picks at most max gateways, filtering by transport, from the ordered list menshen returned */

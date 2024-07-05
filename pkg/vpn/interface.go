@@ -19,6 +19,6 @@ type apiInterface interface {
 	GetOpenvpnArgs() ([]string, error)
 	GetGatewayByIP(ip string) (bonafide.Gateway, error)
 	GetBestGateways(transport string) ([]bonafide.Gateway, error)
-	GetAllGateways(transport string) ([]bonafide.Gateway, error)
+	FetchAllGateways(transport string) error
 	GetSnowflakeCh() chan *snowflake.StatusEvent
 }

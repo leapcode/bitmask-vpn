@@ -288,16 +288,15 @@ func (b *Bonafide) GetBestGateways(transport string) ([]Gateway, error) {
 	return gws, err
 }
 
-// GetAllGateways only filters gateways by transport.
+// FetchGateways only filters gateways by transport.
 // if "any" is provided it will return all gateways for all transports
-func (b *Bonafide) GetAllGateways(transport string) ([]Gateway, error) {
+func (b *Bonafide) FetchAllGateways(transport string) error {
 	err := b.maybeInitializeEIP()
 	// XXX needs to wait for bonafide too
 	if err != nil {
-		return nil, err
+		return err
 	}
-	gws, err := b.gateways.getAll(transport, b.tzOffsetHours)
-	return gws, err
+	return b.gateways.getAll(transport, b.tzOffsetHours)
 }
 
 func (b *Bonafide) GetLocationQualityMap(transport string) map[string]float64 {

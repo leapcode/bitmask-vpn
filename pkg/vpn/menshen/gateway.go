@@ -28,22 +28,6 @@ func (m *Menshen) GetGatewayByIP(ip string) (bonafide.Gateway, error) {
 	return bonafide.Gateway{}, fmt.Errorf("Could not find a gateway with ip %s", ip)
 }
 
-// Fetch gateways and return a list filtered transport. The parameter transport can
-// have the value "any". Then it wil lreturn all gateways for all transports.
-// GetAllGateways get's called once during startup
-// TODO: maybe merge GetAllGateways and fetchGateways
-func (m *Menshen) GetAllGateways(transport string) ([]bonafide.Gateway, error) {
-	// TODO: implement obfsv4 support (transport can have the value "any")
-	if transport == "obfs4" {
-		return []bonafide.Gateway{}, errors.New("obfs4 is not supported for v5 right now")
-	}
-	err := m.fetchGateways(transport)
-	if err != nil {
-		return []bonafide.Gateway{}, err
-	}
-	return NewBonafideGatewayArray(m.Gateways), nil
-}
-
 // Returns a list of gateways that we will connect to. First checks if automatic gateway
 // selection should be used.
 func (m *Menshen) GetBestGateways(transport string) ([]bonafide.Gateway, error) {
@@ -112,8 +96,13 @@ func getGatewayNames(gateways []*models.ModelsGateway) []string {
 // Asks menshen for gateways. The gateways are stored in m.Gateways
 // Currently, there is not CountryCode filtering
 // The vars m.gwLocations and m.gwsByLocation are updated
-func (m *Menshen) fetchGateways(transport string) error {
+func (m *Menshen) FetchAllGateways(transport string) error {
 	log.Trace().Msg("Fetching gateways from menshen")
+
+	// TODO: implement obfsv4 support (transport can have the value "any")
+	if transport == "obfs4" {
+		errors.New("obfs4 is not supported for v5 right now")
+	}
 
 	// reset if called multiple times
 	m.gwLocations = []string{}
