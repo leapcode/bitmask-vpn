@@ -30,8 +30,15 @@ yay riseup-vpn
 
 # Debian
 
-We haven't updated deb.leap.se repo yet 😞 (see #466), but if you *really* desire a debian
-package you can build your own for the time being:
+The package is available as "riseup-vpn" in Debian Bookworm, albeit at an older version. To get the same, you could run:
+
+```
+sudo apt install riseup-vpn
+```
+
+The latest version is available for Debian Bookworm via backports. See the [offcial page](https://backports.debian.org/Instructions/) for instructions on how to set it up. If you are using Debian Testing/Unstable, riseup-vpn's latest version is available there as well.
+
+If you're using an older version of Debian, then we do not have a package for the same. However, if you really desire a debian package you can build your own for the time being:
 
 ```
 debuild -us -uc
