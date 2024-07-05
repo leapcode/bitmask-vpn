@@ -324,10 +324,6 @@ func (p *gatewayPool) getAll(transport string, tz int) error {
 	}
 
 	log.Debug().Msg("seems to be initialized...")
-	if len(p.recommended) == 0 {
-		_, err := p.getGatewaysFromMenshen(transport, 999)
-		return err
-	}
 	_, err := p.getGatewaysByTimezone(transport, tz, 999)
 	return err
 }
