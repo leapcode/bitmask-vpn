@@ -183,6 +183,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		var gw bonafide.Gateway
 		var gateways []bonafide.Gateway
 		var proxy string
+		var err error
 
 		gw, gotPrivate := maybeGetPrivateGateway()
 		if gotPrivate {
@@ -202,7 +203,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 			log.Debug().Msg("Getting a gateway with obfs4 transport...")
 
-			gateways, err := b.api.GetBestGateways("obfs4")
+			gateways, err = b.api.GetBestGateways("obfs4")
 			if err != nil {
 				return err
 			}
@@ -224,7 +225,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			}
 		}
 
-		err := b.launch.FirewallStart(gateways)
+		err = b.launch.FirewallStart(gateways)
 		if err != nil {
 			return err
 		}
