@@ -198,6 +198,13 @@ func (l *Launcher) OpenvpnStop() error {
 
 func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	log.Info().Msg("Starting firewall")
+	if len(gateways) == 0 {
+		log.Warn().Msg("Need atleast one gateway for firewall allow list")
+	}
+
+	for _, gw := range gateways {
+		log.Debug().Str("gateway ip: ", gw.IPAddress).Msg("Allowd gateway IP")
+	}
 
 	if os.Getenv("LEAP_DRYRUN") == "1" {
 		log.Debug().Msg("Not changing firewall rules (LEAP_DRYRUN=1)")
