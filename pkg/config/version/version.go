@@ -8,8 +8,8 @@ var (
 	// set during build with '-X 0xacab.org/leap/bitmask-vpn/pkg/config/version.appVersion'
 	appVersion = "unknown"
 
-    // set when `git archive` is used, the "$Fromat:%(describe)" will be replaced
-    // by the o/p of `git describe` https://git-scm.com/docs/gitattributes#_export_subst
+	// set when `git archive` is used, the "$Fromat:%(describe)" will be replaced
+	// by the o/p of `git describe` https://git-scm.com/docs/gitattributes#_export_subst
 	gitArchiveVersion = "$Format:%(describe)$"
 )
 

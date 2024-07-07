@@ -32,4 +32,3 @@ func TestIsValidCertBroken(t *testing.T) {
 	certFile := "testdata/broken.pem"
 	require.False(t, isValidCert(certFile), "The test with the broken pem file failed")
 }
-
