@@ -2,7 +2,6 @@ package menshen
 
 import (
 	"errors"
-	"fmt"
 	"net/url"
 	"os"
 	"strconv"
@@ -114,17 +113,11 @@ func (m *Menshen) GetOpenvpnArgs() ([]string, error) {
 		return []string{}, err
 	}
 
-	// openVpnArgsInterface is of type interface{}
-	openVpnArgsInterface := service.OpenvpnConfiguration
-
 	// openVpnArgsArrayInterface is of type map[string]interface{}
 	//   openVpnArgsArrayInterface["dev"] = "tun" (string)
 	//   openVpnArgsArrayInterface["persist-key"] = true (bool)
-	openVpnArgsArrayInterface, ok := openVpnArgsInterface.(map[string]interface{})
-	if !ok {
-		return []string{},
-			fmt.Errorf("OpenVPN arguments returned by menshen have an invalid type: %v", openVpnArgsInterface)
-	}
+	openVpnArgsArrayInterface := service.OpenvpnConfiguration
+
 	openVpnArgs := []string{}
 	for arg, value := range openVpnArgsArrayInterface {
 		// e.g.: arg=dev value=tun, arg=persist-key value=true

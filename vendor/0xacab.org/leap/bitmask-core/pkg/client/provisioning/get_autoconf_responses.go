@@ -6,6 +6,7 @@ package provisioning
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,11 +96,13 @@ func (o *GetAutoconfOK) Code() int {
 }
 
 func (o *GetAutoconfOK) Error() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfOK %s", 200, payload)
 }
 
 func (o *GetAutoconfOK) String() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfOK %s", 200, payload)
 }
 
 func (o *GetAutoconfOK) GetPayload() string {
@@ -161,11 +164,13 @@ func (o *GetAutoconfBadRequest) Code() int {
 }
 
 func (o *GetAutoconfBadRequest) Error() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfBadRequest %s", 400, payload)
 }
 
 func (o *GetAutoconfBadRequest) String() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfBadRequest %s", 400, payload)
 }
 
 func (o *GetAutoconfBadRequest) GetPayload() interface{} {
@@ -227,11 +232,13 @@ func (o *GetAutoconfNotFound) Code() int {
 }
 
 func (o *GetAutoconfNotFound) Error() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfNotFound %s", 404, payload)
 }
 
 func (o *GetAutoconfNotFound) String() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfNotFound %s", 404, payload)
 }
 
 func (o *GetAutoconfNotFound) GetPayload() interface{} {
@@ -293,11 +300,13 @@ func (o *GetAutoconfInternalServerError) Code() int {
 }
 
 func (o *GetAutoconfInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfInternalServerError %s", 500, payload)
 }
 
 func (o *GetAutoconfInternalServerError) String() string {
-	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /autoconf][%d] getAutoconfInternalServerError %s", 500, payload)
 }
 
 func (o *GetAutoconfInternalServerError) GetPayload() interface{} {

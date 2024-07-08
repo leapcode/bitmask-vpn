@@ -24,7 +24,7 @@ func NewBonafideGateway(v5Gateway *models.ModelsGateway) *bonafide.Gateway {
 		Location:     v5Gateway.Location,
 		LocationName: strings.Title(v5Gateway.Location),
 		CountryCode:  getCountryCodeForLocation(v5Gateway.Location),
-		Ports:        []string{fmt.Sprintf("%d", v5Gateway.Ports[0])},
+		Ports:        []string{fmt.Sprintf("%d", v5Gateway.Port)},
 		Protocols:    []string{v5Gateway.Type},
 		//Options:      v5Gateway.Options,
 		//Transport:    v5Gateway.Transport,

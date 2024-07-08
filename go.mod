@@ -25,7 +25,7 @@ require (
 )
 
 require (
-	0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e
+	0xacab.org/leap/bitmask-core v0.0.0-20240705122443-e372171b7c36
 	github.com/natefinch/npipe v0.0.0-20160621034901-c1b8fa8bdcce
 	github.com/prometheus-community/pro-bing v0.4.0
 	github.com/rs/zerolog v1.33.0

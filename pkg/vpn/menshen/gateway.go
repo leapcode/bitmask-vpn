@@ -119,7 +119,7 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 	for i, gw := range m.Gateways {
 		log.Debug().
 			Str("host", gw.Host).
-			Int64("port", gw.Ports[0]).
+			Int64("port", gw.Port).
 			Str("ip", gw.IPAddr).
 			Str("location", strings.Title(gw.Location)).
 			Str("protocol", gw.Transport).

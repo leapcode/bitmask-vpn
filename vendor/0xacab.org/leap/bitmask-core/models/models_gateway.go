@@ -17,6 +17,10 @@ import (
 // swagger:model models.Gateway
 type ModelsGateway struct {
 
+	// Bucket is a "bucket" tag that connotes a resource group that a user may or may not
+	// have access to. An empty bucket string implies that it is open access
+	Bucket string `json:"bucket,omitempty"`
+
 	// An experimental gateway flags any gateway that, for whatever reason,
 	// is not deemed stable. The expectation is that clients have to opt-in to
 	// experimental gateways (and bridges too).
@@ -49,10 +53,8 @@ type ModelsGateway struct {
 	// Overloaded should be set to true if the fractional load is above threshold.
 	Overloaded bool `json:"overloaded,omitempty"`
 
-	// List of ports this gateway is listening on. The order of the ports is used
-	// for load balancing the gateway. The client should use the ports in the order
-	// it receives them (first port in the list is the preferred port)
-	Ports []int64 `json:"ports"`
+	// The (primary) port this gateway is listening on.
+	Port int64 `json:"port,omitempty"`
 
 	// TCP, UDP or KCP. This was called "protocol" in previous versions of the API.
 	Transport string `json:"transport,omitempty"`

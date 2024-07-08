@@ -334,7 +334,7 @@ func (api *API) SerializeConfig(params *GatewayParams) (string, error) {
 		Cert:      crt,
 		Key:       key,
 		IPAddr:    gw.IPAddr,
-		Port:      fmt.Sprintf("%d", gw.Ports[0]),
+		Port:      fmt.Sprintf("%d", gw.Port),
 		Transport: gw.Transport + "4",
 	}
 	tmpl, err := template.New("openvpncert").Parse(openvpnConfigTemplate)

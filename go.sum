@@ -1,5 +1,5 @@
-0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e h1:dg8K5g8gpWYh8GfJPJKlSF6twnjFa4Ui9FMEahAf3jw=
-0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e/go.mod h1:kuAy05ISfgrZJIPj2i7lXRxRlFF8gtRy3KvYYOgMYvI=
+0xacab.org/leap/bitmask-core v0.0.0-20240705122443-e372171b7c36 h1:pX9BZDphco1wjiyyfJAy4cRb4fmKKn+6u5SMvhU01zI=
+0xacab.org/leap/bitmask-core v0.0.0-20240705122443-e372171b7c36/go.mod h1:kuAy05ISfgrZJIPj2i7lXRxRlFF8gtRy3KvYYOgMYvI=
 0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051 h1:z9sIIud8NbKW5+Qp0k6BnogK3O8CPWCN3Rx5Jbzq7bQ=
 0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051/go.mod h1:uesfK5XkHYSgHRpE9/Bb2yKkKTE6VFViyjbU/z4ST60=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=

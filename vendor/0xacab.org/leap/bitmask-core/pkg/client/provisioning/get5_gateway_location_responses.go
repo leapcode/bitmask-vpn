@@ -6,6 +6,7 @@ package provisioning
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *Get5GatewayLocationOK) Code() int {
 }
 
 func (o *Get5GatewayLocationOK) Error() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationOK %s", 200, payload)
 }
 
 func (o *Get5GatewayLocationOK) String() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationOK %s", 200, payload)
 }
 
 func (o *Get5GatewayLocationOK) GetPayload() []*models.ModelsGateway {
@@ -163,11 +166,13 @@ func (o *Get5GatewayLocationBadRequest) Code() int {
 }
 
 func (o *Get5GatewayLocationBadRequest) Error() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationBadRequest %s", 400, payload)
 }
 
 func (o *Get5GatewayLocationBadRequest) String() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationBadRequest %s", 400, payload)
 }
 
 func (o *Get5GatewayLocationBadRequest) GetPayload() interface{} {
@@ -229,11 +234,13 @@ func (o *Get5GatewayLocationNotFound) Code() int {
 }
 
 func (o *Get5GatewayLocationNotFound) Error() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationNotFound %s", 404, payload)
 }
 
 func (o *Get5GatewayLocationNotFound) String() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationNotFound %s", 404, payload)
 }
 
 func (o *Get5GatewayLocationNotFound) GetPayload() interface{} {
@@ -295,11 +302,13 @@ func (o *Get5GatewayLocationInternalServerError) Code() int {
 }
 
 func (o *Get5GatewayLocationInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationInternalServerError %s", 500, payload)
 }
 
 func (o *Get5GatewayLocationInternalServerError) String() string {
-	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/gateway/{location}][%d] get5GatewayLocationInternalServerError %s", 500, payload)
 }
 
 func (o *Get5GatewayLocationInternalServerError) GetPayload() interface{} {

@@ -6,6 +6,7 @@ package provisioning
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,11 +98,13 @@ func (o *Get5ServiceOK) Code() int {
 }
 
 func (o *Get5ServiceOK) Error() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceOK %s", 200, payload)
 }
 
 func (o *Get5ServiceOK) String() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceOK %s", 200, payload)
 }
 
 func (o *Get5ServiceOK) GetPayload() *models.ModelsEIPService {
@@ -165,11 +168,13 @@ func (o *Get5ServiceBadRequest) Code() int {
 }
 
 func (o *Get5ServiceBadRequest) Error() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceBadRequest %s", 400, payload)
 }
 
 func (o *Get5ServiceBadRequest) String() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceBadRequest %s", 400, payload)
 }
 
 func (o *Get5ServiceBadRequest) GetPayload() interface{} {
@@ -231,11 +236,13 @@ func (o *Get5ServiceNotFound) Code() int {
 }
 
 func (o *Get5ServiceNotFound) Error() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceNotFound %s", 404, payload)
 }
 
 func (o *Get5ServiceNotFound) String() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceNotFound %s", 404, payload)
 }
 
 func (o *Get5ServiceNotFound) GetPayload() interface{} {
@@ -297,11 +304,13 @@ func (o *Get5ServiceInternalServerError) Code() int {
 }
 
 func (o *Get5ServiceInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceInternalServerError %s", 500, payload)
 }
 
 func (o *Get5ServiceInternalServerError) String() string {
-	return fmt.Sprintf("[GET /5/service][%d] get5ServiceInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/service][%d] get5ServiceInternalServerError %s", 500, payload)
 }
 
 func (o *Get5ServiceInternalServerError) GetPayload() interface{} {

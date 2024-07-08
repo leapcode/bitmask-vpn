@@ -6,6 +6,7 @@ package provisioning
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,11 +96,13 @@ func (o *Get5OpenvpnCertOK) Code() int {
 }
 
 func (o *Get5OpenvpnCertOK) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertOK %s", 200, payload)
 }
 
 func (o *Get5OpenvpnCertOK) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertOK %s", 200, payload)
 }
 
 func (o *Get5OpenvpnCertOK) GetPayload() string {
@@ -161,11 +164,13 @@ func (o *Get5OpenvpnCertBadRequest) Code() int {
 }
 
 func (o *Get5OpenvpnCertBadRequest) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertBadRequest %s", 400, payload)
 }
 
 func (o *Get5OpenvpnCertBadRequest) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertBadRequest %s", 400, payload)
 }
 
 func (o *Get5OpenvpnCertBadRequest) GetPayload() interface{} {
@@ -227,11 +232,13 @@ func (o *Get5OpenvpnCertNotFound) Code() int {
 }
 
 func (o *Get5OpenvpnCertNotFound) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertNotFound %s", 404, payload)
 }
 
 func (o *Get5OpenvpnCertNotFound) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertNotFound %s", 404, payload)
 }
 
 func (o *Get5OpenvpnCertNotFound) GetPayload() interface{} {
@@ -293,11 +300,13 @@ func (o *Get5OpenvpnCertInternalServerError) Code() int {
 }
 
 func (o *Get5OpenvpnCertInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertInternalServerError %s", 500, payload)
 }
 
 func (o *Get5OpenvpnCertInternalServerError) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/cert][%d] get5OpenvpnCertInternalServerError %s", 500, payload)
 }
 
 func (o *Get5OpenvpnCertInternalServerError) GetPayload() interface{} {

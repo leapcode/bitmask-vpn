@@ -24,7 +24,7 @@ type ModelsEIPService struct {
 	Locations interface{} `json:"locations,omitempty"`
 
 	// openvpn configuration
-	OpenvpnConfiguration interface{} `json:"openvpn_configuration,omitempty"`
+	OpenvpnConfiguration map[string]interface{} `json:"openvpn_configuration,omitempty"`
 
 	// serial
 	Serial int64 `json:"serial,omitempty"`

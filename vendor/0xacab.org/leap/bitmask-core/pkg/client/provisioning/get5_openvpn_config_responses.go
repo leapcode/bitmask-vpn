@@ -6,6 +6,7 @@ package provisioning
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,11 +96,13 @@ func (o *Get5OpenvpnConfigOK) Code() int {
 }
 
 func (o *Get5OpenvpnConfigOK) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigOK %s", 200, payload)
 }
 
 func (o *Get5OpenvpnConfigOK) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigOK %s", 200, payload)
 }
 
 func (o *Get5OpenvpnConfigOK) GetPayload() string {
@@ -161,11 +164,13 @@ func (o *Get5OpenvpnConfigBadRequest) Code() int {
 }
 
 func (o *Get5OpenvpnConfigBadRequest) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigBadRequest %s", 400, payload)
 }
 
 func (o *Get5OpenvpnConfigBadRequest) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigBadRequest  %+v", 400, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigBadRequest %s", 400, payload)
 }
 
 func (o *Get5OpenvpnConfigBadRequest) GetPayload() interface{} {
@@ -227,11 +232,13 @@ func (o *Get5OpenvpnConfigNotFound) Code() int {
 }
 
 func (o *Get5OpenvpnConfigNotFound) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigNotFound %s", 404, payload)
 }
 
 func (o *Get5OpenvpnConfigNotFound) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigNotFound  %+v", 404, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigNotFound %s", 404, payload)
 }
 
 func (o *Get5OpenvpnConfigNotFound) GetPayload() interface{} {
@@ -293,11 +300,13 @@ func (o *Get5OpenvpnConfigInternalServerError) Code() int {
 }
 
 func (o *Get5OpenvpnConfigInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigInternalServerError %s", 500, payload)
 }
 
 func (o *Get5OpenvpnConfigInternalServerError) String() string {
-	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigInternalServerError  %+v", 500, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /5/openvpn/config][%d] get5OpenvpnConfigInternalServerError %s", 500, payload)
 }
 
 func (o *Get5OpenvpnConfigInternalServerError) GetPayload() interface{} {

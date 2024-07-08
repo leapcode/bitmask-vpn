@@ -21,6 +21,10 @@ type ModelsBridge struct {
 	// otherwise.
 	Auth string `json:"auth,omitempty"`
 
+	// Bucket is a "bucket" tag that connotes a resource group that a user may or may not
+	// have access to. An empty bucket string implies that it is open access
+	Bucket string `json:"bucket,omitempty"`
+
 	// An experimental bridge flags any bridge that, for whatever reason,
 	// is not deemed stable. The expectation is that clients have to opt-in to
 	// experimental bridges (and gateways too).
@@ -47,7 +51,7 @@ type ModelsBridge struct {
 
 	// Options contain the map of options that will be passed to the client. It usually
 	// contains authentication credentials.
-	Options interface{} `json:"options,omitempty"`
+	Options map[string]interface{} `json:"options,omitempty"`
 
 	// Overloaded should be set to true if the fractional load is above threshold.
 	Overloaded bool `json:"overloaded,omitempty"`

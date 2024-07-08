@@ -1,4 +1,4 @@
-# 0xacab.org/leap/bitmask-core v0.0.0-20240529192952-8ea2f4de269e
+# 0xacab.org/leap/bitmask-core v0.0.0-20240705122443-e372171b7c36
 ## explicit; go 1.20
 0xacab.org/leap/bitmask-core/models
 0xacab.org/leap/bitmask-core/pkg/bootstrap
