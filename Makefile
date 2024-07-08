@@ -297,6 +297,7 @@ clean:
 	@rm -rf lib/*
 	@rm -rf build/
 	@-unlink branding/assets/default
+	@cd ArchLinux && rm -rf bitmask-vpn pkg src *.tar.zst
 
 
 ########################################################################
@@ -434,6 +435,11 @@ package_snap:
 
 package_deb:
 	@${MAKE} -C build/${PROVIDER} pkg_deb
+
+package_arch:
+	grep -q "Arch Linux" /etc/issue || (echo "Arch Linux system is required to build the Arch Linux package" && exit 1)
+	# at least the makepkg binary is mandatory, makepkg is part pacman package
+	(cd ArchLinux && makepkg --syncdeps --noconfirm)
 
 sign_artifact:
 	@find ${FILE} -type f -not -name "*.asc" -print0 | xargs -0 -n1 -I{} sha256sum -b "{}" | sed 's/*deploy\///' > ${FILE}.sha256

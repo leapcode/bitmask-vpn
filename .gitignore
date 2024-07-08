@@ -29,3 +29,9 @@ debian/files
 # IDE
 .idea
 .vs
+
+# Arch Linux package
+ArchLinux/src
+ArchLinux/pkg
+ArchLinux/bitmask-vpn
+ArchLinux/*.tar.zst

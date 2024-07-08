@@ -1,0 +1,61 @@
+# Maintainer: Pea <peanut2 [aaaaat] systemli [dooot] org>
+
+pkgname=bitmask-vpn-git
+pkgrel=1
+pkgdesc="Bitmask is an open source application to provide easy and secure encrypted communication with a VPN"
+pkgver=0.24.6.rc.1.r10.g4ee5fba
+arch=("x86_64")
+license=("GPL-3.0-only")
+url="https://0xacab.org/leap/bitmask-vpn"
+conflicts=('riseup-vpn' 'riseup-vpn-git')
+
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+# qt6-tools has /usr/lib/qt6/bin/lrelease
+makedepends=('git' 'make' 'go' 'qt6-tools')
+depends=('qt6-base' 'qt6-declarative' 'qt6-svg' 'openvpn' 'python' 'lxsession' 'iptables')
+
+pkgver() {
+  cd bitmask-vpn
+  git describe --long --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd bitmask-vpn
+  export GOCACHE="$srcdir/GOCACHE"
+  PROVIDER=bitmask make vendor
+}
+
+
+build() {
+  cd bitmask-vpn
+  export GOCACHE="$srcdir/GOCACHE"
+  export CGO_CPPFLAGS="${CPPFLAGS}"
+  export CGO_CFLAGS="${CFLAGS}"
+  export CGO_CXXFLAGS="${CXXFLAGS}"
+  export CGO_LDFLAGS="${LDFLAGS}"
+  export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=readonly -modcacherw"
+
+  export PROVIDER=bitmask
+  export QMAKE=qmake6
+  export LRELEASE=/usr/lib/qt6/bin/lrelease
+  make build -j $(nproc)
+}
+
+check() {
+  cd bitmask-vpn
+  export GOCACHE="$srcdir/GOCACHE"
+  CI="dont run integration tests as they are broken" make test
+}
+
+package() {
+  cd bitmask-vpn
+
+  install -Dm755 build/qt/release/bitmask-vpn "$pkgdir/usr/bin/bitmask-vpn"
+  install -Dm755 helpers/bitmask-root "$pkgdir/usr/bin/bitmask-root"
+  install -Dm644 helpers/se.leap.bitmask.policy "$pkgdir/usr/share/polkit-1/actions/se.leap.bitmask.policy"
+
+  install -Dm644 build/bitmask/debian/bitmask-vpn.desktop "$pkgdir/usr/share/applications/bitmask-vpn.desktop"
+  install -Dm644 build/bitmask/debian/icons/scalable/bitmask-vpn.png  "$pkgdir/usr/share/icons/hicolor/128x128/apps/bitmask-vpn.png"
+}
