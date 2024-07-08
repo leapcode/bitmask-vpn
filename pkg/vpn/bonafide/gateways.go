@@ -300,7 +300,7 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 	} else if len(p.recommended) != 0 {
 		return p.getGatewaysFromMenshen(transport, max)
 	} else {
-		return p.getGatewaysByTimezone(transport, tz, max)
+		return p.GetGatewaysByTimezone(transport, tz, max)
 	}
 }
 
@@ -315,17 +315,6 @@ func (p *gatewayPool) getBestLocation(transport string, tz int) string {
 	}
 	return best[0].Location
 
-}
-
-func (p *gatewayPool) getAll(transport string, tz int) error {
-	if (&gatewayPool{} == p) {
-		log.Warn().Msg("getAll tried to access uninitialized struct")
-		return nil
-	}
-
-	log.Debug().Msg("seems to be initialized...")
-	_, err := p.getGatewaysByTimezone(transport, tz, 999)
-	return err
 }
 
 /* picks at most max gateways, filtering by transport, from the ordered list menshen returned */
@@ -344,7 +333,7 @@ func (p *gatewayPool) getGatewaysFromMenshen(transport string, max int) ([]Gatew
 }
 
 /* the old timezone based heuristic, when everything goes wrong */
-func (p *gatewayPool) getGatewaysByTimezone(transport string, tzOffsetHours, max int) ([]Gateway, error) {
+func (p *gatewayPool) GetGatewaysByTimezone(transport string, tzOffsetHours, max int) ([]Gateway, error) {
 	gws := make([]Gateway, 0)
 	gwVector := []gatewayDistance{}
 

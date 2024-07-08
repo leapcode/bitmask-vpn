@@ -296,7 +296,8 @@ func (b *Bonafide) FetchAllGateways(transport string) error {
 	if err != nil {
 		return err
 	}
-	return b.gateways.getAll(transport, b.tzOffsetHours)
+	_, err = b.gateways.GetGatewaysByTimezone(transport, b.tzOffsetHours, 999)
+	return err
 }
 
 func (b *Bonafide) GetLocationQualityMap(transport string) map[string]float64 {
