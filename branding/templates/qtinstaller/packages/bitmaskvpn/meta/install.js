@@ -64,6 +64,9 @@ function Component() {
     }
     console.log("CPU Architecture: " +  systemInfo.currentCpuArchitecture);
 
+    if (systemInfo.productType === "windows") {
+        installer.addWizardPage(component, "InstallForAllUsersCheckBoxForm", QInstaller.LicenseCheck);
+    }
 }
 
 Component.prototype.createOperations = function ()
@@ -83,8 +86,12 @@ Component.prototype.createOperations = function ()
     // We can also use this to register different components (different architecture for instance)
     // See https://doc.qt.io/qtinstallerframework/qt-installer-framework-systeminfo-packages-root-meta-installscript-qs.html
 
+    console.log("installForAllUsers value: " + installer.value("installForAllUsers"));
     if (systemInfo.productType === "windows") {
         postInstallWindows();
+        if (installer.value("installForAllUsers") === "true") {
+            installForAllUsersWindows()
+        }
     } else if (systemInfo.productType === "macos") {
         uninstallOSX();
         postInstallOSX();
@@ -121,6 +128,23 @@ function postInstallWindows() {
         "CreateShortcut",
         "@TargetDir@\\Uninstall-$APPNAME.exe",
         "@StartMenuDir@\\Uninstall.lnk"
+    );
+}
+
+function installForAllUsersWindows() {
+    component.addElevatedOperation(
+        "Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+        "try {New-LocalGroup -Name 'OpenVPN Administrators' -Description 'Group to allow use of openvpn' -ErrorAction Stop} catch [Microsoft.PowerShell.Commands.GroupExistsException] { exit 0 }",
+        "errormessage=Unable to create the 'OpenVPN Administrators' group.",
+        "UNDOEXECUTE", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+        "try { Remove-LocalGroup -Name 'OpenVPN Administrators' -ErrorAction Stop } catch [Microsoft.PowerShell.Commands.GroupNotFoundException] { exit 0 }",
+        "errormessage=Unable to remove the 'OpenVPN Administrator' group."
+    );
+
+    component.addElevatedOperation(
+        "Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+        "$$users=(Get-LocalUser | Select-Object Name | where {$$_.Name -NotMatch 'Administrator' -and $$_.Name -NotMatch 'Guest' -and $$_.Name -NotMatch 'DefaultAccount' -and $$_.Name -NotMatch 'WDAGUtilityAccount'}); try {Add-LocalGroupMember -Group 'OpenVPN Administrators' -Member $$users -ErrorAction Stop} catch [Microsoft.PowerShell.Commands.MemberExistsException] {exit 0}",
+        "errormessage=Unable to add users to the 'OpenVPN Administrators' group."
     );
 }
 
@@ -163,4 +187,13 @@ function postInstallLinux() {
     console.log("Post-installation for GNU/Linux");
     console.log("Maybe you want to use your package manager instead?");
     component.addOperation("AppendFile", "/tmp/bitmask-installer.log", "this is a test - written from the installer");
+}
+
+function uninstallWindows() {
+    console.log("uninstall for windows: remove openvpn administrators group")
+
+    component.addElevatedOperation(
+        "Execute", "{0}", "powershell", "-NonInteractive", "-NoProfile", "-command",
+        "Remove-LocalGroup -Name 'OpenVPN Administrator' -ErrorAction Ignore",
+    );
 }

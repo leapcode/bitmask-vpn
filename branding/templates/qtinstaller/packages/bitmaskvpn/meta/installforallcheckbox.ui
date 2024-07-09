@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>InstallForAllUsersCheckBoxForm</class>
+    <widget class="QWidget" name="InstallForAllUsersCheckBoxForm">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>412</width>
+                <height>179</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Select Installation Mode</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="margin">
+                <number>10</number>
+            </property>
+            <item>
+                <widget class="QCheckBox" name="installForAllCheckBox">
+                    <property name="font">
+                        <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Install for All Users on this Computer</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </item>
+            <item>
+                <widget class="QLabel" name="allUsersLabel">
+                    <property name="text">
+                        <string>The application will be installed for all users on this machine. All users will be added to the OpenVPN Administrators group to enable interaction with OpenVPN.</string>
+                    </property>
+                    <property name="wordWrap">
+                        <bool>true</bool>
+                    </property>
+                    <property name="indent">
+                        <number>25</number>
+                    </property>
+                </widget>
+            </item>
+        </layout>
+    </widget>
+    <resources />
+    <connections />
+</ui>

@@ -8,6 +8,7 @@
     <AllowNonAsciiCharacters>false</AllowNonAsciiCharacters>
     <Logo>installer-logo.png</Logo>
     <InstallerApplicationIcon>installer-icon</InstallerApplicationIcon>
+    <ControlScript>script.qs</ControlScript>
 
     <!--
     <RemoteRepositories>

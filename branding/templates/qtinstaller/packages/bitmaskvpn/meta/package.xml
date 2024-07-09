@@ -8,4 +8,7 @@
     <RequiresAdminRights>true</RequiresAdminRights>
     <Script>install.js</Script>
     <ForcedInstallation>true</ForcedInstallation>
+    <UserInterfaces>
+        <UserInterface>installforallcheckbox.ui</UserInterface>
+    </UserInterfaces>
 </Package>
