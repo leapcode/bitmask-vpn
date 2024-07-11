@@ -31,10 +31,8 @@ func SwitchOff() {
 }
 
 //export UseLocation
-func UseLocation(label string) {
-	// a bit of a hack to force the compiler to copy the string
-	// so the original C++ string will not be used as it will be changed down the line
-	location := string([]byte(label))
+func UseLocation(label *C.char) {
+	location := C.GoString(label)
 	backend.UseLocation(location)
 }
 
@@ -44,8 +42,9 @@ func UseAutomaticGateway() {
 }
 
 //export SetTransport
-func SetTransport(transport string) {
-	backend.SetTransport(string(transport))
+func SetTransport(transport *C.char) {
+	tp := C.GoString(transport)
+	backend.SetTransport(tp)
 }
 
 //export GetTransport

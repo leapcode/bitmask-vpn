@@ -48,7 +48,10 @@ void Backend::donateSeen()
 
 void Backend::useLocation(QString label)
 {
-    UseLocation(toGoStr(label));
+    QByteArray loc = label.toUtf8();
+    char *c = loc.data();
+
+    UseLocation(c);
 }
 
 void Backend::useAutomaticGateway()
@@ -58,7 +61,10 @@ void Backend::useAutomaticGateway()
 
 void Backend::setTransport(QString transport)
 {
-    SetTransport(toGoStr(transport));
+    QByteArray tp = transport.toUtf8();
+    char *c = tp.data();
+
+    SetTransport(c);
 }
 
 void Backend::setUDP(bool udp)
