@@ -54,8 +54,8 @@ arch:
     # makepkg does not run as root, but it needs sudo to install dependencies
     - "cd /home/non_root && sudo -u non_root make package_arch"
     - "cd /home/non_root && pacman -U ArchLinux/*tar.zst --noconfirm"
-    # artifacts must be relative to the working directory (/builds/leap/bitmask-vpn)
-    - "cp /home/non_root/ArchLinux/*.tar.zst /builds/leap/bitmask-vpn"
+    # artifacts must be relative to the working directory (e.g. /builds/leap/bitmask-vpn)
+    - "cp /home/non_root/ArchLinux/*.tar.zst $CI_PROJECT_DIR"
   artifacts:
     paths:
       - '*.tar.zst'
