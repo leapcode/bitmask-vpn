@@ -31,7 +31,7 @@ ICON = $$VENDOR_PATH/icon.png
 
 macx {
     ICON = $$VENDOR_PATH/assets/icon.icns
-    LIBS += -framework Security -framework CoreFoundation
+    LIBS += -framework Security -framework CoreFoundation -lresolv
 }
 win32 {
     RC_ICONS = $$VENDOR_PATH/assets/icon.ico
