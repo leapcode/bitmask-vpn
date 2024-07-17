@@ -16,7 +16,6 @@
 package bitmask
 
 import (
-	"fmt"
 	"os"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -64,9 +63,6 @@ func ConfigureProvider(opts *ProviderOpts) {
 }
 
 func initBitmaskVPN() (Bitmask, error) {
-	if config.ApiVersion == 5 {
-		return nil, fmt.Errorf("API v5 is not implemented. Please use apiVersion=3 in config file")
-	}
 	b, err := vpn.Init()
 	return b, err
 }
