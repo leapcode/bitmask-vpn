@@ -63,10 +63,6 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.ApiVersion = opts.ApiVersion
 }
 
-func InitializeLogger() {
-	config.ConfigureLogger()
-}
-
 func initBitmaskVPN() (Bitmask, error) {
 	if config.ApiVersion == 5 {
 		return nil, fmt.Errorf("API v5 is not implemented. Please use apiVersion=3 in config file")

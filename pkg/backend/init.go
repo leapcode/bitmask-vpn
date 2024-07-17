@@ -55,7 +55,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		log.Fatal().
 			Msg("Could not initialize bitmask, ctx is nil!")
 	}
-	bitmask.InitializeLogger()
+	config.ConfigureLogger()
 	ctx.cfg = config.ParseConfig()
 	setConfigOpts(opts, ctx.cfg)
 	ctx.UseUDP = ctx.cfg.UDP
