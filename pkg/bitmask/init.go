@@ -62,11 +62,6 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.ApiVersion = opts.ApiVersion
 }
 
-func initBitmaskVPN() (Bitmask, error) {
-	b, err := vpn.Init()
-	return b, err
-}
-
 func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 	log.Trace().Msg("Initializing bitmask")
 	if conf.SkipLaunch {
@@ -79,7 +74,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 		}
 	}
 
-	b, err := initBitmaskVPN()
+	b, err := vpn.Init()
 	if err != nil {
 		return nil, err
 	}
