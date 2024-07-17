@@ -22,10 +22,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var logFile *os.File
+
 func ConfigureLogger() {
 	os.MkdirAll(Path, 0750)
 
-	runLogFile, _ := os.OpenFile(
+	logFile, _ = os.OpenFile(
 		LogPath,
 		os.O_RDWR|os.O_CREATE|os.O_APPEND,
 		0644,
@@ -35,7 +37,7 @@ func ConfigureLogger() {
 		TimeFormat: "2006-01-02T15:04:05.999Z07:00",
 	}
 
-	multi := zerolog.MultiLevelWriter(consoleWriter, runLogFile)
+	multi := zerolog.MultiLevelWriter(consoleWriter, logFile)
 	log.Logger = zerolog.New(multi).With().Timestamp().Logger()
 
 	envLogLevel := os.Getenv("LOG_LEVEL")
@@ -51,4 +53,8 @@ func ConfigureLogger() {
 		Str("logFile", LogPath).
 		Str("hint", "you can change the log level with env LOG_LEVEL=INFO|DEBUG|TRACE").
 		Msg("Enabling logging")
+}
+
+func CloseLogger() {
+	logFile.Close()
 }

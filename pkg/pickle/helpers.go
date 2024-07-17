@@ -132,6 +132,7 @@ func dumpHelper(fname, dest string, isExec bool) {
 func InstallHelpers() {
 	// logger is not configured at this point
 	config.ConfigureLogger()
+	defer config.CloseLogger()
 
 	// this  function can be called by command line argument: riseup-vpn --install-helpers
 	log.Info().Msg("Installing helpers")

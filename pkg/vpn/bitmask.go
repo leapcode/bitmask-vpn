@@ -158,6 +158,8 @@ func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
 // Close the connection to bitmask, and does cleanup of temporal files
 func (b *Bitmask) Close() {
 	log.Info().Msg("Close: cleanup and vpn shutdown...")
+	defer config.CloseLogger()
+
 	err := b.StopVPN()
 	if err != nil {
 		log.Warn().

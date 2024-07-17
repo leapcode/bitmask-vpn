@@ -69,12 +69,14 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 
 	b, err := bitmask.InitializeBitmask(ctx.cfg)
 	if err != nil {
+		config.CloseLogger()
 		log.Error().
 			Err(err).
 			Msg("Could not initialize bitmask")
 		errCh <- err.Error()
 		return
 	}
+
 	// right now we just get autostart from an init flag,
 	// but we want to be able to persist that option from the preferences
 	// pane

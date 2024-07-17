@@ -35,6 +35,7 @@ var (
 func main() {
 	config.LogPath = path.Join(config.Path, logFile)
 	config.ConfigureLogger()
+	defer config.CloseLogger()
 	helper.Version = Version
 	helper.AppName = AppName
 
