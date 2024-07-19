@@ -203,7 +203,9 @@ func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	}
 
 	for _, gw := range gateways {
-		log.Debug().Str("gateway ip: ", gw.IPAddress).Msg("Allowd gateway IP")
+		log.Debug().
+			Str("gatewayIP", gw.IPAddress).
+			Msg("Whitelisting gateway ip in firewall")
 	}
 
 	if os.Getenv("LEAP_DRYRUN") == "1" {
