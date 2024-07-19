@@ -730,6 +730,9 @@ def firewall_start(args):
     if QUBES_PROXY and QUBES_VER >= 3:
         # rewrite DNS packets for VPN DNS; Qubes preconfigures masquerade
         ip4tables("-t", "nat", "--flush", "PR-QBS")
+        for gateway in gateways:
+            ip4tables("-t", "nat", "--append", "PR-QBS", "--destination", gateway,
+                      "--jump", "RETURN")
         ip4tables("-t", "nat", "--append", "PR-QBS", "-p", "udp",
                   "--dport", "53", "--jump", "DNAT", "--to",
                   NAMESERVER + ":53")
@@ -737,8 +740,12 @@ def firewall_start(args):
                   "--dport", "53", "--jump", "DNAT", "--to",
                   NAMESERVER + ":53")
     else:
+        # As we may have OpenVPN running on port 53, we don't want to redirect that
+        for gateway in gateways:
+            ip4tables("-t", "nat", "--append", BITMASK_CHAIN_NAT_OUT, "--destination",
+                      gateway, "--jump", "RETURN")
         # allow dns to localhost
-        ip4tables("-t", "nat", "--append", BITMASK_CHAIN, "--protocol", "udp",
+        ip4tables("-t", "nat", "--append", BITMASK_CHAIN_NAT_OUT, "--protocol", "udp",
                   "--dest", "127.0.1.1,127.0.0.1,127.0.0.53", "--dport", "53",
                   "--jump", "ACCEPT")
         # rewrite all outgoing packets to use VPN DNS server
