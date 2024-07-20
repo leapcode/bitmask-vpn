@@ -148,25 +148,72 @@ func (b *Bitmask) generateManagementPassword() string {
 	return tmpFile.Name()
 }
 
+func appendProxyArgsToOpenvpnCmd(args []string, proxy string) []string {
+	proxyArgs := strings.Split(proxy, ":")
+	args = append(args, "--remote", proxyArgs[0], proxyArgs[1], "udp")
+	return args
+}
+
+func (b *Bitmask) getObsfucationGateways(transport string) ([]bonafide.Gateway, error) {
+	gw, gotPrivate := maybeGetPrivateGateway()
+	if gotPrivate {
+		log.Info().
+			Str("host", gw.Host).
+			Msgf("Got a private bridge with options: %v", gw.Options)
+		return []bonafide.Gateway{gw}, nil
+	}
+	log.Debug().Msg("Getting a gateway with obfs4 transport...")
+
+	gateways, err := b.api.GetBestGateways(transport)
+	if err != nil {
+		return []bonafide.Gateway{}, err
+	}
+	return gateways, nil
+}
+
+func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) ([]string, error) {
+	arg := []string{}
+	gateways, err := b.getObsfucationGateways(transport)
+	if err != nil {
+		return arg, err
+	}
+	if len(gateways) == 0 {
+		log.Warn().
+			Str("transport", b.transport).
+			Msg("No gateway for transport in provider")
+		return arg, errors.New("ERROR: cannot find any gateway for selected transport")
+	}
+	err = b.launch.FirewallStart(gateways)
+	if err != nil {
+		return arg, err
+	}
+
+	// loop over the list of gateways trying each gateway
+	// once a successful connection is made error is  nil
+	// and the loop breaks
+	for _, gw := range gateways {
+		proxy, err := b.startTransport(ctx, gw)
+		if err == nil {
+			arg = appendProxyArgsToOpenvpnCmd(arg, proxy)
+			// add default gatway route for openvpn
+			arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
+			break
+		}
+		log.Warn().Err(err).
+			Str("gateway IP", gw.IPAddress).
+			Any("gateway options", gw.Options).
+			Msg("failed to start proxy for obfs4 gateway, trying another")
+	}
+
+	return arg, nil
+}
+
 func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 	arg := b.openvpnArgs
-	/*
-		XXX has this changed??
-		 arg, err := b.bonafide.GetOpenvpnArgs()
-		 if err != nil {
-		 	return err
-		 }
-	*/
-	/*
-		XXX and this??
-		 certPemPath, err := b.getCert()
-		 if err != nil {
-		 	return err
-		 }
-	*/
 	b.statusCh <- Starting
-	if b.GetTransport() == "obfs4" {
 
+	switch b.GetTransport() {
+	case "obfs4":
 		if config.ApiVersion == 5 {
 			// if I return an error, the GUI state does not get updated properly to Failed/Stopped and
 			// continues to stay in state Connecting (also clicking Cancel doesnot work)
@@ -174,62 +221,12 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			// menshen/v5 has different api endpoints: gateways and bridges
 			// gw.Options is always empty right now
 		}
-
-		var gw bonafide.Gateway
-		var gateways []bonafide.Gateway
-		var proxy string
-		var err error
-
-		gw, gotPrivate := maybeGetPrivateGateway()
-		if gotPrivate {
-			var err error
-			log.Info().
-				Str("host", gw.Host).
-				Msgf("Got a private bridge with options: %v", gw.Options)
-			gateways = []bonafide.Gateway{gw}
-			proxy, err = b.startTransport(ctx, gw)
-			if err != nil {
-				// TODO this is not going to return the error since it blocks
-				// we need to get an error channel from obfsvpn.
-				return err
-			}
-		} else {
-			// get a gateway from bonafide looking at the services announced in eip-service
-
-			log.Debug().Msg("Getting a gateway with obfs4 transport...")
-
-			gateways, err = b.api.GetBestGateways("obfs4")
-			if err != nil {
-				return err
-			}
-			if len(gateways) == 0 {
-				log.Warn().
-					Str("transport", b.transport).
-					Msg("No gateway for transport in provider")
-				return errors.New("ERROR: cannot find any gateway for selected transport")
-			}
-
-			gw = gateways[0]
-			b.ptGateway = gw
-
-			proxy, err = b.startTransport(ctx, gw)
-			if err != nil {
-				// TODO this is not going to return the error since it blocks
-				// we need to get an error channel from obfsvpn.
-				return err
-			}
-		}
-
-		err = b.launch.FirewallStart(gateways)
+		proxyArgs, err := b.setupObsfucationProxy(ctx, "obfs4")
 		if err != nil {
 			return err
 		}
-
-		proxyArgs := strings.Split(proxy, ":")
-		arg = append(arg, "--remote", proxyArgs[0], proxyArgs[1], "udp")
-		arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
-	} else {
-
+		arg = append(arg, proxyArgs...)
+	default:
 		gateways, err := b.api.GetBestGateways("openvpn")
 		if err != nil {
 			return err
@@ -269,6 +266,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			}
 		}
 	}
+
 	openvpnVerb := os.Getenv("OPENVPN_VERBOSITY")
 	verb, err := strconv.Atoi(openvpnVerb)
 	if err != nil || verb > 6 || verb < 3 {
@@ -290,7 +288,6 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		"--cert", b.certPemPath,
 		"--key", b.certPemPath,
 		"--persist-tun") // needed for reconnects
-	//		"--float")
 
 	if os.Getenv("OPENVPN_LOG_TO_FILE") != "" {
 		openVpnLogFile := filepath.Join(os.TempDir(), "leap-vpn.log")
