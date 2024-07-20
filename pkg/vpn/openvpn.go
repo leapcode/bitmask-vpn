@@ -19,7 +19,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -130,7 +129,7 @@ func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
 func (b *Bitmask) generateManagementPassword() string {
 	pass := getRandomPass(12)
 
-	tmpFile, err := ioutil.TempFile(b.tempdir, "leap-vpn-")
+	tmpFile, err := os.CreateTemp(b.tempdir, "leap-vpn-")
 	if err != nil {
 		log.Fatal().
 			Err(err).
@@ -349,7 +348,7 @@ func (b *Bitmask) getCert() error {
 			logDnsLookup(url.Host)
 			return err
 		}
-		err = ioutil.WriteFile(b.certPemPath, cert, 0600)
+		err = os.WriteFile(b.certPemPath, cert, 0600)
 		if err != nil {
 			return err
 		}
