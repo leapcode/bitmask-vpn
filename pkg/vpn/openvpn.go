@@ -62,12 +62,12 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.api.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway) (proxy string, err error) {
+func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKCP bool) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
 	kcpConfig := obfsvpn.KCPConfig{
 		Enabled: false,
 	}
-	if os.Getenv("LEAP_KCP") == "1" {
+	if os.Getenv("LEAP_KCP") == "1" || useKCP {
 		kcpConfig = *obfsvpn.DefaultKCPConfig()
 	}
 
@@ -188,11 +188,13 @@ func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) (
 		return arg, err
 	}
 
+	kcp := transport == "kcp"
+
 	// loop over the list of gateways trying each gateway
 	// once a successful connection is made error is  nil
 	// and the loop breaks
 	for _, gw := range gateways {
-		proxy, err := b.startTransport(ctx, gw)
+		proxy, err := b.startTransport(ctx, gw, kcp)
 		if err == nil {
 			arg = appendProxyArgsToOpenvpnCmd(arg, proxy)
 			// add default gatway route for openvpn
@@ -222,6 +224,12 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 			// gw.Options is always empty right now
 		}
 		proxyArgs, err := b.setupObsfucationProxy(ctx, "obfs4")
+		if err != nil {
+			return err
+		}
+		arg = append(arg, proxyArgs...)
+	case "kcp":
+		proxyArgs, err := b.setupObsfucationProxy(ctx, "kcp")
 		if err != nil {
 			return err
 		}
@@ -467,31 +475,24 @@ func (b *Bitmask) UseAutomaticGateway() {
 
 // SetTransport selects an obfuscation transport to use
 func (b *Bitmask) SetTransport(t string) error {
-	if t != "openvpn" && t != "obfs4" {
+	switch t {
+	case "openvpn", "obfs4", "kcp":
+		b.transport = t
+		log.Info().
+			Str("transport", t).
+			Msg("Setting transport")
+		return nil
+	default:
 		return fmt.Errorf("Transport %s not implemented", t)
 	}
-	log.Info().
-		Str("transport", t).
-		Msg("Setting transport")
-	// compare and set string looks strange, but if assigning directly
-	// we're getting some kind of corruption with the transport string.
-	// I suspect something's
-	// not quite right with the c<->go char pointers handling.
-	if t == "obfs4" {
-		b.transport = "obfs4"
-	} else if t == "openvpn" {
-		b.transport = "openvpn"
-	}
-	return nil
 }
 
 // GetTransport gets the obfuscation transport to use. Only obfs4 available for now.
 func (b *Bitmask) GetTransport() string {
-	if b.transport == "obfs4" {
-		return "obfs4"
-	} else {
+	if b.transport == "" {
 		return "openvpn"
 	}
+	return b.transport
 }
 
 func (b *Bitmask) getTempCertPemPath() string {

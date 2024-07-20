@@ -226,6 +226,36 @@ ThemedPage {
                         useBridgesCheckBox.enabled = areBridgesAvailable()
                     }
                 }
+
+                Label {
+                    text: qsTr("KCP might work when UDP is blocked on some networks.")
+                    width: parent.width
+                    color: Material.foreground
+                    visible: true
+                    wrapMode: Text.Wrap
+                    font.pixelSize: Theme.fontSize - 3
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    Layout.preferredWidth: 240
+                }
+
+                MaterialCheckBox {
+                    id: useKCP
+                    text: qsTr("Use KCP if available")
+                    enabled: areBridgesAvailable()
+                    checked: false
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                    onClicked: {
+                        useKcp(checked);
+                        useUDP.enabled = !checked;
+                        useBridgesCheckBox.enabled = !checked;
+                        useBridgesCheckBox.checked = checked;
+                    }
+                }
             }
         }
     }
@@ -247,6 +277,10 @@ ThemedPage {
                     target: useUDP
                     enabled: false
                 }
+                PropertyChanges {
+                    target: useKCP
+                    enabled: false
+                }
             },
             State {
                 name: "starting"
@@ -260,6 +294,10 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useUDP
+                    enabled: false
+                }
+                PropertyChanges {
+                    target: useKCP
                     enabled: false
                 }
             },
@@ -277,6 +315,10 @@ ThemedPage {
                     target: useUDP
                     enabled: true
                 }
+                PropertyChanges {
+                    target: useKCP
+                    enabled: true
+                }
             }
         ]
     }
@@ -290,6 +332,14 @@ ThemedPage {
     function useBridges(value) {
         if (value == true) {
             backend.setTransport("obfs4")
+        } else {
+            backend.setTransport("openvpn")
+        }
+    }
+
+    function useKcp(value) {
+        if (value == true) {
+            backend.setTransport("kcp")
         } else {
             backend.setTransport("openvpn")
         }
@@ -316,6 +366,12 @@ ThemedPage {
         }
         if (ctx && ctx.transport == "obfs4") {
             useBridgesCheckBox.checked = true
+            useUDP.enabled = false
+        }
+        if (ctx && ctx.transport == "kcp") {
+            useKCP.checked = true
+            useBridgesCheckBox.checked = true
+            useBridgesCheckBox.enabled = false
             useUDP.enabled = false
         }
         // disabled for now, will be on next release

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math/rand"
 	"os"
+	"slices"
 	"sort"
 	"strconv"
 	"time"
@@ -62,6 +63,9 @@ type gatewayPool struct {
 }
 
 func (gw Gateway) isTransport(transport string) bool {
+	if transport == "kcp" {
+		return gw.Transport == "obfs4" && slices.Contains(gw.Protocols, "kcp")
+	}
 	return transport == "any" || gw.Transport == transport
 }
 
