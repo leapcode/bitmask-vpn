@@ -45,6 +45,7 @@ type Config struct {
 		DisableAutostart bool
 		UDP              bool
 		Snowflake        bool
+		KCP              bool
 	}
 	SkipLaunch       bool
 	Obfs4            bool
@@ -52,6 +53,7 @@ type Config struct {
 	StartVPN         bool
 	UDP              bool
 	Snowflake        bool
+	KCP              bool
 }
 
 // ParseConfig reads the configuration from the configuration file
@@ -107,6 +109,12 @@ func (c *Config) SetDonated() error {
 func (c *Config) SetUseObfs4(val bool) error {
 	c.Obfs4 = val
 	c.file.Obfs4 = val
+	return c.save()
+}
+
+func (c *Config) SetUseKCP(val bool) error {
+	c.KCP = val
+	c.file.KCP = val
 	return c.save()
 }
 
