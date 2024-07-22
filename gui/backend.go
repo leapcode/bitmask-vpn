@@ -3,8 +3,6 @@ package main
 /* a wrapper around bitmask that exposes status to a QtQml gui.
    Have a look at the pkg/backend module for further enlightment. */
 
-// #cgo pkg-config: Qt6Core Qt6Gui Qt6Widgets Qt6Quick Qt6QuickControls2
-// #cgo CXXFLAGS: -I ..
 import "C"
 
 import "unsafe"
