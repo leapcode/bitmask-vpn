@@ -2,6 +2,20 @@ development
 ===========
 - ...
 
+0.24.8-rc.1
+======
+- Exposes KCP support in the UI
+- Adds new bitmask-vpn package for Arch Linux
+- Fixes a bug preventing use of the app by non-admin users on windows
+- Fixes a bug on macOS preventing users from manual location selection
+- Fixes a bug where the app's close routine was called twice
+- Fixes a bug where log file was not closed while quitting the app
+- Fixes a bug where the correct app name was not shown in installer error messages
+- Updates to latest obfsvpn
+- Updates to latest bitmask-core
+- Updates translation files
+- Adds missing iptables dependency to ubuntu package
+
 0.24.6-rc.1
 ======
 - Adds better debug and informational logs
