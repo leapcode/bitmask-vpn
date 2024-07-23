@@ -297,7 +297,12 @@ endif
 clean:
 	@rm -rf lib/*
 	@rm -rf build/
+ifeq ($(PLATFORM), windows)
+	# Need to use unlink on Windows for permission reasons
 	@-unlink branding/assets/default
+else
+	@rm -rf branding/assets/default
+endif
 	@cd ArchLinux && rm -rf bitmask-vpn pkg src *.tar.zst
 
 
