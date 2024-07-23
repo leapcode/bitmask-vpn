@@ -71,13 +71,6 @@ OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdpar
 .PHONY: allinone
 allinone: clean vendor build
 
-install_go:
-	# the version of go in bionic is too old. let's get something newer from a ppa.
-	@sudo apt install software-properties-common
-	@sudo add-apt-repository ppa:longsleep/golang-backports
-	@sudo apt-get update
-	@sudo apt-get install golang-go
-
 depends:
 	-@${MAKE} depends$(UNAME)
 
