@@ -11,6 +11,7 @@ cmd/bitmask-helper/bitmask-helper
 /bitmask-connect
 cmd/bitmask-connect/bitmask-connect
 gui/i18n/*.qm
+gui/providers/providers.json
 /snap
 
 locales/*/out.gotext.json

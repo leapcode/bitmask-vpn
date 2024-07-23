@@ -29,6 +29,7 @@ def generateProvidersJSON(configPath, outputJSONPath):
         providerData = getProviderData(p, config)
         addCaData(providerData, configPath)
         providers['providers'].append(providerData)
+    os.makedirs(os.path.dirname(outputJSONPath), exist_ok=True)
     with open(outputJSONPath, 'w', encoding='utf-8') as f:
         json.dump(providers, f, ensure_ascii=False, indent=4)
 
