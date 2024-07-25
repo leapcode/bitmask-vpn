@@ -45,7 +45,12 @@ debuild -us -uc
 sudo dpkg -i ../riseup-vpn*.deb
 ```
 
-You can also run `make package_deb`. You can install the built package with `apt install -f ./deploy/*.deb`.
+You can also run 
+```
+PROVIDER=riseup make vendor
+PROVIDER=riseup QMAKE=qmake6 make package_deb
+```
+Then install the built package with `apt install -f ./deploy/*.deb`.
 
 # Ubuntu
 
