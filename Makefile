@@ -194,6 +194,7 @@ endif
 installer: check_qtifw checksign
 	@mkdir -p ${INST_DATA}
 	@cp -r ${TEMPLATES}/qtinstaller/packages ${INSTALLER}
+	@cp LICENSE ${INSTALLER}/packages/bitmaskvpn/meta/LICENSE.txt
 	@cp -r ${TEMPLATES}/qtinstaller/installer.pro ${INSTALLER}
 	@cp -r ${TEMPLATES}/qtinstaller/config ${INSTALLER}
 	@cp ${VENDOR_PATH}/assets/icon.ico ${INSTALLER}/config/installer-icon.ico

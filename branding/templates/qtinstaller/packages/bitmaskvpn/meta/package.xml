@@ -7,6 +7,9 @@
     <Default>false</Default>
     <RequiresAdminRights>true</RequiresAdminRights>
     <Script>install.js</Script>
+    <Licenses>
+        <License name="License Agreement" file="LICENSE.txt" />
+    </Licenses>
     <ForcedInstallation>true</ForcedInstallation>
     <UserInterfaces>
         <UserInterface>installforallcheckbox.ui</UserInterface>
