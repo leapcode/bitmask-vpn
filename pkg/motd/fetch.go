@@ -21,7 +21,7 @@ func FetchLatest() []Message {
 	url := os.Getenv("MOTD_URL")
 	if url == "" {
 		switch config.Provider {
-		case "riseup.net":
+		case "riseup":
 			url = riseupMOTD
 		default:
 			return empty
