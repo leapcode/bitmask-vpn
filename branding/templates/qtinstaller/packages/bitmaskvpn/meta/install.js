@@ -36,9 +36,16 @@ function Component() {
     // Check whether OS is supported.
     // start installer with -v to see debug output
 
+    installer.gainAdminRights();
+
     console.log("OS: " + systemInfo.productType);
     console.log("Kernel: " + systemInfo.kernelType + "/" + systemInfo.kernelVersion);
     installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+
+    if (installer.isInstaller()) {
+        console.log("Checking for existing installation")
+        component.loaded.connect(this, Component.prototype.installerLoaded);
+    }
 
     var validOs = false;
 
@@ -97,6 +104,26 @@ Component.prototype.createOperations = function ()
         postInstallOSX();
     } else {
         postInstallLinux();
+    }
+}
+
+Component.prototype.installerLoaded = function () {
+    var dir = installer.value("TargetDir")
+    var maintenancetoolPath = Dir.toNativeSeparator(dir + "/uninstall.exe")
+    if (systemInfo.productType == "macos") {
+        maintenancetoolPath = Dir.toNativeSeparator(dir + "/uninstall.app" + "/Contents/MacOS/uninstall")
+    }
+    if (installer.fileExists(dir) && installer.fileExists(maintenancetoolPath)) {
+        console.log("Found existing installation at: " + dir)
+        var result = QMessageBox.warning("uninstallprevious.critical", "Uninstall previous version", "To proceed existing installation needs to be removed. Click OK to remove existing installation.",
+            QMessageBox.Ok | QMessageBox.Cancel);
+        if (result == QMessageBox.Ok) {
+            console.log("Running uninstall using maintenance tool at: " + maintenancetoolPath)
+            installer.execute(maintenancetoolPath, ["purge", "-c"]);
+        }
+        if (result == QMessageBox.Cancel) {
+            cancelInstaller("Need to removed existing installation to proceed.");
+        }
     }
 }
 
