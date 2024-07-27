@@ -224,8 +224,10 @@ ToolBar {
     function isBridgeSelected() {
         if (ctx && ctx.transport == "obfs4") {
             return true;
-        } else {
-            return false;
         }
+        if (ctx && ctx.transport == "kcp") {
+            return true;
+        }
+        return false;
     }
 }
