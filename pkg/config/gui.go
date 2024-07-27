@@ -80,6 +80,7 @@ func ParseConfig() *Config {
 	conf.StartVPN = !conf.file.UserStoppedVPN
 	conf.UDP = conf.file.UDP
 	conf.Snowflake = conf.file.Snowflake
+	conf.KCP = conf.file.KCP
 	return &conf
 }
 
