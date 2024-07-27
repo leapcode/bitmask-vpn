@@ -8,7 +8,7 @@ set -e
 XBUILD="${XBUILD:-no}"
 LRELEASE="${LRELEASE:-lrelease}"
 VENDOR_PATH="${VENDOR_PATH:-providers/riseup}"
-APPNAME="${APPNAME:-BitmaskVPN}"
+APPNAME="${APPNAME:-Bitmask}"
 LDFLAGS_VER="-X 0xacab.org/leap/bitmask-vpn/pkg/config/version.appVersion=${VERSION}"
 
 OSX_TARGET=12
@@ -124,7 +124,7 @@ function renameOutput {
 }
 
 function buildDefault {
-    echo "[+] Building BitmaskVPN"
+    echo "[+] Building Bitmask"
     if [ "$LRELEASE" != "no" ]
     then
         $LRELEASE bitmask.pro

@@ -1,4 +1,4 @@
-!defined(INSTALLER, var):INSTALLER= "BitmaskVPN-Installer-git"
+!defined(INSTALLER, var):INSTALLER= "Bitmask-Installer-git"
 !defined(TARGET, var):TARGET= "bitmask-vpn"
 TEMPLATE = aux
 CONFIG -= debug_and_release

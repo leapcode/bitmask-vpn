@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
     providers->loadJson(providerJsonBytes);
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
-    QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "BitmaskVPN");
+    QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "Bitmask");
     QString organizationDomain = getProviderConfig(providersInfo, defaultProvider.toString(), "providerURL", "riseup.net");
 
     QApplication::setApplicationName(appName);
@@ -230,7 +230,7 @@ int main(int argc, char **argv) {
         app.setWindowIcon(QIcon(":/vendor/calyx.svg"));
     } else if (appName == "RiseupVPN") {
         app.setWindowIcon(QIcon(":/vendor/riseup.svg"));
-    } else if (appName == "BitmaskVPN") {
+    } else if (appName == "Bitmask") {
         app.setWindowIcon(QIcon(":/vendor/bitmask.svg"));
     }
 
