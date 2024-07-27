@@ -109,6 +109,13 @@ func setTransport(b Bitmask, conf *config.Config) error {
 			return err
 		}
 	}
+	if conf.KCP {
+		log.Info().Msg("Using transport kcp")
+		err := b.SetTransport("kcp")
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
