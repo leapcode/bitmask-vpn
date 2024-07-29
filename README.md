@@ -1,21 +1,21 @@
-# BitmaskVPN - Desktop client
+# Bitmask - Desktop client
 
 ## Supported operating systems
 
-**BitmaskVPN** needs the following minimum versions of supported operating systems:
+**Bitmask** needs the following minimum versions of supported operating systems:
 
 ### On Windows
 
-**BitmaskVPN** has been tested to work on windows 10 and 11 it might not work on earlier version of windows.
+**Bitmask** has been tested to work on windows 10 and 11 it might not work on earlier version of windows.
 
 ### On MacOS
 
-- **BitmaskVPN** has been tested to work on last three releases of MacOS (Monteray, Ventura and Sonoma)
-- **BitmaskVPN** currently needs rossetta to be enable to work on Apple hardware (M1, M2)
+- **Bitmask** has been tested to work on last three releases of MacOS (Monteray, Ventura and Sonoma)
+- **Bitmask** currently needs rossetta to be enable to work on Apple hardware (M1, M2)
 
 ### On Linux
 
-- **BitmaskVPN** has been tested to work on the latest version of Debian, Ubuntu, Fedora and Arch Linux
+- **Bitmask** has been tested to work on the latest version of Debian, Ubuntu, Fedora and Arch Linux
 - Packages are only available for Ubuntu, Debian and Arch Linux
 
 ## Install
