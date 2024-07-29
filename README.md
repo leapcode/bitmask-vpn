@@ -20,12 +20,25 @@
 
 ## Install
 
-# Arch Linux
+## Build
 
-There are two AUR packages for Arch Linux. There is [riseup-vpn-git](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that). There is also [riseup-vpn](https://aur.archlinux.org/packages/riseup-vpn) with the latest stable release.
+Clone this repo, install dependencies and build the application. Dependencies assume debian packages, or homebrew for osx. For Windows OS see corresponding section below. For other systems try manually, or send us a patch. bitmask-vpn can be branded for a specific provider by specifying the env variable PROVIDER during the build process; we currently support three providers: riseup, calyx, and bitmask. To create a client branded for 'riseup', run:
 
 ```
-yay riseup-vpn
+git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
+sudo make depends  # do not use sudo in osx 
+PROVIDER=riseup make vendor
+make build
+```
+
+# Ubuntu
+
+If you're using Ubuntu, you can use [leapcodes ppa](https://launchpad.net/~leapcodes/+archive/ubuntu/riseup-vpn).
+
+```
+sudo add-apt-repository ppa:leapcodes/riseup-vpn
+sudo apt update
+sudo apt install riseup-vpn
 ```
 
 # Debian
@@ -52,14 +65,13 @@ PROVIDER=riseup QMAKE=qmake6 make package_deb
 ```
 Then install the built package with `apt install -f ./deploy/*.deb`.
 
-# Ubuntu
 
-If you're using Ubuntu, you can use [leapcodes ppa](https://launchpad.net/~leapcodes/+archive/ubuntu/riseup-vpn).
+# Arch Linux
+
+There are two AUR packages for Arch Linux. There is [riseup-vpn-git](https://aur.archlinux.org/packages/riseup-vpn-git) that tracks main branch, so expect some instabilities (early birds catch the bugs they say, and we're thankful for that). There is also [riseup-vpn](https://aur.archlinux.org/packages/riseup-vpn) with the latest stable release.
 
 ```
-sudo add-apt-repository ppa:leapcodes/riseup-vpn
-sudo apt update
-sudo apt install riseup-vpn
+yay riseup-vpn
 ```
 
 ## Snap
