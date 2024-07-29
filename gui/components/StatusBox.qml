@@ -146,6 +146,8 @@ Item {
             Layout.alignment: Qt.AlignBottom
             padding: 0
             display: AbstractButton.IconOnly
+            Accessible.name: qsTr("Turn on")
+            Accessible.role: Accessible.Button
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor
             }
