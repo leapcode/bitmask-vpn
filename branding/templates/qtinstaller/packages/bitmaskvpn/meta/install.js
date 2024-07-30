@@ -194,7 +194,7 @@ function uninstallOSX() {
     // TODO use installer filepath??
     component.addElevatedOperation(
         "Execute", "{0}",
-        "@TargetDir@/post-install", "-action=uninstall", "-stage=preinstall",
+        "@TargetDir@/post-install", "-action=uninstall", "-stage=preinstall", "-appname=@ProductName@",
         "errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach /tmp/bitmask-uninstall.log"
     );
 }
@@ -203,10 +203,10 @@ function postInstallOSX() {
     console.log("Post-installation for OSX");
     component.addElevatedOperation(
         "Execute", "{0}",
-        "@TargetDir@/post-install", "-action=post-install",
+        "@TargetDir@/post-install", "-action=post-install", "-appname=@ProductName@",
         "errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the post-install.log file.",
         "UNDOEXECUTE",
-        "@TargetDir@/post-install", "-action=uninstall"
+        "@TargetDir@/post-install", "-action=uninstall", "-appname=@ProductName@"
     );
 }
 

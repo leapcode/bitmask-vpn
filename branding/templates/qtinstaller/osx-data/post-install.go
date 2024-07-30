@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -72,33 +73,25 @@ var (
 		return filepath.Dir(execPath)
 	}()
 
-	appBundlePath = func() string {
-		names, err := filepath.Glob(filepath.Join(curdir, "*VPN.app"))
-		if err != nil {
-			log.Printf("error finding .app bundle path: %v", err)
-			return ""
-		}
-		if len(names) >= 1 {
-			return names[0]
-		}
-		return ""
-	}()
-
 	// flags
 	installerAction string
 	installerStage  string
+	appName         string
 )
 
 func init() {
 	const (
-		action = "action"
-		stage  = "stage"
+		action  = "action"
+		stage   = "stage"
+		appname = "appname"
 	)
 	var usageAction = fmt.Sprintf("the installer actions: %s", strings.Join([]string{actionPostInstall, actionUninstall}, ","))
-	var usageStage = fmt.Sprintf("the installer action stage: preinstall, uninstall")
+	var usageStage = "the installer action stage: preinstall, uninstall"
+	var usageAppName = "name of the application being installed this is used to form the app bundle name by appending .app to it"
 
 	flag.StringVar(&installerAction, action, "", usageAction)
 	flag.StringVar(&installerStage, stage, stageUninstall, usageStage)
+	flag.StringVar(&appName, appname, "", usageAppName)
 
 	flag.Parse()
 }
@@ -113,7 +106,7 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Println("running action: post-install")
-		if appBundlePath == "" {
+		if appBundlePath() == "" {
 			log.Fatal("could not find path to .app bundle")
 		}
 		err := postInstall()
@@ -126,6 +119,18 @@ func main() {
 	default:
 		log.Fatalf("unknown command supplied: %s", installerAction)
 	}
+}
+
+func appBundlePath() string {
+	path := filepath.Join(curdir, appName+".app")
+	_, err := os.Stat(path)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			log.Printf("unable to find the app bundle path: %v", err)
+			return ""
+		}
+	}
+	return path
 }
 
 func setupLogFile(logFile string) error {
@@ -147,7 +152,7 @@ func postInstall() error {
 
 	log.Println("Changing ownership of 'bitmask-helper'")
 	// change ownership of bitmask-helper to root
-	if err := os.Chown(filepath.Join(appBundlePath, helperName), 0, 0); err != nil {
+	if err := os.Chown(filepath.Join(appBundlePath(), helperName), 0, 0); err != nil {
 		log.Println("error while changing ownership of 'bitmask-helper': ", err)
 	}
 	// copy launchd plist file to target location /Library/LaunchDaemons
@@ -174,7 +179,7 @@ func postInstall() error {
 
 	// change ownership of 'helper' dir
 	log.Println("Changing ownership of 'helper' dir")
-	if err := os.Chown(filepath.Join(appBundlePath, "helper"), 0, 0); err != nil {
+	if err := os.Chown(filepath.Join(appBundlePath(), "helper"), 0, 0); err != nil {
 		log.Println("error while changing ownership of dir 'helper': ", err)
 	}
 	return nil
@@ -186,7 +191,7 @@ func uninstall(stage string) {
 		if err := setupLogFile(filepath.Join("/tmp", fmt.Sprintf("bitmask-%s.log", stage))); err != nil {
 			log.Fatal(err)
 		}
-		if appBundlePath == "" {
+		if appBundlePath() == "" {
 			log.Fatal("could not find path to .app bundle")
 		}
 	default:
@@ -247,7 +252,7 @@ func generatePlist() (string, error) {
 	appPath := struct {
 		Path string
 	}{
-		Path: appBundlePath,
+		Path: appBundlePath(),
 	}
 
 	t, err := template.New("plist").Parse(plistTemplate)
