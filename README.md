@@ -81,7 +81,7 @@ PROVIDER=riseup make vendor
 make build
 ```
 
-You need at least go 1.20.
+To build you need at least go 1.22.
 
 ## Test
 
