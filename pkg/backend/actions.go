@@ -21,6 +21,7 @@ func stopVPN() {
 		log.Warn().
 			Err(err).
 			Msg("Could not stop VPN")
+		setError(err.Error())
 	}
 }
 
