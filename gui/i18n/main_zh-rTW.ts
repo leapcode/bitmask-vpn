@@ -309,23 +309,11 @@ Connection</source>
 連線</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">啟用</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>安全
 連線</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">關閉</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>

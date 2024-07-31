@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>About</name>
     <message>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -309,23 +307,11 @@ Connection</source>
 غير آمن</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">تشغيل</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>اتصال
 آمن</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">إغلاق</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">ألغِ</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -427,8 +413,8 @@ Connection</source>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

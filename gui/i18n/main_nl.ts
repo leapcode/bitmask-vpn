@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
     <name>About</name>
     <message>
@@ -36,7 +34,7 @@
     <message>
         <location filename="../components/Help.qml" line="7"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="20"/>
@@ -78,13 +76,13 @@
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation>Automatisch de beste verbinding gebruiken</translation>
+        <translation>Gebruik automatisch de beste verbinding</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation>Manueel selecteren</translation>
+        <translation>Selecteer manueel</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
@@ -111,7 +109,7 @@
         <location filename="../components/MainView.qml" line="43"/>
         <location filename="../components/MainView.qml" line="66"/>
         <source>Donate</source>
-        <translation>Doneren</translation>
+        <translation>Doneer</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="59"/>
@@ -121,7 +119,7 @@
     <message>
         <location filename="../components/MainView.qml" line="73"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="80"/>
@@ -159,7 +157,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Taal</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
@@ -204,17 +202,17 @@
     <message>
         <location filename="../components/Preferences.qml" line="216"/>
         <source>Use UDP if available</source>
-        <translation>Gebruik UDP wanneer beschikbaar</translation>
+        <translation>Gebruik UDP indien beschikbaar</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -240,7 +238,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit kan een paar minuten duren</translation>
     </message>
 </context>
 <context>
@@ -253,13 +251,13 @@
     <message>
         <location filename="../components/Systray.qml" line="36"/>
         <source>Donate</source>
-        <translation>Doneren</translation>
+        <translation>Doneer</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation>Verbergen</translation>
+        <translation>Verberg</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
@@ -285,7 +283,7 @@
     <message>
         <location filename="../components/Systray.qml" line="79"/>
         <source>Disconnect</source>
-        <translation>Verbinding verbreken</translation>
+        <translation>Verbreek</translation>
     </message>
 </context>
 <context>
@@ -293,7 +291,7 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
@@ -309,23 +307,11 @@ Connection</source>
 Verbinding</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">Inschakelen</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>Beveiligde
 Verbinding</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">Uitschakelen</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuleren</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -365,70 +351,70 @@ Verbinding</translation>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>pluggable transport verbinding</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>verbonden</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met handshake</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>Handshake klaar</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>één-hop verbinding maken</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status opvragen</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status laden</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels laden</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>Descriptors opvragen</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>Descriptors laden</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>cirecuit opbouwen</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>gereed</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -461,11 +447,7 @@ Verbinding</translation>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Autostart uitschakelen voor de volgende keer.</translation>
+        <translation>Automatisch inschakelen.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>

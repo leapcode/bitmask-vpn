@@ -241,6 +241,11 @@
         <source>This can take several minutes</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../components/StatusBox.qml" line="149"/>
+        <source>Turn on</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Systray</name>
@@ -296,7 +301,7 @@
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
-        <location filename="../components/VPNState.qml" line="153"/>
+        <location filename="../components/VPNState.qml" line="155"/>
         <source>Connecting</source>
         <translation type="unfinished"></translation>
     </message>
@@ -307,103 +312,119 @@ Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="117"/>
+        <location filename="../components/VPNState.qml" line="98"/>
+        <source>Turn on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="118"/>
         <source>Secured
 Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="134"/>
+        <source>Turn off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="172"/>
+        <location filename="../components/VPNState.qml" line="211"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="268"/>
+        <location filename="../components/VPNState.qml" line="272"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="271"/>
+        <location filename="../components/VPNState.qml" line="275"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="274"/>
+        <location filename="../components/VPNState.qml" line="278"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="277"/>
+        <location filename="../components/VPNState.qml" line="281"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="284"/>
+        <location filename="../components/VPNState.qml" line="288"/>
         <source>pluggable transport connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="286"/>
+        <location filename="../components/VPNState.qml" line="290"/>
         <source>connection done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="288"/>
+        <location filename="../components/VPNState.qml" line="292"/>
         <source>doing handshake</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="290"/>
+        <location filename="../components/VPNState.qml" line="294"/>
         <source>handshake done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="292"/>
+        <location filename="../components/VPNState.qml" line="296"/>
         <source>creating one-hop connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="294"/>
+        <location filename="../components/VPNState.qml" line="298"/>
         <source>requesting status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="296"/>
+        <location filename="../components/VPNState.qml" line="300"/>
         <source>loading status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="298"/>
+        <location filename="../components/VPNState.qml" line="302"/>
         <source>loading keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="300"/>
+        <location filename="../components/VPNState.qml" line="304"/>
         <source>requesting descriptors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="302"/>
+        <location filename="../components/VPNState.qml" line="306"/>
         <source>loading descriptors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="304"/>
+        <location filename="../components/VPNState.qml" line="308"/>
         <source>creating circuit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="306"/>
+        <location filename="../components/VPNState.qml" line="310"/>
         <source>done</source>
         <translation type="unfinished"></translation>
     </message>

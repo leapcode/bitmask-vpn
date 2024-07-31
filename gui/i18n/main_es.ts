@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>About</name>
     <message>
@@ -131,7 +129,7 @@
     <message>
         <location filename="../components/MainView.qml" line="87"/>
         <source>Quit</source>
-        <translation>Cerrar</translation>
+        <translation>Salir</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="111"/>
@@ -159,12 +157,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
         <source>Censorship circumvention</source>
-        <translation>Anti-censura</translation>
+        <translation>Evasión de censura</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="113"/>
@@ -184,7 +182,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="167"/>
         <source>Use Snowflake</source>
-        <translation>Usar Snowflake</translation>
+        <translation>Usa Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="182"/>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -240,7 +238,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Esto puede llevar varios minutos</translation>
     </message>
 </context>
 <context>
@@ -270,7 +268,7 @@
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits the application</extracomment>
-        <translation>Cerrar</translation>
+        <translation>Salir</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
@@ -293,7 +291,7 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>Estableciendo</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
@@ -309,23 +307,11 @@ Connection</source>
 Insegura</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">Encender</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>Conexión
 Segura</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">Apagar</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancelar</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -336,7 +322,7 @@ Segura</translation>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>off</source>
-        <translation>off</translation>
+        <translation>inactivo</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="268"/>
@@ -365,70 +351,70 @@ Segura</translation>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>conexión de transporte conectable</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>conexión realizada</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>haciendo negociación</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>negociación realizada</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>creando conexión de un salto</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>solicitando estado</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>cargando estado</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>cargando claves</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>solicitando descriptores</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>cargando descriptores</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>creando circuito</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>terminado</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -461,11 +447,7 @@ Segura</translation>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Deshabilitar arranque automático para la siguiente ejecución.</translation>
+        <translation>Habilitar autoarranque.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>

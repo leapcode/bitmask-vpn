@@ -159,7 +159,7 @@ $2</translation>
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Linguagem</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
@@ -309,23 +309,11 @@ Connection</source>
 Insegura</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">Ligar</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>Conexão
 Segura</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">Desligar</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancelar</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>

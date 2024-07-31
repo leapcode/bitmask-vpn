@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="lt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="lt">
 <context>
     <name>About</name>
     <message>
@@ -36,7 +34,7 @@
     <message>
         <location filename="../components/Help.qml" line="7"/>
         <source>Help</source>
-        <translation>Žinynas</translation>
+        <translation>Pagalba</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="20"/>
@@ -116,12 +114,12 @@
     <message>
         <location filename="../components/MainView.qml" line="59"/>
         <source>Preferences</source>
-        <translation>Nuostatos</translation>
+        <translation>Parinktys</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="73"/>
         <source>Help</source>
-        <translation>Žinynas</translation>
+        <translation>Pagalba</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="80"/>
@@ -131,7 +129,7 @@
     <message>
         <location filename="../components/MainView.qml" line="87"/>
         <source>Quit</source>
-        <translation>Išeiti</translation>
+        <translation>Baigti</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="111"/>
@@ -149,7 +147,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
-        <translation>Nuostatos</translation>
+        <translation>Parinktys</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="55"/>
@@ -159,7 +157,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalba</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
@@ -184,7 +182,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="167"/>
         <source>Use Snowflake</source>
-        <translation>Naudoti „Snowflake“</translation>
+        <translation>Naudoti Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="182"/>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -240,7 +238,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tai gali užtrukti keletą minučių</translation>
     </message>
 </context>
 <context>
@@ -270,7 +268,7 @@
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits the application</extracomment>
-        <translation>Išeiti</translation>
+        <translation>Baigti</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
@@ -293,7 +291,7 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>Nustatoma</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
@@ -309,23 +307,11 @@ Connection</source>
 ryšys</translation>
     </message>
     <message>
-        <source>Turn on</source>
-        <translation type="vanished">Įjungti</translation>
-    </message>
-    <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
         <translation>Apsaugotas
 ryšys</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">Išjungti</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Atsisakyti</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -365,70 +351,70 @@ ryšys</translation>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>keičiamojo perdavimo ryšys</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>ryšys atliktas</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>atliekamas išankstinis suderinimas</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>išankstinis suderinimas atliktas</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>kuriamas vieno šuolio ryšys</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>užklausimo būsena</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>įkėlimo būsena</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>įkeliami raktai</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>užklausiami deskriptoriai</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>įkeliami deskriptoriai</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>kuriama grandinė</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>atlikta</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -461,11 +447,7 @@ ryšys</translation>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Išjungti automatinį paleidimą kitam paleidimui.</translation>
+        <translation>Įjungti automatinį paleidimą.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>

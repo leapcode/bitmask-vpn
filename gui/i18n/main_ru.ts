@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>About</name>
     <message>
@@ -12,7 +10,7 @@
         <location filename="../components/About.qml" line="80"/>
         <source>&lt;p&gt;This service is paid for entirely by donations from users like you. &lt;a href=&quot;%1&quot;&gt;Please donate&lt;/a&gt;.&lt;/p&gt;</source>
         <extracomment>donation text of the about dialog</extracomment>
-        <translation>&lt;p&gt;Этот сервис поддерживается только благодаря таким людям, как вы. &lt;a href=&quot;%1&quot;&gt;Пожалуйста, пожертвуйте&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Этот сервис полностью оплачивается за счет пожертвований таких пользователей, как вы. &lt;a href=&quot;%1&quot;&gt;Пожалуйста, сделайте пожертвование&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="103"/>
@@ -111,7 +109,7 @@
         <location filename="../components/MainView.qml" line="43"/>
         <location filename="../components/MainView.qml" line="66"/>
         <source>Donate</source>
-        <translation>Пожертвуйте</translation>
+        <translation>Пожертвовать</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="59"/>
@@ -141,7 +139,7 @@
     <message>
         <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Этот сервис поддерживается только благодаря таким людям, как вы. Стоимость VPN — примерно 5$/мес/чел., но нам важен каждый цент. Хотите пожертвовать прямо сейчас?</translation>
+        <translation>Этот сервис полностью оплачивается за счет пожертвований таких пользователей, как вы. Стоимость использования VPN составляет примерно 5 долларов США на человека в месяц, но важен каждый цент. Вы хотите сделать пожертвование прямо сейчас?</translation>
     </message>
 </context>
 <context>
@@ -149,12 +147,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="11"/>
         <source>Preferences</source>
-        <translation>Предпочтений</translation>
+        <translation>Предпочтения</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="55"/>
         <source>Turn off the VPN to make changes</source>
-        <translation>Выключите VPN для изменений</translation>
+        <translation>Отключите VPN, чтобы внести изменения</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
@@ -169,7 +167,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="113"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation>Эти способы позволяют обойти цензуру, но замедляют соединение. Используйте по необходимости.</translation>
+        <translation>Эти методы позволяют обойти цензуру, но работают медленнее. Используйте их только при необходимости.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="127"/>
@@ -189,7 +187,7 @@
     <message>
         <location filename="../components/Preferences.qml" line="182"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation>Требуется наличие Tor в системе</translation>
+        <translation>Snowflake нуждается в установке Tor в вашей системе</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="195"/>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -227,7 +225,7 @@
     <message>
         <location filename="../components/Splash.qml" line="101"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation>Перед запуском новой программы установки обязательно &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;удалите&lt;/a&gt; предыдущую.</translation>
+        <translation>Перед запуском новой установки обязательно &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;удалите&lt;/a&gt; предыдущую.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="105"/>
@@ -280,7 +278,7 @@
     <message>
         <location filename="../components/Systray.qml" line="76"/>
         <source>Connect</source>
-        <translation>Установить соединение</translation>
+        <translation>Подключить</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="79"/>
@@ -305,33 +303,21 @@
         <location filename="../components/VPNState.qml" line="82"/>
         <source>Unsecured
 Connection</source>
-        <translation>Соединение не
-защищено</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="vanished">ВКЛ</translation>
+        <translation>Соединение 
+не защищено</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
-        <translation>Защищено
+        <translation>Защищенное
 Соединение</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">ВЫКЛ</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Отменить</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Статус %1: включено</translation>
+        <translation>%1 выключено</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -342,7 +328,7 @@ Connection</source>
         <location filename="../components/VPNState.qml" line="268"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
-        <translation>Статус %1: выключено</translation>
+        <translation>%1 включено</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="271"/>
@@ -375,7 +361,7 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation>рукопожатие</translation>
+        <translation>выполняется рукопожатие</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
@@ -415,20 +401,20 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation>создание цепи</translation>
+        <translation>создание цепочки</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation>ok</translation>
+        <translation>выполнено</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -471,7 +457,7 @@ Connection</source>
     <message>
         <location filename="../main.cpp" line="180"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
-        <translation>Запустить VPN, выбрав &quot;вкл.&quot; или &quot;выкл.&quot;.</translation>
+        <translation>Запуск VPN, или &quot;вкл.&quot; или &quot;выкл.&quot;.</translation>
     </message>
 </context>
 </TS>

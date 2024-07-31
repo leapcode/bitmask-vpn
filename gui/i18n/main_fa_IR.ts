@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fa_IR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fa_IR">
 <context>
     <name>About</name>
     <message>
         <location filename="../components/About.qml" line="9"/>
         <source>About</source>
-        <translation>‫‫درباره‬</translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../components/About.qml" line="80"/>
@@ -19,7 +17,8 @@
         <source>%1 version: 
 %2</source>
         <extracomment>screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png %1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 نسخه: 
+%2</translation>
     </message>
 </context>
 <context>
@@ -27,7 +26,7 @@
     <message>
         <location filename="../components/Footer.qml" line="180"/>
         <source>Recommended</source>
-        <translation>توصیه می‌شود</translation>
+        <translation>توصیه‌شده</translation>
     </message>
 </context>
 <context>
@@ -40,17 +39,17 @@
     <message>
         <location filename="../components/Help.qml" line="20"/>
         <source>Troubleshooting and support</source>
-        <translation type="unfinished"></translation>
+        <translation>عیب‌یابی و پشتیبانی</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="31"/>
         <source>Report a bug</source>
-        <translation type="unfinished"></translation>
+        <translation>گزارش اشکال</translation>
     </message>
     <message>
         <location filename="../components/Help.qml" line="42"/>
         <source>How to uninstall</source>
-        <translation type="unfinished"></translation>
+        <translation>نحوه حذف برنامه</translation>
     </message>
 </context>
 <context>
@@ -71,37 +70,37 @@
     <message>
         <location filename="../components/Locations.qml" line="21"/>
         <source>Select Location</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب مکان</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="27"/>
         <source>Automatically use best connection</source>
         <extracomment>this is in the radio button for the auto selection</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از بهترین مکان به صورت خودکار</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب دستی</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
         <source>Switching gateway…</source>
         <extracomment>A little display to signal that the clicked gateway is being switched to</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>در حال تعویض دروازه…</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>فقط مکان‌های دارای پل</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
         <source>Recommended</source>
         <extracomment>Location Selection: label for radio button that selects automatically</extracomment>
-        <translation>توصیه می‌شود</translation>
+        <translation>توصیه‌شده</translation>
     </message>
 </context>
 <context>
@@ -125,7 +124,7 @@
     <message>
         <location filename="../components/MainView.qml" line="80"/>
         <source>About</source>
-        <translation>‫‫درباره‬</translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="87"/>
@@ -135,12 +134,12 @@
     <message>
         <location filename="../components/MainView.qml" line="111"/>
         <source>Please donate!</source>
-        <translation type="unfinished"></translation>
+        <translation>لطفا حمایت کنید!</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation type="unfinished"></translation>
+        <translation>هزینه این سرویس به طور کامل از طریق کمک‌های مالی کاربرانی مانند شما پرداخت می‌شود. هزینه اجرای VPN تقریبا 5 دلار برای هر نفر در ماه است، اما کوچکترین کمک هم مهم است. تمایل دارید الآن کمک کنید؟</translation>
     </message>
 </context>
 <context>
@@ -153,22 +152,22 @@
     <message>
         <location filename="../components/Preferences.qml" line="55"/>
         <source>Turn off the VPN to make changes</source>
-        <translation type="unfinished"></translation>
+        <translation>برای اعمال تغییرات VPN را خاموش کنید</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>زبان</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
         <source>Censorship circumvention</source>
-        <translation type="unfinished"></translation>
+        <translation>دور زدن سانسور</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="113"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>این تکنیک‌ها می‌توانند سانسور را دور بزنند، اما کندتر هستند. فقط در صورت نیاز از آن‌ها استفاده کنید.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="127"/>
@@ -178,42 +177,42 @@
     <message>
         <location filename="../components/Preferences.qml" line="153"/>
         <source>Traffic is obfuscated to bypass blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>ترافیک برای دور زدن مسدودیت‌ها مبهم شده است</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="167"/>
         <source>Use Snowflake</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از Snowflake</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="182"/>
         <source>Snowflake needs Tor installed in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>Snowflake نیاز به نصب تور در سیستم شما دارد</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="195"/>
         <source>Transport</source>
-        <translation type="unfinished"></translation>
+        <translation>حامل</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="203"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP می تواند VPN را سریع‌تر کند. هرچند ممکن است در برخی از شبکه‌ها مسدود شده باشد.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="216"/>
         <source>Use UDP if available</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از UDP در صورت مهیا بودن</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -221,17 +220,17 @@
     <message>
         <location filename="../components/Splash.qml" line="101"/>
         <source>There is a newer version available. </source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه جدیدتری موجود است.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="101"/>
         <source>Make sure to &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;uninstall&lt;/a&gt; the previous one before running the new installer.</source>
-        <translation type="unfinished"></translation>
+        <translation>قبل از اجرای فایل نصب جدید، از &lt;a href=&quot;https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md&quot;&gt;حذف&lt;/a&gt; نسخه قبلی مطمئن شوید.</translation>
     </message>
     <message>
         <location filename="../components/Splash.qml" line="105"/>
         <source>UPGRADE NOW</source>
-        <translation type="unfinished"></translation>
+        <translation>اکنون ارتقا دهید</translation>
     </message>
 </context>
 <context>
@@ -239,7 +238,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>این ممکن است چند دقیقه طول بکشد</translation>
     </message>
 </context>
 <context>
@@ -258,12 +257,12 @@
         <location filename="../components/Systray.qml" line="45"/>
         <source>Hide</source>
         <extracomment>Part of the systray menu; show or hide the main app window</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>پنهان کردن</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="45"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="57"/>
@@ -274,7 +273,7 @@
     <message>
         <location filename="../components/Systray.qml" line="74"/>
         <source>Connect to</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="76"/>
@@ -284,7 +283,7 @@
     <message>
         <location filename="../components/Systray.qml" line="79"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
 </context>
 <context>
@@ -292,37 +291,27 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>راه اندازی</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
         <location filename="../components/VPNState.qml" line="153"/>
         <source>Connecting</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="82"/>
         <source>Unsecured
 Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="vanished">روشن کردن</translation>
+        <translation>اتصال
+ناامن</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">خاموش کردن</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">انصراف</translation>
+        <translation>اتصال
+امن</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -333,7 +322,7 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
         <source>off</source>
-        <translation type="unfinished"></translation>
+        <translation>خاموش</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="268"/>
@@ -362,70 +351,70 @@ Connection</source>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال حامل‌های قابل اتصال</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال انجام شد</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>انجام دست دادن</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>دست دادن انجام شد</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد اتصال تک هاپ</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست وضعیت</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>بارگذاری وضعیت</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>بارگذاری کلیدها</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست توصیف‌گرها</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>بارگذاری توصیف‌گرها</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد زنجیره</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>انجام شد</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -458,11 +447,7 @@ Connection</source>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">شروع اتوماتیک را در اجرای بعد غیر فعال کن.</translation>
+        <translation>شروع خودکار را فعال کنید.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>

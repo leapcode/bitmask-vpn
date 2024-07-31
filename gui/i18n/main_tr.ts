@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>About</name>
     <message>
@@ -59,7 +57,7 @@
     <message>
         <location filename="../components/InitErrors.qml" line="31"/>
         <source>Could not find helpers. Please check your installation</source>
-        <translation>Yardımcılar bulunamadı, lütfen kurulumunuzu denetleyin.</translation>
+        <translation>Yardımcılar bulunamadı. Lütfen kurulumunuzu denetleyin.</translation>
     </message>
     <message>
         <location filename="../components/InitErrors.qml" line="44"/>
@@ -84,7 +82,7 @@
         <location filename="../components/Locations.qml" line="29"/>
         <source>Manually select</source>
         <extracomment>Location Selection: label for radio buttons that selects manually</extracomment>
-        <translation>El ile seçin</translation>
+        <translation>El ile seçim</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="31"/>
@@ -96,7 +94,7 @@
         <location filename="../components/Locations.qml" line="33"/>
         <source>Only locations with bridges</source>
         <extracomment>Subtitle to explain that only bridge locations are shown in the selector</extracomment>
-        <translation>Yalnız köprü ile ulaşılan konumlar</translation>
+        <translation>Yalnızca köprü ile ulaşılan konumlar</translation>
     </message>
     <message>
         <location filename="../components/Locations.qml" line="65"/>
@@ -131,7 +129,7 @@
     <message>
         <location filename="../components/MainView.qml" line="87"/>
         <source>Quit</source>
-        <translation>Çık</translation>
+        <translation>Çıkış</translation>
     </message>
     <message>
         <location filename="../components/MainView.qml" line="111"/>
@@ -141,7 +139,7 @@
     <message>
         <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Bu hizmet tamamen sizin gibi kullanıcıların bağışları sayesinde sunulabiliyor. Bir VPN ağını işletme maliyeti, kişi başına aylık 5 dolar civarındadır, ancak her katkı değerlidir. Siz de bağış yapmak ister misiniz?</translation>
+        <translation>Bu hizmet tamamen sizin gibi kullanıcıların bağışları sayesinde sunulabiliyor. Bir VPN ağını işletme maliyeti, kişi başına aylık 5 Amerikan doları civarındadır. Ancak her katkı değerlidir. Siz de bağış yapmak ister misiniz?</translation>
     </message>
 </context>
 <context>
@@ -159,17 +157,17 @@
     <message>
         <location filename="../components/Preferences.qml" line="71"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Dil</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="105"/>
         <source>Censorship circumvention</source>
-        <translation>Sansürü aşma</translation>
+        <translation>Engellemeyi aşma</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="113"/>
         <source>These techniques can bypass censorship, but are slower. Use them only when needed.</source>
-        <translation>Bu yöntemler sansürü aşabilir, ancak yavaştır. Yalnız gerek duyduğunuz zaman kullanın.</translation>
+        <translation>Bu yöntemler engellemeyi aşabilir, ancak yavaştır. Yalnızca gerek duyduğunuz zaman kullanın.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="127"/>
@@ -209,12 +207,12 @@
     <message>
         <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bazı ağlarda UDP engellenmişse KCP çalışabilir.</translation>
     </message>
     <message>
         <location filename="../components/Preferences.qml" line="244"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"></translation>
+        <translation>Mevcut ise KCP kullan</translation>
     </message>
 </context>
 <context>
@@ -240,7 +238,7 @@
     <message>
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu işlem birkaç dakika sürebilir</translation>
     </message>
 </context>
 <context>
@@ -270,7 +268,7 @@
         <location filename="../components/Systray.qml" line="57"/>
         <source>Quit</source>
         <extracomment>Part of the systray menu; quits the application</extracomment>
-        <translation>Çık</translation>
+        <translation>Çıkış</translation>
     </message>
     <message>
         <location filename="../components/Systray.qml" line="74"/>
@@ -293,7 +291,7 @@
     <message>
         <location filename="../components/VPNState.qml" line="26"/>
         <source>Setting up</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuruluyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
@@ -305,27 +303,15 @@
         <location filename="../components/VPNState.qml" line="82"/>
         <source>Unsecured
 Connection</source>
-        <translation>Güvenilmez
+        <translation>Güvenli olmayan
 bağlantı</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation type="vanished">Aç</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="117"/>
         <source>Secured
 Connection</source>
-        <translation>Güvenilir
+        <translation>Güvenli
 bağlantı</translation>
-    </message>
-    <message>
-        <source>Turn off</source>
-        <translation type="vanished">Kapat</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Vazgeç</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="265"/>
@@ -365,70 +351,70 @@ bağlantı</translation>
     <message>
         <location filename="../components/VPNState.qml" line="284"/>
         <source>pluggable transport connection</source>
-        <translation type="unfinished"></translation>
+        <translation>değiştirilebilir taşıyıcı bağlantısı</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="286"/>
         <source>connection done</source>
-        <translation type="unfinished"></translation>
+        <translation>bağlantı kuruldu</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="288"/>
         <source>doing handshake</source>
-        <translation type="unfinished"></translation>
+        <translation>el sıkışılıyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="290"/>
         <source>handshake done</source>
-        <translation type="unfinished"></translation>
+        <translation>el sıkışma tamamlandı</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="292"/>
         <source>creating one-hop connection</source>
-        <translation type="unfinished"></translation>
+        <translation>bir duraklı bağlantı oluşturuluyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="294"/>
         <source>requesting status</source>
-        <translation type="unfinished"></translation>
+        <translation>durum isteniyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="296"/>
         <source>loading status</source>
-        <translation type="unfinished"></translation>
+        <translation>durum yükleniyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="298"/>
         <source>loading keys</source>
-        <translation type="unfinished"></translation>
+        <translation>anahtarlar yükleniyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="300"/>
         <source>requesting descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>belirteçler isteniyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="302"/>
         <source>loading descriptors</source>
-        <translation type="unfinished"></translation>
+        <translation>belirteçler yükleniyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="304"/>
         <source>creating circuit</source>
-        <translation type="unfinished"></translation>
+        <translation>devre kuruluyor</translation>
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="306"/>
         <source>done</source>
-        <translation type="unfinished"></translation>
+        <translation>bitti</translation>
     </message>
 </context>
 <context>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source></source>
-        <translation></translation>
+        <source/>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -451,26 +437,22 @@ bağlantı</translation>
     <message>
         <location filename="../main.cpp" line="160"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Yardımcıları kur (yalnız Linux üzerinde ve sudo gereklidir)</translation>
+        <translation>Yardımcıları kur (yalnızca Linux üzerinde ve sudo gereklidir)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="166"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
-        <translation>Trafiği gizlemek için obfs4 kullanılsın. Yalnız hizmet sağlayıcıda kullanılabiliyorsa</translation>
+        <translation>Trafiği gizlemek için obfs4 kullanılsın. Yalnızca hizmet sağlayıcıda kullanılabiliyorsa</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="172"/>
         <source>Enable autostart.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable autostart for the next run.</source>
-        <translation type="vanished">Sonraki çalıştırmada otomatik başlatma devre dışı bırakılsın</translation>
+        <translation>Otomatik başlatma kullanılsın.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="177"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Web API kapı numarası (varsayılan: 8080)</translation>
+        <translation>Web API bağlantı noktası (varsayılan: 8080)</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="180"/>
