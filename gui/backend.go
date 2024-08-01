@@ -92,6 +92,8 @@ func InitializeBitmaskContext(provider string,
 	opts.Obfs4 = obfs4
 	opts.DisableAutostart = disableAutostart
 	opts.StartVPN = startVPN
+	opts.DisableAutostart = true
+	opts.SkipLaunch = true
 	go backend.InitializeBitmaskContext(opts)
 }
 
