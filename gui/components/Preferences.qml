@@ -309,7 +309,7 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useBridgesCheckBox
-                    enabled: true
+                    enabled: true && (ctx && ctx.provider == "bitmask")
                 }
                 PropertyChanges {
                     target: useUDP
@@ -317,7 +317,7 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useKCP
-                    enabled: true
+                    enabled: true && (ctx && ctx.provider == "bitmask")
                 }
             }
         ]
@@ -325,6 +325,9 @@ ThemedPage {
 
     function areBridgesAvailable() {
         // FIXME check if provider offers it
+        if (ctx && ctx.provider == "riseup") {
+            return false
+        }
         let providerSupport = true
         return providerSupport && !useUDP.checked
     }
@@ -364,11 +367,11 @@ ThemedPage {
         if (ctx && ctx.offersUdp && ctx.udp == "true") {
             useUDP.checked = true
         }
-        if (ctx && ctx.transport == "obfs4") {
+        if (ctx && ctx.transport == "obfs4" && ctx.provider == "bitmask") {
             useBridgesCheckBox.checked = true
             useUDP.enabled = false
         }
-        if (ctx && ctx.transport == "kcp") {
+        if (ctx && ctx.transport == "kcp" && ctx.provider == "bitmask") {
             useKCP.checked = true
             useBridgesCheckBox.checked = true
             useBridgesCheckBox.enabled = false
