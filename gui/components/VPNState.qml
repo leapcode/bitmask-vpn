@@ -63,7 +63,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: false
-                icon.source: Theme.buttonConnecting
+                contentItem.source: Theme.buttonConnecting
             }
             PropertyChanges {
                 target: systray
@@ -94,7 +94,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                icon.source: Theme.buttonDisconnected
+                contentItem.source: Theme.buttonDisconnected
                 Accessible.name: qsTr("Turn on")
             }
             PropertyChanges {
@@ -130,7 +130,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                icon.source: Theme.buttonConnected
+                contentItem.source: Theme.buttonConnected
                 Accessible.name: qsTr("Turn off")
             }
             PropertyChanges {
@@ -168,7 +168,7 @@ StateGroup {
             PropertyChanges {
                 target: toggleVPN
                 enabled: true
-                icon.source: Theme.buttonConnecting
+                contentItem.source: Theme.buttonConnecting
                 Accessible.name: qsTr("Cancel")
             }
             PropertyChanges {
@@ -207,7 +207,7 @@ StateGroup {
             }
             PropertyChanges {
                 target: toggleVPN
-                icon.source: Theme.buttonConnecting
+                contentItem.source: Theme.buttonConnecting
                 Accessible.name: qsTr("Cancel")
             }
             PropertyChanges {

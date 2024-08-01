@@ -151,11 +151,10 @@ Item {
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor
             }
-            icon {
+            contentItem: Image {
+                anchors.fill: parent
                 source: Theme.buttonDisconnected
-                height: 48
-                width: 48
-                color: "transparent"
+                mipmap: true
             }
 
             onClicked: {
