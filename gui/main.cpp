@@ -46,31 +46,48 @@ QString getProviderConfig(QJsonValue info, QString provider, QString key, QStrin
     return defaultValue;
 }
 
+// Function to get custom locale name
+QString getCustomLocaleName(const QString &localeCode) {
+    QLocale locale(localeCode);
+    QString language = QLocale::languageToString(locale.language());
+
+    // Special handling for the default locale
+    if (language == "C" || language == "en") {
+        return "English";
+    }
+
+    QString territory = locale.territory() != QLocale::AnyTerritory ? QLocale::territoryToString(locale.territory()) : "";
+
+    if (!territory.isEmpty()) {
+        return QString("%1 (%2)").arg(language, territory);
+    }
+    return language;
+}
+
 QList<QVariant> getAvailableLocales() {
     QString localePath = ":/i18n";
     QDir dir(localePath);
     QStringList fileNames = dir.entryList(QStringList("*.qm"));
 
     QList<QVariant> locales;
-    for (int i = 0; i < fileNames.size(); ++i) {
-        // get locale extracted by filename
-        QString localeName;
-        localeName = fileNames[i]; // "de.qm"
-        localeName.truncate(localeName.lastIndexOf('.')); // "de"
+    for (const QString &fileName : fileNames) {
+        // Extract locale code from filename
+        QString localeCode = fileName;
+        localeCode.truncate(localeCode.lastIndexOf('.')); // "main_es_CU.qm" -> "main_es_CU"
 
-        if (localeName == "base") {
-            localeName = "en";
+        if (localeCode == "main_base") {
+            localeCode = "en";
         } else {
-            // remove main_ prefix
-            localeName = localeName.mid(5);
+            // Remove "main_" prefix; main_es_CU -> es_CU
+            localeCode = localeCode.mid(5);
         }
 
+        // Get custom locale name
+        QString localeName = getCustomLocaleName(localeCode);
 
-        QLocale locale = QLocale(localeName);
-        QString name = QLocale::languageToString(locale.language());
         QVariantMap localeObject;
-        localeObject.insert("locale", localeName);
-        localeObject.insert("name", name);
+        localeObject.insert("locale", localeCode);
+        localeObject.insert("name", localeName);
         locales.push_back(localeObject);
     }
 
