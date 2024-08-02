@@ -64,6 +64,7 @@ QString getCustomLocaleName(const QString &localeCode) {
     return language;
 }
 
+// Function to get available locales and sort them alphabetically
 QList<QVariant> getAvailableLocales() {
     QString localePath = ":/i18n";
     QDir dir(localePath);
@@ -90,6 +91,11 @@ QList<QVariant> getAvailableLocales() {
         localeObject.insert("name", localeName);
         locales.push_back(localeObject);
     }
+
+    // Sort locales alphabetically by name, case-insensitive
+    std::sort(locales.begin(), locales.end(), [](const QVariant &a, const QVariant &b) {
+        return a.toMap().value("name").toString().toLower() < b.toMap().value("name").toString().toLower();
+    });
 
     return locales;
 }
