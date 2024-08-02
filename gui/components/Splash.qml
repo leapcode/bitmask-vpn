@@ -53,7 +53,7 @@ Page {
 
         Image {
             id: connectionImage
-            height: 180
+            height: 135
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             source: customTheme.iconSplash
