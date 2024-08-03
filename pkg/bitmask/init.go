@@ -102,12 +102,21 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 }
 
 func setTransport(b Bitmask, conf *config.Config) error {
+	if config.Provider == "riseup" {
+		log.Info().Msg("Using transport openvpn")
+		err := b.SetTransport("openvpn")
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 	if conf.Obfs4 {
 		log.Info().Msg("Using transport obfs4")
 		err := b.SetTransport("obfs4")
 		if err != nil {
 			return err
 		}
+		return nil
 	}
 	if conf.KCP {
 		log.Info().Msg("Using transport kcp")
