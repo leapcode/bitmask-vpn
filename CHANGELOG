@@ -2,6 +2,17 @@ development
 ===========
 - ...
 
+0.24.8-rc.3
+======
+- Reduces the size of splash screen image
+- Disable obfs4 and kcp checkbox in preferences for riseup
+- Removes duplicate languages in the language picker in preferences
+- Language picker in preferences shows languages sorted alphabetically
+- Updates translation files
+- Adds region to language selections menu when available
+- Improves UI responsiveness when connect or disconnect fails
+- Disable automatic openvpn connection during app start
+
 0.24.8-rc.2
 ======
 - Fixes a local privilege escalation security bug when using "--install-helpers"
