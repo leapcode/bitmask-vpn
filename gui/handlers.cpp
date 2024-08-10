@@ -99,7 +99,6 @@ void Backend::resetNotification(QString label)
 
 void Backend::quit()
 {
-    Quit();
     emit this->quitDone();
 }
 
