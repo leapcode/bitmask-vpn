@@ -378,6 +378,7 @@ tgz:
 
 gen_pkg_deb:
 ifeq (${PLATFORM}, linux)
+	@mkdir -p build/${PROVIDER}/
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
 ifeq (${VENDOR_PATH}, providers)
@@ -393,6 +394,7 @@ endif
 
 gen_pkg_snap:
 ifeq (${PLATFORM}, linux)
+	@mkdir -p build/${PROVIDER}
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
 	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
 	@cp pkg/pickle/helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
