@@ -191,6 +191,38 @@ ThemedPage {
                     Layout.preferredWidth: 220
                 }
 
+                MaterialCheckBox {
+                    id: useKCP
+                    text: qsTr("Use KCP if available")
+                    enabled: areBridgesAvailable()
+                    checked: false
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                    onClicked: {
+                        useKcp(checked);
+                        useUDP.enabled = !checked;
+                        useBridgesCheckBox.enabled = !checked;
+                        useBridgesCheckBox.checked = checked;
+                    }
+                }
+
+                Label {
+                    text: qsTr("Obfs4 with KCP can help to bypass blocks")
+                    width: parent.width
+                    color: useKCP.enabled ? Material.foreground : Material.hintTextColor
+                    visible: true
+                    wrapMode: Text.Wrap
+                    font.pixelSize: Theme.fontSize - 5
+                    Layout.leftMargin: 36
+                    Layout.rightMargin: 15
+                    Layout.bottomMargin: 5
+                    Layout.topMargin: -5
+                    Layout.preferredWidth: 220
+                }
+
                 Label {
                     text: qsTr("Transport")
                     font.bold: true
@@ -224,36 +256,6 @@ ThemedPage {
                     onClicked: {
                         doUseUDP(checked)
                         useBridgesCheckBox.enabled = areBridgesAvailable()
-                    }
-                }
-
-                Label {
-                    text: qsTr("KCP might work when UDP is blocked on some networks.")
-                    width: parent.width
-                    color: Material.foreground
-                    visible: true
-                    wrapMode: Text.Wrap
-                    font.pixelSize: Theme.fontSize - 3
-                    Layout.leftMargin: 10
-                    Layout.rightMargin: 10
-                    Layout.preferredWidth: 240
-                }
-
-                MaterialCheckBox {
-                    id: useKCP
-                    text: qsTr("Use KCP if available")
-                    enabled: areBridgesAvailable()
-                    checked: false
-                    Layout.leftMargin: 10
-                    Layout.rightMargin: 10
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
-                    }
-                    onClicked: {
-                        useKcp(checked);
-                        useUDP.enabled = !checked;
-                        useBridgesCheckBox.enabled = !checked;
-                        useBridgesCheckBox.checked = checked;
                     }
                 }
             }
