@@ -2,7 +2,7 @@ development
 ===========
 - ...
 
-0.24.8-rc.3
+0.24.8
 ======
 - Reduces the size of splash screen image
 - Disable obfs4 and kcp checkbox in preferences for riseup
@@ -12,9 +12,6 @@ development
 - Adds region to language selections menu when available
 - Improves UI responsiveness when connect or disconnect fails
 - Disable automatic openvpn connection during app start
-
-0.24.8-rc.2
-======
 - Fixes a local privilege escalation security bug when using "--install-helpers"
 - Change bitmask branded app name to Bitmask from BitmaskVPN
 - Fixes bug where MOTD message box was not shown for RiseupVPN
@@ -22,9 +19,6 @@ development
 - Show license page during installation
 - Uninstalls previous version before installing current version
 - Adds accessibility hints to connection button
-
-0.24.8-rc.1
-======
 - Exposes KCP support in the UI
 - Adds new bitmask-vpn package for Arch Linux
 - Fixes a bug preventing use of the app by non-admin users on windows
