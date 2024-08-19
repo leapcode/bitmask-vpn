@@ -119,7 +119,6 @@ jobs:
           make vendor
           make build
           make installer
-          chmod +x ./build/installer/RiseupVPN-installer-unknown.app/Contents/MacOS/RiseupVPN-installer-unknown
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
