@@ -17,6 +17,8 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
+	"io/fs"
 	"os"
 	"path"
 	"time"
@@ -61,8 +63,10 @@ func ParseConfig() *Config {
 	var conf Config
 
 	f, err := os.Open(configPath)
-	if err != nil {
-		conf.save()
+	if err != nil && errors.Is(err, fs.ErrNotExist) {
+		log.Debug().
+			Msg("Config file doesn't exist. Using default values to create")
+		conf.setDefaults()
 	} else {
 		defer f.Close()
 		dec := json.NewDecoder(f)
@@ -82,6 +86,13 @@ func ParseConfig() *Config {
 	conf.Snowflake = conf.file.Snowflake
 	conf.KCP = conf.file.KCP
 	return &conf
+}
+
+func (c *Config) setDefaults() {
+	if err := c.SetUseUDP(true); err != nil {
+		log.Err(err).
+			Msg("Unable to set default for UDP config")
+	}
 }
 
 func (c *Config) SetUserStoppedVPN(vpnStopped bool) error {
