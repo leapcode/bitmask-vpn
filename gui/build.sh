@@ -21,7 +21,7 @@ SOURCE_GOLIB=gui/backend.go
 
 MAKE=${MAKE:=make}
 QTBUILD=build/qt
-RELEASE=$QTBUILD/release
+RELEASE_DIR=$QTBUILD/release
 DEBUGP=$QTBUILD/debug
 
 PLATFORM=$(uname -s)
@@ -103,23 +103,23 @@ function renameOutput {
         if [ "$DEBUG" == "1" ]
         then
           echo "[+] Selecting DEBUG build"
-          mv $DEBUGP/bitmask $RELEASE/$TARGET
+          mv $DEBUGP/bitmask $RELEASE_DIR/$TARGET
         else
           echo "[+] Selecting RELEASE build"
-          mv $RELEASE/bitmask $RELEASE/$TARGET
-          strip $RELEASE/$TARGET
+          mv $RELEASE_DIR/bitmask $RELEASE_DIR/$TARGET
+          strip $RELEASE_DIR/$TARGET
         fi
-        echo "[+] Binary is in" $RELEASE/$TARGET
+        echo "[+] Binary is in" $RELEASE_DIR/$TARGET
     elif  [ "$PLATFORM" == "Darwin" ]
     then
-        rm -rf $RELEASE/$TARGET.app
-        mv $RELEASE/bitmask.app/ $RELEASE/$TARGET.app/
-	mv $RELEASE/$TARGET.app/Contents/MacOS/bitmask $RELEASE/$TARGET.app/Contents/MacOS/$APPNAME
+        rm -rf $RELEASE_DIR/$TARGET.app
+        mv $RELEASE_DIR/bitmask.app/ $RELEASE_DIR/$TARGET.app/
+	mv $RELEASE_DIR/$TARGET.app/Contents/MacOS/bitmask $RELEASE_DIR/$TARGET.app/Contents/MacOS/$APPNAME
 	# bsd sed
-	sed -i '' "s/>bitmask/>${APPNAME}/" $RELEASE/$TARGET.app/Contents/Info.plist
-        echo "[+] App is in" $RELEASE/$TARGET
+	sed -i '' "s/>bitmask/>${APPNAME}/" $RELEASE_DIR/$TARGET.app/Contents/Info.plist
+        echo "[+] App is in" $RELEASE_DIR/$TARGET
     else # for MINGWIN or CYGWIN
-        mv $RELEASE/bitmask.exe $RELEASE/$TARGET.exe
+        mv $RELEASE_DIR/bitmask.exe $RELEASE_DIR/$TARGET.exe
     fi
 }
 
