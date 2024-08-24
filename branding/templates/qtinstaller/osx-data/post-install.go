@@ -44,15 +44,13 @@ const (
     <key>ThrottleInterval</key>
     <integer>5</integer>
     <key>Label</key>
-	<string>se.leap.BitmaskHelper</string>
-	<key>Program</key>
+    <string>{{ .Label }}</string>
+    <key>Program</key>
     <string>{{ .Path }}/bitmask-helper</string>
 </dict>
 </plist>`
 
-	plistPath          = "/Library/LaunchDaemons/se.leap.bitmask-helper.plist"
-	helperName         = "bitmask-helper"
-	launchdDaemonLabel = "se.leap.BitmaskHelper"
+	helperName = "bitmask-helper"
 
 	// -action flag values
 	actionPostInstall = "post-install"
@@ -77,6 +75,9 @@ var (
 	installerAction string
 	installerStage  string
 	appName         string
+
+	plistPath          string
+	launchdDaemonLabel string
 )
 
 func init() {
@@ -100,6 +101,13 @@ func main() {
 	if os.Getuid() != 0 {
 		log.Fatal("not running as root")
 	}
+	if appName == "" || installerAction == "" {
+		log.Fatal("-action and -appname flags cannot be empty")
+	}
+
+	plistPath = fmt.Sprintf("/Library/LaunchDaemons/se.leap.helper.%s.plist", appName)
+	launchdDaemonLabel = fmt.Sprintf("se.leap.Helper.%s", appName)
+
 	switch installerAction {
 	case actionPostInstall:
 		if err := setupLogFile(filepath.Join(curdir, "post-install.log")); err != nil {
@@ -250,9 +258,11 @@ func unloadHelperPlist() error {
 func generatePlist() (string, error) {
 
 	appPath := struct {
-		Path string
+		Path  string
+		Label string
 	}{
-		Path: appBundlePath(),
+		Path:  appBundlePath(),
+		Label: launchdDaemonLabel,
 	}
 
 	t, err := template.New("plist").Parse(plistTemplate)
