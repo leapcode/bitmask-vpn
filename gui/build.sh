@@ -92,7 +92,8 @@ function buildQmake {
     echo "[+] Now building Qml app with Qt qmake"
     echo "[+] Using qmake in:" $QMAKE
     mkdir -p $QTBUILD
-    $QMAKE -early QMAKE_CC=$CC QMAKE_CXX=$CXX QMAKE_LINK=$CXX -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH="${VENDOR_PATH}" RELEASE=${RELEASE} $PROJECT
+    $QMAKE -early QMAKE_CC=$CC QMAKE_CXX=$CXX QMAKE_LINK=$CXX -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH="${VENDOR_PATH}" \
+	    RELEASE=${RELEASE} TARGET=${TARGET} $PROJECT
     #CONFIG=+force_debug_info CONFIG+=debug CONFIG+=debug_and_release
 }
 

@@ -11,8 +11,8 @@ QMAKE ?= qmake
 LRELEASE ?= lrelease
 SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
-APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam appname | tail -n 1)
-TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} branding/scripts/getparam binname | tail -n 1)
+APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} branding/scripts/getparam appname | tail -n 1)
+TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} branding/scripts/getparam binname | tail -n 1)
 PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | cut -d ',' -f 1 | tr -d "[:space:]")
 VERSION ?= $(shell git describe 2> /dev/null)
 ifeq ($(VERSION),)
