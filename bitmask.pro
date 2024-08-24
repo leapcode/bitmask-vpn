@@ -4,11 +4,22 @@ QT += quickcontrols2 svg
 CONFIG += qt staticlib
 CONFIG += c++17 strict_c++
 CONFIG += qtquickcompiler
-CONFIG+=force_debug_info
-CONFIG+=debug_and_release
-#CONFIG+=release
+
+RELEASE = $$RELEASE
+
+equals(RELEASE, "yes") {
+    message("[qmake] doing release build")
+    CONFIG += release
+    # debug_and_release is default on windows
+    # and needs to be explicitly disabled
+    win32:CONFIG -= debug_and_release
+} else {
+    message("[qmake] doing debug build")
+    CONFIG += force_debug_info
+    CONFIG += debug_and_release
+}
+
 windows:CONFIG -= console
-unix:DEBUG:CONFIG += debug
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 12
 QMAKE_TARGET_BUNDLE_PREFIX = se.leap
