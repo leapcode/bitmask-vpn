@@ -1,7 +1,8 @@
-From 021a767c62b2ffddb63b0a2bcfad512e4f893558 Mon Sep 17 00:00:00 2001
+From 82e3eda5709f1f8dd6bdb898a3c6b71a41cc4e62 Mon Sep 17 00:00:00 2001
 From: jkito <belter@riseup.net>
-Date: Sun, 16 Jun 2024 23:47:18 +0530
-Subject: [PATCH] [build] fix build on ubuntu 23.04 with qt6.4
+Date: Sun, 25 Aug 2024 17:18:10 +0530
+Subject: [PATCH] build: use qt5compat qml module to build on qt6.4 for ubuntu
+ and debian
 
 ---
  bitmask.pro                    |  2 +-
@@ -18,21 +19,21 @@ Subject: [PATCH] [build] fix build on ubuntu 23.04 with qt6.4
  11 files changed, 21 insertions(+), 25 deletions(-)
 
 diff --git a/bitmask.pro b/bitmask.pro
-index f377bb4..4aa4956 100644
+index bbeacb12..58ba5f2f 100644
 --- a/bitmask.pro
 +++ b/bitmask.pro
 @@ -1,8 +1,8 @@
- #TARGET = $$BINARY_NAME
+ TARGET = $$TARGET
  
  QT += quickcontrols2 svg
 -CONFIG += qt staticlib
  CONFIG += c++17 strict_c++
 +CONFIG += qt staticlib core5compat
  CONFIG += qtquickcompiler
- CONFIG+=force_debug_info
- CONFIG+=debug_and_release
+ 
+ RELEASE = $$RELEASE
 diff --git a/gui/components/ErrorBox.qml b/gui/components/ErrorBox.qml
-index 5667ed9..ef8f58f 100644
+index 5667ed9d..ef8f58fb 100644
 --- a/gui/components/ErrorBox.qml
 +++ b/gui/components/ErrorBox.qml
 @@ -1,6 +1,6 @@
@@ -44,7 +45,7 @@ index 5667ed9..ef8f58f 100644
  
  Item {
 diff --git a/gui/components/Footer.qml b/gui/components/Footer.qml
-index a72953e..c4801c9 100644
+index d534f96a..9df6db62 100644
 --- a/gui/components/Footer.qml
 +++ b/gui/components/Footer.qml
 @@ -2,7 +2,7 @@ import QtQuick
@@ -94,7 +95,7 @@ index a72953e..c4801c9 100644
          }
      }
 diff --git a/gui/components/Home.qml b/gui/components/Home.qml
-index f3bea85..7830f46 100644
+index f3bea85a..7830f46d 100644
 --- a/gui/components/Home.qml
 +++ b/gui/components/Home.qml
 @@ -1,6 +1,6 @@
@@ -106,7 +107,7 @@ index f3bea85..7830f46 100644
  Page {
      StatusBox {
 diff --git a/gui/components/InitErrors.qml b/gui/components/InitErrors.qml
-index aaf9897..10b4755 100644
+index aaf9897b..10b4755c 100644
 --- a/gui/components/InitErrors.qml
 +++ b/gui/components/InitErrors.qml
 @@ -1,6 +1,6 @@
@@ -118,7 +119,7 @@ index aaf9897..10b4755 100644
  ErrorBox {
  
 diff --git a/gui/components/Locations.qml b/gui/components/Locations.qml
-index 1c887d5..7914010 100644
+index 2a188738..6228a58c 100644
 --- a/gui/components/Locations.qml
 +++ b/gui/components/Locations.qml
 @@ -1,7 +1,7 @@
@@ -145,7 +146,7 @@ index 1c887d5..7914010 100644
                  }
              }
 diff --git a/gui/components/MotdBox.qml b/gui/components/MotdBox.qml
-index 2c8cdb8..7b851c0 100644
+index 2c8cdb8b..7b851c0c 100644
 --- a/gui/components/MotdBox.qml
 +++ b/gui/components/MotdBox.qml
 @@ -1,6 +1,6 @@
@@ -157,7 +158,7 @@ index 2c8cdb8..7b851c0 100644
  
  Item {
 diff --git a/gui/components/Preferences.qml b/gui/components/Preferences.qml
-index 50d0733..bc63ecd 100644
+index d8ed6587..a0b6bba6 100644
 --- a/gui/components/Preferences.qml
 +++ b/gui/components/Preferences.qml
 @@ -2,8 +2,8 @@ import QtQuick
@@ -172,7 +173,7 @@ index 50d0733..bc63ecd 100644
  import "../themes/themes.js" as Theme
  
 diff --git a/gui/components/SignalIcon.qml b/gui/components/SignalIcon.qml
-index 8747f05..38a2371 100644
+index 8747f054..38a23710 100644
 --- a/gui/components/SignalIcon.qml
 +++ b/gui/components/SignalIcon.qml
 @@ -1,7 +1,7 @@
@@ -199,7 +200,7 @@ index 8747f05..38a2371 100644
      }
  
 diff --git a/gui/components/Splash.qml b/gui/components/Splash.qml
-index 2b374b9..c69743f 100644
+index c9351804..d18cc3ba 100644
 --- a/gui/components/Splash.qml
 +++ b/gui/components/Splash.qml
 @@ -1,6 +1,6 @@
@@ -211,7 +212,7 @@ index 2b374b9..c69743f 100644
  
  Page {
 diff --git a/gui/components/StatusBox.qml b/gui/components/StatusBox.qml
-index 13709a6..1851688 100644
+index d17c2fe0..24a1f8f2 100644
 --- a/gui/components/StatusBox.qml
 +++ b/gui/components/StatusBox.qml
 @@ -1,6 +1,6 @@
@@ -223,5 +224,5 @@ index 13709a6..1851688 100644
  import QtQuick.Templates as T
  import QtQuick.Controls.impl
 -- 
-2.45.1
+2.46.0
 
