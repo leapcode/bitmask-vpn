@@ -139,7 +139,6 @@ function buildDefault {
     $MAKE -C $QTBUILD clean
     $MAKE -C $QTBUILD $MAKEFLAGS all
 
-    renameOutput
     echo "[+] Done."
 }
 
