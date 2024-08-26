@@ -62,3 +62,76 @@ arch:
     expire_in: 1 week
   tags:
     - linux
+
+build_debian12_package:
+  stage: package
+  # we use backports because we need go1.22
+  image: debian:bookworm-backports
+  before_script:
+    - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y make sudo"
+    - "make depends"
+    - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-1.22"
+    - "update-alternatives --install /usr/bin/go go /usr/lib/go-1.22/bin/go 0"
+    - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
+    - "patch -p1 < docker/*.patch"
+  script:
+    - "PROVIDER=bitmask make vendor"
+    - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
+    - "make clean"
+    - "PROVIDER=riseup make vendor"
+    - "PROVIDER=riseup QMAKE=qmake6 make package_deb"
+  after_script:
+    - "mv deploy/*.deb build/riseup/build"
+  artifacts:
+    paths:
+      - "build/riseup/build/"
+    expire_in: 1 week
+  tags:
+    - linux
+
+build_ubuntu22_package:
+  stage: package
+  image: ubuntu:22.04
+  before_script:
+    - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common make sudo"
+    - "add-apt-repository ppa:longsleep/golang-backports -y"
+    - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-go"
+    - "make depends"
+    - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
+    - "patch -p1 < docker/*.patch"
+  script:
+    - "PROVIDER=bitmask make vendor"
+    - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
+    - "make clean"
+    - "PROVIDER=riseup make vendor"
+    - "PROVIDER=riseup QMAKE=qmake6 make package_deb"
+  after_script:
+    - "mv deploy/*.deb build/riseup/build"
+  artifacts:
+    paths:
+      - "build/riseup/build/"
+    expire_in: 1 week
+  tags:
+    - linux
+
+build_ubuntu24_package:
+  stage: package
+  image: ubuntu:24.04
+  before_script:
+    - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y make sudo"
+    - "make depends"
+    - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
+  script:
+    - "PROVIDER=bitmask make vendor"
+    - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
+    - "make clean"
+    - "PROVIDER=riseup make vendor"
+    - "PROVIDER=riseup QMAKE=qmake6 make package_deb"
+  after_script:
+    - "mv deploy/*.deb build/riseup/build"
+  artifacts:
+    paths:
+      - "build/riseup/build/"
+    expire_in: 1 week
+  tags:
+    - linux
