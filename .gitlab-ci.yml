@@ -40,7 +40,7 @@ debian:
       - 'deploy/*.deb'
     expire_in: 1 week
 
-arch:
+build_Arch_Linux_package:
   image: archlinux
   stage: package
   before_script:
