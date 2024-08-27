@@ -28,18 +28,6 @@ lint:
   tags:
     - linux
 
-debian:
-  image: registry.0xacab.org/jkito/bitmask-vpn:latest
-  stage: package
-  tags:
-    - linux
-  script:
-    - 'PROVIDER="bitmask" make vendor && make package_deb'
-  artifacts:
-    paths:
-      - 'deploy/*.deb'
-    expire_in: 1 week
-
 build_Arch_Linux_package:
   image: archlinux
   stage: package
