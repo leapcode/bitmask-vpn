@@ -2,8 +2,6 @@ module 0xacab.org/leap/bitmask-vpn
 
 go 1.22
 
-toolchain go1.22.2
-
 require (
 	0xacab.org/leap/obfsvpn v1.0.1-0.20240625123757-59f234eea051
 	git.torproject.org/pluggable-transports/goptlib.git v1.3.0
