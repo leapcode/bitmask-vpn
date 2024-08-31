@@ -129,11 +129,28 @@ function build_openssl()
             echo "[ ] got:      " ${sha256}
 	    exit 1
 	fi
+
+	local openssl_target_platform=""
+	case "$(uname -m)" in
+		"x86_64")
+			openssl_target_platform="darwin64-x86_64-cc"
+			if [ "$(uname)" == "Linux" ]; then
+				openssl_target_platform="linux-x86_64"
+			fi
+			;;
+		"arm64")
+			openssl_target_platform="darwin64-arm64-cc"
+			if [ "$(uname)" == "Linux" ]; then
+				openssl_target_platform="linux64-aarch64"
+			fi
+			;;
+	esac
+
 	tar zxvf openssl-$OPENSSL.tar.gz
 	cd openssl-$OPENSSL
 	# Kudos to Jonathan K. Bullard from Tunnelblick.
 	# TODO pass cc/arch if osx
-	./Configure darwin64-x86_64-cc no-shared zlib no-asm --openssldir="$DEST"
+	./Configure ${openssl_target_platform} no-shared zlib no-asm --openssldir="$DEST"
 	make build_libs build_apps openssl.pc libssl.pc libcrypto.pc
 	make DESTDIR=$DEST install_sw
 }
