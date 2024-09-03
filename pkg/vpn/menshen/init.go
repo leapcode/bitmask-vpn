@@ -1,10 +1,7 @@
 package menshen
 
 import (
-	"errors"
-	"net/url"
 	"os"
-	"strconv"
 	"strings"
 
 	"0xacab.org/leap/bitmask-core/models"
@@ -29,9 +26,7 @@ type Menshen struct {
 
 }
 
-// Parses API URL of menshen (config.APIURL). Can be overwritten during runtime by setting env API_URL.
-// Returns hostname/ip, port, useTLS of menshen
-func parseApiURL() (string, int, bool) {
+func New() (*Menshen, error) {
 	if os.Getenv("API_URL") != "" {
 		config.APIURL = os.Getenv("API_URL")
 		log.Debug().
@@ -39,49 +34,10 @@ func parseApiURL() (string, int, bool) {
 			Msg("Using API URL from env")
 	}
 
-	url, err := url.Parse(config.APIURL)
+	cfg, err := bootstrap.NewConfigFromURL(config.APIURL)
 	if err != nil {
-		log.Fatal().
-			Err(err).
-			Str("apiUrl", config.APIURL).
-			Msg("Could not parse API URL")
+		return nil, err
 	}
-
-	hostname := url.Hostname()
-	useTLS := url.Scheme != "http"
-
-	var port int
-	if url.Port() == "" {
-		port = 443
-	} else {
-		port, err = strconv.Atoi(url.Port())
-		if err != nil {
-			log.Fatal().
-				Err(err).
-				Str("port", url.Port()).
-				Msg("Could not parse port to int")
-		}
-	}
-
-	log.Trace().
-		Bool("useTLS", useTLS).
-		Str("hostname", hostname).
-		Int("port", port).
-		Msg("Parsed API URL")
-
-	return hostname, port, useTLS
-}
-
-func New() (*Menshen, error) {
-	hostname, port, useTLS := parseApiURL()
-	// URL schema parsing can be confusing. Parsing an empty string results in empty hostname
-	if hostname == "" {
-		return nil, errors.New("Could not initialize menshen object. Hostname is empty")
-	}
-	cfg := bootstrap.NewConfig()
-	cfg.Host = hostname
-	cfg.Port = port
-	cfg.UseTLS = useTLS
 
 	api, err := bootstrap.NewAPI(cfg)
 	if err != nil {
