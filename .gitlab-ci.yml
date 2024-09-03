@@ -28,6 +28,20 @@ lint:
   tags:
     - linux
 
+build_macos:
+  stage: build
+  script:
+    - export PROVIDER=riseup
+    - make vendor
+    - make -j4 build
+    - make installer
+  tags:
+    - macos
+  artifacts:
+    paths:
+      - 'build/installer/*.app'
+    expire_in: 1 week
+
 build_Arch_Linux_package:
   image: archlinux
   stage: package
