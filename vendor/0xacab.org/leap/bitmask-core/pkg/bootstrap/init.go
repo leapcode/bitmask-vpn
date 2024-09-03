@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"bytes"
 	"fmt"
-	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -11,24 +10,21 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"golang.org/x/net/http2"
 	"golang.org/x/net/proxy"
 
 	"0xacab.org/leap/bitmask-core/models"
 	"0xacab.org/leap/bitmask-core/pkg/client"
 	"0xacab.org/leap/bitmask-core/pkg/client/provisioning"
 	"0xacab.org/leap/bitmask-core/pkg/introducer"
-
-	gotls "crypto/tls"
-
-	utls "github.com/refraction-networking/utls"
+	"0xacab.org/leap/tunnel-telemetry/pkg/geolocate"
 )
 
 type Config struct {
-	// BaseCountry is an ISO-2 country code. If present, we will skip
-	// geolocation lookup, and we will send our "base" country to menshen
-	// when asking for gateways/bridges.
-	BaseCountry string
+	// FallbackCountryCode is an ISO-2 country code. Fallback if geolocation lookup fails.
+	FallbackCountryCode string
+	// country code used to fetch gateways/bridges. If geolocation lookup fails,
+	// api.config.FallbackCountryCode is used
+	CountryCode string
 	// Host we will connect to for API operations.
 	Host string
 	// Port we will connect to for API operations (default 443)
@@ -41,50 +37,20 @@ type Config struct {
 	Proxy string
 	// ResolveWithDoH indicates whether we should use a DoH resolver.
 	ResolveWithDoH bool
+	// STUNServers is a list of STUN users to be used to get the current ip adress
+	// The order is kept. A provider can use a list of public STUN servers, use
+	// its self-hosted STUN servers or use public STUN servers as a fallback here.
+	// A STUN server should be in the format ip/host:port
+	STUNServers []string
+	// The CountryCodeLookupURL returns a country code for a given ip address.
+	CountryCodeLookupURL string
 }
 
-func (c *Config) getAPIClient() *http.Client {
-	if c.UseTLS {
-		client := &http.Client{
-			Transport: &http2.Transport{
-				// Hook into TLS connection buildup to resolve IP with DNS over HTTP (DoH)
-				DialTLS: func(network, addr string, tlsCfg *gotls.Config) (net.Conn, error) {
-					if c.ResolveWithDoH {
-						log.Debug().
-							Str("domain", addr).
-							Msg("Resolving host with DNS over HTTPs")
-
-						ip4, err := dohQuery(c.Host)
-						if err != nil {
-							return nil, err
-						}
-
-						log.Debug().
-							Str("domain", addr).
-							Str("ip4", ip4).
-							Msg("Sucessfully resolved host via DNS over HTTPs")
-						addr = fmt.Sprintf("%s:%d", ip4, c.Port)
-					}
-
-					roller, err := utls.NewRoller()
-					if err != nil {
-						return nil, err
-					}
-					uconn, err := roller.Dial(network, addr, c.Host)
-					if err != nil {
-						return nil, err
-					}
-
-					uconn.SetSNI(c.Host)
-					return uconn, err
-				},
-			},
-			Timeout: time.Duration(30) * time.Second,
-		}
-		return client
-	} else {
-		return &http.Client{Timeout: time.Duration(30) * time.Second}
-	}
+type API struct {
+	client     *client.MenshenAPI
+	gateways   []*models.ModelsGateway
+	httpClient *http.Client
+	config     *Config
 }
 
 func NewConfig() *Config {
@@ -95,13 +61,18 @@ func NewConfig() *Config {
 	}
 }
 
-type API struct {
-	client     *client.MenshenAPI
-	gateways   []*models.ModelsGateway
-	httpClient *http.Client
+func NewConfigFromURL(url string) (*Config, error) {
+	host, port, useTLS, err := parseApiURL(url)
+	if err != nil {
+		return nil, err
 
-	countryBase     string
-	countryOverride bool
+	}
+	return &Config{
+		Host:           host,
+		Port:           port,
+		UseTLS:         useTLS,
+		ResolveWithDoH: useTLS,
+	}, nil
 }
 
 func NewAPI(cfg *Config) (*API, error) {
@@ -137,11 +108,7 @@ func NewAPI(cfg *Config) (*API, error) {
 	api := &API{
 		client:   client,
 		gateways: make([]*models.ModelsGateway, 0),
-	}
-
-	if cfg.BaseCountry != "" {
-		api.countryOverride = true
-		api.countryBase = cfg.BaseCountry
+		config:   cfg,
 	}
 
 	// Introducer has precedence over the Proxy parameter, unless it fails.
@@ -196,35 +163,43 @@ func getSocksProxyClient(proxyString string) (*http.Client, error) {
 	return client, nil
 }
 
-// DoGeolocationLookup will try to fetch a valid country code from an online
-// geolocation service (not controlled by us). This country code will be stored and
-// sent in any subsequent resource queries to menshen (gateways/bridges), so that proximity
-// is used in addition to the load information.
+// DoGeolocationLookup will try to fetch a valid country code.This country
+// code will be stored and sent in any subsequent resource queries to menshen
 // This method should be called only once, right after initializing the API object.
-func (api *API) DoGeolocationLookup() error {
-	if api.countryOverride {
-		log.Debug().
-			Str("countryCode", api.countryBase).
-			Msg("Skipping geolocation lookup as country is already set")
-		return nil
+// The VPN must be turned off when calling this function.
+func (api *API) DoGeolocationLookup() (string, error) {
+	log.Debug().Msg("Doing geolocataion lookup")
+	geo, err := geolocate.FindCurrentHostGeolocationWithSTUN(api.config.STUNServers, api.config.CountryCodeLookupURL)
+	if err == nil {
+		// FIXME scrub if we're going to submit logs.
+		log.Info().
+			Str("countryCode", geo.CC).
+			Msg("Successfully got country code")
+		api.config.CountryCode = geo.CC
+	} else {
+		if api.config.FallbackCountryCode != "" {
+			log.Warn().
+				Err(err).
+				Str("fallbackCountryCode", api.config.FallbackCountryCode).
+				Msg("Could not get country code via geolocation lookup. Using fallback country code")
+			api.config.CountryCode = api.config.FallbackCountryCode
+		} else {
+			return "", err
+		}
 	}
+	return api.config.CountryCode, nil
+}
 
-	// we're not using uTLS in this lookup, because the geoip service used (ubuntu) does not seem to support h2.
-	// if this fails, we could explore other additional lookups (stun, etc) as the OONI probe does.
-	// in any case, we should not sweat it too much: we can also play with different heuristics, as setting
-	// up the region (continent) or time zone. that should be enough, if we consider load and probably some
-	// other estimation of proximity.
-	client := &http.Client{Timeout: time.Duration(30) * time.Second}
-	cc, err := ubuntuGeoLookup(client)
-	if err != nil {
-		return err
+func (api *API) GetProvider() (*models.ModelsProvider, error) {
+	params := provisioning.NewGetProviderJSONParams()
+	if api.httpClient != nil {
+		params = params.WithHTTPClient(api.httpClient)
 	}
-	// FIXME scrub if we're going to submit logs.
-	log.Info().
-		Str("countryCode", cc).
-		Msg("Successfully got country code from geo API")
-	api.countryBase = cc
-	return nil
+	providerResponse, err := api.client.Provisioning.GetProviderJSON(params)
+	if err != nil {
+		return nil, err
+	}
+	return providerResponse.Payload, nil
 }
 
 // call menshen endpoint /service and return response
@@ -232,19 +207,19 @@ func (api *API) DoGeolocationLookup() error {
 // TODO: split /service into multiple endpoints:
 // locations, openvpn arguments, serial+version, auth
 func (api *API) GetService() (*models.ModelsEIPService, error) {
-	params := provisioning.NewGet5ServiceParams()
+	params := provisioning.NewGetAPI5ServiceParams()
 	if api.httpClient != nil {
 		params = params.WithHTTPClient(api.httpClient)
 	}
 
 	// TODO: menshen needs to accept cc as param too.
 	/*
-		if api.countryBase != "" {
-			params.Cc = api.countryBase
+		if api.config.CountryCode != "" {
+			params.Cc = api.config.CountryCode
 		}
 	*/
 
-	service, err := api.client.Provisioning.Get5Service(params)
+	service, err := api.client.Provisioning.GetAPI5Service(params)
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +247,7 @@ type GatewayParams struct {
 // API). It optionally accepts a GatewayParams object where you can set
 // different filters.
 func (api *API) GetGateways(p *GatewayParams) ([]*models.ModelsGateway, error) {
-	params := provisioning.NewGet5GatewaysParams()
+	params := provisioning.NewGetAPI5GatewaysParams()
 	if p != nil {
 		params.Loc = &p.Location
 		params.Port = &p.Port
@@ -283,7 +258,7 @@ func (api *API) GetGateways(p *GatewayParams) ([]*models.ModelsGateway, error) {
 		params = params.WithHTTPClient(api.httpClient)
 	}
 
-	gateways, err := api.client.Provisioning.Get5Gateways(params)
+	gateways, err := api.client.Provisioning.GetAPI5Gateways(params)
 	if err != nil {
 		return nil, err
 	}
@@ -293,12 +268,12 @@ func (api *API) GetGateways(p *GatewayParams) ([]*models.ModelsGateway, error) {
 // GetOpenVPNCert returns valid OpenVPN client credentials (certificate and
 // private key)
 func (api *API) GetOpenVPNCert() (string, error) {
-	params := provisioning.NewGet5OpenvpnCertParams()
+	params := provisioning.NewGetAPI5OpenvpnCertParams()
 	if api.httpClient != nil {
 		params = params.WithHTTPClient(api.httpClient)
 	}
 
-	cert, err := api.client.Provisioning.Get5OpenvpnCert(params)
+	cert, err := api.client.Provisioning.GetAPI5OpenvpnCert(params)
 	if err != nil {
 		return "", err
 	}

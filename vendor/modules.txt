@@ -1,5 +1,5 @@
-# 0xacab.org/leap/bitmask-core v0.0.0-20240705122443-e372171b7c36
-## explicit; go 1.20
+# 0xacab.org/leap/bitmask-core v0.0.0-20240830161617-121267e4c4eb
+## explicit; go 1.22.2
 0xacab.org/leap/bitmask-core/models
 0xacab.org/leap/bitmask-core/pkg/bootstrap
 0xacab.org/leap/bitmask-core/pkg/client
@@ -11,6 +11,9 @@
 ## explicit; go 1.22
 0xacab.org/leap/obfsvpn/client
 0xacab.org/leap/obfsvpn/obfsvpn
+# 0xacab.org/leap/tunnel-telemetry v0.0.0-20240830081933-7328bb50078b
+## explicit; go 1.21.5
+0xacab.org/leap/tunnel-telemetry/pkg/geolocate
 # filippo.io/edwards25519 v1.1.0
 ## explicit; go 1.20
 filippo.io/edwards25519
@@ -96,7 +99,7 @@ github.com/cretz/bine/tor
 github.com/cretz/bine/torutil
 github.com/cretz/bine/torutil/ed25519
 github.com/cretz/bine/torutil/ed25519/internal/edwards25519
-# github.com/davecgh/go-spew v1.1.1
+# github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 ## explicit
 github.com/davecgh/go-spew/spew
 # github.com/dchest/siphash v1.2.3
@@ -157,8 +160,8 @@ github.com/go-openapi/validate
 # github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572
 ## explicit; go 1.13
 github.com/go-task/slim-sprig
-# github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38
-## explicit; go 1.14
+# github.com/google/pprof v0.0.0-20231212022811-ec68065c825e
+## explicit; go 1.19
 github.com/google/pprof/profile
 # github.com/google/uuid v1.6.0
 ## explicit
@@ -217,7 +220,7 @@ github.com/natefinch/npipe
 # github.com/oklog/ulid v1.3.1
 ## explicit
 github.com/oklog/ulid
-# github.com/onsi/ginkgo/v2 v2.9.5
+# github.com/onsi/ginkgo/v2 v2.13.2
 ## explicit; go 1.18
 github.com/onsi/ginkgo/v2/config
 github.com/onsi/ginkgo/v2/formatter
@@ -338,7 +341,7 @@ github.com/pion/webrtc/v3/pkg/rtcerr
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
-# github.com/pmezard/go-difflib v1.0.0
+# github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 ## explicit
 github.com/pmezard/go-difflib/difflib
 # github.com/prometheus-community/pro-bing v0.4.0

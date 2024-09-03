@@ -80,44 +80,46 @@ func WithAcceptTextPlain(r *runtime.ClientOperation) {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	Get5BridgeLocation(params *Get5BridgeLocationParams, opts ...ClientOption) (*Get5BridgeLocationOK, error)
+	GetAPI5BridgeLocation(params *GetAPI5BridgeLocationParams, opts ...ClientOption) (*GetApi5BridgeLocationOK, error)
 
-	Get5Bridges(params *Get5BridgesParams, opts ...ClientOption) (*Get5BridgesOK, error)
+	GetAPI5Bridges(params *GetAPI5BridgesParams, opts ...ClientOption) (*GetApi5BridgesOK, error)
 
-	Get5GatewayLocation(params *Get5GatewayLocationParams, opts ...ClientOption) (*Get5GatewayLocationOK, error)
+	GetAPI5GatewayLocation(params *GetAPI5GatewayLocationParams, opts ...ClientOption) (*GetApi5GatewayLocationOK, error)
 
-	Get5Gateways(params *Get5GatewaysParams, opts ...ClientOption) (*Get5GatewaysOK, error)
+	GetAPI5Gateways(params *GetAPI5GatewaysParams, opts ...ClientOption) (*GetApi5GatewaysOK, error)
 
-	Get5OpenvpnCert(params *Get5OpenvpnCertParams, opts ...ClientOption) (*Get5OpenvpnCertOK, error)
+	GetAPI5OpenvpnCert(params *GetAPI5OpenvpnCertParams, opts ...ClientOption) (*GetApi5OpenvpnCertOK, error)
 
-	Get5OpenvpnConfig(params *Get5OpenvpnConfigParams, opts ...ClientOption) (*Get5OpenvpnConfigOK, error)
+	GetAPI5OpenvpnConfig(params *GetAPI5OpenvpnConfigParams, opts ...ClientOption) (*GetApi5OpenvpnConfigOK, error)
 
-	Get5Service(params *Get5ServiceParams, opts ...ClientOption) (*Get5ServiceOK, error)
+	GetAPI5Service(params *GetAPI5ServiceParams, opts ...ClientOption) (*GetApi5ServiceOK, error)
 
-	GetAutoconf(params *GetAutoconfParams, opts ...ClientOption) (*GetAutoconfOK, error)
+	GetAPIAutoconf(params *GetAPIAutoconfParams, opts ...ClientOption) (*GetAPIAutoconfOK, error)
+
+	GetProviderJSON(params *GetProviderJSONParams, opts ...ClientOption) (*GetProviderJSONOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-Get5BridgeLocation gets bridges
+GetAPI5BridgeLocation gets bridges
 
 fetch bridges by location
 */
-func (a *Client) Get5BridgeLocation(params *Get5BridgeLocationParams, opts ...ClientOption) (*Get5BridgeLocationOK, error) {
+func (a *Client) GetAPI5BridgeLocation(params *GetAPI5BridgeLocationParams, opts ...ClientOption) (*GetApi5BridgeLocationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5BridgeLocationParams()
+		params = NewGetAPI5BridgeLocationParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5BridgeLocation",
+		ID:                 "GetAPI5BridgeLocation",
 		Method:             "GET",
-		PathPattern:        "/5/bridge/{location}",
+		PathPattern:        "/api/5/bridge/{location}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5BridgeLocationReader{formats: a.formats},
+		Reader:             &GetAPI5BridgeLocationReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -129,35 +131,35 @@ func (a *Client) Get5BridgeLocation(params *Get5BridgeLocationParams, opts ...Cl
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5BridgeLocationOK)
+	success, ok := result.(*GetApi5BridgeLocationOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5BridgeLocation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5BridgeLocation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5Bridges gets all bridges
+GetAPI5Bridges gets all bridges
 
 Fetch all bridges. This is an optional API endpoint for compatibility with vpnweb, but do not count on all the providers to have it enabled since it makes it easier to enumerate resources. On the other hand, if the service has "open" VPN endpoints, they can enumerate them here freely. Bridges, however, should be more restricted as a general rule.
 */
-func (a *Client) Get5Bridges(params *Get5BridgesParams, opts ...ClientOption) (*Get5BridgesOK, error) {
+func (a *Client) GetAPI5Bridges(params *GetAPI5BridgesParams, opts ...ClientOption) (*GetApi5BridgesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5BridgesParams()
+		params = NewGetAPI5BridgesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5Bridges",
+		ID:                 "GetAPI5Bridges",
 		Method:             "GET",
-		PathPattern:        "/5/bridges",
+		PathPattern:        "/api/5/bridges",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5BridgesReader{formats: a.formats},
+		Reader:             &GetAPI5BridgesReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -169,35 +171,35 @@ func (a *Client) Get5Bridges(params *Get5BridgesParams, opts ...ClientOption) (*
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5BridgesOK)
+	success, ok := result.(*GetApi5BridgesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5Bridges: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5Bridges: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5GatewayLocation gets gateways by location
+GetAPI5GatewayLocation gets gateways by location
 
 fetch random gateways for a given location
 */
-func (a *Client) Get5GatewayLocation(params *Get5GatewayLocationParams, opts ...ClientOption) (*Get5GatewayLocationOK, error) {
+func (a *Client) GetAPI5GatewayLocation(params *GetAPI5GatewayLocationParams, opts ...ClientOption) (*GetApi5GatewayLocationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5GatewayLocationParams()
+		params = NewGetAPI5GatewayLocationParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5GatewayLocation",
+		ID:                 "GetAPI5GatewayLocation",
 		Method:             "GET",
-		PathPattern:        "/5/gateway/{location}",
+		PathPattern:        "/api/5/gateway/{location}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5GatewayLocationReader{formats: a.formats},
+		Reader:             &GetAPI5GatewayLocationReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -209,35 +211,35 @@ func (a *Client) Get5GatewayLocation(params *Get5GatewayLocationParams, opts ...
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5GatewayLocationOK)
+	success, ok := result.(*GetApi5GatewayLocationOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5GatewayLocation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5GatewayLocation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5Gateways gets all gateways
+GetAPI5Gateways gets all gateways
 
 Fetch all gateways. This is an optional API endpoint for compatibility with vpnweb, but do not count on all the providers to have it enabled since it makes it easier to enumerate resources. On the other hand, if the service has "open" VPN endpoints, they can enumerate them here freely. Bridges, however, should be more restricted as a general rule.
 */
-func (a *Client) Get5Gateways(params *Get5GatewaysParams, opts ...ClientOption) (*Get5GatewaysOK, error) {
+func (a *Client) GetAPI5Gateways(params *GetAPI5GatewaysParams, opts ...ClientOption) (*GetApi5GatewaysOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5GatewaysParams()
+		params = NewGetAPI5GatewaysParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5Gateways",
+		ID:                 "GetAPI5Gateways",
 		Method:             "GET",
-		PathPattern:        "/5/gateways",
+		PathPattern:        "/api/5/gateways",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5GatewaysReader{formats: a.formats},
+		Reader:             &GetAPI5GatewaysReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -249,35 +251,35 @@ func (a *Client) Get5Gateways(params *Get5GatewaysParams, opts ...ClientOption) 
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5GatewaysOK)
+	success, ok := result.(*GetApi5GatewaysOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5Gateways: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5Gateways: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5OpenvpnCert gets openvpn cert
+GetAPI5OpenvpnCert gets openvpn cert
 
 Fetch a new key and cert.
 */
-func (a *Client) Get5OpenvpnCert(params *Get5OpenvpnCertParams, opts ...ClientOption) (*Get5OpenvpnCertOK, error) {
+func (a *Client) GetAPI5OpenvpnCert(params *GetAPI5OpenvpnCertParams, opts ...ClientOption) (*GetApi5OpenvpnCertOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5OpenvpnCertParams()
+		params = NewGetAPI5OpenvpnCertParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5OpenvpnCert",
+		ID:                 "GetAPI5OpenvpnCert",
 		Method:             "GET",
-		PathPattern:        "/5/openvpn/cert",
+		PathPattern:        "/api/5/openvpn/cert",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5OpenvpnCertReader{formats: a.formats},
+		Reader:             &GetAPI5OpenvpnCertReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -289,35 +291,35 @@ func (a *Client) Get5OpenvpnCert(params *Get5OpenvpnCertParams, opts ...ClientOp
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5OpenvpnCertOK)
+	success, ok := result.(*GetApi5OpenvpnCertOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5OpenvpnCert: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5OpenvpnCert: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5OpenvpnConfig fetches open v p n config file
+GetAPI5OpenvpnConfig fetches open v p n config file
 
 fetch a working config file for OpenVPN service.
 */
-func (a *Client) Get5OpenvpnConfig(params *Get5OpenvpnConfigParams, opts ...ClientOption) (*Get5OpenvpnConfigOK, error) {
+func (a *Client) GetAPI5OpenvpnConfig(params *GetAPI5OpenvpnConfigParams, opts ...ClientOption) (*GetApi5OpenvpnConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5OpenvpnConfigParams()
+		params = NewGetAPI5OpenvpnConfigParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5OpenvpnConfig",
+		ID:                 "GetAPI5OpenvpnConfig",
 		Method:             "GET",
-		PathPattern:        "/5/openvpn/config",
+		PathPattern:        "/api/5/openvpn/config",
 		ProducesMediaTypes: []string{"text/plain"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5OpenvpnConfigReader{formats: a.formats},
+		Reader:             &GetAPI5OpenvpnConfigReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -329,35 +331,35 @@ func (a *Client) Get5OpenvpnConfig(params *Get5OpenvpnConfigParams, opts ...Clie
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5OpenvpnConfigOK)
+	success, ok := result.(*GetApi5OpenvpnConfigOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5OpenvpnConfig: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5OpenvpnConfig: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-Get5Service gets service info
+GetAPI5Service gets service info
 
 fetch service information, including location and common tunnel config
 */
-func (a *Client) Get5Service(params *Get5ServiceParams, opts ...ClientOption) (*Get5ServiceOK, error) {
+func (a *Client) GetAPI5Service(params *GetAPI5ServiceParams, opts ...ClientOption) (*GetApi5ServiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGet5ServiceParams()
+		params = NewGetAPI5ServiceParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "Get5Service",
+		ID:                 "GetAPI5Service",
 		Method:             "GET",
-		PathPattern:        "/5/service",
+		PathPattern:        "/api/5/service",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &Get5ServiceReader{formats: a.formats},
+		Reader:             &GetAPI5ServiceReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -369,35 +371,35 @@ func (a *Client) Get5Service(params *Get5ServiceParams, opts ...ClientOption) (*
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*Get5ServiceOK)
+	success, ok := result.(*GetApi5ServiceOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for Get5Service: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPI5Service: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-GetAutoconf fetches open v p n config file
+GetAPIAutoconf fetches open v p n config file
 
 fetch a working config file for OpenVPN service.
 */
-func (a *Client) GetAutoconf(params *GetAutoconfParams, opts ...ClientOption) (*GetAutoconfOK, error) {
+func (a *Client) GetAPIAutoconf(params *GetAPIAutoconfParams, opts ...ClientOption) (*GetAPIAutoconfOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetAutoconfParams()
+		params = NewGetAPIAutoconfParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "GetAutoconf",
+		ID:                 "GetAPIAutoconf",
 		Method:             "GET",
-		PathPattern:        "/autoconf",
+		PathPattern:        "/api/autoconf",
 		ProducesMediaTypes: []string{"text/plain"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &GetAutoconfReader{formats: a.formats},
+		Reader:             &GetAPIAutoconfReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -409,13 +411,53 @@ func (a *Client) GetAutoconf(params *GetAutoconfParams, opts ...ClientOption) (*
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetAutoconfOK)
+	success, ok := result.(*GetAPIAutoconfOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAutoconf: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for GetAPIAutoconf: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetProviderJSON gets provider info
+
+Fetch provider information how to configure and bootstrap the VPN
+*/
+func (a *Client) GetProviderJSON(params *GetProviderJSONParams, opts ...ClientOption) (*GetProviderJSONOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetProviderJSONParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetProviderJSON",
+		Method:             "GET",
+		PathPattern:        "/provider.json",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GetProviderJSONReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetProviderJSONOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetProviderJSON: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
