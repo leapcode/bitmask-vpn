@@ -149,7 +149,7 @@ build_gui: build_golib relink_vendor
 	@echo "==============BUILD GUI==============="
 	@echo "TARGET: ${TARGET}"
 	@echo "VENDOR_PATH: ${VENDOR_PATH}"
-	@XBUILD=no CC=${CC} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} QMAKE=${QMAKE} LRELEASE=${LRELEASE} TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} APPNAME=${APPNAME} gui/build.sh --skip-golib
+	@XBUILD=no CC=${CC} CXX=${CXX} MAKE=${MAKE} AR=${AR} LD=${LD} LRELEASE=${LRELEASE} TARGET=${TARGET} VENDOR_PATH=${VENDOR_PATH} APPNAME=${APPNAME} gui/build.sh --skip-golib
 	@echo "============BUILD GUI================="
 
 build: build_helper build_gui
