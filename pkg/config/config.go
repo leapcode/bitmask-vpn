@@ -8,5 +8,5 @@ var (
 	APIURL          = ""
 	GeolocationAPI  = ""
 	ApiVersion      = -1
+	CaCert          = []byte("")
 )
-var CaCert = []byte("")
