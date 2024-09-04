@@ -140,3 +140,7 @@ func (m *Menshen) NeedsCredentials() bool {
 func (m *Menshen) GetSnowflakeCh() chan *snowflake.StatusEvent {
 	return nil
 }
+
+func (m *Menshen) DoGeolocationLookup() (string, error) {
+	return m.api.DoGeolocationLookup()
+}

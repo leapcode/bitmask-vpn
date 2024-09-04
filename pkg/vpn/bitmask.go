@@ -136,6 +136,25 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
+	if config.ApiVersion == 5 && len(config.STUNServers) != 0 {
+		/*
+			Geolocation lookup should be done only once during startup. Changing the country
+			code during runtime is not supported. The VPN must be turn off for the lookup.
+			If the lookup succeeds, we save it in the config file and use it as fallback
+			the next time.
+		*/
+		countryCode, err := b.api.DoGeolocationLookup()
+		if err == nil {
+			log.Debug().
+				Str("countryCode", countryCode).
+				Msg("Successfully got country code")
+		} else {
+			log.Warn().
+				Str("err", err.Error()).
+				Msgf("Could not do geolocation lookup")
+		}
+	}
+
 	go b.fetchGateways()
 	go b.initOpenVPNManagementHandler()
 
