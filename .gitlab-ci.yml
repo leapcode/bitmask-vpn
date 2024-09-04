@@ -75,7 +75,6 @@ build_debian12_package:
     - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-1.22"
     - "update-alternatives --install /usr/bin/go go /usr/lib/go-1.22/bin/go 0"
     - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
-    - "patch -p1 < docker/*.patch"
   script:
     - "PROVIDER=bitmask make vendor"
     - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
@@ -100,7 +99,6 @@ build_ubuntu22_package:
     - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-go"
     - "make depends"
     - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
-    - "patch -p1 < docker/*.patch"
   script:
     - "PROVIDER=bitmask make vendor"
     - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
