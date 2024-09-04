@@ -437,6 +437,9 @@ package_snap:
 	@ln -s build/${PROVIDER}/snap snap
 	@${MAKE} -C build/${PROVIDER} pkg_snap
 
+prepare_deb:
+	@${MAKE} -C build/${PROVIDER} prepare_deb
+
 package_deb:
 	@${MAKE} -C build/${PROVIDER} pkg_deb
 

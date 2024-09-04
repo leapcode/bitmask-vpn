@@ -91,7 +91,7 @@ pkg_snap:
 	-@rm ../../snap
 	@mv ../../$(BINNAME)* ../../deploy
 
-pkg_deb:
+prepare_deb:
 	echo "[+] building debian package version" ${DEB_VERSION}
 	-@mkdir -p ../../deploy
 	@if [ $(BUILD_RELEASE) = no ]; then\
@@ -106,6 +106,8 @@ pkg_deb:
 	@rm -rf build/${BINNAME}_${DEB_VERSION} build/bitmask-vpn_${VERSION}-src
 	@cd build && tar xzf $(BINNAME)_${DEB_VERSION}.orig.tar.gz && mv bitmask-vpn_${VERSION}-src ${BINNAME}_${DEB_VERSION}
 	@cp -r debian/ build/$(BINNAME)_$(DEB_VERSION)/
+
+pkg_deb: prepare_deb
 	@cd build/$(BINNAME)_$(DEB_VERSION) && debuild -us -uc
 	@mv build/*.deb ../../deploy
 
