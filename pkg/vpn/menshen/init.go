@@ -38,6 +38,8 @@ func New() (*Menshen, error) {
 	if err != nil {
 		return nil, err
 	}
+	cfg.STUNServers = config.STUNServers
+	cfg.CountryCodeLookupURL = config.CountryCodeLookupURL
 
 	api, err := bootstrap.NewAPI(cfg)
 	if err != nil {

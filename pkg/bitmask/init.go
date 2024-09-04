@@ -29,20 +29,22 @@ type ProviderInfo struct {
 }
 
 type ProviderOpts struct {
-	Provider        string `json:"name"`
-	AppName         string `json:"applicationName"`
-	BinaryName      string `json:"binaryName"`
-	Auth            string `json:"auth"`
-	AuthEmptyPass   bool   `json:"authEmptyPass"`
-	ProviderURL     string `json:"providerURL"`
-	DonateURL       string `json:"donateURL"`
-	ApiURL          string `json:"apiURL"`
-	TosURL          string `json:"tosURL"`
-	HelpURL         string `json:"helpURL"`
-	GeolocationURL  string `json:"geolocationAPI"`
-	AskForDonations bool   `json:"askForDonations"`
-	CaCert          string `json:"caCertString"`
-	ApiVersion      int    `json:"apiVersion"`
+	Provider             string   `json:"name"`
+	AppName              string   `json:"applicationName"`
+	BinaryName           string   `json:"binaryName"`
+	Auth                 string   `json:"auth"`
+	AuthEmptyPass        bool     `json:"authEmptyPass"`
+	ProviderURL          string   `json:"providerURL"`
+	DonateURL            string   `json:"donateURL"`
+	ApiURL               string   `json:"apiURL"`
+	TosURL               string   `json:"tosURL"`
+	HelpURL              string   `json:"helpURL"`
+	GeolocationURL       string   `json:"geolocationAPI"`
+	AskForDonations      bool     `json:"askForDonations"`
+	CaCert               string   `json:"caCertString"`
+	ApiVersion           int      `json:"apiVersion"`
+	STUNServers          []string `json:"STUNServers"`
+	CountryCodeLookupURL string   `json:"countryCodeLookupURL"`
 }
 
 func GetConfiguredProvider() *ProviderInfo {
@@ -60,6 +62,8 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.APIURL = opts.ApiURL
 	config.CaCert = []byte(opts.CaCert)
 	config.ApiVersion = opts.ApiVersion
+	config.STUNServers = opts.STUNServers
+	config.CountryCodeLookupURL = opts.CountryCodeLookupURL
 }
 
 func InitializeBitmask(conf *config.Config) (Bitmask, error) {

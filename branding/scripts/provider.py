@@ -24,9 +24,11 @@ def getProviderData(provider, config):
     keys = ('name', 'applicationName', 'binaryName', 'auth', 'authEmptyPass',
             'providerURL', 'tosURL', 'helpURL',
             'askForDonations', 'donateURL', 'apiURL',
-            'apiVersion', 'geolocationAPI', 'caCertString')
+            'apiVersion', 'geolocationAPI', 'caCertString',
+            'STUNServers', 'countryCodeLookupURL')
     boolValues = ['askForDonations', 'authEmptyPass']
     intValues = ['apiVersion', ]
+    listValues = ['STUNServers']
 
     for value in keys:
         if value not in c:
@@ -36,6 +38,13 @@ def getProviderData(provider, config):
             d[value] = bool(d[value])
         elif value in intValues:
             d[value] = int(d[value])
+        elif value in listValues:
+            if d[value].strip() == "":
+                d[value] = []
+            else:
+                d[value] = d[value].split(",")
+                # remove spaces
+                d[value] = [x.strip() for x in d[value]]
 
     d['timeStamp'] = '{:%Y-%m-%d %H:%M:%S}'.format(
         datetime.datetime.now())
