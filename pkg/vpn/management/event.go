@@ -25,6 +25,7 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 var eventSep = []byte(":")
@@ -145,13 +146,22 @@ func (e *StateEvent) RemoteAddr() string {
 	return string(parts[4])
 }
 
+// RemotePort returns the port of the remote openvpn process.
+// This field is only populated for events whose NewState returns
+// CONNECTED.
+func (e *StateEvent) RemotePort() string {
+	parts := e.parts()
+	// parts[5] is "80,,,fd15:53b6:dead::2", 80 is the port
+	return strings.Split(string(parts[5]), ",")[0]
+}
+
 func (e *StateEvent) String() string {
 	newState := e.NewState()
 	switch newState {
 	case "ASSIGN_IP":
 		return fmt.Sprintf("%s: %s", newState, e.LocalTunnelAddr())
 	case "CONNECTED":
-		return fmt.Sprintf("%s: %s", newState, e.RemoteAddr())
+		return fmt.Sprintf("%s: %s:%s", newState, e.RemoteAddr(), e.RemotePort())
 	default:
 		desc := e.Description()
 		if desc != "" {

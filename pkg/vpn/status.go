@@ -103,7 +103,10 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 		}
 
 		if statusName == "CONNECTED" {
-			ip := strings.Split(stateEvent.String(), ": ")[1]
+			state := strings.Split(stateEvent.String(), ":")
+			ip := strings.TrimSpace(state[1])
+			port := state[2]
+
 			if ip == "127.0.0.1" {
 				// we're using pluggable transports
 				b.onGateway = b.ptGateway
@@ -113,10 +116,12 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 					b.onGateway = gw
 					log.Info().
 						Str("gateway", b.onGateway.Host).
+						Str("port", port).
 						Msg("Sucessfully connected to gateway")
 				} else {
 					log.Warn().
 						Str("ip", ip).
+						Str("port", port).
 						Msg("Connected to unknown gateway")
 				}
 			}
