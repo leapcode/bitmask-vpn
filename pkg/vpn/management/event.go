@@ -173,8 +173,8 @@ func (e *StateEvent) parts() [][]byte {
 		// Prevent crash if the server has sent us a malformed
 		// status message. This should never actually happen if
 		// the server is behaving itself.
-		if len(e.bodyParts) < 5 {
-			expanded := make([][]byte, 5)
+		if len(e.bodyParts) < 6 {
+			expanded := make([][]byte, 6)
 			copy(expanded, e.bodyParts)
 			e.bodyParts = expanded
 		}
