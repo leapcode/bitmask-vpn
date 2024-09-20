@@ -181,6 +181,7 @@ func TestStateEvent(t *testing.T) {
 		WantDesc       string
 		WantLocalAddr  string
 		WantRemoteAddr string
+		WantRemotePort string
 	}
 	testCases := []TestCase{
 		{
@@ -190,6 +191,7 @@ func TestStateEvent(t *testing.T) {
 			WantDesc:       "",
 			WantLocalAddr:  "",
 			WantRemoteAddr: "",
+			WantRemotePort: "",
 		},
 		{
 			Input:          []byte("STATE:,"),
@@ -198,6 +200,7 @@ func TestStateEvent(t *testing.T) {
 			WantDesc:       "",
 			WantLocalAddr:  "",
 			WantRemoteAddr: "",
+			WantRemotePort: "",
 		},
 		{
 			Input:          []byte("STATE:,,,,"),
@@ -206,6 +209,7 @@ func TestStateEvent(t *testing.T) {
 			WantDesc:       "",
 			WantLocalAddr:  "",
 			WantRemoteAddr: "",
+			WantRemotePort: "",
 		},
 		{
 			Input:          []byte("STATE:123,CONNECTED,good,172.16.0.1,192.168.4.1"),
@@ -214,6 +218,7 @@ func TestStateEvent(t *testing.T) {
 			WantDesc:       "good",
 			WantLocalAddr:  "172.16.0.1",
 			WantRemoteAddr: "192.168.4.1",
+			WantRemotePort: "",
 		},
 		{
 			Input:          []byte("STATE:123,RECONNECTING,SIGHUP,,"),
@@ -222,14 +227,34 @@ func TestStateEvent(t *testing.T) {
 			WantDesc:       "SIGHUP",
 			WantLocalAddr:  "",
 			WantRemoteAddr: "",
+			WantRemotePort: "",
 		},
 		{
-			Input:          []byte("STATE:123,RECONNECTING,SIGHUP,,,extra"),
+			Input:          []byte("STATE:123,RECONNECTING,SIGHUP,,,"),
 			WantTimestamp:  "123",
 			WantState:      "RECONNECTING",
 			WantDesc:       "SIGHUP",
 			WantLocalAddr:  "",
 			WantRemoteAddr: "",
+			WantRemotePort: "",
+		},
+		{
+			Input:          []byte("STATE:1726824244,CONNECTED,SUCCESS,10.42.0.62,204.13.164.252,80,,,fd15:53b6:dead::2"),
+			WantTimestamp:  "1726824244",
+			WantState:      "CONNECTED",
+			WantDesc:       "SUCCESS",
+			WantLocalAddr:  "10.42.0.62",
+			WantRemoteAddr: "204.13.164.252",
+			WantRemotePort: "80",
+		},
+		{
+			Input:          []byte("STATE:1726824244,CONNECTED,SUCCESS,10.42.0.62,204.13.164.252"),
+			WantTimestamp:  "1726824244",
+			WantState:      "CONNECTED",
+			WantDesc:       "SUCCESS",
+			WantLocalAddr:  "10.42.0.62",
+			WantRemoteAddr: "204.13.164.252",
+			WantRemotePort: "",
 		},
 	}
 
@@ -257,6 +282,9 @@ func TestStateEvent(t *testing.T) {
 		}
 		if got, want := st.RemoteAddr(), testCase.WantRemoteAddr; got != want {
 			t.Errorf("test %d RemoteAddr returned %q; want %q", i, got, want)
+		}
+		if got, want := st.RemotePort(), testCase.WantRemotePort; got != want {
+			t.Errorf("test %d RemotePort returned %q; want %q", i, got, want)
 		}
 	}
 }
