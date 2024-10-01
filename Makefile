@@ -59,7 +59,7 @@ OPENVPN_WINDOWS_INSTALLER = https://build.openvpn.net/downloads/releases/OpenVPN
 ifeq ($(PLATFORM), linux)
 HAS_QTIFW :=
 else
-HAS_QTIFW := $(shell which binarycreator)
+HAS_QTIFW := $(shell command -v binarycreator)
 endif
 OPENVPN_BIN = "$(HOME)/openvpn_build/sbin/$(shell grep OPENVPN branding/thirdparty/openvpn/build_openvpn.sh | head -n 1 | cut -d = -f 2 | tr -d '"')"
 

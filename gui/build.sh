@@ -13,7 +13,7 @@ LDFLAGS_VER="-X 0xacab.org/leap/bitmask-vpn/pkg/config/version.appVersion=${VERS
 
 OSX_TARGET=12
 WIN64="win64"
-GO=`which go`
+GO=`command -v go`
 
 PROJECT=bitmask.pro
 TARGET_GOLIB=lib/libgoshim.a
