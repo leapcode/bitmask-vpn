@@ -1,5 +1,40 @@
 ${binaryName} (${version}) unstable; urgency=medium
 
-  * Initial package.
+  * Reduces the size of splash screen image
+  * Disable obfs4 and kcp checkbox in preferences for riseup
+  * Removes duplicate languages in the language picker in preferences
+  * Language picker in preferences shows languages sorted alphabetically
+  * Updates translation files
+  * Adds region to language selections menu when available
+  * Improves UI responsiveness when connect or disconnect fails
+  * Disable automatic openvpn connection during app start
+  * Fixes a local privilege escalation security bug when using "--install-helpers"
+  * Change bitmask branded app name to Bitmask from BitmaskVPN
+  * Fixes bug where MOTD message box was not shown for RiseupVPN
+  * Show bridge icon when KCP transport is selected
+  * Show license page during installation
+  * Uninstalls previous version before installing current version
+  * Adds accessibility hints to connection button
+  * Exposes KCP support in the UI
+  * Adds new bitmask-vpn package for Arch Linux
+  * Fixes a bug preventing use of the app by non-admin users on windows
+  * Fixes a bug on macOS preventing users from manual location selection
+  * Fixes a bug where the app's close routine was called twice
+  * Fixes a bug where log file was not closed while quitting the app
+  * Fixes a bug where the correct app name was not shown in installer error messages
+  * Updates to latest obfsvpn
+  * Updates to latest bitmask-core
+  * Updates translation files
+  * Adds missing iptables dependency to ubuntu package
 
- -- LEAP Encryption Access Project  <debian@leap.se>  Mon, 29 Jul 2019 10:00:00 +0100
+ -- LEAP Encryption Access Project  <debian@leap.se>  Fri, 04 Oct 2024 09:16:36 +0200
+
+riseup-vpn (0.24.5-3-geb2df9a~noble) noble; urgency=medium
+
+  * fixes missing dependencies on .deb package
+  * Shorten too long strings in translations
+  * Connection status text width trimmed to be inside parent container
+  * Update GUI to Qt6
+  * Fixes a bug where after using obfs4 it was impossible to gracefully close the app
+
+ -- LEAP Encryption Access Project <debian@leap.se>  Sun, 19 May 2024 11:54:54 +0530
