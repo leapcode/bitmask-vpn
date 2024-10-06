@@ -45,8 +45,14 @@ const (
     <integer>5</integer>
     <key>Label</key>
     <string>{{ .Label }}</string>
-    <key>Program</key>
-    <string>{{ .Path }}/bitmask-helper</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ .Path }}/bitmask-helper</string>
+        <string>-socket-uid</string>
+        <string>{{.Uid}}</string>
+        <string>-socket-gid</string>
+        <string>{{.Gid}}</string>
+    </array>
 </dict>
 </plist>`
 
@@ -59,6 +65,10 @@ const (
 	// -stage flag values
 	stagePre       = "preinstall"
 	stageUninstall = "uninstall"
+
+	// listening socket flag values
+	socketUid = "socket-uid"
+	socketGid = "socket-gid"
 )
 
 var (
@@ -78,6 +88,9 @@ var (
 
 	plistPath          string
 	launchdDaemonLabel string
+
+	uid int
+	gid int
 )
 
 func init() {
@@ -93,6 +106,9 @@ func init() {
 	flag.StringVar(&installerAction, action, "", usageAction)
 	flag.StringVar(&installerStage, stage, stageUninstall, usageStage)
 	flag.StringVar(&appName, appname, "", usageAppName)
+
+	flag.IntVar(&uid, socketUid, 0, "Helper unix socket UID")
+	flag.IntVar(&gid, socketGid, 0, "Helper unix socket GID")
 
 	flag.Parse()
 }
@@ -260,9 +276,13 @@ func generatePlist() (string, error) {
 	appPath := struct {
 		Path  string
 		Label string
+		Uid   int
+		Gid   int
 	}{
 		Path:  appBundlePath(),
 		Label: launchdDaemonLabel,
+		Uid:   uid,
+		Gid:   gid,
 	}
 
 	t, err := template.New("plist").Parse(plistTemplate)

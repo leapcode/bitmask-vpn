@@ -35,11 +35,19 @@ function cancelInstaller(message)
 function Component() {
     // Check whether OS is supported.
     // start installer with -v to see debug output
+    var uid = installer.execute("/usr/bin/id", ["-u"])[0]
+    var gid = installer.execute("/usr/bin/id", ["-g"])[0]
+
+    installer.setValue("HelperSocketUid", uid.trim())
+    installer.setValue("HelperSocketGid", gid.trim())
 
     installer.gainAdminRights();
 
     console.log("OS: " + systemInfo.productType);
     console.log("Kernel: " + systemInfo.kernelType + "/" + systemInfo.kernelVersion);
+
+    console.log("UID: " + uid)
+    console.log("GID: " + gid)
     installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
 
     if (installer.isInstaller()) {
@@ -200,10 +208,12 @@ function uninstallOSX() {
 }
 
 function postInstallOSX() {
+    var uid = installer.value("HelperSocketUid")
+    var gid = installer.value("HelperSocketGid")
     console.log("Post-installation for OSX");
     component.addElevatedOperation(
         "Execute", "{0}",
-        "@TargetDir@/post-install", "-action=post-install", "-appname=@ProductName@",
+        "@TargetDir@/post-install", "-action=post-install", "-appname=@ProductName@", "-socket-uid=" + uid, "-socket-gid=" + gid,
         "errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the post-install.log file.",
         "UNDOEXECUTE",
         "@TargetDir@/post-install", "-action=uninstall", "-appname=@ProductName@"

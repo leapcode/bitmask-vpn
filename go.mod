@@ -9,10 +9,8 @@ require (
 	github.com/ProtonMail/go-autostart v0.0.0-20210130080809-00ed301c8e9a
 	github.com/cretz/bine v0.2.0
 	github.com/dchest/siphash v1.2.3 // indirect
-	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 	github.com/pion/webrtc/v3 v3.2.44
-	github.com/sevlyar/go-daemon v0.1.6
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/xtaci/kcp-go/v5 v5.6.11
 	github.com/xtaci/smux v1.5.24

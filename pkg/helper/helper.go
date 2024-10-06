@@ -15,9 +15,9 @@
 
 // This helper is intended to be long-lived, and run with administrator privileges.
 // It will launch a http server and expose a REST API to control OpenVPN and the firewall.
-// At the moment, it is only used in Darwin and Windows - although it could also be used in GNU/Linux systems (but we use the one-shot bitmask-root wrapper in GNU/Linux instead).
-// In Windows, this helper will run on the first available port after the standard one (7171).
-// In other systems, the 7171 port is hardcoded.
+// At the moment, it is only used in Darwin - although it could also be used in GNU/Linux systems (but we use the one-shot bitmask-root wrapper in GNU/Linux instead).
+// In Darwin, this helper will use a unix domain socket for the http server
+// The /tmp/bitmask-helper.sock path for the socket is hardcoded.
 
 package helper
 
@@ -31,6 +31,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const helperSocket = "bitmask-helper.sock"
+
 var (
 	AppName    = "DemoLibVPN"
 	BinaryName = "bitmask"
@@ -43,31 +45,35 @@ type openvpnT struct {
 
 // startHelper is the main entrypoint. It can react to cli args (used to install or manage the service in windows), and
 // eventually will start the http server.
-func StartHelper(port int) {
+func StartHelper(port, socketUid, socketGid int) {
 	initializeService(port)
 	parseCliArgs()
 	daemonize()
-	runServer(port)
+	runServer(socketUid, socketGid)
 }
 
 // serveHTTP will start the HTTP server that exposes the firewall and openvpn api.
 // this can be called at different times by the different implementations of the helper.
-func serveHTTP(bindAddr string) {
-	log.Info().
-		Str("bindAddr", bindAddr).
-		Msg("Starting HTTP server")
+func serveHTTP(unixListener net.Listener) {
 	openvpn := openvpnT{nil}
-	http.HandleFunc("/openvpn/start", openvpn.start)
-	http.HandleFunc("/openvpn/stop", openvpn.stop)
-	http.HandleFunc("/firewall/start", firewallStartHandler)
-	http.HandleFunc("/firewall/stop", firewallStopHandler)
-	http.HandleFunc("/firewall/isup", firewallIsUpHandler)
-	http.HandleFunc("/version", versionHandler)
 
-	err := http.ListenAndServe(bindAddr, nil)
-	log.Fatal().
-		Err(err).
-		Msg("Could not start HTTP Server")
+	mux := http.NewServeMux()
+	mux.HandleFunc("/openvpn/start", openvpn.start)
+	mux.HandleFunc("/openvpn/stop", openvpn.stop)
+	mux.HandleFunc("/firewall/start", firewallStartHandler)
+	mux.HandleFunc("/firewall/stop", firewallStopHandler)
+	mux.HandleFunc("/firewall/isup", firewallIsUpHandler)
+	mux.HandleFunc("/version", versionHandler)
+
+	server := http.Server{
+		Handler: mux,
+	}
+
+	if err := server.Serve(unixListener); err != nil {
+		log.Fatal().
+			Err(err).
+			Msg("Could not start http server")
+	}
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {

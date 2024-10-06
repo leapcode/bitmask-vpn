@@ -21,7 +21,6 @@ package helper
 import (
 	"os"
 	"os/exec"
-	"strconv"
 
 	"github.com/rs/zerolog/log"
 
@@ -54,11 +53,6 @@ func parseCliArgs() {
 func initializeService(port int) {}
 
 func daemonize() {}
-
-func runServer(port int) {
-	// defined in helper.go
-	serveHTTP("localhost:" + strconv.Itoa(port))
-}
 
 func getOpenvpnPath() string {
 	if os.Getenv("SNAP") != "" {

@@ -169,9 +169,6 @@ github.com/josharian/intern
 # github.com/jtolds/gls v4.20.0+incompatible
 ## explicit
 github.com/jtolds/gls
-# github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
-## explicit
-github.com/kardianos/osext
 # github.com/keybase/go-ps v0.0.0-20190827175125-91aafc93ba19
 ## explicit
 github.com/keybase/go-ps
@@ -337,9 +334,6 @@ github.com/rs/zerolog
 github.com/rs/zerolog/internal/cbor
 github.com/rs/zerolog/internal/json
 github.com/rs/zerolog/log
-# github.com/sevlyar/go-daemon v0.1.6
-## explicit
-github.com/sevlyar/go-daemon
 # github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d
 ## explicit
 github.com/smartystreets/assertions

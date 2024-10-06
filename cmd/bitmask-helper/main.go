@@ -16,6 +16,7 @@
 package main
 
 import (
+	"flag"
 	"path"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -30,9 +31,18 @@ const (
 var (
 	Version string
 	AppName string
+
+	socketUid int
+	socketGid int
 )
 
+func init() {
+	flag.IntVar(&socketUid, "socket-uid", 0, "The UID for the unix socket to listen on")
+	flag.IntVar(&socketGid, "socket-gid", 0, "The GID for the unix socket to listen on")
+}
+
 func main() {
+	flag.Parse()
 	config.LogPath = path.Join(config.Path, logFile)
 	config.ConfigureLogger()
 	defer config.CloseLogger()
@@ -40,5 +50,5 @@ func main() {
 	helper.AppName = AppName
 
 	// StartHelper is the main entry point - it also handles cli args in windows, and starts the http server.
-	helper.StartHelper(preferredPort)
+	helper.StartHelper(preferredPort, socketUid, socketGid)
 }

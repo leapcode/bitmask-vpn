@@ -35,13 +35,10 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/rs/zerolog/log"
-
-	"github.com/sevlyar/go-daemon"
 )
 
 const (
@@ -80,34 +77,6 @@ func parseCliArgs() {
 func initializeService(port int) {}
 
 func daemonize() {
-	cntxt := &daemon.Context{
-		PidFileName: "pid",
-		PidFilePerm: 0644,
-		LogFileName: "bitmask-helper.log",
-		LogFilePerm: 0640,
-		WorkDir:     filepath.Join(getHelperDir(), "helper"),
-		Umask:       027,
-		Args:        []string{"[bitmask-helper]"},
-	}
-
-	d, err := cntxt.Reborn()
-	if err != nil {
-		log.Fatal().
-			Err(err).
-			Msg("Unable to run bitmask helper")
-	}
-	if d != nil {
-		return
-	}
-	defer cntxt.Release()
-	log.Info().Msg("Successfully started bitmask-helper daemon")
-}
-
-func runServer(preferredPort int) {
-	port := getFirstAvailablePortFrom(preferredPort)
-	writePortToFile(port)
-	bindAddr := "localhost:" + strconv.Itoa(port)
-	serveHTTP(bindAddr)
 }
 
 func getOpenvpnPath() string {

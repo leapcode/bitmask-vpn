@@ -17,13 +17,15 @@ package launcher
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -36,31 +38,35 @@ import (
 
 type Launcher struct {
 	helperAddr string
+	client     *http.Client
 	Failed     bool
 	MngPass    string
 }
 
-const initialHelperPort = 7171
+const helperSocket = "bitmask-helper.sock"
 
-func probeHelperPort(port int) (int, error) {
-	// this should be enough for a local reply
-	timeout := time.Duration(500 * time.Millisecond)
-	c := http.Client{Timeout: timeout}
-	for {
-		if smellsLikeOurHelperSpirit(port, &c) {
-			return port, nil
-		}
-		port++
-		/* we could go until 65k, but there's really no need */
-		if port > 10000 {
-			break
-		}
-	}
-	return -1, errors.New("Could not find port of helper backend")
+func getHelperSocketPath() string {
+	return filepath.Join("/tmp", helperSocket)
 }
 
-func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
-	uri := "http://localhost:" + strconv.Itoa(port) + "/version"
+func probeHelper() (*http.Client, error) {
+	client := http.Client{
+		Transport: &http.Transport{
+			DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
+				return net.Dial("unix", getHelperSocketPath())
+			},
+		},
+		Timeout: 500 * time.Millisecond, // this should be enough for a local reply
+	}
+
+	if smellsLikeOurHelperSpirit(&client) {
+		return &client, nil
+	}
+	return nil, errors.New("Could not find port of helper backend")
+}
+
+func smellsLikeOurHelperSpirit(c *http.Client) bool {
+	uri := "http://bitmask/version"
 	resp, err := c.Get(uri)
 	if err != nil {
 		log.Warn().
@@ -70,7 +76,7 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 		return false
 	}
 	if resp.StatusCode == 200 {
-		ver, err := ioutil.ReadAll(resp.Body)
+		ver, err := io.ReadAll(resp.Body)
 		defer resp.Body.Close()
 		if err != nil {
 			log.Warn().
@@ -94,12 +100,15 @@ func smellsLikeOurHelperSpirit(port int, c *http.Client) bool {
 }
 
 func NewLauncher() (*Launcher, error) {
-	helperPort, err := probeHelperPort(initialHelperPort)
+	client, err := probeHelper()
 	if err != nil {
 		return nil, err
 	}
-	helperAddr := "http://localhost:" + strconv.Itoa(helperPort)
-	return &Launcher{helperAddr: helperAddr, Failed: false}, nil
+	return &Launcher{
+		helperAddr: "http://bitmask",
+		client:     client,
+		Failed:     false,
+	}, nil
 }
 
 func (l *Launcher) Close() error {
@@ -144,7 +153,7 @@ func (l *Launcher) FirewallStop() error {
 
 func (l *Launcher) FirewallIsUp() bool {
 	var isup bool = false
-	res, err := http.Post(l.helperAddr+"/firewall/isup", "", nil)
+	res, err := l.client.Post(l.helperAddr+"/firewall/isup", "", nil)
 	if err != nil {
 		return false
 	}
@@ -156,7 +165,7 @@ func (l *Launcher) FirewallIsUp() bool {
 			Msg("Got an error status code for firewall/isup")
 		isup = false
 	} else {
-		upStr, err := ioutil.ReadAll(res.Body)
+		upStr, err := io.ReadAll(res.Body)
 		if err != nil {
 			log.Warn().
 				Err(err).
@@ -179,15 +188,17 @@ func (l *Launcher) send(path string, body []byte) error {
 	if body != nil {
 		reader = bytes.NewReader(body)
 	}
-	res, err := http.Post(l.helperAddr+path, "", reader)
+	res, err := l.client.Post(l.helperAddr+path, "", reader)
 	if err != nil {
 		return err
 	}
 	defer res.Body.Close()
 
-	resErr, err := ioutil.ReadAll(res.Body)
+	// read the error sent back by helper
+	// in case of no error helper doesn't
+	// write anything as reponse
+	resErr, err := io.ReadAll(res.Body)
 	if len(resErr) > 0 {
-		/* FIXME why do we trigger a fatal with this error? */
 		return fmt.Errorf("FATAL: Helper returned an error: %q", resErr)
 	}
 	return err

@@ -150,7 +150,7 @@ func initializeService(preferredPort int) {
 func daemonize() {}
 
 // runServer does nothing, serveHTTP is called from within Execute in windows
-func runServer(port int) {}
+func runServer(uid, gid int) {}
 
 func getOpenvpnPath() string {
 	openvpn := path.Join(getExecDir(), "openvpn.exe")
