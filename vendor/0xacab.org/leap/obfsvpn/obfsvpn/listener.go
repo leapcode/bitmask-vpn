@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
+	"crypto/tls"
 	"encoding/hex"
 	"log"
 	"net"
 
+	"github.com/quic-go/quic-go"
 	"github.com/xtaci/kcp-go/v5"
 	"gitlab.com/yawning/obfs4.git/common/ntor"
 	"gitlab.com/yawning/obfs4.git/transports/base"
@@ -21,6 +23,7 @@ import (
 type ListenConfig struct {
 	ListenConfig net.ListenConfig
 	KCPConfig    KCPConfig
+	QUICConfig   QUICConfig
 
 	NodeID     *ntor.NodeID
 	PrivateKey *ntor.PrivateKey
@@ -31,7 +34,7 @@ type ListenConfig struct {
 
 // NewListenConfig returns a ListenConfig and any error during the initialization.
 // perhaps this is redundant, but using the same json format than ss for debug.
-func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string, kcpConfig KCPConfig) (*ListenConfig, error) {
+func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string, kcpConfig KCPConfig, quicConfig QUICConfig) (*ListenConfig, error) {
 	var err error
 	var seed [ntor.KeySeedLength]byte
 	var nodeID *ntor.NodeID
@@ -60,6 +63,7 @@ func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string,
 		Seed:       seed,
 		StateDir:   stateDir,
 		KCPConfig:  kcpConfig,
+		QUICConfig: quicConfig,
 	}
 	return lc, nil
 }
@@ -117,22 +121,54 @@ func NewServerState(stateDir string) error {
 
 // Listen listens on the local network address.
 // See func net.Dial for a description of the network and address parameters.
-func (lc *ListenConfig) Listen(ctx context.Context, kcpConfig KCPConfig, address string) (*Listener, error) {
-	if kcpConfig.Enabled {
+func (lc *ListenConfig) Listen(ctx context.Context, address string) (*Listener, error) {
+	if lc.KCPConfig.Enabled {
 		log.Println("kcp listen on", address)
 		ln, err := kcp.ListenWithOptions(address, nil, 10, 3)
 		if err != nil {
 			return nil, err
 		}
 
-		if err := ln.SetReadBuffer(kcpConfig.ReadBuffer); err != nil {
+		if err := ln.SetReadBuffer(lc.KCPConfig.ReadBuffer); err != nil {
 			return nil, err
 		}
-		if err := ln.SetWriteBuffer(kcpConfig.WriteBuffer); err != nil {
+		if err := ln.SetWriteBuffer(lc.KCPConfig.WriteBuffer); err != nil {
 			return nil, err
 		}
 
-		return lc.Wrap(ctx, ln)
+		wrappedListener, err := lc.Wrap(ctx, ln)
+		if err != nil {
+			return nil, err
+		}
+		wrappedListener.kcpConfig = lc.KCPConfig
+		return wrappedListener, nil
+	} else if lc.QUICConfig.Enabled {
+		log.Println("quic listen on", address)
+		tlsConf := &tls.Config{
+			Certificates: []tls.Certificate{*lc.QUICConfig.TLSCert},
+			NextProtos:   []string{},
+			MinVersion:   tls.VersionTLS12,
+		}
+
+		quicConf := &quic.Config{}
+		udpAddr, err := net.ResolveUDPAddr("udp", address)
+		if err != nil {
+			return nil, err
+		}
+
+		udpConn, err := net.ListenUDP("udp", udpAddr)
+		if err != nil {
+			return nil, err
+		}
+		ql, err := quic.Listen(udpConn, tlsConf, quicConf)
+		if err != nil {
+			return nil, err
+		}
+		ln := QUICListener{
+			ql:  ql,
+			ctx: ctx,
+		}
+		return lc.Wrap(ctx, &ln)
 	}
 	ln, err := lc.ListenConfig.Listen(ctx, "tcp", address)
 	if err != nil {
@@ -160,7 +196,16 @@ func (l *Listener) Accept() (net.Conn, error) {
 		kcpSession.SetStreamMode(true)
 		kcpSession.SetWindowSize(l.kcpConfig.SendWindowSize, l.kcpConfig.ReceiveWindowSize)
 		// https://github.com/skywind3000/kcp/blob/master/README.en.md#protocol-configuration
-		kcpSession.SetNoDelay(1, 10, 2, 1)
+		nd := 0
+		if l.kcpConfig.NoDelay {
+			nd = 1
+		}
+		nc := 0
+		if l.kcpConfig.DisableFlowControl {
+			nc = 1
+		}
+		kcpSession.SetNoDelay(nd, l.kcpConfig.Interval, l.kcpConfig.Resend, nc)
+		kcpSession.SetMtu(l.kcpConfig.MTU)
 	}
 	conn, err = l.sf.WrapConn(conn)
 	return conn, err
