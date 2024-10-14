@@ -30,6 +30,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
+	"0xacab.org/leap/bitmask-core/pkg/introducer"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 )
@@ -100,6 +101,25 @@ func New() *Bonafide {
 		},
 		Timeout: time.Second * 30,
 	}
+
+	// experimental introducer
+	if introURL := os.Getenv("LEAP_INTRODUCER_URL"); introURL != "" {
+		inr, err := introducer.NewIntroducerFromURL(introURL)
+		if err != nil {
+			log.Debug().
+				Err(err).
+				Str("introducer URL", introURL).
+				Msg("failed to create introducer from URL")
+		}
+
+		client, err = introducer.NewHTTPClientFromIntroducer(inr)
+		if err != nil {
+			log.Debug().
+				Err(err).
+				Msg("failed to create http client from introducer")
+		}
+	}
+	client.Timeout = time.Minute
 	_, tzOffsetSeconds := time.Now().Zone()
 	tzOffsetHours := tzOffsetSeconds / secondsPerHour
 

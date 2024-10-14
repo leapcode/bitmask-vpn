@@ -41,6 +41,11 @@ func New() (*Menshen, error) {
 	cfg.STUNServers = config.STUNServers
 	cfg.CountryCodeLookupURL = config.CountryCodeLookupURL
 
+	// experimental introducer
+	if introURL := os.Getenv("LEAP_INTRODUCER_URL"); introURL != "" {
+		cfg.Introducer = introURL
+	}
+
 	api, err := bootstrap.NewAPI(cfg)
 	if err != nil {
 		return nil, err
