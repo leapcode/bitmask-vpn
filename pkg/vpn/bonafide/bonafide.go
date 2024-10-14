@@ -22,7 +22,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"runtime"
@@ -196,7 +195,7 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 		return nil, fmt.Errorf("Get vpn cert has failed with status: %s", resp.Status)
 	}
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 func (b *Bonafide) getURL(object string) string {
@@ -365,7 +364,7 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	}
 
 	geo := &geoLocation{}
-	dataJSON, err := ioutil.ReadAll(resp.Body)
+	dataJSON, err := io.ReadAll(resp.Body)
 	err = json.Unmarshal(dataJSON, &geo)
 	if err != nil {
 		log.Warn().
