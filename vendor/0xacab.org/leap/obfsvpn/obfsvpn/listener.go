@@ -4,12 +4,10 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
-	"crypto/tls"
 	"encoding/hex"
 	"log"
 	"net"
 
-	"github.com/quic-go/quic-go"
 	"github.com/xtaci/kcp-go/v5"
 	"gitlab.com/yawning/obfs4.git/common/ntor"
 	"gitlab.com/yawning/obfs4.git/transports/base"
@@ -23,7 +21,6 @@ import (
 type ListenConfig struct {
 	ListenConfig net.ListenConfig
 	KCPConfig    KCPConfig
-	QUICConfig   QUICConfig
 
 	NodeID     *ntor.NodeID
 	PrivateKey *ntor.PrivateKey
@@ -34,7 +31,7 @@ type ListenConfig struct {
 
 // NewListenConfig returns a ListenConfig and any error during the initialization.
 // perhaps this is redundant, but using the same json format than ss for debug.
-func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string, kcpConfig KCPConfig, quicConfig QUICConfig) (*ListenConfig, error) {
+func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string, kcpConfig KCPConfig) (*ListenConfig, error) {
 	var err error
 	var seed [ntor.KeySeedLength]byte
 	var nodeID *ntor.NodeID
@@ -63,7 +60,6 @@ func NewListenConfig(nodeIDStr, privKeyStr, pubKeyStr, seedStr, stateDir string,
 		Seed:       seed,
 		StateDir:   stateDir,
 		KCPConfig:  kcpConfig,
-		QUICConfig: quicConfig,
 	}
 	return lc, nil
 }
@@ -142,33 +138,6 @@ func (lc *ListenConfig) Listen(ctx context.Context, address string) (*Listener, 
 		}
 		wrappedListener.kcpConfig = lc.KCPConfig
 		return wrappedListener, nil
-	} else if lc.QUICConfig.Enabled {
-		log.Println("quic listen on", address)
-		tlsConf := &tls.Config{
-			Certificates: []tls.Certificate{*lc.QUICConfig.TLSCert},
-			NextProtos:   []string{},
-			MinVersion:   tls.VersionTLS12,
-		}
-
-		quicConf := &quic.Config{}
-		udpAddr, err := net.ResolveUDPAddr("udp", address)
-		if err != nil {
-			return nil, err
-		}
-
-		udpConn, err := net.ListenUDP("udp", udpAddr)
-		if err != nil {
-			return nil, err
-		}
-		ql, err := quic.Listen(udpConn, tlsConf, quicConf)
-		if err != nil {
-			return nil, err
-		}
-		ln := QUICListener{
-			ql:  ql,
-			ctx: ctx,
-		}
-		return lc.Wrap(ctx, &ln)
 	}
 	ln, err := lc.ListenConfig.Listen(ctx, "tcp", address)
 	if err != nil {

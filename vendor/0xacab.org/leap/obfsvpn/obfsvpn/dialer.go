@@ -134,7 +134,7 @@ func (d *Dialer) Dial(network, address string) (net.Conn, error) {
 	return d.dial(ctx, network, address, func(network, address string) (net.Conn, error) {
 		conn, err := d.Dialer.DialContext(ctx, network, address)
 		if err != nil {
-			return nil, fmt.Errorf("%s: %w", ErrCannotDial, err)
+			return nil, fmt.Errorf("%w: %s", ErrCannotDial, err)
 		}
 		return conn.(*net.TCPConn), err
 	})

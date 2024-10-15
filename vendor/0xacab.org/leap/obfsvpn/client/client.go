@@ -38,7 +38,6 @@ type EventLogger interface {
 
 const (
 	dialGiveUpTime = 15 * time.Second
-	reconnectTime  = 3 * time.Second
 )
 
 type Obfs4Config struct {
@@ -46,30 +45,17 @@ type Obfs4Config struct {
 	Cert   string
 }
 
-type Obfs4Conn struct {
-	net.Conn
-	config Obfs4Config
-}
-
-func NewObfs4Conn(conn net.Conn, config Obfs4Config) *Obfs4Conn {
-	return &Obfs4Conn{
-		Conn:   conn,
-		config: config,
-	}
-}
-
 func (oc *Obfs4Config) String() string {
 	return oc.Remote
 }
 
 type Config struct {
-	ProxyAddr     string             `json:"proxy_addr"`
-	HoppingConfig HoppingConfig      `json:"hopping_config"`
-	KCPConfig     obfsvpn.KCPConfig  `json:"kcp_config"`
-	QUICConfig    obfsvpn.QUICConfig `json:"quic_config"`
-	RemoteIP      string             `json:"remote_ip"`
-	RemotePort    string             `json:"remote_port"`
-	Obfs4Cert     string             `json:"obfs4_cert"`
+	ProxyAddr     string            `json:"proxy_addr"`
+	HoppingConfig HoppingConfig     `json:"hopping_config"`
+	KCPConfig     obfsvpn.KCPConfig `json:"kcp_config"`
+	RemoteIP      string            `json:"remote_ip"`
+	RemotePort    string            `json:"remote_port"`
+	Obfs4Cert     string            `json:"obfs4_cert"`
 }
 
 type HoppingConfig struct {
@@ -84,11 +70,11 @@ type HoppingConfig struct {
 
 type Client struct {
 	kcpConfig       obfsvpn.KCPConfig
-	quicConfig      obfsvpn.QUICConfig
 	ProxyAddr       string
-	newObfs4Conn    chan Obfs4Conn
-	obfs4Conns      []Obfs4Conn
+	newObfs4Conn    chan net.Conn
+	obfs4Conns      []net.Conn
 	obfs4Endpoints  []*Obfs4Config
+	obfs4Dialer     *obfsvpn.Dialer
 	obfs4Failures   map[string]int32
 	EventLogger     EventLogger
 	state           clientState
@@ -112,10 +98,9 @@ func NewClient(ctx context.Context, stop context.CancelFunc, config Config) *Cli
 		ctx:            ctx,
 		hopJitter:      config.HoppingConfig.HopJitter,
 		kcpConfig:      config.KCPConfig,
-		quicConfig:     config.QUICConfig,
 		obfs4Failures:  map[string]int32{},
 		minHopSeconds:  config.HoppingConfig.MinHopSeconds,
-		newObfs4Conn:   make(chan Obfs4Conn),
+		newObfs4Conn:   make(chan net.Conn),
 		obfs4Endpoints: obfs4Endpoints,
 		stop:           stop,
 		state:          stopped,
@@ -192,18 +177,34 @@ func (c *Client) Start() (bool, error) {
 	c.updateState(starting)
 
 	obfs4Endpoint := c.obfs4Endpoints[0]
-	obfs4Conn, err := c.createObfs4Connection(obfs4Endpoint)
+
+	c.obfs4Dialer, err = obfsvpn.NewDialerFromCert(obfs4Endpoint.Cert)
 	if err != nil {
-		c.error("Could not createObfs4Connection: %v", err)
+		return false, fmt.Errorf("could not dial obfs4 remote: %w", err)
+	}
+
+	if c.kcpConfig.Enabled {
+		c.obfs4Dialer.DialFunc = obfsvpn.GetKCPDialer(c.kcpConfig, c.log)
+	}
+
+	obfs4Conn, err := c.obfs4Dialer.Dial("tcp", obfs4Endpoint.Remote)
+	if err != nil {
+		c.error("Could not dial obfs4 remote: %v", err)
 		return false, fmt.Errorf("could not dial remote: %w", err)
 	}
-	c.obfs4Conns = []Obfs4Conn{*obfs4Conn}
+
+	c.obfs4Conns = []net.Conn{obfs4Conn}
 
 	c.updateState(running)
 
-	c.openvpnConn, err = c.createOpenvpnConnection()
+	proxyAddr, err := net.ResolveUDPAddr("udp", c.ProxyAddr)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("cannot resolve UDP addr: %w", err)
+	}
+
+	c.openvpnConn, err = net.ListenUDP("udp", proxyAddr)
+	if err != nil {
+		return false, fmt.Errorf("error accepting udp connection: %w", err)
 	}
 
 	if c.hopEnabled {
@@ -219,32 +220,6 @@ func (c *Client) Start() (bool, error) {
 	<-c.ctx.Done()
 
 	return true, nil
-}
-
-func (c *Client) createObfs4Connection(obfs4Endpoint *Obfs4Config) (*Obfs4Conn, error) {
-	var err error
-
-	obfs4Dialer, err := obfsvpn.NewDialerFromCert(obfs4Endpoint.Cert)
-	if err != nil {
-		c.error("Could not get obfs4Dialer from cert: %v", err)
-		return nil, err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), dialGiveUpTime)
-	defer cancel()
-
-	if c.kcpConfig.Enabled {
-		obfs4Dialer.DialFunc = obfsvpn.GetKCPDialer(c.kcpConfig, c.log)
-	} else if c.quicConfig.Enabled {
-		obfs4Dialer.DialFunc = obfsvpn.GetQUICDialer(ctx, c.quicConfig, c.log)
-	}
-
-	c.log("Dialing remote: %v", obfs4Endpoint.Remote)
-	conn, err := obfs4Dialer.DialContext(ctx, "tcp", obfs4Endpoint.Remote)
-	if err != nil {
-		return nil, fmt.Errorf("error in obfs4Dialer.DialContext: %w", err)
-	}
-	return NewObfs4Conn(conn, *obfs4Endpoint), nil
 }
 
 // updateState sets a new client state, logs it and sends an event to the clients
@@ -267,40 +242,6 @@ func (c *Client) pickRandomEndpoint() *Obfs4Config {
 	endpoint := c.obfs4Endpoints[i]
 	// here we could check if the number of failures is ok-ish. we can also do moving averages etc.
 	return endpoint
-}
-
-func (c *Client) connectObfs4(obfs4Endpoint *Obfs4Config, sleepSeconds int) {
-	newObfs4Conn, err := c.createObfs4Connection(obfs4Endpoint)
-
-	if err != nil {
-		newRemote := obfs4Endpoint.Remote
-		_, ok := c.obfs4Failures[newRemote]
-		if ok {
-			c.obfs4Failures[newRemote] += 1
-		} else {
-			c.obfs4Failures[newRemote] = 1
-		}
-		c.error("Could not dial obfs4 remote: %v (failures: %d)", err, c.obfs4Failures[newRemote])
-	}
-
-	if newObfs4Conn == nil {
-		c.error("Did not get obfs4: %v ", err)
-	} else {
-		c.outLock.Lock()
-		c.obfs4Conns = append([]Obfs4Conn{*newObfs4Conn}, c.obfs4Conns...)
-		c.outLock.Unlock()
-
-		c.newObfs4Conn <- *newObfs4Conn
-		c.log("Dialed new remote")
-
-		// If we wait sleepSeconds here to clean up the previous connection, we can guarantee that the
-		// connection list will not grow unbounded
-		go func() {
-			time.Sleep(time.Duration(sleepSeconds) * time.Second)
-
-			c.cleanupOldConn()
-		}()
-	}
 }
 
 func (c *Client) hop() {
@@ -344,8 +285,51 @@ func (c *Client) hop() {
 		}
 
 		c.log("HOPPING to %+v", newRemote)
-		c.connectObfs4(obfs4Endpoint, sleepSeconds)
 
+		obfs4Dialer, err := obfsvpn.NewDialerFromCert(obfs4Endpoint.Cert)
+		if err != nil {
+			c.error("Could not dial obfs4 remote: %v", err)
+			return
+		}
+
+		if c.kcpConfig.Enabled {
+			c.obfs4Dialer.DialFunc = obfsvpn.GetKCPDialer(c.kcpConfig, c.log)
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), dialGiveUpTime)
+		defer cancel()
+
+		c.log("Dialing new remote: %v", newRemote)
+		newObfs4Conn, err := obfs4Dialer.DialContext(ctx, "tcp", newRemote)
+
+		if err != nil {
+			_, ok := c.obfs4Failures[newRemote]
+			if ok {
+				c.obfs4Failures[newRemote] += 1
+			} else {
+				c.obfs4Failures[newRemote] = 1
+			}
+			c.error("Could not dial obfs4 remote: %v (failures: %d)", err, c.obfs4Failures[newRemote])
+		}
+
+		if newObfs4Conn == nil {
+			c.error("Did not get obfs4: %v ", err)
+		} else {
+			c.outLock.Lock()
+			c.obfs4Conns = append([]net.Conn{newObfs4Conn}, c.obfs4Conns...)
+			c.outLock.Unlock()
+
+			c.newObfs4Conn <- newObfs4Conn
+			c.log("Dialed new remote")
+
+			// If we wait sleepSeconds here to clean up the previous connection, we can guarantee that the
+			// connection list will not grow unbounded
+			go func() {
+				time.Sleep(time.Duration(sleepSeconds) * time.Second)
+
+				c.cleanupOldConn()
+			}()
+		}
 	}
 }
 
@@ -356,11 +340,13 @@ func (c *Client) cleanupOldConn() {
 	if len(c.obfs4Conns) > 1 {
 		c.log("Connections: %v", len(c.obfs4Conns))
 		connToClose := c.obfs4Conns[len(c.obfs4Conns)-1]
-		c.log("Cleaning up old connection to %v", connToClose.RemoteAddr())
+		if connToClose != nil {
+			c.log("Cleaning up old connection to %v", connToClose.RemoteAddr())
 
-		err := connToClose.Close()
-		if err != nil {
-			c.log("Error closing obfs4 connection to %v: %v", connToClose.RemoteAddr(), err)
+			err := connToClose.Close()
+			if err != nil {
+				c.log("Error closing obfs4 connection to %v: %v", connToClose.RemoteAddr(), err)
+			}
 		}
 
 		// Remove the connection from our tracking list
@@ -389,19 +375,21 @@ func (c *Client) readUDPWriteTCP() {
 			c.openvpnAddrLock.Unlock()
 		}
 
-		// Always write to the first connection in our list because it will be most up to date
-		conn, err := c.getUsableConnection()
-		if err != nil {
-			c.error("Cannot get connection: %s", err)
-			continue
-		}
-		_, err = conn.Write(tcpBuffer)
-		if err != nil {
-			c.error("readUDPWriteTCP: Write err from %v to %v: %v", conn.LocalAddr(), conn.RemoteAddr(), err)
-			time.Sleep(reconnectTime)
-			config := c.obfs4Conns[0].config
-			c.connectObfs4(&config, 20)
-		}
+		func() {
+			// Always write to the first connection in our list because it will be most up to date
+			func() {
+				conn, err := c.getUsableConnection()
+				if err != nil {
+					c.log("Cannot get connection: %s", err)
+					return
+				}
+				_, err = conn.Write(tcpBuffer)
+				if err != nil {
+					c.log("Write err from %v to %v: %v", conn.LocalAddr(), conn.RemoteAddr(), err)
+					return
+				}
+			}()
+		}()
 	}
 }
 
@@ -452,41 +440,16 @@ func (c *Client) readTCPWriteUDP() {
 
 		for {
 			tcpBytes := <-fromTCP
+
 			c.openvpnAddrLock.RLock()
 			_, err := c.openvpnConn.WriteToUDP(tcpBytes, c.openvpnAddr)
 			c.openvpnAddrLock.RUnlock()
 			if err != nil {
-				c.error("readTCPWriteUDP: Write err from %v to %v: %v", c.openvpnConn.LocalAddr(), c.openvpnConn.RemoteAddr(), err)
-				c.openvpnAddrLock.Lock()
-				c.openvpnConn.Close()
-				c.openvpnConn, err = c.createOpenvpnConnection()
-				c.openvpnAddrLock.Unlock()
-				if err == nil {
-					c.openvpnAddrLock.RLock()
-					_, err := c.openvpnConn.WriteToUDP(tcpBytes, c.openvpnAddr)
-					c.openvpnAddrLock.RUnlock()
-					if err != nil {
-						c.error("Failed to resend. %v", err)
-					}
-				}
+				c.error("Write err from %v to %v: %v", c.openvpnConn.LocalAddr(), c.openvpnConn.RemoteAddr(), err)
+				return
 			}
 		}
 	}
-}
-
-func (c *Client) createOpenvpnConnection() (*net.UDPConn, error) {
-	proxyAddr, err := net.ResolveUDPAddr("udp", c.ProxyAddr)
-	if err != nil {
-		c.error("cannot resolve UDP addr: %v", err)
-		return nil, err
-	}
-
-	udpConn, err := net.ListenUDP("udp", proxyAddr)
-	if err != nil {
-		c.error("error accepting udp connection: %v", err)
-		return nil, fmt.Errorf("error accepting udp connection: %w", err)
-	}
-	return udpConn, nil
 }
 
 func (c *Client) Stop() (bool, error) {
