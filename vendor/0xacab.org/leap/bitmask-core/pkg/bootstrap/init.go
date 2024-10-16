@@ -16,12 +16,11 @@ import (
 	"0xacab.org/leap/bitmask-core/pkg/client"
 	"0xacab.org/leap/bitmask-core/pkg/client/provisioning"
 	"0xacab.org/leap/bitmask-core/pkg/introducer"
+	bitmask_storage "0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/tunnel-telemetry/pkg/geolocate"
 )
 
 type Config struct {
-	// FallbackCountryCode is an ISO-2 country code. Fallback if geolocation lookup fails.
-	FallbackCountryCode string
 	// country code used to fetch gateways/bridges. If geolocation lookup fails,
 	// api.config.FallbackCountryCode is used
 	CountryCode string
@@ -79,9 +78,10 @@ func NewAPI(cfg *Config) (*API, error) {
 	transportConfig := client.DefaultTransportConfig()
 
 	var intro *introducer.Introducer
+	var err error
 
 	if cfg.Introducer != "" {
-		intro, err := introducer.NewIntroducerFromURL(cfg.Introducer)
+		intro, err = introducer.NewIntroducerFromURL(cfg.Introducer)
 		if err != nil {
 			return nil, err
 		}
@@ -117,13 +117,15 @@ func NewAPI(cfg *Config) (*API, error) {
 	// In the future, we might want to add a timeout and mark it as unusable if it fails.
 	if intro != nil {
 		client, err := introducer.NewHTTPClientFromIntroducer(intro)
-		if client != nil {
+		if err != nil {
 			return nil, err
 		}
-		log.Info().Msg("Using obfuscated http client")
+		log.Info().
+			Str("type", intro.Type).
+			Str("addr", intro.Addr).
+			Bool("UseKCP", intro.KCP).
+			Msg("Using introducer")
 		api.httpClient = client
-		// We got an http client configured to use the obfuscated introducer,
-		// so we'll stop here.
 		return api, nil
 	}
 
@@ -166,28 +168,44 @@ func getSocksProxyClient(proxyString string) (*http.Client, error) {
 // DoGeolocationLookup will try to fetch a valid country code.This country
 // code will be stored and sent in any subsequent resource queries to menshen
 // This method should be called only once, right after initializing the API object.
-// The VPN must be turned off when calling this function.
-func (api *API) DoGeolocationLookup() (string, error) {
+// The VPN must be turned off when calling this function. When the geolocation
+// lookup succeeds, the country code is saved on disk for the future, in case
+// the geolcation lookup fails.
+
+func (api *API) DoGeolocationLookup() error {
 	log.Debug().Msg("Doing geolocataion lookup")
-	geo, err := geolocate.FindCurrentHostGeolocationWithSTUN(api.config.STUNServers, api.config.CountryCodeLookupURL)
-	if err == nil {
-		// FIXME scrub if we're going to submit logs.
-		log.Info().
-			Str("countryCode", geo.CC).
-			Msg("Successfully got country code")
-		api.config.CountryCode = geo.CC
-	} else {
-		if api.config.FallbackCountryCode != "" {
-			log.Warn().
-				Err(err).
-				Str("fallbackCountryCode", api.config.FallbackCountryCode).
-				Msg("Could not get country code via geolocation lookup. Using fallback country code")
-			api.config.CountryCode = api.config.FallbackCountryCode
-		} else {
-			return "", err
-		}
+
+	storage, err := bitmask_storage.GetStorage()
+	if err != nil {
+		return fmt.Errorf("Could not get storage to load/save country code fallback: %s", err)
 	}
-	return api.config.CountryCode, nil
+
+	geo, err := geolocate.FindCurrentHostGeolocationWithSTUN(api.config.STUNServers, api.config.CountryCodeLookupURL)
+
+	if err == nil {
+		api.config.CountryCode = geo.CC
+		storage.SaveFallbackCountryCode(geo.CC)
+		return nil
+	}
+
+	log.Warn().
+		Err(err).
+		Str("stunServers", strings.Join(api.config.STUNServers, ",")).
+		Str("countryCodeLookupURL", api.config.CountryCodeLookupURL).
+		Msg("Could not get country code using STUN servers. " +
+			"Trying to use previously fetched country code")
+
+	cc := storage.GetFallbackCountryCode()
+	if cc == "" {
+		log.Warn().Msg("No fallback country code was saved. Proceeding without country code")
+	} else {
+		log.Info().
+			Str("countryCode", cc).
+			Msg("Using fallback country code")
+		api.config.CountryCode = cc
+	}
+
+	return nil
 }
 
 func (api *API) GetProvider() (*models.ModelsProvider, error) {
@@ -243,6 +261,14 @@ type GatewayParams struct {
 	CC        string
 }
 
+type BridgeParams struct {
+	Location  string
+	Port      string
+	Transport string
+	CC        string
+	Type      string
+}
+
 // GetGateways returns a list of gateways (it it's enabled by the menshen
 // API). It optionally accepts a GatewayParams object where you can set
 // different filters.
@@ -263,6 +289,24 @@ func (api *API) GetGateways(p *GatewayParams) ([]*models.ModelsGateway, error) {
 		return nil, err
 	}
 	return gateways.Payload, err
+}
+
+func (api *API) GetAllBridges(p *BridgeParams) ([]*models.ModelsBridge, error) {
+	params := provisioning.NewGetAPI5BridgesParams()
+	if p != nil {
+		params.Loc = &p.Location
+		params.Port = &p.Port
+		params.Tr = &p.Transport
+		params.Type = &p.Type
+	}
+	if api.httpClient != nil {
+		params = params.WithHTTPClient(api.httpClient)
+	}
+	bridges, err := api.client.Provisioning.GetAPI5Bridges(params)
+	if err != nil {
+		return nil, err
+	}
+	return bridges.Payload, nil
 }
 
 // GetOpenVPNCert returns valid OpenVPN client credentials (certificate and
@@ -288,14 +332,9 @@ func (api *API) SerializeConfig(params *GatewayParams) (string, error) {
 		return "", err
 	}
 
-	var key string
-	if strings.Contains(rawCert, rsaBegin) {
-		key = matchDelimitedString(rawCert, rsaBegin, rsaEnd)
-	} else {
-		key = matchDelimitedString(rawCert, keyBegin, keyEnd)
-	}
-
+	key := matchDelimitedString(rawCert, keyBegin, keyEnd)
 	crt := matchDelimitedString(rawCert, certBegin, certEnd)
+	ca := matchDelimitedString(rawCert, caBegin, caEnd)
 	gateways, err := api.GetGateways(params)
 	if err != nil {
 		return "", err
@@ -305,7 +344,7 @@ func (api *API) SerializeConfig(params *GatewayParams) (string, error) {
 	gw := gateways[0]
 
 	vars := configVars{
-		CA:        riseupCA,
+		CA:        ca,
 		Cert:      crt,
 		Key:       key,
 		IPAddr:    gw.IPAddr,

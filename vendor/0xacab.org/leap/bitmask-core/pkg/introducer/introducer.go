@@ -28,7 +28,7 @@ func (i *Introducer) Validate() error {
 	if len(i.Cert) != 70 {
 		return fmt.Errorf("wrong certificate len = %d", len(i.Cert))
 	}
-	if len(strings.Split(i.FQDN, ".")) < 2 {
+	if i.FQDN != "localhost" && len(strings.Split(i.FQDN, ".")) < 2 {
 		return fmt.Errorf("expected a FQDN, got: %s", i.FQDN)
 	}
 	return nil

@@ -9,23 +9,21 @@ import "time"
 
 // Introducer keeps metadata about introducers that the user has added to the Bitmask application. Introducers are expected to be transmitted off-band.
 type Introducer struct {
-	ID   int    `storm:"increment"`
-	Name string `storm:"index,unique"`
+	FQDN string
 	// URL is the canonical URL. It should be stored after validation and writing in the canonical order, since
 	// we will check for uniqueness.
-	URL       string    `storm:"unique"`
-	CreatedAt time.Time `storm:"index"`
+	URL       string
+	CreatedAt time.Time
 	LastUsed  time.Time
 }
 
 // Bridge is a private bridge.
 type Bridge struct {
-	ID       int    `storm:"increment"`
-	Name     string `storm:"index,unique"`
+	Name     string
 	Location string
 	Type     string
 	// Raw is the raw JSON serialization of the bridge. We could also use the menshen model as a nested struct.
-	Raw       string    `storm:"unique"`
-	CreatedAt time.Time `storm:"index"`
+	Raw       string
+	CreatedAt time.Time
 	LastUsed  time.Time
 }

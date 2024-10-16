@@ -76,8 +76,17 @@ func NewHTTPClientFromIntroducer(introducer *Introducer) (*http.Client, error) {
 		Transport: &CallbackTransport{
 			OriginalTransport: transport,
 			Callback: func(r *http.Response) {
-				if err := storage.MaybeUpdateLastUsedForIntroducer(introducer.URL()); err != nil {
-					log.Error().Err(err).Msg("cannot update introducer")
+				store, err := storage.GetStorage()
+				if err != nil {
+					log.Warn().
+						Err(err).
+						Msg("Could not load DB to update lastUsed timestamp for introducer")
+					return
+				}
+				if err := store.UpdateLastUsedForIntroducer(introducer.URL()); err != nil {
+					log.Warn().
+						Err(err).
+						Msg("Could not update lastUsed timestamp for introducer")
 				}
 			},
 		},
