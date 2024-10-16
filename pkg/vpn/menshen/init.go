@@ -7,6 +7,7 @@ import (
 
 	"0xacab.org/leap/bitmask-core/models"
 	"0xacab.org/leap/bitmask-core/pkg/bootstrap"
+	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 
@@ -49,6 +50,34 @@ func New() (*Menshen, error) {
 
 	// experimental introducer
 	if introURL := os.Getenv("LEAP_INTRODUCER_URL"); introURL != "" {
+
+		log.Info().
+			Str("introducerURL", introURL).
+			Msg("Using introducer from env LEAP_INTRODUCER_URL")
+
+		store, err := storage.GetStorage()
+		if err != nil {
+			log.Fatal().
+				Err(err).
+				Str("introducerURL", introURL).
+				Msg("Could to get storage")
+		}
+
+		// check if introducer exists in database, if not add it
+		_, err = store.GetIntroducerByURL(introURL)
+		if err != nil {
+			err = store.AddIntroducer(introURL)
+			if err != nil {
+				log.Fatal().
+					Err(err).
+					Str("introducerURL", introURL).
+					Msg("Failed to add introducer to storage")
+			} else {
+				log.Info().Msg("Added introducer to database")
+			}
+		} else {
+			log.Info().Msg("Found introducer in database")
+		}
 		cfg.Introducer = introURL
 	}
 
@@ -75,7 +104,7 @@ func New() (*Menshen, error) {
 // "--persisst-key" without additional value
 // Currently, there is no caching implemented
 func (m *Menshen) GetOpenvpnArgs() ([]string, error) {
-	log.Trace().Msg("Getting OpenVPN arguments")
+	log.Trace().Msg("Getting OpenVPN arguments from menshen")
 
 	service, err := m.api.GetService()
 	if err != nil {
@@ -118,7 +147,7 @@ func (m *Menshen) GetOpenvpnArgs() ([]string, error) {
 // Asks menshen for valid client credentials (certificate + key)
 // Currently, there is no caching implemented
 func (m *Menshen) GetPemCertificate() ([]byte, error) {
-	log.Trace().Msg("Getting OpenVPN client certificate")
+	log.Trace().Msg("Getting OpenVPN client certificate from menshen")
 	cert, err := m.api.GetOpenVPNCert()
 	if err != nil {
 		return []byte{}, err
