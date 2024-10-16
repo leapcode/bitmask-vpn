@@ -40,18 +40,19 @@ func isUpgradeAvailable() bool {
 func isValidCert(path string) bool {
 	log.Trace().
 		Str("path", path).
-		Msg("Checking for a valid OpenVPN client credentials (key and certificate)")
+		Msg("Checking for valid OpenVPN client credentials (key and certificate)")
 
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Debug().
 			Str("path", path).
+			Str("err", err.Error()).
 			Msg("Could not read certificate file")
 		return false
 	}
 
 	pkBlock, rest := pem.Decode(data)
-	if rest == nil {
+	if rest == nil || pkBlock == nil {
 		log.Warn().
 			Str("data", string(data)).
 			Msg("Could not decode pem data")

@@ -329,9 +329,10 @@ func (b *Bitmask) getCert() error {
 	}
 
 	b.certPemPath = b.getTempCertPemPath()
-	// If we start OpenVPN, openvpn.pem does not exist and isValidCert returns false
-	// If we start OpenVPN later again (not restarting the  client), there
-	// should be a valid openvpn.pem
+	// If we start OpenVPN for  the first time, openvpn.pem does not exist
+	// and isValidCert returns false
+	// If we start OpenVPN later again (not restarting the client), there
+	// should be a valid openvpn.pem and isValidCert should return true
 	// If there is no valid openvpn.pem, fetch a new one from menshen
 	// Note: b.tempdir is unique for every run of the desktop client
 	if !isValidCert(b.certPemPath) {
