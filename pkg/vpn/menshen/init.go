@@ -146,6 +146,6 @@ func (m *Menshen) GetSnowflakeCh() chan *snowflake.StatusEvent {
 	return nil
 }
 
-func (m *Menshen) DoGeolocationLookup() (string, error) {
+func (m *Menshen) DoGeolocationLookup() error {
 	return m.api.DoGeolocationLookup()
 }

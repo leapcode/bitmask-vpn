@@ -412,6 +412,6 @@ func (b *Bonafide) GetSnowflakeCh() chan *snowflake.StatusEvent {
 	return b.snowflakeCh
 }
 
-func (b *Bonafide) DoGeolocationLookup() (string, error) {
-	return "", errors.New("DoGeolocationLookup is not supported in v3 (only implemented in bitmask-core)")
+func (b *Bonafide) DoGeolocationLookup() error {
+	return errors.New("DoGeolocationLookup is not supported in v3 (only implemented in bitmask-core)")
 }

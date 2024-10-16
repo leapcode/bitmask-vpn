@@ -143,12 +143,8 @@ func Init() (*Bitmask, error) {
 			If the lookup succeeds, we save it in the config file and use it as fallback
 			the next time.
 		*/
-		countryCode, err := b.api.DoGeolocationLookup()
-		if err == nil {
-			log.Debug().
-				Str("countryCode", countryCode).
-				Msg("Successfully got country code")
-		} else {
+		err := b.api.DoGeolocationLookup()
+		if err != nil {
 			log.Warn().
 				Str("err", err.Error()).
 				Msgf("Could not do geolocation lookup")

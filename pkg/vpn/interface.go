@@ -21,5 +21,5 @@ type apiInterface interface {
 	GetBestGateways(transport string) ([]bonafide.Gateway, error)
 	FetchAllGateways(transport string) error
 	GetSnowflakeCh() chan *snowflake.StatusEvent
-	DoGeolocationLookup() (string, error)
+	DoGeolocationLookup() error
 }
