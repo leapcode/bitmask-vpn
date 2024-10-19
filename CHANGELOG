@@ -2,6 +2,47 @@ development
 ===========
 - ...
 
+0.24.10-rc.1
+======
+- helper: use unix socket for local api
+- change obfsvpn version to v1.1.0
+- Do geolocation lookup
+- Add STUNServers countryCodeLookupURL fields to provider config (geolocation lookup)
+- [config] Clean code (move CaCert to global var list)
+- [menshen] Use NewConfigFromURL instead of NewConfig
+- Update bitmask-core dependency
+- Replace which with command -v
+- Update obfsvpn to v1.3.0
+- [bitmask-root] Don't redirect port 53 traffic of vpn gateways
+- [bitmask-root] Don't return generator in get_gateways
+- Fix log message that logs whitelisted gateway ip in firewall
+- config: enable UDP for openvpn by default
+- docs: add instructions for deb source package and uploading to ppa
+- deb: add intermediate makefile target to prepare deb package
+- Add python3 build dependency in control template
+- Update debian changelog template
+- deb: update patch for deb package to build with qt6.4
+- build: donot rename built app binary
+- build: pass in PROVIDER env variable to getparam script
+- installer: name helper launchd service based on app name
+- qmake: pass RELEASE variable to qmake invocation
+- build: use RELEASE_DIR for path to release build dir
+- qmake: configure for release builds when env RELEASE is yes
+- ci: donot manually apply patch in debian package jobs
+- ci: add gitlab ci job for building on macos
+- build: update openvpn build script to work on arm64 host
+- [Makefile] Don't overwrite QMAKE env when calling build.sh
+- [Makefile] Fix racecondition in Makefile
+- [Makefile] Remove install_go target
+- [Makefile] Add default target allinone (clean/vendor/build)
+- [Makefile] Use unlink only on Windows for make clean
+- Remove gui/providers/providers.json from git repo
+- ci: Remove debian job. Not needed anymore
+- ci: rename arch CI job to build_Arch_Linux_package
+- ci: build deb packages for Debian 12, Ubuntu 22.04 and Ubuntu 24.04
+- ci: Fix CI fail "toolchain not available"
+- ci: remove ineffective chmod from build step of macOS job
+
 0.24.8
 ======
 - Reduces the size of splash screen image
