@@ -345,7 +345,13 @@ func (b *Bitmask) getCert() error {
 					Str("apiUrl", config.APIURL).
 					Msg("Could not parse domain out of API URL")
 			}
-			logDnsLookup(url.Host)
+
+			domain := url.Host
+			// url.Host also contains a port if supplied
+			if strings.Contains(url.Host, ":") {
+				domain = domain[0:strings.Index(domain, ":")]
+			}
+			logDnsLookup(domain)
 			return err
 		}
 		err = os.WriteFile(b.certPemPath, cert, 0600)

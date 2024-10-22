@@ -147,7 +147,7 @@ func (b *Bitmask) GetBestLocation(transport string) string {
 	location, err := b.api.GetBestLocation(transport)
 	if err != nil {
 		log.Warn().
-			Err(err).
+			Str("err", err.Error()).
 			Str("transport", transport).
 			Msg("Could not get best location")
 	}

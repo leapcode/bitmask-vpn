@@ -115,7 +115,7 @@ func logDnsLookup(domain string) {
 
 	log.Debug().
 		Str("domain", domain).
-		Msg("Resolving domain ...")
+		Msg("Resolving domain")
 	for _, addr := range addrs {
 		log.Debug().
 			Str("domain", domain).
