@@ -23,6 +23,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
+	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/launcher"
 	"0xacab.org/leap/bitmask-vpn/pkg/motd"
@@ -172,6 +173,7 @@ func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {
 
 // Close the connection to bitmask, and does cleanup of temporal files
 func (b *Bitmask) Close() {
+
 	log.Info().Msg("Close: cleanup and vpn shutdown...")
 	defer config.CloseLogger()
 
@@ -195,6 +197,15 @@ func (b *Bitmask) Close() {
 			Err(err).
 			Msg("There was an error removing temp dir")
 	}
+
+	store, err := storage.GetStorage()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not get bitmask-core storage to close it")
+		return
+	}
+	store.Close()
 }
 
 // Version gets the bitmask version string

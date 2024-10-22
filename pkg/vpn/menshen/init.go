@@ -1,6 +1,7 @@
 package menshen
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -32,6 +33,11 @@ func New() (*Menshen, error) {
 		log.Debug().
 			Str("apiUrl", config.APIURL).
 			Msg("Using API URL from env")
+	}
+
+	err := storage.InitAppStorage()
+	if err != nil {
+		return nil, fmt.Errorf("Could not initialize bitmask-core storage: %v", err)
 	}
 
 	cfg, err := bootstrap.NewConfigFromURL(config.APIURL)
