@@ -33,27 +33,30 @@ function cancelInstaller(message)
 }
 
 function Component() {
-    // Check whether OS is supported.
-    // start installer with -v to see debug output
-    var uid = installer.execute("/usr/bin/id", ["-u"])[0]
-    var gid = installer.execute("/usr/bin/id", ["-g"])[0]
+    if (systemInfo.productType === "macos") {
+        var uid = installer.execute("/usr/bin/id", ["-u"])[0]
+        var gid = installer.execute("/usr/bin/id", ["-g"])[0]
+        installer.setValue("HelperSocketUid", uid.trim())
+        installer.setValue("HelperSocketGid", gid.trim())
 
-    installer.setValue("HelperSocketUid", uid.trim())
-    installer.setValue("HelperSocketGid", gid.trim())
+        console.log("UID: " + uid)
+        console.log("GID: " + gid)
+    }
 
     installer.gainAdminRights();
 
     console.log("OS: " + systemInfo.productType);
     console.log("Kernel: " + systemInfo.kernelType + "/" + systemInfo.kernelVersion);
 
-    console.log("UID: " + uid)
-    console.log("GID: " + gid)
     installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
 
     if (installer.isInstaller()) {
         console.log("Checking for existing installation")
         component.loaded.connect(this, Component.prototype.installerLoaded);
     }
+
+    // Check whether OS is supported.
+    // start installer with -v to see debug output
 
     var validOs = false;
 
