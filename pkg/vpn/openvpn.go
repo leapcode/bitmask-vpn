@@ -423,6 +423,9 @@ func (b *Bitmask) Reconnect() error {
 	if err != nil {
 		return err
 	}
+	log.Debug().
+		Str("status", status).
+		Msg("Status when switching location")
 
 	if status != Off {
 		b.statusCh <- Stopping
@@ -451,11 +454,16 @@ func (b *Bitmask) Reconnect() error {
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
 	status := Off
+	var err error
 	if b.isFailed() {
 		status = Failed
 	} else {
-		status, err := b.getOpenvpnState()
+		status, err = b.getOpenvpnState()
 		if err != nil {
+			log.Warn().
+				Err(err).
+				Str("status", status).
+				Msg("status of openvpn from management")
 			status = Off
 		}
 		if status == Off && b.launch.FirewallIsUp() {

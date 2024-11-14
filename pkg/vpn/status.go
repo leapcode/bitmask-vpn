@@ -174,6 +174,9 @@ func (b *Bitmask) getOpenvpnState() (string, error) {
 	}
 	stateEvent, err := b.managementClient.LatestState()
 	if err != nil {
+		log.Debug().
+			Err(err).
+			Msg("error fetching latest state from management interface")
 		return "", err
 	}
 	status, ok := statusNames[stateEvent.NewState()]
