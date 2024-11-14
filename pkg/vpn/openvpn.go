@@ -430,8 +430,11 @@ func (b *Bitmask) Reconnect() error {
 			b.obfsvpnProxy.Stop()
 			b.obfsvpnProxy = nil
 		}
-		err = b.launch.OpenvpnStop()
-		if err != nil {
+		b.tryStopFromManagement()
+		if err := b.launch.OpenvpnStop(); err != nil {
+			log.Debug().
+				Err(err).
+				Msg("Error while stop obfsvpn proxy")
 			return err
 		}
 	}
