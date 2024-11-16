@@ -17,7 +17,6 @@ package vpn
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -58,7 +57,7 @@ type Bitmask struct {
 
 // Init the connection to bitmask
 func Init() (*Bitmask, error) {
-	tempdir, err := ioutil.TempDir("", "leap-")
+	tempdir, err := os.MkdirTemp("", "leap-")
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +109,7 @@ func Init() (*Bitmask, error) {
 		provider:         "",
 	}
 
-	err = ioutil.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
+	err = os.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
 	if err != nil {
 		return nil, err
 	}
