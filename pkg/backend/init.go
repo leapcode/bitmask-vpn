@@ -74,8 +74,9 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 			Err(err).
 			Msg("Could not initialize bitmask")
 		errCh <- err.Error()
-		return
 	}
+
+	ctx.bm = b
 
 	// right now we just get autostart from an init flag,
 	// but we want to be able to persist that option from the preferences
@@ -99,7 +100,6 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		log.Error().Msg("Could not find polkit")
 		errCh <- "nopolkit"
 	}
-	ctx.bm = b
 	ctx.IsReady = true
 }
 

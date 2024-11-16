@@ -119,8 +119,7 @@ func Init() (*Bitmask, error) {
 		Str("caCertPath", b.getTempCaCertPath()).
 		Msg("Sucessfully wrote OpenVPN CA certificate (hardcoded in the binary, not coming from API)")
 
-	err = b.launch.FirewallStop()
-	if err != nil {
+	if err := b.launch.FirewallStop(); err != nil {
 		log.Warn().
 			Err(err).
 			Msg("Could not stop firewall")
