@@ -191,27 +191,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="195"/>
+        <location filename="../components/Preferences.qml" line="213"/>
+        <source>Obfs4 with KCP can help to bypass blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="227"/>
         <source>Transport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="203"/>
+        <location filename="../components/Preferences.qml" line="235"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="216"/>
+        <location filename="../components/Preferences.qml" line="248"/>
         <source>Use UDP if available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="231"/>
-        <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../components/Preferences.qml" line="244"/>
+        <location filename="../components/Preferences.qml" line="196"/>
         <source>Use KCP if available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -440,42 +440,42 @@ Connection</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="140"/>
+        <location filename="../main.cpp" line="167"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="147"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Enable Web API.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="160"/>
+        <location filename="../main.cpp" line="187"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="166"/>
+        <location filename="../main.cpp" line="193"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="172"/>
+        <location filename="../main.cpp" line="199"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="177"/>
+        <location filename="../main.cpp" line="204"/>
         <source>Web API port (default: 8080)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="180"/>
+        <location filename="../main.cpp" line="207"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation type="unfinished"></translation>
     </message>

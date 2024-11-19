@@ -191,27 +191,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="195"/>
+        <location filename="../components/Preferences.qml" line="213"/>
+        <source>Obfs4 with KCP can help to bypass blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="227"/>
         <source>Transport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="203"/>
+        <location filename="../components/Preferences.qml" line="235"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="216"/>
+        <location filename="../components/Preferences.qml" line="248"/>
         <source>Use UDP if available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="231"/>
-        <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../components/Preferences.qml" line="244"/>
+        <location filename="../components/Preferences.qml" line="196"/>
         <source>Use KCP if available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -440,32 +440,32 @@ Connection</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="140"/>
+        <location filename="../main.cpp" line="167"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>تېز ھەم بىخەتەر VPN بىتماسك تەرىپىدىن سۇنۇلىدۇ.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="147"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>سېستىما تەگلىكىدە سىن رەسىمنى كۆرسەتمە (Gnome پوستى كېڭەيتىلمىلىرى، ياكى باشقا ئۇشۇلدا VPNنى كونترول قىلىشتەك ھەر ئىككى ئىشتا قوللىنىشچان)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Enable Web API.</source>
         <translation>ئاكتىپلاشWeb API.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="160"/>
+        <location filename="../main.cpp" line="187"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>ياردمچى قاچىلاش (پەقەتلا لىناكىس ئۈچۈن، لازىم sudo).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="166"/>
+        <location filename="../main.cpp" line="193"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>ئەگەر تەمىنلىگۈچىدە بولسا، obfs4 نى قاتناشنى مۈجىمەللەشتۈرۈشكە ئىشلىتىش.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="172"/>
+        <location filename="../main.cpp" line="199"/>
         <source>Enable autostart.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -474,12 +474,12 @@ Connection</source>
         <translation type="vanished">كېيىنكى قېتىم باشلىتىلغاندا ئاپتۇماتىك قوزغىتىشنى چەكلەش</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="177"/>
+        <location filename="../main.cpp" line="204"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API پورتى (ئەستىكىسى: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="180"/>
+        <location filename="../main.cpp" line="207"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>VPN باشلات، مەيلى &quot;ئوچۇق&quot; ياكى &quot;ئېتىك&quot; بولسۇن</translation>
     </message>

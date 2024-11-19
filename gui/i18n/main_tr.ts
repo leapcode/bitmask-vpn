@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>About</name>
     <message>
@@ -190,29 +192,33 @@
         <translation>Snowflake için sisteminizde Tor kurulu olması gerekir</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="195"/>
+        <location filename="../components/Preferences.qml" line="213"/>
+        <source>Obfs4 with KCP can help to bypass blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="227"/>
         <source>Transport</source>
         <translation>Taşıyıcı</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="203"/>
+        <location filename="../components/Preferences.qml" line="235"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP, VPN bağlantısını daha hızlı yapabilir. Bazı ağlarda engellenmiş olabilir.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="216"/>
+        <location filename="../components/Preferences.qml" line="248"/>
         <source>Use UDP if available</source>
         <translation>Olabiliyorsa UDP kullanılsın</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation>Bazı ağlarda UDP engellenmişse KCP çalışabilir.</translation>
+        <translation type="vanished">Bazı ağlarda UDP engellenmişse KCP çalışabilir.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="244"/>
+        <location filename="../components/Preferences.qml" line="196"/>
         <source>Use KCP if available</source>
-        <translation>Mevcut ise KCP kullan</translation>
+        <translation>Olabiliyorsa KCP kullanılsın</translation>
     </message>
 </context>
 <context>
@@ -239,6 +245,11 @@
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
         <translation>Bu işlem birkaç dakika sürebilir</translation>
+    </message>
+    <message>
+        <location filename="../components/StatusBox.qml" line="149"/>
+        <source>Turn on</source>
+        <translation>Aç</translation>
     </message>
 </context>
 <context>
@@ -295,7 +306,7 @@
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
-        <location filename="../components/VPNState.qml" line="153"/>
+        <location filename="../components/VPNState.qml" line="155"/>
         <source>Connecting</source>
         <translation>Bağlantı kuruluyor</translation>
     </message>
@@ -307,104 +318,120 @@ Connection</source>
 bağlantı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="117"/>
+        <location filename="../components/VPNState.qml" line="98"/>
+        <source>Turn on</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="118"/>
         <source>Secured
 Connection</source>
         <translation>Güvenli
 bağlantı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="134"/>
+        <source>Turn off</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="172"/>
+        <location filename="../components/VPNState.qml" line="211"/>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 kapalı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>off</source>
         <translation>kapalı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="268"/>
+        <location filename="../components/VPNState.qml" line="272"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 açık</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="271"/>
+        <location filename="../components/VPNState.qml" line="275"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 ile bağlantı kuruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="274"/>
+        <location filename="../components/VPNState.qml" line="278"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 durduruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="277"/>
+        <location filename="../components/VPNState.qml" line="281"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 interneti engelliyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="284"/>
+        <location filename="../components/VPNState.qml" line="288"/>
         <source>pluggable transport connection</source>
         <translation>değiştirilebilir taşıyıcı bağlantısı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="286"/>
+        <location filename="../components/VPNState.qml" line="290"/>
         <source>connection done</source>
         <translation>bağlantı kuruldu</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="288"/>
+        <location filename="../components/VPNState.qml" line="292"/>
         <source>doing handshake</source>
         <translation>el sıkışılıyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="290"/>
+        <location filename="../components/VPNState.qml" line="294"/>
         <source>handshake done</source>
         <translation>el sıkışma tamamlandı</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="292"/>
+        <location filename="../components/VPNState.qml" line="296"/>
         <source>creating one-hop connection</source>
         <translation>bir duraklı bağlantı oluşturuluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="294"/>
+        <location filename="../components/VPNState.qml" line="298"/>
         <source>requesting status</source>
         <translation>durum isteniyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="296"/>
+        <location filename="../components/VPNState.qml" line="300"/>
         <source>loading status</source>
         <translation>durum yükleniyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="298"/>
+        <location filename="../components/VPNState.qml" line="302"/>
         <source>loading keys</source>
         <translation>anahtarlar yükleniyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="300"/>
+        <location filename="../components/VPNState.qml" line="304"/>
         <source>requesting descriptors</source>
         <translation>belirteçler isteniyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="302"/>
+        <location filename="../components/VPNState.qml" line="306"/>
         <source>loading descriptors</source>
         <translation>belirteçler yükleniyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="304"/>
+        <location filename="../components/VPNState.qml" line="308"/>
         <source>creating circuit</source>
         <translation>devre kuruluyor</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="306"/>
+        <location filename="../components/VPNState.qml" line="310"/>
         <source>done</source>
         <translation>bitti</translation>
     </message>
@@ -413,49 +440,49 @@ bağlantı</translation>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="140"/>
+        <location filename="../main.cpp" line="167"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>: hızlı ve güvenilir bir VPN. Bitmask tarafından sunuluyor.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="147"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>Sistem çubuğu simgesi görüntülenmesin (Gnome kabuk eklentisiyle birlikte ya da VPN bağlantısını başka şekillerde denetlemek için kullanışlıdır)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Enable Web API.</source>
         <translation>Web API kullanılsın</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="160"/>
+        <location filename="../main.cpp" line="187"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>Yardımcıları kur (yalnızca Linux üzerinde ve sudo gereklidir)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="166"/>
+        <location filename="../main.cpp" line="193"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Trafiği gizlemek için obfs4 kullanılsın. Yalnızca hizmet sağlayıcıda kullanılabiliyorsa</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="172"/>
+        <location filename="../main.cpp" line="199"/>
         <source>Enable autostart.</source>
         <translation>Otomatik başlatma kullanılsın.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="177"/>
+        <location filename="../main.cpp" line="204"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API bağlantı noktası (varsayılan: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="180"/>
+        <location filename="../main.cpp" line="207"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>VPN bağlantısını başlat, &apos;açık&apos; veya &apos;kapalı&apos;.</translation>
     </message>

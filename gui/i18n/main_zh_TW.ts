@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_TW">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>About</name>
     <message>
@@ -190,29 +192,29 @@
         <translation>Snowflake 需要在您的系統上安裝 Tor</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="195"/>
+        <location filename="../components/Preferences.qml" line="213"/>
+        <source>Obfs4 with KCP can help to bypass blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="227"/>
         <source>Transport</source>
         <translation>傳輸</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="203"/>
+        <location filename="../components/Preferences.qml" line="235"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>UDP 能讓 VPN 更快速，但可能在某些網路上被封鎖。</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="216"/>
+        <location filename="../components/Preferences.qml" line="248"/>
         <source>Use UDP if available</source>
         <translation>可用時使用 UDP</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="231"/>
-        <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../components/Preferences.qml" line="244"/>
+        <location filename="../components/Preferences.qml" line="196"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -239,6 +241,11 @@
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
         <translation>這可能會花幾分鐘</translation>
+    </message>
+    <message>
+        <location filename="../components/StatusBox.qml" line="149"/>
+        <source>Turn on</source>
+        <translation type="unfinished">啟用</translation>
     </message>
 </context>
 <context>
@@ -295,7 +302,7 @@
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
-        <location filename="../components/VPNState.qml" line="153"/>
+        <location filename="../components/VPNState.qml" line="155"/>
         <source>Connecting</source>
         <translation>正在連接</translation>
     </message>
@@ -307,104 +314,120 @@ Connection</source>
 連線</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="117"/>
+        <location filename="../components/VPNState.qml" line="98"/>
+        <source>Turn on</source>
+        <translation>啟用</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="118"/>
         <source>Secured
 Connection</source>
         <translation>安全
 連線</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="134"/>
+        <source>Turn off</source>
+        <translation>關閉</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="172"/>
+        <location filename="../components/VPNState.qml" line="211"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 已關閉</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>off</source>
         <translation>關</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="268"/>
+        <location filename="../components/VPNState.qml" line="272"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 已啟用</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="271"/>
+        <location filename="../components/VPNState.qml" line="275"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>正在連線到 %1</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="274"/>
+        <location filename="../components/VPNState.qml" line="278"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>正在停止 %1</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="277"/>
+        <location filename="../components/VPNState.qml" line="281"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 正在封鎖網路</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="284"/>
+        <location filename="../components/VPNState.qml" line="288"/>
         <source>pluggable transport connection</source>
         <translation>可插拔式傳輸連線</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="286"/>
+        <location filename="../components/VPNState.qml" line="290"/>
         <source>connection done</source>
         <translation>連線完成</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="288"/>
+        <location filename="../components/VPNState.qml" line="292"/>
         <source>doing handshake</source>
         <translation>正在交握</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="290"/>
+        <location filename="../components/VPNState.qml" line="294"/>
         <source>handshake done</source>
         <translation>交握完成</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="292"/>
+        <location filename="../components/VPNState.qml" line="296"/>
         <source>creating one-hop connection</source>
         <translation>正在建立單一節點跳躍 (one-hop) 連線</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="294"/>
+        <location filename="../components/VPNState.qml" line="298"/>
         <source>requesting status</source>
         <translation>正在請求狀態</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="296"/>
+        <location filename="../components/VPNState.qml" line="300"/>
         <source>loading status</source>
         <translation>正在載入狀態</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="298"/>
+        <location filename="../components/VPNState.qml" line="302"/>
         <source>loading keys</source>
         <translation>正在載入金鑰</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="300"/>
+        <location filename="../components/VPNState.qml" line="304"/>
         <source>requesting descriptors</source>
         <translation>正在請求描述元</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="302"/>
+        <location filename="../components/VPNState.qml" line="306"/>
         <source>loading descriptors</source>
         <translation>正在載入描述元</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="304"/>
+        <location filename="../components/VPNState.qml" line="308"/>
         <source>creating circuit</source>
         <translation>正在建立迴路</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="306"/>
+        <location filename="../components/VPNState.qml" line="310"/>
         <source>done</source>
         <translation>完成</translation>
     </message>
@@ -413,49 +436,49 @@ Connection</source>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="140"/>
+        <location filename="../main.cpp" line="167"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
         <translation>：快速而安全的 VPN。由 Bitmask 提供。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="147"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
         <translation>不要顯示工作列圖示 (適合搭配 Gnome Shell 延伸模組，或以其他方式控制 VPN 時使用)。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Enable Web API.</source>
         <translation>啟用 Web API。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="160"/>
+        <location filename="../main.cpp" line="187"/>
         <source>Install helpers (Linux only, requires sudo).</source>
         <translation>安裝協助程式 (僅限 Linux，須使用 sudo)。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="166"/>
+        <location filename="../main.cpp" line="193"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>如果服務提供者支援，使用 obfs4 以混淆流量。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="172"/>
+        <location filename="../main.cpp" line="199"/>
         <source>Enable autostart.</source>
         <translation>啟用自動啟動。</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="177"/>
+        <location filename="../main.cpp" line="204"/>
         <source>Web API port (default: 8080)</source>
         <translation>Web API 連接埠 (預設：8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="180"/>
+        <location filename="../main.cpp" line="207"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>啟動 VPN，「開啟」或「關閉」。</translation>
     </message>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fr">
 <context>
     <name>About</name>
     <message>
@@ -17,7 +19,7 @@
         <source>%1 version: 
 %2</source>
         <extracomment>screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png %1 -&gt; application name %2 -&gt; version string</extracomment>
-        <translation>%1 version : 
+        <translation>%1 version&#xa0;: 
 %2</translation>
     </message>
 </context>
@@ -139,7 +141,7 @@
     <message>
         <location filename="../components/MainView.qml" line="125"/>
         <source>This service is paid for entirely by donations from users like you. The cost of running the VPN is approximately 5 USD per person every month, but every little bit counts. Do you want to donate now?</source>
-        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5 $ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant ?</translation>
+        <translation>Ce service est entièrement financé par les dons d’utilisateurs tels que vous. L’exploitation du RPV coûte approximativement 5&#xa0;$ US par personne et par mois, mais chaque geste compte. Souhaitez-vous faire un don maintenant&#x202f;?</translation>
     </message>
 </context>
 <context>
@@ -190,29 +192,33 @@
         <translation>Snowflake a besoin que Tor soit installé sur votre système</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="195"/>
+        <location filename="../components/Preferences.qml" line="213"/>
+        <source>Obfs4 with KCP can help to bypass blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../components/Preferences.qml" line="227"/>
         <source>Transport</source>
         <translation>Transport</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="203"/>
+        <location filename="../components/Preferences.qml" line="235"/>
         <source>UDP can make the VPN faster. It might be blocked on some networks.</source>
         <translation>L’UDP peut accélérer le RPV. Il pourrait être bloqué sur certains réseaux.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="216"/>
+        <location filename="../components/Preferences.qml" line="248"/>
         <source>Use UDP if available</source>
         <translation>Utiliser l’UDP si disponible</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="231"/>
         <source>KCP might work when UDP is blocked on some networks.</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">KCP peut fonctionner lorsque l&apos;UDP est bloqué sur certains réseaux.</translation>
     </message>
     <message>
-        <location filename="../components/Preferences.qml" line="244"/>
+        <location filename="../components/Preferences.qml" line="196"/>
         <source>Use KCP if available</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser KCP si disponible</translation>
     </message>
 </context>
 <context>
@@ -239,6 +245,11 @@
         <location filename="../components/StatusBox.qml" line="78"/>
         <source>This can take several minutes</source>
         <translation>Ceci peut prendre plusieurs minutes</translation>
+    </message>
+    <message>
+        <location filename="../components/StatusBox.qml" line="149"/>
+        <source>Turn on</source>
+        <translation>Activer</translation>
     </message>
 </context>
 <context>
@@ -295,7 +306,7 @@
     </message>
     <message>
         <location filename="../components/VPNState.qml" line="51"/>
-        <location filename="../components/VPNState.qml" line="153"/>
+        <location filename="../components/VPNState.qml" line="155"/>
         <source>Connecting</source>
         <translation>Connexion</translation>
     </message>
@@ -307,104 +318,120 @@ Connection</source>
 non sécurisée</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="117"/>
+        <location filename="../components/VPNState.qml" line="98"/>
+        <source>Turn on</source>
+        <translation>Activer</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="118"/>
         <source>Secured
 Connection</source>
         <translation>Connexion
 sécurisée</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="134"/>
+        <source>Turn off</source>
+        <translation>Désactiver</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="172"/>
+        <location filename="../components/VPNState.qml" line="211"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>%1 off</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 est désactivée</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="265"/>
+        <location filename="../components/VPNState.qml" line="269"/>
         <source>off</source>
         <translation>désactivé</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="268"/>
+        <location filename="../components/VPNState.qml" line="272"/>
         <source>%1 on</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 est activée</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="271"/>
+        <location filename="../components/VPNState.qml" line="275"/>
         <source>Connecting to %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Connexion à %1</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="274"/>
+        <location filename="../components/VPNState.qml" line="278"/>
         <source>Stopping %1</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>Arrêt de %1</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="277"/>
+        <location filename="../components/VPNState.qml" line="281"/>
         <source>%1 blocking internet</source>
         <extracomment>%1 -&gt; application name</extracomment>
         <translation>%1 bloque Internet</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="284"/>
+        <location filename="../components/VPNState.qml" line="288"/>
         <source>pluggable transport connection</source>
         <translation>connexion au transport enfichable</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="286"/>
+        <location filename="../components/VPNState.qml" line="290"/>
         <source>connection done</source>
         <translation>la connexion est effective</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="288"/>
+        <location filename="../components/VPNState.qml" line="292"/>
         <source>doing handshake</source>
         <translation>établissement d’une liaison</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="290"/>
+        <location filename="../components/VPNState.qml" line="294"/>
         <source>handshake done</source>
         <translation>la liaison est établie</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="292"/>
+        <location filename="../components/VPNState.qml" line="296"/>
         <source>creating one-hop connection</source>
         <translation>création d’une connexion à un saut</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="294"/>
+        <location filename="../components/VPNState.qml" line="298"/>
         <source>requesting status</source>
         <translation>demande de l’état</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="296"/>
+        <location filename="../components/VPNState.qml" line="300"/>
         <source>loading status</source>
         <translation>chargement de l’état</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="298"/>
+        <location filename="../components/VPNState.qml" line="302"/>
         <source>loading keys</source>
         <translation>chargement des clés</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="300"/>
+        <location filename="../components/VPNState.qml" line="304"/>
         <source>requesting descriptors</source>
         <translation>demande des descripteurs</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="302"/>
+        <location filename="../components/VPNState.qml" line="306"/>
         <source>loading descriptors</source>
         <translation>chargement des descripteurs</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="304"/>
+        <location filename="../components/VPNState.qml" line="308"/>
         <source>creating circuit</source>
         <translation>création du circuit</translation>
     </message>
     <message>
-        <location filename="../components/VPNState.qml" line="306"/>
+        <location filename="../components/VPNState.qml" line="310"/>
         <source>done</source>
         <translation>terminé</translation>
     </message>
@@ -413,49 +440,49 @@ sécurisée</translation>
     <name>VPNSwitch</name>
     <message>
         <location filename="../qml/VPNSwitch.qml" line="10"/>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="140"/>
+        <location filename="../main.cpp" line="167"/>
         <source>: a fast and secure VPN. Powered by Bitmask.</source>
-        <translation> : un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
+        <translation>&#xa0;: un RPV rapide et sécurisé. Propulsé par Bitmask.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="147"/>
+        <location filename="../main.cpp" line="174"/>
         <source>Do not show the systray icon (useful together with Gnome Shell extension, or to control VPN by other means).</source>
-        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome Shell ou pour contrôler le RPV par d’autres moyens).</translation>
+        <translation>Ne pas afficher l’icône de la zone de notification (utile combiné à l’extension Gnome&#xa0;Shell ou pour contrôler le RPV par d’autres moyens).</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="154"/>
+        <location filename="../main.cpp" line="181"/>
         <source>Enable Web API.</source>
         <translation>Activer l’API Web.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="160"/>
+        <location filename="../main.cpp" line="187"/>
         <source>Install helpers (Linux only, requires sudo).</source>
-        <translation>Installer les aides (Linux seulement, « sudo » est requis). </translation>
+        <translation>Installer les aides (Linux seulement, «&#xa0;sudo&#xa0;» est requis). </translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="166"/>
+        <location filename="../main.cpp" line="193"/>
         <source>Use obfs4 to obfuscate the traffic, if available in the provider.</source>
         <translation>Utiliser obfs4 pour brouiller le trafic, si proposé par le fournisseur.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="172"/>
+        <location filename="../main.cpp" line="199"/>
         <source>Enable autostart.</source>
         <translation>Activer le démarrage automatique.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="177"/>
+        <location filename="../main.cpp" line="204"/>
         <source>Web API port (default: 8080)</source>
-        <translation>Port de l’API Web (par défaut : 8080)</translation>
+        <translation>Port de l’API Web (par défaut&#xa0;: 8080)</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="180"/>
+        <location filename="../main.cpp" line="207"/>
         <source>Start the VPN, either &apos;on&apos; or &apos;off&apos;.</source>
         <translation>Démarrer le RPV, soit Activer soit Désactiver</translation>
     </message>
