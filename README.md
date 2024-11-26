@@ -29,7 +29,11 @@ git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
 sudo make depends  # do not use sudo in osx 
 PROVIDER=riseup make vendor
 make build
+sudo build/qt/release/riseup-vpn --install-helpers # on Linux and Mac
+LOG_LEVEL=TRACE build/qt/release/riseup-vpn
 ```
+
+With `--install-helpers` the `bitmask-root` helper gets copied to `/usr/sbin`.
 
 # Ubuntu
 
