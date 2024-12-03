@@ -16,6 +16,7 @@
 package pid
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -30,17 +31,20 @@ import (
 	"github.com/keybase/go-ps"
 )
 
-var pidFile = filepath.Join(config.Path, "systray.pid")
+var (
+	pidFile           = filepath.Join(config.Path, "systray.pid")
+	AlreadyRunningErr = errors.New("another instance is already running")
+)
 
 func AcquirePID() error {
 	pid := syscall.Getpid()
 	current, err := getPID()
 	if err != nil {
-		log.Print("Error reading pid file:", err)
+		log.Err(err).Msg("Error reading pid file")
 	}
 
 	if current != pid && pidRunning(current) {
-		return fmt.Errorf("Another systray is running with pid: %d", current)
+		return fmt.Errorf("%w, pid: %d", AlreadyRunningErr, current)
 	}
 
 	return setPID(pid)

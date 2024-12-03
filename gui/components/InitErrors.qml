@@ -44,6 +44,19 @@ ErrorBox {
                 errorText: qsTr("Could not find polkit agent.")
                 visible: true 
             }
+        },
+        State {
+            name: "alreadyrunning"
+            when: root.error == "alreadyrunning"
+            PropertyChanges {
+                target: splashProgress
+                visible: false
+            }
+            PropertyChanges {
+                target: splashErrorBox
+                errorText: qsTr("Application is going to quit as another instance is already running. Please use the system tray icon to open it")
+                visible: true 
+            }
         }
     ]
 }

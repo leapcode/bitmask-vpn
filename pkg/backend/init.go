@@ -1,6 +1,10 @@
 package backend
 
 import (
+	"errors"
+	"os"
+	"time"
+
 	"github.com/rs/zerolog/log"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
@@ -61,10 +65,15 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	ctx.UseUDP = ctx.cfg.UDP
 
 	err := pid.AcquirePID()
-	if err != nil {
-		log.Fatal().
+	if err != nil && errors.Is(err, pid.AlreadyRunningErr) {
+		log.Error().
 			Err(err).
 			Msg("Could not acquire PID")
+		errCh <- "alreadyrunning"
+		// would be better to quit the app from cpp land
+		// using go trigger(OnInitPidError)
+		time.Sleep(10 * time.Second)
+		os.Exit(1)
 	}
 
 	b, err := bitmask.InitializeBitmask(ctx.cfg)
