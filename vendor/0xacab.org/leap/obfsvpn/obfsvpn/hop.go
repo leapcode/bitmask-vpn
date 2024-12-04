@@ -1,8 +1,6 @@
 package obfsvpn
 
-const MinHopPort = 49152
-const MaxHopPort = 65535
-
-var PortHopRange = MaxHopPort - MinHopPort
+const MinHopPort uint = 49152
+const MaxHopPort uint = 65535
 
 const MaxUDPLen uint = 65507
