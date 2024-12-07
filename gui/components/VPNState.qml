@@ -37,6 +37,7 @@ StateGroup {
             PropertyChanges {
                 target: backgroundImage
                 source: customTheme.bgConnecting
+                opacity: 0.8
             }
             PropertyChanges {
                 target: connectionImage
@@ -54,6 +55,7 @@ StateGroup {
             PropertyChanges {
                 target: backgroundImage
                 source: customTheme.bgConnecting
+                opacity: 0.8
             }
             PropertyChanges {
                 target: connectionImage
@@ -159,6 +161,7 @@ StateGroup {
             PropertyChanges {
                 target: backgroundImage
                 source: customTheme.bgConnecting
+                opacity: 0.8
             }
             PropertyChanges {
                 target: connectionImage
@@ -183,6 +186,7 @@ StateGroup {
             StateChangeScript {
                 script: {
                     vpn.startingUI = false;
+                    console.debug("status starting");
                 }
             }
         },
@@ -204,6 +208,7 @@ StateGroup {
             PropertyChanges {
                 target: backgroundImage
                 source: customTheme.bgConnecting
+                opacity: 0.8
             }
             PropertyChanges {
                 target: toggleVPN
@@ -219,6 +224,11 @@ StateGroup {
                 target: systray.statusItem
                 text: toHuman("stopping")
             }
+            StateChangeScript {
+                script: {
+                    console.debug("status stopping");
+                }
+            }
         },
         State {
             name: failed
@@ -227,38 +237,46 @@ StateGroup {
     transitions: [
         Transition {
             to: on
-            OpacityAnimator {
-                target: backgroundImage
-                from: 0.8;
-                to: 1;
-                duration: 500;
+            NumberAnimation {
+               target: backgroundImage
+               properties: "opacity"
+               from: 0.8
+               to: 1.0
+               duration: 500;
+               easing.type: Easing.InCubic;
             }
         },
         Transition {
             to: off
-            OpacityAnimator {
-                target: backgroundImage
-                from: 0.8;
-                to: 1;
-                duration: 500;
+            NumberAnimation {
+               target: backgroundImage
+               properties: "opacity"
+               from: 0.8
+               to: 1.0
+               duration: 500;
+               easing.type: Easing.InCubic;
             }
         },
         Transition {
             to: starting
-            OpacityAnimator {
-                target: backgroundImage
-                from: 0.8;
-                to: 1;
-                duration: 500;
+            NumberAnimation {
+               target: backgroundImage
+               properties: "opacity"
+               from: 0.8
+               to: 1.0
+               duration: 500;
+               easing.type: Easing.InCubic;
             }
         },
         Transition {
             to: stopping
-            OpacityAnimator {
-                target: backgroundImage
-                from: 0.8;
-                to: 1;
-                duration: 500;
+            NumberAnimation {
+               target: backgroundImage
+               properties: "opacity"
+               from: 0.8
+               to: 1.0
+               duration: 500;
+               easing.type: Easing.InCubic;
             }
         }
     ]
