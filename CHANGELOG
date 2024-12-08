@@ -2,6 +2,32 @@ development
 ===========
 - ...
 
+0.24.10-rc.3
+======
+- ui: use NumberAnimation for state change animation
+- update obfsvpn go module to v1.3.1-0.20241121155258-e6b06efc4456
+- [README] Print how to start bitmask-vpn after building it
+- [management] Add tests for parsing port of a management message
+- Log port of connected OpenVPN gateway
+- [management] Improve error handling in *StateEvent.parts()
+- show error message when app already running
+- remove use of deprecated ioutil module
+- fix crash during start when helper not installed
+- ovpn: don't redeclare status variable
+- ovpn: stop openvpn from management interface
+- Add introducer to storage before using it when supplied via env
+- Initialize and close bitmask-core storage
+- Improve error handling when checking downloaded pem cert
+- Update calls to DoGeolocationLookup after API change
+- Update to latest bitmask-core (commit 0812b9aadf98)
+- enable setting introducer url using env variable
+- chore: replace ioutil with io module
+- Strip port of menshen host before resolving with logDnsLookup
+- update l10n
+- create 0.24.10-rc.2 release
+- installer: get uid and gid only for macos
+- Update urls in provider config for bitmask provider
+
 0.24.10-rc.2
 ======
 - installer: get uid and gid only for macos
