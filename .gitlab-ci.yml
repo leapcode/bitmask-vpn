@@ -54,7 +54,6 @@ build_Arch_Linux_package:
     - "chown -R non_root:non_root /home/non_root"
   script:
     # makepkg does not run as root, but it needs sudo to install dependencies
-    - "cat /etc/issue"
     - "cd /home/non_root/build && sudo -u non_root make package_arch"
     - "cd /home/non_root/build && pacman -U ArchLinux/*tar.zst --noconfirm"
     # artifacts must be relative to the working directory (e.g. /builds/leap/bitmask-vpn)

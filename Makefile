@@ -444,7 +444,7 @@ package_deb:
 	@${MAKE} -C build/${PROVIDER} pkg_deb
 
 package_arch:
-	grep -q "Arch Linux" /etc/issue || (echo "Arch Linux system is required to build the Arch Linux package" && exit 1)
+	grep -q "Arch Linux" /etc/os-release || (echo "Arch Linux system is required to build the Arch Linux package" && exit 1)
 	# at least the makepkg binary is mandatory, makepkg is part pacman package
 	(cd ArchLinux && makepkg --syncdeps --noconfirm)
 
