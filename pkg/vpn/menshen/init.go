@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"0xacab.org/leap/bitmask-core/pkg/bootstrap"
+	"0xacab.org/leap/bitmask-core/pkg/introducer"
 	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
@@ -63,10 +64,18 @@ func New() (*Menshen, error) {
 				Msg("Could to get storage")
 		}
 
-		// check if introducer exists in database, if not add it
-		_, err = store.GetIntroducerByURL(introURL)
+		_, err = store.GetIntroducerByFQDN(cfg.Host)
 		if err != nil {
-			err = store.AddIntroducer(introURL)
+			// introducer does not exist, let's add it to db
+			intro, err := introducer.NewIntroducerFromURL(introURL)
+			if err != nil {
+				log.Fatal().
+					Err(err).
+					Str("introducerURL", introURL).
+					Msg("Could not create introudcer object")
+			}
+
+			err = store.AddIntroducer(intro)
 			if err != nil {
 				log.Fatal().
 					Err(err).
