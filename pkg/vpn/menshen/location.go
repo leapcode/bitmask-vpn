@@ -141,6 +141,9 @@ func (m *Menshen) updateLocationQualityMap(transport string) {
 	// normalize values (from rtt in ms to a number between 0 and 1)
 	for location, rtt := range qualityMap {
 		avgRttNormalized := (rtt - minAvgRtt) / (maxAvgRtt - minAvgRtt)
+		if math.IsNaN(avgRttNormalized) {
+			avgRttNormalized = 0
+		}
 		// higher latency is bad, so 1 - avgRttNormalized
 		qualityMap[location] = 1 - avgRttNormalized
 	}
