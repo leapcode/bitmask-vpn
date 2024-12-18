@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"0xacab.org/leap/bitmask-core/models"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
+	"0xacab.org/leap/menshen/models"
 	"github.com/rs/zerolog/log"
 )
 

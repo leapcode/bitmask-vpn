@@ -1,12 +1,15 @@
-# 0xacab.org/leap/bitmask-core v0.0.0-20241015185856-0812b9aadf98
+# 0xacab.org/leap/bitmask-core v0.0.0-20241213164419-d3c23078a4e0
 ## explicit; go 1.22.2
-0xacab.org/leap/bitmask-core/models
 0xacab.org/leap/bitmask-core/pkg/bootstrap
-0xacab.org/leap/bitmask-core/pkg/client
-0xacab.org/leap/bitmask-core/pkg/client/provisioning
+0xacab.org/leap/bitmask-core/pkg/bridge
 0xacab.org/leap/bitmask-core/pkg/introducer
-0xacab.org/leap/bitmask-core/pkg/models
 0xacab.org/leap/bitmask-core/pkg/storage
+# 0xacab.org/leap/menshen v0.0.0-20241122184833-0524d7e093d5
+## explicit; go 1.22
+0xacab.org/leap/menshen/client
+0xacab.org/leap/menshen/client/agent
+0xacab.org/leap/menshen/client/provisioning
+0xacab.org/leap/menshen/models
 # 0xacab.org/leap/obfsvpn v1.3.1-0.20241121155258-e6b06efc4456
 ## explicit; go 1.22
 0xacab.org/leap/obfsvpn/client
@@ -468,7 +471,7 @@ go.opentelemetry.io/otel/trace/embedded
 ## explicit; go 1.20
 go.uber.org/mock/mockgen
 go.uber.org/mock/mockgen/model
-# golang.org/x/crypto v0.26.0
+# golang.org/x/crypto v0.30.0
 ## explicit; go 1.20
 golang.org/x/crypto/blake2b
 golang.org/x/crypto/blake2s
@@ -500,7 +503,7 @@ golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.28.0
+# golang.org/x/net v0.32.0
 ## explicit; go 1.18
 golang.org/x/net/bpf
 golang.org/x/net/dns/dnsmessage
@@ -515,10 +518,10 @@ golang.org/x/net/internal/socks
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
 golang.org/x/net/proxy
-# golang.org/x/sync v0.8.0
+# golang.org/x/sync v0.10.0
 ## explicit; go 1.18
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.23.0
+# golang.org/x/sys v0.28.0
 ## explicit; go 1.18
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
@@ -528,7 +531,7 @@ golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/debug
 golang.org/x/sys/windows/svc/eventlog
 golang.org/x/sys/windows/svc/mgr
-# golang.org/x/text v0.17.0
+# golang.org/x/text v0.21.0
 ## explicit; go 1.18
 golang.org/x/text/secure/bidirule
 golang.org/x/text/transform

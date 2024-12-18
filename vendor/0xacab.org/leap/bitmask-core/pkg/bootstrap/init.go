@@ -12,17 +12,17 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/proxy"
 
-	"0xacab.org/leap/bitmask-core/models"
-	"0xacab.org/leap/bitmask-core/pkg/client"
-	"0xacab.org/leap/bitmask-core/pkg/client/provisioning"
 	"0xacab.org/leap/bitmask-core/pkg/introducer"
 	bitmask_storage "0xacab.org/leap/bitmask-core/pkg/storage"
+	"0xacab.org/leap/menshen/client"
+	"0xacab.org/leap/menshen/client/provisioning"
+	"0xacab.org/leap/menshen/models"
+
 	"0xacab.org/leap/tunnel-telemetry/pkg/geolocate"
 )
 
 type Config struct {
-	// country code used to fetch gateways/bridges. If geolocation lookup fails,
-	// api.config.FallbackCountryCode is used
+	// country code used to fetch gateways/bridges.
 	CountryCode string
 	// Host we will connect to for API operations.
 	Host string
@@ -150,7 +150,7 @@ func NewAPI(cfg *Config) (*API, error) {
 func getSocksProxyClient(proxyString string) (*http.Client, error) {
 	proxyURL, err := url.Parse(proxyString)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to parse proxy URL: %w", err)
 	}
 
 	dialer, err := proxy.FromURL(proxyURL, proxy.Direct)
@@ -221,21 +221,12 @@ func (api *API) GetProvider() (*models.ModelsProvider, error) {
 }
 
 // call menshen endpoint /service and return response
-// TODO: rename endpoint and and this function
-// TODO: split /service into multiple endpoints:
 // locations, openvpn arguments, serial+version, auth
 func (api *API) GetService() (*models.ModelsEIPService, error) {
 	params := provisioning.NewGetAPI5ServiceParams()
 	if api.httpClient != nil {
 		params = params.WithHTTPClient(api.httpClient)
 	}
-
-	// TODO: menshen needs to accept cc as param too.
-	/*
-		if api.config.CountryCode != "" {
-			params.Cc = api.config.CountryCode
-		}
-	*/
 
 	service, err := api.client.Provisioning.GetAPI5Service(params)
 	if err != nil {
@@ -244,21 +235,11 @@ func (api *API) GetService() (*models.ModelsEIPService, error) {
 	return service.Payload, nil
 }
 
-// TODO: split /service endpoint into multiple endpoints
-// then call this endpoint and return locations
-// do not use an internal variable to store it
-/*
-func (api *API) Locations() interface{} {
-	panic("TODO")
-}
-*/
-
 // GatewayParams contains the fields that can be used to filter the listing of available gateways.
 type GatewayParams struct {
 	Location  string
 	Port      string
 	Transport string
-	CC        string
 }
 
 type BridgeParams struct {
@@ -273,18 +254,29 @@ type BridgeParams struct {
 // API). It optionally accepts a GatewayParams object where you can set
 // different filters.
 func (api *API) GetGateways(p *GatewayParams) ([]*models.ModelsGateway, error) {
-	params := provisioning.NewGetAPI5GatewaysParams()
+	params := provisioning.NewGetAPI5GatewayParams()
 	if p != nil {
 		params.Loc = &p.Location
-		params.Port = &p.Port
-		params.Tr = &p.Transport
-		params.Cc = &p.CC
+		// /api/5/gateway curently only supports filtering by cc and location
+		//params.Port = &p.Port
+		//params.Transport = &p.Transport
 	}
+
+	if api.config.CountryCode != "" {
+		log.Debug().
+			Str("countryCode", api.config.CountryCode).
+			Msg("Setting country code")
+		params.Cc = &api.config.CountryCode
+	}
+
 	if api.httpClient != nil {
 		params = params.WithHTTPClient(api.httpClient)
 	}
+	authHeader := api.getInviteTokenAuth()
 
-	gateways, err := api.client.Provisioning.GetAPI5Gateways(params)
+	// TODO: only temporary - call api/5/gateway because it supports filtering
+	// will be merged in the future https://0xacab.org/leap/bitmask-core/-/issues/32
+	gateways, err := api.client.Provisioning.GetAPI5Gateway(params, authHeader)
 	if err != nil {
 		return nil, err
 	}
@@ -302,7 +294,8 @@ func (api *API) GetAllBridges(p *BridgeParams) ([]*models.ModelsBridge, error) {
 	if api.httpClient != nil {
 		params = params.WithHTTPClient(api.httpClient)
 	}
-	bridges, err := api.client.Provisioning.GetAPI5Bridges(params)
+	authHeader := api.getInviteTokenAuth()
+	bridges, err := api.client.Provisioning.GetAPI5Bridges(params, authHeader)
 	if err != nil {
 		return nil, err
 	}

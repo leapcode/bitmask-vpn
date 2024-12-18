@@ -9,6 +9,9 @@ import (
 	"strconv"
 	"time"
 
+	bitmask_storage "0xacab.org/leap/bitmask-core/pkg/storage"
+	"github.com/go-openapi/runtime"
+	openapi "github.com/go-openapi/runtime/client"
 	utls "github.com/refraction-networking/utls"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/http2"
@@ -85,4 +88,38 @@ func (c *Config) getAPIClient() *http.Client {
 	} else {
 		return &http.Client{Timeout: time.Duration(30) * time.Second}
 	}
+}
+
+// Returns authentication header (invite token) from database
+// Returns nil if no introducer is saved or an error occurs
+func (api *API) getInviteTokenAuth() runtime.ClientAuthInfoWriter {
+	if len(api.config.Introducer) == 0 {
+		return nil
+	}
+
+	log.Trace().Msg("Getting invite token from db")
+	storage, err := bitmask_storage.GetStorage()
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("Could not get storage to load invite token")
+		return nil
+	}
+
+	introducer, err := storage.GetIntroducerByFQDN(api.config.Host)
+	if err != nil {
+		log.Debug().
+			Str("err", err.Error()).
+			Str("fqdn", api.config.Host).
+			Msg("Could not get introducer by fqdn")
+		return nil
+	}
+
+	if len(introducer.Auth) == 0 {
+		log.Warn().Msg("An introducer was found for this fqdn, but the invite token is empty")
+		return nil
+	}
+
+	log.Debug().Msg("Sending invite token")
+	return openapi.APIKeyAuth("x-menshen-auth-token", "header", introducer.Auth)
 }

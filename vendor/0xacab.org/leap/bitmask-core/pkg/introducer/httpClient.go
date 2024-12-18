@@ -8,25 +8,9 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/obfsvpn/obfsvpn"
 	"github.com/xtaci/kcp-go"
 )
-
-// CallbackTransport calls a callback function after a successful 200 OK response.
-type CallbackTransport struct {
-	OriginalTransport http.RoundTripper
-	Callback          func(*http.Response)
-}
-
-// RoundTrip performs the request and calls the callback if we get a 200 OK.
-func (c *CallbackTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	resp, err := c.OriginalTransport.RoundTrip(req)
-	if err == nil && resp.StatusCode == http.StatusOK {
-		c.Callback(resp)
-	}
-	return resp, err
-}
 
 // NewHTTPClientFromIntroducer returns an http.Client that will use the passed introducer.
 func NewHTTPClientFromIntroducer(introducer *Introducer) (*http.Client, error) {
@@ -73,23 +57,7 @@ func NewHTTPClientFromIntroducer(introducer *Introducer) (*http.Client, error) {
 	}
 
 	client := &http.Client{
-		Transport: &CallbackTransport{
-			OriginalTransport: transport,
-			Callback: func(r *http.Response) {
-				store, err := storage.GetStorage()
-				if err != nil {
-					log.Warn().
-						Err(err).
-						Msg("Could not load DB to update lastUsed timestamp for introducer")
-					return
-				}
-				if err := store.UpdateLastUsedForIntroducer(introducer.URL()); err != nil {
-					log.Warn().
-						Err(err).
-						Msg("Could not update lastUsed timestamp for introducer")
-				}
-			},
-		},
+		Transport: transport,
 	}
 	return client, nil
 }

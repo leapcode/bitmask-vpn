@@ -19,14 +19,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
 	"os"
 	"path/filepath"
 	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
 
-	"0xacab.org/leap/bitmask-core/pkg/models"
+	"0xacab.org/leap/bitmask-core/pkg/bridge"
+	"0xacab.org/leap/bitmask-core/pkg/introducer"
 )
 
 var AppName = "bitmask"
@@ -43,10 +43,10 @@ type Storage struct {
 }
 
 // CompareIntroducer is a function type for the comparison of introducers
-type CompareIntroducer func(introducer models.Introducer) bool
+type CompareIntroducer func(introducer introducer.Introducer) bool
 
 // CompareBridge is a function type for the comparison of bridges
-type CompareBridge func(bridge models.Bridge) bool
+type CompareBridge func(bridge bridge.Bridge) bool
 
 // InitAppStorage initializes the global storage with a given storage instance
 func InitAppStorageWith(store Store) {
@@ -115,50 +115,43 @@ func NewStorageWithDefaultDir() (*Storage, error) {
 	return NewStorage(configPath)
 }
 
-// AddIntroducers adds a new Introducer model from URL
-// to the storage
-func (s *Storage) AddIntroducer(url string) error {
-	fqdn, err := getFQDNFromIntroducerURL(url)
+// Add new introducer to storage. Before, delete all existing
+// introducers with the same fqdn
+func (s *Storage) AddIntroducer(intro *introducer.Introducer) error {
+	err := intro.Validate()
 	if err != nil {
 		return err
 	}
 
-	item := &models.Introducer{
-		FQDN:      *fqdn,
-		URL:       url,
-		CreatedAt: time.Now(),
-	}
-
 	// delete existing introducer with same FQDN as we only want
 	// to allow one for per provider for now
-	err = s.DeleteIntroducer(*fqdn)
+	err = s.DeleteIntroducer(intro.FQDN)
 	if err != nil {
 		return err
 	}
 
 	introducers, err := s.getAllIntroducers()
-
 	if err != nil {
 		return err
 	}
-	introducers = append(introducers, *item)
+	introducers = append(introducers, *intro)
 	return s.saveIntroducers(introducers)
 }
 
-func (s *Storage) getAllIntroducers() ([]models.Introducer, error) {
+func (s *Storage) getAllIntroducers() ([]introducer.Introducer, error) {
 	// Create an empty slice of Introducer
-	emptySlice := []models.Introducer{}
+	emptySlice := []introducer.Introducer{}
 	bytes, _ := json.Marshal(emptySlice)
 
 	introducerString := s.store.GetByteArrayWithDefault(INTRODUCER, bytes)
-	introducers, err := unmarshalJSON[[]models.Introducer](introducerString)
+	introducers, err := unmarshalJSON[[]introducer.Introducer](introducerString)
 	if err != nil {
 		return nil, err
 	}
-	return *introducers, err
+	return *introducers, nil
 }
 
-func (s *Storage) saveIntroducers(introducers []models.Introducer) error {
+func (s *Storage) saveIntroducers(introducers []introducer.Introducer) error {
 	bytes, err := json.Marshal(introducers)
 	if err != nil {
 		return err
@@ -177,27 +170,19 @@ func unmarshalJSON[T any](data []byte) (*T, error) {
 }
 
 // ListIntroducers returns an array of all introducers
-func (s *Storage) ListIntroducers() ([]models.Introducer, error) {
+func (s *Storage) ListIntroducers() ([]introducer.Introducer, error) {
 	return s.getAllIntroducers()
 }
 
 // GetIntroducerByFQDN returns the first introducer for a given fqdn.
-func (s *Storage) GetIntroducerByFQDN(fqdn string) (*models.Introducer, error) {
-	compare := func(intro models.Introducer) bool {
+func (s *Storage) GetIntroducerByFQDN(fqdn string) (*introducer.Introducer, error) {
+	compare := func(intro introducer.Introducer) bool {
 		return intro.FQDN == fqdn
 	}
 	return s.getFirstIntroducer(compare)
 }
 
-// GetIntroducerByURL will return the Introducer with the given URL, if found, and an error.
-func (s *Storage) GetIntroducerByURL(url string) (*models.Introducer, error) {
-	compare := func(intro models.Introducer) bool {
-		return intro.URL == url
-	}
-	return s.getFirstIntroducer(compare)
-}
-
-func (s *Storage) getFirstIntroducer(compare CompareIntroducer) (*models.Introducer, error) {
+func (s *Storage) getFirstIntroducer(compare CompareIntroducer) (*introducer.Introducer, error) {
 	introducers, err := s.getAllIntroducers()
 	if err != nil {
 		return nil, err
@@ -210,28 +195,6 @@ func (s *Storage) getFirstIntroducer(compare CompareIntroducer) (*models.Introdu
 	return nil, fmt.Errorf("introducer not found")
 }
 
-func (s *Storage) updateFirstIntroducer(compare CompareIntroducer, lastUsed time.Time) ([]models.Introducer, error) {
-	introducers, err := s.getAllIntroducers()
-	if err != nil {
-		return nil, err
-	}
-
-	found := false
-	for _, intro := range introducers {
-		if compare(intro) {
-			intro.LastUsed = lastUsed
-			found = true
-			break
-		}
-	}
-
-	if !found {
-		return nil, fmt.Errorf("introducer not found")
-	}
-
-	return introducers, nil
-}
-
 // DeleteIntroducer deletes all introducers for a given fqdn.
 func (s *Storage) DeleteIntroducer(fqdn string) error {
 	if fqdn == "" {
@@ -242,11 +205,11 @@ func (s *Storage) DeleteIntroducer(fqdn string) error {
 		return err
 	}
 
-	compare := func(intro models.Introducer) bool {
+	compare := func(intro introducer.Introducer) bool {
 		return fqdn == intro.FQDN
 	}
 
-	updatedIntroducers := func() []models.Introducer {
+	updatedIntroducers := func() []introducer.Introducer {
 		for i, intro := range introducers {
 			if compare(intro) {
 				// Swap with the last element
@@ -263,7 +226,7 @@ func (s *Storage) DeleteIntroducer(fqdn string) error {
 
 // NewBridge creates a new Bridge from the passed parameters.
 func (s *Storage) NewBridge(name, bridgeType, location, raw string) error {
-	item := &models.Bridge{
+	item := &bridge.Bridge{
 		Name:     name,
 		Type:     bridgeType,
 		Location: location,
@@ -275,7 +238,7 @@ func (s *Storage) NewBridge(name, bridgeType, location, raw string) error {
 		return err
 	}
 
-	comparison := func(intro models.Bridge) bool {
+	comparison := func(intro bridge.Bridge) bool {
 		return intro.Name == name || intro.Raw == raw
 	}
 	bridge, _ := s.getFirstBridge(comparison)
@@ -287,20 +250,20 @@ func (s *Storage) NewBridge(name, bridgeType, location, raw string) error {
 	return s.saveBridges(bridges)
 }
 
-func (s *Storage) getAllBridges() ([]models.Bridge, error) {
+func (s *Storage) getAllBridges() ([]bridge.Bridge, error) {
 	// Create an empty slice of Introducer
-	emptySlice := []models.Bridge{}
+	emptySlice := []bridge.Bridge{}
 	bytes, _ := json.Marshal(emptySlice)
 
 	bridgeBytes := s.store.GetByteArrayWithDefault(BRIDGE, bytes)
-	bridges, err := unmarshalJSON[[]models.Bridge](bridgeBytes)
+	bridges, err := unmarshalJSON[[]bridge.Bridge](bridgeBytes)
 	if err != nil {
 		return nil, err
 	}
 	return *bridges, err
 }
 
-func (s *Storage) saveBridges(bridges []models.Bridge) error {
+func (s *Storage) saveBridges(bridges []bridge.Bridge) error {
 	bytes, err := json.Marshal(bridges)
 	if err != nil {
 		return err
@@ -310,11 +273,11 @@ func (s *Storage) saveBridges(bridges []models.Bridge) error {
 }
 
 // ListBridges returns an array of all the bridges.
-func (s *Storage) ListBridges() ([]models.Bridge, error) {
+func (s *Storage) ListBridges() ([]bridge.Bridge, error) {
 	return s.getAllBridges()
 }
 
-func (s *Storage) getFirstBridge(compare CompareBridge) (*models.Bridge, error) {
+func (s *Storage) getFirstBridge(compare CompareBridge) (*bridge.Bridge, error) {
 	bridges, err := s.getAllBridges()
 	if err != nil {
 		return nil, err
@@ -327,12 +290,12 @@ func (s *Storage) getFirstBridge(compare CompareBridge) (*models.Bridge, error) 
 	return nil, fmt.Errorf("bridge not found")
 }
 
-func (s *Storage) getBridges(compare CompareBridge) ([]models.Bridge, error) {
+func (s *Storage) getBridges(compare CompareBridge) ([]bridge.Bridge, error) {
 	bridges, err := s.getAllBridges()
 	if err != nil {
 		return nil, err
 	}
-	var result []models.Bridge
+	var result []bridge.Bridge
 
 	for _, bridge := range bridges {
 		if compare(bridge) {
@@ -348,24 +311,24 @@ func (s *Storage) getBridges(compare CompareBridge) ([]models.Bridge, error) {
 }
 
 // GetBridgeByName will return the Bridge with the given Name, if found, and an error.
-func (s *Storage) GetBridgeByName(name string) (*models.Bridge, error) {
-	compare := func(bridge models.Bridge) bool {
+func (s *Storage) GetBridgeByName(name string) (*bridge.Bridge, error) {
+	compare := func(bridge bridge.Bridge) bool {
 		return bridge.Name == name
 	}
 	return s.getFirstBridge(compare)
 }
 
 // GetBridgesByType will return all Bridges with the given Type, if found, and an error.
-func (s *Storage) GetBridgesByType(bridgeType string) ([]models.Bridge, error) {
-	compare := func(bridge models.Bridge) bool {
+func (s *Storage) GetBridgesByType(bridgeType string) ([]bridge.Bridge, error) {
+	compare := func(bridge bridge.Bridge) bool {
 		return bridge.Type == bridgeType
 	}
 	return s.getBridges(compare)
 }
 
 // GetBridgesByLocation will return all Bridges with the given Location, if found, and an error.
-func (s *Storage) GetBridgesByLocation(location string) ([]models.Bridge, error) {
-	compare := func(bridge models.Bridge) bool {
+func (s *Storage) GetBridgesByLocation(location string) ([]bridge.Bridge, error) {
+	compare := func(bridge bridge.Bridge) bool {
 		return bridge.Location == location
 	}
 	return s.getBridges(compare)
@@ -379,11 +342,11 @@ func (s *Storage) DeleteBridge(name string) error {
 		return err
 	}
 
-	compare := func(bridge models.Bridge) bool {
+	compare := func(bridge bridge.Bridge) bool {
 		return bridge.Name == name
 	}
 
-	updatedBridges := func() []models.Bridge {
+	updatedBridges := func() []bridge.Bridge {
 		for i, bridge := range bridges {
 			if compare(bridge) {
 				// Swap with the last element
@@ -419,36 +382,6 @@ func GetStorage() (*Storage, error) {
 	}
 	return storage, nil
 
-}
-
-func getFQDNFromIntroducerURL(introducerURL string) (*string, error) {
-	// Parse the introducer URL string
-	u, err := url.Parse(introducerURL)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse introducer URL: %w", err)
-	}
-
-	// Extract FQDN from query parameters
-	fqdn := u.Query().Get("fqdn")
-	if fqdn == "" {
-		return nil, fmt.Errorf("FQDN not found in the introducer URL")
-	}
-
-	return &fqdn, nil
-}
-
-// UpdateLastUsedForIntroducer will attempt to update the LastUsed timestamp for the introducer
-// that matches the passed URL.
-func (s *Storage) UpdateLastUsedForIntroducer(url string) error {
-	var compare CompareIntroducer = func(introducer models.Introducer) bool {
-		return introducer.URL == url
-	}
-	introducers, err := s.updateFirstIntroducer(compare, time.Now())
-	if err != nil {
-		return err
-	}
-
-	return s.saveIntroducers(introducers)
 }
 
 func (s *Storage) SaveFallbackCountryCode(cc string) {

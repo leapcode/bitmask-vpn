@@ -5,11 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"0xacab.org/leap/bitmask-core/models"
 	"0xacab.org/leap/bitmask-core/pkg/bootstrap"
 	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
+	"0xacab.org/leap/menshen/models"
 
 	"github.com/rs/zerolog/log"
 )
