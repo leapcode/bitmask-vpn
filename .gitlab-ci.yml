@@ -49,15 +49,16 @@ build_Arch_Linux_package:
     - "pacman -Suy base-devel --noconfirm"
     - "useradd non_root"
     - "echo 'non_root ALL=NOPASSWD: ALL' >> /etc/sudoers"
-    - "mkdir /home/non_root"
-    - "cp -r Makefile ArchLinux/ /home/non_root"
+    - "mkdir -p /home/non_root/build"
+    - "cp -r . /home/non_root/build"
     - "chown -R non_root:non_root /home/non_root"
   script:
     # makepkg does not run as root, but it needs sudo to install dependencies
-    - "cd /home/non_root && sudo -u non_root make package_arch"
-    - "cd /home/non_root && pacman -U ArchLinux/*tar.zst --noconfirm"
+    - "cat /etc/issue"
+    - "cd /home/non_root/build && sudo -u non_root make package_arch"
+    - "cd /home/non_root/build && pacman -U ArchLinux/*tar.zst --noconfirm"
     # artifacts must be relative to the working directory (e.g. /builds/leap/bitmask-vpn)
-    - "cp /home/non_root/ArchLinux/*.tar.zst $CI_PROJECT_DIR"
+    - "cp /home/non_root/build/ArchLinux/*.tar.zst $CI_PROJECT_DIR"
   artifacts:
     paths:
       - '*.tar.zst'

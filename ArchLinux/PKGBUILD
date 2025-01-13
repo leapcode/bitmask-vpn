@@ -9,7 +9,8 @@ license=("GPL-3.0-only")
 url="https://0xacab.org/leap/bitmask-vpn"
 conflicts=('riseup-vpn' 'riseup-vpn-git')
 
-source=("git+$url.git")
+#source=("git+$url.git")
+source=("bitmask-vpn::git+file://$(pwd)/../")
 sha256sums=('SKIP')
 
 # qt6-tools has /usr/lib/qt6/bin/lrelease
