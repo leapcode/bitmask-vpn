@@ -2,8 +2,8 @@ development
 ===========
 - ...
 
-0.24.10-rc.3
-======
+0.24.10
+=======
 - ui: use NumberAnimation for state change animation
 - update obfsvpn go module to v1.3.1-0.20241121155258-e6b06efc4456
 - [README] Print how to start bitmask-vpn after building it
@@ -27,14 +27,8 @@ development
 - create 0.24.10-rc.2 release
 - installer: get uid and gid only for macos
 - Update urls in provider config for bitmask provider
-
-0.24.10-rc.2
-======
 - installer: get uid and gid only for macos
 - Update urls in provider config for bitmask provider
-
-0.24.10-rc.1
-======
 - helper: use unix socket for local api
 - change obfsvpn version to v1.1.0
 - Do geolocation lookup
