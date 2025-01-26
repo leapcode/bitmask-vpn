@@ -48,6 +48,7 @@ type connectionCtx struct {
 	Errors            string              `json:"errors"`
 	Status            status              `json:"status"`
 	Locations         map[string]float64  `json:"locations"`
+	Providers         []string            `json:"providers"`
 	LocationLabels    map[string][]string `json:"locationLabels"`
 	CurrentGateway    string              `json:"currentGateway"`
 	CurrentLocation   string              `json:"currentLocation"`

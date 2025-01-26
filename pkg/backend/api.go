@@ -1,3 +1,6 @@
+// go:build cgo
+// +go:build cgo
+
 /* All the exported functions should be added here */
 
 package backend
@@ -195,12 +198,13 @@ type Providers struct {
 }
 
 type InitOpts struct {
-	ProviderOptions  *bitmask.ProviderOpts
-	SkipLaunch       bool
-	Obfs4            bool
-	UDP              bool
-	DisableAutostart bool
-	StartVPN         string
+	ProviderOptions    *bitmask.ProviderOpts
+	SkipLaunch         bool
+	Obfs4              bool
+	UDP                bool
+	DisableAutostart   bool
+	StartVPN           string
+	AvailableProviders []string
 }
 
 func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
@@ -236,8 +240,9 @@ func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
 func InitializeBitmaskContext(opts *InitOpts) {
 	bitmask.ConfigureProvider(opts.ProviderOptions)
 
-	initOnce.Do(func() { initializeContext(opts) })
+	initializeContext(opts)
 	if ctx.bm != nil {
+		log.Info().Msg("Updating status in context")
 		ctx.LoginDialog = ctx.bm.NeedsCredentials()
 		go ctx.updateStatus()
 	}

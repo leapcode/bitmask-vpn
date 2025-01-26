@@ -1,3 +1,6 @@
+// go:build cgo
+// +go:build cgo
+
 package backend
 
 import (
@@ -23,8 +26,6 @@ import "C"
 
 var callbacks = make(map[string](*[0]byte))
 var callbackMutex sync.Mutex
-
-var initOnce sync.Once
 
 // Events are just a enumeration of all the posible events that C functions can
 // be interested in subscribing to. You cannot subscribe to an event that is
