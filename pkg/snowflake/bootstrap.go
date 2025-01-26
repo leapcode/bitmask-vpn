@@ -122,14 +122,14 @@ func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error 
 		Timeout: time.Minute * 5,
 	}
 
-	eipUri := config.APIURL + "/3/config/eip-service.json"
+	eipUri := config.ProviderConfig.APIURL + "/3/config/eip-service.json"
 	eipFile := filepath.Join(config.Path, provider+"-eip.json")
 	err = fetchFile(apiClient, eipUri, eipFile)
 	if err != nil {
 		return err
 	}
 
-	certUri := config.APIURL + "/3/cert"
+	certUri := config.ProviderConfig.APIURL + "/3/cert"
 	certFile := filepath.Join(config.Path, provider+".pem")
 	err = fetchFile(apiClient, certUri, certFile)
 	if err != nil {

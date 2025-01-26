@@ -47,23 +47,18 @@ type ProviderOpts struct {
 	CountryCodeLookupURL string   `json:"countryCodeLookupURL"`
 }
 
-func GetConfiguredProvider() *ProviderInfo {
-	provider := config.Provider
-	appName := config.ApplicationName
-	return &ProviderInfo{provider, appName}
-}
-
 func ConfigureProvider(opts *ProviderOpts) {
-	config.Provider = opts.Provider
-	config.ApplicationName = opts.AppName
-	config.BinaryName = opts.BinaryName
-	config.Auth = opts.Auth
-	config.GeolocationAPI = opts.GeolocationURL
-	config.APIURL = opts.ApiURL
-	config.CaCert = []byte(opts.CaCert)
-	config.ApiVersion = opts.ApiVersion
-	config.STUNServers = opts.STUNServers
-	config.CountryCodeLookupURL = opts.CountryCodeLookupURL
+	log.Info().Msg("configuring provider")
+	config.ProviderConfig.Provider = opts.Provider
+	config.ProviderConfig.ApplicationName = opts.AppName
+	config.ProviderConfig.BinaryName = opts.BinaryName
+	config.ProviderConfig.Auth = opts.Auth
+	config.ProviderConfig.GeolocationAPI = opts.GeolocationURL
+	config.ProviderConfig.APIURL = opts.ApiURL
+	config.ProviderConfig.CaCert = []byte(opts.CaCert)
+	config.ProviderConfig.ApiVersion = opts.ApiVersion
+	config.ProviderConfig.STUNServers = opts.STUNServers
+	config.ProviderConfig.CountryCodeLookupURL = opts.CountryCodeLookupURL
 }
 
 func InitializeBitmask(conf *config.Config) (Bitmask, error) {
@@ -82,7 +77,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 	if err != nil {
 		return nil, err
 	}
-	b.SetProvider(config.Provider)
+	b.SetProvider(config.ProviderConfig.Provider)
 
 	err = setTransport(b, conf)
 	if err != nil {
@@ -106,7 +101,7 @@ func InitializeBitmask(conf *config.Config) (Bitmask, error) {
 }
 
 func setTransport(b Bitmask, conf *config.Config) error {
-	if config.Provider == "riseup" {
+	if config.ProviderConfig.Provider == "riseup" {
 		log.Info().Msg("Using transport openvpn")
 		err := b.SetTransport("openvpn")
 		if err != nil {
@@ -148,7 +143,7 @@ func maybeStartVPN(b Bitmask, conf *config.Config) error {
 
 	if b.CanStartVPN() {
 		log.Info().Msg("Starting OpenVPN")
-		err := b.StartVPN(config.Provider)
+		err := b.StartVPN(config.ProviderConfig.Provider)
 		if err != nil {
 			return err
 		}

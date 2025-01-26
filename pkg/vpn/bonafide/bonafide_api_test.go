@@ -18,9 +18,9 @@ func TestBonafideAPI(t *testing.T) {
 }
 
 func initTestConfig() {
-	config.APIURL = "https://api.black.riseup.net/"
-	config.GeolocationAPI = "https://api.black.riseup.net:9001/json"
-	config.CaCert = []byte(`-----BEGIN CERTIFICATE-----
+	config.ProviderConfig.APIURL = "https://api.black.riseup.net/"
+	config.ProviderConfig.GeolocationAPI = "https://api.black.riseup.net:9001/json"
+	config.ProviderConfig.CaCert = []byte(`-----BEGIN CERTIFICATE-----
 MIIFjTCCA3WgAwIBAgIBATANBgkqhkiG9w0BAQ0FADBZMRgwFgYDVQQKDA9SaXNl
 dXAgTmV0d29ya3MxGzAZBgNVBAsMEmh0dHBzOi8vcmlzZXVwLm5ldDEgMB4GA1UE
 AwwXUmlzZXVwIE5ldHdvcmtzIFJvb3QgQ0EwHhcNMTQwNDI4MDAwMDAwWhcNMjQw

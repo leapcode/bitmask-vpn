@@ -84,7 +84,7 @@ func smellsLikeOurHelperSpirit(c *http.Client) bool {
 				Msg("Could not read web response")
 			return false
 		}
-		if strings.Contains(string(ver), config.ApplicationName) {
+		if strings.Contains(string(ver), config.ProviderConfig.ApplicationName) {
 			log.Debug().
 				Str("url", uri).
 				Msg("Successfully probed for matching helper")
@@ -92,7 +92,7 @@ func smellsLikeOurHelperSpirit(c *http.Client) bool {
 		} else {
 			log.Debug().
 				Str("anotherHelper", string(ver)).
-				Str("expectedHelper", config.ApplicationName).
+				Str("expectedHelper", config.ProviderConfig.ApplicationName).
 				Msg("Found invalid helper already running")
 		}
 	}

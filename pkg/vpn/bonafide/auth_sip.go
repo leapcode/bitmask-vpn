@@ -73,7 +73,7 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 }
 
 func getTokenPath() string {
-	return path.Join(config.Path, config.ApplicationName+".token")
+	return path.Join(config.Path, config.ProviderConfig.ApplicationName+".token")
 }
 
 func writeToken(token []byte) {

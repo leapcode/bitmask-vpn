@@ -49,7 +49,7 @@ func getSIPCreds() SIPCreds {
 }
 
 func initTestConfigSIP() {
-	config.APIURL = "https://localhost:8000/"
+	config.ProviderConfig.APIURL = "https://localhost:8000/"
 }
 
 func _TestSIPIntegrationGetCert(t *testing.T) {

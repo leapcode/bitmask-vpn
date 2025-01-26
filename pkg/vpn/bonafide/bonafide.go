@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"runtime"
 	"strings"
@@ -92,7 +93,7 @@ func New() *Bonafide {
 			Msg("Error loading SystemCertPool, falling back to empty pool")
 		certs = x509.NewCertPool()
 	}
-	certs.AppendCertsFromPEM(config.CaCert)
+	certs.AppendCertsFromPEM(config.ProviderConfig.CaCert)
 	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -129,7 +130,7 @@ func New() *Bonafide {
 		tzOffsetHours: tzOffsetHours,
 		snowflakeCh:   make(chan *snowflake.StatusEvent, 20),
 	}
-	switch auth := config.Auth; auth {
+	switch auth := config.ProviderConfig.Auth; auth {
 	case "sip":
 		log.Debug().Msg("Client expects sip auth")
 		b.auth = &sipAuthentication{client, b.getURL("auth")}
@@ -221,11 +222,20 @@ func (b *Bonafide) GetPemCertificate() ([]byte, error) {
 func (b *Bonafide) getURL(object string) string {
 	switch object {
 	case "cert":
-		return config.APIURL + certPathv1
+		if link, err := url.JoinPath(config.ProviderConfig.APIURL, certPathv1); err == nil {
+			return link
+		}
+		return ""
 	case "certv3":
-		return config.APIURL + certPathv3
+		if link, err := url.JoinPath(config.ProviderConfig.APIURL, certPathv3); err == nil {
+			return link
+		}
+		return ""
 	case "auth":
-		return config.APIURL + authPathv3
+		if link, err := url.JoinPath(config.ProviderConfig.APIURL, authPathv3); err == nil {
+			return link
+		}
+		return ""
 	}
 	log.Warn().Msg("BUG: unknown url object")
 	return ""
@@ -255,7 +265,7 @@ func (b *Bonafide) maybeInitializeEIP() error {
 	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
 		log.Info().Msg("Snowflake is enabled. Fetching eip json and certificate via snowflake (SNOWFLAKE=1)")
-		p := strings.ToLower(config.Provider)
+		p := strings.ToLower(config.ProviderConfig.Provider)
 		if b.snowflakeProgress != 100 {
 			ch := make(chan *snowflake.StatusEvent, 20)
 			b.watchSnowflakeProgress(ch)
@@ -361,10 +371,10 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 	* gemyip.domain/json, with a LE certificate, but in riseup is served
 	* behind the api certificate.  So this is a workaround until we
 	* streamline that behavior */
-	resp, err := b.client.Post(config.GeolocationAPI, "", nil)
+	resp, err := b.client.Post(config.ProviderConfig.GeolocationAPI, "", nil)
 	if err != nil {
 		client := &http.Client{Timeout: time.Second * 30}
-		_resp, err := client.Post(config.GeolocationAPI, "", nil)
+		_resp, err := client.Post(config.ProviderConfig.GeolocationAPI, "", nil)
 		if err != nil {
 			log.Warn().
 				Err(err).

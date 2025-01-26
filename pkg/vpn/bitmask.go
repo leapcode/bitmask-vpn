@@ -64,23 +64,23 @@ func Init() (*Bitmask, error) {
 
 	var api apiInterface
 	if os.Getenv("API_VERSION") == "5" {
-		config.ApiVersion = 5
+		config.ProviderConfig.ApiVersion = 5
 		log.Debug().Msg("Enforcing API v5 by env variable")
 	}
 	log.Debug().
-		Int("apiVersion", config.ApiVersion).
+		Int("apiVersion", config.ProviderConfig.ApiVersion).
 		Msg("Using specific API backend version")
 
-	if config.ApiVersion == 5 {
+	if config.ProviderConfig.ApiVersion == 5 {
 		api, err = menshen.New()
 		if err != nil {
 			return nil, err
 		}
-	} else if config.ApiVersion == 3 {
+	} else if config.ProviderConfig.ApiVersion == 3 {
 		api = bonafide.New()
 	} else {
 		log.Warn().
-			Int("apiVersion", config.ApiVersion).
+			Int("apiVersion", config.ProviderConfig.ApiVersion).
 			Msg("ApiVersion of provider was not set correctly. Version 3 and 5 is supported. Using v3 for backwards compatiblity")
 		api = bonafide.New()
 	}
@@ -109,7 +109,7 @@ func Init() (*Bitmask, error) {
 		provider:         "",
 	}
 
-	err = os.WriteFile(b.getTempCaCertPath(), config.CaCert, 0600)
+	err = os.WriteFile(b.getTempCaCertPath(), config.ProviderConfig.CaCert, 0600)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
-	if config.ApiVersion == 5 && len(config.STUNServers) != 0 {
+	if config.ProviderConfig.ApiVersion == 5 && len(config.ProviderConfig.STUNServers) != 0 {
 		/*
 			Geolocation lookup should be done only once during startup. Changing the country
 			code during runtime is not supported. The VPN must be turn off for the lookup.

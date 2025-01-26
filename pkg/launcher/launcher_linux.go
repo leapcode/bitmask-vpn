@@ -284,7 +284,7 @@ func runBitmaskRoot(arg ...string) error {
 
 func bitmaskRootPath() (string, error) {
 	if os.Getenv("SNAP") != "" {
-		path := "/snap/bin/" + config.BinaryName + ".bitmask-root"
+		path := "/snap/bin/" + config.ProviderConfig.BinaryName + ".bitmask-root"
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
 			return path, nil
 		}
@@ -299,7 +299,7 @@ func bitmaskRootPath() (string, error) {
 
 func getOpenvpnPath() string {
 	if os.Getenv("SNAP") != "" {
-		return "/snap/bin/" + config.BinaryName + ".openvpn"
+		return "/snap/bin/" + config.ProviderConfig.BinaryName + ".openvpn"
 	}
 	return systemOpenvpnPath
 }

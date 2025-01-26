@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -102,7 +103,12 @@ func (b *Bonafide) IsUDPAvailable() bool {
 }
 
 func (b *Bonafide) fetchEipJSON() error {
-	eip3API := config.APIURL + "3/config/eip-service.json"
+	eip3API, err := url.JoinPath(config.ProviderConfig.APIURL, "3", "config", "eip-service.json")
+	if err != nil {
+		return err
+	}
+	log.Debug().Any("config.ProviderConfig", config.ProviderConfig)
+
 	resp, err := b.client.Post(eip3API, "", nil)
 
 	for err != nil {
@@ -123,7 +129,7 @@ func (b *Bonafide) fetchEipJSON() error {
 		buf := make([]byte, 128)
 		resp.Body.Read(buf)
 		log.Warn().Msg("Error fetching eip v3 json (status code 404)")
-		eip1API := config.APIURL + "1/config/eip-service.json"
+		eip1API := config.ProviderConfig.APIURL + "1/config/eip-service.json"
 		resp, err = b.client.Post(eip1API, "", nil)
 		if err != nil {
 			return err
@@ -146,7 +152,7 @@ func (b *Bonafide) fetchEipJSON() error {
 }
 
 func (b *Bonafide) parseEipJSONFromFile() error {
-	provider := strings.ToLower(config.Provider)
+	provider := strings.ToLower(config.ProviderConfig.Provider)
 	eipFile := filepath.Join(config.Path, provider+"-eip.json")
 	f, err := os.Open(eipFile)
 	if err != nil {

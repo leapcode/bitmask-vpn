@@ -35,7 +35,7 @@ const (
 )
 
 var (
-	snapOpenvpnPath = "/snap/bin/" + config.BinaryName + ".openvpn"
+	snapOpenvpnPath = "/snap/bin/" + config.ProviderConfig.BinaryName + ".openvpn"
 )
 
 func getPlatformOpenvpnFlags() []string {

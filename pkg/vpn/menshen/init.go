@@ -31,9 +31,9 @@ type Menshen struct {
 
 func New() (*Menshen, error) {
 	if os.Getenv("API_URL") != "" {
-		config.APIURL = os.Getenv("API_URL")
+		config.ProviderConfig.APIURL = os.Getenv("API_URL")
 		log.Debug().
-			Str("apiUrl", config.APIURL).
+			Str("apiUrl", config.ProviderConfig.APIURL).
 			Msg("Using API URL from env")
 	}
 
@@ -42,12 +42,12 @@ func New() (*Menshen, error) {
 		return nil, fmt.Errorf("Could not initialize bitmask-core storage: %v", err)
 	}
 
-	cfg, err := bootstrap.NewConfigFromURL(config.APIURL)
+	cfg, err := bootstrap.NewConfigFromURL(config.ProviderConfig.APIURL)
 	if err != nil {
 		return nil, err
 	}
-	cfg.STUNServers = config.STUNServers
-	cfg.CountryCodeLookupURL = config.CountryCodeLookupURL
+	cfg.STUNServers = config.ProviderConfig.STUNServers
+	cfg.CountryCodeLookupURL = config.ProviderConfig.CountryCodeLookupURL
 
 	// experimental introducer
 	if introURL := os.Getenv("LEAP_INTRODUCER_URL"); introURL != "" {

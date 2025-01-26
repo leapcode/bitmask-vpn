@@ -215,7 +215,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 	switch b.GetTransport() {
 	case "obfs4":
-		if config.ApiVersion == 5 {
+		if config.ProviderConfig.ApiVersion == 5 {
 			// if I return an error, the GUI state does not get updated properly to Failed/Stopped and
 			// continues to stay in state Connecting (also clicking Cancel doesnot work)
 			log.Fatal().Msg("Could not start OpenVPN with obfs4. This is currently not supported via v5")
@@ -315,7 +315,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 func (b *Bitmask) getCert() error {
 	log.Info().Msg("Getting OpenVPN client certificate")
 
-	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.Provider)+".pem")
+	persistentCertFile := filepath.Join(config.Path, strings.ToLower(config.ProviderConfig.Provider)+".pem")
 	// snowflake might have written a cert here
 	// reuse cert. for the moment we're not writing one there, this is
 	// only to allow users to get certs off-band and place them there
@@ -339,11 +339,11 @@ func (b *Bitmask) getCert() error {
 		cert, err := b.api.GetPemCertificate()
 		if err != nil {
 			// if we can't speak with API => resolve DNS and log
-			url, err := url.Parse(config.APIURL)
+			url, err := url.Parse(config.ProviderConfig.APIURL)
 			if err != nil {
 				log.Warn().
 					Err(err).
-					Str("apiUrl", config.APIURL).
+					Str("apiUrl", config.ProviderConfig.APIURL).
 					Msg("Could not parse domain out of API URL")
 			}
 

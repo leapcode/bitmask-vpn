@@ -136,7 +136,7 @@ func setConfigOpts(opts *InitOpts, conf *config.Config) {
 }
 
 func initializeAutostart(conf *config.Config) bitmaskAutostart.Autostart {
-	autostart := bitmaskAutostart.NewAutostart(config.ApplicationName, "")
+	autostart := bitmaskAutostart.NewAutostart(config.ProviderConfig.ApplicationName, "")
 	if conf.SkipLaunch || conf.DisableAutostart {
 		// Disable removes ~.config/autostart/RiseupVPN.desktop: (on Linux)
 		// it's possible that the file does not exist, so no need to check err
