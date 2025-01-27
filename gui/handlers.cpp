@@ -2,6 +2,10 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QJSValue>
+#include <QFutureWatcher>
+#include <QJSEngine>
+#include <QtConcurrent>
 
 #include "handlers.h"
 #include "lib/libgoshim.h"
@@ -95,6 +99,28 @@ void Backend::resetError(QString errlabel)
 void Backend::resetNotification(QString label)
 {
     ResetNotification(toGoStr(label));
+}
+
+void Backend::switchProvider(QString provider) {
+    QByteArray pr = provider.toUtf8();
+    char *c = pr.data();
+
+    SwitchProvider(c);
+}
+
+void Backend::switchProvider(QString provider, const QJSValue &callback)
+{
+    auto *watcher = new QFutureWatcher<void>(this);
+    QObject::connect(watcher, &QFutureWatcher<void>::finished, this, [this,watcher,callback]() {
+        QJSValue cbCopy(callback); // needed as callback is captured as const
+        cbCopy.call();
+    });
+    QObject::connect(watcher, &QFutureWatcher<void>::finished, watcher, &QFutureWatcher<void>::deleteLater);
+
+    auto future = QtConcurrent::run([this, provider] {
+        this->switchProvider(provider);
+    });
+    watcher->setFuture(future);
 }
 
 void Backend::quit()

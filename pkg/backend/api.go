@@ -8,6 +8,7 @@ package backend
 import (
 	"C"
 	"encoding/json"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -19,6 +20,8 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/pid"
 	"github.com/rs/zerolog/log"
 )
+
+var providers *Providers
 
 func Login(username, password string) {
 	success, err := ctx.bm.DoLogin(username, password)
@@ -207,37 +210,56 @@ type InitOpts struct {
 	AvailableProviders []string
 }
 
-func InitOptsFromJSON(provider, providersJSON string) *InitOpts {
-	providers := Providers{}
-	err := json.Unmarshal([]byte(providersJSON), &providers)
-	if err != nil {
-		log.Fatal().
-			Err(err).
-			Str("providersJson", providersJSON).
-			Msg("Could not parse provider json")
-	}
-	var providerOpts *bitmask.ProviderOpts
-	providerOpts = &providers.Data[0]
-	if len(providers.Data) != 1 {
-		chosenProvider := os.Getenv("LEAP_PROVIDER")
-		if chosenProvider != "" {
-			for _, p := range providers.Data {
-				if p.Provider == chosenProvider {
-					log.Info().
-						Str("provider", chosenProvider).
-						Msg("Selecting provider")
-					return &InitOpts{ProviderOptions: &p}
-				}
-			}
+// InitOptsFromJSON initializes the provider configuration (InitOpts) struct. It is
+// called by the c++ code during startup. There is hardcoded provider information from
+// the binary (providersJSON). And there are dynamic provider configurations saved on
+// disk (loaded by appendOnDiskProviders function).
+func InitOptsFromJSON(providerName, providersJSON string) *InitOpts {
+	log.Debug().Str("providerName", providerName).Msg("initializing for provider")
+
+	// load all providers into providers (the one from the binary + all providers stored on disk)
+	if providers == nil {
+		providers = &Providers{}
+		err := json.Unmarshal([]byte(providersJSON), providers)
+		if err != nil {
 			log.Fatal().
-				Str("provider", chosenProvider).
-				Msg("Provider not found in providers.json")
+				Err(err).
+				Str("providersJson", providersJSON).
+				Msg("Could not parse provider json")
 		}
+		providers = appendOnDiskProviders(providers)
 	}
-	return &InitOpts{ProviderOptions: providerOpts}
+	initOpts := &InitOpts{}
+
+	if enforcedProviderEnv := os.Getenv("LEAP_PROVIDER"); enforcedProviderEnv != "" {
+		providerName = enforcedProviderEnv
+	}
+
+	for _, p := range providers.Data {
+		initOpts.AvailableProviders = append(initOpts.AvailableProviders, p.Provider)
+	}
+
+	// we do the following check as a protection for release builds providers.Data will always
+	// be > 0
+	if len(providers.Data) > 0 {
+		for _, p := range providers.Data {
+			if p.Provider == providerName {
+				log.Info().
+					Str("providerName", providerName).
+					Msg("Selecting provider")
+				initOpts.ProviderOptions = &p
+				return initOpts
+			}
+		}
+		log.Fatal().
+			Str("providerName", providerName).
+			Msg("Provider not found in providers.json")
+	}
+	return initOpts
 }
 
 func InitializeBitmaskContext(opts *InitOpts) {
+	log.Info().Msg("Initializing bitmask context")
 	bitmask.ConfigureProvider(opts.ProviderOptions)
 
 	initializeContext(opts)
@@ -299,4 +321,48 @@ func EnableWebAPI(port string) {
 
 func GetVersion() *C.char {
 	return C.CString(version.Version())
+}
+
+func IsProviderURI(provider string) bool {
+	if _, err := url.ParseRequestURI(provider); err != nil {
+		return false
+	}
+	return true
+}
+
+func FetchProviderOptsFromRemote(providerURL string) string {
+	url, err := url.ParseRequestURI(providerURL)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Msg("Failed to parse provider URL")
+		return ""
+	}
+
+	opts := &bitmask.ProviderOpts{}
+	switch url.Scheme {
+	case "obfsvpnintro":
+		opts = fetchProviderOptsWithIntroducer(providerURL)
+	case "https", "http":
+		opts = fetchProviderOptsHttp(providerURL)
+	}
+
+	if len(opts.Provider) > 0 {
+		if !providerAlreadyExists(providers, opts) {
+			log.Debug().
+				Msg("Adding newly fetched provider to global providers var")
+			if err := writeProviderOptsToFile(opts); err != nil {
+				log.Debug().
+					Err(err).
+					Msg("Failed to write provider options to file")
+			}
+			providers.Data = append(providers.Data, *opts)
+		}
+		return opts.Provider
+	}
+	return ""
+}
+
+func writeProviderOptsToFile(opts *bitmask.ProviderOpts) error {
+	return writeProviderJSONToFile(opts, getProviderJSONPath(opts.Provider))
 }

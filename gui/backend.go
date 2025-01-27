@@ -84,16 +84,41 @@ func SubscribeToEvent(event string, f unsafe.Pointer) {
 }
 
 //export InitializeBitmaskContext
-func InitializeBitmaskContext(provider string,
+func InitializeBitmaskContext(provider *C.char,
 	jsonPtr unsafe.Pointer, jsonLen C.int,
 	obfs4 bool, disableAutostart bool, startVPN string) {
 	json := C.GoBytes(jsonPtr, jsonLen)
-	opts := backend.InitOptsFromJSON(provider, string(json))
+	providerName := C.GoString(provider)
+	opts := backend.InitOptsFromJSON(providerName, string(json))
 	opts.Obfs4 = obfs4
 	opts.DisableAutostart = disableAutostart
 	opts.StartVPN = startVPN
 	opts.DisableAutostart = true
 	opts.SkipLaunch = true
+	go backend.InitializeBitmaskContext(opts)
+}
+
+//export SwitchProvider
+func SwitchProvider(provider *C.char) {
+	// provider could be provider URL or provider name
+	providerNameOrURL := C.GoString(provider)
+	var opts = &backend.InitOpts{}
+	var providerName string
+
+	/* TODO: read the following values from the on-disk config file */
+	opts.Obfs4 = false
+	opts.DisableAutostart = true
+	opts.SkipLaunch = true
+
+	if backend.IsProviderURI(providerNameOrURL) {
+		providerName = backend.FetchProviderOptsFromRemote(providerNameOrURL)
+	}
+
+	if len(providerName) == 0 {
+		providerName = providerNameOrURL
+	}
+
+	opts = backend.InitOptsFromJSON(providerName, "")
 	go backend.InitializeBitmaskContext(opts)
 }
 

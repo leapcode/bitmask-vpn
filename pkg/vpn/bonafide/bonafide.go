@@ -262,6 +262,9 @@ func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 }
 
 func (b *Bonafide) maybeInitializeEIP() error {
+	if b.gateways != nil && len(b.gateways.available) > 0 {
+		return nil
+	}
 	// FIXME - use config/bitmask flag
 	if os.Getenv("SNOWFLAKE") == "1" {
 		log.Info().Msg("Snowflake is enabled. Fetching eip json and certificate via snowflake (SNOWFLAKE=1)")
@@ -280,13 +283,11 @@ func (b *Bonafide) maybeInitializeEIP() error {
 		}
 		b.gateways = newGatewayPool(b.eip)
 	} else {
-		if b.eip == nil {
-			err := b.fetchEipJSON()
-			if err != nil {
-				return err
-			}
-			b.gateways = newGatewayPool(b.eip)
+		err := b.fetchEipJSON()
+		if err != nil {
+			return err
 		}
+		b.gateways = newGatewayPool(b.eip)
 
 		// XXX For now, we just initialize once per session.
 		// We might update the menshen gateways every time we 'maybe initilize EIP'
@@ -304,6 +305,7 @@ func (b *Bonafide) maybeInitializeEIP() error {
 // GetBestGateways filters by transport, and will return the maximum number defined
 // in bonafide.maxGateways, or the maximum by default (3).
 func (b *Bonafide) GetBestGateways(transport string) ([]Gateway, error) {
+	log.Info().Str("transport", transport).Msg("Getting gateways for")
 	err := b.maybeInitializeEIP()
 	if err != nil {
 		return nil, err
@@ -338,6 +340,7 @@ func (b *Bonafide) GetLocationLabels(transport string) map[string][]string {
 }
 
 func (b *Bonafide) SetManualGateway(label string) {
+	log.Debug().Str("location", label).Msg("manual location selection")
 	b.gateways.setUserChoice(label)
 }
 

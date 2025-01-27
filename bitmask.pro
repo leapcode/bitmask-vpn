@@ -48,7 +48,7 @@ win32 {
     RC_ICONS = $$VENDOR_PATH/assets/icon.ico
 }
 
-QT += qml widgets quick
+QT += qml widgets quick concurrent
 
 SOURCES += \
     gui/main.cpp \

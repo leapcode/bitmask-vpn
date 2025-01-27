@@ -289,7 +289,6 @@ int main(int argc, char **argv) {
 
     /* set the json model, load providers.json */
     ctx->setContextProperty("jsonModel", model);
-    ctx->setContextProperty("providers", providers);
     ctx->setContextProperty("desktop", desktop);
     // we're relying on the binary name, for now, to switch themes
     ctx->setContextProperty("flavor", QString::fromStdString(argv[0]));
@@ -336,8 +335,17 @@ int main(int argc, char **argv) {
     QString QProvidersJSON(providers->json().toJson(QJsonDocument::Compact));
 
     /* let the Go side initialize its internal state */
+    QByteArray provider_byte = defaultProvider.toString().toUtf8();
+    char *pr = provider_byte.data();
+
+    QString prv = staticSettings->value("provider", "").toString();
+    auto _prv = prv.toUtf8();
+    if (!_prv.isEmpty()) {
+        pr = _prv.data();
+    }
+
     InitializeBitmaskContext(
-            toGoStr(defaultProvider.toString()),
+            pr,
             (char*)providerJsonBytes.data(), providerJsonBytes.length(),
             obfs4, !enableAutostart, toGoStr(startVPN));
 

@@ -30,6 +30,7 @@ debian/files
 # IDE
 .idea
 .vs
+compile_flags.txt
 
 # Arch Linux package
 ArchLinux/src
