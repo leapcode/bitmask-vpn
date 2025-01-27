@@ -12,6 +12,7 @@
 
 #include "handlers.h"
 #include "qjsonmodel.h"
+#include "appsettings.h"
 #include "lib/libgoshim.h"
 
 /* Hi! I'm Troy McClure and I'll be your guide today. You probably remember me
@@ -156,10 +157,10 @@ int main(int argc, char **argv) {
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
     QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "Bitmask");
-    QString organizationDomain = getProviderConfig(providersInfo, defaultProvider.toString(), "providerURL", "riseup.net");
 
     QApplication::setApplicationName(appName);
-    QApplication::setOrganizationDomain(organizationDomain);
+    QApplication::setOrganizationDomain(QString("leap.se"));
+    QApplication::setOrganizationName(QString("leap"));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(
@@ -261,9 +262,9 @@ int main(int argc, char **argv) {
         app.setWindowIcon(QIcon(":/vendor/bitmask.svg"));
     }
 
-    QSettings settings;
-    QString locale = settings.value("locale", QLocale().name()).toString();
-    settings.setValue("locale", locale);
+    appSettings *staticSettings = new appSettings;
+    QString locale = staticSettings->value("locale", QLocale().name()).toString();
+    staticSettings->setValue("locale", locale);
 
     /* load translations */
     QTranslator translator;
@@ -282,6 +283,9 @@ int main(int argc, char **argv) {
     /* the backend handler has slots for calling back to Go when triggered by
        signals in Qml. */
     ctx->setContextProperty("backend", &backend);
+
+    /* app settings class exposed to qml */
+    ctx->setContextProperty("appsettings", staticSettings);
 
     /* set the json model, load providers.json */
     ctx->setContextProperty("jsonModel", model);
@@ -309,8 +313,8 @@ int main(int argc, char **argv) {
         model->loadJson(js.toUtf8());
     });
 
-    QObject::connect(&backend, &Backend::localeChanged, [&app, &translator, &engine, &settings](QString locale) {
-        settings.setValue("locale", locale);
+    QObject::connect(&backend, &Backend::localeChanged, [&app, &translator, &engine, &staticSettings](QString locale) {
+        staticSettings->setValue("locale", locale);
 
         app.removeTranslator(&translator);
         translator.load(QLocale(locale), QLatin1String("main"), QLatin1String("_"), QLatin1String(":/i18n"));

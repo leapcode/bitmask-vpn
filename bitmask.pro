@@ -59,7 +59,8 @@ SOURCES += \
 HEADERS += \
     gui/handlers.h \
     gui/qjsonmodel.h \
-    lib/libgoshim.h
+    lib/libgoshim.h \
+    gui/appsettings.h
 
 # we build from build/qt
 LIBS += -L../../lib -lgoshim -lpthread
