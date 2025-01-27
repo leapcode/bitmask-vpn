@@ -41,6 +41,7 @@ type Bitmask struct {
 	canUpgrade       bool                   // is there an update available?
 	motd             []motd.Message         // cached message of the day (ony fetched once during startup)
 	statusCh         chan string            // channel used to get current OpenVPN state (remote ip, connection state, ...)
+	statusCloseCh    chan int               // chnanel used to close the status fetch loop to update GUI
 	managementClient *management.MgmtClient // used to speak with our own management backend (OpenVPN process connects to it)
 	transport        string                 // used transport, e.g. OpenVPN (plain) or obfuscated protocols (obfs4)
 	openvpnArgs      []string               // arguments used for invoking the OpenVPN process
@@ -95,6 +96,7 @@ func Init() (*Bitmask, error) {
 		onGateway:        bonafide.Gateway{},
 		ptGateway:        bonafide.Gateway{},
 		statusCh:         make(chan string, 10),
+		statusCloseCh:    make(chan int),
 		managementClient: nil,
 		api:              api,
 		launch:           launch,
@@ -163,6 +165,10 @@ func (b *Bitmask) SetProvider(p string) {
 // GetStatusCh returns a channel that will recieve VPN status changes
 func (b *Bitmask) GetStatusCh() <-chan string {
 	return b.statusCh
+}
+
+func (b *Bitmask) GetStatusCloseCh() chan int {
+	return b.statusCloseCh
 }
 
 func (b *Bitmask) GetSnowflakeCh() <-chan *snowflake.StatusEvent {

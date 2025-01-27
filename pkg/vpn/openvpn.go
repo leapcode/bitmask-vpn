@@ -427,6 +427,8 @@ func (b *Bitmask) Reconnect() error {
 		Str("status", status).
 		Msg("Status when switching location")
 
+	log.Debug().Str("status", status).Msg("b.GetStatus is")
+
 	if status != Off {
 		b.statusCh <- Stopping
 		if b.obfsvpnProxy != nil {
@@ -453,22 +455,16 @@ func (b *Bitmask) Reconnect() error {
 
 // GetStatus returns the VPN status
 func (b *Bitmask) GetStatus() (string, error) {
-	status := Off
-	var err error
 	if b.isFailed() {
-		status = Failed
-	} else {
-		status, err = b.getOpenvpnState()
-		if err != nil {
-			log.Warn().
-				Err(err).
-				Str("status", status).
-				Msg("status of openvpn from management")
-			status = Off
-		}
-		if status == Off && b.launch.FirewallIsUp() {
-			return Failed, nil
-		}
+		return Failed, nil
+	}
+	var status string
+	status, err := b.getOpenvpnState()
+	if err != nil {
+		status = ""
+	}
+	if status == Off && b.launch.FirewallIsUp() {
+		return Failed, nil
 	}
 	return status, nil
 }
@@ -488,6 +484,7 @@ func (b *Bitmask) GetLocationLabels(transport string) map[string][]string {
 
 // UseGateway selects a gateway, by label, as the default gateway
 func (b *Bitmask) UseGateway(label string) {
+	log.Info().Str("label", label).Msg("Using Gateway with location")
 	b.api.SetManualGateway(label)
 }
 

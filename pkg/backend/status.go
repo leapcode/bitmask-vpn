@@ -19,6 +19,7 @@ const (
 	onStr       = "on"
 	stoppingStr = "stopping"
 	failedStr   = "failed"
+	unknownStr  = "unknown"
 )
 
 // ctx will be our glorious global object.
@@ -119,10 +120,13 @@ func (c connectionCtx) updateStatus() {
 	}()
 
 	statusCh := c.bm.GetStatusCh()
+	statusCloseCh := c.bm.GetStatusCloseCh()
 	for {
 		select {
 		case stStr := <-statusCh:
 			setStatusFromStr(stStr)
+		case _ = <-statusCloseCh:
+			return
 		}
 	}
 }
@@ -158,7 +162,7 @@ const (
 )
 
 func (s status) String() string {
-	return [...]string{offStr, startingStr, onStr, stoppingStr, failedStr}[s]
+	return [...]string{offStr, startingStr, onStr, stoppingStr, failedStr, unknownStr}[s]
 }
 
 func (s status) MarshalJSON() ([]byte, error) {
@@ -168,7 +172,7 @@ func (s status) MarshalJSON() ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-func (s status) fromString(st string) status {
+func fromString(st string) status {
 	switch st {
 	case offStr:
 		return off
@@ -189,5 +193,5 @@ func setStatusFromStr(stStr string) {
 	log.Trace().
 		Str("status", stStr).
 		Msg("Setting GUI status")
-	setStatus(unknown.fromString(stStr))
+	setStatus(fromString(stStr))
 }

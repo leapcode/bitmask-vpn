@@ -21,6 +21,7 @@ import "0xacab.org/leap/bitmask-vpn/pkg/snowflake"
 
 type Bitmask interface {
 	GetStatusCh() <-chan string
+	GetStatusCloseCh() chan int
 	GetSnowflakeCh() <-chan *snowflake.StatusEvent
 	Close()
 	Version() (string, error)

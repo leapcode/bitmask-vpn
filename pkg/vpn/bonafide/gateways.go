@@ -292,6 +292,7 @@ func (p *gatewayPool) setRecommendedGateways(geo *geoLocation) {
 /* get at most max gateways. the method of picking depends on whether we're
 * doing manual override, and if we got useful info from menshen */
 func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) {
+	log.Info().Str("transport", transport).Msg("Getting gateways for")
 	if hostname := os.Getenv("LEAP_GW"); hostname != "" {
 		log.Debug().
 			Str("hostname", hostname).
@@ -299,14 +300,19 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 		return p.getGatewaysByHostname(hostname)
 	}
 	if p.isManualLocation() {
+		log.Info().Msg("Getting gateways manual location")
 		if len(p.recommended) != 0 {
+			log.Info().Msg("Getting gateways manual location from recommended")
 			return p.getGatewaysFromMenshenByLocation(p.userChoice, transport)
 		} else {
+			log.Info().Msg("Getting gateways manual location random")
 			return p.getRandomGatewaysByLocation(p.userChoice, transport)
 		}
 	} else if len(p.recommended) != 0 {
+		log.Info().Msg("Getting gateways automatic location recommended")
 		return p.getGatewaysFromMenshen(transport, max)
 	} else {
+		log.Info().Msg("Getting gateways automatic location by timezone")
 		return p.GetGatewaysByTimezone(transport, tz, max)
 	}
 }

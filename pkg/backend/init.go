@@ -25,6 +25,11 @@ func initializeContext(opts *InitOpts) {
 	// multi-provider config in the backend too, and just
 	// switch the "active" here in the ctx, after the user has selected one
 	// in the combobox.
+
+	// if ctx is not nil then close the signal channel to break up the status update loop
+	if ctx != nil {
+		close(ctx.bm.GetStatusCloseCh())
+	}
 	ctx = &connectionCtx{
 		AppName:         opts.ProviderOptions.AppName,
 		Provider:        opts.ProviderOptions.Provider,
