@@ -6,10 +6,12 @@ import QtQuick.Layouts
 import "../themes/themes.js" as Theme
 
 Page {
+    id: mainView
     StackView {
         id: stackView
         anchors.fill: parent
         initialItem: Home {
+            id: home
         }
     }
 
@@ -37,10 +39,17 @@ Page {
                 width: parent.width
                 text: model.text
                 visible: {
-                    if (isDonationService) {
+                    if (model.text == qsTr("Donate")) {
+                        if (!isDonationService) {
+                            return false;
+                        }
+                    } else if (model.text == qsTr("Switch Provider")) {
+                        if (ctx.appName != qsTr("Bitmask")) {
+                            return false;
+                        }
+                    } else {
                         return true;
                     }
-                    return model.text != qsTr("Donate");
                 }
                 highlighted: ListView.isCurrentItem
                 icon.color: "transparent"
@@ -88,6 +97,13 @@ Page {
             icon: "../resources/quit.svg"
             triggered: function () {
                 Qt.callLater(backend.quit);
+            }
+        }
+        ListElement {
+            text: qsTr("Switch Provider")
+            icon: "../resources/switch_provider.svg"
+            triggered: function () {
+                stackView.push("SwitchProvider.qml");
             }
         }
     } // end listmodel
@@ -158,6 +174,14 @@ Page {
         }
         let url = ctx.donateURL;
         return "<style>a:link {color:'" + Theme.blue + "'; }</style><a href='#'>" + url + "</a>";
+    }
+
+    function loadMainView() {
+        stackView.pop();
+    }
+
+    function setStatusStarting() {
+        home.setStatusBoxStateStarting();
     }
 
     Component.onCompleted: {

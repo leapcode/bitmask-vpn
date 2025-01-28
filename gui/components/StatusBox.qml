@@ -9,8 +9,13 @@ import QtQuick.Controls.Material.impl
 import "../themes/themes.js" as Theme
 
 Item {
-    id: statusbox
     anchors.fill: parent
+
+    signal setStatusStarting()
+
+    onSetStatusStarting: {
+        vpn.startingUI = true;
+    }
 
     Rectangle {
         id: statusBoxBackground

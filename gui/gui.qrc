@@ -41,6 +41,11 @@
         <file>components/InitErrors.qml</file>
         <file>components/ErrorBox.qml</file>
         <file>components/MotdBox.qml</file>
+        <file>components/ProviderSelection.qml</file>
+        <file>components/SelectCircumventionTechnique.qml</file>
+        <file>components/ConfiguringProvider.qml</file>
+        <file>components/ProviderSetupComplete.qml</file>
+        <file>components/SwitchProvider.qml</file>
 
         <!-- resources, assets -->
         <file>resources/icon-noshield.svg</file>
@@ -71,6 +76,8 @@
         <file>resources/button_green.png</file>
         <file>resources/button_yellow.png</file>
         <file>resources/button_red.png</file>
+        <file>resources/setup_progress_image.png</file>
+        <file>resources/switch_provider.svg</file>
 
         <!-- riseup assets -->
         <file>resources/ravens.svg</file>

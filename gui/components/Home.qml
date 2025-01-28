@@ -4,5 +4,10 @@ import QtQuick.Effects
 
 Page {
     StatusBox {
+        id: statusbox
+    }
+
+    function setStatusBoxStateStarting() {
+        statusbox.setStatusStarting()
     }
 }

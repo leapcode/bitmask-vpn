@@ -204,23 +204,6 @@ ToolBar {
         }
     }
 
-    function hasMultipleGateways() {
-        let provider = getSelectedProvider(providers);
-        if (provider == "riseup") {
-            return true;
-        } else {
-            if (!ctx) {
-                return false;
-            }
-            return ctx.locations.length > 0;
-        }
-    }
-
-    function getSelectedProvider(providers) {
-        let obj = JSON.parse(providers.getJson());
-        return obj['default'];
-    }
-
     function isBridgeSelected() {
         if (ctx && ctx.transport == "obfs4") {
             return true;

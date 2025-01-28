@@ -7,12 +7,11 @@ import QtQuick.Layouts
 import "./components"
 
 ApplicationWindow {
-
     id: root
     visible: true
 
-    property int appHeight: 460
-    property int appWidth: 280
+    property int appHeight: 480
+    property int appWidth: 300
     property alias customTheme: themeLoader.item
 
     width: appWidth
@@ -23,8 +22,8 @@ ApplicationWindow {
     minimumHeight: appHeight
     maximumHeight: appHeight
 
-    title: ctx ? ctx.appName : ""
-    Material.accent: Material.Green
+    //title: ctx ? ctx.appName : ""
+    Material.accent: Material.Pink
 
     property var ctx
     property var error: ""
@@ -33,6 +32,7 @@ ApplicationWindow {
     property bool isDonationService: false
     property bool showDonationReminder: false
     property var locationsModel: []
+    property var providersModel: []
     // TODO get from persistance
     property var selectedGateway: "auto"
 
@@ -44,7 +44,7 @@ ApplicationWindow {
         "blocked": "qrc:/assets/icon/png/white/vpn_blocked.png"
     }
 
-    signal openDonateDialog()
+    signal openDonateDialog
 
     FontLoader {
         id: lightFont
@@ -82,7 +82,6 @@ ApplicationWindow {
         source: loadTheme()
     }
 
-
     Systray {
         id: systray
     }
@@ -90,98 +89,120 @@ ApplicationWindow {
     Connections {
         target: jsonModel
         function onDataChanged() {
-            let j = jsonModel.getJson()
+            let j = jsonModel.getJson();
             if (qmlDebug) {
-                console.debug(j)
+                console.debug(j);
             }
-            ctx = JSON.parse(j)
+            ctx = JSON.parse(j);
             if (ctx != undefined) {
-                locationsModel = getSortedLocations()
+                locationsModel = getSortedLocations();
+                providersModel = getAvailableProviders();
             }
             if (ctx.errors) {
-                console.debug("errors, setting root.error")
-                root.error = ctx.errors
+                console.debug("errors, setting root.error");
+                root.error = ctx.errors;
             } else {
-                root.error = ""
+                root.error = "";
             }
             if (ctx.donateURL) {
-                isDonationService = true
+                isDonationService = true;
             }
             if (ctx.donateDialog == 'true') {
-                showDonationReminder = true
+                showDonationReminder = true;
             }
             if (isAutoLocation()) {
-                root.selectedGateway = "auto"
+                root.selectedGateway = "auto";
             }
         }
     }
 
     function getSortedLocations() {
-        let obj = ctx.locations
-        var arr = []
+        let obj = ctx.locations;
+        var arr = [];
         for (var prop in obj) {
             if (obj.hasOwnProperty(prop)) {
                 arr.push({
-                             "key": prop,
-                             "value": obj[prop]
-                         })
+                    "key": prop,
+                    "value": obj[prop]
+                });
             }
         }
         arr.sort(function (a, b) {
-            return a.value - b.value
-        }).reverse()
-        return Array.from(arr, (k,_) => k.key);
+            return a.value - b.value;
+        }).reverse();
+        return Array.from(arr, (k, _) => k.key);
+    }
+
+    function getAvailableProviders() {
+        let providers = ctx.providers;
+        var arr = [];
+        for (var i in providers) {
+            arr.push({
+                "providerName": providers[i]
+            });
+        }
+        arr.sort(function (a, b) {
+            return a.providerName > b.providerName;
+        });
+
+        arr.push({
+            "providerName": "Add new provider"
+        },
+        {
+            "providerName": "Enter invite Code"
+        });
+        return arr;
     }
 
     function isAutoLocation() {
         // FIXME there's something weird going on with newyork location...
         // it gets marked as auto, which from europe is a bug.
-        let best = ctx.locationLabels[ctx.bestLocation]
+        let best = ctx.locationLabels[ctx.bestLocation];
         if (best == undefined) {
-            return false
+            return false;
         }
-        return (best[0] == ctx.currentLocation)
+        return (best[0] == ctx.currentLocation);
     }
 
     function bringToFront() {
-        // FIXME does not work properly, at least on linux 
+        // FIXME does not work properly, at least on linux
         if (visibility == 3) {
-            showNormal()
+            showNormal();
         } else {
-            show() 
+            show();
         }
-        raise()
-        requestActivate()
+        raise();
+        requestActivate();
     }
 
     function loadTheme() {
-        var arr
+        var arr;
         if (Qt.platform.os == "windows") {
-            arr = flavor.split("\\")
+            arr = flavor.split("\\");
         } else {
-            arr = flavor.split("/")
+            arr = flavor.split("/");
         }
-        var providerFlavor = arr[arr.length-1]
-        console.debug("flavor: " + providerFlavor)
+        var providerFlavor = arr[arr.length - 1];
+        console.debug("flavor: " + providerFlavor);
         if (providerFlavor.startsWith("riseup-vpn") || providerFlavor == "RiseupVPN") {
-            return "qrc:/themes/Riseup.qml"
+            return "qrc:/themes/Riseup.qml";
         } else if (providerFlavor.startsWith("calyx-vpn") || providerFlavor == "CalyxVPN") {
-            return "qrc:/themes/Calyx.qml"
+            return "qrc:/themes/Calyx.qml";
         } else if (providerFlavor.startsWith("bitmask-vpn") || providerFlavor == "Bitmask") {
-            return "qrc:/themes/Bitmask.qml"
+            return "qrc:/themes/Bitmask.qml";
         } else {
             // we should do a Default theme, with a fallback
             // mechanism
-            return "qrc:/themes/Riseup.qml"
+            return "qrc:/themes/Riseup.qml";
         }
     }
 
     onSceneGraphError: function (error, msg) {
-        console.debug("ERROR while initializing scene")
-        console.debug(msg)
+        console.debug("ERROR while initializing scene");
+        console.debug(msg);
     }
 
     Component.onCompleted: {
-        loader.source = "components/Splash.qml"
+        loader.source = "components/Splash.qml";
     }
 }
