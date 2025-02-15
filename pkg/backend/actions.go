@@ -23,6 +23,7 @@ func stopVPN() {
 			Msg("Could not stop VPN")
 		setError(err.Error())
 	}
+	setStatus(off)
 }
 
 func getGateway() string {

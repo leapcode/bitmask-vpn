@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/rs/zerolog/log"
 
@@ -224,18 +225,21 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		}
 		proxyArgs, err := b.setupObsfucationProxy(ctx, "obfs4")
 		if err != nil {
+			b.statusCh <- Off
 			return err
 		}
 		arg = append(arg, proxyArgs...)
 	case "kcp":
 		proxyArgs, err := b.setupObsfucationProxy(ctx, "kcp")
 		if err != nil {
+			b.statusCh <- Off
 			return err
 		}
 		arg = append(arg, proxyArgs...)
 	default:
 		gateways, err := b.api.GetBestGateways("openvpn")
 		if err != nil {
+			b.statusCh <- Off
 			return err
 		}
 		log.Info().Msgf("Got best gateway %v", gateways)
@@ -248,6 +252,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		}
 		err = b.launch.FirewallStart(gateways)
 		if err != nil {
+			b.statusCh <- Off
 			return err
 		}
 
@@ -396,10 +401,24 @@ func (b *Bitmask) StopVPN() error {
 			b.obfsvpnProxy = nil
 		}()
 	}
+
 	b.tryStopFromManagement()
-	if err := b.launch.OpenvpnStop(); err != nil {
-		log.Debug().Err(err).Msg("Error while stop obfsvpn proxy")
+	time.Sleep(1 * time.Second)
+
+	st, err := b.GetStatus()
+	if err != nil {
+		return err
 	}
+
+	switch st {
+	case Off, Stopping:
+		if err := b.launch.OpenvpnStop(); err != nil {
+			log.Debug().
+				Err(err).
+				Msg("Error while stop obfsvpn proxy")
+		}
+	}
+
 	return nil
 }
 

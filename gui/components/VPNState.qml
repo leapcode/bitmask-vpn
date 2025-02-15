@@ -76,9 +76,15 @@ StateGroup {
                 target: systray.statusItem
                 text: toHuman("connecting")
             }
+            StateChangeScript {
+                script: {
+                    vpn.startingUI = false;
+                    console.debug("status is off and startingUI is true");
+                }
+            }
         },
         State {
-            name: "off"
+            name: off
             PropertyChanges {
                 target: connectionState
                 text: qsTr("Unsecured\nConnection")

@@ -163,12 +163,13 @@ Item {
             }
 
             onClicked: {
-                if (vpn.state === "on" | vpn.state === "starting") {
+                if (vpn.state === "on" | vpn.state === "starting" | vpn.state === "stopping") {
                     backend.switchOff();
                 } else if (vpn.state === "off") {
                     vpn.startingUI = true;
                     backend.switchOn();
                 } else {
+                    console.debug("vpn.state: ", vpn.state)
                     console.debug("unknown state");
                 }
             }
