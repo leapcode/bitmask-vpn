@@ -344,7 +344,7 @@ func FetchProviderOptsFromRemote(providerURL string) string {
 	case "obfsvpnintro":
 		opts = fetchProviderOptsWithIntroducer(providerURL)
 	case "https", "http":
-		opts = fetchProviderOptsHttp(providerURL)
+		opts = fetchProviderOptsWitBootstrapper(providerURL)
 	}
 
 	if len(opts.Provider) > 0 {

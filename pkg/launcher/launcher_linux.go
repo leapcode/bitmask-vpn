@@ -243,6 +243,7 @@ func (l *Launcher) openvpnRunner(arg ...string) {
 				l.Failed = true
 			}
 		}
+		log.Info().Msg("Exited from the running loop in launcher.openvpnRunner")
 	}
 
 	for arg := range l.OpenvpnCh {

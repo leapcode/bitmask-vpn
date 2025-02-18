@@ -218,7 +218,7 @@ Item {
             anchors.rightMargin: 10
             onTextChanged: function () {
                 var input = text;
-                var pattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+                var pattern = /^obfsvpnintro:\/\//;
                 console.log("User input:", input);
                 if (pattern.test(input)) {
                     providerSetupPage.providerName = input;
