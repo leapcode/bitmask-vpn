@@ -53,12 +53,21 @@ var statusNames = map[string]string{
 	"FAILED":       Off,
 }
 
+var managementListener *management.MgmtListener
+
 // Start listener on 127.0.0.1:6061 and run backend handler, the OpenVPN process
 // connects to this port and tells us things like the state or the connected gateway.
 // Our management backend is implemented in the management package (pkg/vpn/management)
 // OpenVPN gets invoked with --management-client and --management 127.0.0.1 6061 <secret>
 // Reference: https://openvpn.net/community-resources/management-interface/
 func (b *Bitmask) initOpenVPNManagementHandler() {
+	if managementListener != nil {
+		if err := managementListener.Close(); err != nil {
+			log.Warn().
+				Err(err).
+				Msg("failed to close openvpn management listener")
+		}
+	}
 	listenAddr := net.JoinHostPort(openvpnManagementAddr, openvpnManagementPort)
 
 	newConnection := func(conn management.IncomingConn) {
@@ -72,16 +81,24 @@ func (b *Bitmask) initOpenVPNManagementHandler() {
 		b.eventHandler(eventCh)
 	}
 
-	err := management.ListenAndServe(
-		listenAddr,
-		management.IncomingConnHandlerFunc(newConnection),
-	)
+	ml, err := management.Listen(listenAddr)
+	if err != nil {
+		log.Warn().
+			Err(err).
+			Msg("unable to create management listener")
+		return
+	}
+	// idealy this variable should be protected with a lock
+	// since this method is run as a goroutine
+	managementListener = ml
 
-	// This should never be reached, ListenAndServe blocks
-	log.Fatal().
-		Err(err).
-		Str("listen", listenAddr).
-		Msgf("Could not start OpenVPN management backend")
+	if err := ml.Serve(management.IncomingConnHandlerFunc(newConnection)); err != nil {
+		log.Warn().
+			Err(err).
+			Str("listen", listenAddr).
+			Msgf("Could not start OpenVPN management backend")
+
+	}
 }
 
 // Handle events sent by OpenVPN management. For more information please read
