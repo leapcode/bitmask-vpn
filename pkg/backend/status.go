@@ -100,11 +100,16 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 
 func (c connectionCtx) updateStatus() {
 	updateMutex.Lock()
-	defer updateMutex.Unlock()
+	defer func() {
+		log.Debug().
+			Msg("Exiting from the updateStatus go routine checking the values of the statusCh")
+		updateMutex.Unlock()
+	}()
 	if stStr, err := c.bm.GetStatus(); err != nil {
 		log.Error().
 			Err(err).
 			Msg("Could not get OpenVPN status")
+		setStatusFromStr(offStr)
 	} else {
 		setStatusFromStr(stStr)
 	}
@@ -121,11 +126,23 @@ func (c connectionCtx) updateStatus() {
 
 	statusCh := c.bm.GetStatusCh()
 	statusCloseCh := c.bm.GetStatusCloseCh()
+	log.Debug().
+		Msg("Going to enter the statusCh value check loop")
 	for {
 		select {
 		case stStr := <-statusCh:
+			log.Debug().
+				Str("statusCh", stStr).
+				Msg("Got value in the statusCh")
+			if stStr == "" {
+				setStatusFromStr(offStr)
+				continue
+			}
 			setStatusFromStr(stStr)
 		case _ = <-statusCloseCh:
+			log.Debug().
+				Msg("Closing the statusCh reading loop via the statusCloseCh")
+			setStatusFromStr(offStr)
 			return
 		}
 	}
