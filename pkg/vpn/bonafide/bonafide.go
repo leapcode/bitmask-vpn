@@ -227,7 +227,23 @@ func (b *Bonafide) getURL(object string) string {
 		}
 		return ""
 	case "certv3":
-		if link, err := url.JoinPath(config.ProviderConfig.APIURL, certPathv3); err == nil {
+		u, err := url.Parse(config.ProviderConfig.APIURL)
+		if err != nil {
+			log.Debug().
+				Err(err)
+			return ""
+		}
+		apiUrl, err := url.Parse(u.Hostname())
+		if err != nil {
+			log.Debug().
+				Err(err)
+			return ""
+		}
+		apiUrl.Scheme = u.Scheme
+		if link, err := url.JoinPath(apiUrl.String(), certPathv3); err == nil {
+			log.Debug().
+				Str("cert_url", link).
+				Msg("v3 openvpn cert url")
 			return link
 		}
 		return ""
