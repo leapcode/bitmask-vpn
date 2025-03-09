@@ -57,7 +57,6 @@ func Login(username, password string) {
 func setError(err string) {
 	ctx.Errors = err
 	go setStatus(off)
-	go ctx.updateStatus()
 }
 
 func SwitchOn() {
