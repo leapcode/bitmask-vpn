@@ -230,29 +230,21 @@ func (l *Launcher) FirewallIsUp() bool {
 	return err == nil
 }
 
-func (l *Launcher) openvpnRunner(arg ...string) {
-	running := false
-	runOpenvpn := func(arg []string) {
-		for running {
-			err := runBitmaskRoot(arg...)
-			if err != nil {
-				log.Warn().
-					Err(err).
-					Msg("An error ocurred running OpenVPN")
-				l.OpenvpnCh <- nil
-				l.Failed = true
-			}
+func (l *Launcher) openvpnRunner(args ...string) {
+	runOpenvpn := func(args []string) {
+		err := runBitmaskRoot(args...)
+		if err != nil {
+			log.Warn().
+				Err(err).
+				Msg("An error ocurred running OpenVPN")
+			l.OpenvpnCh <- nil
+			l.Failed = true
 		}
 		log.Info().Msg("Exited from the running loop in launcher.openvpnRunner")
 	}
 
 	for arg := range l.OpenvpnCh {
-		if arg == nil {
-			running = false
-		} else {
-			running = true
-			go runOpenvpn(arg)
-		}
+		go runOpenvpn(arg)
 	}
 }
 
