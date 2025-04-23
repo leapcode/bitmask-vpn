@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
@@ -262,7 +263,7 @@ func runBitmaskRoot(arg ...string) error {
 	out, err := cmd.CombinedOutput()
 	// 'firewall isup' is called often and "fails" often, as the firewall is not yet up, so don't log
 	outTrimed := strings.TrimRight(strings.TrimRight(string(out), "\n"), "\r")
-	if err != nil && arg[2] != "isup" {
+	if err != nil && slices.Contains(arg, "isup") {
 		log.Warn().
 			Err(err).
 			Str("cmd", strings.Join(arg, " ")).
