@@ -123,9 +123,11 @@ build_ubuntu24_package:
     - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
   script:
     - "PROVIDER=bitmask make vendor"
+    - "rm -rf build/bitmask/debian/patches"
     - "PROVIDER=bitmask QMAKE=qmake6 make package_deb"
     - "make clean"
     - "PROVIDER=riseup make vendor"
+    - "rm -rf build/riseup/debian/patches"
     - "PROVIDER=riseup QMAKE=qmake6 make package_deb"
   after_script:
     - "mv deploy/*.deb build/riseup/build"
