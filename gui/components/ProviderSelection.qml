@@ -65,6 +65,37 @@ Item {
             id: providerSel
         }
 
+        Component {
+            id: materialRadioButtonDelegate
+            MaterialRadioButton {
+                required property var model
+
+                text: model.modelData.providerName
+                ButtonGroup.group: providerSel
+                checked: model.modelData.providerName === root.ctx.provider
+                HoverHandler {
+                    cursorShape: Qt.PointingHandCursor
+                }
+                onClicked: function () {
+                    if (model.modelData.providerName === "Add new provider") {
+                        addNewProviderInputBox.visible = true;
+                        addProviderViaInviteCodeBox.visible = false;
+                        providerSetupPage.providerName = "";
+                    } else if (model.modelData.providerName == "Enter invite Code") {
+                        addProviderViaInviteCodeBox.visible = true;
+                        addNewProviderInputBox.visible = false;
+                        providerSetupPage.providerName = "";
+                    } else {
+                        addNewProviderInputBox.visible = false;
+                        addProviderViaInviteCodeBox.visible = false;
+
+                        console.log("Provider name: ", model.modelData.providerName);
+                        providerSetupPage.providerName = model.modelData.providerName;
+                    }
+                }
+            }
+        }
+
         ScrollView {
             id: frame
             clip: true
@@ -76,33 +107,7 @@ Item {
             ListView {
                 id: providersView
                 model: root.providersModel
-                delegate: MaterialRadioButton {
-                    required property string providerName
-
-                    text: providerName
-                    ButtonGroup.group: providerSel
-                    checked: providerName === root.ctx.provider
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
-                    }
-                    onClicked: function () {
-                        if (providerName === "Add new provider") {
-                            addNewProviderInputBox.visible = true;
-                            addProviderViaInviteCodeBox.visible = false;
-                            providerSetupPage.providerName = "";
-                        } else if (providerName == "Enter invite Code") {
-                            addProviderViaInviteCodeBox.visible = true;
-                            addNewProviderInputBox.visible = false;
-                            providerSetupPage.providerName = "";
-                        } else {
-                            addNewProviderInputBox.visible = false;
-                            addProviderViaInviteCodeBox.visible = false;
-
-                            console.log("Provider name: ", providerName);
-                            providerSetupPage.providerName = providerName;
-                        }
-                    }
-                }
+                delegate: materialRadioButtonDelegate
             }
         }
     }
