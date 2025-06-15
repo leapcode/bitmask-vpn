@@ -62,13 +62,19 @@ func (b *Bitmask) CanStartVPN() bool {
 	return !b.api.NeedsCredentials()
 }
 
-func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKCP bool) (proxy string, err error) {
+func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKCP, useQUIC bool) (proxy string, err error) {
 	proxyAddr := "127.0.0.1:8080"
 	kcpConfig := obfsvpn.KCPConfig{
 		Enabled: false,
 	}
+	quicConfig := obfsvpn.QUICConfig{
+		Enabled: false,
+	}
+
 	if os.Getenv("LEAP_KCP") == "1" || useKCP {
 		kcpConfig = *obfsvpn.DefaultKCPConfig()
+	} else if os.Getenv("LEAP_QUIC") == "1" || useQUIC {
+		quicConfig = *obfsvpn.DefaultQUICConfig()
 	}
 
 	obfsvpnCfg := obfsvpnClient.Config{
@@ -77,6 +83,7 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 			Enabled: false,
 		},
 		KCPConfig:  kcpConfig,
+		QUICConfig: quicConfig,
 		Obfs4Cert:  gw.Options["cert"],
 		RemoteIP:   gw.IPAddress,
 		RemotePort: gw.Ports[0],
@@ -189,12 +196,13 @@ func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) (
 	}
 
 	kcp := transport == "kcp"
+	quic := transport == "quic"
 
 	// loop over the list of gateways trying each gateway
 	// once a successful connection is made error is  nil
 	// and the loop breaks
 	for _, gw := range gateways {
-		proxy, err := b.startTransport(ctx, gw, kcp)
+		proxy, err := b.startTransport(ctx, gw, kcp, quic)
 		if err == nil {
 			arg = appendProxyArgsToOpenvpnCmd(arg, proxy)
 			// add default gatway route for openvpn
@@ -231,6 +239,13 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		arg = append(arg, proxyArgs...)
 	case "kcp":
 		proxyArgs, err := b.setupObsfucationProxy(ctx, "kcp")
+		if err != nil {
+			b.statusCh <- Off
+			return err
+		}
+		arg = append(arg, proxyArgs...)
+	case "quic":
+		proxyArgs, err := b.setupObsfucationProxy(ctx, "quic")
 		if err != nil {
 			b.statusCh <- Off
 			return err
@@ -516,7 +531,7 @@ func (b *Bitmask) UseAutomaticGateway() {
 // SetTransport selects an obfuscation transport to use
 func (b *Bitmask) SetTransport(t string) error {
 	switch t {
-	case "openvpn", "obfs4", "kcp":
+	case "openvpn", "obfs4", "kcp", "quic":
 		b.transport = t
 		log.Info().
 			Str("transport", t).

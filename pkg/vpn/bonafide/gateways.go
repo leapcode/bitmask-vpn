@@ -66,6 +66,9 @@ func (gw Gateway) isTransport(transport string) bool {
 	if transport == "kcp" {
 		return gw.Transport == "obfs4" && slices.Contains(gw.Protocols, "kcp")
 	}
+	if transport == "quic" {
+		return gw.Transport == "obfs4" && slices.Contains(gw.Protocols, "quic")
+	}
 	if transport == "obfs4" {
 		return (slices.Contains(gw.Protocols, "tcp") || slices.Contains(gw.Protocols, "udp")) && gw.Transport == "obfs4"
 	}

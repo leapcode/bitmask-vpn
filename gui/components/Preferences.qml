@@ -317,6 +317,10 @@ ThemedPage {
                     target: useKCP
                     enabled: false
                 }
+                PropertyChanges {
+                    target: useQUIC
+                    enabled: false
+                }
             },
             State {
                 name: "starting"
@@ -336,6 +340,10 @@ ThemedPage {
                     target: useKCP
                     enabled: false
                 }
+                PropertyChanges {
+                    target: useQUIC
+                    enabled: false
+                }
             },
             State {
                 name: "off"
@@ -353,6 +361,10 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useKCP
+                    enabled: true && (ctx && ctx.provider == "bitmask")
+                }
+                PropertyChanges {
+                    target: useQUIC
                     enabled: true && (ctx && ctx.provider == "bitmask")
                 }
             }
@@ -417,6 +429,14 @@ ThemedPage {
         }
         if (ctx && ctx.transport == "kcp" && ctx.provider == "bitmask") {
             useKCP.checked = true
+            useQUIC.checked = false
+            useBridgesCheckBox.checked = true
+            useBridgesCheckBox.enabled = false
+            useUDP.enabled = false
+        }
+        if (ctx && ctx.transport == "quic" && ctx.provider == "bitmask") {
+            useQUIC.checked = true
+            useKCP.checked = false
             useBridgesCheckBox.checked = true
             useBridgesCheckBox.enabled = false
             useUDP.enabled = false
