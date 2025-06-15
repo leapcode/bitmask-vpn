@@ -204,6 +204,7 @@ ThemedPage {
                     onClicked: {
                         useKcp(checked);
                         useUDP.enabled = !checked;
+                        useQUIC.enabled = !checked;
                         useBridgesCheckBox.enabled = !checked;
                         useBridgesCheckBox.checked = checked;
                     }
@@ -213,6 +214,39 @@ ThemedPage {
                     text: qsTr("Obfs4 with KCP can help to bypass blocks")
                     width: parent.width
                     color: useKCP.enabled ? Material.foreground : Material.hintTextColor
+                    visible: true
+                    wrapMode: Text.Wrap
+                    font.pixelSize: Theme.fontSize - 5
+                    Layout.leftMargin: 36
+                    Layout.rightMargin: 15
+                    Layout.bottomMargin: 5
+                    Layout.topMargin: -5
+                    Layout.preferredWidth: 220
+                }
+
+                MaterialCheckBox {
+                    id: useQUIC
+                    text: qsTr("Use QUIC if available")
+                    enabled: areBridgesAvailable()
+                    checked: false
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                    onClicked: {
+                        useQuic(checked);
+                        useUDP.enabled = !checked;
+                        useKCP.enabled = !checked;
+                        useBridgesCheckBox.enabled = !checked;
+                        useBridgesCheckBox.checked = checked;
+                    }
+                }
+
+                Label {
+                    text: qsTr("Obfs4 with QUIC can help to bypass blocks")
+                    width: parent.width
+                    color: useQUIC.enabled ? Material.foreground : Material.hintTextColor
                     visible: true
                     wrapMode: Text.Wrap
                     font.pixelSize: Theme.fontSize - 5
@@ -345,6 +379,14 @@ ThemedPage {
     function useKcp(value) {
         if (value == true) {
             backend.setTransport("kcp")
+        } else {
+            backend.setTransport("openvpn")
+        }
+    }
+
+    function useQuic(value) {
+        if (value == true) {
+            backend.setTransport("quic")
         } else {
             backend.setTransport("openvpn")
         }
