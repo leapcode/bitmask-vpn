@@ -72,6 +72,8 @@ func Init() (*Bitmask, error) {
 		Int("apiVersion", config.ProviderConfig.ApiVersion).
 		Msg("Using specific API backend version")
 
+	// here check instead in the api_versions array (if exists)
+	// and then decide if api v5 should be used or v3
 	if config.ProviderConfig.ApiVersion == 5 {
 		api, err = menshen.New()
 		if err != nil {
@@ -250,4 +252,20 @@ func (b *Bitmask) GetMotd() string {
 
 func (b *Bitmask) CanUpgrade() bool {
 	return b.canUpgrade
+}
+
+func (b *Bitmask) OffersObfs4() bool {
+	return b.api.SupportsObfs4()
+}
+
+func (b *Bitmask) OffersQUIC() bool {
+	return b.api.SupportsQUIC()
+}
+
+func (b *Bitmask) OffersKCP() bool {
+	return b.api.SupportsKCP()
+}
+
+func (b *Bitmask) OffersHopping() bool {
+	return b.api.SupportsHopping()
 }

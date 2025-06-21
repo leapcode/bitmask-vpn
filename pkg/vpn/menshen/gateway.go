@@ -156,3 +156,19 @@ func (m *Menshen) SetAutomaticGateway() {
 	log.Debug().Msg("Setting remote gateway to automatic")
 	m.userChoice = ""
 }
+
+func (m *Menshen) SupportsObfs4() bool {
+	return false
+}
+
+func (m *Menshen) SupportsKCP() bool {
+	return false
+}
+
+func (m *Menshen) SupportsQUIC() bool {
+	return false
+}
+
+func (m *Menshen) SupportsHopping() bool {
+	return false
+}

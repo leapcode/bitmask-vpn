@@ -22,4 +22,8 @@ type apiInterface interface {
 	FetchAllGateways(transport string) error
 	GetSnowflakeCh() chan *snowflake.StatusEvent
 	DoGeolocationLookup() error
+	SupportsObfs4() bool
+	SupportsKCP() bool
+	SupportsQUIC() bool
+	SupportsHopping() bool
 }

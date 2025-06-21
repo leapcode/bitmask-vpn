@@ -66,6 +66,10 @@ type connectionCtx struct {
 	UseSnowflake      bool                `json:"snowflake"`
 	SnowflakeProgress int                 `json:"snowflakeProgress"`
 	SnowflakeTag      string              `json:"snowflakeTag"`
+	OffersObfs4       bool                `json:"offersObfs4"`
+	OffersQUIC        bool                `json:"offersQuic"`
+	OffersKCP         bool                `json:"offersKcp"`
+	OffersHopping     bool                `json:"offersHopping"`
 	bm                bitmask.Bitmask
 	autostart         bitmaskAutostart.Autostart
 	cfg               *config.Config
@@ -89,6 +93,10 @@ func (c *connectionCtx) toJson() ([]byte, error) {
 		c.CanUpgrade = c.bm.CanUpgrade()
 		c.Motd = c.bm.GetMotd()
 		c.HasTor = snowflake.HasTor()
+		c.OffersObfs4 = c.bm.OffersObfs4()
+		c.OffersKCP = c.bm.OffersKCP()
+		c.OffersQUIC = c.bm.OffersQUIC()
+		c.OffersHopping = c.bm.OffersHopping()
 	}
 	defer statusMutex.Unlock()
 	b, err := json.Marshal(c)

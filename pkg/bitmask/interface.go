@@ -50,4 +50,8 @@ type Bitmask interface {
 	DoLogin(username, password string) (bool, error)
 	CanUpgrade() bool
 	GetMotd() string
+	OffersObfs4() bool
+	OffersQUIC() bool
+	OffersKCP() bool
+	OffersHopping() bool
 }

@@ -353,7 +353,7 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useBridgesCheckBox
-                    enabled: true && (ctx && ctx.provider == "bitmask")
+                    enabled: true && areBridgesAvailable()
                 }
                 PropertyChanges {
                     target: useUDP
@@ -361,20 +361,28 @@ ThemedPage {
                 }
                 PropertyChanges {
                     target: useKCP
-                    enabled: true && (ctx && ctx.provider == "bitmask")
+                    enabled: true && areBridgesAvailable()
                 }
                 PropertyChanges {
                     target: useQUIC
-                    enabled: true && (ctx && ctx.provider == "bitmask")
+                    enabled: true && areBridgesAvailable()
                 }
             }
         ]
     }
 
     function areBridgesAvailable() {
-        // FIXME check if provider offers it
-        if (ctx && ctx.provider == "riseup") {
-            return false
+        if (ctx && ctx.offersObfs4) {
+            return true
+        }
+        if (ctx && ctx.offersKcp) {
+            return true
+        }
+        if (ctx && ctx.offersQuic) {
+            return true
+        }
+        if (ctx && ctx.offersHopping) {
+            return true
         }
         let providerSupport = true
         return providerSupport && !useUDP.checked
@@ -423,18 +431,18 @@ ThemedPage {
         if (ctx && ctx.offersUdp && ctx.udp == "true") {
             useUDP.checked = true
         }
-        if (ctx && ctx.transport == "obfs4" && ctx.provider == "bitmask") {
+        if (ctx && ctx.transport == "obfs4" && areBridgesAvailable()) {
             useBridgesCheckBox.checked = true
             useUDP.enabled = false
         }
-        if (ctx && ctx.transport == "kcp" && ctx.provider == "bitmask") {
+        if (ctx && ctx.transport == "kcp" && areBridgesAvailable()) {
             useKCP.checked = true
             useQUIC.checked = false
             useBridgesCheckBox.checked = true
             useBridgesCheckBox.enabled = false
             useUDP.enabled = false
         }
-        if (ctx && ctx.transport == "quic" && ctx.provider == "bitmask") {
+        if (ctx && ctx.transport == "quic" && areBridgesAvailable()) {
             useQUIC.checked = true
             useKCP.checked = false
             useBridgesCheckBox.checked = true

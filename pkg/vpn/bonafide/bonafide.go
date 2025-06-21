@@ -444,3 +444,36 @@ func (b *Bonafide) GetSnowflakeCh() chan *snowflake.StatusEvent {
 func (b *Bonafide) DoGeolocationLookup() error {
 	return errors.New("DoGeolocationLookup is not supported in v3 (only implemented in bitmask-core)")
 }
+
+func (b *Bonafide) SupportsObfs4() bool {
+	return b.supportsTransport("obfs4")
+}
+
+func (b *Bonafide) SupportsKCP() bool {
+	return b.supportsTransport("kcp")
+}
+
+func (b *Bonafide) SupportsQUIC() bool {
+	return b.supportsTransport("quic")
+}
+
+func (b *Bonafide) SupportsHopping() bool {
+	return b.supportsTransport("obfs4-hop")
+}
+
+func (b *Bonafide) supportsTransport(transport string) bool {
+	if b.eip == nil {
+		return false
+	}
+	gws, err := b.gateways.getBest(transport, b.tzOffsetHours, 5)
+	if err != nil {
+		log.Debug().
+			Err(err).
+			Msg("error fetching gateways for obfs4")
+		return false
+	}
+	if len(gws) > 0 {
+		return true
+	}
+	return false
+}
