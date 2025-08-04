@@ -1,6 +1,32 @@
-development
-===========
-- ...
+0.25.8
+======
+- fix: openvpn connect infinite loop when no gateways are found
+- gui: only enable bridge options if provider offers it
+- obfsvpn: use QUIC as transport when enabled
+- gui: add option in preferences to enable QUIC
+- qml: use a custom component as delegate for providers list view
+- ci: remove patches when building deb package for ubuntu 24
+- fix index out of range error
+- deb: update patch for building with qt6.4
+- fix bug auto restarting openvpn process after stop
+- fix helper checking if a gateway offers a transport/protocol
+- openvpn: check and close exisitng management handler
+- remove call to ctx.updateStatus from setError
+- openvpn: when openvpn status is empty string set it as off
+- apiv3: strip port from API url for opevpn cert url
+- add support for invite token and introducer url
+- vpnstate: mark state as Off for the UI when connection fails and state is off
+- gui: add UI to switch providers and add a new providers
+- backend: add API SwitchProvider to configure a new provider
+- pass Qt appsettings to the Qml via context
+- close the status channel before adding new provider
+- remove init.Once from bitmask initialization
+- add ProviderConfig struct to keep the application specific provider options
+- [v5] Quickfix for devision by 0 in updateLocationQualityMap
+- Update introducer code after bitmask-core update
+- Update introducer calls after bitmask-core update
+- [makefile] Fix failing check to verify we're on Arch
+- [CI] Use current working directory when building Arch Linux package
 
 0.24.10
 =======
