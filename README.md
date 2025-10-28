@@ -31,7 +31,7 @@ sudo make depends  # do not use sudo in osx
 make vendor
 make build
 sudo build/qt/release/riseup-vpn --install-helpers # on Linux and Mac
-LOG_LEVEL=TRACE build/qt/release/riseup-vpn
+DEBUG=1 LOG_LEVEL=TRACE build/qt/release/riseup-vpn
 ```
 
 With `--install-helpers` the `bitmask-root` helper gets copied to `/usr/sbin`.
