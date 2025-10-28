@@ -26,8 +26,9 @@ Clone this repo, install dependencies and build the application. Dependencies as
 
 ```
 git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
+export PROVIDER=riseup
 sudo make depends  # do not use sudo in osx 
-PROVIDER=riseup make vendor
+make vendor
 make build
 sudo build/qt/release/riseup-vpn --install-helpers # on Linux and Mac
 LOG_LEVEL=TRACE build/qt/release/riseup-vpn
