@@ -36,6 +36,7 @@ else
 PLATFORM ?= $(shell echo ${UNAME} | awk "{print tolower(\$$0)}")
 endif
 
+QT_CHECK := $(PWD)/scripts/test_qt_version.sh
 QTBUILD = build/qt
 INSTALLER = build/installer
 
@@ -83,6 +84,14 @@ dependsLinux:
 	@sudo apt-get install -y devscripts fakeroot
 	@${MAKE} -C docker deps
 	@# debian needs also: snap install snapcraft --classic; snap install  multipass --beta --classic
+	@echo "Running Qt version check..."
+	@if $(QT_CHECK); then \
+	  echo "Qt check passed."; \
+	else \
+	  echo "Qt check failed. Applying patch for older QT6 versions..."; \
+	  patch -p1 < $(wildcard $(PWD)/docker/*.patch); \
+	  sudo apt-get install qml6-module-qt5compat-graphicaleffects; \
+	fi
 
 dependsDarwin:
 	@brew install git golang make qt5
