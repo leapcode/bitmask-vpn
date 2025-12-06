@@ -465,15 +465,10 @@ func (b *Bonafide) supportsTransport(transport string) bool {
 	if b.eip == nil {
 		return false
 	}
-	gws, err := b.gateways.getBest(transport, b.tzOffsetHours, 5)
-	if err != nil {
-		log.Debug().
-			Err(err).
-			Msg("error fetching gateways for obfs4")
-		return false
-	}
-	if len(gws) > 0 {
-		return true
+	for _, gw := range b.gateways.available {
+		if gw.isTransport(transport) {
+			return true
+		}
 	}
 	return false
 }
