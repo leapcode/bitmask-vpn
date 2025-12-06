@@ -303,15 +303,10 @@ func (p *gatewayPool) getBest(transport string, tz, max int) ([]Gateway, error) 
 		return p.getGatewaysByHostname(hostname)
 	}
 	if p.isManualLocation() {
-		log.Info().Msg("Getting gateways manual location")
-		if len(p.recommended) != 0 {
-			log.Info().Msg("Getting gateways manual location from recommended")
-			return p.getGatewaysFromMenshenByLocation(p.userChoice, transport)
-		} else {
-			log.Info().Msg("Getting gateways manual location random")
-			return p.getRandomGatewaysByLocation(p.userChoice, transport)
-		}
-	} else if len(p.recommended) != 0 {
+		log.Info().Msg("Getting gateways manual location random")
+		return p.getRandomGatewaysByLocation(p.userChoice, transport)
+	}
+	if len(p.recommended) != 0 {
 		log.Info().Msg("Getting gateways automatic location recommended")
 		return p.getGatewaysFromMenshen(transport, max)
 	} else {
