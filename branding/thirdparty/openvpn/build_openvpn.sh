@@ -11,13 +11,13 @@ set -e
 #set -x
 
 # [!] This needs to be updated for every release --------------------------
-OPENVPN="openvpn-2.6.6"
-OPENSSL="3.2.1"
+OPENVPN="openvpn-2.6.17"
+OPENSSL="3.6.0"
 MBEDTLS="2.25.0"
 LZO="lzo-2.10"
 ZLIB="zlib-1.3.1"
 LZO_SHA1="4924676a9bae5db58ef129dc1cebce3baa3c4b5d"
-OPENSSL_SHA256="83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39"
+OPENSSL_SHA256="b6a5f44b7eb69e3fa35dbf15524405b44837a481d43d81daddde3ff21fcbb8e9"
 MBEDTLS_SHA256="f838f670f51070bc6b4ebf0c084affd9574652ded435b064969f36ce4e8b586d"
 # -------------------------------------------------------------------------
 
