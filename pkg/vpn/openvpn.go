@@ -77,6 +77,10 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 		quicConfig = *obfsvpn.DefaultQUICConfig()
 	}
 
+	eventLogger := &EventLogger{
+		Events: make(chan string, 3),
+	}
+
 	obfsvpnCfg := obfsvpnClient.Config{
 		ProxyAddr: proxyAddr,
 		HoppingConfig: obfsvpnClient.HoppingConfig{
@@ -96,7 +100,9 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 		Str("OBFS4 Port:", obfsvpnCfg.RemotePort).
 		Msg("OBFS4 bridge connection parameters")
 	ctx, cancelFunc := context.WithCancel(ctx)
-	b.obfsvpnProxy = obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
+	obfsvpnClient := obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
+	obfsvpnClient.EventLogger = eventLogger
+	b.obfsvpnProxy = obfsvpnClient
 	go func() {
 		_, err = b.obfsvpnProxy.Start()
 		if err != nil {
@@ -105,13 +111,25 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 				Str("transport", b.transport).
 				Msg("Could not connect to transport")
 		}
-		log.Info().
-			Str("ip", gw.IPAddress).
-			Str("host", gw.Host).
-			Msg("Connected via obfs4")
 	}()
 
-	return proxyAddr, nil
+	t := time.NewTimer(45 * time.Second)
+loop:
+	select {
+	case state := <-eventLogger.Events:
+		if state == "ERROR" {
+			return "", errors.New("Unable to start obfsvpn proxy")
+		}
+		if state == "RUNNING" {
+			return proxyAddr, nil
+		}
+		if state == "STARTING" {
+			goto loop
+		}
+	case <-t.C:
+		return "", errors.New("Unable to start obfsvpn proxy")
+	}
+	return "", errors.New("Unable to start obfsvpn proxy")
 }
 
 func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
@@ -465,15 +483,15 @@ func (b *Bitmask) Reconnect() error {
 
 	if status != Off {
 		b.statusCh <- Stopping
+		b.tryStopFromManagement()
 		if b.obfsvpnProxy != nil {
 			b.obfsvpnProxy.Stop()
 			b.obfsvpnProxy = nil
 		}
-		b.tryStopFromManagement()
 		if err := b.launch.OpenvpnStop(); err != nil {
 			log.Debug().
 				Err(err).
-				Msg("Error while stop obfsvpn proxy")
+				Msg("Error while stopping openvpn")
 			return err
 		}
 	}
