@@ -322,6 +322,13 @@ func GetVersion() *C.char {
 	return C.CString(version.Version())
 }
 
+func SantizeProvider(provider string) string {
+	if !strings.Contains(provider, "://") {
+		return "https://" + provider
+	}
+	return provider
+}
+
 func IsProviderURI(provider string) bool {
 	if _, err := url.ParseRequestURI(provider); err != nil {
 		return false
