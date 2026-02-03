@@ -8,6 +8,7 @@ import "C"
 import "unsafe"
 
 import (
+	"strings"
 	"0xacab.org/leap/bitmask-vpn/pkg/backend"
 )
 
@@ -116,8 +117,10 @@ func SwitchProvider(provider *C.char) {
 		providerName = backend.FetchProviderOptsFromRemote(sanitizedProviderNameOrURL)
 	}
 
-	if len(providerName) == 0 {
+	if len(providerName) == 0 && !strings.Contains(providerNameOrURL, "."){
 		providerName = providerNameOrURL
+	} else {
+		return
 	}
 
 	opts = backend.InitOptsFromJSON(providerName, "")
