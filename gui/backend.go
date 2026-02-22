@@ -8,8 +8,8 @@ import "C"
 import "unsafe"
 
 import (
-	"strings"
 	"0xacab.org/leap/bitmask-vpn/pkg/backend"
+	"strings"
 )
 
 //export GetBitmaskVersion
@@ -117,14 +117,14 @@ func SwitchProvider(provider *C.char) {
 		providerName = backend.FetchProviderOptsFromRemote(sanitizedProviderNameOrURL)
 	}
 
-	if len(providerName) == 0 && !strings.Contains(providerNameOrURL, "."){
+	if len(providerName) == 0 && !strings.Contains(providerNameOrURL, ".") {
 		providerName = providerNameOrURL
-	} else {
-		return
 	}
 
-	opts = backend.InitOptsFromJSON(providerName, "")
-	go backend.InitializeBitmaskContext(opts)
+	if len(providerName) > 0 {
+		opts = backend.InitOptsFromJSON(providerName, "")
+		go backend.InitializeBitmaskContext(opts)
+	}
 }
 
 //export InitializeTestBitmaskContext
