@@ -256,7 +256,12 @@ func runBitmaskRoot(arg ...string) error {
 	if err != nil {
 		return err
 	}
-	arg = append([]string{bitmaskRoot}, arg...)
+	arg = func() []string {
+		if v := os.Getenv("UDP"); v == "1" {
+			return append([]string{bitmaskRoot}, append([]string{"--udp"}, arg...)...)
+		}
+		return append([]string{bitmaskRoot}, arg...)
+	}()
 	cmd := exec.Command("pkexec", arg...)
 	log.Debug().
 		Str("cmd", strings.Join(arg, " ")).
