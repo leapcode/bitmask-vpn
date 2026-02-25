@@ -31,7 +31,7 @@ lint:
 build_macos:
   stage: build
   script:
-    - export PROVIDER=riseup
+    - export PROVIDER=bitmask
     - make vendor
     - make -j4 build
     - make installer
