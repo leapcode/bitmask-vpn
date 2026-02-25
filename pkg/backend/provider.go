@@ -15,7 +15,6 @@ import (
 	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/bitmask"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
-	"0xacab.org/leap/menshen/models"
 	"github.com/rs/zerolog/log"
 )
 
@@ -36,7 +35,7 @@ func fetchProviderOptsWitBootstrapper(providerURL string) *bitmask.ProviderOpts 
 		return &bitmask.ProviderOpts{}
 	}
 
-	providerInfo, err := callBootstrapWithRetry(bootstrapper.GetProvider, 3)
+	providerInfo, err := bootstrapper.GetProvider()
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -153,7 +152,7 @@ func fetchProviderOptsWithIntroducer(introducerURL string) *bitmask.ProviderOpts
 		return &bitmask.ProviderOpts{}
 	}
 
-	providerInfo, err := callBootstrapWithRetry(bootstrapper.GetProvider, 3)
+	providerInfo, err := bootstrapper.GetProvider()
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -247,15 +246,4 @@ func providerAlreadyExists(providers *Providers, provider *bitmask.ProviderOpts)
 		}
 	}
 	return false
-}
-
-func callBootstrapWithRetry(bootstrapper func() (*models.ModelsProvider, error), retries int) (models *models.ModelsProvider, err error) {
-	for i := 0; i <= retries; i++ {
-		models, err = bootstrapper()
-		if err == nil {
-			break
-		}
-		log.Warn().Err(err).Msg("Got error while trying to fetch provider json")
-	}
-	return models, err
 }
