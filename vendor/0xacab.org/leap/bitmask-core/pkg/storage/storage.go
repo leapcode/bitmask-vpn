@@ -33,9 +33,22 @@ var AppName = "bitmask"
 var appStorage *Storage
 
 const (
-	INTRODUCER  = "INTRODUCER"
-	BRIDGE      = "BRIDGE"
-	COUNTRYCODE = "COUNTRYCODE"
+	INTRODUCER            = "INTRODUCER"
+	BRIDGE                = "BRIDGE"
+	COUNTRYCODE           = "COUNTRYCODE"
+	USE_OBFS4             = "USE_OBFS4"
+	USE_KCP               = "USE_KCP"
+	USE_HOPPING           = "USE_HOPPING"
+	USE_QUIC              = "USE_QUIC"
+	BRIDGES               = "BRIDGES"
+	BRIDGES_TIMESTAMP     = "BRIDGES_TIMESTAMP"
+	GATEWAYS              = "GATEWAYS"
+	GATEWAYS_TIMESTAMP    = "GATEWAYS_TIMESTAMP"
+	PROVIDER              = "PROVIDER"
+	PROVIDER_TIMESTAMP    = "PROVIDER_TIMESTAMP"
+	EIP_SERVICE           = "EIP_SERVICE"
+	EIP_SERVICE_TIMESTAMP = "EIP_SERVICE_TIMESTAMP"
+	OVPN_CREDENTIALS      = "CREDENTIALS"
 )
 
 type Storage struct {
@@ -141,12 +154,11 @@ func (s *Storage) AddIntroducer(intro *introducer.Introducer) error {
 func (s *Storage) getAllIntroducers() ([]introducer.Introducer, error) {
 	// Create an empty slice of Introducer
 	emptySlice := []introducer.Introducer{}
-	bytes, _ := json.Marshal(emptySlice)
 
-	introducerString := s.store.GetByteArrayWithDefault(INTRODUCER, bytes)
-	introducers, err := unmarshalJSON[[]introducer.Introducer](introducerString)
+	introducerBytes := s.store.GetByteArray(INTRODUCER)
+	introducers, err := unmarshalJSON[[]introducer.Introducer](introducerBytes)
 	if err != nil {
-		return nil, err
+		return emptySlice, nil
 	}
 	return *introducers, nil
 }
@@ -390,4 +402,96 @@ func (s *Storage) SaveFallbackCountryCode(cc string) {
 
 func (s *Storage) GetFallbackCountryCode() string {
 	return s.store.GetString(COUNTRYCODE)
+}
+
+func (s *Storage) SaveUseObfs4(enabled bool) {
+	s.store.SetBoolean(USE_OBFS4, enabled)
+}
+
+func (s *Storage) GetUseObfs4() bool {
+	return s.store.GetBoolean(USE_OBFS4)
+}
+
+func (s *Storage) SaveUseKCP(enabled bool) {
+	s.store.SetBoolean(USE_KCP, enabled)
+}
+
+func (s *Storage) GetUseKCP() bool {
+	return s.store.GetBoolean(USE_KCP)
+}
+
+func (s *Storage) SaveUseQUIC(enabled bool) {
+	s.store.SetBoolean(USE_QUIC, enabled)
+}
+
+func (s *Storage) GetUseQUIC() bool {
+	return s.store.GetBoolean(USE_QUIC)
+}
+
+func (s *Storage) SaveUseHopping(enabled bool) {
+	s.store.SetBoolean(USE_HOPPING, enabled)
+}
+
+func (s *Storage) GetUseHopping() bool {
+	return s.store.GetBoolean(USE_HOPPING)
+}
+
+func (s *Storage) SaveModelsBridges(bridges string) {
+	s.store.SetString(BRIDGES, bridges)
+	s.store.SetLong(BRIDGES_TIMESTAMP, time.Now().Unix())
+}
+
+func (s *Storage) GetModelsBridges() string {
+	return s.store.GetString(BRIDGES)
+}
+
+func (s *Storage) SaveModelsGateways(gateways string) {
+	s.store.SetString(GATEWAYS, gateways)
+	s.store.SetLong(GATEWAYS_TIMESTAMP, time.Now().Unix())
+}
+
+func (s *Storage) GetModelsGateways() string {
+	return s.store.GetString(GATEWAYS)
+}
+
+func (s *Storage) SaveModelsProvider(provider string) {
+	s.store.SetString(PROVIDER, provider)
+	s.store.SetLong(PROVIDER_TIMESTAMP, time.Now().Unix())
+}
+
+func (s *Storage) GetModelsProvider() string {
+	return s.store.GetString(PROVIDER)
+}
+
+func (s *Storage) SaveModelsEIPService(bridges string) {
+	s.store.SetString(EIP_SERVICE, bridges)
+	s.store.SetLong(EIP_SERVICE_TIMESTAMP, time.Now().Unix())
+}
+
+func (s *Storage) GetModelsEIPService() string {
+	return s.store.GetString(EIP_SERVICE)
+}
+
+func (s *Storage) GetEIPServiceTimestamp() int64 {
+	return s.store.GetLong(EIP_SERVICE_TIMESTAMP)
+}
+
+func (s *Storage) GetProviderTimestamp() int64 {
+	return s.store.GetLong(PROVIDER_TIMESTAMP)
+}
+
+func (s *Storage) GetBridgesTimestamp() int64 {
+	return s.store.GetLong(BRIDGES_TIMESTAMP)
+}
+
+func (s *Storage) GetGatewaysTimestamp() int64 {
+	return s.store.GetLong(GATEWAYS_TIMESTAMP)
+}
+
+func (s *Storage) SaveOpenVPNCredentials(credentials string) {
+	s.store.SetString(OVPN_CREDENTIALS, credentials)
+}
+
+func (s *Storage) GetOpenVPNCredentials() string {
+	return s.store.GetString(OVPN_CREDENTIALS)
 }

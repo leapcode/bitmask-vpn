@@ -1045,5 +1045,8 @@ func DialOrWithDialer(dialer *net.Dialer, info *ServerInfo, addr, methodName str
 // sent.
 func DialOr(info *ServerInfo, addr, methodName string) (*net.TCPConn, error) {
 	c, err := DialOrWithDialer(&net.Dialer{}, info, addr, methodName)
-	return c.(*net.TCPConn), err
+	if err != nil {
+		return nil, err
+	}
+	return c.(*net.TCPConn), nil
 }

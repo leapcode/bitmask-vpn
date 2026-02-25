@@ -2,14 +2,11 @@ package introducer
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
-
 	"0xacab.org/leap/obfsvpn/obfsvpn"
-	"github.com/xtaci/kcp-go"
+	"github.com/rs/zerolog/log"
 )
 
 // NewHTTPClientFromIntroducer returns an http.Client that will use the passed introducer.
@@ -28,10 +25,7 @@ func NewHTTPClientFromIntroducer(introducer *Introducer) (*http.Client, error) {
 
 	switch {
 	case introducer.KCP:
-		dialer.DialFunc = func(network, address string) (net.Conn, error) {
-			log.Debug().Msg(fmt.Sprintf("dialing kcp://%s", address))
-			return kcp.Dial(address)
-		}
+		dialer.DialFunc = obfsvpn.GetKCPDialer(*obfsvpn.DefaultKCPConfig(), log.Debug().Msgf)
 	}
 
 	transport := &http.Transport{

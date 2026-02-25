@@ -25,7 +25,7 @@ func FindCurrentHostGeolocation() (*GeoInfo, error) {
 	}
 
 	// TODO: use smart-dialer here.
-	geo := NewGeolocator()
+	geo := NewDefaultGeolocator()
 	info, err := geo.Geolocate(ip)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func FindCurrentHostGeolocation() (*GeoInfo, error) {
 // FindCurrentHostGeolocationWithSTUN first trys to get the current public ip address by
 // using the given STUN servers. It then uses countryCodeLookupURL to convert the ip address
 // into a country code. If countryCodeLookupURL is empty, then defaultGeolocationAPI (OONI) is used
-func FindCurrentHostGeolocationWithSTUN(stunServers []string, countryCodeLookupURL string) (*GeoInfo, error) {
+func (g *Geolocator) FindCurrentHostGeolocationWithSTUN(stunServers []string) (*GeoInfo, error) {
 	var ip string
 	var err error
 
@@ -64,19 +64,7 @@ func FindCurrentHostGeolocationWithSTUN(stunServers []string, countryCodeLookupU
 		return nil, errors.New("Could not get ip address with STUN servers. All STUN servers failed")
 	}
 
-	// TODO: use smart-dialer here.
-	geo := NewGeolocator()
-	if countryCodeLookupURL == "" {
-		log.Trace().
-			Str("countryCodeLookupURL", defaultGeolocationAPI).
-			Msg("Using default country code lookup url (OONI)")
-	} else {
-		geo.API = countryCodeLookupURL
-		log.Trace().
-			Str("countryCodeLookupURL", countryCodeLookupURL).
-			Msg("Using custom country code lookup url")
-	}
-	info, err := geo.Geolocate(ip)
+	info, err := g.Geolocate(ip)
 	if err != nil {
 		return nil, err
 	}
@@ -136,10 +124,16 @@ type Geolocator struct {
 	Client *http.Client
 }
 
-// TODO: add NewGeolocationWithHTTPClient
-func NewGeolocator() *Geolocator {
+func NewDefaultGeolocator() *Geolocator {
 	return &Geolocator{
 		API:    defaultGeolocationAPI,
+		Client: defaultHTTPClient,
+	}
+}
+
+func NewGeolocator(apiUrl string) *Geolocator {
+	return &Geolocator{
+		API:    apiUrl,
 		Client: defaultHTTPClient,
 	}
 }

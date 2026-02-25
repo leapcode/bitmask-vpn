@@ -1,15 +1,22 @@
 package bootstrap
 
 import (
+	"crypto/sha256"
 	gotls "crypto/tls"
+	"crypto/x509"
+	"encoding/hex"
+	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"net"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	bitmask_storage "0xacab.org/leap/bitmask-core/pkg/storage"
+	"0xacab.org/leap/menshen/models"
 	"github.com/go-openapi/runtime"
 	openapi "github.com/go-openapi/runtime/client"
 	utls "github.com/refraction-networking/utls"
@@ -57,16 +64,22 @@ func (c *Config) getAPIClient() *http.Client {
 							Str("domain", addr).
 							Msg("Resolving host with DNS over HTTPs")
 
-						ip4, err := dohQuery(c.Host)
+						ip, err := dohQuery(c.Host)
 						if err != nil {
 							return nil, err
 						}
 
 						log.Debug().
 							Str("domain", addr).
-							Str("ip4", ip4).
+							Str("ip", ip).
 							Msg("Sucessfully resolved host via DNS over HTTPs")
-						addr = fmt.Sprintf("%s:%d", ip4, c.Port)
+						if strings.Contains(ip, ":") {
+							// IPv6 address requires extra brackets in order to
+							// distinguish address from port
+							addr = fmt.Sprintf("[%s]:%d", ip, c.Port)
+						} else {
+							addr = fmt.Sprintf("%s:%d", ip, c.Port)
+						}
 					}
 
 					roller, err := utls.NewRoller()
@@ -122,4 +135,98 @@ func (api *API) getInviteTokenAuth() runtime.ClientAuthInfoWriter {
 
 	log.Debug().Msg("Sending invite token")
 	return openapi.APIKeyAuth("x-menshen-auth-token", "header", introducer.Auth)
+}
+
+func SupportsApiv5(provider *models.ModelsProvider) bool {
+	for _, version := range provider.APIVersions {
+		if version == "5" {
+			return true
+		}
+	}
+	return false
+}
+
+func ShouldUpdateEIPService(unixTimestamp int64) bool {
+	timestamp := time.Unix(unixTimestamp, 0)
+	return time.Since(timestamp) > 72*time.Hour
+}
+
+func ShouldUpdateBridges(unixTimestamp int64) bool {
+	timestamp := time.Unix(unixTimestamp, 0)
+	return time.Since(timestamp) > 4*time.Hour
+}
+
+func ShouldUpdateGateways(unixTimestamp int64) bool {
+	timestamp := time.Unix(unixTimestamp, 0)
+	return time.Since(timestamp) > 24*time.Hour
+}
+
+func ShouldUpdateOpenVPNCredentials(credentials, caCertFingerprint string) bool {
+	caCrt := GetCAFromApi5OpenvpnCertResponse(credentials)
+	ovpnCrt := GetCertFromApi5OpenvpnCertResponse(credentials)
+	key := GetKeyFromApi5OpenvpnCertResponse(credentials)
+
+	if caCrt == "" || ovpnCrt == "" || key == "" {
+		log.Debug().Msg("OpenVPN credentials are missing.")
+		return true
+	}
+
+	tomorrow := time.Now().In(time.UTC).Add(24 * time.Hour)
+	if err := ValidateCertificate(ovpnCrt, tomorrow); err != nil {
+		log.Warn().Msgf("OpenVPN certificate is not valid: %v", err)
+		return true
+	}
+
+	if err := ValidateCertificateWithFP(caCrt, caCertFingerprint, tomorrow); err != nil {
+		log.Warn().Msgf("CA certificate is not valid: %v", err)
+		return true
+	}
+
+	return true
+}
+
+// Validate a certificate against an expiry date
+func ValidateCertificate(pemCert string, minimalTimeBoreExpiry time.Time) error {
+	return ValidateCertificateWithFP(pemCert, "", minimalTimeBoreExpiry)
+}
+
+// Validate a certificate against a SHA256 fingerprint and an expiry date
+func ValidateCertificateWithFP(pemCert string, fingerprint string, minimalTimeBoreExpiry time.Time) error {
+	crtBlock, _ := pem.Decode([]byte(pemCert))
+	if crtBlock == nil {
+		return fmt.Errorf("could not decode pem certificate")
+	}
+
+	cert, err := x509.ParseCertificate(crtBlock.Bytes)
+	if err != nil {
+		return fmt.Errorf("could not parse certificate")
+	}
+
+	expires := cert.NotAfter
+
+	if !expires.After(minimalTimeBoreExpiry) {
+		return fmt.Errorf("certificate is expired: %v expected minimalTimeBeforeExpiry: %v", expires, minimalTimeBoreExpiry)
+	}
+
+	if fingerprint != "" {
+		// normalize fingerprint
+		fingerprint = strings.ToLower(fingerprint)
+		fingerprint = strings.TrimPrefix(fingerprint, "sha256:")
+		fingerprint = strings.TrimSpace(fingerprint)
+
+		digest := sha256.Sum256(crtBlock.Bytes)
+		hexString := strings.TrimSpace(hex.EncodeToString(digest[:]))
+		if hexString != fingerprint {
+			return fmt.Errorf("cert fingerprint does not match: %v expected: %v", hexString, fingerprint)
+		}
+	}
+	return nil
+}
+
+func ToJson(model any) (string, error) {
+	res, err := json.Marshal(model)
+	if err != nil {
+		return "", err
+	}
+	return string(res), nil
 }

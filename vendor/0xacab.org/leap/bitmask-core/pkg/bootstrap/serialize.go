@@ -55,3 +55,15 @@ func matchDelimitedString(str, left, right string) string {
 	}
 	return matches[0][1]
 }
+
+func GetCAFromApi5OpenvpnCertResponse(response string) string {
+	return matchDelimitedString(response, caBegin, caEnd)
+}
+
+func GetKeyFromApi5OpenvpnCertResponse(response string) string {
+	return matchDelimitedString(response, keyBegin, keyEnd)
+}
+
+func GetCertFromApi5OpenvpnCertResponse(response string) string {
+	return matchDelimitedString(response, certBegin, certEnd)
+}

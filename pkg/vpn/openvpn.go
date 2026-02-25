@@ -100,7 +100,10 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 		Str("OBFS4 Port:", obfsvpnCfg.RemotePort).
 		Msg("OBFS4 bridge connection parameters")
 	ctx, cancelFunc := context.WithCancel(ctx)
-	obfsvpnClient := obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
+	obfsvpnClient, err := obfsvpnClient.NewClient(ctx, cancelFunc, obfsvpnCfg)
+	if err != nil {
+		return "", err
+	}
 	obfsvpnClient.EventLogger = eventLogger
 	b.obfsvpnProxy = obfsvpnClient
 	go func() {

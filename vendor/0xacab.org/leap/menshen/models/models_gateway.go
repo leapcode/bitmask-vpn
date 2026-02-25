@@ -43,7 +43,7 @@ type ModelsGateway struct {
 	IPAddr string `json:"ip_addr,omitempty"`
 
 	// LastSeenMillis is a unix time in milliseconds representing the last time we received a heartbeat update from this gateway
-	LastSeenMillis int64 `json:"lastSeenMillis,omitempty"`
+	LastSeenMillis int64 `json:"last_seen_millis,omitempty"`
 
 	// Load is the fractional load received from the menshen agent. For the
 	// time being it is a synthethic metric that takes into account number of clients
@@ -59,7 +59,7 @@ type ModelsGateway struct {
 	// The (primary) port this gateway is listening on.
 	Port int64 `json:"port,omitempty"`
 
-	// TCP, UDP or KCP. This was called "protocol" in previous versions of the API.
+	// TCP, UDP, KCP or Quic. This was called "protocol" in previous versions of the API.
 	Transport string `json:"transport,omitempty"`
 
 	// Type is the type of gateway. The only valid type as of 2023 is openvpn.

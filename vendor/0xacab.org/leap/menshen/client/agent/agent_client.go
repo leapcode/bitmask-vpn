@@ -56,32 +56,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PutAPI5AgentBridge(params *PutAPI5AgentBridgeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentBridgeOK, error)
+	PutAPI5AgentBridges(params *PutAPI5AgentBridgesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentBridgesOK, *PutApi5AgentBridgesCreated, error)
 
-	PutAPI5AgentGateway(params *PutAPI5AgentGatewayParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentGatewayOK, error)
+	PutAPI5AgentGateways(params *PutAPI5AgentGatewaysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentGatewaysOK, *PutApi5AgentGatewaysCreated, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PutAPI5AgentBridge registers a bridge
+PutAPI5AgentBridges registers bridges
 
-Register a bridge. This endpoint allows "menshen agent" processes running on bridges to register themselves.
+Register bridges. This endpoint allows "menshen agent" processes running on bridges to register themselves.
 */
-func (a *Client) PutAPI5AgentBridge(params *PutAPI5AgentBridgeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentBridgeOK, error) {
+func (a *Client) PutAPI5AgentBridges(params *PutAPI5AgentBridgesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentBridgesOK, *PutApi5AgentBridgesCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPutAPI5AgentBridgeParams()
+		params = NewPutAPI5AgentBridgesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PutAPI5AgentBridge",
+		ID:                 "PutAPI5AgentBridges",
 		Method:             "PUT",
-		PathPattern:        "/api/5/agent/bridge",
+		PathPattern:        "/api/5/agent/bridges",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &PutAPI5AgentBridgeReader{formats: a.formats},
+		Reader:             &PutAPI5AgentBridgesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -92,37 +92,38 @@ func (a *Client) PutAPI5AgentBridge(params *PutAPI5AgentBridgeParams, authInfo r
 
 	result, err := a.transport.Submit(op)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	success, ok := result.(*PutApi5AgentBridgeOK)
-	if ok {
-		return success, nil
+	switch value := result.(type) {
+	case *PutApi5AgentBridgesOK:
+		return value, nil, nil
+	case *PutApi5AgentBridgesCreated:
+		return nil, value, nil
 	}
-	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for PutAPI5AgentBridge: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for agent: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-PutAPI5AgentGateway registers a gateway
+PutAPI5AgentGateways registers gateways
 
-Register a gateway. This endpoint allows "menshen agent" processes running on gateways to register themselves.
+Register gateways. This endpoint allows "menshen agent" processes running on gateways to register themselves.
 */
-func (a *Client) PutAPI5AgentGateway(params *PutAPI5AgentGatewayParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentGatewayOK, error) {
+func (a *Client) PutAPI5AgentGateways(params *PutAPI5AgentGatewaysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutApi5AgentGatewaysOK, *PutApi5AgentGatewaysCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPutAPI5AgentGatewayParams()
+		params = NewPutAPI5AgentGatewaysParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PutAPI5AgentGateway",
+		ID:                 "PutAPI5AgentGateways",
 		Method:             "PUT",
-		PathPattern:        "/api/5/agent/gateway",
+		PathPattern:        "/api/5/agent/gateways",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &PutAPI5AgentGatewayReader{formats: a.formats},
+		Reader:             &PutAPI5AgentGatewaysReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -133,15 +134,16 @@ func (a *Client) PutAPI5AgentGateway(params *PutAPI5AgentGatewayParams, authInfo
 
 	result, err := a.transport.Submit(op)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	success, ok := result.(*PutApi5AgentGatewayOK)
-	if ok {
-		return success, nil
+	switch value := result.(type) {
+	case *PutApi5AgentGatewaysOK:
+		return value, nil, nil
+	case *PutApi5AgentGatewaysCreated:
+		return nil, value, nil
 	}
-	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for PutAPI5AgentGateway: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for agent: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

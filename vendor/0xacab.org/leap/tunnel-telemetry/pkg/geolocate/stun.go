@@ -3,7 +3,7 @@ package geolocate
 import (
 	"encoding/json"
 
-	"github.com/pion/stun"
+	"github.com/pion/stun/v3"
 )
 
 var (

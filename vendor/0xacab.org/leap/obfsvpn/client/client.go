@@ -8,11 +8,14 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"net"
+	"runtime"
 	"sync"
 	"time"
 
+	"0xacab.org/leap/obfsvpn/internal/runtimex"
 	"0xacab.org/leap/obfsvpn/obfsvpn"
 )
 
@@ -62,6 +65,7 @@ func (oc *Obfs4Config) String() string {
 	return oc.Remote
 }
 
+// Config configures the pluggable transport.
 type Config struct {
 	ProxyAddr     string             `json:"proxy_addr"`
 	HoppingConfig HoppingConfig      `json:"hopping_config"`
@@ -72,6 +76,7 @@ type Config struct {
 	Obfs4Cert     string             `json:"obfs4_cert"`
 }
 
+// HoppingConfig configures the hopping transport.
 type HoppingConfig struct {
 	Enabled       bool     `json:"enabled"`
 	Remotes       []string `json:"remotes"`
@@ -82,6 +87,24 @@ type HoppingConfig struct {
 	MaxHopPort    uint     `json:"max_hop_port"`
 	MinHopSeconds uint     `json:"min_hop_seconds"`
 	HopJitter     uint     `json:"hop_jitter"`
+}
+
+// portHopRange returns the port hop range or an error if the config is invalid.
+//
+// Note: this method assumes that hopping is enabled and the HoppingConfig is being used.
+func (hc *HoppingConfig) portHopRange() (int, error) {
+	if hc.MaxHopPort <= hc.MinHopPort {
+		return 0, fmt.Errorf("hoppingconfig: MaxHopPort (%d) must be greater than MinHopPort (%d)", hc.MaxHopPort, hc.MinHopPort)
+	}
+	if hc.MaxHopPort > math.MaxUint16 {
+		return 0, fmt.Errorf("hoppingconfig: MaxHopPort (%d) must not be greater than MaxUint16", hc.MaxHopPort)
+	}
+	if hc.MinHopPort > math.MaxUint16 {
+		return 0, fmt.Errorf("hoppingconfig: MinHopPort (%d) must not be greater than MaxUint16", hc.MinHopPort)
+	}
+	// #nosec G115 - the following operation is safe because of the above check
+	v := int(hc.MaxHopPort - hc.MinHopPort)
+	return v, nil
 }
 
 type Client struct {
@@ -106,9 +129,40 @@ type Client struct {
 	hopJitter       uint
 }
 
-func NewClient(ctx context.Context, stop context.CancelFunc, config Config) *Client {
-	obfs4Endpoints := generateObfs4Config(config)
-	return &Client{
+// TODO(bassosimone): refactor sleepSeconds to return a [time.Duration].
+
+// sleepSeconds returns the number of seconds to sleep or an error.
+//
+// Note: this method assumes that c.hopEnabled is true.
+func (c *Client) sleepSeconds() (int, error) {
+	if c.hopJitter <= 0 {
+		return 0, fmt.Errorf("c.hopJitter (%d) must be positive", c.hopJitter)
+	}
+	if c.hopJitter > math.MaxInt {
+		return 0, fmt.Errorf("c.hopJitter (%d) must not be greater than math.MaxInt", c.hopJitter)
+	}
+	if c.minHopSeconds > math.MaxInt {
+		return 0, fmt.Errorf("c.minHopSeconds (%d) must not be greater than math.MaxInt", c.minHopSeconds)
+	}
+	if c.hopJitter > math.MaxInt-c.minHopSeconds {
+		return 0, fmt.Errorf("c.hopJitter + c.minHopSeconds (%d + %d) must not be greater than math.MaxInt", c.hopJitter, c.minHopSeconds)
+	}
+	// #nosec G404 G115 -- OK to use weak RNG and to convert c.hopJitter to int
+	secs := rand.Intn(int(c.hopJitter)) + int(c.minHopSeconds)
+	return secs, nil
+}
+
+// TODO(bassosimone): storing a context inside a structure is not considered
+// idiomatic Go: https://go.dev/wiki/CodeReviewComments#contexts
+
+// NewClient constructs a [*Client] instance.
+func NewClient(ctx context.Context, stop context.CancelFunc, config Config) (*Client, error) {
+	obfs4Endpoints, err := generateObfs4Config(config)
+	if err != nil {
+		return nil, err
+	}
+
+	c := &Client{
 		ProxyAddr:      config.ProxyAddr,
 		hopEnabled:     config.HoppingConfig.Enabled,
 		ctx:            ctx,
@@ -122,6 +176,15 @@ func NewClient(ctx context.Context, stop context.CancelFunc, config Config) *Cli
 		stop:           stop,
 		state:          stopped,
 	}
+
+	// Run the check now to avoid panicking in [*Client.hop]
+	if c.hopEnabled {
+		if _, err := c.sleepSeconds(); err != nil {
+			return nil, err
+		}
+	}
+
+	return c, nil
 }
 
 // NewFFIClient creates a new client
@@ -134,21 +197,29 @@ func NewFFIClient(jsonConfig string) (*Client, error) {
 		return nil, err
 	}
 	ctx, stop := context.WithCancel(context.Background())
-	return NewClient(ctx, stop, config), nil
+	return NewClient(ctx, stop, config)
 }
 
-func generateObfs4Config(config Config) []*Obfs4Config {
+// generateObfs4Config generates the OBFS4 config or returns an error.
+func generateObfs4Config(config Config) ([]*Obfs4Config, error) {
 	obfsEndpoints := []*Obfs4Config{}
 
 	if config.HoppingConfig.Enabled {
-		portHopRange := int(config.HoppingConfig.MaxHopPort - config.HoppingConfig.MinHopPort)
+		// Safely compute the portHopRange and bail if the config is wrong
+		portHopRange, err := config.HoppingConfig.portHopRange()
+		if err != nil {
+			return nil, err
+		}
+
 		for i, obfs4Remote := range config.HoppingConfig.Remotes {
 			// We want a non-crypto RNG so that we can share a seed
 			// #nosec G404
 			r := rand.New(rand.NewSource(config.HoppingConfig.PortSeed))
-			for pi := 0; pi < int(config.HoppingConfig.PortCount); pi++ {
-				portOffset := r.Intn(portHopRange)
-				addr := net.JoinHostPort(obfs4Remote, fmt.Sprint(portOffset+int(config.HoppingConfig.MinHopPort)))
+			for pi := uint(0); pi < config.HoppingConfig.PortCount; pi++ {
+				// #nosec G115 - Intn panics if given a negative value
+				portOffset := uint(r.Intn(portHopRange))
+
+				addr := net.JoinHostPort(obfs4Remote, fmt.Sprint(portOffset+config.HoppingConfig.MinHopPort))
 				obfsEndpoints = append(obfsEndpoints, &Obfs4Config{
 					Cert:   config.HoppingConfig.Obfs4Certs[i],
 					Remote: addr,
@@ -164,17 +235,19 @@ func generateObfs4Config(config Config) []*Obfs4Config {
 	}
 
 	log.Printf("obfs4 endpoints: %+v", obfsEndpoints)
-	return obfsEndpoints
+	return obfsEndpoints, nil
 }
 
-func (c *Client) Start() (bool, error) {
-	var err error
-
+func (c *Client) Start() (_ bool, err error) {
 	c.mux.Lock()
-
 	defer func() {
-		c.updateState(stopped)
+		if r := recover(); r != nil {
+			buf := make([]byte, 1<<16) // 64KB buffer
+			stackSize := runtime.Stack(buf, true)
+			err = fmt.Errorf("recovered from panic: %v\nStack trace:\n%s", r, buf[:stackSize])
+		}
 
+		c.updateState(stopped)
 		if err != nil {
 			c.mux.Unlock()
 		}
@@ -202,12 +275,12 @@ func (c *Client) Start() (bool, error) {
 	}
 	c.obfs4Conns = []Obfs4Conn{*obfs4Conn}
 
-	c.updateState(running)
-
 	c.openvpnConn, err = c.createOpenvpnConnection()
 	if err != nil {
 		return false, err
 	}
+
+	c.updateState(running)
 
 	if c.hopEnabled {
 		go c.hop()
@@ -233,13 +306,13 @@ func (c *Client) createObfs4Connection(obfs4Endpoint *Obfs4Config) (*Obfs4Conn, 
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), dialGiveUpTime)
+	ctx, cancel := context.WithTimeout(c.ctx, dialGiveUpTime)
 	defer cancel()
 
 	if c.kcpConfig.Enabled {
 		obfs4Dialer.DialFunc = obfsvpn.GetKCPDialer(c.kcpConfig, c.log)
 	} else if c.quicConfig.Enabled {
-		obfs4Dialer.DialFunc = obfsvpn.GetQUICDialer(ctx, c.quicConfig, c.log)
+		obfs4Dialer.DialFunc = obfsvpn.GetQUICDialer(ctx, c.log)
 	}
 
 	c.log("Dialing remote: %v", obfs4Endpoint.Remote)
@@ -299,25 +372,43 @@ func (c *Client) connectObfs4(obfs4Endpoint *Obfs4Config, sleepSeconds int) {
 		// If we wait sleepSeconds here to clean up the previous connection, we can guarantee that the
 		// connection list will not grow unbounded
 		go func() {
-			time.Sleep(time.Duration(sleepSeconds) * time.Second)
-
+			cancelled := cancellableSleep(c.ctx, time.Duration(sleepSeconds)*time.Second)
+			if cancelled {
+				c.log("Sleep for connection cleanup cancelled. Immediately cleaning up old connections")
+			}
 			c.cleanupOldConn()
 		}()
 	}
 }
 
+// cancellableSleep simulates a sleep that can be canceled by a context.
+func cancellableSleep(ctx context.Context, duration time.Duration) bool {
+	timer := time.NewTimer(duration)
+	defer timer.Stop()
+
+	select {
+	case <-timer.C:
+		return false // Sleep completed
+	case <-ctx.Done():
+		return true // Sleep canceled
+	}
+}
+
+// hop implements the port hopping logic for the client.
+//
+// Note: this method assumes that c.hopEnabled is true and should only be called
+// when hopping is enabled. The caller is responsible for checking c.hopEnabled.
 func (c *Client) hop() {
 	for {
-		select {
-		case <-c.ctx.Done():
-			return
-		default:
-		}
+		// Note that we ensure that c.sleepSeconds does not fail in [NewClient]
+		sleepSeconds := runtimex.AssertNotErrorWithReturnOrPanic(c.sleepSeconds())
 
-		// #nosec G404
-		sleepSeconds := rand.Intn(int(c.hopJitter)) + int(c.minHopSeconds)
 		c.log("Sleeping %d seconds...", sleepSeconds)
-		time.Sleep(time.Duration(sleepSeconds) * time.Second)
+		cancelled := cancellableSleep(c.ctx, time.Duration(sleepSeconds)*time.Second)
+		if cancelled {
+			c.log("Hop sleep cancelled")
+			return
+		}
 
 		obfs4Endpoint := c.pickRandomEndpoint()
 
@@ -348,7 +439,6 @@ func (c *Client) hop() {
 
 		c.log("HOPPING to %+v", newRemote)
 		c.connectObfs4(obfs4Endpoint, sleepSeconds)
-
 	}
 }
 
@@ -401,21 +491,27 @@ func (c *Client) readUDPWriteTCP() {
 		_, err = conn.Write(tcpBuffer)
 		if err != nil {
 			c.error("readUDPWriteTCP: Write err from %v to %v: %v", conn.LocalAddr(), conn.RemoteAddr(), err)
-			time.Sleep(reconnectTime)
-			config := c.obfs4Conns[0].config
-			c.connectObfs4(&config, 20)
+			cancelled := cancellableSleep(c.ctx, reconnectTime)
+			if !cancelled {
+				conn, err = c.getUsableConnection()
+				if err != nil {
+					return
+				}
+				config := conn.config
+				c.connectObfs4(&config, 20)
+			}
 		}
 	}
 }
 
-func (c *Client) getUsableConnection() (net.Conn, error) {
+func (c *Client) getUsableConnection() (*Obfs4Conn, error) {
 	c.outLock.Lock()
 	defer c.outLock.Unlock()
 
 	if len(c.obfs4Conns) == 0 {
 		return nil, errors.New("no usable connection")
 	} else {
-		return c.obfs4Conns[0], nil
+		return &c.obfs4Conns[0], nil
 	}
 }
 
@@ -492,9 +588,16 @@ func (c *Client) createOpenvpnConnection() (*net.UDPConn, error) {
 	return udpConn, nil
 }
 
-func (c *Client) Stop() (bool, error) {
+func (c *Client) Stop() (_ bool, err error) {
 	c.mux.Lock()
-	defer c.mux.Unlock()
+	defer func() {
+		if r := recover(); r != nil {
+			buf := make([]byte, 1<<16) // 64KB buffer
+			stackSize := runtime.Stack(buf, true)
+			err = fmt.Errorf("recovered from panic: %v\nStack trace:\n%s", r, buf[:stackSize])
+		}
+		c.mux.Unlock()
+	}()
 
 	if !c.IsStarted() {
 		return false, ErrNotRunning

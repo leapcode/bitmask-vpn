@@ -20,16 +20,16 @@ const (
 
 // https://github.com/skywind3000/kcp/blob/master/README.en.md#protocol-configuration
 type KCPConfig struct {
-	Enabled            bool
-	SendWindowSize     int
-	ReceiveWindowSize  int
-	ReadBuffer         int
-	WriteBuffer        int
-	NoDelay            bool
-	Interval           int
-	Resend             int
-	DisableFlowControl bool
-	MTU                int
+	Enabled            bool `json:"enabled"`
+	SendWindowSize     int  `json:"send_window_size"`
+	ReceiveWindowSize  int  `json:"receive_window_size"`
+	ReadBuffer         int  `json:"read_buffer"`
+	WriteBuffer        int  `json:"write_buffer"`
+	NoDelay            bool `json:"no_delay"`
+	Interval           int  `json:"interval"`
+	Resend             int  `json:"resend"`
+	DisableFlowControl bool `json:"disable_flow_control"`
+	MTU                int  `json:"mtu"`
 }
 
 func DefaultKCPConfig() *KCPConfig {

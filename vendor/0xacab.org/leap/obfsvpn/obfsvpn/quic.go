@@ -14,8 +14,8 @@ type QUICConfig struct {
 }
 
 type QUICConn struct {
-	quic.Stream
-	conn quic.Connection
+	*quic.Stream
+	conn *quic.Conn
 }
 
 func (q *QUICConn) Close() error {
@@ -64,7 +64,7 @@ func DefaultQUICConfig() *QUICConfig {
 	}
 }
 
-func GetQUICDialer(ctx context.Context, quicConfig QUICConfig, logger func(format string, a ...interface{})) func(network, address string) (net.Conn, error) {
+func GetQUICDialer(ctx context.Context, logger func(format string, a ...interface{})) func(network, address string) (net.Conn, error) {
 	quicConf := &quic.Config{}
 	return func(network, address string) (net.Conn, error) {
 		tlsConf := &tls.Config{

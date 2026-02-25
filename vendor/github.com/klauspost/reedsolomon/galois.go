@@ -8,6 +8,7 @@ package reedsolomon
 
 import (
 	"encoding/binary"
+	"sync"
 )
 
 const (
@@ -910,14 +911,14 @@ func galExp(a byte, n int) byte {
 	return expTable[uint8(logResult)]
 }
 
-func genCodeGenMatrix(matrixRows [][]byte, inputs, inIdx, outputs int, dst []byte) []byte {
+func genCodeGenMatrix(matrixRows [][]byte, inputs, inIdx, outputs, vectorLength int, dst []byte) []byte {
 	if !codeGen {
 		panic("codegen not enabled")
 	}
 	total := inputs * outputs
 
 	// Duplicated in+out
-	wantBytes := total * 32 * 2
+	wantBytes := total * vectorLength * 2
 	if cap(dst) < wantBytes {
 		dst = AllocAligned(1, wantBytes)[0]
 	} else {
@@ -925,15 +926,16 @@ func genCodeGenMatrix(matrixRows [][]byte, inputs, inIdx, outputs int, dst []byt
 	}
 	for i, row := range matrixRows[:outputs] {
 		for j, idx := range row[inIdx : inIdx+inputs] {
-			dstIdx := (j*outputs + i) * 64
+			dstIdx := (j*outputs + i) * vectorLength * 2
 			dstPart := dst[dstIdx:]
-			dstPart = dstPart[:64]
+			dstPart = dstPart[:vectorLength*2]
 			lo := mulTableLow[idx][:]
 			hi := mulTableHigh[idx][:]
-			copy(dstPart[:16], lo)
-			copy(dstPart[16:32], lo)
-			copy(dstPart[32:48], hi)
-			copy(dstPart[48:64], hi)
+
+			for k := 0; k < vectorLength; k += 16 {
+				copy(dstPart[k:k+16], lo)
+				copy(dstPart[vectorLength*2-(k+16):vectorLength*2-k], hi)
+			}
 		}
 	}
 	return dst
@@ -976,4 +978,28 @@ func sliceXorGo(in, out []byte, _ *options) {
 	for n, input := range in {
 		out[n] ^= input
 	}
+}
+
+// Combines 2 lookups into one.
+// 32MB in total.
+var mulTable16 *[256][65536]uint16
+var mulTable16Init sync.Once
+
+// getMulTable16 will return the 65536 entry table for the given column byte.
+func getMulTable16(c byte) *[65536]uint16 {
+	mulTable16Init.Do(func() {
+		mulTable16 = &[256][65536]uint16{}
+		// Generate two byte lookup table for multiplication
+		for i := 0; i < 256; i++ {
+			t0 := &mulTable[i]
+			t1 := &mulTable16[i]
+			for j := 0; j < 256; j++ {
+				for k := 0; k < 256; k++ {
+					dst := j*256 + k
+					t1[dst] = uint16(t0[j])<<8 | uint16(t0[k])
+				}
+			}
+		}
+	})
+	return &mulTable16[c]
 }

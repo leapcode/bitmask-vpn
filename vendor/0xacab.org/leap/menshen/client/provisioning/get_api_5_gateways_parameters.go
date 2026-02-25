@@ -14,7 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 )
 
 // NewGetAPI5GatewaysParams creates a new GetAPI5GatewaysParams object,
@@ -61,12 +60,6 @@ GetAPI5GatewaysParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type GetAPI5GatewaysParams struct {
-
-	/* Byload.
-
-	   Sort by load (experimental)
-	*/
-	Byload *bool
 
 	/* Cc.
 
@@ -145,17 +138,6 @@ func (o *GetAPI5GatewaysParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithByload adds the byload to the get API 5 gateways params
-func (o *GetAPI5GatewaysParams) WithByload(byload *bool) *GetAPI5GatewaysParams {
-	o.SetByload(byload)
-	return o
-}
-
-// SetByload adds the byload to the get API 5 gateways params
-func (o *GetAPI5GatewaysParams) SetByload(byload *bool) {
-	o.Byload = byload
-}
-
 // WithCc adds the cc to the get API 5 gateways params
 func (o *GetAPI5GatewaysParams) WithCc(cc *string) *GetAPI5GatewaysParams {
 	o.SetCc(cc)
@@ -207,23 +189,6 @@ func (o *GetAPI5GatewaysParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
-	if o.Byload != nil {
-
-		// query param byload
-		var qrByload bool
-
-		if o.Byload != nil {
-			qrByload = *o.Byload
-		}
-		qByload := swag.FormatBool(qrByload)
-		if qByload != "" {
-
-			if err := r.SetQueryParam("byload", qByload); err != nil {
-				return err
-			}
-		}
-	}
 
 	if o.Cc != nil {
 

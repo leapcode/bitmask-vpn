@@ -5,8 +5,8 @@ import (
 	"crypto/tls"
 	"errors"
 	"io"
-	"time"
 
+	"github.com/quic-go/quic-go/internal/monotime"
 	"github.com/quic-go/quic-go/internal/protocol"
 	"github.com/quic-go/quic-go/internal/wire"
 )
@@ -38,7 +38,7 @@ type LongHeaderOpener interface {
 type ShortHeaderOpener interface {
 	headerDecryptor
 	DecodePacketNumber(wirePN protocol.PacketNumber, wirePNLen protocol.PacketNumberLen) protocol.PacketNumber
-	Open(dst, src []byte, rcvTime time.Time, pn protocol.PacketNumber, kp protocol.KeyPhaseBit, associatedData []byte) ([]byte, error)
+	Open(dst, src []byte, rcvTime monotime.Time, pn protocol.PacketNumber, kp protocol.KeyPhaseBit, associatedData []byte) ([]byte, error)
 }
 
 // LongHeaderSealer seals a long header packet
@@ -82,6 +82,29 @@ const (
 	// EventHandshakeComplete signals that the TLS handshake was completed.
 	EventHandshakeComplete
 )
+
+func (k EventKind) String() string {
+	switch k {
+	case EventNoEvent:
+		return "EventNoEvent"
+	case EventWriteInitialData:
+		return "EventWriteInitialData"
+	case EventWriteHandshakeData:
+		return "EventWriteHandshakeData"
+	case EventReceivedReadKeys:
+		return "EventReceivedReadKeys"
+	case EventDiscard0RTTKeys:
+		return "EventDiscard0RTTKeys"
+	case EventReceivedTransportParameters:
+		return "EventReceivedTransportParameters"
+	case EventRestoredTransportParameters:
+		return "EventRestoredTransportParameters"
+	case EventHandshakeComplete:
+		return "EventHandshakeComplete"
+	default:
+		return "Unknown EventKind"
+	}
+}
 
 // Event is a handshake event.
 type Event struct {

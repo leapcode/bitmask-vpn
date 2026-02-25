@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"math"
 	"net"
 )
 
@@ -43,7 +44,6 @@ func ReadTCPFrameUDP(tcpConn net.Conn, datagramBuffer []byte, lengthBuffer []byt
 // ReadUDPFrameTCP reads from a udp connection and returns a framed
 // TCP buffer
 func ReadUDPFrameTCP(udpConn *net.UDPConn, datagramBuffer []byte) ([]byte, *net.UDPAddr, error) {
-	var length16 uint16
 	n, udpAddr, err := udpConn.ReadFromUDP(datagramBuffer)
 
 	if err != nil {
@@ -55,7 +55,13 @@ func ReadUDPFrameTCP(udpConn *net.UDPConn, datagramBuffer []byte) ([]byte, *net.
 	outSlice := make([]byte, len(readBuffer))
 	copy(outSlice, readBuffer)
 
-	length16 = uint16(n)
+	// Note: the following code accepts zero length packets
+	if n > math.MaxUint16 {
+		return nil, nil, fmt.Errorf("invalid packet size: %d", n)
+	}
+	// #nosec G115 - packets cannot be larger than [math.MaxUint16] per the above check
+	length16 := uint16(n)
+
 	lengthBuf := new(bytes.Buffer)
 	err = binary.Write(lengthBuf, binary.LittleEndian, length16)
 	if err != nil {

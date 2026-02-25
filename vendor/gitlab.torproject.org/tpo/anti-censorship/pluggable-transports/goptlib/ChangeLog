@@ -1,8 +1,18 @@
+== v1.6.0
+
+Fixed a type assertion panic in DialOr that occurred when the network dial
+failed. Patch by Rob Jansen.
+https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib/-/issues/2
+
+Enhanced the TestGetServerBindaddrs test to compare not only MethodName and
+Addr, but also Options, and fixed a test case that expected the wrong Options.
+Patch by Jack Wampler.
+https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib/-/merge_requests/2
+
 == v1.5.0
 
 Added the ReportVersion function that lets a client or server report its
 implementation version using the new STATUS TYPE=version feature.
-
 https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib/-/issues/1
 
 == v1.4.0

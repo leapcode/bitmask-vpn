@@ -70,10 +70,8 @@ type ModelsProvider struct {
 	// Provider name
 	Name map[string]string `json:"name,omitempty"`
 
-	// Operational properties which describe how the provider offers the service
-	Service struct {
-		ModelsProviderService
-	} `json:"service,omitempty"`
+	// service
+	Service *ModelsProviderService `json:"service,omitempty"`
 
 	// List of services the provider offers, currently only openvpn
 	Services []string `json:"services"`
@@ -106,6 +104,17 @@ func (m *ModelsProvider) validateService(formats strfmt.Registry) error {
 		return nil
 	}
 
+	if m.Service != nil {
+		if err := m.Service.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("service")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("service")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -125,6 +134,22 @@ func (m *ModelsProvider) ContextValidate(ctx context.Context, formats strfmt.Reg
 
 func (m *ModelsProvider) contextValidateService(ctx context.Context, formats strfmt.Registry) error {
 
+	if m.Service != nil {
+
+		if swag.IsZero(m.Service) { // not required
+			return nil
+		}
+
+		if err := m.Service.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("service")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("service")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -139,6 +164,48 @@ func (m *ModelsProvider) MarshalBinary() ([]byte, error) {
 // UnmarshalBinary interface implementation
 func (m *ModelsProvider) UnmarshalBinary(b []byte) error {
 	var res ModelsProvider
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
+}
+
+// ModelsProviderService Operational properties which describe how the provider offers the service
+//
+// swagger:model ModelsProviderService
+type ModelsProviderService struct {
+
+	// Flag indicating if anonymous usage without registration is allowed
+	// deprecated: kept for backwards compatibility
+	AllowAnonymous bool `json:"allow_anonymous,omitempty"`
+
+	// Flag indicating if the provider supports user registration
+	// deprecated: kept for backwards compatibility
+	AllowRegistration bool `json:"allow_registration,omitempty"`
+}
+
+// Validate validates this models provider service
+func (m *ModelsProviderService) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this models provider service based on context it is used
+func (m *ModelsProviderService) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *ModelsProviderService) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *ModelsProviderService) UnmarshalBinary(b []byte) error {
+	var res ModelsProviderService
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

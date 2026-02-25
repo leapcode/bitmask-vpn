@@ -80,11 +80,7 @@ func WithAcceptTextPlain(r *runtime.ClientOperation) {
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetAPI5BridgeLocation(params *GetAPI5BridgeLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5BridgeLocationOK, error)
-
 	GetAPI5Bridges(params *GetAPI5BridgesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5BridgesOK, error)
-
-	GetAPI5Gateway(params *GetAPI5GatewayParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5GatewayOK, error)
 
 	GetAPI5Gateways(params *GetAPI5GatewaysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5GatewaysOK, error)
 
@@ -102,50 +98,9 @@ type ClientService interface {
 }
 
 /*
-GetAPI5BridgeLocation gets bridges
-
-fetch bridges by location
-*/
-func (a *Client) GetAPI5BridgeLocation(params *GetAPI5BridgeLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5BridgeLocationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetAPI5BridgeLocationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "GetAPI5BridgeLocation",
-		Method:             "GET",
-		PathPattern:        "/api/5/bridge/{location}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &GetAPI5BridgeLocationReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*GetApi5BridgeLocationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAPI5BridgeLocation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
 GetAPI5Bridges gets all bridges
 
-Fetch all bridges. This is an optional API endpoint for compatibility with vpnweb, but do not count on all the providers to have it enabled since it makes it easier to enumerate resources. On the other hand, if the service has "open" VPN endpoints, they can enumerate them here freely. Bridges, however, should be more restricted as a general rule.
+Fetch all bridges, optionally filtered by transport, port, obfuscation type and location. The returned list is also restricted by the BucketTokenAuth, an auth token which determines access to available resources. The order of bridges depends on the location of the client (which is provided by the cc query parameter) and should be followed by it.
 */
 func (a *Client) GetAPI5Bridges(params *GetAPI5BridgesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5BridgesOK, error) {
 	// TODO: Validate the params before sending
@@ -184,50 +139,9 @@ func (a *Client) GetAPI5Bridges(params *GetAPI5BridgesParams, authInfo runtime.C
 }
 
 /*
-GetAPI5Gateway gets gateways by location countrycode or random
-
-Get Gateways with param countrycode for nearest, or with param location to get a gateway in specific location, or a random one without params
-*/
-func (a *Client) GetAPI5Gateway(params *GetAPI5GatewayParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5GatewayOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetAPI5GatewayParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "GetAPI5Gateway",
-		Method:             "GET",
-		PathPattern:        "/api/5/gateway",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &GetAPI5GatewayReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*GetApi5GatewayOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for GetAPI5Gateway: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
 GetAPI5Gateways gets all gateways
 
-Fetch all gateways. This is an optional API endpoint for compatibility with vpnweb, but do not count on all the providers to have it enabled since it makes it easier to enumerate resources. On the other hand, if the service has "open" VPN endpoints, they can enumerate them here freely. Bridges, however, should be more restricted as a general rule.
+Fetch all gateways, optionally filtered by transport, port and location. The returned list is also restricted by the BucketTokenAuth, an auth token which determines access to available resources. The order of gateways depends on the location of the client (which is provided by the cc query parameter) and should be followed by it.
 */
 func (a *Client) GetAPI5Gateways(params *GetAPI5GatewaysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApi5GatewaysOK, error) {
 	// TODO: Validate the params before sending

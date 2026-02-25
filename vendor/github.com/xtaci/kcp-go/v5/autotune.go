@@ -22,7 +22,11 @@
 
 package kcp
 
-const maxAutoTuneSamples = 258
+import (
+	"sort"
+)
+
+const maxAutoTuneSamples = 258 // 256 + 2 extra for edge detection
 
 // pulse represents a 0/1 signal with time sequence
 type pulse struct {
@@ -31,13 +35,26 @@ type pulse struct {
 }
 
 // autoTune object to detect pulses in a signal
+// Uses a fixed-size ring buffer instead of heap to avoid allocations
 type autoTune struct {
-	pulses [maxAutoTuneSamples]pulse
+	pulses [maxAutoTuneSamples]pulse // fixed-size array to avoid heap allocations
+	head   int                       // oldest element index
+	tail   int                       // next write position
+	count  int                       // number of elements
 }
 
-// Sample adds a signal sample to the pulse buffer
+// Sample adds a signal sample to the pulse buffer using a ring buffer
 func (tune *autoTune) Sample(bit bool, seq uint32) {
-	tune.pulses[seq%maxAutoTuneSamples] = pulse{bit, seq}
+	// Write to current tail position
+	tune.pulses[tune.tail] = pulse{bit: bit, seq: seq}
+	tune.tail = (tune.tail + 1) % maxAutoTuneSamples
+
+	if tune.count < maxAutoTuneSamples {
+		tune.count++
+	} else {
+		// Buffer is full, advance head (discard oldest)
+		tune.head = (tune.head + 1) % maxAutoTuneSamples
+	}
 }
 
 // Find a period for a given signal
@@ -56,37 +73,65 @@ func (tune *autoTune) Sample(bit bool, seq uint32) {
 //            A     B    C     D  E     F     G  H     I
 
 func (tune *autoTune) FindPeriod(bit bool) int {
-	// last pulse and initial index setup
-	lastPulse := tune.pulses[0]
-	idx := 1
+	// Need at least 3 samples to detect a period (rising and falling edges)
+	if tune.count < 3 {
+		return -1
+	}
+
+	// Copy elements from ring buffer for sorting and analysis.
+	sorted := make([]pulse, tune.count)
+	for i := 0; i < tune.count; i++ {
+		idx := (tune.head + i) % maxAutoTuneSamples
+		sorted[i] = tune.pulses[idx]
+	}
+
+	// Sort the copied data by sequence number (seq) to ensure linear order for period calculation.
+	sort.Slice(sorted, func(i, j int) bool {
+		return _itimediff(sorted[i].seq, sorted[j].seq) < 0
+	})
 
 	// left edge
-	var leftEdge int
-	for ; idx < len(tune.pulses); idx++ {
-		if lastPulse.bit != bit && tune.pulses[idx].bit == bit { // edge found
-			if lastPulse.seq+1 == tune.pulses[idx].seq { // ensure edge continuity
-				leftEdge = idx
+	leftEdge := -1
+	lastPulse := sorted[0]
+	idx := 1
+
+	for ; idx < len(sorted); idx++ {
+		if lastPulse.seq+1 == sorted[idx].seq { // continuous sequence
+			if lastPulse.bit != bit && sorted[idx].bit == bit { // edge found
+				leftEdge = idx // mark left edge(the changed bit position)
 				break
 			}
+		} else {
+			return -1
 		}
-		lastPulse = tune.pulses[idx]
+		lastPulse = sorted[idx]
+	}
+
+	// no left edge found
+	if leftEdge == -1 {
+		return -1
 	}
 
 	// right edge
-	var rightEdge int
-	lastPulse = tune.pulses[leftEdge]
+	rightEdge := -1
+	lastPulse = sorted[leftEdge]
 	idx = leftEdge + 1
 
-	for ; idx < len(tune.pulses); idx++ {
-		if lastPulse.seq+1 == tune.pulses[idx].seq { // ensure pulses in this level monotonic
-			if lastPulse.bit == bit && tune.pulses[idx].bit != bit { // edge found
+	for ; idx < len(sorted); idx++ {
+		if lastPulse.seq+1 == sorted[idx].seq {
+			if lastPulse.bit == bit && sorted[idx].bit != bit {
 				rightEdge = idx
 				break
 			}
 		} else {
 			return -1
 		}
-		lastPulse = tune.pulses[idx]
+		lastPulse = sorted[idx]
+	}
+
+	// no right edge found
+	if rightEdge == -1 {
+		return -1
 	}
 
 	return rightEdge - leftEdge

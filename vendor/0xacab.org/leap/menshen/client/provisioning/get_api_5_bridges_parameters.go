@@ -61,6 +61,12 @@ GetAPI5BridgesParams contains all the parameters to send to the API endpoint
 */
 type GetAPI5BridgesParams struct {
 
+	/* Cc.
+
+	   base country code (ISO-2)
+	*/
+	Cc *string
+
 	/* Loc.
 
 	   location
@@ -138,6 +144,17 @@ func (o *GetAPI5BridgesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCc adds the cc to the get API 5 bridges params
+func (o *GetAPI5BridgesParams) WithCc(cc *string) *GetAPI5BridgesParams {
+	o.SetCc(cc)
+	return o
+}
+
+// SetCc adds the cc to the get API 5 bridges params
+func (o *GetAPI5BridgesParams) SetCc(cc *string) {
+	o.Cc = cc
+}
+
 // WithLoc adds the loc to the get API 5 bridges params
 func (o *GetAPI5BridgesParams) WithLoc(loc *string) *GetAPI5BridgesParams {
 	o.SetLoc(loc)
@@ -189,6 +206,23 @@ func (o *GetAPI5BridgesParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
+
+	if o.Cc != nil {
+
+		// query param cc
+		var qrCc string
+
+		if o.Cc != nil {
+			qrCc = *o.Cc
+		}
+		qCc := qrCc
+		if qCc != "" {
+
+			if err := r.SetQueryParam("cc", qCc); err != nil {
+				return err
+			}
+		}
+	}
 
 	if o.Loc != nil {
 

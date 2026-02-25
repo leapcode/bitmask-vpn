@@ -102,6 +102,7 @@ func New(addr string) *Pinger {
 		Count:      -1,
 		Interval:   time.Second,
 		RecordRtts: true,
+		RecordTTLs: true,
 		Size:       timeSliceLength + trackerLength,
 		Timeout:    time.Duration(math.MaxInt64),
 
@@ -115,6 +116,7 @@ func New(addr string) *Pinger {
 		protocol:          "udp",
 		awaitingSequences: firstSequence,
 		TTL:               64,
+		tclass:            192, // CS6 (network control)
 		logger:            StdLogger{Logger: log.New(log.Writer(), log.Prefix(), log.Flags())},
 	}
 }
@@ -159,15 +161,22 @@ type Pinger struct {
 	maxRtt    time.Duration
 	avgRtt    time.Duration
 	stdDevRtt time.Duration
-	stddevm2  time.Duration
+	stddevm2  float64
 	statsMu   sync.RWMutex
 
 	// If true, keep a record of rtts of all received packets.
 	// Set to false to avoid memory bloat for long running pings.
 	RecordRtts bool
 
+	// If true, keep a record of TTLs of all received packets.
+	// Set to false to avoid memory bloat for long running pings.
+	RecordTTLs bool
+
 	// rtts is all of the Rtts
 	rtts []time.Duration
+
+	// ttls is all of the TTLs
+	ttls []uint8
 
 	// OnSetup is called when Pinger has finished setting up the listening socket
 	OnSetup func()
@@ -199,6 +208,9 @@ type Pinger struct {
 	// Source is the source IP address
 	Source string
 
+	// Interface used to send/recv ICMP messages
+	InterfaceName string
+
 	// Channel and mutex used to communicate when the Pinger should stop between goroutines.
 	done chan interface{}
 	lock sync.Mutex
@@ -228,6 +240,9 @@ type Pinger struct {
 	logger Logger
 
 	TTL int
+
+	// tclass defines the traffic class (ToS for IPv4) set on outgoing icmp packets
+	tclass uint8
 }
 
 type packet struct {
@@ -285,6 +300,9 @@ type Statistics struct {
 	// Rtts is all of the round-trip times sent via this pinger.
 	Rtts []time.Duration
 
+	// TTLs is all of the TTLs received via this pinger.
+	TTLs []uint8
+
 	// MinRtt is the minimum round-trip time sent via this pinger.
 	MinRtt time.Duration
 
@@ -308,6 +326,10 @@ func (p *Pinger) updateStatistics(pkt *Packet) {
 		p.rtts = append(p.rtts, pkt.Rtt)
 	}
 
+	if p.RecordTTLs {
+		p.ttls = append(p.ttls, uint8(pkt.TTL))
+	}
+
 	if p.PacketsRecv == 1 || pkt.Rtt < p.minRtt {
 		p.minRtt = pkt.Rtt
 	}
@@ -322,17 +344,19 @@ func (p *Pinger) updateStatistics(pkt *Packet) {
 	delta := pkt.Rtt - p.avgRtt
 	p.avgRtt += delta / pktCount
 	delta2 := pkt.Rtt - p.avgRtt
-	p.stddevm2 += delta * delta2
+	p.stddevm2 += float64(delta) * float64(delta2)
 
-	p.stdDevRtt = time.Duration(math.Sqrt(float64(p.stddevm2 / pktCount)))
+	p.stdDevRtt = time.Duration(math.Sqrt(p.stddevm2 / float64(pktCount)))
 }
 
 // SetIPAddr sets the ip address of the target host.
 func (p *Pinger) SetIPAddr(ipaddr *net.IPAddr) {
 	p.ipv4 = isIPv4(ipaddr.IP)
 
+	p.statsMu.Lock()
 	p.ipaddr = ipaddr
 	p.addr = ipaddr.String()
+	p.statsMu.Unlock()
 }
 
 // IPAddr returns the ip address of the target host.
@@ -385,7 +409,9 @@ func (p *Pinger) Resolve() error {
 
 	p.ipv4 = isIPv4(ipaddr.IP)
 
+	p.statsMu.Lock()
 	p.ipaddr = ipaddr
+	p.statsMu.Unlock()
 
 	return nil
 }
@@ -394,10 +420,14 @@ func (p *Pinger) Resolve() error {
 // DNS name like "www.google.com" or IP like "127.0.0.1".
 func (p *Pinger) SetAddr(addr string) error {
 	oldAddr := p.addr
+	p.statsMu.Lock()
 	p.addr = addr
+	p.statsMu.Unlock()
 	err := p.Resolve()
 	if err != nil {
+		p.statsMu.Lock()
 		p.addr = oldAddr
+		p.statsMu.Unlock()
 		return err
 	}
 	return nil
@@ -470,6 +500,18 @@ func (p *Pinger) SetDoNotFragment(df bool) {
 	p.df = df
 }
 
+// SetTrafficClass sets the traffic class (type-of-service field for IPv4) field
+// value for future outgoing packets.
+func (p *Pinger) SetTrafficClass(tc uint8) {
+	p.tclass = tc
+}
+
+// TrafficClass returns the traffic class field (type-of-service field for IPv4)
+// value for outgoing packets.
+func (p *Pinger) TrafficClass() uint8 {
+	return p.tclass
+}
+
 // Run runs the pinger. This is a blocking function that will exit when it's
 // done. If Count or Interval are not specified, it will run continuously until
 // it is interrupted.
@@ -509,7 +551,20 @@ func (p *Pinger) RunWithContext(ctx context.Context) error {
 		}
 	}
 
+	if p.tclass != 0 {
+		if err := conn.SetTrafficClass(p.tclass); err != nil {
+			return fmt.Errorf("error setting traffic class: %v", err)
+		}
+	}
+
 	conn.SetTTL(p.TTL)
+	if p.InterfaceName != "" {
+		iface, err := net.InterfaceByName(p.InterfaceName)
+		if err != nil {
+			return err
+		}
+		conn.SetIfIndex(iface.Index)
+	}
 	return p.run(ctx, conn)
 }
 
@@ -643,6 +698,7 @@ func (p *Pinger) Statistics() *Statistics {
 		PacketsRecvDuplicates: p.PacketsRecvDuplicates,
 		PacketLoss:            loss,
 		Rtts:                  p.rtts,
+		TTLs:                  p.ttls,
 		Addr:                  p.addr,
 		IPAddr:                p.ipaddr,
 		MaxRtt:                p.maxRtt,
@@ -804,7 +860,9 @@ func (p *Pinger) processPacket(recv *packet) error {
 		inPkt.Seq = pkt.Seq
 		// If we've already received this sequence, ignore it.
 		if _, inflight := p.awaitingSequences[*pktUUID][pkt.Seq]; !inflight {
+			p.statsMu.Lock()
 			p.PacketsRecvDuplicates++
+			p.statsMu.Unlock()
 			if p.OnDuplicateRecv != nil {
 				p.OnDuplicateRecv(inPkt)
 			}
@@ -897,7 +955,9 @@ func (p *Pinger) sendICMP(conn packetConn) error {
 		}
 		// mark this sequence as in-flight
 		p.awaitingSequences[currentUUID][p.sequence] = struct{}{}
+		p.statsMu.Lock()
 		p.PacketsSent++
+		p.statsMu.Unlock()
 		p.sequence++
 		if p.sequence > 65535 {
 			newUUID := uuid.New()
@@ -931,6 +991,13 @@ func (p *Pinger) listen() (packetConn, error) {
 		p.Stop()
 		return nil, err
 	}
+
+	if p.Privileged() {
+		if err := conn.InstallICMPIDFilter(p.id); err != nil {
+			p.logger.Warnf("error installing icmp filter, %v", err)
+		}
+	}
+
 	return conn, nil
 }
 

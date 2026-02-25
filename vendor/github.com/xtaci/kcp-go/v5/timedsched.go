@@ -40,11 +40,11 @@ type timedFunc struct {
 // a heap for sorted timed function
 type timedFuncHeap []timedFunc
 
-func (h timedFuncHeap) Len() int            { return len(h) }
-func (h timedFuncHeap) Less(i, j int) bool  { return h[i].ts.Before(h[j].ts) }
-func (h timedFuncHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *timedFuncHeap) Push(x interface{}) { *h = append(*h, x.(timedFunc)) }
-func (h *timedFuncHeap) Pop() interface{} {
+func (h timedFuncHeap) Len() int           { return len(h) }
+func (h timedFuncHeap) Less(i, j int) bool { return h[i].ts.Before(h[j].ts) }
+func (h timedFuncHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *timedFuncHeap) Push(x any)        { *h = append(*h, x.(timedFunc)) }
+func (h *timedFuncHeap) Pop() any {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -74,7 +74,7 @@ func NewTimedSched(parallel int) *TimedSched {
 	ts.die = make(chan struct{})
 	ts.chPrependNotify = make(chan struct{}, 1)
 
-	for i := 0; i < parallel; i++ {
+	for range parallel {
 		go ts.sched()
 	}
 	go ts.prepend()
@@ -83,8 +83,10 @@ func NewTimedSched(parallel int) *TimedSched {
 
 // sched is a goroutine to schedule and execute timed tasks.
 func (ts *TimedSched) sched() {
-	var tasks timedFuncHeap
 	timer := time.NewTimer(0)
+	defer timer.Stop()
+
+	var tasks timedFuncHeap
 	drained := false
 	for {
 		select {

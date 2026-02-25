@@ -36,16 +36,47 @@ func dohQuery(domain string) (string, error) {
 			HTTPClient: &http.Client{Timeout: 10 * time.Second},
 		}
 
+		// lookup A records for IPv4
 		ips, _, err := resolver.LookupA(domain)
 		if err != nil {
 			log.Warn().
 				Str("resolver", dnsServer).
 				Str("domain", domain).
 				Err(err).
-				Msg("Could not resolve host with DNS over HTTPs")
+				Msg("Could not resolve host's IPv4 address with DNS over HTTPS")
 			continue
 		}
-		return ips[0].IP4, nil
+
+		if len(ips) > 0 {
+			return ips[0].IP4, nil
+		}
+
+		// fallback: lookup AAAA records for IPv6
+		log.Warn().
+			Str("resolver", dnsServer).
+			Str("domain", domain).
+			Err(err).
+			Msg("No A records found for domain")
+
+		v6Ips, _, err := resolver.LookupAAAA(domain)
+		if err != nil {
+			log.Warn().
+				Str("resolver", dnsServer).
+				Str("domain", domain).
+				Err(err).
+				Msg("Could not resolve host's IPv6 address with DNS over HTTPS")
+			continue
+		}
+
+		if len(v6Ips) > 0 {
+			return v6Ips[0].IP6, nil
+		}
+
+		log.Warn().
+			Str("resolver", dnsServer).
+			Str("domain", domain).
+			Err(err).
+			Msg("No AAAA records found for domain")
 	}
 	return "", errors.New("Could not resolve ip with DNS over HTTPS. Tried all resolvers")
 

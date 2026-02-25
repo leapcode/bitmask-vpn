@@ -43,7 +43,7 @@ type ModelsBridge struct {
 	IPAddr string `json:"ip_addr,omitempty"`
 
 	// LastSeenMillis is a unix time in milliseconds representing the last time we received a heartbeat update from this bridge
-	LastSeenMillis int64 `json:"lastSeenMillis,omitempty"`
+	LastSeenMillis int64 `json:"last_seen_millis,omitempty"`
 
 	// Load is the fractional load - but for now menshen agent is not measuring
 	// load in the bridges.
