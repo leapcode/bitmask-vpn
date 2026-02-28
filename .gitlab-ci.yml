@@ -21,10 +21,10 @@ build_test:
     expire_in: 1 week
 
 lint:
-  image: golangci/golangci-lint:v1.59-alpine
+  image: golangci/golangci-lint:latest-alpine
   stage: build
   script:
-    - golangci-lint run --timeout=5m
+    - golangci-lint run ./pkg/... ./cmd/...
   tags:
     - linux
 
@@ -65,15 +65,12 @@ build_Arch_Linux_package:
   tags:
     - linux
 
-build_debian12_package:
+build_debian_package:
   stage: package
-  # we use backports because we need go1.22
-  image: debian:bookworm-backports
+  image: debian:sid
   before_script:
     - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y make sudo"
     - "make depends"
-    - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-1.22"
-    - "update-alternatives --install /usr/bin/go go /usr/lib/go-1.22/bin/go 0"
     - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
   script:
     - "PROVIDER=bitmask make vendor"
@@ -118,7 +115,9 @@ build_ubuntu24_package:
   stage: package
   image: ubuntu:24.04
   before_script:
-    - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y make sudo"
+    - "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common make sudo"
+    - "add-apt-repository ppa:longsleep/golang-backports -y"
+    - "DEBIAN_FRONTEND=noninteractive apt-get install -y -q golang-go"
     - "make depends"
     - 'ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease'
   script:
