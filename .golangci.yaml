@@ -1,21 +1,30 @@
-issues:
-  exclude-use-default: true
-  exclude-dirs-use-default: true
-  exclude-files:
-    - ".*\\.cpp$"
-    - ".*\\.h$"
-    - ".*\\.sh$"
-    - ".*\\.py$"
-    - ".*\\.qml$"
-  exclude-dirs:
-    - "gui"
+version: "2"
+run:
+  timeout: 5m
+  tests: false
 linters:
-  disable-all: true
+  default: none
   enable:
     - errcheck
-    - gosimple
-    - ineffassign
     - govet
+    - ineffassign
+    - staticcheck
     - unused
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+  settings:
+    staticcheck:
+      checks:
+        - all
+        - '-ST1005'
+formatters:
+  enable:
     - gofmt
-
+    - goimports
+  exclusions:
+    generated: lax
