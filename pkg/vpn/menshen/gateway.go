@@ -25,7 +25,7 @@ func (m *Menshen) GetGatewayByIP(ip string) (bonafide.Gateway, error) {
 			return *NewBonafideGateway(gw), nil
 		}
 	}
-	return bonafide.Gateway{}, fmt.Errorf("Could not find a gateway with ip %s", ip)
+	return bonafide.Gateway{}, fmt.Errorf("could not find a gateway with ip %s", ip)
 }
 
 // Returns a list of gateways that we will connect to. First checks if automatic gateway
@@ -52,7 +52,7 @@ func (m *Menshen) GetBestGateways(transport string) ([]bonafide.Gateway, error) 
 	var gateways []*models.ModelsGateway
 	gws, found := m.gwsByLocation[location]
 	if !found {
-		return []bonafide.Gateway{}, fmt.Errorf("Could not find a gateway for location %s", location)
+		return []bonafide.Gateway{}, fmt.Errorf("could not find a gateway for location %s", location)
 	}
 
 	if len(gws) > 1 {
@@ -101,7 +101,7 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 
 	// TODO: implement obfsv4 support (transport can have the value "any")
 	if transport == "obfs4" {
-		errors.New("obfs4 is not supported for v5 right now")
+		_ = errors.New("obfs4 is not supported for v5 right now")
 	}
 
 	// reset if called multiple times
@@ -121,16 +121,16 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 			Str("host", gw.Host).
 			Int64("port", gw.Port).
 			Str("ip", gw.IPAddr).
-			Str("location", strings.Title(gw.Location)).
+			Str("location", gw.Location).
 			Str("protocol", gw.Transport).
 			Str("transport", gw.Type).
 			Msg("Got gateway from API")
 
 		// TODO: get rid of the strings.Title stuff if menshen supports gateway identifier
-		if !slices.Contains(m.gwLocations, strings.Title(gw.Location)) {
-			m.gwLocations = append(m.gwLocations, strings.Title(gw.Location))
+		if !slices.Contains(m.gwLocations, gw.Location) {
+			m.gwLocations = append(m.gwLocations, gw.Location)
 		}
-		m.gwsByLocation[strings.Title(gw.Location)] = append(m.gwsByLocation[strings.Title(gw.Location)], m.Gateways[i])
+		m.gwsByLocation[gw.Location] = append(m.gwsByLocation[gw.Location], m.Gateways[i])
 	}
 	m.updateLocationQualityMap(transport)
 	return nil

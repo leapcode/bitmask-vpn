@@ -107,7 +107,7 @@ func (l *MgmtListener) Serve(handler IncomingConnHandler) error {
 	for {
 		incoming, err := l.Accept()
 		if err != nil {
-			if ne, ok := err.(net.Error); ok && ne.Temporary() {
+			if _, ok := err.(net.Error); ok {
 				if tempDelay == 0 {
 					tempDelay = 5 * time.Millisecond
 				} else {

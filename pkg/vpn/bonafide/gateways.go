@@ -172,47 +172,6 @@ func (p *gatewayPool) getRandomGatewaysByLocation(location, transport string) ([
 	return gateways, nil
 }
 
-func (p *gatewayPool) getGatewaysFromMenshenByLocation(location, transport string) ([]Gateway, error) {
-	if !p.isValidLocation(location) {
-		return []Gateway{}, errors.New("bonafide: BUG not a valid location: " + location)
-	}
-	gws := p.byLocation[location]
-	if len(gws) == 0 {
-		return []Gateway{}, errors.New("bonafide: BUG no gw for location: " + location)
-	}
-
-	var gateways []Gateway
-	for _, gw := range p.recommended {
-		if !gw.gateway.isTransport(transport) {
-			continue
-		}
-		for _, locatedGw := range gws {
-			if locatedGw.Host == gw.gateway.Host {
-				gateways = append(gateways, *locatedGw)
-				break
-			}
-		}
-		if len(gateways) == maxGateways {
-			break
-		}
-	}
-	if len(gateways) == 0 {
-		return []Gateway{}, errors.New("bonafide: BUG could not find any gateway for that location")
-	}
-
-	return gateways, nil
-}
-
-/* used when we select a hostname in the ui and we want to know the gateway details */
-func (p *gatewayPool) getGatewayByHost(host string) (Gateway, error) {
-	for _, gw := range p.available {
-		if gw.Host == host {
-			return gw, nil
-		}
-	}
-	return Gateway{}, errors.New("bonafide: not a valid host name")
-}
-
 /* used when we want to know gateway details after we know what IP openvpn has connected to */
 func (p *gatewayPool) getGatewayByIP(ip string) (Gateway, error) {
 	for _, gw := range p.available {
@@ -352,7 +311,6 @@ func (p *gatewayPool) GetGatewaysByTimezone(transport string, tzOffsetHours, max
 		if !gw.isTransport(transport) {
 			continue
 		}
-		distance := 13
 		gwOffset, err := strconv.Atoi(p.locations[gw.Location].Timezone)
 		if err != nil {
 			log.Warn().
@@ -360,10 +318,9 @@ func (p *gatewayPool) GetGatewaysByTimezone(transport string, tzOffsetHours, max
 				Msg("Could not sort gateways")
 			return gws, err
 		}
-		distance = tzDistance(tzOffsetHours, gwOffset)
+		distance := tzDistance(tzOffsetHours, gwOffset)
 		gwVector = append(gwVector, gatewayDistance{gw, distance})
 	}
-	rand.Seed(time.Now().UnixNano())
 	cmp := func(i, j int) bool {
 		if gwVector[i].distance == gwVector[j].distance {
 			return rand.Intn(2) == 1

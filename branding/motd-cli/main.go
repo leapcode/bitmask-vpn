@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -48,7 +47,7 @@ func main() {
 		fmt.Printf("Urgency: %s %v\n", msg.Urgency, mark(msg.IsValidUrgency()))
 		fmt.Printf("Languages: %d %v\n", len(msg.Text), mark(msg.HasLocalizedText()))
 		for _, t := range msg.Text {
-			fmt.Printf(t.Str)
+			fmt.Print(t.Str)
 		}
 		if !msg.IsValid() {
 			os.Exit(1)
@@ -63,7 +62,7 @@ func downloadToTempFile(url string) string {
 	}
 	defer resp.Body.Close()
 
-	out, err := ioutil.TempFile("/tmp/", "motd-linter")
+	out, err := os.CreateTemp("/tmp/", "motd-linter")
 	if err != nil {
 		panic(err)
 	}

@@ -19,7 +19,7 @@ func CheckAuth(handler http.HandlerFunc, token string) http.HandlerFunc {
 			handler(w, r)
 		} else {
 			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("401 - Unauthorized"))
+			_, _ = w.Write([]byte("401 - Unauthorized"))
 		}
 	}
 }
@@ -35,11 +35,11 @@ func webOff(w http.ResponseWriter, r *http.Request) {
 }
 
 func webStatus(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, ctx.Status.String())
+	fmt.Fprintf(w, "%s", ctx.Status.String())
 }
 
 func webGatewayGet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, ctx.bm.GetCurrentGateway())
+	fmt.Fprintf(w, "%s", ctx.bm.GetCurrentGateway())
 }
 
 func webGatewaySet(w http.ResponseWriter, r *http.Request) {
@@ -64,11 +64,11 @@ func webGatewaySet(w http.ResponseWriter, r *http.Request) {
 
 func webGatewayList(w http.ResponseWriter, r *http.Request) {
 	transport := ctx.bm.GetTransport()
-	locationJson, err := json.Marshal(ctx.bm.GetLocationQualityMap(transport))
+	locationJSON, err := json.Marshal(ctx.bm.GetLocationQualityMap(transport))
 	if err != nil {
 		fmt.Fprintf(w, "Error converting json: %v", err)
 	}
-	fmt.Fprintf(w, string(locationJson))
+	fmt.Fprintf(w, "%s", locationJSON)
 }
 
 func webTransportGet(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +76,7 @@ func webTransportGet(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Error converting json: %v", err)
 	}
-	fmt.Fprintf(w, string(t))
+	fmt.Fprintf(w, "%s", t)
 
 }
 
@@ -90,7 +90,7 @@ func webTransportSet(w http.ResponseWriter, r *http.Request) {
 		t := r.FormValue("transport")
 		if isValidTransport(t) {
 			fmt.Fprintf(w, "Selected transport: %s\n", t)
-			go ctx.bm.SetTransport(string(t))
+			go func() { _ = ctx.bm.SetTransport(string(t)) }()
 		} else {
 			fmt.Fprintf(w, "Unknown transport: %s\n", t)
 		}
@@ -104,7 +104,7 @@ func webTransportList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Error converting json: %v", err)
 	}
-	fmt.Fprintf(w, string(t))
+	fmt.Fprintf(w, "%s", t)
 }
 
 func webQuit(w http.ResponseWriter, r *http.Request) {

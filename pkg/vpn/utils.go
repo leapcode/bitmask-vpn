@@ -5,7 +5,6 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
-	"io/ioutil"
 	"math"
 	"net"
 	"os"
@@ -42,7 +41,7 @@ func isValidCert(path string) bool {
 		Str("path", path).
 		Msg("Checking for valid OpenVPN client credentials (key and certificate)")
 
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Debug().
 			Str("path", path).
@@ -99,13 +98,13 @@ func isValidCert(path string) bool {
 // Generate a random password with len l
 func getRandomPass(l int) string {
 	buff := make([]byte, int(math.Round(float64(l)/float64(1.33333333333))))
-	rand.Read(buff)
+	_, _ = rand.Read(buff)
 	str := base64.RawURLEncoding.EncodeToString(buff)
 	return str[:l] // strip 1 extra character we get from odd length results
 }
 
 // Resolve host and log - used for analyzing blocked clients
-func logDnsLookup(domain string) {
+func logDNSLookup(domain string) {
 	addrs, err := net.LookupHost(domain)
 	if err != nil {
 		log.Warn().

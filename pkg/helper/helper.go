@@ -45,11 +45,11 @@ type openvpnT struct {
 
 // startHelper is the main entrypoint. It can react to cli args (used to install or manage the service in windows), and
 // eventually will start the http server.
-func StartHelper(port, socketUid, socketGid int) {
+func StartHelper(port, socketUID, socketGID int) {
 	initializeService(port)
 	parseCliArgs()
 	daemonize()
-	runServer(socketUid, socketGid)
+	runServer(socketUID, socketGID)
 }
 
 // serveHTTP will start the HTTP server that exposes the firewall and openvpn api.

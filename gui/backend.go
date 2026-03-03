@@ -1,15 +1,21 @@
+//go:build cgo
+// +build cgo
+
 package main
 
 /* a wrapper around bitmask that exposes status to a QtQml gui.
    Have a look at the pkg/backend module for further enlightment. */
 
-import "C"
-
-import "unsafe"
+// #cgo pkg-config: Qt6Core Qt6Gui Qt6Widgets Qt6Qml Qt6Quick Qt6QuickControls2 Qt6Concurrent Qt6Svg
+// #cgo LDFLAGS: -lpthread
 
 import (
-	"0xacab.org/leap/bitmask-vpn/pkg/backend"
+	"C"
+	"unsafe"
+
 	"strings"
+
+	"0xacab.org/leap/bitmask-vpn/pkg/backend"
 )
 
 //export GetBitmaskVersion

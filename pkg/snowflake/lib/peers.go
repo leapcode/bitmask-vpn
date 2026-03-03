@@ -59,14 +59,14 @@ func (p *Peers) Collect() (*WebRTCPeer, error) {
 		return nil, errors.New("missing Tongue to catch Snowflakes with")
 	}
 	cnt := p.Count()
-	capacity := p.Tongue.GetMax()
+	capacity := p.GetMax()
 	s := fmt.Sprintf("Currently at [%d/%d]", cnt, capacity)
 	if cnt >= capacity {
 		return nil, fmt.Errorf("At capacity [%d/%d]", cnt, capacity)
 	}
 	log.Info().Msgf("WebRTC: Collecting a new Snowflake. %s", s)
 	// BUG: some broker conflict here.
-	connection, err := p.Tongue.Catch()
+	connection, err := p.Catch()
 	if nil != err {
 		return nil, err
 	}

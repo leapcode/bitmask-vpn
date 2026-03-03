@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -41,7 +40,7 @@ func main() {
 		log.Println("Error:", err)
 	}
 
-	providerDefinitionJSON, err := ioutil.ReadFile(c)
+	providerDefinitionJSON, err := os.ReadFile(c)
 	if err != nil {
 		fmt.Println("Error reading config file")
 		os.Exit(1)

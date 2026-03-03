@@ -29,10 +29,6 @@ import (
 	pmautostart "github.com/ProtonMail/go-autostart"
 )
 
-const (
-	errorMsg = `An error has ocurred initializing the VPN: %v`
-)
-
 // Autostart holds the functions to enable and disable the application autostart
 type Autostart interface {
 	Disable() error

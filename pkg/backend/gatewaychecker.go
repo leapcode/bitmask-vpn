@@ -8,12 +8,7 @@ import (
 // checks whether they've been fetched to update status.
 func (c connectionCtx) delayCheckForGateways() {
 	go func() {
-		cnt := 0
-		for {
-			if cnt > 60*2 {
-				break
-			}
-			cnt += 1
+		for cnt := 0; cnt <= 60*2; cnt++ {
 			time.Sleep(time.Second * 5)
 			transport := c.bm.GetTransport()
 			locs := c.bm.GetLocationQualityMap(transport)

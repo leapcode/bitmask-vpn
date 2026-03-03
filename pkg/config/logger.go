@@ -25,7 +25,7 @@ import (
 var logFile *os.File
 
 func ConfigureLogger() {
-	os.MkdirAll(Path, 0750)
+	_ = os.MkdirAll(Path, 0750)
 
 	logFile, _ = os.OpenFile(
 		LogPath,
@@ -41,11 +41,12 @@ func ConfigureLogger() {
 	log.Logger = zerolog.New(multi).With().Timestamp().Logger()
 
 	envLogLevel := os.Getenv("LOG_LEVEL")
-	if envLogLevel == "TRACE" {
+	switch envLogLevel {
+	case "TRACE":
 		zerolog.SetGlobalLevel(zerolog.TraceLevel)
-	} else if envLogLevel == "DEBUG" {
+	case "DEBUG":
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	} else {
+	default:
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 

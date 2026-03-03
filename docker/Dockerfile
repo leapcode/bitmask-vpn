@@ -4,7 +4,8 @@
 FROM ubuntu:24.04 as builder
 
 MAINTAINER LEAP Encryption Access Project <info@leap.se>
-ARG GO_VERSION=1.22
+ARG GO_VERSION=1.25.4
+ARG ARCH=amd64
 LABEL Description="An image to build Bitmask Lite" Vendor="LEAP" Version="1.2"
 ENV OSXSDK_SHA256="631b4144c6bf75bf7a4d480d685a9b5bda10ee8d03dbf0db829391e2ef858789" \
     PATH="$PATH:/osxcross/target/bin:/usr/lib/go-${GO_VERSION}/bin" \
@@ -30,10 +31,12 @@ RUN apt-get update && apt-get upgrade --yes && \
             qml-module-qtquick-controls2 libqt6qml6 libqt6svg6-dev qt6-l10n-tools \
             qt6-tools-dev qt6-tools-dev-tools qt6-base-dev qt6-base-dev-tools \
             qt6-declarative-dev qt6-declarative-dev-tools \
-            qml6-module-qt5compat-graphicaleffects libqt6core5compat6 libqt6core5compat6-dev \
-            golang golang-${GO_VERSION}-go golang-golang-x-tools-dev && \
+            qml6-module-qt5compat-graphicaleffects libqt6core5compat6 libqt6core5compat6-dev && \
     rm -r /var/lib/apt/lists/*
 
+RUN wget https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz && \
+     rm -rf /usr/local/go && tar -C /usr/local -xzf go${GO_VERSION}.linux-${ARCH}.tar.gz && \
+     echo "export PATH=$PATH:/usr/local/go/bin" >> /etc/profile
 RUN ln -s $(qmake6 -query "QT_INSTALL_BINS")/lrelease /usr/local/bin/lrelease
 
 # osx cross compiling

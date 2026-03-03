@@ -1,13 +1,11 @@
 package backend
 
 import (
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 
 	"github.com/rs/zerolog/log"
 )
@@ -23,7 +21,7 @@ func generateAuthToken() {
 	}
 	t := getRandomString()
 	tokenPath := filepath.Join(os.TempDir(), bitmaskToken)
-	err := ioutil.WriteFile(tokenPath, []byte(t), os.FileMode(int(0600)))
+	err := os.WriteFile(tokenPath, []byte(t), os.FileMode(int(0600)))
 	if err != nil {
 		log.Fatal().
 			Err(err).
@@ -49,7 +47,6 @@ func readAuthToken() string {
 }
 
 func getRandomString() string {
-	rand.Seed(time.Now().UnixNano())
 	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyz" +
 		"0123456789")

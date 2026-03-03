@@ -18,7 +18,7 @@ import (
 // global ctx holder. This is expected to be called only once, so the public
 // api uses the sync.Once primitive to call this.
 func initializeContext(opts *InitOpts) {
-	var st status = off
+	st := off
 
 	// TODO - now there's really no need to dance between opts and config anymore
 	// but this was the simplest transition. We should probably keep the
@@ -71,7 +71,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	ctx.UseUDP = ctx.cfg.UDP
 
 	err := pid.AcquirePID()
-	if err != nil && errors.Is(err, pid.AlreadyRunningErr) {
+	if err != nil && errors.Is(err, pid.ErrAlreadyRunning) {
 		log.Error().
 			Err(err).
 			Msg("Could not acquire PID")

@@ -7,7 +7,7 @@ type ProviderCfg struct {
 	Auth                 string
 	APIURL               string
 	GeolocationAPI       string
-	ApiVersion           int
+	APIVersion           int
 	CaCert               []byte
 	STUNServers          []string
 	CountryCodeLookupURL string

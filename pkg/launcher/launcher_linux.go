@@ -180,7 +180,7 @@ func getPolkitPath() (string, error) {
 			return polkit, nil
 		}
 	}
-	return "", errors.New("Could not find any usable polkit binary")
+	return "", errors.New("could not find any usable polkit binary")
 }
 
 func (l *Launcher) OpenvpnStart(flags ...string) error {

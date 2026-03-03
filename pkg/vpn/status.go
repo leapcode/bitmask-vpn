@@ -76,8 +76,8 @@ func (b *Bitmask) initOpenVPNManagementHandler() {
 			Str("endpoint", listenAddr).
 			Msg("OpenVPN process connected to our management backend")
 		b.managementClient = conn.Open(eventCh)
-		b.managementClient.SendPassword(b.launch.MngPass)
-		b.managementClient.SetStateEvents(true)
+		_, _ = b.managementClient.SendPassword(b.launch.MngPass)
+		_ = b.managementClient.SetStateEvents(true)
 		b.eventHandler(eventCh)
 	}
 

@@ -36,13 +36,13 @@ type ProviderOpts struct {
 	AuthEmptyPass        bool     `json:"authEmptyPass"`
 	ProviderURL          string   `json:"providerURL"`
 	DonateURL            string   `json:"donateURL"`
-	ApiURL               string   `json:"apiURL"`
+	APIURL               string   `json:"apiURL"`
 	TosURL               string   `json:"tosURL"`
 	HelpURL              string   `json:"helpURL"`
 	GeolocationURL       string   `json:"geolocationAPI"`
 	AskForDonations      bool     `json:"askForDonations"`
 	CaCert               string   `json:"caCertString"`
-	ApiVersion           int      `json:"apiVersion"`
+	APIVersion           int      `json:"apiVersion"`
 	STUNServers          []string `json:"STUNServers"`
 	CountryCodeLookupURL string   `json:"countryCodeLookupURL"`
 }
@@ -54,9 +54,9 @@ func ConfigureProvider(opts *ProviderOpts) {
 	config.ProviderConfig.BinaryName = opts.BinaryName
 	config.ProviderConfig.Auth = opts.Auth
 	config.ProviderConfig.GeolocationAPI = opts.GeolocationURL
-	config.ProviderConfig.APIURL = opts.ApiURL
+	config.ProviderConfig.APIURL = opts.APIURL
 	config.ProviderConfig.CaCert = []byte(opts.CaCert)
-	config.ProviderConfig.ApiVersion = opts.ApiVersion
+	config.ProviderConfig.APIVersion = opts.APIVersion
 	config.ProviderConfig.STUNServers = opts.STUNServers
 	config.ProviderConfig.CountryCodeLookupURL = opts.CountryCodeLookupURL
 }

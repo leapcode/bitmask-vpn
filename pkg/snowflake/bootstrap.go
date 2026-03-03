@@ -3,8 +3,8 @@ package snowflake
 import (
 	"context"
 	"io"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -19,17 +19,6 @@ import (
 // TODO
 // [ ] fix snowflake-client binary
 // [ ] find tor path
-
-const torrcOrig = `UseBridges 1
-DataDirectory datadir
-
-ClientTransportPlugin snowflake exec /usr/local/bin/snowflake-client -log /tmp/snowflake.log -url https://snowflake-broker.torproject.net.global.prod.fastly.net/ \
--front cdn.sstatic.net -ice stun:stun.voip.blackberry.com:3478,stun:stun.altar.com.pl:3478,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478,stun:stun.sonetel.com:3478,stun:stun.sonetel.net:3478,stun:stun.stunprotocol.org:3478,stun:stun.uls.co.za:3478,stun:stun.voipgate.com:3478,stun:stun.voys.nl:3478 \
--max 5
-
-Bridge snowflake 192.0.2.3:1
-
-SocksPort auto`
 
 const torrc = `UseBridges 1
 DataDirectory datadir
@@ -70,13 +59,13 @@ func (e *StatusLogger) Write(p []byte) (n int, err error) {
 }
 
 func writeTorrc() string {
-	f, err := ioutil.TempFile("", "torrc-snowflake-")
+	f, err := os.CreateTemp("", "torrc-snowflake-")
 	if err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("Could not write tor config file")
 	}
-	f.Write([]byte(torrc))
+	_, _ = f.Write([]byte(torrc))
 	return f.Name()
 }
 
@@ -91,7 +80,7 @@ func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error 
 
 	log.Info().Msg("Starting Tor and fetching files to bootstrap VPN tunnel...")
 
-	t, err := tor.Start(nil, conf)
+	t, err := tor.Start(context.TODO(), conf)
 	if err != nil {
 		return err
 	}
@@ -122,16 +111,16 @@ func BootstrapWithSnowflakeProxies(provider string, ch chan *StatusEvent) error 
 		Timeout: time.Minute * 5,
 	}
 
-	eipUri := config.ProviderConfig.APIURL + "/3/config/eip-service.json"
-	eipFile := filepath.Join(config.Path, provider+"-eip.json")
-	err = fetchFile(apiClient, eipUri, eipFile)
+	EIPURI := config.ProviderConfig.APIURL + "/3/config/eip-service.json"
+	EIPFile := filepath.Join(config.Path, provider+"-eip.json")
+	err = fetchFile(apiClient, EIPURI, EIPFile)
 	if err != nil {
 		return err
 	}
 
-	certUri := config.ProviderConfig.APIURL + "/3/cert"
+	certURI := config.ProviderConfig.APIURL + "/3/cert"
 	certFile := filepath.Join(config.Path, provider+".pem")
-	err = fetchFile(apiClient, certUri, certFile)
+	err = fetchFile(apiClient, certURI, certFile)
 	if err != nil {
 		return err
 	}
@@ -155,5 +144,5 @@ func fetchFile(client *http.Client, uri string, file string) error {
 	}
 
 	log.Debug().Msgf("Data received: %s", c)
-	return ioutil.WriteFile(file, c, 0600)
+	return os.WriteFile(file, c, 0600)
 }

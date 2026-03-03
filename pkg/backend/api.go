@@ -1,5 +1,5 @@
-// go:build cgo
-// +go:build cgo
+//go:build cgo
+// +build cgo
 
 /* All the exported functions should be added here */
 
@@ -77,7 +77,7 @@ func UseLocation(label string) {
 	ctx.bm.UseGateway(label)
 	go trigger(OnStatusChanged)
 	if ctx.Status == on && label != strings.ToLower(ctx.CurrentLocation) {
-		go ctx.bm.Reconnect()
+		_ = ctx.bm.Reconnect()
 	}
 }
 
@@ -89,7 +89,7 @@ func UseAutomaticGateway() {
 	ctx.bm.UseAutomaticGateway()
 	go trigger(OnStatusChanged)
 	if ctx.Status == on {
-		ctx.bm.Reconnect()
+		_ = ctx.bm.Reconnect()
 	}
 }
 
@@ -110,14 +110,14 @@ func SetTransport(label string) {
 		// But tonight we're in problem-solving mode, and we can assume that user wants to use bridges,
 		// no matter what. So let's assume that "use obfs4" supersedes everything else and be done.
 		UseAutomaticGateway()
-		ctx.cfg.SetUseObfs4(true)
-		ctx.cfg.SetUseKCP(false)
+		_ = ctx.cfg.SetUseObfs4(true)
+		_ = ctx.cfg.SetUseKCP(false)
 	case "kcp":
-		ctx.cfg.SetUseObfs4(true)
-		ctx.cfg.SetUseKCP(true)
+		_ = ctx.cfg.SetUseObfs4(true)
+		_ = ctx.cfg.SetUseKCP(true)
 	default:
-		ctx.cfg.SetUseObfs4(false)
-		ctx.cfg.SetUseKCP(false)
+		_ = ctx.cfg.SetUseObfs4(false)
+		_ = ctx.cfg.SetUseKCP(false)
 	}
 	go trigger(OnStatusChanged)
 }
@@ -126,7 +126,7 @@ func SetUDP(udp bool) {
 	log.Info().
 		Bool("useUDP", udp).
 		Msg("Configuring UDP")
-	ctx.cfg.SetUseUDP(udp)
+	_ = ctx.cfg.SetUseUDP(udp)
 	ctx.bm.UseUDP(udp)
 	go trigger(OnStatusChanged)
 }
@@ -135,8 +135,8 @@ func SetSnowflake(snowflake bool) {
 	log.Info().
 		Bool("useSnowflake", snowflake).
 		Msg("Configuring Snowflake")
-	ctx.cfg.SetUseSnowflake(snowflake)
-	ctx.bm.UseSnowflake(snowflake)
+	_ = ctx.cfg.SetUseSnowflake(snowflake)
+	_ = ctx.bm.UseSnowflake(snowflake)
 	go trigger(OnStatusChanged)
 }
 
@@ -273,7 +273,7 @@ func InitializeBitmaskContext(opts *InitOpts) {
 }
 
 func RefreshContext() *C.char {
-	c, err := ctx.toJson()
+	c, err := ctx.toJSON()
 	if err != nil {
 		log.Warn().
 			Err(err).

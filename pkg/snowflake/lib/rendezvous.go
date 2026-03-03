@@ -12,7 +12,6 @@ import (
 	"bytes"
 	"errors"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"sync"
@@ -26,9 +25,9 @@ import (
 )
 
 const (
-	BrokerError503        string = "No snowflake proxies currently available."
-	BrokerError400        string = "You sent an invalid offer in the request."
-	BrokerErrorUnexpected string = "Unexpected error, no answer."
+	BrokerError503        string = "No snowflake proxies currently available"
+	BrokerError400        string = "You sent an invalid offer in the request"
+	BrokerErrorUnexpected string = "Unexpected error, no answer"
 	readLimit                    = 100000 //Maximum number of bytes to be read from an HTTP response
 )
 
@@ -82,7 +81,7 @@ func NewBrokerChannel(broker string, front string, transport http.RoundTripper, 
 }
 
 func limitedRead(r io.Reader, limit int64) ([]byte, error) {
-	p, err := ioutil.ReadAll(&io.LimitedReader{R: r, N: limit + 1})
+	p, err := io.ReadAll(&io.LimitedReader{R: r, N: limit + 1})
 	if err != nil {
 		return p, err
 	} else if int64(len(p)) == limit+1 {
@@ -121,7 +120,7 @@ func (bc *BrokerChannel) Negotiate(offer *webrtc.SessionDescription) (
 	if nil != err {
 		return nil, err
 	}
-	if "" != bc.Host { // Set true host if necessary.
+	if len(bc.Host) > 0 { // Set true host if necessary.
 		request.Host = bc.Host
 	}
 	// include NAT-TYPE

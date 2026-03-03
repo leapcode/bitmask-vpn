@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -18,7 +17,6 @@ import (
 
 type eipService struct {
 	Gateways             []gatewayV3
-	defaultGateway       string
 	Locations            map[string]Location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 	auth                 string
@@ -26,7 +24,6 @@ type eipService struct {
 
 type eipServiceV1 struct {
 	Gateways             []gatewayV1
-	defaultGateway       string
 	Locations            map[string]Location
 	OpenvpnConfiguration openvpnConfig `json:"openvpn_configuration"`
 }
@@ -127,7 +124,7 @@ func (b *Bonafide) fetchEipJSON() error {
 		b.eip, err = decodeEIP3(resp.Body)
 	case 404:
 		buf := make([]byte, 128)
-		resp.Body.Read(buf)
+		_, _ = resp.Body.Read(buf)
 		log.Warn().Msg("Error fetching eip v3 json (status code 404)")
 		eip1API := config.ProviderConfig.APIURL + "1/config/eip-service.json"
 		resp, err = b.client.Post(eip1API, "", nil)
@@ -266,15 +263,14 @@ func (eip eipService) getOpenvpnArgs() []string {
 }
 
 func parseOpenvpnArgsFromFile(path string) (*openvpnConfig, error) {
-	// TODO sanitize options: check keys against array of allowed options
 	f, err := os.Open(path)
-	defer f.Close()
-
 	if err != nil {
 		return nil, err
 	}
-	byteValue, _ := ioutil.ReadAll(f)
+	defer f.Close()
+
+	byteValue, _ := io.ReadAll(f)
 	var cfg openvpnConfig
-	json.Unmarshal([]byte(byteValue), &cfg)
+	_ = json.Unmarshal([]byte(byteValue), &cfg)
 	return &cfg, nil
 }

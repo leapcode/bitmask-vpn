@@ -65,7 +65,7 @@ func copyAsRoot(orig, dest string, isExec bool) {
 		return
 	}
 
-	cmd := exec.Command("false")
+	var cmd *exec.Cmd
 	if isRoot() {
 		cmd = exec.Command("cp", orig, dest)
 	} else {
@@ -73,7 +73,7 @@ func copyAsRoot(orig, dest string, isExec bool) {
 		log.Info().
 			Str("dest", dest).
 			Msg("> About to write (with sudo):\n>ok? [y/N]")
-		fmt.Scanln(&confirm)
+		_, _ = fmt.Scanln(&confirm)
 		if confirm != "y" {
 			log.Warn().Msg("Aborting")
 			os.Exit(1)

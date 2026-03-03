@@ -39,7 +39,7 @@ func New() (*Menshen, error) {
 
 	err := storage.InitAppStorage()
 	if err != nil {
-		return nil, fmt.Errorf("Could not initialize bitmask-core storage: %v", err)
+		return nil, fmt.Errorf("could not initialize bitmask-core storage: %v", err)
 	}
 
 	cfg, err := bootstrap.NewConfigFromURL(config.ProviderConfig.APIURL)

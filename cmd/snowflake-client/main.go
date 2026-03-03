@@ -4,7 +4,6 @@ package main
 import (
 	"flag"
 	"io"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
@@ -14,7 +13,6 @@ import (
 	"strings"
 	"sync"
 	"syscall"
-	"time"
 
 	pt "git.torproject.org/pluggable-transports/goptlib.git"
 	//sf "git.torproject.org/pluggable-transports/snowflake.git/client/lib"
@@ -34,15 +32,15 @@ func socksAcceptLoop(ln *pt.SocksListener, tongue sf.Tongue, shutdown chan struc
 	for {
 		conn, err := ln.AcceptSocks()
 		if err != nil {
-			if err, ok := err.(net.Error); ok && err.Temporary() {
+			if _, ok := err.(net.Error); ok {
 				continue
 			}
 			log.Printf("SOCKS accept error: %s", err)
 			break
 		}
 		log.Printf("SOCKS accepted: %v", conn.Req)
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			defer wg.Done()
 			defer conn.Close()
 
@@ -59,7 +57,6 @@ func socksAcceptLoop(ln *pt.SocksListener, tongue sf.Tongue, shutdown chan struc
 					log.Printf("handler error: %s", err)
 				}
 				close(handler)
-				return
 
 			}()
 			select {
@@ -68,7 +65,6 @@ func socksAcceptLoop(ln *pt.SocksListener, tongue sf.Tongue, shutdown chan struc
 			case <-handler:
 				log.Println("Handler ended")
 			}
-			return
 		}()
 	}
 }
@@ -114,7 +110,7 @@ func main() {
 	// buffer is full.
 	// https://bugs.torproject.org/26360
 	// https://bugs.torproject.org/25600#comment:14
-	var logOutput = ioutil.Discard
+	var logOutput = io.Discard
 	if *logFilename != "" {
 		if *logToStateDir || *oldLogToStateDir {
 			stateDir, err := pt.MakeStateDir()
@@ -142,7 +138,6 @@ func main() {
 
 	iceServers := parseIceServers(*iceServersCommas)
 	// chooses a random subset of servers from inputs
-	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(iceServers), func(i, j int) {
 		iceServers[i], iceServers[j] = iceServers[j], iceServers[i]
 	})
@@ -172,7 +167,7 @@ func main() {
 		log.Fatal(err)
 	}
 	if ptInfo.ProxyURL != nil {
-		pt.ProxyError("proxy is not supported")
+		_ = pt.ProxyError("proxy is not supported")
 		os.Exit(1)
 	}
 	listeners := make([]net.Listener, 0)
@@ -184,7 +179,7 @@ func main() {
 			// TODO: Be able to recover when SOCKS dies.
 			ln, err := pt.ListenSocks("tcp", "127.0.0.1:0")
 			if err != nil {
-				pt.CmethodError(methodName, err.Error())
+				_ = pt.CmethodError(methodName, err.Error())
 				break
 			}
 			log.Printf("Started SOCKS listener at %v.", ln.Addr())
@@ -192,7 +187,7 @@ func main() {
 			pt.Cmethod(methodName, ln.Version(), ln.Addr())
 			listeners = append(listeners, ln)
 		default:
-			pt.CmethodError(methodName, "no such method")
+			_ = pt.CmethodError(methodName, "no such method")
 		}
 	}
 	pt.CmethodsDone()
@@ -204,7 +199,7 @@ func main() {
 		// This environment variable means we should treat EOF on stdin
 		// just like SIGTERM: https://bugs.torproject.org/15435.
 		go func() {
-			if _, err := io.Copy(ioutil.Discard, os.Stdin); err != nil {
+			if _, err := io.Copy(io.Discard, os.Stdin); err != nil {
 				log.Printf("calling io.Copy(ioutil.Discard, os.Stdin) returned error: %v", err)
 			}
 			log.Printf("synthesizing SIGTERM because of stdin close")

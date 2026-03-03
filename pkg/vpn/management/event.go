@@ -32,15 +32,8 @@ var eventSep = []byte(":")
 var fieldSep = []byte(",")
 var byteCountEventKW = []byte("BYTECOUNT")
 var byteCountCliEventKW = []byte("BYTECOUNT_CLI")
-var clientEventKW = []byte("CLIENT")
 var echoEventKW = []byte("ECHO")
-var fatalEventKW = []byte("FATAL")
 var holdEventKW = []byte("HOLD")
-var infoEventKW = []byte("INFO")
-var logEventKW = []byte("LOG")
-var needOkEventKW = []byte("NEED-OK")
-var needStrEventKW = []byte("NEED-STR")
-var passwordEventKW = []byte("PASSWORD")
 var stateEventKW = []byte("STATE")
 
 type Event interface {
@@ -229,10 +222,10 @@ func (e *EchoEvent) String() string {
 // on a VPN connection.
 //
 // For OpenVPN *servers*, events are emitted for each client and the method
-// ClientId identifies thet client.
+// ClientID identifies thet client.
 //
 // For other OpenVPN modes, events are emitted only once per interval for the
-// single connection managed by the target process, and ClientId returns
+// single connection managed by the target process, and ClientID returns
 // the empty string.
 type ByteCountEvent struct {
 	hasClient bool
@@ -242,7 +235,7 @@ type ByteCountEvent struct {
 	bodyParts [][]byte
 }
 
-func (e *ByteCountEvent) ClientId() string {
+func (e *ByteCountEvent) ClientID() string {
 	if !e.hasClient {
 		return ""
 	}
@@ -276,7 +269,7 @@ func (e *ByteCountEvent) BytesOut() int {
 
 func (e *ByteCountEvent) String() string {
 	if e.hasClient {
-		return fmt.Sprintf("Client %s: %d in, %d out", e.ClientId(), e.BytesIn(), e.BytesOut())
+		return fmt.Sprintf("Client %s: %d in, %d out", e.ClientID(), e.BytesIn(), e.BytesOut())
 	} else {
 		return fmt.Sprintf("%d in, %d out", e.BytesIn(), e.BytesOut())
 	}

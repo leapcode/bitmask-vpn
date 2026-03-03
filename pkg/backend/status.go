@@ -75,7 +75,7 @@ type connectionCtx struct {
 	cfg               *config.Config
 }
 
-func (c *connectionCtx) toJson() ([]byte, error) {
+func (c *connectionCtx) toJSON() ([]byte, error) {
 	statusMutex.Lock()
 	if c.bm != nil {
 		transport := c.bm.GetTransport()
@@ -124,11 +124,8 @@ func (c connectionCtx) updateStatus() {
 
 	go func() {
 		snowflakeCh := c.bm.GetSnowflakeCh()
-		for {
-			select {
-			case event := <-snowflakeCh:
-				setSnowflakeStatus(event)
-			}
+		for event := range snowflakeCh {
+			setSnowflakeStatus(event)
 		}
 	}()
 
@@ -147,7 +144,7 @@ func (c connectionCtx) updateStatus() {
 				continue
 			}
 			setStatusFromStr(stStr)
-		case _ = <-statusCloseCh:
+		case <-statusCloseCh:
 			log.Debug().
 				Msg("Closing the statusCh reading loop via the statusCloseCh")
 			setStatusFromStr(offStr)

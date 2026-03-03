@@ -18,7 +18,7 @@ package pid
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -33,7 +33,7 @@ import (
 
 var (
 	pidFile           = filepath.Join(config.Path, "systray.pid")
-	AlreadyRunningErr = errors.New("another instance is already running")
+	ErrAlreadyRunning = errors.New("another instance is already running")
 )
 
 func AcquirePID() error {
@@ -44,7 +44,7 @@ func AcquirePID() error {
 	}
 
 	if current != pid && pidRunning(current) {
-		return fmt.Errorf("%w, pid: %d", AlreadyRunningErr, current)
+		return fmt.Errorf("%w, pid: %d", ErrAlreadyRunning, current)
 	}
 
 	return setPID(pid)
@@ -81,7 +81,7 @@ func getPID() (int, error) {
 	}
 	defer file.Close()
 
-	b, err := ioutil.ReadAll(file)
+	b, err := io.ReadAll(file)
 	if err != nil {
 		return 0, err
 	}
@@ -98,7 +98,7 @@ func setPID(pid int) error {
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("%d", pid))
+	_, err = fmt.Fprintf(file, "%d", pid)
 	return err
 }
 

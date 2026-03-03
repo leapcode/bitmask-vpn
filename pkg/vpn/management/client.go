@@ -242,11 +242,12 @@ func (c *MgmtClient) LatestState() (*StateEvent, error) {
 // LatestStatus retrieves the current daemon status information, in the same format as that produced by the OpenVPN --status directive.
 func (c *MgmtClient) LatestStatus(statusFormat StatusFormat) ([][]byte, error) {
 	var cmd []byte
-	if statusFormat == StatusFormatDefault {
+	switch statusFormat {
+	case StatusFormatDefault:
 		cmd = []byte("status")
-	} else if statusFormat == StatusFormatV3 {
+	case StatusFormatV3:
 		cmd = []byte("status 3")
-	} else {
+	default:
 		return nil, fmt.Errorf("Incorrect 'status' format option")
 	}
 	err := c.sendCommand(cmd)
@@ -287,24 +288,6 @@ func (c *MgmtClient) SendPassword(pass string) ([]byte, error) {
 
 func (c *MgmtClient) sendCommand(cmd []byte) error {
 	_, err := c.wr.Write(cmd)
-	if err != nil {
-		return err
-	}
-	_, err = c.wr.Write(newline)
-	return err
-}
-
-// sendCommandPayload can be called after sendCommand for
-// commands that expect a multi-line input payload.
-//
-// The buffer given in 'payload' *must* end with a newline,
-// or else the protocol will be broken.
-func (c *MgmtClient) sendCommandPayload(payload []byte) error {
-	_, err := c.wr.Write(payload)
-	if err != nil {
-		return err
-	}
-	_, err = c.wr.Write(endMessage)
 	if err != nil {
 		return err
 	}

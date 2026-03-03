@@ -108,7 +108,7 @@ func (c *WebRTCPeer) connect(config *webrtc.Configuration, broker *BrokerChannel
 	log.Println(c.id, " connecting...")
 	// TODO: When go-webrtc is more stable, it's possible that a new
 	// PeerConnection won't need to be re-prepared each time.
-	c.preparePeerConnection(config)
+	_ = c.preparePeerConnection(config)
 	answer, err := broker.Negotiate(c.pc.LocalDescription())
 	if err != nil {
 		return err

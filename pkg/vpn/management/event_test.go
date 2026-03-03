@@ -382,7 +382,7 @@ func TestByteCountEvent(t *testing.T) {
 			continue
 		}
 
-		if got, want := bc.ClientId(), testCase.WantClientId; got != want {
+		if got, want := bc.ClientID(), testCase.WantClientId; got != want {
 			t.Errorf("test %d ClientId returned %q; want %q", i, got, want)
 		}
 		if got, want := bc.BytesIn(), testCase.WantBytesIn; got != want {

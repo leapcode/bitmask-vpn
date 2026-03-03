@@ -58,7 +58,6 @@ type Bonafide struct {
 	token             []byte
 	snowflakeCh       chan *snowflake.StatusEvent // only used by the GUI to show the progress (but does not work?)
 	snowflakeProgress int
-	snowflake         bool
 }
 
 type openvpnConfig map[string]interface{}
@@ -155,10 +154,7 @@ func (b *Bonafide) NeedsCredentials() bool {
 	/* try cached */
 	/* TODO cleanup this call - maybe expose getCachedToken instead of relying on empty creds? */
 	_, err := b.auth.getToken("", "")
-	if err != nil {
-		return true
-	}
-	return false
+	return err != nil
 }
 
 func (b *Bonafide) DoLogin(username, password string) (bool, error) {
@@ -233,14 +229,14 @@ func (b *Bonafide) getURL(object string) string {
 				Err(err)
 			return ""
 		}
-		apiUrl, err := url.Parse(u.Hostname())
+		APIURL, err := url.Parse(u.Hostname())
 		if err != nil {
 			log.Debug().
 				Err(err)
 			return ""
 		}
-		apiUrl.Scheme = u.Scheme
-		if link, err := url.JoinPath(apiUrl.String(), certPathv3); err == nil {
+		APIURL.Scheme = u.Scheme
+		if link, err := url.JoinPath(APIURL.String(), certPathv3); err == nil {
 			log.Debug().
 				Str("cert_url", link).
 				Msg("v3 openvpn cert url")
@@ -262,16 +258,13 @@ func (b *Bonafide) watchSnowflakeProgress(ch chan *snowflake.StatusEvent) {
 	// pass to the channel that is observed by the backend
 	log.Debug().Msg("Waiting for snowflake events")
 	go func() {
-		for {
-			select {
-			case evt := <-ch:
-				log.Debug().
-					Str("tag", evt.Tag).
-					Str("progress", fmt.Sprintf("%02d%%", evt.Progress)).
-					Msg("Snowflake progress")
-				b.snowflakeProgress = evt.Progress
-				b.snowflakeCh <- evt
-			}
+		for evt := range ch {
+			log.Debug().
+				Str("tag", evt.Tag).
+				Str("progress", fmt.Sprintf("%02d%%", evt.Progress)).
+				Msg("Snowflake progress")
+			b.snowflakeProgress = evt.Progress
+			b.snowflakeCh <- evt
 		}
 
 	}()
@@ -312,7 +305,7 @@ func (b *Bonafide) maybeInitializeEIP() error {
 		// or just periodically - but we need to modify menshen api to
 		// pass a location parameter.
 		if len(b.gateways.recommended) == 0 {
-			b.fetchGatewaysFromMenshen()
+			_ = b.fetchGatewaysFromMenshen()
 		}
 	}
 	return nil
@@ -357,7 +350,7 @@ func (b *Bonafide) GetLocationLabels(transport string) map[string][]string {
 
 func (b *Bonafide) SetManualGateway(label string) {
 	log.Debug().Str("location", label).Msg("manual location selection")
-	b.gateways.setUserChoice(label)
+	_ = b.gateways.setUserChoice(label)
 }
 
 func (b *Bonafide) SetAutomaticGateway() {
@@ -414,6 +407,9 @@ func (b *Bonafide) fetchGatewaysFromMenshen() error {
 
 	geo := &geoLocation{}
 	dataJSON, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
 	err = json.Unmarshal(dataJSON, &geo)
 	if err != nil {
 		log.Warn().

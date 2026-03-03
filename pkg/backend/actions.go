@@ -25,7 +25,3 @@ func stopVPN() {
 	}
 	setStatus(off)
 }
-
-func getGateway() string {
-	return ctx.bm.GetCurrentGateway()
-}

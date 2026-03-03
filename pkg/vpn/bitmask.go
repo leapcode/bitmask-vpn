@@ -65,25 +65,26 @@ func Init() (*Bitmask, error) {
 
 	var api apiInterface
 	if os.Getenv("API_VERSION") == "5" {
-		config.ProviderConfig.ApiVersion = 5
+		config.ProviderConfig.APIVersion = 5
 		log.Debug().Msg("Enforcing API v5 by env variable")
 	}
 	log.Debug().
-		Int("apiVersion", config.ProviderConfig.ApiVersion).
+		Int("apiVersion", config.ProviderConfig.APIVersion).
 		Msg("Using specific API backend version")
 
 	// here check instead in the api_versions array (if exists)
 	// and then decide if api v5 should be used or v3
-	if config.ProviderConfig.ApiVersion == 5 {
+	switch config.ProviderConfig.APIVersion {
+	case 5:
 		api, err = menshen.New()
 		if err != nil {
 			return nil, err
 		}
-	} else if config.ProviderConfig.ApiVersion == 3 {
+	case 3:
 		api = bonafide.New()
-	} else {
+	default:
 		log.Warn().
-			Int("apiVersion", config.ProviderConfig.ApiVersion).
+			Int("apiVersion", config.ProviderConfig.APIVersion).
 			Msg("ApiVersion of provider was not set correctly. Version 3 and 5 is supported. Using v3 for backwards compatiblity")
 		api = bonafide.New()
 	}
@@ -123,7 +124,7 @@ func Init() (*Bitmask, error) {
 			Msg("Sucessfully wrote OpenVPN CA certificate (hardcoded in the binary, not coming from API)")
 	}
 
-	if config.ProviderConfig.ApiVersion == 5 {
+	if config.ProviderConfig.APIVersion == 5 {
 		cert, err := b.api.GetPemCertificate()
 		if err != nil {
 			return nil, err
@@ -154,7 +155,7 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
-	if config.ProviderConfig.ApiVersion == 5 && len(config.ProviderConfig.STUNServers) != 0 {
+	if config.ProviderConfig.APIVersion == 5 && len(config.ProviderConfig.STUNServers) != 0 {
 		/*
 			Geolocation lookup should be done only once during startup. Changing the country
 			code during runtime is not supported. The VPN must be turn off for the lookup.

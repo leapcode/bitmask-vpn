@@ -3,7 +3,6 @@ package menshen
 import (
 	"errors"
 	"math"
-	"strings"
 	"time"
 
 	ping "github.com/prometheus-community/pro-bing"
@@ -102,8 +101,8 @@ func (m *Menshen) updateLocationQualityMap(transport string) {
 	maxAvgRtt := 0.0
 
 	for location, gateways := range m.gwsByLocation {
-		sum_location := int64(0)
-		counter_location := int64(0)
+		sumLocation := int64(0)
+		counterLocation := int64(0)
 
 		for _, gw := range gateways {
 			stats, err := calcLatency(gw.IPAddr)
@@ -112,20 +111,20 @@ func (m *Menshen) updateLocationQualityMap(transport string) {
 					Err(err).
 					Str("gateway", gw.Host).
 					Msg("Could not calculate latency")
-				sum_location += math.MaxInt64
+				sumLocation += math.MaxInt64
 			} else {
 				log.Trace().
 					Str("location", location).
 					Str("gateway", gw.Host).
 					Int64("rtt ms", stats.AvgRtt.Milliseconds()).
 					Msg("Calculated rtt for gateway")
-				sum_location += stats.AvgRtt.Milliseconds()
+				sumLocation += stats.AvgRtt.Milliseconds()
 			}
-			counter_location += 1
+			counterLocation += 1
 		}
 
-		locationRttAvg := float64(sum_location / counter_location)
-		qualityMap[strings.Title(location)] = locationRttAvg
+		locationRttAvg := float64(sumLocation / counterLocation)
+		qualityMap[location] = locationRttAvg
 
 		if locationRttAvg < minAvgRtt {
 			minAvgRtt = locationRttAvg
@@ -167,8 +166,7 @@ func (m *Menshen) GetLocationLabels(transport string) map[string][]string {
 		_, exist := locationLabels[gw.Host]
 		if !exist {
 			countryCode := getCountryCodeForLocation(gw.Location)
-			// TODO: get rid of strings.Title if menshen supports gateway identifier
-			locationLabels[strings.Title(gw.Location)] = []string{strings.Title(gw.Location), countryCode}
+			locationLabels[gw.Location] = []string{gw.Location, countryCode}
 		}
 	}
 	return locationLabels

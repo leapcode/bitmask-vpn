@@ -46,7 +46,7 @@ func fetchProviderOptsWitBootstrapper(providerURL string) *bitmask.ProviderOpts 
 	apiVersion, _ := strconv.Atoi(providerInfo.APIVersion)
 	name, ok := providerInfo.Name["en"]
 	if !ok {
-		name = fmt.Sprintf("provider_generic")
+		name = "provider_generic"
 	}
 
 	var caCert = []byte{}
@@ -68,10 +68,10 @@ func fetchProviderOptsWitBootstrapper(providerURL string) *bitmask.ProviderOpts 
 	providerOpts := bitmask.ProviderOpts{
 		AppName:         "Bitmask",
 		BinaryName:      "bitmask-vpn",
-		ApiURL:          providerInfo.APIURI,
+		APIURL:          providerInfo.APIURI,
 		ProviderURL:     providerInfo.Domain,
 		TosURL:          providerInfo.TosURL,
-		ApiVersion:      apiVersion,
+		APIVersion:      apiVersion,
 		AskForDonations: providerInfo.AskForDonations,
 		Auth:            "annon",
 		DonateURL:       providerInfo.DonateURL,
@@ -163,7 +163,7 @@ func fetchProviderOptsWithIntroducer(introducerURL string) *bitmask.ProviderOpts
 	apiVersion, _ := strconv.Atoi(providerInfo.APIVersion)
 	name, ok := providerInfo.Name["en"]
 	if !ok {
-		name = fmt.Sprintf("provider_generic")
+		name = "provider_generic"
 	}
 
 	var caCert = []byte{}
@@ -185,10 +185,10 @@ func fetchProviderOptsWithIntroducer(introducerURL string) *bitmask.ProviderOpts
 	providerOpts := bitmask.ProviderOpts{
 		AppName:         "Bitmask",
 		BinaryName:      "bitmask-vpn",
-		ApiURL:          providerInfo.APIURI,
+		APIURL:          providerInfo.APIURI,
 		ProviderURL:     providerInfo.Domain,
 		TosURL:          providerInfo.TosURL,
-		ApiVersion:      apiVersion,
+		APIVersion:      apiVersion,
 		AskForDonations: providerInfo.AskForDonations,
 		Auth:            "annon",
 		DonateURL:       providerInfo.DonateURL,
@@ -202,7 +202,7 @@ func fetchProviderOptsWithIntroducer(introducerURL string) *bitmask.ProviderOpts
 }
 
 func appendOnDiskProviders(providers *Providers) *Providers {
-	provider_files, err := filepath.Glob(filepath.Join(config.Path, "provider_*.json"))
+	providerFiles, err := filepath.Glob(filepath.Join(config.Path, "provider_*.json"))
 	if err != nil {
 		log.Debug().
 			Err(err).
@@ -210,7 +210,7 @@ func appendOnDiskProviders(providers *Providers) *Providers {
 		return providers
 	}
 
-	for _, f := range provider_files {
+	for _, f := range providerFiles {
 		data, err := os.ReadFile(f)
 		if err != nil {
 			log.Debug().

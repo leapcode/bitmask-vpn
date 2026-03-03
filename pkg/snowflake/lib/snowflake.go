@@ -69,6 +69,7 @@ func newSession(snowflakes SnowflakeCollector) (net.PacketConn, *smux.Session, e
 		return nil, nil, err
 	}
 	// Permit coalescing the payloads of consecutive sends.
+	// nolint:staticcheck // SA1019: SetStreamMode is deprecated but no alternative available
 	conn.SetStreamMode(true)
 	// Set the maximum send and receive window sizes to a high number
 	// Removes KCP bottlenecks: https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/issues/40026

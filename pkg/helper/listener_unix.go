@@ -4,13 +4,14 @@
 package helper
 
 import (
-	"github.com/rs/zerolog/log"
 	"net"
 	"os"
 	"path/filepath"
+
+	"github.com/rs/zerolog/log"
 )
 
-func runServer(socketUid, socketGid int) {
+func runServer(socketUID, socketGID int) {
 	socketPath := filepath.Join("/tmp", helperSocket)
 	if err := os.Remove(socketPath); err != nil {
 		log.Warn().
@@ -27,11 +28,11 @@ func runServer(socketUid, socketGid int) {
 		Str("socketPath", socketPath).
 		Msg("created listener")
 	log.Info().
-		Int("socket uid", socketUid).
-		Int("socket gid", socketGid).
+		Int("socket uid", socketUID).
+		Int("socket gid", socketGID).
 		Msg("changing socket ownership")
 
-	if err = os.Chown(socketPath, socketUid, socketGid); err != nil {
+	if err = os.Chown(socketPath, socketUID, socketGID); err != nil {
 		log.Fatal().
 			Err(err).
 			Msg("unable to change owner of socket file")

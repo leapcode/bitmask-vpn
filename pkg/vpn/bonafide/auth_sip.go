@@ -18,7 +18,7 @@ package bonafide
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path"
 	"strings"
@@ -64,7 +64,7 @@ func (a *sipAuthentication) getToken(user, password string) ([]byte, error) {
 	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("TokenErrBadStatus %d", resp.StatusCode)
 	}
-	token, err := ioutil.ReadAll(resp.Body)
+	token, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func getTokenPath() string {
 
 func writeToken(token []byte) {
 	tp := getTokenPath()
-	err := ioutil.WriteFile(tp, token, 0600)
+	err := os.WriteFile(tp, token, 0600)
 	if err != nil {
 		log.Warn().
 			Err(err).
@@ -96,7 +96,7 @@ func readToken() ([]byte, error) {
 			Msg("Could not open token file")
 		return nil, err
 	}
-	token, err := ioutil.ReadAll(f)
+	token, err := io.ReadAll(f)
 	if err != nil {
 		log.Warn().
 			Err(err).
