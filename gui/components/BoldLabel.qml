@@ -12,7 +12,6 @@ Label {
         bold: true
     }
 
-    text: parent.text
     Accessible.name: text
     Accessible.role: Accessible.StaticText
 }

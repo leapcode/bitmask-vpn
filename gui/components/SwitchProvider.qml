@@ -10,6 +10,7 @@ ThemedPage {
     property bool providerSetupInProgress: false
 
     signal configurationCompleted
+    signal setupFinished
 
     onConfigurationCompleted: {
         providerSetupPage.providerSetupInProgress = false;

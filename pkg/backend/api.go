@@ -238,27 +238,45 @@ func InitOptsFromJSON(providerName, providersJSON string) *InitOpts {
 		initOpts.AvailableProviders = append(initOpts.AvailableProviders, p.Provider)
 	}
 
-	// we do the following check as a protection for release builds providers.Data will always
-	// be > 0
-	if len(providers.Data) > 0 {
-		for _, p := range providers.Data {
-			if p.Provider == providerName {
-				log.Info().
-					Str("providerName", providerName).
-					Msg("Selecting provider")
-				initOpts.ProviderOptions = &p
-				return initOpts
-			}
-		}
-		log.Fatal().
-			Str("providerName", providerName).
-			Msg("Provider not found in providers.json")
+	// If no providers configured, return empty initOpts - UI will show provider selection
+	if len(providers.Data) == 0 {
+		log.Info().Msg("No providers configured, returning empty initOpts")
+		return initOpts
 	}
+
+	// If providers exist but no provider name specified, don't select any yet
+	if providerName == "" {
+		log.Info().Msg("No provider selected yet, returning initOpts without selection")
+		return initOpts
+	}
+
+	// Find and select the specified provider
+	for i := range providers.Data {
+		if providers.Data[i].Provider == providerName {
+			log.Info().
+				Str("providerName", providerName).
+				Msg("Selecting provider")
+			initOpts.ProviderOptions = &providers.Data[i]
+			return initOpts
+		}
+	}
+
+	log.Fatal().
+		Str("providerName", providerName).
+		Msg("Provider not found in providers.json")
 	return initOpts
 }
 
 func InitializeBitmaskContext(opts *InitOpts) {
 	log.Info().Msg("Initializing bitmask context")
+
+	// If no provider is configured yet, just initialize minimal context
+	if opts.ProviderOptions == nil {
+		log.Info().Msg("No provider configured yet, initializing minimal context")
+		initializeContext(opts)
+		return
+	}
+
 	bitmask.ConfigureProvider(opts.ProviderOptions)
 
 	initializeContext(opts)

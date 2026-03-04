@@ -61,8 +61,18 @@ Item {
             }
 
             onClicked: {
-                mainView.loadMainView();
-                mainView.setStatusStarting();
+                // If we're in the initial setup flow (from Splash), emit signal to load main view
+                // Otherwise, we're in the main app flow
+                if (root.mainView !== undefined && root.mainView !== null) {
+                    root.mainView.loadMainView();
+                    root.mainView.setStatusStarting();
+                } else {
+                    // Emit signal to parent (SwitchProvider) to notify setup is complete
+                    // StackView.view gives us the StackView, and its parent is the SwitchProvider
+                    if (StackView.view && StackView.view.parent) {
+                        StackView.view.parent.setupFinished();
+                    }
+                }
                 appsettings.setValue("provider", root.ctx.provider);
                 backend.switchOn();
             }

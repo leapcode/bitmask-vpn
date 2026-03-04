@@ -27,9 +27,28 @@ func initializeContext(opts *InitOpts) {
 	// in the combobox.
 
 	// if ctx is not nil then close the signal channel to break up the status update loop
-	if ctx != nil {
+	if ctx != nil && ctx.bm != nil {
 		close(ctx.bm.GetStatusCloseCh())
 	}
+
+	// If no provider is configured yet, create minimal context
+	if opts.ProviderOptions == nil {
+		config.ConfigureLogger()
+		cfg := config.ParseConfig()
+		ctx = &connectionCtx{
+			AppName:      "Bitmask",
+			Provider:     "",
+			Providers:    opts.AvailableProviders,
+			DonateDialog: false,
+			Version:      version.Version(),
+			Status:       st,
+			IsReady:      false,
+			cfg:          cfg,
+		}
+		go trigger(OnStatusChanged)
+		return
+	}
+
 	ctx = &connectionCtx{
 		AppName:         opts.ProviderOptions.AppName,
 		Provider:        opts.ProviderOptions.Provider,

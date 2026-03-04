@@ -191,6 +191,35 @@ Page {
         if (!isEmpty(root.error)) {
             return
         }
+        
+        // Debug logging to trace the issue
+        console.debug("loadMainViewWhenReady called");
+        console.debug("hasNoProvider: " + hasNoProvider);
+        console.debug("ctx: " + ctx);
+        if (ctx) {
+            console.debug("ctx.providers: " + ctx.providers);
+            if (ctx.providers) {
+                console.debug("ctx.providers.length: " + ctx.providers.length);
+            }
+        }
+        
+        // If no provider configured, show provider selection immediately
+        // Check hasNoProvider first (from C++ context property) - this is the most reliable check
+        if (hasNoProvider === true) {
+            console.debug("No provider configured (hasNoProvider=true), loading SwitchProvider");
+            splashTimer.stop()
+            loader.source = "components/SwitchProvider.qml"
+            return
+        }
+        
+        // Fallback: check ctx.providers if ctx is available
+        if (ctx && ctx.providers && ctx.providers.length === 0) {
+            console.debug("No provider configured (ctx.providers is empty), loading SwitchProvider");
+            splashTimer.stop()
+            loader.source = "components/SwitchProvider.qml"
+            return
+        }
+        
         if (ctx && isTrue(ctx.isReady) || qmlDebug) {
             splashTimer.stop()
             if (hasMotd()) {
@@ -228,12 +257,18 @@ Page {
     }
 
     function isEmptyMotd(motd) {
-        let m = JSON.parse(motd)
-        let first = m[0]
-        if (first == undefined) {
+        if (!motd || motd === "") {
             return true
         }
-        return isEmpty(first.text)
+        try {
+            let m = JSON.parse(motd)
+            let first = m[0]
+            if (first == undefined) {
+                return true
+            }
+            return isEmpty(first.text)
+        } catch (e) {
+            return true
+        }
     }
-
 }

@@ -156,6 +156,17 @@ int main(int argc, char **argv) {
     providers->loadJson(providerJsonBytes);
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
+    appSettings *staticSettings = new appSettings;
+    
+    /* Check if no providers configured (empty providers.json or empty providers array) */
+    bool hasNoProvider = providersInfo.toArray().isEmpty() && defaultProvider.toString().isEmpty();
+    
+    /* Check if there's a saved provider in settings - if so, don't show provider selection */
+    QString savedProvider = staticSettings->value("provider", "").toString();
+    if (!savedProvider.isEmpty()) {
+        hasNoProvider = false;
+    }
+    
     QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "Bitmask");
 
     QApplication::setApplicationName(appName);
@@ -262,7 +273,6 @@ int main(int argc, char **argv) {
         app.setWindowIcon(QIcon(":/vendor/bitmask.svg"));
     }
 
-    appSettings *staticSettings = new appSettings;
     QString locale = staticSettings->value("locale", QLocale().name()).toString();
     staticSettings->setValue("locale", locale);
 
@@ -298,6 +308,7 @@ int main(int argc, char **argv) {
     ctx->setContextProperty("systrayAvailable", availableSystray);
     ctx->setContextProperty("qmlDebug", debug == "1");
     ctx->setContextProperty("locales", getAvailableLocales());
+    ctx->setContextProperty("hasNoProvider", hasNoProvider);
 
     //XXX we're doing configuration via config file, but this is a mechanism
     //to change to Dark Theme if desktop has it.

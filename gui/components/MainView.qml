@@ -44,12 +44,11 @@ Page {
                             return false;
                         }
                     } else if (model.text == qsTr("Switch Provider")) {
-                        if (ctx.appName != qsTr("Bitmask")) {
+                        if (ctx && ctx.appName && ctx.appName != qsTr("Bitmask")) {
                             return false;
                         }
-                    } else {
-                        return true;
                     }
+                    return true;
                 }
                 highlighted: ListView.isCurrentItem
                 icon.color: "transparent"
