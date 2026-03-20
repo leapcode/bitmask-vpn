@@ -98,7 +98,7 @@ Page {
     }
 
     function getUpgradeText() {
-        return qsTr("There is a newer version available. ") + qsTr("Make sure to <a href=\"https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md\">uninstall</a> the previous one before running the new installer.")
+        return qsTr("There is a newer version available.") + qsTr("Make sure to <a href=\"https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/uninstall.md\">uninstall</a> the previous one before running the new installer.")
     }
 
     function getUpgradeLink() {
