@@ -347,7 +347,7 @@ github.com/pmezard/go-difflib/difflib
 # github.com/prometheus-community/pro-bing v0.4.0
 ## explicit; go 1.19
 github.com/prometheus-community/pro-bing
-# github.com/quic-go/quic-go v0.47.0
+# github.com/quic-go/quic-go v0.48.2
 ## explicit; go 1.22
 github.com/quic-go/quic-go
 github.com/quic-go/quic-go/internal/ackhandler
