@@ -27,7 +27,8 @@ Clone this repo, install dependencies and build the application. Dependencies as
 ```
 git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
 export PROVIDER=riseup
-sudo make depends  # do not use sudo in osx 
+export LRELEASE=/usr/lib/qt6/bin/lrelease # linux - qt6-tools has /usr/lib/qt6/bin/lrelease
+sudo make depends  # do not use sudo in osx
 make vendor
 make build
 sudo build/qt/release/riseup-vpn --install-helpers # on Linux and Mac
@@ -63,7 +64,7 @@ debuild -us -uc
 sudo dpkg -i ../riseup-vpn*.deb
 ```
 
-You can also run 
+You can also run
 ```
 PROVIDER=riseup make vendor
 PROVIDER=riseup QMAKE=qmake6 make package_deb
@@ -93,7 +94,7 @@ Clone this repo, install dependencies and build the application. Dependencies as
 
 ```
 git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
-sudo make depends  # do not use sudo in osx 
+sudo make depends  # do not use sudo in osx
 PROVIDER=riseup make vendor
 make build
 ```
@@ -119,7 +120,7 @@ You need to have installed and added to your user PATH (mentioned version tested
 2) QT (>= Qt6.6)
 3) QtIFW (>= QtIFW-4.0.0)
 4) Cygwin64 (>= 2.905 64 bit)
-5) Using Cygwin `Package Select` window install `python3` and `make` packages. 
+5) Using Cygwin `Package Select` window install `python3` and `make` packages.
 
 **Note:** for \#5 you don't need to add packages to PATH they will available in `cygwin` after installation.
 
@@ -131,7 +132,7 @@ git clone git@0xacab.org:leap/bitmask-vpn.git && cd bitmask-vpn
 #### Build
 Build script uses a symbolic link in one of the stages. Unfortunately Cygwin can't create native symlink from local non   
 admin user due to windows security restriction. To avoid this issue we need to call next target from cygwin terminal as   
-Administrator. This need to be done only once. 
+Administrator. This need to be done only once.
 ```bash
 make relink_vendor
 ```
