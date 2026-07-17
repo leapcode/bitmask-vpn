@@ -9,7 +9,8 @@ class appSettings : public QSettings {
 
 public:
   explicit appSettings(QObject *parent = 0)
-      : QSettings(QSettings::UserScope,
+      : QSettings(QSettings::IniFormat,
+                  QSettings::UserScope,
                   QApplication::instance()->organizationName(),
                   QApplication::instance()->applicationName(), parent) {}
   Q_INVOKABLE inline void setValue(const QString &key, const QVariant &value) {
