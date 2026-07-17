@@ -202,24 +202,29 @@ Page {
                 console.debug("ctx.providers.length: " + ctx.providers.length);
             }
         }
-        
+
         // If no provider configured, show provider selection immediately
         // Check hasNoProvider first (from C++ context property) - this is the most reliable check
-        if (hasNoProvider === true) {
+        // Use truthy check since hasNoProvider from C++ might be a variant/bool
+        if (hasNoProvider) {
             console.debug("No provider configured (hasNoProvider=true), loading SwitchProvider");
             splashTimer.stop()
-            loader.source = "components/SwitchProvider.qml"
+            loader.setSource("SwitchProvider.qml", {
+                "isInitialSetup": true
+            })
             return
         }
-        
+
         // Fallback: check ctx.providers if ctx is available
         if (ctx && ctx.providers && ctx.providers.length === 0) {
             console.debug("No provider configured (ctx.providers is empty), loading SwitchProvider");
             splashTimer.stop()
-            loader.source = "components/SwitchProvider.qml"
+            loader.setSource("SwitchProvider.qml", {
+                "isInitialSetup": true
+            })
             return
         }
-        
+
         if (ctx && isTrue(ctx.isReady) || qmlDebug) {
             splashTimer.stop()
             if (hasMotd()) {

@@ -8,14 +8,44 @@ ThemedPage {
     property string providerName
     property bool useCircumvention: false
     property bool providerSetupInProgress: false
+    property var parentStackView: null
+    property bool isInitialSetup: false
+    property bool isSwitchProvider: true
 
     signal configurationCompleted
     signal setupFinished
+
+    Component.onCompleted: {
+        console.log("[SwitchProvider] Component completed - isSwitchProvider:", isSwitchProvider);
+    }
 
     onConfigurationCompleted: {
         providerSetupPage.providerSetupInProgress = false;
         stackView.push("ProviderSetupComplete.qml");
         pageIndicatorAndNavigationButtonContainer.visible = false;
+    }
+
+    onSetupFinished: {
+        console.log("[SwitchProvider] Setup finished, returning to MainView");
+        if (parentStackView !== null) {
+            parentStackView.pop()
+        } else {
+            loader.setSource("MainView.qml")
+        }
+    }
+
+    header: Header {
+        forceInitialVisibility: true
+        isInitialSetup: providerSetupPage.isInitialSetup
+        isSwitchProvider: providerSetupPage.isSwitchProvider
+        onBackToMainViewRequested: {
+            console.log("[SwitchProvider] Back to MainView requested");
+            if (parentStackView !== null) {
+                parentStackView.pop()
+            } else {
+                loader.setSource("MainView.qml")
+            }
+        }
     }
 
     StackView {
@@ -66,7 +96,17 @@ ThemedPage {
                 opacity: backButton.pressed ? 0.75 : 1.0
             }
             enabled: stackView.depth > 1
-            onClicked: stackView.pop()
+            onClicked: {
+                if (stackView.depth >= 4) {
+                    if (providerSetupPage.parentStackView) {
+                        providerSetupPage.parentStackView.pop();
+                    } else {
+                        loader.source = "components/MainView.qml";
+                    }
+                } else {
+                    stackView.pop();
+                }
+            }
             anchors {
                 leftMargin: 4
                 bottomMargin: 2

@@ -22,6 +22,7 @@ public:
 signals:
 
     void jsonChanged(QString json);
+    void providerSetupComplete();
 
 };
 

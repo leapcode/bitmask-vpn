@@ -60,6 +60,11 @@ func setError(err string) {
 }
 
 func SwitchOn() {
+	if ctx == nil || ctx.bm == nil {
+		log.Error().Msg("Cannot switch on: backend not initialized")
+		setError("backend_not_initialized")
+		return
+	}
 	go setStatus(starting)
 	go startVPN()
 }

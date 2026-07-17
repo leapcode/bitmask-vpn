@@ -99,6 +99,9 @@ public:
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
     Q_INVOKABLE QByteArray getJson();
 
+signals:
+    void providerSetupComplete();
+
 private:
     QJsonValue genJson(QJsonTreeItem *) const;
     QJsonTreeItem * mRootItem;

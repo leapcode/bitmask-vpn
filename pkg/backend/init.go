@@ -108,6 +108,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 			Err(err).
 			Msg("Could not initialize bitmask")
 		errCh <- err.Error()
+		return
 	}
 
 	ctx.bm = b
@@ -135,6 +136,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 		errCh <- "nopolkit"
 	}
 	ctx.IsReady = true
+	go trigger(OnProviderSetupComplete)
 }
 
 // transfer initialization options from the config json to the config object

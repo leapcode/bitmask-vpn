@@ -45,6 +45,11 @@ ApplicationWindow {
     }
 
     signal openDonateDialog
+    signal setupFinished
+
+    onSetupFinished: {
+        loader.source = "components/MainView.qml";
+    }
 
     FontLoader {
         id: lightFont
@@ -75,16 +80,6 @@ ApplicationWindow {
         id: loader
         asynchronous: true
         anchors.fill: parent
-        onLoaded: {
-            // When SwitchProvider is loaded, connect its setupFinished signal
-            if (loader.source.toString().indexOf("SwitchProvider.qml") !== -1 && loader.item) {
-                console.debug("SwitchProvider loaded, connecting setupFinished signal");
-                loader.item.setupFinished.connect(function() {
-                    console.debug("setupFinished signal received, loading MainView");
-                    loader.source = "components/MainView.qml";
-                });
-            }
-        }
     }
 
     Loader {

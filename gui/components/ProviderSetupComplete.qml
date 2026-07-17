@@ -8,6 +8,15 @@ import "../themes/themes.js" as Theme
 Item {
     id: providerSetupComplete
 
+    property bool isBackendReady: false
+
+    Connections {
+        target: jsonModel
+        function onProviderSetupComplete() {
+            isBackendReady = true;
+        }
+    }
+
     Rectangle {
         id: pageHeader
         color: "transparent"
@@ -49,6 +58,7 @@ Item {
             anchors.top: needCircumventionMsg.bottom
             anchors.topMargin: 180
             display: AbstractButton.IconOnly
+            enabled: isBackendReady
             Accessible.name: qsTr("Turn on")
             Accessible.role: Accessible.Button
             HoverHandler {
@@ -61,20 +71,13 @@ Item {
             }
 
             onClicked: {
-                // If we're in the initial setup flow (from Splash), emit signal to load main view
-                // Otherwise, we're in the main app flow
-                if (root.mainView !== undefined && root.mainView !== null) {
-                    root.mainView.loadMainView();
-                    root.mainView.setStatusStarting();
-                } else {
-                    // Emit signal to parent (SwitchProvider) to notify setup is complete
-                    // StackView.view gives us the StackView, and its parent is the SwitchProvider
-                    if (StackView.view && StackView.view.parent) {
-                        StackView.view.parent.setupFinished();
-                    }
+                if (!isBackendReady) {
+                    console.debug("Backend not ready yet, cannot connect");
+                    return;
                 }
                 appsettings.setValue("provider", root.ctx.provider);
                 backend.switchOn();
+                providerSetupPage.setupFinished();
             }
         }
     }

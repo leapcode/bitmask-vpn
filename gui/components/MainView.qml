@@ -38,18 +38,6 @@ Page {
             delegate: ItemDelegate {
                 width: parent.width
                 text: model.text
-                visible: {
-                    if (model.text == qsTr("Donate")) {
-                        if (!isDonationService) {
-                            return false;
-                        }
-                    } else if (model.text == qsTr("Switch Provider")) {
-                        if (ctx && ctx.appName && ctx.appName != qsTr("Bitmask")) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
                 highlighted: ListView.isCurrentItem
                 icon.color: "transparent"
                 icon.source: model.icon
@@ -102,13 +90,32 @@ Page {
             text: qsTr("Switch Provider")
             icon: "../resources/switch_provider.svg"
             triggered: function () {
-                stackView.push("SwitchProvider.qml");
+                stackView.push("SwitchProvider.qml", {
+                    "isSwitchProvider": true,
+                    "parentStackView": stackView
+                });
+            }
+        }
+        Component.onCompleted: {
+            // remove Donate button if donation service is not available
+            if (!isDonationService) {
+                navModel.remove(1)
+            }
+            // remove Switch Provider button when no Bitmask
+            if (ctx && ctx.appName && ctx.appName != qsTr("Bitmask")) {
+                navModel.remove(5)
             }
         }
     } // end listmodel
 
     header: Header {
         id: header
+        visible: {
+            if (stackView.currentItem && stackView.currentItem.isSwitchProvider) {
+                return false;
+            }
+            return stackView.depth > 1 || forceInitialVisibility;
+        }
     }
 
     Keys.onPressed: {

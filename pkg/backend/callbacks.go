@@ -31,10 +31,12 @@ var callbackMutex sync.Mutex
 // be interested in subscribing to. You cannot subscribe to an event that is
 // not listed here.
 type Events struct {
-	OnStatusChanged string
+	OnStatusChanged         string
+	OnProviderSetupComplete string
 }
 
 const OnStatusChanged string = "OnStatusChanged"
+const OnProviderSetupComplete string = "OnProviderSetupComplete"
 
 // subscribe registers a callback from C-land.
 // This callback needs to be passed as a void* C function pointer.

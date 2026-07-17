@@ -31,6 +31,12 @@ void onStatusChanged() {
     free(ctx);
 }
 
+void onProviderSetupComplete() {
+    char *ctx = RefreshContext();
+    emit qw->providerSetupComplete();
+    free(ctx);
+}
+
 std::string getEnv(std::string const& key)
 {
     char const* val = getenv(key.c_str());
@@ -156,22 +162,28 @@ int main(int argc, char **argv) {
     providers->loadJson(providerJsonBytes);
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
-    appSettings *staticSettings = new appSettings;
-    
-    /* Check if no providers configured (empty providers.json or empty providers array) */
-    bool hasNoProvider = providersInfo.toArray().isEmpty() && defaultProvider.toString().isEmpty();
-    
-    /* Check if there's a saved provider in settings - if so, don't show provider selection */
-    QString savedProvider = staticSettings->value("provider", "").toString();
-    if (!savedProvider.isEmpty()) {
-        hasNoProvider = false;
-    }
     
     QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "Bitmask");
 
     QApplication::setApplicationName(appName);
     QApplication::setOrganizationDomain(QString("leap.se"));
     QApplication::setOrganizationName(QString("leap"));
+
+    /* Check if no providers configured (empty providers.json or empty providers array) */
+
+    qDebug() << "Default Provider: " + defaultProvider.toString();
+    bool hasNoProvider = defaultProvider.toString().isEmpty();
+    
+    /* Initialize settings AFTER organization and application names are set */
+    appSettings *staticSettings = new appSettings;
+    
+    /* Check if there's a saved provider in settings - if so, don't show provider selection */
+    QString savedProvider = staticSettings->value("provider", "").toString();
+    qDebug() << "Qt Saved Provider: " + savedProvider;
+    if (!savedProvider.isEmpty()) {
+        hasNoProvider = false;
+    }
+    qDebug() << "Qt App Settings filepath: " + staticSettings->fileName();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(
@@ -323,6 +335,10 @@ int main(int argc, char **argv) {
         model->loadJson(js.toUtf8());
     });
 
+    QObject::connect(qw, &QJsonWatch::providerSetupComplete, [model]() {
+        emit model->providerSetupComplete();
+    });
+
     QObject::connect(&backend, &Backend::localeChanged, [&app, &translator, &engine, &staticSettings](QString locale) {
         staticSettings->setValue("locale", locale);
 
@@ -341,6 +357,11 @@ int main(int argc, char **argv) {
     const char *stCh = "OnStatusChanged";
     GoString statusChangedEvt = {stCh, (long int)strlen(stCh)};
     SubscribeToEvent(statusChangedEvt, (void *)onStatusChanged);
+
+    /* register providerSetupComplete callback with CGO */
+    const char *provSetup = "OnProviderSetupComplete";
+    GoString providerSetupEvt = {provSetup, (long int)strlen(provSetup)};
+    SubscribeToEvent(providerSetupEvt, (void *)onProviderSetupComplete);
 
     /* we send json as bytes because it breaks as a simple string */
     QString QProvidersJSON(providers->json().toJson(QJsonDocument::Compact));
