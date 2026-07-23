@@ -14,6 +14,8 @@ HEADERS += \
 
 LIBS += -L../lib -lgoshim -lpthread
 
+QT += concurrent
+
 RESOURCES += tests/tests.qrc
 
 DESTDIR = build

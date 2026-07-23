@@ -211,7 +211,7 @@ type InitOpts struct {
 	UDP                bool
 	DisableAutostart   bool
 	StartVPN           string
-	AvailableProviders []string
+	AvailableProviders []ProviderItem
 }
 
 // InitOptsFromJSON initializes the provider configuration (InitOpts) struct. It is
@@ -240,7 +240,10 @@ func InitOptsFromJSON(providerName, providersJSON string) *InitOpts {
 	}
 
 	for _, p := range providers.Data {
-		initOpts.AvailableProviders = append(initOpts.AvailableProviders, p.Provider)
+		initOpts.AvailableProviders = append(initOpts.AvailableProviders, ProviderItem{
+			ID:   p.Provider,
+			Name: p.DisplayName,
+		})
 	}
 
 	// If no providers configured, return empty initOpts - UI will show provider selection

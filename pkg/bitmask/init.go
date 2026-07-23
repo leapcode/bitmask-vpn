@@ -29,7 +29,8 @@ type ProviderInfo struct {
 }
 
 type ProviderOpts struct {
-	Provider             string   `json:"name"`
+	Provider             string   `json:"provider"`
+	DisplayName          string   `json:"name"`
 	AppName              string   `json:"applicationName"`
 	BinaryName           string   `json:"binaryName"`
 	Auth                 string   `json:"auth"`

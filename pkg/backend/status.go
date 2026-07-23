@@ -26,6 +26,14 @@ const (
 // if we ever switch again to a provider-agnostic app, we should keep a map here.
 var ctx *connectionCtx
 
+// ProviderItem is a selectable provider entry exposed to the UI. ID is the
+// canonical provider identifier (the INI section header, e.g. "coopvpn"); Name
+// is the display name shown to the user (e.g. "CoopVPN").
+type ProviderItem struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 // these mutexes protect setting and updating the global status in this go backend
 var statusMutex sync.Mutex
 var updateMutex sync.Mutex
@@ -36,43 +44,44 @@ var updateMutex sync.Mutex
 // them.
 
 type connectionCtx struct {
-	AppName           string              `json:"appName"`
-	Provider          string              `json:"provider"`
-	TosURL            string              `json:"tosURL"`
-	HelpURL           string              `json:"helpURL"`
-	AskForDonations   bool                `json:"askForDonations"`
-	DonateDialog      bool                `json:"donateDialog"`
-	DonateURL         string              `json:"donateURL"`
-	LoginDialog       bool                `json:"loginDialog"`
-	LoginOk           bool                `json:"loginOk"`
-	Version           string              `json:"version"`
-	Errors            string              `json:"errors"`
-	Status            status              `json:"status"`
-	Locations         map[string]float64  `json:"locations"`
-	Providers         []string            `json:"providers"`
-	LocationLabels    map[string][]string `json:"locationLabels"`
-	CurrentGateway    string              `json:"currentGateway"`
-	CurrentLocation   string              `json:"currentLocation"`
-	CurrentCountry    string              `json:"currentCountry"`
-	BestLocation      string              `json:"bestLocation"`
-	Transport         string              `json:"transport"`
-	UseUDP            bool                `json:"udp"`
-	OffersUDP         bool                `json:"offersUdp"`
-	ManualLocation    bool                `json:"manualLocation"`
-	IsReady           bool                `json:"isReady"`
-	CanUpgrade        bool                `json:"canUpgrade"`
-	Motd              string              `json:"motd"`
-	HasTor            bool                `json:"hasTor"`
-	UseSnowflake      bool                `json:"snowflake"`
-	SnowflakeProgress int                 `json:"snowflakeProgress"`
-	SnowflakeTag      string              `json:"snowflakeTag"`
-	OffersObfs4       bool                `json:"offersObfs4"`
-	OffersQUIC        bool                `json:"offersQuic"`
-	OffersKCP         bool                `json:"offersKcp"`
-	OffersHopping     bool                `json:"offersHopping"`
-	bm                bitmask.Bitmask
-	autostart         bitmaskAutostart.Autostart
-	cfg               *config.Config
+	AppName             string              `json:"appName"`
+	Provider            string              `json:"provider"`
+	ProviderDisplayName string              `json:"providerDisplayName"`
+	TosURL              string              `json:"tosURL"`
+	HelpURL             string              `json:"helpURL"`
+	AskForDonations     bool                `json:"askForDonations"`
+	DonateDialog        bool                `json:"donateDialog"`
+	DonateURL           string              `json:"donateURL"`
+	LoginDialog         bool                `json:"loginDialog"`
+	LoginOk             bool                `json:"loginOk"`
+	Version             string              `json:"version"`
+	Errors              string              `json:"errors"`
+	Status              status              `json:"status"`
+	Locations           map[string]float64  `json:"locations"`
+	Providers           []ProviderItem      `json:"providers"`
+	LocationLabels      map[string][]string `json:"locationLabels"`
+	CurrentGateway      string              `json:"currentGateway"`
+	CurrentLocation     string              `json:"currentLocation"`
+	CurrentCountry      string              `json:"currentCountry"`
+	BestLocation        string              `json:"bestLocation"`
+	Transport           string              `json:"transport"`
+	UseUDP              bool                `json:"udp"`
+	OffersUDP           bool                `json:"offersUdp"`
+	ManualLocation      bool                `json:"manualLocation"`
+	IsReady             bool                `json:"isReady"`
+	CanUpgrade          bool                `json:"canUpgrade"`
+	Motd                string              `json:"motd"`
+	HasTor              bool                `json:"hasTor"`
+	UseSnowflake        bool                `json:"snowflake"`
+	SnowflakeProgress   int                 `json:"snowflakeProgress"`
+	SnowflakeTag        string              `json:"snowflakeTag"`
+	OffersObfs4         bool                `json:"offersObfs4"`
+	OffersQUIC          bool                `json:"offersQuic"`
+	OffersKCP           bool                `json:"offersKcp"`
+	OffersHopping       bool                `json:"offersHopping"`
+	bm                  bitmask.Bitmask
+	autostart           bitmaskAutostart.Autostart
+	cfg                 *config.Config
 }
 
 func (c *connectionCtx) toJSON() ([]byte, error) {

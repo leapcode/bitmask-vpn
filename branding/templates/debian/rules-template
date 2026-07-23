@@ -11,7 +11,13 @@ export DH_GOLANG_EXCLUDES := vendor packages tools cmd/bitmask-helper cmd/bitmas
 
 export PATH := $(shell qmake6 -query "QT_INSTALL_BINS"):$(PATH)
 
-export PROVIDER=${name}
+# Provider configuration for the in-chroot build. Exactly one of PROVIDER
+# (single) or PROVIDERS (multi, comma-separated) is set by generate-debian.
+# DEFAULT_PROVIDER is optional: a provider id, or empty to trigger the
+# provider-setup UI on app start.
+${providerExport}
+${providersExport}
+${defaultProviderExport}
 export VENDOR_PATH=providers
 
 #dh_golang doesn't do this for you

@@ -46,7 +46,7 @@ std::string getEnv(std::string const& key)
 QString getProviderConfig(QJsonValue info, QString provider, QString key, QString defaultValue) {
     for (auto p: info.toArray()) {
         QJsonObject item = p.toObject();
-        if (item["name"].toString().toLower() == provider.toLower() && item[key].toString() != "") {
+        if (item["provider"].toString() == provider && item[key].toString() != "") {
             return item[key].toString();
         }
     }

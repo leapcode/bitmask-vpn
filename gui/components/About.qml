@@ -71,7 +71,7 @@ ThemedPage {
 
     function getText() {
         var _name = ctx ? ctx.appName : "vpn"
-        var _provider = ctx ? ctx.provider : "unknown"
+        var _provider = ctx ? ctx.providerDisplayName : "unknown"
         var _donateURL = ctx ? ctx.donateURL : ""
         var _tosURL = ctx ? ctx.tosURL : "…"
         var _donateTXT = ""
@@ -80,9 +80,9 @@ ThemedPage {
             _donateTXT = qsTr(
                         "<p>This service is paid for entirely by donations from users like you. <a href=\"%1\">Please donate</a>.</p>").arg(_donateURL)
         }
-        if (_provider == "Riseup") {
+        if (ctx && ctx.provider == "riseup") {
             // XXX this is a quick workaround. About-us should be parametrized too.
-            _provider = "<a href=\"https://riseup.net/about-us\">" + ctx.provider + "</a>"
+            _provider = "<a href=\"https://riseup.net/about-us\">" + ctx.providerDisplayName + "</a>"
         }
         //: about dialog, screenshot https://0xacab.org/leap/bitmask-vpn/-/blob/main/docs/screenshots/about.png
         //: %1 -> application name

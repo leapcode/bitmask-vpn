@@ -72,7 +72,7 @@ Item {
 
                 text: model.modelData.providerName
                 ButtonGroup.group: providerSel
-                checked: model.modelData.providerName === root.ctx.provider
+                checked: model.modelData.providerId === root.ctx.provider
                 HoverHandler {
                     cursorShape: Qt.PointingHandCursor
                 }
@@ -90,7 +90,7 @@ Item {
                         addProviderViaInviteCodeBox.visible = false;
 
                         console.log("Provider name: ", model.modelData.providerName);
-                        providerSetupPage.providerName = model.modelData.providerName;
+                        providerSetupPage.providerName = model.modelData.providerId;
                     }
                 }
             }

@@ -5,6 +5,7 @@ import json
 import os
 import sys
 
+from provider import getDefaultProvider
 from provider import getDefaultProviders
 from provider import getProviderData
 
@@ -23,7 +24,7 @@ def generateProvidersJSON(configPath, outputJSONPath):
     providers = {}
     defaultProviders = getDefaultProviders(config)
 
-    providers['default'] = defaultProviders[0]
+    providers['default'] = getDefaultProvider(config)
     providers['providers'] = []
     for p in defaultProviders:
         providerData = getProviderData(p, config)
@@ -34,7 +35,7 @@ def generateProvidersJSON(configPath, outputJSONPath):
         json.dump(providers, f, ensure_ascii=False, indent=4)
 
 def addCaData(data, configfile):
-    provider = data.get('name').lower()
+    provider = data.get('provider') or data.get('name').lower()
     folder, f = os.path.split(configfile)
     caFile = os.path.join(folder, provider, provider + '-ca.crt')
     if not os.path.isfile(caFile):

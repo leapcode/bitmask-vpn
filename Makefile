@@ -13,7 +13,27 @@ SKIP_CACHECK ?= no
 VENDOR_PATH ?= providers
 APPNAME ?= $(shell VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} branding/scripts/getparam appname | tail -n 1)
 TARGET ?= $(shell VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} branding/scripts/getparam binname | tail -n 1)
+# Use PROVIDERS for multi-provider, PROVIDER for single.
 PROVIDER ?= $(shell grep ^'provider =' ${VENDOR_PATH}/vendor.conf | cut -d '=' -f 2 | cut -d ',' -f 1 | tr -d "[:space:]")
+# check to ensure only one of PROVIDER or PROVIDERS is set not both
+ifneq ($(filter environment command line,$(origin PROVIDER)),)
+ifneq ($(filter environment command line,$(origin PROVIDERS)),)
+$(error Ambiguous provider config: both PROVIDER and PROVIDERS env are set. Use PROVIDERS (comma-separated) for multi-provider, or PROVIDER for a single provider.)
+endif
+endif
+# Pass-through for generate-debian. PROVIDERS is only forwarded when set via
+# env or command line. DEFAULT_PROVIDER distinguishes unset (vendor.conf
+# fallback) from empty string (trigger provider-setup UI on app start).
+ifeq ($(filter environment command line,$(origin PROVIDERS)),)
+PROVIDERS_EXPORT :=
+else
+PROVIDERS_EXPORT := PROVIDERS=$(PROVIDERS)
+endif
+ifeq ($(origin DEFAULT_PROVIDER),undefined)
+DEFAULT_PROVIDER_EXPORT :=
+else
+DEFAULT_PROVIDER_EXPORT := DEFAULT_PROVIDER=$(DEFAULT_PROVIDER)
+endif
 VERSION ?= $(shell git describe 2> /dev/null)
 ifeq ($(VERSION),)
     VERSION := "unknown"
@@ -207,7 +227,7 @@ installer: check_qtifw checksign
 	@cp ${VENDOR_PATH}/assets/installer-logo.png ${INSTALLER}/config/installer-logo.png
 ifeq (${PLATFORM}, darwin)
 	@mkdir -p ${INST_DATA}/helper
-	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} ${SCRIPTS}/gen-qtinstaller osx ${INSTALLER}
 	@cp "${TEMPLATES}/osx/bitmask.pf.conf" ${INST_DATA}helper/bitmask.pf.conf
 	@cp "${TEMPLATES}/osx/client.up.sh" ${INST_DATA}/
 	@cp "${TEMPLATES}/osx/client.down.sh" ${INST_DATA}/
@@ -217,16 +237,16 @@ ifeq (${PLATFORM}, darwin)
 	@cp build/bin/${PLATFORM}/bitmask-helper ${INST_DATA}/
 ifeq (${RELEASE}, yes)
 	@echo "[+] Running macdeployqt (release mode)"
-	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/components ${MACDEPLOYQT_OPTS}
+	@macdeployqt ${QTBUILD}/release/${TARGET}.app -qmldir=gui/components ${MACDEPLOYQT_OPTS}
 else
 	@echo "[+] Running macdeployqt (debug mode)"
-	@macdeployqt ${QTBUILD}/release/${PROVIDER}-vpn.app -qmldir=gui/components
+	@macdeployqt ${QTBUILD}/release/${TARGET}.app -qmldir=gui/components
 endif
 	@cp -r "${QTBUILD}/release/${TARGET}.app"/ ${INST_DATA}/
 endif
 ifeq (${PLATFORM}, windows)
 	@wget ${OPENVPN_WINDOWS_INSTALLER} -O ${INST_DATA}/openvpn-installer.msi
-	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} ${SCRIPTS}/gen-qtinstaller windows ${INSTALLER}
 ifeq (${VENDOR_PATH}, providers)
 	@cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.ico ${INST_DATA}/icon.ico
 else
@@ -245,7 +265,7 @@ endif
 	@cp -r $(shell cygpath $(shell ${QMAKE} -query 'QT_INSTALL_QML')) ${INST_DATA}
 endif
 ifeq (${PLATFORM}, linux)
-	@VERSION=${VERSION} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
+	@VERSION=${VERSION} PROVIDER=${PROVIDER} ${SCRIPTS}/gen-qtinstaller linux ${INSTALLER}
 endif
 	@echo "[+] All templates, binaries and libraries copied to build/installer."
 	@echo "[+] Now building the installer."
@@ -374,7 +394,7 @@ gen_providers_json:
 prepare_templates: tgz
 	@mkdir -p build/${PROVIDER}/bin/ deploy
 	@cp ${TEMPLATES}/makefile/Makefile build/${PROVIDER}/Makefile
-	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-vendor-make build/${PROVIDER}/vendor.mk
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} ${SCRIPTS}/generate-vendor-make build/${PROVIDER}/vendor.mk
 
 TGZ_NAME = bitmask-vpn_${VERSION}-src
 TGZ_PATH = ./build/${TGZ_NAME}
@@ -389,7 +409,7 @@ gen_pkg_deb:
 ifeq (${PLATFORM}, linux)
 	@mkdir -p build/${PROVIDER}/
 	@cp -r ${TEMPLATES}/debian build/${PROVIDER}
-	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} ${PROVIDERS_EXPORT} ${DEFAULT_PROVIDER_EXPORT} ${SCRIPTS}/generate-debian build/${PROVIDER}/debian/data.json
 ifeq (${VENDOR_PATH}, providers)
 	@mkdir -p build/${PROVIDER}/debian/icons/scalable && cp ${VENDOR_PATH}/${PROVIDER}/assets/icon.png build/${PROVIDER}/debian/icons/scalable/${TARGET}.png
 else
@@ -405,7 +425,7 @@ gen_pkg_snap:
 ifeq (${PLATFORM}, linux)
 	@mkdir -p build/${PROVIDER}
 	@cp -r ${TEMPLATES}/snap build/${PROVIDER}
-	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
+	@VERSION=${VERSION} VENDOR_PATH=${VENDOR_PATH} PROVIDER=${PROVIDER} ${SCRIPTS}/generate-snap build/${PROVIDER}/snap/data.json
 	@cp pkg/pickle/helpers/se.leap.bitmask.snap.policy build/${PROVIDER}/snap/local/pre/
 	@cp pkg/pickle/helpers/bitmask-root build/${PROVIDER}/snap/local/pre/
 	@cd build/${PROVIDER}/snap && python3 generate.py

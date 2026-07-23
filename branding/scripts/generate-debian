@@ -6,7 +6,7 @@ import sys
 
 import configparser
 
-from provider import getDefaultProviders
+from provider import getBrandingProvider
 from provider import getProviderData
 
 
@@ -24,8 +24,23 @@ if __name__ == "__main__":
     configFile = os.path.join(VENDOR_PATH, 'vendor.conf')
     config = configparser.ConfigParser()
     config.read(configFile)
-    provider = getDefaultProviders(config)[0]
+    provider = os.environ.get('PROVIDER') or getBrandingProvider(config)
     data = getProviderData(provider, config)
+
+    providers_env = os.environ.get('PROVIDERS')
+    default_provider_env = os.environ.get('DEFAULT_PROVIDER')
+
+    if providers_env:
+        data['providerExport'] = ''
+        data['providersExport'] = 'export PROVIDERS={}'.format(providers_env)
+    else:
+        data['providerExport'] = 'export PROVIDER={}'.format(data['provider'])
+        data['providersExport'] = ''
+
+    if default_provider_env is not None:
+        data['defaultProviderExport'] = 'export DEFAULT_PROVIDER={}'.format(default_provider_env)
+    else:
+        data['defaultProviderExport'] = ''
 
     if len(sys.argv) != 2:
         print('Usage: {} <output_file>'.format(SCRIPT))

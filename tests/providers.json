@@ -2,6 +2,7 @@
     "default": "demolib",
     "providers": [
         {
+            "provider": "demolib",
             "name": "demolib",
             "applicationName": "DemoLibVPN",
             "binaryName": "demolib-vpn",

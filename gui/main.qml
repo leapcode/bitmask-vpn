@@ -143,7 +143,8 @@ ApplicationWindow {
         var arr = [];
         for (var i in providers) {
             arr.push({
-                providerName: providers[i]
+                providerId: providers[i].id,
+                providerName: providers[i].name
             });
         }
         arr.sort(function (a, b) {
@@ -151,9 +152,11 @@ ApplicationWindow {
         });
 
         arr.push({
+            providerId: "",
             providerName: "Add new provider"
         },
         {
+            providerId: "",
             providerName: "Enter invite Code"
         });
         return arr;

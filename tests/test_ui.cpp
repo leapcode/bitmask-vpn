@@ -7,16 +7,10 @@
 #include "../lib/libgoshim.h"
 
 
-GoString _toGoStr(QString s)
-{
-    const char *c = s.toUtf8().constData();
-    return (GoString){c, (long int)strlen(c)};
-}
-
 QString getAppName(QJsonValue info, QString provider) {
     for (auto p: info.toArray()) {
         QJsonObject item = p.toObject();
-        if (item["name"] == provider) {
+        if (item["provider"] == provider) {
             return item["applicationName"].toString();
         }
     }
@@ -67,8 +61,10 @@ public slots:
         QJsonValue providersInfo = providers->json().object().value("providers");
         QString appName = getAppName(providersInfo, defaultProvider.toString());
 
+        QByteArray defaultProviderBytes = defaultProvider.toString().toUtf8();
         InitializeTestBitmaskContext(
-            _toGoStr(defaultProvider.toString()),
+            GoString{defaultProviderBytes.constData(),
+                     (long int)defaultProviderBytes.length()},
             (char*)providerJsonBytes.data(), providerJsonBytes.length());
 
         ctx->setContextProperty("jsonModel", model);

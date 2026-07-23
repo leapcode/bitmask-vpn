@@ -36,31 +36,33 @@ func initializeContext(opts *InitOpts) {
 		config.ConfigureLogger()
 		cfg := config.ParseConfig()
 		ctx = &connectionCtx{
-			AppName:      "Bitmask",
-			Provider:     "",
-			Providers:    opts.AvailableProviders,
-			DonateDialog: false,
-			Version:      version.Version(),
-			Status:       st,
-			IsReady:      false,
-			cfg:          cfg,
+			AppName:             "Bitmask",
+			Provider:            "",
+			ProviderDisplayName: "",
+			Providers:           opts.AvailableProviders,
+			DonateDialog:        false,
+			Version:             version.Version(),
+			Status:              st,
+			IsReady:             false,
+			cfg:                 cfg,
 		}
 		go trigger(OnStatusChanged)
 		return
 	}
 
 	ctx = &connectionCtx{
-		AppName:         opts.ProviderOptions.AppName,
-		Provider:        opts.ProviderOptions.Provider,
-		TosURL:          opts.ProviderOptions.TosURL,
-		HelpURL:         opts.ProviderOptions.HelpURL,
-		DonateURL:       opts.ProviderOptions.DonateURL,
-		AskForDonations: opts.ProviderOptions.AskForDonations,
-		Providers:       opts.AvailableProviders,
-		DonateDialog:    false,
-		Version:         version.Version(),
-		Status:          st,
-		IsReady:         false,
+		AppName:             opts.ProviderOptions.AppName,
+		Provider:            opts.ProviderOptions.Provider,
+		ProviderDisplayName: opts.ProviderOptions.DisplayName,
+		TosURL:              opts.ProviderOptions.TosURL,
+		HelpURL:             opts.ProviderOptions.HelpURL,
+		DonateURL:           opts.ProviderOptions.DonateURL,
+		AskForDonations:     opts.ProviderOptions.AskForDonations,
+		Providers:           opts.AvailableProviders,
+		DonateDialog:        false,
+		Version:             version.Version(),
+		Status:              st,
+		IsReady:             false,
 	}
 	errCh := make(chan string)
 	go checkErrors(errCh)
