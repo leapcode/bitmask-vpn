@@ -727,18 +727,16 @@ def firewall_start(args):
     # route all ipv4 DNS over VPN
     # (note: NAT does not work with ipv6 until kernel 3.7)
     enable_ip_forwarding()
-    if QUBES_PROXY and QUBES_VER >= 3:
-        # rewrite DNS packets for VPN DNS; Qubes preconfigures masquerade
-        ip4tables("-t", "nat", "--flush", "PR-QBS")
+    if QUBES_PROXY and QUBES_VER >= 4:
+        # Qubes 4.2+ uses nftables, rewrite DNS via nft
+        run("nft", "flush", "chain", "ip", "qubes", "dnat-dns")
         for gateway in gateways:
-            ip4tables("-t", "nat", "--append", "PR-QBS", "--destination", gateway,
-                      "--jump", "RETURN")
-        ip4tables("-t", "nat", "--append", "PR-QBS", "-p", "udp",
-                  "--dport", "53", "--jump", "DNAT", "--to",
-                  NAMESERVER + ":53")
-        ip4tables("-t", "nat", "--append", "PR-QBS", "-p", "tcp",
-                  "--dport", "53", "--jump", "DNAT", "--to",
-                  NAMESERVER + ":53")
+            run("nft", "add", "rule", "ip", "qubes", "dnat-dns",
+                "ip", "daddr", gateway, "return")
+        run("nft", "add", "rule", "ip", "qubes", "dnat-dns",
+            "udp", "dport", "53", "dnat", "to", NAMESERVER)
+        run("nft", "add", "rule", "ip", "qubes", "dnat-dns",
+            "tcp", "dport", "53", "dnat", "to", NAMESERVER)
     else:
         # As we may have OpenVPN running on port 53, we don't want to redirect that
         for gateway in gateways:
