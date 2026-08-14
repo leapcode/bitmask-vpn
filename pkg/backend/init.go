@@ -12,6 +12,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/config/version"
 	"0xacab.org/leap/bitmask-vpn/pkg/pid"
+	"0xacab.org/leap/bitmask-vpn/pkg/vpn"
 )
 
 // initializeContext initializes an empty connStatus and assigns it to the
@@ -46,6 +47,14 @@ func initializeContext(opts *InitOpts) {
 			IsReady:             false,
 			cfg:                 cfg,
 		}
+		// App version updates are independent of provider configuration, so
+		// run the check even before a provider is selected. toJSON only
+		// overwrites ctx.CanUpgrade when ctx.bm != nil, so the value set
+		// here is preserved and serialized on the no-provider path.
+		go func() {
+			ctx.CanUpgrade = vpn.IsUpgradeAvailable()
+			go trigger(OnStatusChanged)
+		}()
 		go trigger(OnStatusChanged)
 		return
 	}

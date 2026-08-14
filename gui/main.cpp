@@ -33,6 +33,7 @@ void onStatusChanged() {
 
 void onProviderSetupComplete() {
     char *ctx = RefreshContext();
+    emit qw->jsonChanged(QString(ctx));
     emit qw->providerSetupComplete();
     free(ctx);
 }

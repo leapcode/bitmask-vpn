@@ -14,6 +14,7 @@ Item {
         target: jsonModel
         function onProviderSetupComplete() {
             isBackendReady = true;
+            appsettings.setValue("provider", root.ctx.provider);
         }
     }
 
@@ -75,7 +76,6 @@ Item {
                     console.debug("Backend not ready yet, cannot connect");
                     return;
                 }
-                appsettings.setValue("provider", root.ctx.provider);
                 backend.switchOn();
                 providerSetupPage.setupFinished();
             }
