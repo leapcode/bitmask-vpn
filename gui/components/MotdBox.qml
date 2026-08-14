@@ -6,6 +6,7 @@ import "../themes/themes.js" as Theme
 Item {
     id: motdBox
     width: parent.width
+    height: labelWrapper.height
     property var motdText: ""
     property var motdLink: ""
     property var url: ""

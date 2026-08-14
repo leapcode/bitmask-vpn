@@ -18,6 +18,7 @@ package vpn
 import (
 	"encoding/json"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -54,6 +55,14 @@ type Bitmask struct {
 	// authentication (key file prefixed with leap-vpn-...). Directory gets deleted during teardown
 	certPemPath string // path of OpenVPN client certificate. Normally this is $tempdir/openvpn.pem,
 	// but it also can be $config/$provider.pem (if snowflake is used or supplied out-of-band in a censored network)
+
+	// v5InitWG waits for the async v5 initialization (cert fetch + geolocation
+	// lookup) that runs in a background goroutine from Init(). v5InitErr holds
+	// any error from the cert fetch; it is written before Done() and read
+	// after Wait() in waitV5Init(), so no mutex is needed (memory model
+	// guarantee). For v3, the WaitGroup stays at count 0 and the error is nil.
+	v5InitWG  sync.WaitGroup
+	v5InitErr error
 }
 
 // Init the connection to bitmask
@@ -109,7 +118,7 @@ func Init() (*Bitmask, error) {
 		openvpnArgs:      []string{},
 		useUDP:           false,
 		useSnowflake:     false,
-		canUpgrade:       isUpgradeAvailable(),
+		canUpgrade:       IsUpgradeAvailable(),
 		motd:             motd.FetchLatest(),
 		provider:         "",
 	}
@@ -141,19 +150,43 @@ func Init() (*Bitmask, error) {
 			}
 	*/
 
-	if config.ProviderConfig.APIVersion == 5 && len(config.ProviderConfig.STUNServers) != 0 {
-		/*
-			Geolocation lookup should be done only once during startup. Changing the country
-			code during runtime is not supported. The VPN must be turn off for the lookup.
-			If the lookup succeeds, we save it in the config file and use it as fallback
-			the next time.
-		*/
-		err := b.api.DoGeolocationLookup()
-		if err != nil {
-			log.Warn().
-				Str("err", err.Error()).
-				Msgf("Could not do geolocation lookup")
-		}
+	if config.ProviderConfig.APIVersion == 5 {
+		// Fetch the CA certificate and do the geolocation lookup
+		// asynchronously. The hardcoded CA written above is used as a
+		// fallback until the API-fetched cert arrives. waitV5Init()
+		// (called from StartVPN) blocks until the cert fetch completes,
+		// ensuring cacert.pem is updated before startOpenVPN reads it.
+		b.v5InitWG.Add(1)
+		go func() {
+			defer b.v5InitWG.Done()
+			if len(config.ProviderConfig.CaCert) == 0 {
+				cert, err := b.api.GetPemCertificate()
+				if err != nil {
+					b.v5InitErr = err
+					return
+				}
+				if err := os.WriteFile(b.getTempCaCertPath(), cert, 0600); err != nil {
+					b.v5InitErr = err
+					return
+				}
+				log.Debug().
+					Str("caCertPath", b.getTempCaCertPath()).
+					Msg("Sucessfully fetched OpenVPN CA certificate for API v5 (async)")
+			}
+			if len(config.ProviderConfig.STUNServers) != 0 {
+				/*
+					Geolocation lookup should be done only once during startup. Changing the country
+					code during runtime is not supported. The VPN must be turn off for the lookup.
+					If the lookup succeeds, we save it in the config file and use it as fallback
+					the next time.
+				*/
+				if err := b.api.DoGeolocationLookup(); err != nil {
+					log.Warn().
+						Err(err).
+						Msg("Could not do geolocation lookup")
+				}
+			}
+		}()
 	}
 
 	go b.fetchGateways()
@@ -164,6 +197,17 @@ func Init() (*Bitmask, error) {
 
 func (b *Bitmask) SetProvider(p string) {
 	b.provider = p
+}
+
+// waitV5Init blocks until the async v5 initialization (cert fetch +
+// geolocation lookup) completes, and returns any error from the cert fetch.
+// For v3, this is a no-op (WaitGroup count is 0, error is nil).
+func (b *Bitmask) waitV5Init() error {
+	if config.ProviderConfig.APIVersion != 5 {
+		return nil
+	}
+	b.v5InitWG.Wait()
+	return b.v5InitErr
 }
 
 // GetStatusCh returns a channel that will recieve VPN status changes

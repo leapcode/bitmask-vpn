@@ -20,7 +20,7 @@ const (
 	cert       = "CERTIFICATE"
 )
 
-func isUpgradeAvailable() bool {
+func IsUpgradeAvailable() bool {
 
 	// SNAPS have their own way of upgrading. We probably should also try to detect
 	// if we've been installed via another package manager.

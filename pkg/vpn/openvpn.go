@@ -40,6 +40,9 @@ func (b *Bitmask) StartVPN(provider string) error {
 		log.Warn().Msg("BUG cannot start")
 		return errors.New("BUG: cannot start vpn")
 	}
+	if err := b.waitV5Init(); err != nil {
+		return fmt.Errorf("v5 initialization failed: %w", err)
+	}
 
 	var err error
 	err = b.getCert()

@@ -29,26 +29,21 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 24
 
-        MotdBox {
-            id: motd
-            visible: false
-            anchors {
-                top: parent.top
-                topMargin: 100
-                bottomMargin: 30
-            }
-        }
-
-        VerticalSpacer {
-            id: motdSpacer 
-            visible: false
-            height: 100
-        }
-
         VerticalSpacer {
             id: upperSpacer
             visible: true
             height: root.height * 0.25
+        }
+
+        MotdBox {
+            id: motd
+            visible: false
+        }
+
+        VerticalSpacer {
+            id: motdSpacer
+            visible: false
+            height: 100
         }
 
         Image {
@@ -93,6 +88,19 @@ Page {
         id: splashTimer
     }
 
+    // Re-evaluate the MOTD text whenever a fresh ctx arrives from Go, so the
+    // box is never left empty due to a timing gap between showMotd() running
+    // and ctx.motd being fully populated. Mirrors the jsonModel onDataChanged
+    // handler in main.qml.
+    Connections {
+        target: jsonModel
+        function onDataChanged() {
+            if (motd.visible) {
+                updateMotdText()
+            }
+        }
+    }
+
     function hasMotd() {
         return needsUpgrade() || (ctx && !isEmptyMotd(ctx.motd))
     }
@@ -110,57 +118,18 @@ Page {
     }
 
     function needsUpgrade() {
-        if (ctx && isTrue(ctx.canUpgrade)) {
-            if (qmlDebug) {
-                return true
-            }
-            let platform = Qt.platform.os
-            //DEBUG -------------------------------------------------------------------
-            //if (platform == "windows" || platform == "osx" || platform == "linux" ) {
-            //DEBUG -------------------------------------------------------------------
-            if (platform == "windows" || platform == "osx") {
-                    return true
-            }
+        if (qmlDebug) {
+            return true
         }
-        return false 
+        return ctx && isTrue(ctx.canUpgrade)
     }
 
     function showMotd() {
-        // XXX this is not picking locales configured by LANG or LC_ALL
-        // Need to fix this; probably also with allowing to select translation
-        // manually on runtime.
-        let isUpgrade = false
-        let lang = Qt.locale().name.substring(0,2)
-        let messages = JSON.parse(ctx.motd)
-        let platform = Qt.platform.os
-        let textEn = ""
-        let textLocale = ""
-        let link = ""
-
+        // Layout/visibility setup for the MOTD view. Text is selected in
+        // updateMotdText(), which is also re-run whenever a fresh ctx arrives
+        // (see Connections to jsonModel below) so the box is never left empty
+        // due to a timing gap between showMotd() and ctx.motd being populated.
         if (needsUpgrade()) {
-            isUpgrade = true;
-            textLocale = getUpgradeText();
-            link = getUpgradeLink();
-        } else {
-            // TODO fallback in case upgrade has no text
-            console.debug("configured locale: " + lang)
-            console.debug("platform: " + Qt.platform.os)
-            for (let i=0; i < messages.length; i++) {
-                let m = messages[i]
-                if (m.platform == "all" || m.platform == platform) {
-                    for (let k=0; k < m.text.length; k++) {
-                        if (m.text[k].lang == lang) {
-                            textLocale = m.text[k].str
-                            break
-                        } else if (m.text[k].lang == "en") {
-                            textEn = m.text[k].str
-                        }
-                    }
-                    break
-                }
-            }
-        }
-        if (isUpgrade) {
             upperSpacer.height = 100
         } else {
             // TODO get proportional to textLocale/textEn
@@ -173,11 +142,72 @@ Page {
         splashProgress.visible = false
         motd.visible = true
         motdSpacer.visible = true
-        motd.motdText = textLocale ? textLocale : textEn
+        closeButton.visible = true
+        updateMotdText()
+    }
+
+    function updateMotdText() {
+        // XXX this is not picking locales configured by LANG or LC_ALL
+        // Need to fix this; probably also with allowing to select translation
+        // manually on runtime.
+        let lang = Qt.locale().name.substring(0,2)
+        let platform = Qt.platform.os
+        let textEn = ""
+        let textLocale = ""
+        let link = ""
+
+        if (needsUpgrade()) {
+            textLocale = getUpgradeText();
+            link = getUpgradeLink();
+        } else if (ctx && !isEmptyMotd(ctx.motd)) {
+            let messages = JSON.parse(ctx.motd)
+            console.debug("configured locale: " + lang)
+            console.debug("platform: " + Qt.platform.os)
+            // First pass: pick a message that targets this platform.
+            let chosen = null
+            for (let i=0; i < messages.length; i++) {
+                if (messages[i].platform == platform) {
+                    chosen = messages[i]
+                    break
+                }
+            }
+            // Fallback 1: any "all" message.
+            if (!chosen) {
+                for (let i=0; i < messages.length; i++) {
+                    if (messages[i].platform == "all") {
+                        chosen = messages[i]
+                        break
+                    }
+                }
+            }
+            // Fallback 2: first message in the array, if any.
+            if (!chosen && messages.length > 0) {
+                chosen = messages[0]
+            }
+            if (chosen) {
+                for (let k=0; k < chosen.text.length; k++) {
+                    if (chosen.text[k].lang == lang) {
+                        textLocale = chosen.text[k].str
+                        break
+                    } else if (chosen.text[k].lang == "en") {
+                        textEn = chosen.text[k].str
+                    }
+                }
+            }
+        }
+
+        let finalText = textLocale ? textLocale : textEn
+        if (!finalText) {
+            // No text to show: skip the MOTD view and go straight to main.
+            console.debug("no motd text, skipping to main view")
+            motd.visible = false
+            motdSpacer.visible = false
+            loader.source = "components/MainView.qml"
+            return
+        }
+        motd.motdText = finalText
         motd.motdLink = link
         motd.url = getLinkURL()
-        // FIXME if no text, just skip to main view
-        closeButton.visible = true
     }
 
     function delay(delayTime, cb) {
