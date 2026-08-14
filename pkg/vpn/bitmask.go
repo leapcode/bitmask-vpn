@@ -124,20 +124,6 @@ func Init() (*Bitmask, error) {
 			Msg("Sucessfully wrote OpenVPN CA certificate (hardcoded in the binary, not coming from API)")
 	}
 
-	if config.ProviderConfig.APIVersion == 5 {
-		cert, err := b.api.GetPemCertificate()
-		if err != nil {
-			return nil, err
-		}
-		err = os.WriteFile(b.getTempCaCertPath(), cert, 0600)
-		if err != nil {
-			return nil, err
-		}
-		log.Debug().
-			Str("caCertPath", b.getTempCaCertPath()).
-			Msg("Sucessfully fetched OpenVPN CA certificate for API v5")
-	}
-
 	if err := b.launch.FirewallStop(); err != nil {
 		log.Warn().
 			Err(err).
