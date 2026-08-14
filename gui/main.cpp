@@ -376,6 +376,8 @@ int main(int argc, char **argv) {
         pr = _prv.data();
     }
 
+    qDebug() << ">>> value of pr is:" << pr;
+
     InitializeBitmaskContext(
             pr,
             (char*)providerJsonBytes.data(), providerJsonBytes.length(),

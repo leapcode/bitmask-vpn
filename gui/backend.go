@@ -117,9 +117,8 @@ func SwitchProvider(provider *C.char) {
 	opts.DisableAutostart = true
 	opts.SkipLaunch = true
 
-	sanitizedProviderNameOrURL := backend.SantizeProvider(providerNameOrURL)
-
-	if backend.IsProviderURI(sanitizedProviderNameOrURL) {
+	if backend.IsProviderURI(providerNameOrURL) {
+		sanitizedProviderNameOrURL := backend.SantizeProvider(providerNameOrURL)
 		providerName = backend.FetchProviderOptsFromRemote(sanitizedProviderNameOrURL)
 	}
 
