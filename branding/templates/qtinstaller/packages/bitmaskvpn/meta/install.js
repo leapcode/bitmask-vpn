@@ -119,18 +119,30 @@ Component.prototype.createOperations = function ()
 }
 
 Component.prototype.installerLoaded = function () {
-    var dir = installer.value("TargetDir")
-    var maintenancetoolPath = Dir.toNativeSeparator(dir + "/uninstall.exe")
-    if (systemInfo.productType == "macos") {
-        maintenancetoolPath = Dir.toNativeSeparator(dir + "/uninstall.app" + "/Contents/MacOS/uninstall")
-    }
-    if (installer.fileExists(dir) && installer.fileExists(maintenancetoolPath)) {
-        console.log("Found existing installation at: " + dir)
+    var appName = installer.value("Name")
+    var targetDir = installer.value("TargetDir")
+    var bundlePath = targetDir + "/" + appName + ".app"
+    var newTool = Dir.toNativeSeparator(bundlePath + "/Contents/Resources/uninstall.app/Contents/MacOS/uninstall")
+    var oldWrapper = targetDir + "/" + appName
+    var oldTool = Dir.toNativeSeparator(oldWrapper + "/uninstall.app/Contents/MacOS/uninstall")
+
+    var foundNew = installer.fileExists(bundlePath) && installer.fileExists(newTool)
+    var foundOld = installer.fileExists(oldTool)
+
+    if (foundNew || foundOld) {
         var result = QMessageBox.warning("uninstallprevious.critical", "Uninstall previous version", "To proceed existing installation needs to be removed. Click OK to remove existing installation.",
             QMessageBox.Ok | QMessageBox.Cancel);
         if (result == QMessageBox.Ok) {
-            console.log("Running uninstall using maintenance tool at: " + maintenancetoolPath)
-            installer.execute(maintenancetoolPath, ["purge", "-c"]);
+            if (foundNew) {
+                console.log("Running uninstall using maintenance tool at: " + newTool)
+                installer.execute(newTool, ["purge", "-c"]);
+            }
+            if (foundOld) {
+                console.log("Running uninstall using legacy maintenance tool at: " + oldTool)
+                installer.execute(oldTool, ["purge", "-c"]);
+                console.log("Removing legacy wrapper directory: " + oldWrapper)
+                installer.execute("/bin/rm", ["-rf", oldWrapper]);
+            }
         }
         if (result == QMessageBox.Cancel) {
             cancelInstaller("Need to removed existing installation to proceed.");
@@ -205,7 +217,7 @@ function uninstallOSX() {
     // TODO use installer filepath??
     component.addElevatedOperation(
         "Execute", "{0}",
-        "@TargetDir@/post-install", "-action=uninstall", "-stage=preinstall", "-appname=@ProductName@",
+        "@TargetDir@/$APPNAME.app/post-install", "-action=uninstall", "-stage=preinstall", "-appname=@ProductName@",
         "errormessage=There was an error during the pre-installation script, things might be broken. Please report this error and attach /tmp/bitmask-uninstall.log"
     );
 }
@@ -216,10 +228,10 @@ function postInstallOSX() {
     console.log("Post-installation for OSX");
     component.addElevatedOperation(
         "Execute", "{0}",
-        "@TargetDir@/post-install", "-action=post-install", "-appname=@ProductName@", "-socket-uid=" + uid, "-socket-gid=" + gid,
-        "errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the post-install.log file.",
+        "@TargetDir@/$APPNAME.app/post-install", "-action=post-install", "-appname=@ProductName@", "-socket-uid=" + uid, "-socket-gid=" + gid,
+        "errormessage=There was an error during the post-installation script, things might be broken. Please report this error and attach the /tmp/bitmask-postinstall.log file.",
         "UNDOEXECUTE",
-        "@TargetDir@/post-install", "-action=uninstall", "-appname=@ProductName@"
+        "@TargetDir@/$APPNAME.app/post-install", "-action=uninstall", "-appname=@ProductName@"
     );
 }
 

@@ -14,7 +14,7 @@ from provider import getProviderData
 OS_CONFIG = {
     'osx': """
     <!-- osx -->
-    <TargetDir>/Applications/$APPNAME</TargetDir>
+    <TargetDir>/Applications</TargetDir>
     <StartMenuDir>$APPNAME.app</StartMenuDir>
     <RunProgram>open</RunProgram>
     <RunProgramDescription>Start $APPNAME now!</RunProgramDescription>

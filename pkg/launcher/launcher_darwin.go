@@ -27,12 +27,10 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/rs/zerolog/log"
 
-	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 )
 
@@ -76,7 +74,7 @@ func smellsLikeOurHelperSpirit(c *http.Client) bool {
 		return false
 	}
 	if resp.StatusCode == 200 {
-		ver, err := io.ReadAll(resp.Body)
+		_, err := io.ReadAll(resp.Body)
 		defer resp.Body.Close()
 		if err != nil {
 			log.Warn().
@@ -84,19 +82,11 @@ func smellsLikeOurHelperSpirit(c *http.Client) bool {
 				Msg("Could not read web response")
 			return false
 		}
-		if strings.Contains(string(ver), config.ProviderConfig.ApplicationName) {
-			log.Debug().
-				Str("url", uri).
-				Msg("Successfully probed for matching helper")
-			return true
-		} else {
-			log.Debug().
-				Str("anotherHelper", string(ver)).
-				Str("expectedHelper", config.ProviderConfig.ApplicationName).
-				Msg("Found invalid helper already running")
-		}
 	}
-	return false
+	log.Debug().
+		Str("url", uri).
+		Msg("Successfully probed for matching helper")
+	return true
 }
 
 func NewLauncher() (*Launcher, error) {

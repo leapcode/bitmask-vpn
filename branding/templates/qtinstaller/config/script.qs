@@ -21,3 +21,18 @@ Controller.prototype.ReadyForInstallationPageCallback = function() {
         console.log(e);
     }
 }
+
+Controller.prototype.FinishedPageCallback = function() {
+    if (systemInfo.productType === "macos") {
+        var targetDir = installer.value("TargetDir")
+        var appName = installer.value("Name")
+        var src = targetDir + "/uninstall.app"
+        var dstDir = targetDir + "/" + appName + ".app/Contents/Resources"
+        var dst = dstDir + "/uninstall.app"
+        if (installer.fileExists(src)) {
+            console.log("Relocating maintenance tool: " + src + " -> " + dst)
+            installer.execute("/bin/mkdir", ["-p", dstDir])
+            installer.execute("/bin/mv", [src, dst])
+        }
+    }
+}

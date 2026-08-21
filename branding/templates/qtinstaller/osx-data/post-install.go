@@ -126,7 +126,7 @@ func main() {
 
 	switch installerAction {
 	case actionPostInstall:
-		if err := setupLogFile(filepath.Join(curdir, "post-install.log")); err != nil {
+		if err := setupLogFile(filepath.Join("/tmp", "bitmask-postinstall.log")); err != nil {
 			log.Fatal(err)
 		}
 		log.Println("running action: post-install")
@@ -146,15 +146,13 @@ func main() {
 }
 
 func appBundlePath() string {
-	path := filepath.Join(curdir, appName+".app")
-	_, err := os.Stat(path)
-	if err != nil {
+	if _, err := os.Stat(filepath.Join(curdir, "Contents")); err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			log.Printf("unable to find the app bundle path: %v", err)
 			return ""
 		}
 	}
-	return path
+	return curdir
 }
 
 func setupLogFile(logFile string) error {
