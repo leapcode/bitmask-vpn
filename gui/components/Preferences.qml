@@ -3,17 +3,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.Material
 import QtQuick.Effects
-import QtCore
 
 import "../themes/themes.js" as Theme
 
 ThemedPage {
     title: qsTr("Preferences")
-
-    Settings {
-        id: settings
-        property string locale: locale
-    }
 
     ScrollView {
         clip: true
@@ -92,7 +86,7 @@ ThemedPage {
                     Material.elevation: 0
 
                     Component.onCompleted: {
-                        currentIndex = indexOfValue(settings.locale)
+                        currentIndex = indexOfValue(appsettings.value("locale"))
                     }
                     onActivated: {
                         backend.setLocale(currentValue)
