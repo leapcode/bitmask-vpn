@@ -109,13 +109,7 @@ func InitializeBitmaskContext(provider *C.char,
 func SwitchProvider(provider *C.char) {
 	// provider could be provider URL or provider name
 	providerNameOrURL := C.GoString(provider)
-	var opts = &backend.InitOpts{}
 	var providerName string
-
-	/* TODO: read the following values from the on-disk config file */
-	opts.Obfs4 = false
-	opts.DisableAutostart = true
-	opts.SkipLaunch = true
 
 	if backend.IsProviderURI(providerNameOrURL) {
 		sanitizedProviderNameOrURL := backend.SantizeProvider(providerNameOrURL)
@@ -127,7 +121,11 @@ func SwitchProvider(provider *C.char) {
 	}
 
 	if len(providerName) > 0 {
-		opts = backend.InitOptsFromJSON(providerName, "")
+		opts := backend.InitOptsFromJSON(providerName, "")
+		/* TODO: read the following values from the on-disk config file */
+		opts.Obfs4 = false
+		opts.DisableAutostart = true
+		opts.SkipLaunch = true
 		go backend.InitializeBitmaskContext(opts)
 	}
 }
