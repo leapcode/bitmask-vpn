@@ -34,79 +34,50 @@ Page {
             currentIndex: -1
             anchors.fill: parent
 
-            model: navModel
+            model: navItems
             delegate: ItemDelegate {
                 width: parent.width
-                text: model.text
+                text: model.modelData.text
                 highlighted: ListView.isCurrentItem
                 icon.color: "transparent"
-                icon.source: model.icon
+                icon.source: model.modelData.icon
                 onClicked: {
                     settingsDrawer.close();
-                    model.triggered();
+                    model.modelData.triggered();
                 }
             }
         }
     }
 
-    ListModel {
-        id: navModel
-        ListElement {
-            text: qsTr("Preferences")
-            icon: "../resources/tools.svg"
-            triggered: function () {
-                stackView.push("Preferences.qml");
-            }
+    property bool showSwitchProvider: (ctx && ctx.providers && ctx.providers.length > 1)
+                                     || (ctx && ctx.appName === "Bitmask")
+
+    property var navItems: {
+        var items = [
+            { text: qsTr("Preferences"), icon: "../resources/tools.svg",
+              triggered: function () { stackView.push("Preferences.qml"); } }
+        ];
+        if (isDonationService) {
+            items.push({ text: qsTr("Donate"), icon: "../resources/donate.svg",
+              triggered: function () { Qt.openUrlExternally(ctx.donateURL); } });
         }
-        ListElement {
-            text: qsTr("Donate")
-            icon: "../resources/donate.svg"
-            triggered: function () {
-                Qt.openUrlExternally(ctx.donateURL);
-            }
+        items.push(
+            { text: qsTr("Help"), icon: "../resources/help.svg",
+              triggered: function () { stackView.push("Help.qml"); } },
+            { text: qsTr("About"), icon: "../resources/about.svg",
+              triggered: function () { stackView.push("About.qml"); } },
+            { text: qsTr("Quit"), icon: "../resources/quit.svg",
+              triggered: function () { Qt.callLater(backend.quit); } }
+        );
+        if (showSwitchProvider) {
+            items.push({ text: qsTr("Switch Provider"), icon: "../resources/switch_provider.svg",
+              triggered: function () {
+                  stackView.push("SwitchProvider.qml",
+                      { "isSwitchProvider": true, "parentStackView": stackView });
+              } });
         }
-        ListElement {
-            text: qsTr("Help")
-            icon: "../resources/help.svg"
-            triggered: function () {
-                stackView.push("Help.qml");
-            }
-        } // -> can link to another dialog with report bug / support / contribute / FAQ
-        ListElement {
-            text: qsTr("About")
-            icon: "../resources/about.svg"
-            triggered: function () {
-                stackView.push("About.qml");
-            }
-        }
-        ListElement {
-            text: qsTr("Quit")
-            icon: "../resources/quit.svg"
-            triggered: function () {
-                Qt.callLater(backend.quit);
-            }
-        }
-        ListElement {
-            text: qsTr("Switch Provider")
-            icon: "../resources/switch_provider.svg"
-            triggered: function () {
-                stackView.push("SwitchProvider.qml", {
-                    "isSwitchProvider": true,
-                    "parentStackView": stackView
-                });
-            }
-        }
-        Component.onCompleted: {
-            // remove Donate button if donation service is not available
-            if (!isDonationService) {
-                navModel.remove(1)
-            }
-            // remove Switch Provider button when no Bitmask
-            if (ctx && ctx.appName && ctx.appName != qsTr("Bitmask")) {
-                navModel.remove(5)
-            }
-        }
-    } // end listmodel
+        return items;
+    }
 
     header: Header {
         id: header
