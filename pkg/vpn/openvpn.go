@@ -214,7 +214,7 @@ func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) (
 			Msg("No gateway for transport in provider")
 		return arg, errors.New("ERROR: cannot find any gateway for selected transport")
 	}
-	err = b.launch.FirewallStart(gateways)
+	err = b.launch.FirewallStart(gateways, b.useUDP)
 	if err != nil {
 		return arg, err
 	}
@@ -283,13 +283,7 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 		}
 		log.Info().Msgf("Got best gateway %v", gateways)
 
-		// env UDP is used by bitmask-root helper
-		if b.useUDP {
-			os.Setenv("UDP", "1")
-		} else {
-			os.Setenv("UDP", "0")
-		}
-		err = b.launch.FirewallStart(gateways)
+		err = b.launch.FirewallStart(gateways, b.useUDP)
 		if err != nil {
 			b.statusCh <- Off
 			return err

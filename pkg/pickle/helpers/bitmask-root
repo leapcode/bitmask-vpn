@@ -95,10 +95,7 @@ SCRIPT = "bitmask-root"
 NAMESERVER_TCP = "10.41.0.1"
 NAMESERVER_UDP = "10.42.0.1"
 
-if os.getenv("UDP") == "1":
-    NAMESERVER = NAMESERVER_UDP
-else:
-    NAMESERVER = NAMESERVER_TCP
+NAMESERVER = NAMESERVER_TCP
 BITMASK_CHAIN = "bitmask"
 BITMASK_CHAIN_NAT_OUT = "bitmask"
 BITMASK_CHAIN_NAT_POST = "bitmask_postrouting"
@@ -693,6 +690,15 @@ def firewall_start(args):
     :param args: list of gateways, to be sanitized.
     :type args: list
     """
+    global NAMESERVER
+    if "--udp" in args:
+        args.remove("--udp")
+        NAMESERVER = NAMESERVER_UDP
+    elif os.getenv("UDP") == "1":
+        NAMESERVER = NAMESERVER_UDP
+    else:
+        NAMESERVER = NAMESERVER_TCP
+
     default_device = get_default_device()
     local_network_ipv4 = get_local_network_ipv4(default_device)
     local_network_ipv6 = get_local_network_ipv6(default_device)

@@ -200,7 +200,7 @@ func (l *Launcher) OpenvpnStop() error {
 	return runBitmaskRoot("openvpn", "stop")
 }
 
-func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway, useUDP bool) error {
 	log.Info().Msg("Starting firewall")
 	if len(gateways) == 0 {
 		log.Warn().Msg("Need atleast one gateway for firewall allow list")
@@ -218,6 +218,9 @@ func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 	}
 
 	arg := []string{"firewall", "start"}
+	if useUDP {
+		arg = append(arg, "--udp")
+	}
 	for _, gw := range gateways {
 		arg = append(arg, gw.IPAddress)
 	}

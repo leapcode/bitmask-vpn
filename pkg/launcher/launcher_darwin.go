@@ -24,7 +24,6 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -121,7 +120,7 @@ func (l *Launcher) OpenvpnStop() error {
 	return l.send("/openvpn/stop", nil)
 }
 
-func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway, useUDP bool) error {
 	ipList := make([]string, len(gateways))
 	for i, gw := range gateways {
 		ipList[i] = gw.IPAddress
@@ -131,7 +130,7 @@ func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
 		return err
 	}
 	uri := "/firewall/start"
-	if os.Getenv("UDP") == "1" {
+	if useUDP {
 		uri = uri + "?udp=1"
 	}
 	return l.send(uri, byteIPs)

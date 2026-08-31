@@ -112,7 +112,7 @@ func (l *Launcher) OpenvpnStop() error {
 
 // TODO we will have to bring our helper back to do firewall
 
-func (l *Launcher) FirewallStart(gateways []bonafide.Gateway) error {
+func (l *Launcher) FirewallStart(gateways []bonafide.Gateway, useUDP bool) error {
 	log.Warn().Msg("start: no firewall in windows")
 	return nil
 }
