@@ -123,7 +123,7 @@ void catchUnixSignals(std::initializer_list<int> quitSignals) {
     struct sigaction sa;
     sa.sa_handler = handler;
     sa.sa_mask    = blocking_mask;
-    sa.sa_flags   = 0;
+    sa.sa_flags   = SA_ONSTACK;
 
     for (auto sig : quitSignals)
         sigaction(sig, &sa, nullptr);

@@ -96,7 +96,7 @@ ApplicationWindow {
         function onDataChanged() {
             let j = jsonModel.getJson();
             if (qmlDebug) {
-                console.deug("onDataChanged() called")
+                console.debug("onDataChanged() called")
                 console.debug(j);
             }
             ctx = JSON.parse(j);
