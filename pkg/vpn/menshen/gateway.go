@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"slices"
 	"strings"
 
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
@@ -22,7 +21,12 @@ const (
 func (m *Menshen) GetGatewayByIP(ip string) (bonafide.Gateway, error) {
 	for _, gw := range m.Gateways {
 		if gw.IPAddr == ip {
-			return *NewBonafideGateway(gw), nil
+			service, err := m.GetService()
+			if err != nil {
+				return bonafide.Gateway{}, fmt.Errorf("failed to determine gateway location for gateway with ip %s", ip)
+			}
+
+			return *NewBonafideGateway(gw, service), nil
 		}
 	}
 	return bonafide.Gateway{}, fmt.Errorf("could not find a gateway with ip %s", ip)
@@ -80,7 +84,7 @@ func (m *Menshen) GetBestGateways(transport string) ([]bonafide.Gateway, error) 
 		Int("gatewayCount", len(gateways)).
 		Int("maxGateways", maxGateways).
 		Msg("Found best gateways for location")
-	return NewBonafideGatewayArray(gateways), nil
+	return NewBonafideGatewayArray(gateways, m.service), nil
 }
 
 // Just a helper for debugging output that returns a list of hostnames
@@ -105,7 +109,6 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 	}
 
 	// reset if called multiple times
-	m.gwLocations = []string{}
 	m.gwsByLocation = make(map[string][]*models.ModelsGateway)
 
 	var err error
@@ -115,8 +118,13 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 		return err
 	}
 
+	m.service, err = m.GetService()
+	if err != nil {
+		return err
+	}
+
 	// TODO: gw.Port instead of gw.Ports
-	for i, gw := range m.Gateways {
+	for _, gw := range m.Gateways {
 		log.Debug().
 			Str("host", gw.Host).
 			Int64("port", gw.Port).
@@ -126,11 +134,22 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 			Str("transport", gw.Type).
 			Msg("Got gateway from API")
 
-		// TODO: get rid of the strings.Title stuff if menshen supports gateway identifier
-		if !slices.Contains(m.gwLocations, gw.Location) {
-			m.gwLocations = append(m.gwLocations, gw.Location)
+		_, found := m.service.Locations[gw.Location]
+		if !found {
+			log.Warn().
+				Str("gateway location label: ", gw.Location).
+				Str("service locations: ", fmt.Sprintf("%+v", m.service.Locations)).
+				Msg("Gateway contains label which is not available in service locations")
+			continue
 		}
-		m.gwsByLocation[gw.Location] = append(m.gwsByLocation[gw.Location], m.Gateways[i])
+
+		list, found := m.gwsByLocation[gw.Location]
+		if !found {
+			list = make([]*models.ModelsGateway, 0)
+		}
+
+		list = append(list, gw)
+		m.gwsByLocation[gw.Location] = list
 	}
 	m.updateLocationQualityMap(transport)
 	return nil
@@ -138,7 +157,15 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 
 // Sets m.userChoice to a location if the user selects a location in the GUI
 func (m *Menshen) SetManualGateway(location string) {
-	if !slices.Contains(m.gwLocations, location) {
+	service, err := m.GetService()
+	if err != nil {
+		log.Warn().
+			Str("location", location).
+			Msg("Could determine locations.")
+		return
+	}
+	_, found := service.Locations[location]
+	if !found {
 		log.Warn().
 			Str("location", location).
 			Msg("Could not set invalid location")

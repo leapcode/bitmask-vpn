@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"0xacab.org/leap/menshen/models"
 	ping "github.com/prometheus-community/pro-bing"
 	"github.com/rs/zerolog/log"
 )
@@ -162,33 +163,35 @@ func (m *Menshen) GetLocationLabels(transport string) map[string][]string {
 	log.Trace().Msg("Building location label map")
 	locationLabels := make(map[string][]string)
 
+	service, err := m.GetService()
+	if err != nil {
+		return locationLabels
+	}
+
 	for _, gw := range m.Gateways {
-		_, exist := locationLabels[gw.Host]
+		_, exist := locationLabels[gw.Location]
 		if !exist {
-			countryCode := getCountryCodeForLocation(gw.Location)
-			locationLabels[gw.Location] = []string{gw.Location, countryCode}
+			countryCode := getCountryCodeForLocation(gw.Location, service)
+			locationDisplayName := getLocationName(gw.Location, service)
+			locationLabels[gw.Location] = []string{locationDisplayName, countryCode}
 		}
 	}
 	return locationLabels
 }
 
-// Returns the CountryCode for a gateway location
-// TODO: remove this if menshen has support for CountryCode
-func getCountryCodeForLocation(location string) string {
-	switch location {
-	case "paris":
-		return "FR"
-	case "seattle":
-		return "US"
-	case "miami":
-		return "US"
-	case "newyorkcity":
-		return "US"
-	case "montreal":
-		return "US"
-	case "amsterdam":
-		return "NL"
+func getLocationName(location string, service *models.ModelsEIPService) string {
+	l, set := service.Locations[location]
+	if !set {
+		return "Unknown"
 	}
-	return "TODO: CC"
 
+	return l.DisplayName
+}
+
+func getCountryCodeForLocation(location string, service *models.ModelsEIPService) string {
+	l, set := service.Locations[location]
+	if !set {
+		return ""
+	}
+	return l.CountryCode
 }

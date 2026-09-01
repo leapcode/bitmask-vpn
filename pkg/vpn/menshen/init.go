@@ -23,10 +23,9 @@ type Menshen struct {
 	// snowflake bool
 	Gateways           []*models.ModelsGateway            // list of gateways offered by menshen
 	gwsByLocation      map[string][]*models.ModelsGateway // map with gateways per location (Paris: [gw1, gw2, ...])
-	gwLocations        []string                           // list of locations (Paris, Seattle, ...)
+	service            *models.ModelsEIPService           // eip service, containing openvpn configs and set of available locations
 	userChoice         string                             // remote selection by the user in the GUI (empty string for automatic/best gateway/location, "Paris" for gateways located Paris)
 	locationQualityMap map[string]float64                 // quality for each location (locationQualityMap["Paris"] = 0.4 (values beteen 0 and 1)
-
 }
 
 func New() (*Menshen, error) {
@@ -100,11 +99,22 @@ func New() (*Menshen, error) {
 		api:                api,
 		Gateways:           []*models.ModelsGateway{},
 		gwsByLocation:      make(map[string][]*models.ModelsGateway),
-		gwLocations:        []string{},
+		service:            nil,
 		userChoice:         "",
 		locationQualityMap: make(map[string]float64),
 	}
 	return m, nil
+}
+
+func (m *Menshen) GetService() (*models.ModelsEIPService, error) {
+	if m.service == nil {
+		service, err := m.api.GetService()
+		if err != nil {
+			return nil, err
+		}
+		m.service = service
+	}
+	return m.service, nil
 }
 
 // Asks menshen for OpenVPN arguments
@@ -115,7 +125,7 @@ func New() (*Menshen, error) {
 func (m *Menshen) GetOpenvpnArgs() ([]string, error) {
 	log.Trace().Msg("Getting OpenVPN arguments from menshen")
 
-	service, err := m.api.GetService()
+	service, err := m.GetService()
 	if err != nil {
 		return []string{}, err
 	}
