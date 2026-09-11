@@ -1,6 +1,7 @@
 package menshen
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -9,6 +10,7 @@ import (
 	"0xacab.org/leap/bitmask-vpn/pkg/vpn/bonafide"
 	"0xacab.org/leap/menshen/models"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/sync/errgroup"
 )
 
 const (
@@ -111,17 +113,26 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 	// reset if called multiple times
 	m.gwsByLocation = make(map[string][]*models.ModelsGateway)
 
-	var err error
-	// TODO: send CountryCode
-	m.Gateways, err = m.api.GetGateways(nil)
-	if err != nil {
+	var (
+		gateways []*models.ModelsGateway
+		service  *models.ModelsEIPService
+	)
+	g, _ := errgroup.WithContext(context.Background())
+	g.Go(func() error {
+		var err error
+		gateways, err = m.api.GetGateways(nil)
+		return err
+	})
+	g.Go(func() error {
+		var err error
+		service, err = m.GetService()
+		return err
+	})
+	if err := g.Wait(); err != nil {
 		return err
 	}
-
-	m.service, err = m.GetService()
-	if err != nil {
-		return err
-	}
+	m.Gateways = gateways
+	m.service = service
 
 	// TODO: gw.Port instead of gw.Ports
 	for _, gw := range m.Gateways {
