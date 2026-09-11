@@ -63,6 +63,11 @@ type Bitmask struct {
 	// guarantee). For v3, the WaitGroup stays at count 0 and the error is nil.
 	v5InitWG  sync.WaitGroup
 	v5InitErr error
+
+	// gatewaysFetchedCh is closed once the gateway fetch goroutine spawned in
+	// Init() (b.fetchGateways) has completed, successfully or not. It is closed
+	// exactly once and never receives any value.
+	gatewaysFetchedCh chan struct{}
 }
 
 // Init the connection to bitmask
@@ -104,23 +109,24 @@ func Init() (*Bitmask, error) {
 	}
 
 	b := Bitmask{
-		tempdir:          tempdir,
-		onGateway:        bonafide.Gateway{},
-		ptGateway:        bonafide.Gateway{},
-		statusCh:         make(chan string, 10),
-		statusCloseCh:    make(chan int),
-		managementClient: nil,
-		api:              api,
-		launch:           launch,
-		transport:        "",
-		obfsvpnProxy:     nil,
-		certPemPath:      "",
-		openvpnArgs:      []string{},
-		useUDP:           false,
-		useSnowflake:     false,
-		canUpgrade:       IsUpgradeAvailable(),
-		motd:             motd.FetchLatest(),
-		provider:         "",
+		tempdir:           tempdir,
+		onGateway:         bonafide.Gateway{},
+		ptGateway:         bonafide.Gateway{},
+		statusCh:          make(chan string, 10),
+		statusCloseCh:     make(chan int),
+		gatewaysFetchedCh: make(chan struct{}),
+		managementClient:  nil,
+		api:               api,
+		launch:            launch,
+		transport:         "",
+		obfsvpnProxy:      nil,
+		certPemPath:       "",
+		openvpnArgs:       []string{},
+		useUDP:            false,
+		useSnowflake:      false,
+		canUpgrade:        IsUpgradeAvailable(),
+		motd:              motd.FetchLatest(),
+		provider:          "",
 	}
 
 	if len(config.ProviderConfig.CaCert) > 0 {

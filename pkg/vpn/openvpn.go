@@ -406,6 +406,7 @@ func (b *Bitmask) getCert() error {
 
 // Explicit call to GetGateways, to be able to fetch them all before starting the vpn
 func (b *Bitmask) fetchGateways() {
+	defer close(b.gatewaysFetchedCh)
 	log.Info().Msg("Fetching gateways...")
 	err := b.api.FetchAllGateways(b.transport)
 	if err != nil {
@@ -413,6 +414,12 @@ func (b *Bitmask) fetchGateways() {
 			Err(err).
 			Msg("Could not fetch gateways")
 	}
+}
+
+// GetGatewaysFetchedCh returns a channel that is closed once the gateway
+// fetch spawned during initialization has completed (successfully or not).
+func (b *Bitmask) GetGatewaysFetchedCh() <-chan struct{} {
+	return b.gatewaysFetchedCh
 }
 
 // StopVPN or cancel

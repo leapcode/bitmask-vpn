@@ -23,6 +23,7 @@ type Bitmask interface {
 	GetStatusCh() <-chan string
 	GetStatusCloseCh() chan int
 	GetSnowflakeCh() <-chan *snowflake.StatusEvent
+	GetGatewaysFetchedCh() <-chan struct{}
 	Close()
 	Version() (string, error)
 	StartVPN(provider string) error

@@ -78,7 +78,6 @@ func initializeContext(opts *InitOpts) {
 	// isReady is set after Bitmask initialization
 	initializeBitmask(errCh, opts)
 	go trigger(OnStatusChanged)
-	ctx.delayCheckForGateways()
 }
 
 func checkErrors(errCh chan string) {
@@ -123,6 +122,7 @@ func initializeBitmask(errCh chan string, opts *InitOpts) {
 	}
 
 	ctx.bm = b
+	go watchGateways(b)
 
 	// right now we just get autostart from an init flag,
 	// but we want to be able to persist that option from the preferences
