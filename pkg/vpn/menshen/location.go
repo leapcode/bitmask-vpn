@@ -1,6 +1,7 @@
 package menshen
 
 import (
+	"context"
 	"errors"
 	"math"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"0xacab.org/leap/menshen/models"
 	ping "github.com/prometheus-community/pro-bing"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/sync/errgroup"
 )
 
 // Returns true if the user selected a preferred location to connect with
@@ -46,6 +48,11 @@ func (m *Menshen) GetBestLocation(transport string) (string, error) {
 	return bestLocation, nil
 }
 
+const (
+	maxConcurrentPings = 16              // bounds the number of simultaneous ICMP pings
+	pingTimeout        = 3 * time.Second // per-gateway ping budget; also the penalty for unreachable gateways
+)
+
 // TODO: remove function if we have a metric from menshen
 func calcLatency(ip string) (*ping.Statistics, error) {
 	pinger, err := ping.NewPinger(ip)
@@ -55,12 +62,44 @@ func calcLatency(ip string) (*ping.Statistics, error) {
 
 	pinger.Interval = time.Millisecond * 100
 	pinger.Count = 3
-	pinger.Timeout = time.Second * 3
+	pinger.Timeout = pingTimeout
 	err = pinger.Run()
 	if err != nil {
 		return nil, err
 	}
 	return pinger.Statistics(), nil
+}
+
+// measureGatewayLatencies pings all gateways concurrently (bounded by
+// maxConcurrentPings) and returns one average rtt per gateway, in the same
+// order as the input. Each goroutine writes to a distinct index, so no locking
+// is needed. A gateway that cannot be pinged contributes pingTimeout, so
+// unreachable gateways rank worst in the quality map.
+func measureGatewayLatencies(gateways []*models.ModelsGateway) []time.Duration {
+	rtts := make([]time.Duration, len(gateways))
+	g, _ := errgroup.WithContext(context.Background())
+	g.SetLimit(maxConcurrentPings)
+	for i, gw := range gateways {
+		g.Go(func() error {
+			stats, err := calcLatency(gw.IPAddr)
+			if err != nil {
+				log.Warn().
+					Err(err).
+					Str("gateway", gw.Host).
+					Msg("Could not calculate latency")
+				rtts[i] = pingTimeout
+				return nil
+			}
+			log.Trace().
+				Str("gateway", gw.Host).
+				Int64("rtt ms", stats.AvgRtt.Milliseconds()).
+				Msg("Calculated rtt for gateway")
+			rtts[i] = stats.AvgRtt
+			return nil
+		})
+	}
+	_ = g.Wait()
+	return rtts
 }
 
 func (m *Menshen) GetLocationQualityMap(transport string) map[string]float64 {
@@ -78,53 +117,54 @@ func (m *Menshen) GetLocationQualityMap(transport string) map[string]float64 {
 // TODO: The rtt calculation needs to be be optimized:
 //   - the code should be placed into bitmask-core (there is similar functionality, but
 //     it just gives us the best host for a list of hosts based on rtt)
-//   - calculating the rtt should be parallized
 //
 // TODO: do we need transport here as parameter?
 func (m *Menshen) updateLocationQualityMap(transport string) {
 	log.Debug().Msg("Calculating quality for each location")
-	/*
-		implementation description:
-			1) iterate over m.gwsByLocation => gives us location and a list of gateways
-			2) for each gateway, calculate the rtt
-			3) for each location, calculate the average rtt for all gateways
 
-		normalization:
-			- if we have rtt values, we need to normalize them (get floats between 0 and 1)
-			- formulae used: https://www.statology.org/normalize-data-between-0-and-1/
-			- therefore, we need to find out the min and max of all avgRtts for all locations
-			- the algorithm has drawbacks: the worst location always gets a value of 0, the best
-			  a vlaue of 1 - independent of the actual rtt (can be very high)
-			- TODO: check algorithm of v3 implementation
-	*/
+	var all []*models.ModelsGateway
+	for _, gateways := range m.gwsByLocation {
+		all = append(all, gateways...)
+	}
+	rtts := measureGatewayLatencies(all)
+
+	rttByGw := make(map[*models.ModelsGateway]time.Duration, len(all))
+	for i, gw := range all {
+		rttByGw[gw] = rtts[i]
+	}
+
+	m.locationQualityMap = buildLocationQualityMap(m.gwsByLocation, rttByGw)
+}
+
+// buildLocationQualityMap averages the per-gateway rtts per location and
+// normalizes the values to [0, 1] (higher is better).
+/*
+	implementation description:
+		1) iterate over gwsByLocation => gives us location and a list of gateways
+		2) for each location, calculate the average rtt for all gateways
+
+	normalization:
+		- if we have rtt values, we need to normalize them (get floats between 0 and 1)
+		- formulae used: https://www.statology.org/normalize-data-between-0-and-1/
+		- therefore, we need to find out the min and max of all avgRtts for all locations
+		- the algorithm has drawbacks: the worst location always gets a value of 0, the best
+		  a vlaue of 1 - independent of the actual rtt (can be very high)
+		- TODO: check algorithm of v3 implementation
+*/
+func buildLocationQualityMap(gwsByLocation map[string][]*models.ModelsGateway, rttByGw map[*models.ModelsGateway]time.Duration) map[string]float64 {
 	qualityMap := make(map[string]float64)
 	minAvgRtt := math.MaxFloat64
 	maxAvgRtt := 0.0
 
-	for location, gateways := range m.gwsByLocation {
-		sumLocation := int64(0)
-		counterLocation := int64(0)
-
-		for _, gw := range gateways {
-			stats, err := calcLatency(gw.IPAddr)
-			if err != nil {
-				log.Warn().
-					Err(err).
-					Str("gateway", gw.Host).
-					Msg("Could not calculate latency")
-				sumLocation += math.MaxInt64
-			} else {
-				log.Trace().
-					Str("location", location).
-					Str("gateway", gw.Host).
-					Int64("rtt ms", stats.AvgRtt.Milliseconds()).
-					Msg("Calculated rtt for gateway")
-				sumLocation += stats.AvgRtt.Milliseconds()
-			}
-			counterLocation += 1
+	for location, gateways := range gwsByLocation {
+		if len(gateways) == 0 {
+			continue
 		}
-
-		locationRttAvg := float64(sumLocation / counterLocation)
+		sumLocation := 0.0
+		for _, gw := range gateways {
+			sumLocation += float64(rttByGw[gw].Milliseconds())
+		}
+		locationRttAvg := sumLocation / float64(len(gateways))
 		qualityMap[location] = locationRttAvg
 
 		if locationRttAvg < minAvgRtt {
@@ -150,7 +190,7 @@ func (m *Menshen) updateLocationQualityMap(transport string) {
 	log.Trace().
 		Msgf("location quality map normalized: %v", qualityMap)
 
-	m.locationQualityMap = qualityMap
+	return qualityMap
 }
 
 // Returns a map[string][string] with gateway locations and their country code.
