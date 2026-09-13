@@ -2,11 +2,9 @@ package menshen
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"0xacab.org/leap/bitmask-core/pkg/bootstrap"
-	"0xacab.org/leap/bitmask-core/pkg/introducer"
 	"0xacab.org/leap/bitmask-core/pkg/storage"
 	"0xacab.org/leap/bitmask-vpn/pkg/config"
 	"0xacab.org/leap/bitmask-vpn/pkg/snowflake"
@@ -30,13 +28,6 @@ type Menshen struct {
 }
 
 func New() (*Menshen, error) {
-	if os.Getenv("API_URL") != "" {
-		config.ProviderConfig.APIURL = os.Getenv("API_URL")
-		log.Debug().
-			Str("apiUrl", config.ProviderConfig.APIURL).
-			Msg("Using API URL from env")
-	}
-
 	err := storage.InitAppStorage()
 	if err != nil {
 		return nil, fmt.Errorf("could not initialize bitmask-core storage: %v", err)
@@ -48,47 +39,6 @@ func New() (*Menshen, error) {
 	}
 	cfg.STUNServers = config.ProviderConfig.STUNServers
 	cfg.CountryCodeLookupURL = config.ProviderConfig.CountryCodeLookupURL
-
-	// experimental introducer
-	if introURL := os.Getenv("LEAP_INTRODUCER_URL"); introURL != "" {
-
-		log.Info().
-			Str("introducerURL", introURL).
-			Msg("Using introducer from env LEAP_INTRODUCER_URL")
-
-		store, err := storage.GetStorage()
-		if err != nil {
-			log.Fatal().
-				Err(err).
-				Str("introducerURL", introURL).
-				Msg("Could to get storage")
-		}
-
-		_, err = store.GetIntroducerByFQDN(cfg.Host)
-		if err != nil {
-			// introducer does not exist, let's add it to db
-			intro, err := introducer.NewIntroducerFromURL(introURL)
-			if err != nil {
-				log.Fatal().
-					Err(err).
-					Str("introducerURL", introURL).
-					Msg("Could not create introudcer object")
-			}
-
-			err = store.AddIntroducer(intro)
-			if err != nil {
-				log.Fatal().
-					Err(err).
-					Str("introducerURL", introURL).
-					Msg("Failed to add introducer to storage")
-			} else {
-				log.Info().Msg("Added introducer to database")
-			}
-		} else {
-			log.Info().Msg("Found introducer in database")
-		}
-		cfg.Introducer = introURL
-	}
 
 	api, err := bootstrap.NewAPI(cfg)
 	if err != nil {
