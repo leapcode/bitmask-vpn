@@ -248,13 +248,6 @@ func (b *Bitmask) startOpenVPN(ctx context.Context) error {
 
 	switch b.GetTransport() {
 	case "obfs4":
-		if config.ProviderConfig.APIVersion == 5 {
-			// if I return an error, the GUI state does not get updated properly to Failed/Stopped and
-			// continues to stay in state Connecting (also clicking Cancel doesnot work)
-			log.Fatal().Msg("Could not start OpenVPN with obfs4. This is currently not supported via v5")
-			// menshen/v5 has different api endpoints: gateways and bridges
-			// gw.Options is always empty right now
-		}
 		proxyArgs, err := b.setupObsfucationProxy(ctx, "obfs4")
 		if err != nil {
 			b.statusCh <- Off

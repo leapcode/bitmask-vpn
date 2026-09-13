@@ -22,6 +22,7 @@ type Menshen struct {
 	// snowflakeProgress int
 	// snowflake bool
 	Gateways           []*models.ModelsGateway            // list of gateways offered by menshen
+	Bridges            []*models.ModelsBridge             // list of bridges offered by menshen
 	gwsByLocation      map[string][]*models.ModelsGateway // map with gateways per location (Paris: [gw1, gw2, ...])
 	service            *models.ModelsEIPService           // eip service, containing openvpn configs and set of available locations
 	userChoice         string                             // remote selection by the user in the GUI (empty string for automatic/best gateway/location, "Paris" for gateways located Paris)
@@ -98,6 +99,7 @@ func New() (*Menshen, error) {
 		apiConfig:          cfg,
 		api:                api,
 		Gateways:           []*models.ModelsGateway{},
+		Bridges:            []*models.ModelsBridge{},
 		gwsByLocation:      make(map[string][]*models.ModelsGateway),
 		service:            nil,
 		userChoice:         "",

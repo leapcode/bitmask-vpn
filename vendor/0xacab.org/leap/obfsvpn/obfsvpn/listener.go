@@ -11,10 +11,10 @@ import (
 
 	"github.com/quic-go/quic-go"
 	"github.com/xtaci/kcp-go/v5"
-	"gitlab.com/yawning/obfs4.git/common/ntor"
-	"gitlab.com/yawning/obfs4.git/transports/base"
-	"gitlab.com/yawning/obfs4.git/transports/obfs4"
 	pt "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/ntor"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/obfs4"
 )
 
 // ListenConfig contains options for listening to an address.
@@ -193,7 +193,6 @@ func (l *Listener) Accept() (net.Conn, error) {
 	}
 	kcpSession, ok := conn.(*kcp.UDPSession)
 	if ok {
-		kcpSession.SetStreamMode(true)
 		kcpSession.SetWindowSize(l.kcpConfig.SendWindowSize, l.kcpConfig.ReceiveWindowSize)
 		// https://github.com/skywind3000/kcp/blob/master/README.en.md#protocol-configuration
 		nd := 0

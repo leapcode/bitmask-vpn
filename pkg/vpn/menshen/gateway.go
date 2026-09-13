@@ -2,7 +2,6 @@ package menshen
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -37,6 +36,11 @@ func (m *Menshen) GetGatewayByIP(ip string) (bonafide.Gateway, error) {
 // Returns a list of gateways that we will connect to. First checks if automatic gateway
 // selection should be used.
 func (m *Menshen) GetBestGateways(transport string) ([]bonafide.Gateway, error) {
+	switch transport {
+	case "obfs4", "kcp", "quic":
+		return m.getBestBridges(transport)
+	}
+
 	var location string
 	var err error
 
@@ -99,22 +103,97 @@ func getGatewayNames(gateways []*models.ModelsGateway) []string {
 	return gwNames
 }
 
-// Asks menshen for gateways. The gateways are stored in m.Gateways
-// Currently, there is not CountryCode filtering
-// The vars m.gwLocations and m.gwsByLocation are updated
-func (m *Menshen) FetchAllGateways(transport string) error {
-	log.Trace().Msg("Fetching gateways from menshen")
-
-	// TODO: implement obfsv4 support (transport can have the value "any")
-	if transport == "obfs4" {
-		_ = errors.New("obfs4 is not supported for v5 right now")
+func getBridgeNames(bridges []*models.ModelsBridge) []string {
+	names := make([]string, 0, len(bridges))
+	for _, br := range bridges {
+		names = append(names, br.Host)
 	}
+	return names
+}
+
+func (m *Menshen) getBestBridges(transport string) ([]bonafide.Gateway, error) {
+	if len(m.Bridges) == 0 {
+		log.Debug().Msg("Bridges not yet fetched, fetching on-demand")
+		bridges, err := m.api.GetAllBridges(nil)
+		if err != nil {
+			return []bonafide.Gateway{}, fmt.Errorf("failed to fetch bridges: %w", err)
+		}
+		m.Bridges = bridges
+	}
+
+	service, err := m.GetService()
+	if err != nil {
+		return []bonafide.Gateway{}, fmt.Errorf("failed to get service for bridge conversion: %w", err)
+	}
+
+	var selected []*models.ModelsBridge
+	for _, br := range m.Bridges {
+		if !supportsTransport(br, transport) {
+			continue
+		}
+		if m.IsManualLocation() && br.Location != m.userChoice {
+			continue
+		}
+		selected = append(selected, br)
+	}
+
+	if len(selected) == 0 {
+		log.Warn().
+			Str("transport", transport).
+			Str("location", m.userChoice).
+			Msg("No bridges found for transport/location")
+		return []bonafide.Gateway{}, fmt.Errorf("no bridges available for transport %s", transport)
+	}
+
+	if len(selected) > 1 {
+		rand.Shuffle(len(selected), func(i, j int) { selected[i], selected[j] = selected[j], selected[i] })
+		log.Debug().
+			Str("transport", transport).
+			Strs("shuffledBridges", getBridgeNames(selected)).
+			Msg("Shuffled bridges")
+	}
+
+	if len(selected) > maxGateways {
+		selected = selected[:maxGateways]
+	}
+
+	log.Info().
+		Str("transport", transport).
+		Strs("bridges", getBridgeNames(selected)).
+		Int("bridgeCount", len(selected)).
+		Msg("Selected best bridges for transport")
+
+	return NewBonafideGatewayArrayFromBridges(selected, service), nil
+}
+
+// supportsTransport checks whether a bridge supports the requested
+// obfuscation transport. In the v5 bridge model, Type is the bridge type
+// (e.g. "obfs4") and Transport is the underlying protocol (tcp, kcp, quic).
+func supportsTransport(br *models.ModelsBridge, transport string) bool {
+	switch transport {
+	case "obfs4":
+		return br.Type == "obfs4"
+	case "kcp":
+		return br.Type == "obfs4" && br.Transport == "kcp"
+	case "quic":
+		return br.Type == "obfs4" && br.Transport == "quic"
+	default:
+		return false
+	}
+}
+
+// Asks menshen for gateways and bridges. The gateways are stored in m.Gateways,
+// the bridges in m.Bridges. Currently, there is not CountryCode filtering.
+// The vars m.gwLocations and m.gwsByLocation are updated.
+func (m *Menshen) FetchAllGateways(transport string) error {
+	log.Trace().Msg("Fetching gateways and bridges from menshen")
 
 	// reset if called multiple times
 	m.gwsByLocation = make(map[string][]*models.ModelsGateway)
 
 	var (
 		gateways []*models.ModelsGateway
+		bridges  []*models.ModelsBridge
 		service  *models.ModelsEIPService
 	)
 	g, _ := errgroup.WithContext(context.Background())
@@ -125,6 +204,14 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 	})
 	g.Go(func() error {
 		var err error
+		bridges, err = m.api.GetAllBridges(nil)
+		if err != nil {
+			log.Warn().Err(err).Msg("Could not fetch bridges from menshen")
+		}
+		return nil
+	})
+	g.Go(func() error {
+		var err error
 		service, err = m.GetService()
 		return err
 	})
@@ -132,6 +219,7 @@ func (m *Menshen) FetchAllGateways(transport string) error {
 		return err
 	}
 	m.Gateways = gateways
+	m.Bridges = bridges
 	m.service = service
 
 	// TODO: gw.Port instead of gw.Ports
@@ -196,14 +284,29 @@ func (m *Menshen) SetAutomaticGateway() {
 }
 
 func (m *Menshen) SupportsObfs4() bool {
+	for _, br := range m.Bridges {
+		if br.Type == "obfs4" {
+			return true
+		}
+	}
 	return false
 }
 
 func (m *Menshen) SupportsKCP() bool {
+	for _, br := range m.Bridges {
+		if br.Type == "obfs4" && br.Transport == "kcp" {
+			return true
+		}
+	}
 	return false
 }
 
 func (m *Menshen) SupportsQUIC() bool {
+	for _, br := range m.Bridges {
+		if br.Type == "obfs4" && br.Transport == "quic" {
+			return true
+		}
+	}
 	return false
 }
 

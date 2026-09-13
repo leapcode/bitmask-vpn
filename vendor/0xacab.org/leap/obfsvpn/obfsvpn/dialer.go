@@ -9,9 +9,9 @@ import (
 	"strconv"
 
 	//pt "git.torproject.org/pluggable-transports/goptlib.git"
-	"gitlab.com/yawning/obfs4.git/common/ntor"
-	"gitlab.com/yawning/obfs4.git/transports/base"
-	"gitlab.com/yawning/obfs4.git/transports/obfs4"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/common/ntor"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/base"
+	"gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/transports/obfs4"
 	pt "gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/goptlib"
 )
 

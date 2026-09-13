@@ -86,6 +86,11 @@ func (c *Config) getAPIClient() *http.Client {
 					if err != nil {
 						return nil, err
 					}
+					// instead of parroting outdated browsers, we create randomized Client Hello profiles
+					// LEAPs backends only require that ALPN is supported
+					roller.HelloIDs = []utls.ClientHelloID{
+						utls.HelloRandomizedALPN,
+					}
 					uconn, err := roller.Dial(network, addr, c.Host)
 					if err != nil {
 						return nil, err

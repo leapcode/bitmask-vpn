@@ -56,7 +56,6 @@ func GetKCPDialer(kcpConfig KCPConfig, logger func(format string, a ...interface
 		if err != nil {
 			return nil, err
 		}
-		kcpSession.SetStreamMode(true)
 		kcpSession.SetWindowSize(kcpConfig.SendWindowSize, kcpConfig.ReceiveWindowSize)
 		if err := kcpSession.SetReadBuffer(kcpConfig.ReadBuffer); err != nil {
 			return nil, err
