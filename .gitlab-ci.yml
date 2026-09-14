@@ -31,7 +31,8 @@ lint:
 build_macos:
   stage: build
   script:
-    - export PROVIDER=bitmask
+    - export PROVIDERS=coopvpn,riseup
+    - export DEFAULT_PROVIDER=""
     - make vendor
     - make -j4 build
     - make installer
