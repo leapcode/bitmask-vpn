@@ -31,6 +31,10 @@ QMAKE_BUNDLE = $$TARGET
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+# https://forum.qt.io/post/299408
+APPNAMESTR = '\\"$${APPNAME}\\"'
+DEFINES += APPNAME=\"$${APPNAMESTR}\"
+
 !defined(VENDOR_PATH, var):VENDOR_PATH="providers/riseup"
 
 message("[qmake] VENDOR_PATH: $$VENDOR_PATH")

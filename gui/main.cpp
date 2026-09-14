@@ -174,7 +174,10 @@ int main(int argc, char **argv) {
     QJsonValue defaultProvider = providers->json().object().value("default");
     QJsonValue providersInfo = providers->json().object().value("providers");
     
-    QString appName = getProviderConfig(providersInfo, defaultProvider.toString(), "applicationName", "Bitmask");
+    #ifndef APPNAME
+    #define APPNAME "Bitmask"
+    #endif // !APPNAME
+    QString appName = APPNAME;
 
     QApplication::setApplicationName(appName);
     QApplication::setOrganizationDomain(QString("leap.se"));
