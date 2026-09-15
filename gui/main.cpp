@@ -54,6 +54,16 @@ QString getProviderConfig(QJsonValue info, QString provider, QString key, QStrin
     return defaultValue;
 }
 
+bool providerExists(QJsonValue info, QString provider) {
+    for (auto p: info.toArray()) {
+        QJsonObject item = p.toObject();
+        if (item["provider"].toString() == provider) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Function to get custom locale name
 QString getCustomLocaleName(const QString &localeCode) {
     QLocale locale(localeCode);
@@ -184,6 +194,13 @@ int main(int argc, char **argv) {
     if (!savedProvider.isEmpty()) {
         hasNoProvider = false;
     }
+
+    /* Check if saved provider is present in the embedded JSON and show provider selection if no */
+    if (!savedProvider.isEmpty() && !providerExists(providersInfo, savedProvider)) {
+        hasNoProvider = true;
+    }
+
+
     qDebug() << "Qt App Settings filepath: " + staticSettings->fileName();
 
     QCommandLineParser parser;

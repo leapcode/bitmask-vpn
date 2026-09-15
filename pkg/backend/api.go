@@ -269,7 +269,7 @@ func InitOptsFromJSON(providerName, providersJSON string) *InitOpts {
 		}
 	}
 
-	log.Fatal().
+	log.Warn().
 		Str("providerName", providerName).
 		Msg("Provider not found in providers.json")
 	return initOpts
