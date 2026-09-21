@@ -17,16 +17,21 @@
 // It will launch a http server and expose a REST API to control OpenVPN and the firewall.
 // At the moment, it is only used in Darwin - although it could also be used in GNU/Linux systems (but we use the one-shot bitmask-root wrapper in GNU/Linux instead).
 // In Darwin, this helper will use a unix domain socket for the http server
-// The /tmp/bitmask-helper.sock path for the socket is hardcoded.
+// The socket is created in ~/.config/leap/sockets/, inside the home of the user that installed the helper.
 
 package helper
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"net"
 	"net/http"
+	"os"
 	"os/exec"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/rs/zerolog/log"
 )
@@ -69,11 +74,26 @@ func serveHTTP(unixListener net.Listener) {
 		Handler: mux,
 	}
 
-	if err := server.Serve(unixListener); err != nil {
+	shutdown := make(chan struct{})
+	go func() {
+		sigCh := make(chan os.Signal, 1)
+		signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
+		<-sigCh
+		log.Info().Msg("shutting down http server")
+		if err := server.Shutdown(context.Background()); err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not shut down http server gracefully")
+		}
+		close(shutdown)
+	}()
+
+	if err := server.Serve(unixListener); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal().
 			Err(err).
 			Msg("Could not start http server")
 	}
+	<-shutdown
 }
 
 func (openvpn *openvpnT) start(w http.ResponseWriter, r *http.Request) {

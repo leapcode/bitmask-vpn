@@ -24,6 +24,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -43,7 +44,7 @@ type Launcher struct {
 const helperSocket = "bitmask-helper.sock"
 
 func getHelperSocketPath() string {
-	return filepath.Join("/tmp", helperSocket)
+	return filepath.Join(os.Getenv("HOME"), ".config", "leap", "sockets", helperSocket)
 }
 
 func probeHelper() (*http.Client, error) {

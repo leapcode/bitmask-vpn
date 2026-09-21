@@ -9,7 +9,9 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -193,6 +195,11 @@ func postInstall() error {
 		return fmt.Errorf("failed writing the plist file: %s: %v", fout.Name(), err)
 	}
 
+	log.Println("Creating sockets dir for the helper unix socket")
+	if err := createSocketDir(); err != nil {
+		log.Println("error while creating sockets dir: ", err)
+	}
+
 	// load the plist file onto launchd
 	log.Println("Loading plist file")
 	if err := loadHelperPlist(plistPath); err != nil {
@@ -203,6 +210,27 @@ func postInstall() error {
 	log.Println("Changing ownership of 'helper' dir")
 	if err := os.Chown(filepath.Join(appBundlePath(), "helper"), 0, 0); err != nil {
 		log.Println("error while changing ownership of dir 'helper': ", err)
+	}
+	return nil
+}
+
+// createSocketDir creates the leap config dir and the sockets dir inside the
+// home of the user the helper is installed for, so that the helper can put its
+// unix socket there.
+func createSocketDir() error {
+	u, err := user.LookupId(strconv.Itoa(uid))
+	if err != nil {
+		return err
+	}
+	leapDir := filepath.Join(u.HomeDir, ".config", "leap")
+	socketDir := filepath.Join(leapDir, "sockets")
+	if err := os.MkdirAll(socketDir, 0750); err != nil {
+		return err
+	}
+	for _, dir := range []string{leapDir, socketDir} {
+		if err := os.Chown(dir, uid, gid); err != nil {
+			return err
+		}
 	}
 	return nil
 }
