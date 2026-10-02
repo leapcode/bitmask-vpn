@@ -70,8 +70,9 @@ Labs.SystemTrayIcon {
             return ""
         } else if (ctx.status == "off") {
             // Not Turn on, because we will can later append "to <Location>"
-            if (ctx.locations && ctx.bestLocation) {
-                return qsTr("Connect to") + " " + getCanonicalLocation(ctx.bestLocation)
+            let target = root.selectedGateway == "auto" ? ctx.bestLocation : root.selectedGateway
+            if (ctx.locations && target) {
+                return qsTr("Connect to") + " " + getCanonicalLocation(target)
             } else {
                 return qsTr("Connect")
             }

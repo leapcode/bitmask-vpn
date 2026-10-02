@@ -3,7 +3,9 @@ package menshen
 import (
 	"context"
 	"errors"
+	"maps"
 	"math"
+	"slices"
 	"time"
 
 	"0xacab.org/leap/menshen/models"
@@ -36,10 +38,13 @@ func (m *Menshen) GetBestLocation(transport string) (string, error) {
 	var bestLocation string
 	bestLocationQuality := 0.0
 
-	for location, quality := range m.locationQualityMap {
-		if quality > bestLocationQuality {
+	// the iteration order of a map is random: sort the locations so that
+	// ties are resolved deterministically. Otherwise the location we
+	// display in the GUI and the location we connect to can differ.
+	for _, location := range slices.Sorted(maps.Keys(m.locationQualityMap)) {
+		if m.locationQualityMap[location] > bestLocationQuality {
 			bestLocation = location
-			bestLocationQuality = quality
+			bestLocationQuality = m.locationQualityMap[location]
 		}
 	}
 	log.Debug().

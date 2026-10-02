@@ -58,3 +58,23 @@ func TestBuildLocationQualityMapEmptyLocation(t *testing.T) {
 
 	assert.NotContains(t, quality, "Paris", "empty location should be skipped")
 }
+
+func TestGetBestLocationDeterministicOnTies(t *testing.T) {
+	m := &Menshen{
+		Gateways: []*models.ModelsGateway{
+			{Host: "nuremberg-gw", IPAddr: "10.0.0.1"},
+			{Host: "ashburn-gw", IPAddr: "10.0.0.2"},
+		},
+		locationQualityMap: map[string]float64{"nuremberg": 1.0, "ashburn": 1.0},
+	}
+
+	first, err := m.GetBestLocation("openvpn")
+	require.NoError(t, err)
+	assert.NotEmpty(t, first, "a tied quality map should still return a best location")
+
+	for range 100 {
+		next, err := m.GetBestLocation("openvpn")
+		require.NoError(t, err)
+		assert.Equal(t, first, next, "best location must not flip between calls")
+	}
+}

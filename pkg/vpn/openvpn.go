@@ -228,6 +228,7 @@ func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) (
 	for _, gw := range gateways {
 		proxy, err := b.startTransport(ctx, gw, kcp, quic)
 		if err == nil {
+			b.ptGateway = gw
 			arg = appendProxyArgsToOpenvpnCmd(arg, proxy)
 			// add default gatway route for openvpn
 			arg = append(arg, "--route", gw.IPAddress, "255.255.255.255", "net_gateway")
