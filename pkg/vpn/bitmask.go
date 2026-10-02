@@ -48,9 +48,10 @@ type Bitmask struct {
 	openvpnArgs      []string               // arguments used for invoking the OpenVPN process
 	useUDP           bool                   // should we use UDP?
 	obfsvpnProxy     *obfsvpn.Client        // handles OpenVPN obfuscation, e.g. starts/stops obfs4 bridge
-	useSnowflake     bool                   // should we use Snowflake?
-	provider         string                 // currently not used, get fixed if we get to the provider agnostic client
-	tempdir          string                 // random base temp dir. Used for OpenVPN CA (cacert.pem),
+	obfsvpnProxyMu   sync.Mutex
+	useSnowflake     bool // should we use Snowflake?
+	provider         string
+	tempdir          string // random base temp dir. Used for OpenVPN CA (cacert.pem),
 	// client certificate (openvpn.pem, holds key and certificate) and management communication
 	// authentication (key file prefixed with leap-vpn-...). Directory gets deleted during teardown
 	certPemPath string // path of OpenVPN client certificate. Normally this is $tempdir/openvpn.pem,

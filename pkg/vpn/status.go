@@ -145,6 +145,8 @@ func (b *Bitmask) eventHandler(eventCh <-chan management.Event) {
 		}
 	}
 	b.statusCh <- Off
+
+	go b.stopObfsvpnProxy()
 }
 
 // About the Getter functions here:

@@ -66,6 +66,8 @@ func (b *Bitmask) CanStartVPN() bool {
 }
 
 func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKCP, useQUIC bool) (proxy string, err error) {
+	b.stopObfsvpnProxy()
+
 	proxyAddr := "127.0.0.1:8080"
 	kcpConfig := obfsvpn.KCPConfig{
 		Enabled: false,
@@ -108,10 +110,11 @@ func (b *Bitmask) startTransport(ctx context.Context, gw bonafide.Gateway, useKC
 		return "", err
 	}
 	obfsvpnClient.EventLogger = eventLogger
+	b.obfsvpnProxyMu.Lock()
 	b.obfsvpnProxy = obfsvpnClient
+	b.obfsvpnProxyMu.Unlock()
 	go func() {
-		_, err = b.obfsvpnProxy.Start()
-		if err != nil {
+		if _, err := b.obfsvpnProxy.Start(); err != nil {
 			log.Warn().
 				Err(err).
 				Str("transport", b.transport).
@@ -124,6 +127,7 @@ loop:
 	select {
 	case state := <-eventLogger.Events:
 		if state == "ERROR" {
+			b.stopObfsvpnProxy()
 			return "", errors.New("Unable to start obfsvpn proxy")
 		}
 		if state == "RUNNING" {
@@ -133,9 +137,24 @@ loop:
 			goto loop
 		}
 	case <-t.C:
+		b.stopObfsvpnProxy()
 		return "", errors.New("Unable to start obfsvpn proxy")
 	}
 	return "", errors.New("Unable to start obfsvpn proxy")
+}
+
+func (b *Bitmask) stopObfsvpnProxy() {
+	b.obfsvpnProxyMu.Lock()
+	defer b.obfsvpnProxyMu.Unlock()
+	if b.obfsvpnProxy == nil {
+		return
+	}
+	if _, err := b.obfsvpnProxy.Stop(); err != nil {
+		log.Debug().
+			Err(err).
+			Msg("Error while stopping obfsvpn proxy")
+	}
+	b.obfsvpnProxy = nil
 }
 
 func maybeGetPrivateGateway() (bonafide.Gateway, bool) {
@@ -238,6 +257,17 @@ func (b *Bitmask) setupObsfucationProxy(ctx context.Context, transport string) (
 			Str("gateway IP", gw.IPAddress).
 			Any("gateway options", gw.Options).
 			Msg("failed to start proxy for obfs4 gateway, trying another")
+	}
+
+	if len(arg) == 0 {
+		// obfsvpn proxy didn't start do not launch OpenVPN
+		// and stop firewall
+		if err := b.launch.FirewallStop(); err != nil {
+			log.Warn().
+				Err(err).
+				Msg("Could not stop firewall after failing to start the obfuscation proxy")
+		}
+		return arg, errors.New("ERROR: could not start obfuscation proxy for any gateway")
 	}
 
 	return arg, nil
@@ -425,16 +455,7 @@ func (b *Bitmask) StopVPN() error {
 	// try to stop obfsvpn client in a go routine
 	// as the stop operation takes time and might
 	// block if start didn't return yet
-	if b.obfsvpnProxy != nil {
-		go func() {
-			if _, err := b.obfsvpnProxy.Stop(); err != nil {
-				log.Debug().
-					Err(err).
-					Msg("Error while stop obfsvpn proxy")
-			}
-			b.obfsvpnProxy = nil
-		}()
-	}
+	go b.stopObfsvpnProxy()
 
 	b.tryStopFromManagement()
 	time.Sleep(1 * time.Second)
@@ -485,10 +506,7 @@ func (b *Bitmask) Reconnect() error {
 	if status != Off {
 		b.statusCh <- Stopping
 		b.tryStopFromManagement()
-		if b.obfsvpnProxy != nil {
-			_, _ = b.obfsvpnProxy.Stop()
-			b.obfsvpnProxy = nil
-		}
+		b.stopObfsvpnProxy()
 		if err := b.launch.OpenvpnStop(); err != nil {
 			log.Debug().
 				Err(err).
